@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      #google_map {width: 550px; height: 450px;margin-top:50px;margin-left:auto;margin-right:auto;}
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+    </script>
+    <script type="text/javascript">
+
+      var mapCenter = new google.maps.LatLng(54.19265, 16.1779); //Google map Coordinates
+      var map;
+	  var elevator;
+      function initialize() //function initializes Google map
+      {
+        var googleMapOptions =
+        {
+            center: mapCenter, // map center
+            zoom: 15, //zoom level, 0 = earth view to higher value
+            panControl: true, //enable pan Control
+            zoomControl: true, //enable zoom control
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.SMALL //zoom control size
+             },
+            scaleControl: true, // enable scale control
+            mapTypeId: google.maps.MapTypeId.ROADMAP // google map type
+        };
+        map 		= new google.maps.Map(document.getElementById("google_map"), googleMapOptions);
+		elevator 	= new google.maps.ElevationService();
+		// Add a listener for the click event and call getElevation on that location
+		google.maps.event.addListener(map, 'click', getElevation);
+      }
+	  
+	  
+	  
+function getElevation(event) {
+
+  var locations = [];
+
+  // Retrieve the clicked location and push it on the array
+  var clickedLocation = event.latLng;
+  locations.push(clickedLocation);
+
+  // Create a LocationElevationRequest object using the array's one value
+  var positionalRequest = {
+    'locations': locations
+  }
+
+  // Initiate the location request
+  elevator.getElevationForLocations(positionalRequest, function(results, status) {
+    if (status == google.maps.ElevationStatus.OK) {
+
+      // Retrieve the first result
+      if (results[0]) {
+		
+		
+		var lat	=	 results[0].location['A'];
+		var lon	=	 results[0].location['F'];
+		
+		
+		   var mapCenter = new google.maps.LatLng(lat, lon);
+		   
+		 var marker = new google.maps.Marker({
+                position:mapCenter,
+                map: map,
+                  draggable:true,
+                  animation: google.maps.Animation.DROP,
+                title:"This a new marker!",
+              icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
+            });
+			
+	 /*
+//	foreach(results[0].location);
+        // Open an info window indicating the elevation at the clicked position
+        infowindow.setContent('The elevation at this point <br>is ' + results[0].elevation + ' meters.');
+		infowindow.setPosition(clickedLocation);
+	    infowindow.open(map);*/
+	  } else {
+        alert('No results found');
+      }
+    } else {
+      alert('Elevation service failed due to: ' + status);
+    }
+  });
+}
+
+
+
+        function addMyMarker() { //function that will add markers on button click
+            var marker = new google.maps.Marker({
+                position:mapCenter,
+                map: map,
+                  draggable:true,
+                  animation: google.maps.Animation.DROP,
+                title:"This a new marker!",
+              icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
+            });
+        }
+    </script>
+  </head>
+
+  <body onLoad="initialize()">
+    <div id="google_map" ></div><button id="drop" onClick="addMyMarker()">Drop Markers</button>
+  </body>
+</html>

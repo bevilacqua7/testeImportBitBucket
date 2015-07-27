@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Binding to remote data</title>
+    <meta charset="utf-8">
+    <link href="../content/shared/styles/examples-offline.css" rel="stylesheet">
+    <link href="../../styles/kendo.common.min.css" rel="stylesheet">
+    <link href="../../styles/kendo.rtl.min.css" rel="stylesheet">
+    <link href="../../styles/kendo.default.min.css" rel="stylesheet">
+    <link href="../../styles/kendo.dataviz.min.css" rel="stylesheet">
+    <link href="../../styles/kendo.dataviz.default.min.css" rel="stylesheet">
+	
+	
+	
+    <script src="../../js/jquery.min.js"></script>
+	 <script src="../../js/angular.min.js"></script>
+	 
+	 
+	 
+	 
+    
+	
+    <script src="../../js/kendo.all.min.js"></script>
+    <script src="../content/shared/js/console.js"></script>
+	<script src="../../js/messages/kendo.messages.pt-BR.min.js"></script>
+   
+ <script src="../../../alphasoft/js/WRSTelerik.js"></script>
+    
+</head>
+<body>
+    
+        <a class="offline-button" href="../index.html">Back</a>
+    
+    
+
+        <div id="example" class="wrs_grid" style="height:400px">
+            <div id="wrsGrid"></div>
+ 
+<script>
+
+  
+                function onDataBound(arg)
+				{
+					//Frozen Header
+					//arg.sender.columns[0].columns
+					
+					//Not Frozen Header
+					//arg.sender.columns[1].columns
+					//Resultados
+					//arg.sender.dataSource._view[0].fields -- Totas as colunas
+					//arg.sender.dataSource._view.length -- TOTAL
+					//arg.sender.dataSource._view[1]['ShipName'] -- Resultado por linja
+					
+					//$("#wrsGrid").WrsGridTelerikControlColumnPlusMinus(false).minMaxWidth({minWidth:50, maxWidth:50});
+                	var idName	=	arg.sender._cellId.replace('_active_cell','')  ;
+
+				}
+
+            
+
+				
+function dsData(data,ds)
+{
+	
+//	alert(data)
+	for(obj in ds)
+	{
+		$('body').prepend(obj+':;'+ds[obj]+'<br><br>');
+	}
+//$('body').prepend(data.ss+'<br><br>');
+	
+	return '[['+data+']]';
+}
+
+		$(function()
+					{
+								$("#wrsGrid").kendoGrid(
+										{
+											dataBound: onDataBound,
+
+												"columns":[
+																{
+																		"title":"Frozen Header",
+																		"locked":true,
+																		"columns":
+																					[
+																							{
+																								"field":"OrderID",
+																								"title":"Order ID",
+																								"width":200,
+																								//"locked":true
+																							},
+																							{
+																								"field":"Freight",
+																								"width":200,
+																								//"locked":true,
+																								"title":"Freight 012"
+																							},
+																							{
+																								"field":"OrderDate",
+																								"width":200,
+																								"title":"OrderDate",
+																								//"locked":true
+																							}
+																						]
+																		},
+																		{
+																			"title":"Exemplo Grupo",
+																			"columns":
+																						[
+																							{
+																								"field":"ShipName",
+																								"width":260,
+																								"title":"Ship Name"
+																							},
+																							{
+																								"field":"ShipCity",
+																								"width":300,
+																								"title":"Ship City"
+																							}
+																						]
+																		}
+														],
+											"dataSource":
+														{
+																"transport":
+																			{
+																				"read":
+																						{
+																							"url":"wrs.php?type=SS",
+																							"contentType":"application\/json",
+																							"type":"POST"
+																						},
+																				"parameterMap":function(data) {
+																											return kendo.stringify(data);
+																											}
+																			},
+																"pageSize":30,
+																"schema":
+																		{
+																			"data":"data",
+																			"model":
+																				{
+																						"fields":
+																									[
+																										{
+																												"field":"ShipName",
+																												"parse"		: dsData
+																												
+																										},
+																										{
+																											"field":"Freight",
+																											"type":"string"
+																										},
+																										{
+																											"field":"OrderID",
+																											"type":"string"
+																										},
+																										{
+																											"field":"ShipCity",
+																											"type":"string"
+																										},
+																										{
+																											"field":"OrderDate",
+																											"type":"string"
+																										}
+																									]
+																				},
+																			  "total":"total"
+																			},
+																	"serverSorting":true,
+																	"serverPaging":true
+													},
+													"sortable":true,
+													"toolbar":
+																[
+																		{"name":"excel"},
+																		{"name":"pdf"}
+																],
+													"excel":
+																{
+																	"fileName":"WRSEXCEL.xlsx",
+																	"filterable":true,
+																	"proxyURL":"wrs.php?type=save"
+																},
+													"pdf":
+																{
+																	"allPages":true,
+																	"fileName":"WRSPDF.pdf",
+																	"proxyURL":"wrs.php?type=save"
+																},
+													"resizable":true,
+													"scrollable":true,
+													"pageable":{
+																	refresh: true,
+																	pageSizes: [30,50,90],
+																	input:true,
+																	numeric:false
+																	//buttonCount: 7
+																}
+									});
+					});
+		  
+		  
+		  </script>
+    
+    <!--  PARA EXCEL -->
+<script src="../../js/jszip.min.js"></script>
+
+
+
+<script>
+ 
+
+/*
+ * PLUGIN WRS GRID
+ * @link http://learn.jquery.com/plugins/basic-plugin-creation/
+ */
+ 
+	 
+/*
+ * Controle dos Eventos 
+ * Do Botão Esconde e Abre
+ */
+ $(function()
+ {
+	$( "#wrsGrid" ).WrsGridTelerikControlColumnPlusMinus(false).minMaxWidth({minWidth:50, maxWidth:50});
+ });
+
+		/*
+		 * Evento do resize
+		 */
+		 var gridElement = $("#wrsGrid");
+
+      function resizeGrid() {
+		$('.wrs_grid').height($(window).height()-150);
+        gridElement.data("kendoGrid").resize();
+      }
+
+      $(window).resize(function(){
+        resizeGrid();
+      });
+
+	
+</script>
+
+<style>
+    #wrsGrid
+      {
+        margin: 0;
+        padding: 0;
+        border-width: 0;
+        height: 100%;
+      }
+</style>
+</body>
+</html>

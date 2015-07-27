@@ -1,0 +1,23 @@
+body{
+	margin: 15px;
+}
+
+select{
+	font-size: 12px !important;
+	font-weight: 100 !important;
+}
+
+/* Configurações para a WRS_MAIN*/
+.link-contianer a{
+	position: relative;
+}
+.link-contianer a span{
+	position: absolute;
+	top: 30%;
+	left:30%;
+	color: #FFFFFF !important;
+	 	
+}
+.asdasd{
+
+}

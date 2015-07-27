@@ -1,0 +1,115 @@
+/* Configuração do Title do Contex Menu */
+.contex-menu-title:before {
+    content: attr(data-menutitle);
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    background: #DDD;
+    padding: 2px;
+
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+}
+.contex-menu-title :first-child {
+    margin-top: 20px;
+}
+
+.ui-layout-south{
+	padding: 0px !important;
+	position: relative;
+}
+
+
+.ui-layout-south li a
+{
+	background: transparent;
+	padding: 0px ;
+	color: #FFF !important;
+	font-size: 10px;
+	
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+
+	padding-top:2px ;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+
+.ui-layout-south li.ui-state-active{
+	padding: 0px;
+	margin: 0px;
+}
+.wrs_panel_info_hover{
+	padding: 9px !important;
+	font-size: 13px;	
+	border: none;
+	background: transparent;
+}
+.ui-layout-south li a:hover
+{
+	background: transparent;
+	border: none;
+}
+
+
+.rodape_name_right{
+	position: absolute;;
+	right: 10px;
+	top: 10px;	
+}
+
+.rodape_name_right .ui-state-active{
+	border: none;
+	background: transparent;
+}
+
+
+
+
+.wrs_icon
+{
+	width: 32px;
+	height: 32px;
+	display: block;
+}
+
+.wrs_home{
+	background-image: url("../imagens/btn/home.png");
+}
+
+.wrs_new{
+	background-image: url("../imagens/btn/page_table_add.png");
+}
+
+.wrs_open{
+	background-image: url("../imagens/btn/folder.png");
+}
+
+.wrs_save{
+	background-image: url("../imagens/btn/stock_save.png");
+}
+
+.wrs_save_how{
+	background-image: url("../imagens/btn/gtk-save-as.png");
+}
+
+.wrs_download{
+	background-image: url("../imagens/btn/download.png");
+}
+
+
+.wrs_out{
+	background-image: url("../imagens/btn/door-out-icon.png");
+}
+
+
+.wrs_user{
+	background-image: url("../imagens/btn/door-out-icon.png");
+}
+
+ 

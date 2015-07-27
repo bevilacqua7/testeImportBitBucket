@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!-- http://www.pittss.lv/jquery/gomap/examples.php -->
+<html>
+<head>
+    <title>Basic usage</title>
+    <meta charset="utf-8">
+
+	 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAvq_yJP8-zcJZNuwF47gmhIGPXQhjlTgE&sensor=true"></script>
+    <script src="../../jquery.min.js"></script>
+
+<script type="text/javascript" src="../jquery.gomap-1.3.3.js"></script>
+
+   
+    
+    
+</head>
+
+<style> 
+/* Map */ 
+#map { 
+    width:100%; 
+    height:400px; 
+} 
+/* Info window size (optional) */ 
+.gomapMarker { 
+    display: block; 
+    width: 150px; 
+    height: auto; 
+} 
+</style> 
+
+<body>
+<div class="containerMap">
+    <div id="map"></div>
+</div>	
+	<script type="text/javascript">
+	
+	var MAPS_GOOGLE 	=	'';
+$(function() { 
+	
+$("#map").goMap({
+        markers: [{  
+            latitude: -23.676410, 
+            longitude: -46.557007, 
+			title: 'marker title 1',
+			 html: '<b>Nome:</b>Hello!<br>sdhj asdjkhg kasd<br>asdasdasd' ,
+			icon: '../map-marker-32_pink.png'			
+        },{  
+            latitude: -23.686786, 
+            longitude: -46.575975, 
+			title: 'marker title 1',
+			 html: '<b>Nome:</b>Hello 55555!<br>sdhj asdjkhg kasd<br>asdasdasd' ,
+			icon: '../map-marker-32_pink.png'			
+        }], hideByClick: true  
+    }); 
+	
+	
+	
+ 
+	$.goMap.createMarker({  
+            address: 'Giovanni Batista pirelli,1463, Santo André' ,
+            icon: '../map-marker-32_pink.png'	
+    }); 
+	
+	
+});
+
+
+function road(){
+	$('#map').width(400); 
+	goMapsResize();
+}
+
+setTimeout(road,1000*5)
+
+</script>
+
+<div class="dd"></div>
+    
+	
+</body>
+</html>

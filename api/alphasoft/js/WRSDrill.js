@@ -1,0 +1,485 @@
+/**
+ * PLUGIN WRS DRILL
+ * Construção dos principais eventos do Drill
+ * 
+ * 
+ * Esta api é em conjunto com o contextJS 
+ * A API contextJS foi modificada para que funcione perfeitamente com nossos eventos e controles exclusivo que só o WRS contem
+ * 
+ * @link http://lab.jakiestfu.com/contextjs/
+ * @link http://learn.jquery.com/plugins/basic-plugin-creation/
+ */
+
+
+function addDrillOnDataBound(nameID,kendoUI)
+{
+	var kendo			=	wrsKendoUiContextMenu(kendoUI.sender,true);
+	var layout			=	kendo.layout_full;
+	var rows_tag		=	explode(',',layout['LAYOUT_ROWS']);
+	var column_tag		=	explode(',',layout['LAYOUT_COLUMNS']);
+
+	
+	var _data			=	kendoUI.sender._data;
+	var __kendoUI		=	kendoUI.sender;
+
+	var keyName			=	getFirstValueArray(kendoUI.sender.columns);
+	var name_column		=	__kendoUI.columns[keyName].column_table;
+	var sizeColumns		=	__kendoUI.columns[keyName].flag_total_column
+	var columns_fixed	=	explode(',',__kendoUI.columns[keyName].layout['LAYOUT_ROWS']);
+		columns_fixed	=	columns_fixed.length+1;
+
+		
+
+	/*
+	 * Adicionando o DrilDown
+	 */
+	
+	var clickDrillDown	=	 function(){
+		
+					var LEVEL_DRILL	=	 $(this).attr('LEVEL_DRILL');
+					var LEVEL_FULL	=	 $(this).attr('LEVEL_FULL');
+					var rel			=	 $(this).attr('rel');
+					
+					var indexParent			=	 $(this).parent().index();
+					var _layout				=	[];
+					var rows				=	explode(',',layout['LAYOUT_ROWS']);
+					var column				=	explode(',',layout['LAYOUT_COLUMNS']);
+					var filter_add			=	'';
+					if(rel=='column')
+						{
+							indexParent			=	 $(this).parent().parent().index();
+							column[indexParent]	=	LEVEL_DRILL;
+							_layout['LAYOUT_COLUMNS']	=	column;
+							
+							
+						
+						}else{
+							rows[indexParent-1]		=	LEVEL_DRILL;
+							_layout['LAYOUT_ROWS']	=	rows;
+						}
+					
+					
+						filter_add							=	[['__'+replace_attr(LEVEL_FULL),'',LEVEL_FULL+'.['+strip_tags($(this).parent().html())+']']];
+					
+						changeWithDrillFilter(_layout,filter_add);
+		
+	};
+	
+	var is_in_array			=	 function(value){
+	
+			if(in_array(value,rows_tag))
+				{
+					return false;
+				}
+			
+			if(in_array(value,column_tag))
+			{
+				return false;
+			}
+			
+			return true;
+	
+	}
+	for(x in rows_tag)
+		{
+			var json	=	$.parseJSON(base64_decode($('.'+replace_attr(rows_tag[x])).attr('json')));
+			
+			if(!empty(json.LEVEL_DRILL))
+				{
+					if(is_in_array(json.LEVEL_DRILL)){
+						$(nameID).find('.k-grid-content-locked tr').each(function(){
+							if(!$('.k-grid-content tr:eq('+$(this).index()+')').hasClass('tag_total'))
+							{
+								var event	=	$(this).find('td:eq('+(parseInt(x)+1)+')');
+								var aLink	=	$('<a/>',{href:'#'+json.LEVEL_DRILL,'class':'underline','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
+									aLink.click(clickDrillDown);
+								event.html(aLink);
+							}
+						})
+					}
+				}	
+		}
+	
+
+	
+	for(c in column_tag)
+		{
+		
+			if(empty(column_tag[c])) continue;
+			
+		var json	=	$.parseJSON(base64_decode($('.'+replace_attr(column_tag[c])).attr('json')));
+		
+		if(!empty(json.LEVEL_DRILL))
+			{
+				if(is_in_array(json.LEVEL_DRILL)){
+					
+					$(nameID).find('.k-grid-header-wrap tr:eq('+c+')').each(function(){
+						
+						$(this).find('th').each(function(){
+								var event	=	 $(this);
+								
+									if(!event.hasClass('tag_total'))
+									{
+										var aLink	=	$('<a/>',{href:'#'+json.LEVEL_DRILL,'class':'underline','rel':'column','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
+											aLink.click(clickDrillDown);
+										event.html(aLink);
+									}
+								
+						});
+						
+					})
+				}
+			}	
+			
+		}
+
+	
+	
+	
+	
+	
+	
+}
+
+function getFirstValueArray(kendoUi)
+{
+	for(key in kendoUi)
+		{
+			if(key)
+			{
+				return key;
+			}
+		}
+}
+function addTargetDisableContext(kendoUi)
+{
+	var keyName		=	getFirstValueArray(kendoUi);
+	var columnTotal	=	kendoUi[keyName]['flag_total_column'];
+	var tr		=	0;
+	for(total in columnTotal)
+	{
+		var line	=	columnTotal[total];
+		for(th in line)
+		{
+				if(line[th]=='S')
+					{
+						$('.k-grid-header-wrap tr:eq('+tr+') th:eq('+th+') ').addClass('tag_total');
+					}
+		}
+		
+		tr++;
+	}
+}
+(function ( $ ) {
+    $.fn.WrsDrill		= function()
+    {
+    	$event		=	 this;
+    
+    	
+    	//var kendoUi		=	$('#'+$event.attr('id')).data('kendoGrid');
+		
+    //	wrsKendoUiFindColumnsDeep(kendoUi,1);
+    	
+    	$('.dropdown-menu-drill').remove();
+		/*
+		 * Eventos principais recebidps
+		 * construido por Marcelo Santos
+		 * 
+		 * json
+		 * event
+		 * parent
+		 * type
+		 * kendoId
+		 * layout
+		 * 
+		 * Type
+		 * coluna_header_line
+		 * linha
+		 * linha_header
+		 * coluna_headerchangeWithDrill
+		 * 
+		 * 
+		 */
+    	function drill_click_option(e)
+    	{
+    		var IDName			=	'#'+e.kendoId;
+    		var kendoUi			=	$(IDName).data('kendoGrid');
+    		var _data			=	kendoUi._data;
+    		var keyName			=	getFirstValueArray(kendoUi.columns);
+    		var name_column		=	kendoUi.columns[keyName].column_table;
+    		var sizeColumns		=	kendoUi.columns[keyName].flag_total_column
+    		var columns_fixed	=	explode(',',kendoUi.columns[keyName].layout['LAYOUT_ROWS']);
+    			columns_fixed	=	columns_fixed.length+1;
+
+    		
+    		var rows		=  	'';
+    		var column		=	'';
+    		var measure		=	'';
+    		var indexParent	=	e.parent.index()-1;
+    		
+    		var rows_current_full_name		=	'';
+    		var column_current_full_name	=	'';
+    		var measure_current_full_name	=	'';
+    		var filter_add					=	'';
+    		var value_select				=	'';
+    		
+    		var _layout				=	 [];
+    		var layout				=	e.layout;
+    		
+    		
+    		for(x in layout)
+    			{
+    					_layout[x]	=	explode(',',layout[x]);
+    			}
+
+    		switch(e.type)
+    		{
+				case 'linha' 				:  {
+													var indexTR			=	e.parent.parent().index();
+													var indexTD			=	parseInt(e.parent.index());
+														value_select	=	strip_tags(_data[indexTR][name_column[indexTD]]);
+															rows_current_full_name				=	_layout['LAYOUT_ROWS'][indexParent];
+															_layout['LAYOUT_ROWS'][indexParent]	=	e.json['LEVEL_FULL'];
+															filter_add							=	[['__'+replace_attr(rows_current_full_name),'',rows_current_full_name+'.['+value_select+']']];
+															changeWithDrillFilter(_layout,filter_add);
+				};	
+				break;
+				case 'coluna_header'		:	
+    			case 'coluna_header_line' 	:	{
+									    				var sizeTr	=	e.parent.parent().parent().find('tr').length;
+														var indexTr	=	 e.parent.parent().index();
+														
+															if(sizeTr==1 || (sizeTr-1)==indexTr)
+																{
+																	var index_rest	=	'';
+																		measure		=	explode(',',e.layout['LAYOUT_MEASURES']);																		
+																		measure		=	fwrs_array_change_value(measure,e.layout['COLUMN_HEADER'][indexParent+1],e.json['MEASURE_UNIQUE_NAME']);
+																		changeWithDrillColumnRows(measure,'LAYOUT_MEASURES');
+																}
+																else
+																{
+																	column				=	explode(',',e.layout['LAYOUT_COLUMNS']);
+																	var td_index		=	e.parent.index();
+																	var tr_index		=	e.parent.parent().index();
+																	var td_index		=	td_index+qtd_frozen_eq(IDName,tr_index);
+																	
+																	var key_user		=	tr_index+'_'+td_index;
+																	var html_title		=	kendoUi.headerIndex[key_user]['title'];
+																	
+																	
+																	filter_add							=	[['__'+replace_attr(column[indexTr]),'',column[indexTr]+'.['+html_title+']']];
+																 	column[indexTr]				=	e.json['LEVEL_FULL'];
+																	_layout['LAYOUT_COLUMNS']	=	column;
+																	changeWithDrillFilter(_layout,filter_add);
+																	
+
+																}
+    			};
+    			break;
+    			case 'linha_header'			:	{
+    												var sizeTr	=	e.parent.parent().parent().find('tr').length;
+    												var indexTr	=	 e.parent.parent().index();
+    												
+    													if(sizeTr==1 || (sizeTr-1)==indexTr)
+    														{
+    														
+	    														rows				=	explode(',',e.layout['LAYOUT_ROWS']);
+	    														rows[indexParent]	=	e.json['LEVEL_FULL'];
+	    														changeWithDrillColumnRows(rows,'LAYOUT_ROWS');
+    														}
+    														else
+    														{
+    															column			=	explode(',',e.layout['LAYOUT_COLUMNS']);
+    															column[indexTr]	=	e.json['LEVEL_FULL'];
+    															changeWithDrillColumnRows(column,'LAYOUT_COLUMNS');
+    														}
+    													
+    													
+    			};break;
+    			case 'data'				:	{
+    								/*
+    								 * Esta opção é mais complexa pois mudar as colunas e header para fazer a integração correta
+    								 */
+										var indexTR			=	e.parent.parent().index();
+										var indexTD			=	parseInt(e.parent.index());
+											rows			=	explode(',',e.layout['LAYOUT_ROWS']);
+											column			=	explode(',',e.layout['LAYOUT_COLUMNS']);
+											value_select	=	strip_tags(_data[indexTR][name_column[indexTD]]);
+											
+
+											
+										var _layout		=	[];
+										var _filter		=	[];
+										var _value		=	'';
+										var header_size	=	0;
+										
+												for(x in rows)
+													{
+														_value					=	strip_tags(_data[indexTR][name_column[parseInt(x)+1]]);
+														_filter[_filter.length]	=	['__'+replace_attr(rows[x]),'',rows[x]+'.['+_value+']'];
+													}
+												
+										header_size	=	$event.find('.k-grid-header-wrap tr').length;
+										
+										
+										if(header_size!=1)
+										{
+												for(c in column)
+													{
+														_value		=	'';
+														var countTD	=	0;
+														//Pesquisando qual a posição correta de cara Header
+														$event.find('.k-grid-header-wrap tr:eq('+c+') ').find('th').each(function(){
+															
+																var colspan	=	$(this).attr('data-colspan');
+																	colspan	=	 empty(colspan) ? 1 : colspan;	
+																	countTD	=	countTD+parseInt(colspan);
+																if(countTD>=(indexTD+1) && empty(_value))
+																{
+																	_value	=	 strip_tags($(this).html());
+																}
+														});
+
+														var __local_array		=	[];
+															__local_array[0]	=	'__'+replace_attr(column[c]);
+															__local_array[1]	=	'';
+															__local_array[2]	=	column[c]+'.['+_value+']';
+
+														_filter[_filter.length]	=	__local_array;
+													}
+										}
+
+											
+											_layout['LAYOUT_COLUMNS']	=	['empty'];
+											_layout['LAYOUT_MEASURES']	=	[e.layout['COLUMN_HEADER'][indexTD]];
+											_layout['LAYOUT_ROWS']		=	[e.json['LEVEL_FULL']];
+										
+											
+
+											changeWithDrillFilter(_layout,_filter);
+										
+					
+    			};break;
+    		}
+    	}// EDN drill_click_option(e)
+    	
+    	//Start context Menu
+    	context.init({preventDoubleContext: false,above:'auto'});
+
+    	var jsonRelationShip	=	$.parseJSON(base64_decode(ATRIBUTOS_JSON));
+    	var jsonMeasure			=	$.parseJSON(base64_decode(METRICAS_JSON));
+    	
+    	/*
+    	 * Para que funcione tanto com RelationShip,Measure e resultados 
+    	 */
+    	var menu_context_relation_ship_measure	=	 function (_jsonMenu)
+    	{
+    		var menuMain				=	[];
+    		menuMain[menuMain.length]	=	{header	: 'Options', action:drill_click_option};
+
+    		for(indexMenu in _jsonMenu)
+        		{
+        				var subMenu			=	[];
+        				var TITLE			=	indexMenu;
+        				var subObjectMenu	=	_jsonMenu[indexMenu];
+        				
+        				for(indexSubRElation	in subObjectMenu)
+        					{
+        							var detailSubRelation	=	subObjectMenu[indexSubRElation];
+        							var _text				=	empty(detailSubRelation['LEVEL_NAME']) ? detailSubRelation['MEASURE_NAME'] : detailSubRelation['LEVEL_NAME'];
+        							var fullName			=	empty(detailSubRelation['LEVEL_FULL']) ? detailSubRelation['MEASURE_UNIQUE_NAME'] : detailSubRelation['LEVEL_FULL'];
+        							subMenu[subMenu.length]	=	{text	: _text		, className:replace_attr(fullName),action:drill_click_option, json:base64_encode(json_encode(detailSubRelation,true))};
+        							
+        							/*
+        							 * 	ATIBUTOS
+        							 	[RELATIONSHIP_KEY] => [192.168.1.4][GSK - PMB][GSK - PMB][MERCADO].[MERCADO]
+        			                    [DIMENSION_NAME] => MERCADO
+        			                    [LEVEL_FULL] => [MERCADO].[MERCADO]
+        			                    [LEVEL_NAME] => MERCADO
+        			                    [LEVEL_UP] => 
+        			                    [LEVEL_DOWN] => 
+        			                    [LEVEL_DRILL] => 
+        			                    [LEVEL_DEFAULT] => [MERCADO].[MERCADO].[(All)]
+        			                    [LATITUDE] => 
+        			                    [CUBE_ID] => [GSK - PMB][GSK - PMB]
+        							 */
+        								/*
+        								 * MEASURES
+        								[MEASURE_KEY] => [192.168.1.4][GSK - PMB][GSK - PMB]
+        			                    [MEASURE_NAME] => DOLAR
+        			                    [MEASURE_UNIQUE_NAME] => [Measures].[DOLAR]
+        			                    [MEASURE_CAPTION] => DOLAR
+        			                    [DATA_TYPE] => 5
+        			                    [NUMERIC_PRECISION] => 16
+        			                    [NUMERIC_SCALE] => -1
+        			                    [MEASURE_UNITS] => 
+        			                    [DESCRIPTION] => 
+        			                    [MEASURE_DISPLAY_FOLDER] => FATOS
+        			                    [DEFAULT_FORMAT_STRING] => Standard
+        			                    */
+        					}
+        				
+        				var detailSubRelation			=	subObjectMenu[0];
+        				var fullName					=	empty(detailSubRelation['LEVEL_FULL']) ? detailSubRelation['MEASURE_UNIQUE_NAME'] : detailSubRelation['LEVEL_FULL'];
+        					menuMain[menuMain.length]	=	{text	: TITLE	, subMenu:subMenu,className:replace_attr(fullName)};
+        				//menuMain[menuMain.length]=	 {divider: true};
+        		}
+    		
+        	return menuMain;
+    	}
+    	
+    	
+    	/*
+    	 * Context Menu das Linhas
+    	 */
+    	$(".k-grid-content-locked").attr('rel','noContext').attr('type','linha');
+    	context.attachWRS('.k-grid-content-locked td'				, menu_context_relation_ship_measure(jsonRelationShip),$event);
+    	
+    	$(".k-grid-header .k-grid-header-locked").attr('type','linha_header');
+    	context.attachWRS('.k-grid-header .k-grid-header-locked th'	, menu_context_relation_ship_measure(jsonRelationShip),$event);
+
+    	//Dados
+    	$(".k-grid-content").attr('type','data');
+    	context.attachWRS('.k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event);
+
+    	
+    	
+    	//ContextMenu das Heardes mas das Colunas
+    	var length	=	$('.k-grid-header .k-grid-header-wrap tr').length;
+    	
+    	/*
+    	 * Aplicando a header com linhas e colunas na header de resultados
+    	 */
+    	
+    	
+    	var kendoUi		=	$('#'+$event.attr('id')).data('kendoGrid');
+    		
+    		addTargetDisableContext(kendoUi.columns)
+    	
+    	if(length==1)
+    	{
+    		$(".k-grid-header .k-grid-header-wrap").attr('type','coluna_header');
+	    	context.attachWRS('.k-grid-header .k-grid-header-wrap tr:eq(0) th '	, menu_context_relation_ship_measure(jsonMeasure),$event);
+    	}else{
+    		
+    		$('.k-grid-header .k-grid-header-wrap').attr('type','coluna_header_line');
+    		
+    		 
+    		var tag					=	'';
+    		for(var i=0;i<length;i++)
+    			{
+    					tag		=	'.k-grid-header .k-grid-header-wrap tr:eq('+i+') th ';
+    					if(i!=(length-1))
+    					{
+    						context.attachWRS(tag	, menu_context_relation_ship_measure(jsonRelationShip),$event);
+    					}else{
+    						context.attachWRS(tag	, menu_context_relation_ship_measure(jsonMeasure),$event);
+    					}
+    			}   		 
+    	}
+  
+
+
+        return $event;
+    };
+}( jQuery ));
