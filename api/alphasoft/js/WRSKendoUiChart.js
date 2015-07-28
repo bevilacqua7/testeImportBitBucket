@@ -24,12 +24,22 @@
 
     };
 
-    if ($) $.fn.addRule = function (styles, sheet) {
+    if ($) $.fn.addRule = function (styles, sheet){
         addRule(this.selector, styles, sheet);
         return this;
     };
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }(window.jQuery));
+
+
 
 
  										
@@ -241,10 +251,10 @@ function getFisrtChartValue(ChartDefault)
 /*
  * END SLIDE
 */
-function	WRSKendoUiChart(KendoUi) 
+function	WRSKendoUiChart(KendoUi,_onlyDefault) 
 	    {	
-	
 		
+			var onlyDefault		=	empty(_onlyDefault) ? false : _onlyDefault; //Apenas quando for configurações Default
 			var idName			=	KendoUi.element.attr('id');
 			var GRID			=	$('#'+idName);
 			var telerikGrid 	= 	GRID.data('kendoGrid');		
@@ -255,6 +265,8 @@ function	WRSKendoUiChart(KendoUi)
 			var BOX				=	$('.'+idName+'BOX');
 			var headerIndex		=	telerikGrid.headerIndex;
 			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
+			
+			
 			var ChartDefault	=	$.parseJSON(base64_decode(kendoUiTools.CHART)); 
 			var typeChart		=	[];
 						
@@ -275,6 +287,7 @@ function	WRSKendoUiChart(KendoUi)
 			
 			var gaugeOptions	=	{data: [],min:0,max:0};
 			
+		//	console.log('KendoUi',KendoUi);
 			
 			kendoChart.show();
 
@@ -356,6 +369,8 @@ function	WRSKendoUiChart(KendoUi)
 							}
 				
 			}
+			
+			
 			
 			/*
 			 * Apenas permite as colunas que realmente foram selecionadas
@@ -946,6 +961,12 @@ function	WRSKendoUiChart(KendoUi)
 				//END Configure Chart
 				
 				createTypeForms();
+				
+				//Quando for o Default Para o processo neste estágio
+				if(onlyDefault)
+				{
+					return true;
+				}
 				
 				/*
 				 * COnstruindo o Evento do Select

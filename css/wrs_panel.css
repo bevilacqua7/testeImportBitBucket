@@ -1289,3 +1289,13 @@ margin:0px;
 .padding-5{
 	padding: 5px !important;
 }
+
+
+
+.active_tools{
+	-webkit-box-shadow: inset -5px -5px 12px 0px rgba(50, 50, 75, 0.38);
+-moz-box-shadow:    inset -5px -5px 12px 0px rgba(50, 50, 75, 0.38);
+box-shadow:         inset -5px -5px 12px 0px rgba(50, 50, 75, 0.38);
+color:#FFF !important;
+background: #449D44 !important;
+}

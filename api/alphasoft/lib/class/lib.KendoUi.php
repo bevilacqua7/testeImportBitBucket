@@ -108,6 +108,17 @@ class KendoUi
 		return array('page_size','PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','frozen','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE');	
 	}
 	
+	/*
+	 * Configurando o array acimapa para o Javascript
+	 */
+	public function jsRequestWrsKendoUiParam()
+	{
+		$_param 	=	 $this->getRequestWrsKendoUi();
+		$_param_tmp	=	array();
+		foreach($_param as $label => $value){$_param_tmp[$value]	=	'';}
+		return $_param_tmp;
+	}
+	
 	
 	private function buildTelerikKendo()
 	{

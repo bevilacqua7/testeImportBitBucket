@@ -1,7 +1,7 @@
 
 
 /*
- * TODO: Tem que sincronizar esta função com o resizeGridSimple()
+ * TODO: Tem que sincronizar esta função com o resizeGridSimple()open
  */
 (function ( $ ) {
 	
@@ -287,5 +287,139 @@
     };
  
 }( jQuery ));
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * Opções DEFAULD 
+ */
+
+
+
+
+
+
+
+
+
+
+
+//Variável default é preenchida pelo lib.WRS_PANEL
+var getRequestKendoUiDefault	=	{};
+/*
+* Configuração de Gráfico e Visão para o DRAG AND DROP
+*/
+(function( $ ) {
+	 
+  $.fn.wrsConfigGridDefault = function(options) {
+
+  	var opts 					= 	$.extend( {}, getRequestKendoUiDefault, empty(options) ? {} : options),
+  		element					=	this,
+  		data_name				=	'wrsConfigGridDefault',
+  		nav_options				=	element.find('.wrs_grid_options'),
+  		list_wrs_vision			=	element.find('.list-wrs-type-vision'),
+  		btn_options				=	element.find('.btn-options-grid'),
+  		btn_configute_chart		=	element.find('.btn-configute-chart'),
+  		btn_open_type_vision	=	element.find('.btn-open-type-vision'),
+  		data					=	element.data(data_name);
+  	
+  		if(empty(options) && !empty(data)) opts	=	data;
+  		
+  	/*
+  	 * Configurando o tipo de visualização da telas
+  	 */
+  	//
+  	var function_btn_open_type_vision		=	 function()
+  	{
+  		list_wrs_vision.find('li a').each(function(){
+  				var _wrs_data		=	 $(this).attr('wrs-data');
+  				$(this).removeClass('active_tools');
+  				if(opts.WINDOW	==	_wrs_data)$(this).addClass('active_tools');
+  		});
+  	}
+  	
+  	var function_click_list_wrs_vision			=	 function(){
+  			var _wrs_data		=	$(this).attr('wrs-data');
+  				opts.WINDOW		=	_wrs_data;
+  				element.data(data_name,opts);
+  				list_wrs_vision.find('li a').removeClass('active_tools');
+  				$(this).addClass('active_tools');
+  				return false;
+  	}
+  	
+  	
+  	//Click do Botão - nav_options
+  	var event_click_btn_options	=	 function(){
+  		nav_options.find('input').each(function(){if(opts[$(this).attr('name')]){$(this).prop('checked',true);}else{$(this).prop('checked',false);}});
+  	}
+  	
+  	
+  	//Evento de click nos INPUT do Options
+  	var event_find_nav_options_input	=	 function()
+  	{
+  		var _checked				=	 $(this).prop('checked');
+  		opts[$(this).attr('name')]	=_checked;
+  		
+  		element.data(data_name,opts);  			
+  	}
+  	
+  	//Abrindo o Modal de opções do CHART
+  	var event_btn_configute_chart	=	 function(){
+  		
+  			var KendoUi	=	{
+  					element		:	nav_options,
+  					headerIndex	:	{}
+  			};
+  			
+  			foreach(opts);
+  			nav_options.attr('wrsKendoUi',base64_encode(json_encode(opts,true)));
+  			nav_options.data('kendoGrid',KendoUi);	
+  			
+  		/*
+  		 * Usando a estrutura atual para manipular a tela de customização do chart
+  		 * É necessário converter a tela atual para a estrutura do kendo ui somente dessa forma é possível utilizar sem problemas toda a estrutura
+  		 */
+  		
+  		WRSKendoUiChart(KendoUi,true);
+  		
+  		
+  		$($(this).attr('data-target')).modal('show');  		
+  	}
+  	
+  	//EVENTS
+  	//Click para iniciar a configuração das Visões
+  	btn_open_type_vision.unbind('click').click(function_btn_open_type_vision);  
+  	
+  	//Executa a mudança de visão
+  	list_wrs_vision.find('li a').unbind('click').click(function_click_list_wrs_vision);
+  	
+  	//Click do Botão OPTIONS
+  	btn_options.unbind('click').click(event_click_btn_options);
+  	
+  	nav_options.find('li').each(function(){
+  			$(this).find('input').unbind('click').click(event_find_nav_options_input);
+  			$(this).unbind('click').click(function (e) {e.stopPropagation();});
+  	});
+  	
+  	
+  	btn_configute_chart.unbind('click').click(event_btn_configute_chart);
+  	
+  		
+      return element;
+
+  };
+
+}( jQuery ));
+//END
+
  
 

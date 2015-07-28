@@ -26,14 +26,34 @@ $BTN_SAVE							=	LNG('BTN_SAVE');
 $BTN_APLY								=	LNG('BTN_APLY');
 $CHART_CONFIG							=	LNG('CHART_CONFIG');
 
-
+$script_tags						=	'';
 //TAG pode ser enviada externamente pelo include
 if(!isset($HIDE_EXPORT)) $HIDE_EXPORT	=	'';
 
+if(!isset($getRequestKendoUiDefault)) $getRequestKendoUiDefault =json_encode('',true); 
+
+
+	//Se for solicitado o hide então é a opção de configuração no caso aplica-se as configurações necessárias
+	$NAV_CONFIG_WRS		=	'';
+	if(!empty($HIDE_EXPORT)){
+		$NAV_CONFIG_WRS		=	'NAV_CONFIG_WRS';
+		$script_tags		=	<<<HTML
+										
+											$(function(){
+												$('.{$NAV_CONFIG_WRS}').wrsConfigGridDefault();
+											});
+										
+HTML;
+
+	}			
+	
 $WRS_PANEL_HEADER_TABLE		=	<<<HTML
-
-
-<nav class="navbar  wrs_nav_relatorio ui-state-active" id="{$idTag}NAV" >
+<script>
+	//KendoUiChart
+	getRequestKendoUiDefault = {$getRequestKendoUiDefault};	
+	{$script_tags}	
+</script>
+<nav class="navbar  wrs_nav_relatorio ui-state-active {$NAV_CONFIG_WRS}" id="{$idTag}NAV" >
 		  <div class="container-fluid">
 		  
 		  <!-- Title -->
@@ -65,8 +85,8 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 				<div class="grid_button_header_menu ">
 					  		
 				<!-- TOTAL -->
-				<div class="btn-group dropdown-menu-configuration wrs_grid_options">
-						<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+				<div class="btn-group dropdown-menu-configuration wrs_grid_options" id="wrs_grid_options_default">
+						<button type="button" class="btn btn-default btn-options-grid btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 						    <i class="fa fa-cog"></i> {$GRID_HEADER_OPTION} <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" role="menu_export">
@@ -92,10 +112,10 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 					  		 
 					  		<li class="info_chart divider"></li>
 					  		<li class="info_chart li-padding">
-					  			<button type="button" class="btn btn-info  btn-block  btn-sm color_write chart_config_btn" data-target="#myModalChartConfig" ><i class="fa fa-cog"></i> {$CHART_CONFIG}</button>
+					  			<button type="button" class="btn btn-info btn-configute-chart btn-block  btn-sm color_write chart_config_btn" data-target="#myModalChartConfig" ><i class="fa fa-cog"></i> {$CHART_CONFIG}</button>
 					  		</li> 
-					  		<li class="divider"></li>
-					  		<li class="li-padding">
+					  		<li class="divider {$HIDE_EXPORT}"></li>
+					  		<li class="li-padding {$HIDE_EXPORT}">
 					  			<button type="button" class="btn btn-success  btn-block  btn-sm btn_add_opcoes"><i class="fa fa-filter"></i> {$BTN_APLY}</button>
 					  		</li>
 						</ul>
@@ -134,11 +154,11 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 					  		
 					
 				<!-- Visao -->
-				 <div class="btn-group">
-						  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				 <div class="btn-group ">
+						  <button type="button" class="btn btn-default btn-open-type-vision btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 						    <i class="fa fa-eye"></i> {$GRID_HEADER_SEE} <span class="caret"></span>
 						  </button>
-						  <ul class="dropdown-menu wrs_tools_options_window" role="menu">
+						  <ul class="dropdown-menu wrs_tools_options_window list-wrs-type-vision"  role="menu">
 						    <li><a href="#" wrs-data="grid"><i class="fa fa-th"></i> {$GRID_HEADER_SEE_GRID}</a></li>
 						    <li><a href="#"	wrs-data="chart"><i class="fa fa-bar-chart"></i> {$GRID_HEADER_SEE_CHART}</a></li>
 						    <li><a href="#"	wrs-data="map"><i class="fa fa-map-marker"></i> {$GRID_HEADER_SEE_MAP}</a></li>
@@ -148,7 +168,7 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 								<li class="divider"></li>
 							<li><a href="#"	wrs-data="chart_grid"><i class="fa fa-bar-chart"></i> {$GRID_HEADER_SEE_CHART} + <i class="fa fa-th"></i> {$GRID_HEADER_SEE_GRID}</a></li>
 							<li><a href="#" wrs-data="chart_map"><i class="fa fa-bar-chart"></i> {$GRID_HEADER_SEE_CHART} + <i class="fa fa-map-marker"></i> {$GRID_HEADER_SEE_MAP}</a></li>
-								<li class="divider"></li>
+							<li class="divider"></li>
 							<li><a href="#"	wrs-data="map_grid"><i class="fa fa-map-marker"></i> {$GRID_HEADER_SEE_MAP} + <i class="fa fa-th"></i> {$GRID_HEADER_SEE_GRID}</a></li>
 							<li><a href="#" wrs-data="map_chart"><i class="fa fa-map-marker"></i> {$GRID_HEADER_SEE_MAP} + <i class="fa fa-bar-chart"></i> {$GRID_HEADER_SEE_CHART}</a></li>
 							

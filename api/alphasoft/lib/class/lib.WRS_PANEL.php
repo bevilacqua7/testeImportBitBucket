@@ -231,6 +231,7 @@ class WRS_PANEL  extends WRS_USER
 		}
 		else
 		{
+			$getRequestKendoUiDefault	=	$this->getRequestKendoUiDefault;
 			include PATH_TEMPLATE.'wrs_panel.php';
 		}
 		
@@ -414,9 +415,15 @@ class WRS_PANEL  extends WRS_USER
 			$getRequestKendoUi['PLUS_MINUS']	=	 true;
 		}
 
-		$getRequestKendoUi			=	$this->loadWrsKEndoUi($getRequestKendoUi);
-		$getRequestKendoUi_TAG		=	' id="'.$TelerikUi->getId().'" wrsKendoUi="'.base64_encode(json_encode($getRequestKendoUi,true)).'" '; 
 		
+
+		
+		$getRequestKendoUi				=	$this->loadWrsKEndoUi($getRequestKendoUi);
+		$this->getRequestKendoUiDefault	=	$getRequestKendoUiDefault	=	json_encode(array_merge($TelerikUi->jsRequestWrsKendoUiParam(),$getRequestKendoUi),true);
+		$getRequestKendoUi_TAG			=	' id="'.$TelerikUi->getId().'" wrsKendoUi="'.base64_encode(json_encode($getRequestKendoUi,true)).'" '; 
+		
+		
+
 		//Parametrização que vem do select do HTML
 		$flag_invert_column		=	fwrs_request('ORDER_COLUMN'); // 0 - false - 1 true
 		$flag_invert_column		=	empty($flag_invert_column) ? 0 : $flag_invert_column; // Garantindo que não vá nulo
@@ -518,9 +525,9 @@ class WRS_PANEL  extends WRS_USER
 						$this->SAVE_CACHE_SSAS_USER('TABLE_CACHE',$rows['QUERY_TABLE']);
 						if($rows['USER_CODE'] != $USER_CODE)
 						{
-							$clone_table = $this->_query->CLONE_SSAS_TABLE($cube['QUERY_CACHE']);
-							$clone_table_exec = $this->query($clone_table);
-							$rows = $this->fetch_array($clone_table_exec);
+							$copy_table = $this->_query->COPY_SSAS_TABLE($cube['QUERY_CACHE']);
+							$copy_table_exec = $this->query($copy_table);
+							$rows = $this->fetch_array($copy_table_exec);
 							$this->SAVE_CACHE_SSAS_USER('TABLE_CACHE',$rows['QUERY_TABLE']);
 						}
 						$cube =	$this->getCube();

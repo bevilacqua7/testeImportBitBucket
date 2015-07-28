@@ -119,12 +119,12 @@ EOF;
 	 *
 	 * @return <string>
 	 */
-	public function CLONE_SSAS_TABLE( $QUERY_ID )
+	public function COPY_SSAS_TABLE( $QUERY_ID )
 	{
-		// Exemplo: EXEC Clone_SSAS_Table 'mfacioli','18BDBC3648FE450D91BE799CE5758D32'
+		// Exemplo: EXEC Copy_SSAS_Table 'mfacioli','18BDBC3648FE450D91BE799CE5758D32'
 	 	$USER_CODE = WRS::USER_CODE();
 		$query = <<<EOF
-					EXEC Clone_SSAS_Table 	'{$USER_CODE}',
+					EXEC Copy_SSAS_Table 	'{$USER_CODE}',
 											'{$QUERY_ID}'
 EOF;
 		return $query;
