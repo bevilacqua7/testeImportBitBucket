@@ -251,6 +251,7 @@ function getFisrtChartValue(ChartDefault)
 /*
  * END SLIDE
 */
+
 function	WRSKendoUiChart(KendoUi,_onlyDefault) 
 	    {	
 		

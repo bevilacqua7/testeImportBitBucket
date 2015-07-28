@@ -318,6 +318,7 @@ var getRequestKendoUiDefault	=	{};
 /*
 * Configuração de Gráfico e Visão para o DRAG AND DROP
 */
+
 (function( $ ) {
 	 
   $.fn.wrsConfigGridDefault = function(options) {

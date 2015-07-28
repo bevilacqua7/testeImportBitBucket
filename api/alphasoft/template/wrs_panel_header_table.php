@@ -34,8 +34,11 @@ if(!isset($getRequestKendoUiDefault)) $getRequestKendoUiDefault =json_encode('',
 
 
 	//Se for solicitado o hide então é a opção de configuração no caso aplica-se as configurações necessárias
+	
+
 	$NAV_CONFIG_WRS		=	'';
 	if(!empty($HIDE_EXPORT)){
+		
 		$NAV_CONFIG_WRS		=	'NAV_CONFIG_WRS';
 		$script_tags		=	<<<HTML
 										
