@@ -30,14 +30,15 @@ var context = context || (function () {
 				e.preventDefault();
 			});
 		}
-		$(document).on('mouseenter', '.dropdown-submenu', function(){
+		$(document).on('mouseenter', '.dropdown-submenu', function(e){
+			
 			var $sub = $(this).find('.dropdown-context-sub:first'),
 				subWidth = $sub.width(),
-				subLeft = $sub.offset().left,
-				collision = (subWidth+subLeft) > window.innerWidth;
-			if(collision){
-				$sub.addClass('drop-left');
-			}
+				collision = (parseInt(subWidth)+parseInt($dd.width())+parseInt(e.pageX)) > parseInt($(window).width()),
+				subLeft = (collision)?parseInt(parseInt(subWidth)*-1):parseInt($dd.width());
+				
+			$sub.css('left',(collision)?parseInt(parseInt(subWidth)*-1):subLeft);
+			
 		});
 		
 	}
@@ -300,7 +301,9 @@ var context = context || (function () {
 		//
 
 		
-		
+
+		$('#dropdown-' + id+':before').addRule({left:'9px'});
+		$('#dropdown-' + id+':after').addRule({left:'8px'});
 		
 		
 		$('.dropdown-context:not(.dropdown-context-sub)').hide();
@@ -367,11 +370,17 @@ var context = context || (function () {
 		/*
 		 * END IF
 		 */
-		
+		var max_x  = parseInt(parseInt($(window).width()) - parseInt($dd.css('width')))-2;
+		var var_left=parseInt((e.pageX - 13))+parseInt($dd.css('width'))>parseInt($(window).width())?max_x:(e.pageX - 13);
+		var pos_seta=parseInt($dd.css('width'))-parseInt(parseInt($(window).width())-parseInt(e.pageX));
+		if(max_x==var_left){
+			$('#'+$dd.attr('id')+':before').addRule({left:(parseInt(pos_seta)-1)+'px'});
+			$('#'+$dd.attr('id')+':after').addRule({left:pos_seta+'px'});
+		}
 		if (typeof options.above == 'boolean' && options.above) {
 			$dd.addClass('dropdown-context-up').css({
 				top: e.pageY - 20 - $('#dropdown-' + id).height(),
-				left: e.pageX - 13
+				left: var_left
 			}).fadeIn(options.fadeSpeed);
 		} else if (typeof options.above == 'string' && options.above == 'auto') {
 			$dd.removeClass('dropdown-context-up');
@@ -379,12 +388,12 @@ var context = context || (function () {
 			if ((e.pageY + autoH) > $('html').height()) {
 				$dd.addClass('dropdown-context-up').css({
 					top: e.pageY - 20 - autoH,
-					left: e.pageX - 13
+					left: var_left
 				}).fadeIn(options.fadeSpeed);
 			} else {
 				$dd.css({
 					top: e.pageY + 10,
-					left: e.pageX - 13
+					left: var_left
 				}).fadeIn(options.fadeSpeed);
 			}
 		}
