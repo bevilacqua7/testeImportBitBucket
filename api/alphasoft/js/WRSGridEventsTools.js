@@ -321,7 +321,8 @@ var getRequestKendoUiDefault	=	{};
 
 (function( $ ) {
 	 
-  $.fn.wrsConfigGridDefault = function(options) {
+  $.fn.wrsConfigGridDefault = function(options) 
+  {
 
 	  
   	var opts 					= 	$.extend( {}, getRequestKendoUiDefault, empty(options) ? {} : options),
@@ -402,7 +403,7 @@ var getRequestKendoUiDefault	=	{};
 	  		opts[$(this).attr('name')]	= _checked ? 1 : '';
 	  		detect_event();//Abilita Evento
 	  		element.data(data_name,opts);  			
-  	}''
+  	}
   	
   	//Abrindo o Modal de opções do CHART
   	var event_btn_configute_chart	=	 function(){
