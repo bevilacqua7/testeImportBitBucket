@@ -174,7 +174,7 @@ class WRS_FILTER  extends WRS_BASE
 		
 		$ATTRIBUTE	=	 $LEVEL_FULL;
 		
-		$query	=	$this->_query->GET_SSAS_ATTRIBUTE($SERVER, $DATABASE, $CUBE, $ATTRIBUTE, $START, $END, $FILTER_UP, $LIKE, $MEASURE);
+		$query	=	$this->_query->GET_SSAS_MEMBERS($SERVER, $DATABASE, $CUBE, $ATTRIBUTE, $START, $END, $FILTER_UP, $LIKE, $MEASURE);
 		$query	=	 $this->query($query);
 		
 		

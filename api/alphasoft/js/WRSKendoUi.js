@@ -650,8 +650,7 @@ function  themeSUM(nameID,arg)
 			 * Column Header Index criado por Marcelo Santos
 			 */
 			telerikGrid.headerIndex	=	WRSHeaderIndex(telerikGrid);
-			//foreach(telerikGrid.columns[0]);
-			//foreach(telerikGrid.columns[2].columns[0]);
+
 			/*
 			 * Escondendo a Header principal com os exports 
 			 */

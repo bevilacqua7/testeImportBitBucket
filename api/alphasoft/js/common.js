@@ -167,6 +167,15 @@ function getJsonEncodeToElement(element)
 {
 	return $.parseJSON(base64_decode(element.attr('json')));
 }
+
+/*
+ * Decodifica base 64 para json e para array
+ */
+function getJsonDecodeBase64(json)
+{
+	return $.parseJSON(base64_decode(json));
+}
+
 /**
  * @Link http://stackoverflow.com/questions/1822598/getting-url-hash-location-and-using-it-in-jquery/1822617#1822617
  * @returns

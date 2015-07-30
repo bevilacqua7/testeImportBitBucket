@@ -31,7 +31,7 @@
 	
 	<div class="container_center">
 	<h4 class="ui-accordion-header  ui-accordion-header-active ui-state-active"><i class="fa fa-puzzle-piece"></i> <?php echo LNG('ATTRIBUTOS_METRICA');?> <button type="button" class="btn btn-warning btn-xs glyphicon glyphicon-trash wrs_clean_box_drag_drop wrs_clean_box_drag_drop_css" parent="no_parent"></button></h4>
-	<div class="WRS_DRAG_DROP_RECEIVER">
+	<div class="WRS_DRAG_DROP_RECEIVER WRS_MEASURE_DRAG">
 	  <div class="ui-widget-content  wrs_panel_receive ui-state-default" type="metrica" who_receive="metrica">
 	    <ol class="nav nav-tabs wrs_swap_drag_drop sortable_metrica" LNG="DRAG_DROP_FIELD_METRICA"></ol>
 	  </div>

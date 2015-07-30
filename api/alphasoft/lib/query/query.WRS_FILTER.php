@@ -24,19 +24,19 @@ class QUERY_FILTER
 	 *
 	 * @return <string>
 	 */
-	public function GET_SSAS_ATTRIBUTE(	$SERVER, $DATABASE, $CUBE, $ATTRIBUTE, $START, $END, $FILTER, $LIKE, $MEASURE)
+	public function GET_SSAS_MEMBERS( $SERVER, $DATABASE, $CUBE, $ATTRIBUTE, $START, $END, $FILTER, $LIKE, $MEASURE )
 	{
-		// Exemplo: EXEC Get_SSAS_Attribute_Value '192.168.1.3','GSK - DDD','GSK - DDD','[FORCA DE VENDAS].[UNIDADE]',0,11,'','',''
+		// Exemplo: EXEC Get_SSAS_Members '192.168.1.3','GSK - DDD','GSK - DDD','[FORCA DE VENDAS].[UNIDADE]',0,11,'','',''
 		$query = <<<EOF
-					EXEC Get_SSAS_Attribute_Value 	'{$SERVER}',
-													'{$DATABASE}',
-													'{$CUBE}',
-													'{$ATTRIBUTE}',
-													{$START},
-													{$END},
-													'{$FILTER}',
-													'{$LIKE}',
-													'{$MEASURE}'				
+					EXEC Get_SSAS_Members 	'{$SERVER}',
+											'{$DATABASE}',
+											'{$CUBE}',
+											'{$ATTRIBUTE}',
+											{$START},
+											{$END},
+											'{$FILTER}',
+											'{$LIKE}',
+											'{$MEASURE}'				
 EOF;
 		return $query;
 	}

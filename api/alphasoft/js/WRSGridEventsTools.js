@@ -323,18 +323,34 @@ var getRequestKendoUiDefault	=	{};
 	 
   $.fn.wrsConfigGridDefault = function(options) {
 
+	  
   	var opts 					= 	$.extend( {}, getRequestKendoUiDefault, empty(options) ? {} : options),
   		element					=	this,
-  		data_name				=	'wrsConfigGridDefault',
+  		data_name				=	'wrsConfigGridDefault',//WARNING:Cuidado ao alterar essa variável pois ela reflete em outros lugares melhores pesquisaqr antes de modificar - WRSKendoUiCHart -wrs_panel
   		nav_options				=	element.find('.wrs_grid_options'),
   		list_wrs_vision			=	element.find('.list-wrs-type-vision'),
   		btn_options				=	element.find('.btn-options-grid'),
   		btn_configute_chart		=	element.find('.btn-configute-chart'),
   		btn_open_type_vision	=	element.find('.btn-open-type-vision'),
   		data					=	element.data(data_name);
+		nav_options.attr('id','wrs_grid_options_default');
+		
+  		//WARNING:  O nome do ID nao pode ser removido pois existe outros lugares com pendencia no nome - wrs_panel
+		element.attr('id',data_name);
   	
   		if(empty(options) && !empty(data)) opts	=	data;
   		
+  	
+  	var detect_event	=	 function(type)
+  	{
+  			if(type=='clean') 
+  				element.removeAttr('is-event');
+  			else
+  				element.attr('is-event',true);
+  	}
+  	
+  	//Limpando evento
+  	detect_event('clean');
   	/*
   	 * Configurando o tipo de visualização da telas
   	 */
@@ -352,14 +368,29 @@ var getRequestKendoUiDefault	=	{};
   			var _wrs_data		=	$(this).attr('wrs-data');
   				opts.WINDOW		=	_wrs_data;
   				element.data(data_name,opts);
+  				detect_event();//Abilita Evento
   				list_wrs_vision.find('li a').removeClass('active_tools');
   				$(this).addClass('active_tools');
   				return false;
   	}
   	
+  	/*
+  	 * Atualiza de acordo com as informações contidas na original
+  	 * Função pesquisa no html por GRid complementar para que possa usar 
+  	 */
+  	var check_exist_grid	=	 function(){  		
+  		var searchGrid	=	$(document).find('.wrsGrid');
+  		if(!empty(searchGrid.html()))
+  		{
+  			opts	=	getJsonDecodeBase64(searchGrid.attr('wrskendoui'));  			
+  			element.data(data_name,opts);
+  		}  		
+  	}
+  	
   	
   	//Click do Botão - nav_options
   	var event_click_btn_options	=	 function(){
+  		check_exist_grid(); 
   		nav_options.find('input').each(function(){if(opts[$(this).attr('name')]){$(this).prop('checked',true);}else{$(this).prop('checked',false);}});
   	}
   	
@@ -367,21 +398,54 @@ var getRequestKendoUiDefault	=	{};
   	//Evento de click nos INPUT do Options
   	var event_find_nav_options_input	=	 function()
   	{
-  		var _checked				=	 $(this).prop('checked');
-  		opts[$(this).attr('name')]	=_checked;
-  		
-  		element.data(data_name,opts);  			
-  	}
+  		var _checked					=	 $(this).prop('checked');
+	  		opts[$(this).attr('name')]	= _checked ? 1 : '';
+	  		detect_event();//Abilita Evento
+	  		element.data(data_name,opts);  			
+  	}''
   	
   	//Abrindo o Modal de opções do CHART
   	var event_btn_configute_chart	=	 function(){
   		
+  		
+  			var get_measures_title	=	 [];
+  			
+  			
+  			$('.WRS_MEASURE_DRAG').find('li').each(function(){
+  				var _json		=	 $(this).attr('json');
+  				var _json_data	=	getJsonDecodeBase64(_json);
+  				//console.log($(this).attr('vvalue'),getJsonDecodeBase64(_json));  				
+  				get_measures_title[_json_data.MEASURE_UNIQUE_NAME]	=	_json_data.MEASURE_NAME;
+
+  			});
+  			
+  			
+  			/*
+  			 * Comando para já permitir informações selecionada no chart
+  			opts.CHART	=	{data:{
+					'[Measures].[Share Dolar]':{ type : 'column',value : 'column',title : 'Nornal',stack : false}
+				},
+				legend :{},labels:{}};
+  			
+  			
+  			opts.CHART	=	 base64_encode(json_encode(opts.CHART,true));
+  			*/
+  			
+  			element.data(data_name,opts);
+  			
   			var KendoUi	=	{
-  					element		:	nav_options,
-  					headerIndex	:	{}
+  					'element'		:	nav_options,
+  				//Apenas para não ocorrer erro no  WRSKendoUiChart
+  					headerIndex	:	{
+  										chart: {
+  													data:{}, 
+  													measure_title:get_measures_title
+  												}
+  					}
   			};
   			
-  			foreach(opts);
+  			//save options
+  			detect_event();//Abilita Evento
   			nav_options.attr('wrsKendoUi',base64_encode(json_encode(opts,true)));
   			nav_options.data('kendoGrid',KendoUi);	
   			
@@ -390,7 +454,12 @@ var getRequestKendoUiDefault	=	{};
   		 * É necessário converter a tela atual para a estrutura do kendo ui somente dessa forma é possível utilizar sem problemas toda a estrutura
   		 */
   		
+  		nav_options.removeAttr('chart-wrs');//Permite que seja recriado sempre a estrutura nova das escolhas dos charts
+  			
   		WRSKendoUiChart(KendoUi,true);
+  		
+  		
+ // 		TRACE_DEBUG(nav_options.html());
   		
   		
   		$($(this).attr('data-target')).modal('show');  		
@@ -404,6 +473,7 @@ var getRequestKendoUiDefault	=	{};
   	list_wrs_vision.find('li a').unbind('click').click(function_click_list_wrs_vision);
   	
   	//Click do Botão OPTIONS
+
   	btn_options.unbind('click').click(event_click_btn_options);
   	
   	nav_options.find('li').each(function(){

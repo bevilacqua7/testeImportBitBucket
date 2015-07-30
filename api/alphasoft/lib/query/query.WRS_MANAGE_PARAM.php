@@ -67,7 +67,7 @@ class WRS_MANAGE_PARAM
 		$columns 	= 	empty($_columns) 	?	'*' 					: 	$_columns;
 		$columns	=	is_array($columns) 	?	implode(',',array_keys($columns)) 	:	$columns;
 		
-		return  "exec Get_Table_Records '".$table."', '".$orderBy."', '".$orderByPOS."', '".$where."',".$_start.",".$_end;
+		return  "exec Select_Table '".$table."', '".$orderBy."', '".$orderByPOS."', '".$where."',".$_start.",".$_end;
 		//return ' SELECT '.$columns.' FROM '.$table.' '.$where.' ORDER BY '.$orderBy.' '.$orderByPOS;
 	}
 	

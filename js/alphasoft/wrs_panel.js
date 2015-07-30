@@ -1149,7 +1149,23 @@ function wrs_run_filter()
 			}
 		}
 		
+		//foreach(param_request);
+		/*
+		 * Pega os elementos das Opções antes não Dashboard
+		 * 
+		 */
+		var wrsConfigGridDefault		=	$('#wrsConfigGridDefault');
+		var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
 
+		
+		//Se existir interação então faz o merge das informações 
+			if(!empty(wrsConfigGridDefault.attr('is-event'))){
+				if(!empty(wrsConfigGridDefault_data))
+				{
+					param_request	=	merge_objeto(param_request,wrsConfigGridDefault_data);
+				}
+			}
+			
 		runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
 		

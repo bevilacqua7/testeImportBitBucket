@@ -88,7 +88,7 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 				<div class="grid_button_header_menu ">
 					  		
 				<!-- TOTAL -->
-				<div class="btn-group dropdown-menu-configuration wrs_grid_options" id="wrs_grid_options_default">
+				<div class="btn-group dropdown-menu-configuration wrs_grid_options">
 						<button type="button" class="btn btn-default btn-options-grid btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 						    <i class="fa fa-cog"></i> {$GRID_HEADER_OPTION} <span class="caret"></span>
 						</button>

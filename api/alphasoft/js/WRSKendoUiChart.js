@@ -267,8 +267,10 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			var headerIndex		=	telerikGrid.headerIndex;
 			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
 			
-			
 			var ChartDefault	=	$.parseJSON(base64_decode(kendoUiTools.CHART)); 
+			
+
+			
 			var typeChart		=	[];
 						
 			var _data			=	telerikGrid._data;
@@ -286,9 +288,10 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			var ActiveDefault	=	'line';
 			var tmpTotalLine	=	[];
 			
+			
 			var gaugeOptions	=	{data: [],min:0,max:0};
 			
-		//	console.log('KendoUi',KendoUi);
+
 			
 			kendoChart.show();
 
@@ -297,6 +300,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 										radial	:	false,
 										active	:	false
 									};
+			
+			
+			
 			
 			
 			//kendoChart.height(ELEMENT.attr('height-chart'));
@@ -539,6 +545,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 										};
 			
 			ChartDefault		=	$.extend( {}, ChartDefaultOnject, ChartDefault );
+
+			
+			
 			
 			//Flag para saber quando se está usando algumas das opções de DONUT , PIE , RADAR ou Polar
 			var pie_donut			=	false;
@@ -698,7 +707,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 				 * Usando as confirurações do Usuário
 				 * 
 				 */
-	    		
+
 				if(!empty(ChartDefault))
 				{
 					var useCustumer		=	[];
@@ -721,13 +730,14 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 		    			if(is_array(ChartDefault)){
 		    				legendChart	=	ChartDefault['legend'];
 		    			}
-		    			ChartDefault	=	 '';
+		    			
+		    			//Apenas zera quando não for o default
+		    			if(!onlyDefault){ChartDefault	=	 '';}
 		    		}
 				}
 	    		
 	    		
 	    		
-				
 				
 				
 				/*
@@ -750,7 +760,10 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 						for(flf in chartData)	if(empty(firstFullName))	firstFullName=flf
 						chartData					=	[];
 						//chartData[cLevelFull]
-						chartData[infoFirst.name]	=	tmpCustomer[firstFullName];
+						
+						if(!empty(infoFirst)){
+							chartData[infoFirst.name]	=	tmpCustomer[firstFullName];
+						}
 					}
 					
 					//Garante as configurações básica para funcionar
@@ -764,20 +777,27 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 					ChartDefault['data']	=	[];
 		    	}
 		    	
+				
 				//END CUstomer	
 		    	/*
 				 * CHart Config
 				 */
-				var btnConfigChart		=	NAV.find('.chart_config_btn')
-					btnConfigChart.unbind('click').click(function(){
-							var modal	=	 $(this).attr('data-target');
-								$(modal).modal('show');
-								$('.modal-chart-header').html(LNG('CHART_CONFIG'));
-								$('.gauge-container-html,.gauge-container-size-line,.line-total-bubble').addClass('hide');
-								WrsGougeConfigure(idName,kendoUiTools,typeGauge);
-					});
+				var btnConfigChart			 =	NAV.find('.chart_config_btn');				
+				var event_btnConfigChart	=	function(){
+					var modal	=	 $(this).attr('data-target');
+						$(modal).modal('show');
+						$('.modal-chart-header').html(LNG('CHART_CONFIG'));
+						$('.gauge-container-html,.gauge-container-size-line,.line-total-bubble').addClass('hide');
+						WrsGougeConfigure(idName,kendoUiTools,typeGauge);
+					}
 				
+					btnConfigChart.unbind('click').click(event_btnConfigChart);
 				
+
+					//Apenas quando for o Default no DRAG and DROP
+					if(onlyDefault)	event_btnConfigChart();
+					
+					
 				
 				/*
 				 * Carregando a tabela 
@@ -963,21 +983,19 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 				
 				createTypeForms();
 				
-				//Quando for o Default Para o processo neste estágio
-				if(onlyDefault)
-				{
-					return true;
-				}
+				
 				
 				/*
 				 * COnstruindo o Evento do Select
 				 */
 				var loadTypesMeasuresAction	=	 function()
 					{
+					
 						var bodyConfigChart			=	$('.chart-config-body');
 						var measures				=	bodyConfigChart.find('.wrs-measures');
 						var measures_receive		=	bodyConfigChart.find('.wrs-measures-receive');
-
+						
+						
 							if(GRID.attr('chart-wrs')=='true') return true;
 						
 							measures.find('option').remove();
@@ -990,6 +1008,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 								var to_add		=	measures;
 								if(!empty(ChartDefault['data']))
 									{
+									;
+//										console.log('ChartDefault',ChartDefault['data']);
 										if(array_find_data(ChartDefault['data'],lineChartTitles))
 										{//Inserindo os que já estão ativos
 											to_add	=	measures_receive
@@ -1129,9 +1149,17 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 									cCHART['labels']	=	labels;
 									
 									ELEMENT.attr('chart','false');//Abilitando a construção 
-									wrsKendoUiChange('#'+idName,'CHART',base64_encode(json_encode(cCHART,true)));								
 									
-									WRSKendoUiChart(KendoUi);//Run 
+									var chartParam	=	base64_encode(json_encode(cCHART,true));
+									wrsKendoUiChange('#'+idName,'CHART',chartParam);								
+									
+									if(onlyDefault){
+										//Quando for o Default
+										var configOptions	=	$('#wrsConfigGridDefault').data('wrsConfigGridDefault');			
+										configOptions.CHART	=	chartParam;
+									}else{
+										WRSKendoUiChart(KendoUi);//Run 
+									}
 								
 							};
 							
@@ -1357,15 +1385,16 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 							measures.unbind('dblclick').dblclick(toActive);
 							measures_receive.unbind('dblclick').dblclick(toMeasure);
 							
-							
 							$('.toRunConfigChartWrs').unbind('click').click(toRunConfigChartWrs);
-							
 							
 							GRID.attr('chart-wrs','true');//Controler
 							
 					};
 					
 					loadTypesMeasuresAction();
+					
+					//Quando for o Default Para o processo neste estágio
+					if(onlyDefault) return true;
 					
 				
 				//PEsquisando quem é o frozem original
@@ -2137,12 +2166,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 																 */
 																//calculando o maximo e o mínimo do Y
 																//optionBubble.yAxis.min
-																
-																
-																
-																
-																
 															}
+													
 													
 													if(!empty(colNameBubble.cxField))
 													{

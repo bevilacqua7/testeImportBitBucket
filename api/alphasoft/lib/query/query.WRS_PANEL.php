@@ -238,11 +238,11 @@ EOF;
 	 */
 	public function GET_SSAS_HEADER( $TABLE_NAME, $ATTRIBUTE, $LANGUAGE )
 	{
-		// Exemplo: EXEC Get_SSAS_Columns_Table '_MDX_57EBC8E1A2C64670985B79FB9A234DF2_FS','[*]','ENG'
+		// Exemplo: EXEC Get_SSAS_Table '_MDX_57EBC8E1A2C64670985B79FB9A234DF2_FS','[*]','ENG'
 		$query = <<<EOF
-					EXEC Get_SSAS_Columns_Table '{$TABLE_NAME}',
-												'{$ATTRIBUTE}',
-												'{$LANGUAGE}'
+					EXEC Get_SSAS_Table '{$TABLE_NAME}',
+										'{$ATTRIBUTE}',
+										'{$LANGUAGE}'
 EOF;
 			return $query;
 	}

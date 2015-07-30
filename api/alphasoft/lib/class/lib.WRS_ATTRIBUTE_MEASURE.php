@@ -35,12 +35,11 @@ class WRS_ATTRIBUTE_MEASURE  extends WRS_BASE
 	public function isMultipleCube($DATABASE_ID, $USER_ID)
 	{
 		WRS_TRACE('multipleCube()', __LINE__, __FILE__);		
-		$query			=	$this->_query->MULTIPLE_CUBE($DATABASE_ID, $USER_ID);
+		$query			=	$this->_query->MULTIPLE_SSAS_CUBE($DATABASE_ID, $USER_ID);
 		$multiple_cube	=	NULL;
 		
-		$query			=	 $this->query($query);
+		$query			=	$this->query($query);
 		$numRows		=	$this->num_rows($query);
-		
 		if($numRows>1)
 		{
 			$multiple_cube	=	array();

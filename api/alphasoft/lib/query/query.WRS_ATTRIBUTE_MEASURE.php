@@ -44,27 +44,7 @@ EOF;
 	public function MULTIPLE_SSAS_CUBE( $DATABASE_ID, $USER_ID )
 	{
 		$query = <<<EOF
-					SELECT	c.CUBE_ID,
-							c.CUBE_DESC,
-							c.CUBE_FLAG,
-							c.CUBE_STATUS,
-							c.DATABASE_ID,
-							MIN(c.SERVER_ID) AS SERVER_ID,
-							c.CUSTOMER_ID,
-							cu.USER_ID
-					FROM ATT_WRS_CUBE c, 
-						 REL_WRS_CUBE_USER cu
-					WHERE c.DATABASE_ID='{$DATABASE_ID}' 
-					and c.CUBE_ID=cu.CUBE_ID 
-					and cu.USER_ID='{$USER_ID}' 
-					GROUP BY c.CUBE_ID,
-							 c.CUBE_DESC,
-							 c.CUBE_FLAG,
-							 c.CUBE_STATUS,
-							 c.DATABASE_ID,
-							 c.CUSTOMER_ID,
-							 cu.USER_ID
-					ORDER BY c.CUBE_DESC
+		            EXEC Get_SSAS_CubeUser {$USER_ID},'{$DATABASE_ID}'
 EOF;
 		return $query;
 	}
