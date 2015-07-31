@@ -261,6 +261,7 @@ var context = context || (function () {
 				//Não permite alicar o filtro
 				//A class bold é exclusiva do Total para linha e colunas
 
+				
 				if(dropdown_menu.hasClass('bold')){
 					return true;
 				}
@@ -275,6 +276,7 @@ var context = context || (function () {
 					var cssStyle			=	{'top':offset.top-8};//{left:offset.left, top:offset.top};
 					dropdown_menu_sub.offset(cssStyle);
 				}
+				
 			});
 			
 			
@@ -284,6 +286,32 @@ var context = context || (function () {
 		e.preventDefault();
 		e.stopPropagation();
 		
+		
+		/*
+		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
+		 */		
+		var table_parents	=	$(this).parents('div');
+		if(table_parents.attr('type')=='linha_header')
+			{	
+					table_parents	=	table_parents.find('table:first').find('tr');
+					var size_tr		=	table_parents.length;					
+					$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
+					var esconde=false;
+					if(($(this).parent().index()+1)>=size_tr){
+						if($(table_parents[$(this).parent().index()]).find('th').length<=2){ // existe uma coluna vazia, por isso, se for maior que 2 é pq existe mais de uma coluna de informacoes
+							esconde=true;							
+						}
+					}else{
+						if(size_tr<=2){
+							esconde=true;
+						}
+					}
+					if(esconde)
+						$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').addClass('hide');
+					
+			}
+		
+		//END
 		
 		//Verificando se é linha de total
 		if($(this).hasClass('tag_total') || $(this).parent().hasClass('tag_total')) {

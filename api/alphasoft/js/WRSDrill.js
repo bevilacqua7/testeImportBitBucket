@@ -231,10 +231,14 @@ function addTargetDisableContext(kendoUi)
     			{
     					_layout[x]	=	explode(',',layout[x]);
     			}
+    		
+
 
     		switch(e.type)
     		{
 				case 'linha' 				:  {
+					
+													
 													var indexTR			=	e.parent.parent().index();
 													var indexTD			=	parseInt(e.parent.index());
 														value_select	=	strip_tags(_data[indexTR][name_column[indexTD]]);
@@ -279,20 +283,39 @@ function addTargetDisableContext(kendoUi)
     			case 'linha_header'			:	{
     												var sizeTr	=	e.parent.parent().parent().find('tr').length;
     												var indexTr	=	 e.parent.parent().index();
-    												
     													if(sizeTr==1 || (sizeTr-1)==indexTr)
     														{
-    														
 	    														rows				=	explode(',',e.layout['LAYOUT_ROWS']);
-	    														rows[indexParent]	=	e.json['LEVEL_FULL'];
+    															if(e.event.parent().hasClass('REMOVE_LINE_HEADER')){ // se clicou no botao remover
+        															var newrows=[];
+        															for(row in rows){
+        																if(rows[row]!=rows[indexParent])
+        																	newrows[newrows.length]=rows[row];
+        															}
+        															rows = newrows;        																
+    															}else{
+    	    														rows[indexParent]	=	e.json['LEVEL_FULL'];
+    															}
 	    														changeWithDrillColumnRows(rows,'LAYOUT_ROWS');
     														}
     														else
     														{
+    														
     															column			=	explode(',',e.layout['LAYOUT_COLUMNS']);
-    															column[indexTr]	=	e.json['LEVEL_FULL'];
+    															if(e.event.parent().hasClass('REMOVE_LINE_HEADER')){ // se clicou no botao remover
+        															var newcolumn=[];
+        															for(col in column){
+        																if(column[col]!=column[indexTr])
+        																	newcolumn[newcolumn.length]=column[col];
+        															}
+        															column = newcolumn;        																
+    															}else{
+    																column[indexTr]	=	e.json['LEVEL_FULL'];
+    															}
     															changeWithDrillColumnRows(column,'LAYOUT_COLUMNS');
     														}
+    													
+    													return true;
     													
     													
     			};break;
@@ -375,13 +398,14 @@ function addTargetDisableContext(kendoUi)
     	var menu_context_relation_ship_measure	=	 function (_jsonMenu)
     	{
     		var menuMain				=	[];
-    		menuMain[menuMain.length]	=	{header	: 'Options', action:drill_click_option};
+    		menuMain[menuMain.length]	=	{header	: 'Options ', action:drill_click_option};
 
     		for(indexMenu in _jsonMenu)
         		{
         				var subMenu			=	[];
         				var TITLE			=	indexMenu;
         				var subObjectMenu	=	_jsonMenu[indexMenu];
+        				
         				
         				for(indexSubRElation	in subObjectMenu)
         					{
@@ -427,16 +451,25 @@ function addTargetDisableContext(kendoUi)
     		
         	return menuMain;
     	}
-    	
-    	
+
+    	var kendoUi		=	$('#'+$event.attr('id')).data('kendoGrid');
+    	var e_infos = wrsKendoUiContextMenu($event);
+    	var e_colunas 	= explode(',',e_infos.layout_full['LAYOUT_COLUMNS']);
+    	var e_linhas 	= explode(',',e_infos.layout_full['LAYOUT_ROWS']);
+    	var cols_qtde = [e_colunas.length,e_linhas.length];
     	/*
     	 * Context Menu das Linhas
     	 */
+    	var data_line_header							=	 menu_context_relation_ship_measure(jsonRelationShip);
+    		data_line_header[data_line_header.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
+    		
     	$(".k-grid-content-locked").attr('rel','noContext').attr('type','linha');
     	context.attachWRS('.k-grid-content-locked td'				, menu_context_relation_ship_measure(jsonRelationShip),$event);
     	
     	$(".k-grid-header .k-grid-header-locked").attr('type','linha_header');
-    	context.attachWRS('.k-grid-header .k-grid-header-locked th'	, menu_context_relation_ship_measure(jsonRelationShip),$event);
+    	context.attachWRS('.k-grid-header .k-grid-header-locked th'	, data_line_header,$event);
+    	
+    	
 
     	//Dados
     	$(".k-grid-content").attr('type','data');
@@ -452,7 +485,6 @@ function addTargetDisableContext(kendoUi)
     	 */
     	
     	
-    	var kendoUi		=	$('#'+$event.attr('id')).data('kendoGrid');
     		
     		addTargetDisableContext(kendoUi.columns)
     	
