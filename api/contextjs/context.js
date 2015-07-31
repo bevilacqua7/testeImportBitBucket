@@ -291,12 +291,12 @@ var context = context || (function () {
 		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
 		 */		
 		var table_parents	=	$(this).parents('div');
+		var esconde=false;				
 		if(table_parents.attr('type')=='linha_header')
 			{	
 					table_parents	=	table_parents.find('table:first').find('tr');
 					var size_tr		=	table_parents.length;					
 					$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
-					var esconde=false;
 					if(($(this).parent().index()+1)>=size_tr){
 						if($(table_parents[$(this).parent().index()]).find('th').length<=2){ // existe uma coluna vazia, por isso, se for maior que 2 é pq existe mais de uma coluna de informacoes
 							esconde=true;							
@@ -306,11 +306,19 @@ var context = context || (function () {
 							esconde=true;
 						}
 					}
-					if(esconde)
-						$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').addClass('hide');
 					
+			}		
+		if(table_parents.first('div').attr('type')=='coluna_header_line'){
+			var qtde_trs_primeiro 		= table_parents.first('div').find('table:first').find('tr:first').find('th').length;
+			var qtde_trs_headers_linhas = table_parents.first('div').find('table:first').find('tr:first').next().find('th').length;
+			var qtde_colunas_por_secao	= qtde_trs_headers_linhas/qtde_trs_primeiro;
+			if(qtde_colunas_por_secao<=1){
+				esconde=true;
 			}
-		
+		}
+		if(esconde){
+			$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').addClass('hide');
+		}
 		//END
 		
 		//Verificando se é linha de total
