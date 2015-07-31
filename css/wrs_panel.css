@@ -725,8 +725,11 @@ td{
 }
 
 .dropdown-menu{
-	min-width: 80px;
+	min-width: 170px;
 } 
+.dropdown-menu > li > a {
+    padding: 3px 20px 3px 10px; !important
+}
 
 
 .grid_button_header_menu{
