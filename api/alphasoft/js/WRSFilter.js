@@ -262,6 +262,8 @@ function is_wrs_change_to_run(param_request)
 		histoty_param['ORDER_COLUMN']	=	0	;
 		histoty_param['ALL_COLS']		=	''	;
 		histoty_param['ALL_ROWS']		=	''	;
+		histoty_param['DRILL_HIERARQUIA_LINHA']		=	''	;
+		histoty_param['DRILL_HIERARQUIA_LINHA_DATA']		=	''	;
 		
 		
 		var base64						=	base64_encode(json_encode(histoty_param,true));
@@ -292,6 +294,10 @@ function is_wrs_change_to_run(param_request)
 	if(histoty_param['ORDER_COLUMN']!=param_request['ORDER_COLUMN'])		flag=false;
 	if(histoty_param['ALL_COLS']!=param_request['ALL_COLS'])				flag=false;
 	if(histoty_param['ALL_ROWS']!=param_request['ALL_ROWS'])				flag=false;
+	if(histoty_param['DRILL_HIERARQUIA_LINHA']!=param_request['DRILL_HIERARQUIA_LINHA'])				flag=false;
+	if(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']!=param_request['DRILL_HIERARQUIA_LINHA_DATA'])				flag=false;
+	
+	
 	
  
 	
@@ -350,6 +356,11 @@ function is_wrs_change_to_run(param_request)
 		histoty_param['ORDER_COLUMN']	=	param_request['ORDER_COLUMN']	;
 		histoty_param['ALL_COLS']		=	param_request['ALL_COLS']	;
 		histoty_param['ALL_ROWS']		=	param_request['ALL_ROWS']	;
+		histoty_param['DRILL_HIERARQUIA_LINHA']			=	param_request['DRILL_HIERARQUIA_LINHA']	;
+		histoty_param['DRILL_HIERARQUIA_LINHA_DATA']	=	param_request['DRILL_HIERARQUIA_LINHA_DATA']	;
+		
+		
+		
 		
 		filter.attr('history',base64_encode(json_encode(histoty_param,true)));
 

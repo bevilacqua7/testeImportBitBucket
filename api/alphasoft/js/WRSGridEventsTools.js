@@ -304,14 +304,31 @@
  */
 
 
+/*
+ * Ajustas as pendencias do checkbox exemplo o dril_linha depende do linha de totais 
+ * 
+ */
+function rules_pendences_checkbox(element,fullEvent)
+{
+	var dependence	=	element.attr('dependence');
+	var checked		=	element.prop('checked');
+	var _input		=	'';
+	
+	if(!empty(dependence)) {
 
+		_input	=	fullEvent.find('input[name='+dependence+']');
+		if(checked){
+			//_input.prop('disabled',false);
+			_input.parent().parent().show();
+		}else{
+			_input.prop('checked',false);
+			//_input.prop('disabled',true);
+			_input.parent().parent().hide();
 
-
-
-
-
-
-
+		}
+	}
+	
+}
 
 //Variável default é preenchida pelo lib.WRS_PANEL
 var getRequestKendoUiDefault	=	{};
@@ -358,6 +375,7 @@ var getRequestKendoUiDefault	=	{};
   	//
   	var function_btn_open_type_vision		=	 function()
   	{
+  		check_exist_grid();
   		list_wrs_vision.find('li a').each(function(){
   				var _wrs_data		=	 $(this).attr('wrs-data');
   				$(this).removeClass('active_tools');
@@ -392,17 +410,25 @@ var getRequestKendoUiDefault	=	{};
   	//Click do Botão - nav_options
   	var event_click_btn_options	=	 function(){
   		check_exist_grid(); 
-  		nav_options.find('input').each(function(){if(opts[$(this).attr('name')]){$(this).prop('checked',true);}else{$(this).prop('checked',false);}});
+  		nav_options.find('input').each(function(){
+  				if(opts[$(this).attr('name')]){
+  					$(this).prop('checked',true);
+  				}else{
+  					$(this).prop('checked',false);
+  				}  				
+  				rules_pendences_checkbox($(this),$(this).parents('ul'));
+  		});
   	}
   	
   	
   	//Evento de click nos INPUT do Options
   	var event_find_nav_options_input	=	 function()
   	{
-  		var _checked					=	 $(this).prop('checked');
-	  		opts[$(this).attr('name')]	= _checked ? 1 : '';
+  		var _checked					=	$(this).prop('checked');
+	  		opts[$(this).attr('name')]	= 	_checked ? 1 : '';
 	  		detect_event();//Abilita Evento
-	  		element.data(data_name,opts);  			
+	  		element.data(data_name,opts);  
+	  		rules_pendences_checkbox($(this),$(this).parents('ul'));
   	}
   	
   	//Abrindo o Modal de opções do CHART

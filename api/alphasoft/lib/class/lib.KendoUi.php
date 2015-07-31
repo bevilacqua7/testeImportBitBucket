@@ -105,9 +105,10 @@ class KendoUi
 	 */
 	public function getRequestWrsKendoUi()
 	{
-		return array('page_size','PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','frozen','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE');	
+		return array('page_size','PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','frozen','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA');	
 	}
 	
+
 	/*
 	 * Configurando o array acimapa para o Javascript
 	 */

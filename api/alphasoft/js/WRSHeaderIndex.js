@@ -11,6 +11,7 @@ function WRSHeaderIndex(kendoUi)
 	
 	var kendoUiColumns		=	kendoUi.columns;
 	var indexByField		=	[];
+	var byFrozenLevelFull	=	[];
 	var indexFullNameMeasure=	[];
 	var layout				=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
 	var measures			=	explode(',',layout.LAYOUT_MEASURES);
@@ -74,6 +75,7 @@ function WRSHeaderIndex(kendoUi)
 		var key								=	index_TR+'_'+index_TD[index_TR];
 			tmpComeBack[key]				=	data;
 			tmpComeBack[key]['c_parent']	=	key_parent;
+			tmpComeBack[key]['drill_line']	=	false;
 			index_TR						=	index_TR+1;
 			vValue							=	tmpComeBack[key];
 			
@@ -81,8 +83,8 @@ function WRSHeaderIndex(kendoUi)
 			//criando o index por field
 			if(isset(vValue['field']))
 			{
-				indexByField[vValue['field']]	=	tmpComeBack[key];	
-				
+				indexByField[vValue['field']]				=	tmpComeBack[key];	
+				byFrozenLevelFull[vValue['LEVEL_FULL']]		=	tmpComeBack[key];	
 				
 				if(array_find_data(indexFullNameMeasure,vValue['LEVEL_FULL']))
 				{
@@ -130,6 +132,7 @@ function WRSHeaderIndex(kendoUi)
 			}
 			
 			tmpComeBack['field']					=	indexByField;
+			tmpComeBack['byFrozenLevelFull']		=	byFrozenLevelFull;
 			tmpComeBack['chart']					=	[];
 			tmpComeBack['chart']['data']			=	indexFullNameMeasure;
 			tmpComeBack['chart']['category']		=	index_category_chart(tmpComeBack);

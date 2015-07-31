@@ -397,15 +397,19 @@ class WRS_PANEL  extends WRS_USER
 		$TelerikUi	= new KendoUi();
 		$TelerikUi->setId('wrsGrid');
 		$MEASURE_RELATIONSSHIPS		=	 array();
+
+		$cube		=	'';
 		
 		//Pegando as integrações com o KendoUi
 		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi();		
 		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
 		
+		$QUERY_TABLE_CACHE				=	''; //Irá contem o cache da tabela
+		
 		//PAssando o parametro encontrado pelo request ou pelo nativo
 		if(empty($getRequestKendoUi['WINDOW']))
 		{
-			$getRequestKendoUi['WINDOW']='grid_chart';
+			$getRequestKendoUi['WINDOW']='grid';//'grid_chart'
 		}
 		
 		//grid_map
@@ -416,7 +420,7 @@ class WRS_PANEL  extends WRS_USER
 		}
 
 		
-
+		
 		
 		$getRequestKendoUi				=	$this->loadWrsKEndoUi($getRequestKendoUi);
 		$this->getRequestKendoUiDefault	=	$getRequestKendoUiDefault	=	json_encode(array_merge($TelerikUi->jsRequestWrsKendoUiParam(),$getRequestKendoUi),true);
@@ -467,6 +471,8 @@ class WRS_PANEL  extends WRS_USER
 		$DillLayout['LAYOUT_COLUMNS']	=	$COLUMNS;
 		$DillLayout['LAYOUT_MEASURES']	=	$MEASURES;
 		$DillLayout['LAYOUT_FILTERS']	=	$FILTERS;
+		
+		
 		
 		$TelerikUi->setWrsKendoUi($getRequestKendoUi); //Passando para Gravar no JS as integrações recebidas
 				
@@ -522,23 +528,21 @@ class WRS_PANEL  extends WRS_USER
 					if($rows['JOB_STATUS'] == 4)
 					{
 						// Verifica se o Job é de outro usuário
-						$this->SAVE_CACHE_SSAS_USER('TABLE_CACHE',$rows['QUERY_TABLE']);
+						
+						//WRS_DEBUG_QUERY('Remover:::'.$getRequestKendoUi['DRILL_HIERARQUIA_LINHA']);
+						//Salvando o nome da tabela cache
+						$QUERY_TABLE_CACHE		=	$rows['QUERY_TABLE'];
+						$this->SAVE_CACHE_SSAS_USER('TABLE_CACHE',$QUERY_TABLE_CACHE);
 						if($rows['USER_CODE'] != $USER_CODE)
 						{
 							$copy_table = $this->_query->COPY_SSAS_TABLE($cube['QUERY_CACHE']);
 							$copy_table_exec = $this->query($copy_table);
 							$rows = $this->fetch_array($copy_table_exec);
-							$this->SAVE_CACHE_SSAS_USER('TABLE_CACHE',$rows['QUERY_TABLE']);
+							$this->SAVE_CACHE_SSAS_USER('TABLE_CACHE',$QUERY_TABLE_CACHE);
 						}
 						$cube =	$this->getCube();
 						
-						// Obtem a Quantidade de Registros da Consulta
-						$query_table = $this->query("select TOTAL_ROWS from FAT_SSAS_TABLES where QUERY_TABLE = '".$cube['TABLE_CACHE']."'");
-						if($this->num_rows($query_table))
-						{
-							$rows = $this->fetch_array($query_table);
-							$num_rows = (int) $rows['TOTAL_ROWS'];
-						}
+						
 					}
 					elseif ($rows['JOB_STATUS'] < 0)
 					{
@@ -560,9 +564,43 @@ class WRS_PANEL  extends WRS_USER
 					echo fwrs_warning(LNG('ERROR_NOT_ROWS'),$getRequestKendoUi_TAG);
 					return false;
 				}
-		}
+		}//
 
 		$LAYOUT_ROWS_SIZE			=	count(explode(',',$ROWSL));
+		
+		//Processando o Drill Linha
+		if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
+		{
+			$DRILL_HIERARQUIA_LINHA_DATA	=	 json_decode(base64_decode($getRequestKendoUi['DRILL_HIERARQUIA_LINHA_DATA']),true);
+			$DRILL_HIERARQUIA_LINHA_DATA	=	empty($DRILL_HIERARQUIA_LINHA_DATA) ? '' : $DRILL_HIERARQUIA_LINHA_DATA['query'];
+			
+			$query_DRILL_SSAS_TABLE		=	$this->_query->DRILL_SSAS_TABLE( $cube['TABLE_CACHE'], $DRILL_HIERARQUIA_LINHA_DATA,$LAYOUT_ROWS_SIZE );
+			if($this->query($query_DRILL_SSAS_TABLE)){
+				//Concatena apenas para inserir o D na frente
+				$cube['TABLE_CACHE']	=	$cube['TABLE_CACHE'].'D';
+			}else{
+				WRS_TRACE('ERROR::A query do DRILL LInha não está executando'.$query_DRILL_SSAS_TABLE, __LINE__, __FILE__);
+				echo fwrs_warning(LNG('ERROR_DRILL_LINE_RESULT'));
+			}
+			
+		}//END
+		
+		
+		
+		
+		// Obtem a Quantidade de Registros da Consulta		
+		$query_table = $this->query($this->_query->SELECT_FAT_SSAS_TABLES($cube['TABLE_CACHE'],((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+		if($this->num_rows($query_table))
+		{
+			$rows = $this->fetch_array($query_table);
+			$num_rows = (int) $rows['TOTAL_ROWS'];
+		}
+		
+		
+		
+		
+		
+		
 		//$LAYOUT_ROWS_SIZE			=	$LAYOUT_ROWS_SIZE > $rows['COLUMNS']  ?  1 : $LAYOUT_ROWS_SIZE ;
 		$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$LAYOUT_ROWS_SIZE,'1'));
 
