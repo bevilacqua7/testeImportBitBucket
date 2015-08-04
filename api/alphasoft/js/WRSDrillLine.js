@@ -229,18 +229,12 @@ function DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA()
 		{
 			_array[_array.length]		=	query;
 		}else{
-				//Minus DDR
-			var _is_user				=	[];
-				
-				_array					=	DRILL_LINE_empty_array(_array,[implode('{VIR}',array_minus)]);
-				
-				//Garantidno o elemento retirado
-				if(!empty(parent_column))
-				{
-
-					_array					=	DRILL_LINE_strpos(_array,implode('{VIR}',_check_to_remove));
-					//_array[_array.length]		=	query;
-				}
+			//Minus
+			var _is_user									=	[];
+				_array										=	DRILL_LINE_empty_array(_array,[implode('{VIR}',array_minus)]);
+				_check_to_remove[_check_to_remove.length]	=	data;
+				var data_remove								=	implode('{VIR}',_check_to_remove);
+					_array									=	DRILL_LINE_strpos(_array,data_remove);
 		}
 		
 		
@@ -281,7 +275,12 @@ function DRILL_LINE_empty_array(_arrayMain,_arrayCopare)
 
 function DRILL_LINE_strpos(_arrayMain,_value)
 {
-	var _tmp	=	[];
+	var _tmp		=	[];
+	
+	
+
+	
+	
 	if(_arrayMain.length==0) 	return _arrayMain;
 	
 	for(linearrayMain in _arrayMain)
@@ -296,7 +295,7 @@ function DRILL_LINE_strpos(_arrayMain,_value)
 		}
 	
 	
-	_tmp[_tmp.length]	=	_value;
+	//_tmp[_tmp.length]	=	data;
 	
 	
 	return _tmp;

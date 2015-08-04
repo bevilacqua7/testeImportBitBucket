@@ -22,6 +22,9 @@
 	position: relative;
 }
 
+.qtip {
+    max-width: 700px !important;
+}
 
 .ui-layout-south li a
 {
