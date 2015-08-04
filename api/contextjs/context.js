@@ -108,11 +108,37 @@ var context = context || (function () {
 				if (typeof data[i].target !== 'undefined') {
 					linkTarget = ' target="'+data[i].target+'"';
 				}
-				//TRACE_DEBUG(data[i].className);
+
+				var iconA='<span class="btn-left glyphicon glyphicon-font ui-sortable-handle"></span>';// letra A
+				var iconT='<span class="btn-left glyphicon glyphicon-trash ui-sortable-handle"></span>';// Trash
+				var iconS='<span class="btn-left glyphicon glyphicon-usd ui-sortable-handle"></span>';// $
+				var icon='';
+				
+				if(data[i].className=='REMOVE_LINE_HEADER'){
+					icon=iconT;
+				}else{
+					var jsonM = data[i].json;
+					if(!empty(jsonM)){
+						jsonM	=	$.parseJSON(base64_decode(jsonM));
+						var attr = $(jsonM).attr('MEASURE_SOURCE');
+						if (typeof attr !== typeof undefined && attr !== false) {
+						    icon=iconS;
+						}else{
+							icon=iconA;
+						}
+					}else{
+						if(data[i].className.substr(0,8)=='Measures'){
+							icon=iconS;
+						}else{
+							icon=iconA;
+						}
+					}
+				}
+				
 				if (typeof data[i].subMenu !== 'undefined') {
-					$sub = ('<li class="dropdown-submenu ' + data[i].className + '"><a tabindex="-1" href="' + data[i].href + '">' + data[i].text + '<i class="fa fa-angle-right"></i></a></li>');
+					$sub = ('<li class="dropdown-submenu ' + data[i].className + '"><a tabindex="-1" href="' + data[i].href + '">' + icon + data[i].text + '<i class="fa fa-angle-right"></i></a></li>');
 				} else {
-					$sub = $('<li class="' + data[i].className + '"><a tabindex="-1" json="'+data[i].json+'" href="' + data[i].href + '"'+linkTarget+'>' + data[i].text + '</a></li>');
+					$sub = $('<li class="' + data[i].className + '"><a tabindex="-1" json="'+data[i].json+'" href="' + data[i].href + '"'+linkTarget+'>' + icon + data[i].text + '</a></li>');
 				}
 				if (typeof data[i].action !== 'undefined') {
 					var actiond = new Date(),
@@ -291,12 +317,12 @@ var context = context || (function () {
 		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
 		 */		
 		var table_parents	=	$(this).parents('div');
+		var esconde=false;				
 		if(table_parents.attr('type')=='linha_header')
 			{	
 					table_parents	=	table_parents.find('table:first').find('tr');
 					var size_tr		=	table_parents.length;					
 					$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
-					var esconde=false;
 					if(($(this).parent().index()+1)>=size_tr){
 						if($(table_parents[$(this).parent().index()]).find('th').length<=2){ // existe uma coluna vazia, por isso, se for maior que 2 é pq existe mais de uma coluna de informacoes
 							esconde=true;							
@@ -306,11 +332,19 @@ var context = context || (function () {
 							esconde=true;
 						}
 					}
-					if(esconde)
-						$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').addClass('hide');
 					
+			}		
+		if(table_parents.first('div').attr('type')=='coluna_header_line'){
+			var qtde_trs_primeiro 		= table_parents.first('div').find('table:first').find('tr:first').find('th').length;
+			var qtde_trs_headers_linhas = table_parents.first('div').find('table:first').find('tr:first').next().find('th').length;
+			var qtde_colunas_por_secao	= qtde_trs_headers_linhas/qtde_trs_primeiro;
+			if(qtde_colunas_por_secao<=1){
+				esconde=true;
 			}
-		
+		}
+		if(esconde){
+			$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').addClass('hide');
+		}
 		//END
 		
 		//Verificando se é linha de total

@@ -256,8 +256,17 @@ function addTargetDisableContext(kendoUi)
 															if(sizeTr==1 || (sizeTr-1)==indexTr)
 																{
 																	var index_rest	=	'';
-																		measure		=	explode(',',e.layout['LAYOUT_MEASURES']);																		
-																		measure		=	fwrs_array_change_value(measure,e.layout['COLUMN_HEADER'][indexParent+1],e.json['MEASURE_UNIQUE_NAME']);
+																		measure		=	explode(',',e.layout['LAYOUT_MEASURES']);
+		    															if(e.event.parent().hasClass('REMOVE_LINE_HEADER')){ // se clicou no botao remover
+		        															var newrows=[];
+		        															for(row in measure){
+		        																if(measure[row]!=e.layout['COLUMN_HEADER'][indexParent+1])
+		        																	newrows[newrows.length]=measure[row];
+		        															}	
+		        															measure = newrows;
+		    															}else{
+																			measure		=	fwrs_array_change_value(measure,e.layout['COLUMN_HEADER'][indexParent+1],e.json['MEASURE_UNIQUE_NAME']);
+		    															}
 																		changeWithDrillColumnRows(measure,'LAYOUT_MEASURES');
 																}
 																else
@@ -499,13 +508,15 @@ function addTargetDisableContext(kendoUi)
     		 
     		var tag					=	'';
     		for(var i=0;i<length;i++)
-    			{
+    			{    			
     					tag		=	'.k-grid-header .k-grid-header-wrap tr:eq('+i+') th ';
     					if(i!=(length-1))
     					{
     						context.attachWRS(tag	, menu_context_relation_ship_measure(jsonRelationShip),$event);
     					}else{
-    						context.attachWRS(tag	, menu_context_relation_ship_measure(jsonMeasure),$event);
+    						var data_line_header2							=	 menu_context_relation_ship_measure(jsonMeasure);
+    		        		data_line_header2[data_line_header2.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
+    						context.attachWRS(tag	, data_line_header2,$event);
     					}
     			}   		 
     	}
