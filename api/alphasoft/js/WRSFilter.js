@@ -35,6 +35,7 @@
         	             adjust: { x: 20, y: 5 } // Offset it slightly from under the mouse
         	         }*/
         	     });
+        	   
       	     
             
         });
@@ -438,6 +439,7 @@ function wrsFilterClickFalse()
 	 
 (function ( $ ) {
     $.WrsFilter= function(typeEvent,typeValue) {
+    	limpa_resultado_filtros_tratados();
     	$event		=	 this;
     	
     	var G_MSG_FILTER_CLEAN	=	'';
@@ -876,6 +878,7 @@ function wrsFilterClickFalse()
      */
 	 var funCallBackRun	=	 function(data)
 	 	{
+		 	limpa_resultado_filtros_tratados();
 		 	$(data.data.id).find('.wrs_filter_body_container').html(data.html);
 
 	 		var index_data			=	 data.data.index_data;
@@ -1146,7 +1149,7 @@ function wrsFilterClickFalse()
 			 		});
 		 		}
 		 	
-		 	
+		 	formata_texto_resultado_filtros();
 		}
     	 
 	
