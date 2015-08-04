@@ -228,16 +228,23 @@ function getWrsKendoColumn(data)
 	var totalFrozen		=	[];
 	var totalLastLabel	=	'';
 	var indexTh			=	0;
-	
+	var lineToHideDrillLine	=	[];
 	var DRILL_HIERARQUIA_LINHA_DATA		=	$.parseJSON(base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA));
 	
 	//temporária para armazenar a coluna anterior a sendo chamada
 	var tmp_drill_line_column	=	[];
-	_arg.sender._wrs_data	=	[]	;
+		_arg.sender._wrs_data	=	[]	;
 	
-	
+	var	drill_line_value_td			=	[];
+
 	//congela as linhas de DRILL
 	DRILL_LINE_check_header(wrsKendoUi,kendoUi,DRILL_HIERARQUIA_LINHA_DATA);
+	
+	
+	if(!empty(DRILL_HIERARQUIA_LINHA_DATA))
+	{
+		drill_line_value_td	=	DRILL_LINE_get_values_table(DRILL_HIERARQUIA_LINHA_DATA.query);
+	}
 	
 	//Apenas realimenta as colunas que deve ser preenchida caso existe totais
 	if(wrsKendoUi.ALL_ROWS)
@@ -274,6 +281,7 @@ function getWrsKendoColumn(data)
 			{
 				var word			=	_arg.items[i][obj];
 				var img				=	'';	
+				
 				
 				/*
 				 * Impede que a a latitude seja formatada 
@@ -328,15 +336,41 @@ function getWrsKendoColumn(data)
 					
 					
 					//Configurando o DRILL Line
-					if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==	_TRUE) 
+					if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE) 
 					{
+						
+						try{
+							
+							if(!lineToHideDrillLine[obj]) lineToHideDrillLine[obj]=0;
+							
+						}catch (e) {
+						}
+						
 						if(!empty(_arg.items[i][obj]))
 						{
-							if(!kendoUi.headerIndex.field[obj].drill_line && obj!='C000')
+							lineToHideDrillLine[obj]++;
+							
+							if(!kendoUi.headerIndex.field[obj].drill_line && obj!='C000' && kendoUi.headerIndex.field[obj].drill_line_button)
 							{
-								var drill_btn_plus		=	'<button class="DRILL_HIERARQUIA_LINHA" line="'+i+'"  column="'+obj+'" parent_column="'+implode(',',tmp_drill_line_column)+'" data="'+_arg.items[i][obj]+'" type="button"  wrs-type="plus"><i class="fa fa-plus-square"></i></button>';
-								var drill_btn_minus		=	'<button class="DRILL_HIERARQUIA_LINHA" line="'+i+'"  column="'+obj+'" parent_column="'+implode(',',tmp_drill_line_column)+'" data="'+_arg.items[i][obj]+'" type="button"  wrs-type="minus"><i class="fa  fa-minus-square"></i></button>';
-								_arg.items[i][obj]		=	drill_btn_plus+_arg.items[i][obj];
+								
+								var drill_btn_plus		=	'<button class="DRILL_HIERARQUIA_LINHA" size-column="'+kendoUi.wrs_size_columns+'"  line="'+i+'"  column="'+obj+'" parent_column="'+implode(',',tmp_drill_line_column)+'" data="'+_arg.items[i][obj]+'" type="button"  wrs-type="plus"><i class="fa fa-plus-square"></i></button>';
+								var drill_btn_minus		=	'<button class="DRILL_HIERARQUIA_LINHA" size-column="'+kendoUi.wrs_size_columns+'"  line="'+i+'"  column="'+obj+'" parent_column="'+implode(',',tmp_drill_line_column)+'" data="'+_arg.items[i][obj]+'" type="button"  wrs-type="minus"><i class="fa  fa-minus-square"></i></button>';
+								var btn_drill			=	drill_btn_plus;	
+								
+								//Tratando opções para o botão
+								if(drill_line_value_td.length!=0)
+									{
+											try{
+												if(drill_line_value_td[_arg.items[i][obj]]){
+													btn_drill	=	drill_btn_minus;
+												}												
+											}catch(e){
+												btn_drill	=	drill_btn_plus;
+											}
+									}
+								
+								
+								_arg.items[i][obj]		=	btn_drill+_arg.items[i][obj];
 								tmp_drill_line_column[tmp_drill_line_column.length]	=	obj;
 							}
 						}
@@ -409,7 +443,22 @@ function getWrsKendoColumn(data)
 			
 	}
 	
+	//Configurando o DRILL Line
+	if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE){ 
 
+			for(lineDrillHide in lineToHideDrillLine)
+				{
+					if(lineToHideDrillLine[lineDrillHide]==0)
+					{
+						kendoUi.headerIndex.field[lineDrillHide]['drill_line']			=	 true;
+						kendoUi.headerIndex.field[lineDrillHide]['drill_line_button']	=	 true;
+						kendoUi.hideColumn(kendoUi.headerIndex.field[lineDrillHide]);
+					}
+				}
+			
+	}
+	
+	
 	for(idx in _width)
 		{
 			WRSSresize(id,idx, _width[idx],frozen-1); 
@@ -919,6 +968,14 @@ function  themeSUM(nameID,arg)
 						minusButton.trigger('click');
 					}
 			}
+			
+			
+			if(wrsKendoUi['DRILL_HIERARQUIA_LINHA']==1)
+				{
+					minusButton.addClass('hide');
+					plusButton.addClass('hide');
+				}
+			
 			
 			/*
 			 * Evento da Reordenação das Colunas

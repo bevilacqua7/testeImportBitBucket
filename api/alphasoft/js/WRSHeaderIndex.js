@@ -76,6 +76,7 @@ function WRSHeaderIndex(kendoUi)
 			tmpComeBack[key]				=	data;
 			tmpComeBack[key]['c_parent']	=	key_parent;
 			tmpComeBack[key]['drill_line']	=	false;
+			tmpComeBack[key]['drill_line_button']	=	true;
 			index_TR						=	index_TR+1;
 			vValue							=	tmpComeBack[key];
 			

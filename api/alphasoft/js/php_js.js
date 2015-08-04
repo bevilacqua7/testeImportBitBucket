@@ -1774,3 +1774,6 @@ function strip_tags(input, allowed) {
 	      return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
 	    });
 	}
+
+
+

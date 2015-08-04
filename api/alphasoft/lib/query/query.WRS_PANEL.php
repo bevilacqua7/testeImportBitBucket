@@ -44,6 +44,10 @@ class QUERY_PANEL
         //               '{[MERCADO].[MERCADO].[D06-BACTROBAN]},{[PERIODO].[ANO].[2013]},{[VISITADO].[VISITADO].[SIM]}'
         //               1,1,0,0,@SCHEDULE
 	 	$USER_CODE = WRS::USER_CODE();
+		$ROWS = str_replace("'","''",$ROWS);
+		$COLUMNS = str_replace("'","''",$COLUMNS);
+		$MEASURES = str_replace("'","''",$MEASURES);
+		$FILTERS = str_replace("'","''",$FILTERS);
 	 	$query = <<<EOF
 					EXEC Create_SSAS_Job	'{$USER_CODE}',
 											'{$SERVER}',
