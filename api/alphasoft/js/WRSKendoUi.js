@@ -8,12 +8,22 @@
 
 var RELATIONSHIPS_FULL_NAME	=	$.parseJSON(base64_decode( ATRIBUTOS_JSON));
 var RELATIONSHIPS_FULL		=	[];
+var _TRUE	=	'1',
+	TRUE		=	true,
+	NULL		=	null,
+	FALSE		=	false,
+	EMPTY		=	'';
+	
+	
+
 
 include_js('WRSWindowGrid');
 include_js('WRSMaps');
 include_js('WRSKendoUiChart');
 include_js('WRSGridEventsTools');
 include_js('WRSHeaderIndex');
+include_js('WRSDrillLine');	//Drill Line
+
 
 
 
@@ -206,7 +216,8 @@ function getWrsKendoColumn(data)
  function onDataBinding(arg)
  {
 	var id 				=	 '#'+arg.sender.element.attr('id');
-	var wrsKendoUi		=	$.parseJSON(base64_decode($(id).attr('wrsKendoUi')));
+	var kendoUi			=	arg.sender;
+	var wrsKendoUi		=	 $.parseJSON(base64_decode($(id).attr('wrsKendoUi')));
 	var _arg			=	arg;
 	//Pegando a Header e informações de formatação das colunas
 	var _param			=	getWrsKendoColumn(arg.sender.columns);
@@ -217,8 +228,23 @@ function getWrsKendoColumn(data)
 	var totalFrozen		=	[];
 	var totalLastLabel	=	'';
 	var indexTh			=	0;
+	var lineToHideDrillLine	=	[];
+	var DRILL_HIERARQUIA_LINHA_DATA		=	$.parseJSON(base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA));
 	
-	_arg.sender._wrs_data	=	[]	;
+	//temporária para armazenar a coluna anterior a sendo chamada
+	var tmp_drill_line_column	=	[];
+		_arg.sender._wrs_data	=	[]	;
+	
+	var	drill_line_value_td			=	[];
+
+	//congela as linhas de DRILL
+	DRILL_LINE_check_header(wrsKendoUi,kendoUi,DRILL_HIERARQUIA_LINHA_DATA);
+	
+	
+	if(!empty(DRILL_HIERARQUIA_LINHA_DATA))
+	{
+		drill_line_value_td	=	DRILL_LINE_get_values_table(DRILL_HIERARQUIA_LINHA_DATA.query);
+	}
 	
 	//Apenas realimenta as colunas que deve ser preenchida caso existe totais
 	if(wrsKendoUi.ALL_ROWS)
@@ -249,13 +275,14 @@ function getWrsKendoColumn(data)
 				frozen	=	0;
 				
 				_arg.sender._wrs_data[i]	=	[];//Loading
-				
+			
+			tmp_drill_line_column	= [];//clean
 			for(obj in _param)
 			{
-				var word							=	_arg.items[i][obj];
+				var word			=	_arg.items[i][obj];
+				var img				=	'';	
 				
 				
-				var img			=	'';	
 				/*
 				 * Impede que a a latitude seja formatada 
 				 */
@@ -302,10 +329,57 @@ function getWrsKendoColumn(data)
 				
 				if(_param[obj]['locked'])
 				{
+					//Procrssando apenas os Frozens
 					frozen++;
 					_arg.items[i][obj]	= strlen($.trim(_arg.items[i][obj]))==0 ? '' : _arg.items[i][obj]; //Removendo os NULL
-					
 					_arg.sender._wrs_data[i][obj]	=	_arg.items[i][obj];
+					
+					
+					//Configurando o DRILL Line
+					if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE) 
+					{
+						
+						try{
+							
+							if(!lineToHideDrillLine[obj]) lineToHideDrillLine[obj]=0;
+							
+						}catch (e) {
+						}
+						
+						if(!empty(_arg.items[i][obj]))
+						{
+							lineToHideDrillLine[obj]++;
+							
+							if(!kendoUi.headerIndex.field[obj].drill_line && obj!='C000' && kendoUi.headerIndex.field[obj].drill_line_button)
+							{
+								
+								var drill_btn_plus		=	'<button class="DRILL_HIERARQUIA_LINHA" size-column="'+kendoUi.wrs_size_columns+'"  line="'+i+'"  column="'+obj+'" parent_column="'+implode(',',tmp_drill_line_column)+'" data="'+_arg.items[i][obj]+'" type="button"  wrs-type="plus"><i class="fa fa-plus-square"></i></button>';
+								var drill_btn_minus		=	'<button class="DRILL_HIERARQUIA_LINHA" size-column="'+kendoUi.wrs_size_columns+'"  line="'+i+'"  column="'+obj+'" parent_column="'+implode(',',tmp_drill_line_column)+'" data="'+_arg.items[i][obj]+'" type="button"  wrs-type="minus"><i class="fa  fa-minus-square"></i></button>';
+								var btn_drill			=	drill_btn_plus;	
+								
+								//Tratando opções para o botão
+								if(drill_line_value_td.length!=0)
+									{
+											try{
+												if(drill_line_value_td[_arg.items[i][obj]]){
+													btn_drill	=	drill_btn_minus;
+												}												
+											}catch(e){
+												btn_drill	=	drill_btn_plus;
+											}
+									}
+								
+								
+								_arg.items[i][obj]		=	btn_drill+_arg.items[i][obj];
+								tmp_drill_line_column[tmp_drill_line_column.length]	=	obj;
+							}
+						}
+					}
+					
+					
+					
+					//END
+					
 				}else{
 					_arg.sender._wrs_data[i][obj]	=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word,false,true); //Full para complementar
 
@@ -360,10 +434,30 @@ function getWrsKendoColumn(data)
 				}
 				 
 				idx++;
+				
+				
+				
+				
 			}
 
 			
 	}
+	
+	//Configurando o DRILL Line
+	if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE){ 
+
+			for(lineDrillHide in lineToHideDrillLine)
+				{
+					if(lineToHideDrillLine[lineDrillHide]==0)
+					{
+						kendoUi.headerIndex.field[lineDrillHide]['drill_line']			=	 true;
+						kendoUi.headerIndex.field[lineDrillHide]['drill_line_button']	=	 true;
+						kendoUi.hideColumn(kendoUi.headerIndex.field[lineDrillHide]);
+					}
+				}
+			
+	}
+	
 	
 	for(idx in _width)
 		{
@@ -459,6 +553,9 @@ function onDataBound(arg)
 			resizeGridSimple();
 			
 			addDrillOnDataBound(nameID,arg);
+			
+			//Aplicando o Evento do CLick no DRILL LINHA
+			$(nameID).find('.DRILL_HIERARQUIA_LINHA').data('kendoGrid',arg.sender).unbind('click').click(DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA);
 			
 			TRACE('END onDataBound');
 	}
@@ -768,11 +865,15 @@ function  themeSUM(nameID,arg)
 													{
 														if(event=='hide')
 														{
+															
 															telerikGrid.hideColumn(td_column);
 														}
 														else
 														{
-															telerikGrid.showColumn(td_column);
+															//Caso o drill line não o feche não abra novamente
+															if(!td_column.drill_line){
+																telerikGrid.showColumn(td_column);
+															}
 														}
 														
 														lastKey	=	i_key;
@@ -867,6 +968,14 @@ function  themeSUM(nameID,arg)
 						minusButton.trigger('click');
 					}
 			}
+			
+			
+			if(wrsKendoUi['DRILL_HIERARQUIA_LINHA']==1)
+				{
+					minusButton.addClass('hide');
+					plusButton.addClass('hide');
+				}
+			
 			
 			/*
 			 * Evento da Reordenação das Colunas
@@ -1009,8 +1118,11 @@ function  themeSUM(nameID,arg)
 									switch($(this).attr('name'))
 									{
 										case 'SUMARIZA'    :  	telerikGrid.dataSource.read(); break;
-										case 'COLORS_LINE' : 	telerikGrid.dataSource.read();; break;
+										case 'COLORS_LINE' : 	telerikGrid.dataSource.read();; break; 
 									}
+									
+									
+									rules_pendences_checkbox($(this),$(this).parents('ul'));
 					
 				
 			}
@@ -1029,6 +1141,8 @@ function  themeSUM(nameID,arg)
 							{
 								$(this).prop('checked',true);
 							}
+						
+						rules_pendences_checkbox($(this),$(this).parents('ul'));
 				}
 			});
 			//

@@ -1302,3 +1302,12 @@ box-shadow:         inset -5px -5px 12px 0px rgba(50, 50, 75, 0.38);
 color:#FFF !important;
 background: #449D44 !important;
 }
+
+
+.DRILL_HIERARQUIA_LINHA{
+	padding: 0px;
+	background: transparent;
+	border: none;
+	float: right;
+
+}

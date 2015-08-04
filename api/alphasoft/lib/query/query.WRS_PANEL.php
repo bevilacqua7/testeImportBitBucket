@@ -44,6 +44,10 @@ class QUERY_PANEL
         //               '{[MERCADO].[MERCADO].[D06-BACTROBAN]},{[PERIODO].[ANO].[2013]},{[VISITADO].[VISITADO].[SIM]}'
         //               1,1,0,0,@SCHEDULE
 	 	$USER_CODE = WRS::USER_CODE();
+		$ROWS = str_replace("'","''",$ROWS);
+		$COLUMNS = str_replace("'","''",$COLUMNS);
+		$MEASURES = str_replace("'","''",$MEASURES);
+		$FILTERS = str_replace("'","''",$FILTERS);
 	 	$query = <<<EOF
 					EXEC Create_SSAS_Job	'{$USER_CODE}',
 											'{$SERVER}',
@@ -130,6 +134,31 @@ EOF;
 		return $query;
 	}
 
+	
+	/**
+	 * Obtem a Quantidade de Registros da Consulta 
+	 * 
+	 * o $DRILL_LINE é para um execução temporária para a consulta do dril
+	 * @param string $_QUERY_TABLE
+	 * @param int $DRILL_LINE
+	 * @return string
+	 */
+	public function SELECT_FAT_SSAS_TABLES($_QUERY_TABLE,$DRILL_LINE=0)
+	{
+		$FAT_SSAS_TABLES	=	<<<EOF
+		select TOTAL_ROWS from FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}'
+EOF;
+		
+		$SQL_DRILL_LINE			=	<<<EOF
+			SELECT COUNT(*) AS TOTAL_ROWS FROM {$_QUERY_TABLE}
+EOF;
+		/*
+		 * TODO: Temporário
+		 */
+		if($DRILL_LINE==1) return $SQL_DRILL_LINE; 
+		
+		return $FAT_SSAS_TABLES;	
+	}
 	/**
 	 * Ordena a tabela temporária conforme parametro passado
 	 * 
@@ -196,6 +225,8 @@ EOF;
 	public function DRILL_SSAS_TABLE( $TABLE_NAME, $FILTER,$LINE )
 	{
 		// Exemplo: Exec Drill_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F','30 - MARCAS CLASSICAS E SIMILARES{VIR}110000 - JOSE RICARDO DOREA CARVALHO{VIR}112200 - OSVALDO LUIS CARDOZO DE ANDRADE',5
+		//{SEP} -- Quebra de LInhas
+		//{VIR} -- Nivel
 		$query = <<<EOF
 					EXEC Drill_SSAS_Table 	'{$TABLE_NAME}',
 											'{$FILTER}',

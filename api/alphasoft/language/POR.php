@@ -9,6 +9,7 @@
 	$language ['USUARIO_SEM_PRIVILEGIOS'] 				= "Usuário sem privilégios";
 	$language ['USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS'] 	= "Usuário sem privilégios para visualizar a grid, ela contém mais de 65 mil registros";
 	$language ['ERROR_NOT_ROWS'] 						= "Ops Erro interno ao executar o processo...";
+	$language ['ERROR_DRILL_LINE_RESULT'] 				= "(Ops) Erro interno ao processar a criação do DRILL LINHA, se o erro persistir entre em contato com o suporte";
 	$language ['MSG_ERROR_TABLE_CACHE'] 				= "Consulta não pode ser executada, favor modificar o Layout dos Atributos selecionados..";
 	$language ['VALOR'] 								= "Valor";
 	
@@ -101,7 +102,7 @@
 	$language ['ATTRIBUTOS_COLUNA'] 	= "Colunas";
 	$language ['ATTRIBUTOS_LINHA'] 		= "Linhas";
 	$language ['ATTRIBUTOS_METRICA'] 	= "Metricas";
-	$language ['ATTRIBUTOS_MULTIPLE_CUBE'] 	= "Multi Cubos";
+	$language ['ATTRIBUTOS_MULTIPLE_CUBE'] 	= "Cubos";
 	$language ['ATTRIBUTOS_SIMPLES'] 	= "Simples";
 	$language ['ATTRIBUTOS_COMPOSTO'] 	= "Composto";
 	$language ['ATTRIBUTOS_TITLE'] 		= "Atributos";
@@ -153,33 +154,34 @@
 	/**
 	 * Header das GRID
 	 */
-	$language ['GRID_HEADER_OPTION'] 				 = 	"Opções";
-	$language ['GRID_HEADER_OPTION_TOTAL_LINE']		 =	"Total Linhas";
-	$language ['GRID_HEADER_OPTION_TOTAL_COLUMN']	 =	"Total Colunas";
-	$language ['GRID_HEADER_OPTION_TOTAL_SUMARIZA']	 =	"Numeros Resumidos";
-	$language ['GRID_HEADER_OPTION_TOTAL_LINE_COLOR']=	"Linhas Intercaladas";
-	$language ['GRID_HEADER_OPTION_ORDER_COLUMN']	 =	"Inverter Colunas";
+	$language['GRID_HEADER_OPTION'] 				 	= 	"Opções";
+	$language['GRID_HEADER_OPTION_TOTAL_LINE']		 	=	"Total Linhas";
+	$language['GRID_HEADER_OPTION_TOTAL_COLUMN']	 	=	"Total Colunas";
+	$language['GRID_HEADER_OPTION_TOTAL_SUMARIZA']	 	=	"Numeros Resumidos";
+	$language['GRID_HEADER_OPTION_TOTAL_LINE_COLOR']	=	"Linhas Intercaladas";
+	$language['GRID_HEADER_OPTION_ORDER_COLUMN']	 	=	"Inverter Colunas";
+	$language['GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA']=	"Registros Consolidados";
 	
-	$language ['GRID_HEADER_EXPORT'] 		= "Exportar";
-	$language ['GRID_HEADER_EXPORT_PDF'] 	= "Pdf";
-	$language ['GRID_HEADER_EXPORT_CSV'] 	= "Csv";
-	$language ['GRID_HEADER_EXPORT_EXCEL'] 	= "Excel";
-	$language ['GRID_HEADER_EXPORT_IMAGE'] 	= "Imagem";
-	$language ['GRID_HEADER_EXPORT_IMAGE_SVG'] 	= "Imagem SVG";
+	$language['GRID_HEADER_EXPORT'] 			= "Exportar";
+	$language['GRID_HEADER_EXPORT_PDF'] 		= "Pdf";
+	$language['GRID_HEADER_EXPORT_CSV'] 		= "Csv";
+	$language['GRID_HEADER_EXPORT_EXCEL'] 		= "Excel";
+	$language['GRID_HEADER_EXPORT_IMAGE'] 		= "Imagem";
+	$language['GRID_HEADER_EXPORT_IMAGE_SVG'] 	= "Imagem SVG";
 	
-	$language ['CHART_CONFIG'] 	= "Configurar Gráfico";
+	$language['CHART_CONFIG'] 	= "Configurar Gráfico";
 	 
 	 
 	
-	$language ['GRID_HEADER_SEE'] 		= 	"Visão";
-	$language ['GRID_HEADER_SEE_GRID']	=	"Planilha";	
-	$language ['GRID_HEADER_SEE_CHART']	=	"Gráfico";
-	$language ['GRID_HEADER_SEE_MAP']	=	"Mapa";
+	$language['GRID_HEADER_SEE'] 		= 	"Visão";
+	$language['GRID_HEADER_SEE_GRID']	=	"Planilha";	
+	$language['GRID_HEADER_SEE_CHART']	=	"Gráfico";
+	$language['GRID_HEADER_SEE_MAP']	=	"Mapa";
 	
-	$language ['GRID_HEADER_TITLE_DADOS']		=	"Dados";
-	$language ['GRID_HEADER_TITLE_EXIBITION']	=	"Exibição";
+	$language['GRID_HEADER_TITLE_DADOS']		=	"Dados";
+	$language['GRID_HEADER_TITLE_EXIBITION']	=	"Exibição";
 		
-	$language ['WHAT_SEARCH'] = "O que procura?";
+	$language['WHAT_SEARCH'] = "O que procura?";
 	
 	$language ['BTN_SAIR'] 		= "Sair";
 	$language ['BTN_SIM'] 		= "Sim";
@@ -244,5 +246,6 @@
 	
 	$language['LINE_TOTAL']					=	'TOTAL';
 	$language['LINE_TOTAL_BUBBLE']			=	'Deseja usar as linha de totais no gráfico?';
+	
 
 ?>
