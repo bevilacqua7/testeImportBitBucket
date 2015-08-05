@@ -147,6 +147,58 @@ $.fn.textWidth = function(text, font) {
     return $.fn.textWidth.fakeEl.width();
 };
 
+function limpa_resultado_filtros_tratados(){
+	$('.qtip-filtros').remove();
+}
+
+function formata_texto_resultado_filtros(){
+	$('.pws_click_triger_single').each(function(){
+		if($(this).text().trim()!=''){
+			formataNomeLongo($(this));
+		}
+	});
+}
+
+function formataNomeLongo(obj){
+	var text='';
+	var attr = obj.attr('text_original');
+	if(typeof attr !== typeof undefined && attr !== false){
+		text=obj.attr('text_original');
+		obj.text(text);
+	}else{
+		text=obj.text();
+	}
+	var tamanho_original = obj.textWidth();
+	var tamanho_espaco = parseInt(obj.css('width'));
+	while(obj.textWidth()+24>tamanho_espaco){
+		obj.text(obj.text().trim().substring(0,obj.text().trim().length-1));
+	}
+	if(text!=obj.text()){
+		obj.text(obj.text().trim()+'...').attr('text_original',text);				
+		obj.qtip({
+	         style: {                                                     
+	        	 	width: tamanho_original+25,
+	        	 	classes: 'qtip-bootstrap qtip-shadow qtip-filtros'
+	         },content: {
+					text: text
+   	         },position: {
+		        	 my: 'top left',
+		             at: 'top right',
+		             adjust: { x: -5, y: -2 }
+	         }
+	     });		
+	}else{
+		obj.qtip("destroy");
+	}
+}
+
+//Calculate width of text from DOM element or string. By Phil Freo <http://philfreo.com>
+$.fn.textWidth = function(text, font) {
+    if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
+    $.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
+    return $.fn.textWidth.fakeEl.width();
+};
+
 function wrs_east_onresize()
 {
 	//lado direito
@@ -548,7 +600,6 @@ function cloneDragDrop(whoClone,toClone,cloneTAGWrsFlag,who_receive)
 
 function insetDragDropEmpry()
 {
-
 	var DragValues	=	[];
 
 	$('.wrs_swap_drag_drop').each(function(){
@@ -557,9 +608,7 @@ function insetDragDropEmpry()
 		var who_receive			=	 $(this).parent().attr('who_receive');
 		var count				=	0;
 		var notRepeatValueFlag	= 	[]; //Contem as informações dentro de cada bloco 
-		
-		
-		
+				
 		$(this).find('li').each(function(){
 				var vvalue				=	$(this).attr('vvalue');
 				
@@ -871,7 +920,7 @@ function setDraggable(name,use,who_receive)
 	
 	$( name ).draggable(draggableOptionsLi).sortable({placeholder	: "ui-state-highlight"});
 	$( name).disableSelection();
-	
+	wrs_panel_layout.allowOverflow($(name));
 	
 }
 
@@ -1371,6 +1420,10 @@ function wrs_panel_active_drag_drop()
 	 //Iniciando o Evento de Arrastar
 	 setDraggable(".WRS_DRAG_DROP li",false,'');
 	 
+
+	 wrs_panel_layout.allowOverflow($("li.ui-widget-content.box_wrs_panel"));
+	 
+	 
 	 $('.WRS_DRAG_DROP h2').click(wrs_search_drad_drop_direita_h2);
 	 
 	
@@ -1394,7 +1447,14 @@ function wrs_panel_active_drag_drop()
 						  sort			: 	function() 
 									      {
 									       	$( this ).removeClass( "ui-state-default" );
-									       }
+									       },
+									       helper: function () { // modificando o helper pra clonar o objeto ao inves de move-lo
+										       return $(this).children('li.ui-state-hover').clone()
+										            .appendTo('body') 
+										            .css('zIndex',1000) 
+										            .show(); 
+										  } 			
+						,start: function (e, ui) { ui.item.show();} // quando iniciar o novo objeto exibi-lo na tela
 					}
 
 
@@ -1404,8 +1464,6 @@ function wrs_panel_active_drag_drop()
 		sortable_attr_simples_composto();
 		
 		insetDragDropEmpry();
-	
-	
 }
 /**
  * Processo principal
