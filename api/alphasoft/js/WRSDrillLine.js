@@ -288,7 +288,6 @@ function DRILL_LINE_strpos(_arrayMain,_value)
 
 			if(strpos(_arrayMain[linearrayMain],_value)===false)
 			{
-				//TRACE_DEBUG('SAME::;'+_arrayMain[linearrayMain]);
 				_tmp[_tmp.length]	=	_arrayMain[linearrayMain];
 			}
 				

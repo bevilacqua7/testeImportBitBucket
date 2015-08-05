@@ -553,10 +553,8 @@ function onDataBound(arg)
 			resizeGridSimple();
 			
 			addDrillOnDataBound(nameID,arg);
-			
 			//Aplicando o Evento do CLick no DRILL LINHA
 			$(nameID).find('.DRILL_HIERARQUIA_LINHA').data('kendoGrid',arg.sender).unbind('click').click(DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA);
-			
 			TRACE('END onDataBound');
 	}
 
@@ -666,10 +664,33 @@ function  buttonPlusMinus(nameID,hideShow,sizeFrozen)
 
 
 
-function  themeSUM(nameID,arg)
+function  themeSUM(nameID,arg,wrsParam)
 {
+		var find_last			=	'last-child';
+			//Verificando se é LINHA DRILL e se é linha de total
+			if(wrsParam.DRILL_HIERARQUIA_LINHA==_TRUE)
+				{
+					var allFields				=	arg.sender.headerIndex.field;
+					var _count_drillLinehide	=	0;
+					var layout					=	wrsKendoUiContextMenuGetLayoutInfo(arg.sender);
+					var sizeLINE				=	 explode(',',layout.LAYOUT_ROWS);
+					
+					
+					for(lineAllFields in allFields)
+						{
+							if(allFields[lineAllFields].drill_line)
+								{
+									_count_drillLinehide++;
+								}
+						}
+					
+					find_last	=	'eq('+(sizeLINE.length-_count_drillLinehide)+')';
+					
+					
+						
+				}
 			
-			$(nameID).find('.k-grid-content-locked').find('tr').find('td:last-child').each(function(){
+			$(nameID).find('.k-grid-content-locked').find('tr').find('td:'+find_last).each(function(){
 			var index				=	$(this).parent().index();
 			var parent_index_data	=	parseInt($(this).index());
 			var html_data_index		=	'';

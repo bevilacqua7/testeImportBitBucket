@@ -267,7 +267,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			var headerIndex		=	telerikGrid.headerIndex;
 			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
 			
-			var ChartDefault	=	$.parseJSON(base64_decode(kendoUiTools.CHART)); 
+			var ChartDefault				=	$.parseJSON(base64_decode(kendoUiTools.CHART)); 
+			var DRILL_HIERARQUIA_LINHA		=	kendoUiTools.DRILL_HIERARQUIA_LINHA;
+			
 			
 
 			
@@ -306,9 +308,19 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			
 			
 			//kendoChart.height(ELEMENT.attr('height-chart'));
-
+			//Column Frozen para totais	
 			var _colum_frozen	=	parseInt($(GRID).find('.k-grid-content-locked').find('tr:last-child').find('td').length)-1;
 				
+			
+			//Verificando se é DRILL LINHA para modificar as linhas de totais
+			if(DRILL_HIERARQUIA_LINHA==_TRUE)
+			{
+				_colum_frozen	=	0;
+				$(GRID).find('.k-grid-content-locked').find('tr:last-child').find('td').each(function(){
+					if(!$(this).is(':hidden')){_colum_frozen++;}
+				});
+				_colum_frozen		=	 _colum_frozen-1;
+			}
 			
 			
 			if(empty(kendoUiTools.GAUGE_COLOR)){
@@ -1766,7 +1778,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 													}
 													
 													//Validando linha de totais
-													
+
 													if(empty(_data[lineData]['C00'+_colum_frozen])){
 														
 															if(kendoUiTools.SHOW_LINE_TOTAL=='true' && bubble ||
