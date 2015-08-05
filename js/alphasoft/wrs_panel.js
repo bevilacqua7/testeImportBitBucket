@@ -548,7 +548,6 @@ function cloneDragDrop(whoClone,toClone,cloneTAGWrsFlag,who_receive)
 
 function insetDragDropEmpry()
 {
-
 	var DragValues	=	[];
 
 	$('.wrs_swap_drag_drop').each(function(){
@@ -557,9 +556,7 @@ function insetDragDropEmpry()
 		var who_receive			=	 $(this).parent().attr('who_receive');
 		var count				=	0;
 		var notRepeatValueFlag	= 	[]; //Contem as informações dentro de cada bloco 
-		
-		
-		
+				
 		$(this).find('li').each(function(){
 				var vvalue				=	$(this).attr('vvalue');
 				
@@ -871,7 +868,7 @@ function setDraggable(name,use,who_receive)
 	
 	$( name ).draggable(draggableOptionsLi).sortable({placeholder	: "ui-state-highlight"});
 	$( name).disableSelection();
-	
+	wrs_panel_layout.allowOverflow($(name));
 	
 }
 
@@ -1371,6 +1368,10 @@ function wrs_panel_active_drag_drop()
 	 //Iniciando o Evento de Arrastar
 	 setDraggable(".WRS_DRAG_DROP li",false,'');
 	 
+
+	 wrs_panel_layout.allowOverflow($("li.ui-widget-content.box_wrs_panel"));
+	 
+	 
 	 $('.WRS_DRAG_DROP h2').click(wrs_search_drad_drop_direita_h2);
 	 
 	
@@ -1394,7 +1395,14 @@ function wrs_panel_active_drag_drop()
 						  sort			: 	function() 
 									      {
 									       	$( this ).removeClass( "ui-state-default" );
-									       }
+									       },
+									       helper: function () { // modificando o helper pra clonar o objeto ao inves de move-lo
+										       return $(this).children('li.ui-state-hover').clone()
+										            .appendTo('body') 
+										            .css('zIndex',1000) 
+										            .show(); 
+										  } 			
+						,start: function (e, ui) { ui.item.show();} // quando iniciar o novo objeto exibi-lo na tela
 					}
 
 
@@ -1404,8 +1412,6 @@ function wrs_panel_active_drag_drop()
 		sortable_attr_simples_composto();
 		
 		insetDragDropEmpry();
-	
-	
 }
 /**
  * Processo principal
