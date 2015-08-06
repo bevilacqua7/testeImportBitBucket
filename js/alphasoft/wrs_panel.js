@@ -588,7 +588,6 @@ function insetDragDropEmpry()
 						notRepeatValueFlag[vvalue]=	true;
 				}else{
 					if(!empty(vvalue)){
-						console.log('noterepat: ',notRepeatValueFlag, ' DragValues: ', DragValues, ' LevelFull: ',level_full);
 						WRS_ALERT(sprintf(LNG('DRAG_DROP_FILE_IN_USER_REMOVE'),vvalue),'warning');
 						$(this).remove();
 					}
@@ -923,7 +922,8 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 				}
 				
 
-				var object	=	$(where_find).find('li.'+_class);
+				//var object	=	$(where_find).find('li.'+_class);				 
+				var object	=	$(where_find).find("li:containClass('"+_class+"')"); // alterado para procurar nas classes do objeto (case insensitive)
 				
 				
 				if(simples_composto)
@@ -938,6 +938,7 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 				if(!empty(is_filter))
 				{
 					var json 			=	$.parseJSON(base64_decode(object.attr('json')));
+					if(json!=null)
 						json['FILTER']	=	is_filter;
 						
 						object.attr('json',base64_encode(json_encode(json,true)));
@@ -994,7 +995,20 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 	*/
 }
 
-
+// extensao para comparar valores case insensitive com as classes de um objeto
+// embasado e alterado de: http://www.jquerybyexample.net/2012/11/make-jquery-contains-selector-case-insensitive.html
+// felipebevi 20150806
+jQuery.expr[':'].containClass = function(a, i, m) {
+	var classes = jQuery(a).attr('class').toUpperCase().split(" ");
+	var existe=false;
+	for(i=0;i<classes.length;i++){
+		if(m[3].toUpperCase().trim() == classes[i].trim()){
+			existe=true;
+		}
+	}
+	return existe;
+};	
+	
 /**
  * 	Fazendos os inputs dos elementos na grid
  */
