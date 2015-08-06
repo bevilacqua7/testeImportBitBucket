@@ -316,23 +316,22 @@ var context = context || (function () {
 		/*
 		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
 		 */		
-		var table_parents	=	$(this).parents('div');
+		var table_parents_div	=	$(this).parents('div');
 		var esconde=false;				
-		if(table_parents.attr('type')=='linha_header')
+		if(table_parents_div.attr('type')=='linha_header')
 			{	
-					table_parents	=	table_parents.find('table:first').find('tr');
-					var size_tr		=	table_parents.length;					
+					table_parents		=	table_parents_div.find('table:first').find('tr');
+					var size_tr			=	table_parents.length;					
 					$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
 					if(($(this).parent().index()+1)>=size_tr){
 						if($(table_parents[$(this).parent().index()]).find('th').length<=2){ // existe uma coluna vazia, por isso, se for maior que 2 é pq existe mais de uma coluna de informacoes
-							esconde=true;							
+							esconde=true;	
 						}
 					}else{
-						if(size_tr<=2){
+						if(size_tr<2){
 							esconde=true;
 						}
-					}
-					
+					}	
 			}		
 		if(table_parents.first('div').attr('type')=='coluna_header_line'){
 			var qtde_trs_primeiro 		= table_parents.first('div').find('table:first').find('tr:first').find('th').length;
