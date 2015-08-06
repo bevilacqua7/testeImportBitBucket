@@ -316,11 +316,11 @@ var context = context || (function () {
 		/*
 		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
 		 */		
-		var table_parents_div	=	$(this).parents('div');
+		var table_parents	=	$(this).parents('div');
 		var esconde=false;				
-		if(table_parents_div.attr('type')=='linha_header')
+		if(table_parents.attr('type')=='linha_header')
 			{	
-					table_parents		=	table_parents_div.find('table:first').find('tr');
+					table_parents		=	table_parents.find('table:first').find('tr');
 					var size_tr			=	table_parents.length;					
 					$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
 					if(($(this).parent().index()+1)>=size_tr){
@@ -338,6 +338,12 @@ var context = context || (function () {
 			var qtde_trs_headers_linhas = table_parents.first('div').find('table:first').find('tr:first').next().find('th').length;
 			var qtde_colunas_por_secao	= qtde_trs_headers_linhas/qtde_trs_primeiro;
 			if(qtde_colunas_por_secao<=1){
+				esconde=true;
+			}
+		}	
+		if(table_parents.first('div').attr('type')=='coluna_header'){
+			var qtde_colunas_measures 		= table_parents.first('div').find('table:first').find('tr:first').find('th').length;
+			if(qtde_colunas_measures<=1){
 				esconde=true;
 			}
 		}
