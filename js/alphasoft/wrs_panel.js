@@ -1270,6 +1270,11 @@ function wrs_run_filter()
 					param_request	=	merge_objeto(param_request,wrsConfigGridDefault_data);
 				}
 			}
+		
+		//Ajustando ABAS HTML	
+		$('.WRS_DRAG_DROP_RECEIVER_FILTER').hide();
+		$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
+		$('.wrs_panel_filter_icon').hide();
 			
 		runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 

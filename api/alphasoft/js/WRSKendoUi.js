@@ -450,11 +450,19 @@ function getWrsKendoColumn(data)
 				{
 					if(lineToHideDrillLine[lineDrillHide]==0)
 					{
-						kendoUi.headerIndex.field[lineDrillHide]['drill_line']			=	 true;
-						kendoUi.headerIndex.field[lineDrillHide]['drill_line_button']	=	 true;
-						kendoUi.hideColumn(kendoUi.headerIndex.field[lineDrillHide]);
+						if(kendoUi.headerIndex.field[lineDrillHide]['drill_line'])
+						{
+							kendoUi.headerIndex.field[lineDrillHide]['drill_line']			=	 true;
+							kendoUi.headerIndex.field[lineDrillHide]['drill_line_button']	=	 true;
+							kendoUi.hideColumn(kendoUi.headerIndex.field[lineDrillHide]);
+						}
+						
 					}
 				}
+			
+			
+			//foreach(kendoUi.headerIndex.field['C002']);
+			
 			
 	}
 	
@@ -686,7 +694,7 @@ function  themeSUM(nameID,arg,wrsParam)
 					
 					find_last	=	'eq('+(sizeLINE.length-_count_drillLinehide)+')';
 					
-					
+					arg.sender.DRILL_HIERARQUIA_LINHA_TITLE	=	find_last;
 						
 				}
 			
