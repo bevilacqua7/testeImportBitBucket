@@ -114,7 +114,7 @@ var context = context || (function () {
 				var iconS='<span class="btn-left glyphicon glyphicon-usd ui-sortable-handle"></span>';// $
 				var icon='';
 				
-				if(data[i].className=='REMOVE_LINE_HEADER'){
+				if(data[i].hasOwnProperty('className') && data[i].className=='REMOVE_LINE_HEADER'){
 					icon=iconT;
 				}else{
 					var jsonM = data[i].json;
@@ -127,19 +127,19 @@ var context = context || (function () {
 							icon=iconA;
 						}
 					}else{
-						if(data[i].className.substr(0,8)=='Measures'){
+						if(data[i].hasOwnProperty('className') && data[i].className.substr(0,8)=='Measures'){
 							icon=iconS;
 						}else{
 							icon=iconA;
 						}
 					}
 				}
-				
-				if (typeof data[i].subMenu !== 'undefined') {
-					$sub = ('<li class="dropdown-submenu ' + data[i].className + '"><a tabindex="-1" href="' + data[i].href + '">' + icon + data[i].text + '<i class="fa fa-angle-right"></i></a></li>');
-				} else {
-					$sub = $('<li class="' + data[i].className + '"><a tabindex="-1" json="'+data[i].json+'" href="' + data[i].href + '"'+linkTarget+'>' + icon + data[i].text + '</a></li>');
-				}
+				if(data[i].hasOwnProperty('className'))
+					if (typeof data[i].subMenu !== 'undefined') {
+						$sub = ('<li class="dropdown-submenu ' + data[i].className + '"><a tabindex="-1" href="' + data[i].href + '">' + icon + data[i].text + '<i class="fa fa-angle-right"></i></a></li>');
+					} else {
+						$sub = $('<li class="' + data[i].className + '"><a tabindex="-1" json="'+data[i].json+'" href="' + data[i].href + '"'+linkTarget+'>' + icon + data[i].text + '</a></li>');
+					}
 				if (typeof data[i].action !== 'undefined') {
 					var actiond = new Date(),
 						actionID 	= 'event-' + actiond.getTime() * Math.floor(Math.random()*100000),
