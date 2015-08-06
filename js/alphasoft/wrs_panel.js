@@ -90,106 +90,42 @@ function wrs_west_onresize(pane, $Pane)
 	
 	$('.wrs_panel_esquerdo_drag_drop ol').height(heightBox);
 	
-	limpa_resultado_filtros_tratados();
 	formata_texto_resultado_filtros();
 	
 }
 
-function limpa_resultado_filtros_tratados(){
-	$('.qtip-filtros').remove();
-}
-
-function formata_texto_resultado_filtros(){
-	$('.pws_click_triger_single').each(function(){
-		if($(this).text().trim()!=''){
-			formataNomeLongo($(this));
-		}
+// formatar textos muito longos nos filtros criando tooltip pra cada um
+function formata_texto_resultado_filtros(){	
+	var tamanho_letra = $("<div/>").text("W").textWidth();
+	$('.wrs_filter_body_container').each(function(){
+		$(this).find('.pws_filter_text').each(function(){
+			var tamanho_espaco = parseInt($(this).css('width'))+10;//+10=ajuste até a borda
+			if($(this).attr('text_original').length > ceil(tamanho_espaco/tamanho_letra)){
+				$(this).text($(this).attr('text_original').substring(0,ceil(tamanho_espaco/tamanho_letra))+'...');
+				bindQtip($(this));
+			}else{
+				$(this).text($(this).attr('text_original'));
+				$(this).qtip("destroy");
+			}
+		});
 	});
 }
 
-function formataNomeLongo(obj){
-	var text='';
-	var attr = obj.attr('text_original');
-	if(typeof attr !== typeof undefined && attr !== false){
-		text=obj.attr('text_original');
-		obj.text(text);
-	}else{
-		text=obj.text();
-	}
-	var tamanho_original = obj.textWidth();
-	var tamanho_espaco = parseInt(obj.css('width'));
-	while(obj.textWidth()+24>tamanho_espaco){
-		obj.text(obj.text().trim().substring(0,obj.text().trim().length-1));
-	}
-	if(text!=obj.text()){
-		obj.text(obj.text().trim()+'...').attr('text_original',text);				
-		obj.qtip({
-	         style: {                                                     
-	        	 	width: tamanho_original+25,
-	        	 	classes: 'qtip-bootstrap qtip-shadow qtip-filtros'
-	         },content: {
-					text: text
-   	         },position: {
-		        	 my: 'top left',
-		             at: 'top right',
-		             adjust: { x: -5, y: -2 }
-	         }
-	     });		
-	}else{
-		obj.qtip("destroy");
-	}
-}
-
-//Calculate width of text from DOM element or string. By Phil Freo <http://philfreo.com>
-$.fn.textWidth = function(text, font) {
-    if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
-    $.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
-    return $.fn.textWidth.fakeEl.width();
-};
-
-function limpa_resultado_filtros_tratados(){
-	$('.qtip-filtros').remove();
-}
-
-function formata_texto_resultado_filtros(){
-	$('.pws_click_triger_single').each(function(){
-		if($(this).text().trim()!=''){
-			formataNomeLongo($(this));
-		}
-	});
-}
-
-function formataNomeLongo(obj){
-	var text='';
-	var attr = obj.attr('text_original');
-	if(typeof attr !== typeof undefined && attr !== false){
-		text=obj.attr('text_original');
-		obj.text(text);
-	}else{
-		text=obj.text();
-	}
-	var tamanho_original = obj.textWidth();
-	var tamanho_espaco = parseInt(obj.css('width'));
-	while(obj.textWidth()+24>tamanho_espaco){
-		obj.text(obj.text().trim().substring(0,obj.text().trim().length-1));
-	}
-	if(text!=obj.text()){
-		obj.text(obj.text().trim()+'...').attr('text_original',text);				
-		obj.qtip({
-	         style: {                                                     
-	        	 	width: tamanho_original+25,
-	        	 	classes: 'qtip-bootstrap qtip-shadow qtip-filtros'
-	         },content: {
-					text: text
-   	         },position: {
-		        	 my: 'top left',
-		             at: 'top right',
-		             adjust: { x: -5, y: -2 }
-	         }
-	     });		
-	}else{
-		obj.qtip("destroy");
-	}
+// cria o qtip para o objeto em questão (fazer pra cada um, outra alternativa a mandar atualizar o DOM (varrendo um por um))
+function bindQtip(obj){
+	obj.qtip({
+         style: {                                                     
+        	 	width: $("<span/>").text(obj.attr('text_original')).textWidth()+80,
+        	 	classes: 'qtip-bootstrap qtip-shadow qtip-filtros'
+         },content: {
+				text: obj.attr('text_original')
+	         },position: {
+	        	 my: 'top left',
+	             at: 'top right',
+	             adjust: { x: -5, y: -2 }
+         }
+     });		
+	
 }
 
 //Calculate width of text from DOM element or string. By Phil Freo <http://philfreo.com>
@@ -399,6 +335,7 @@ $(document).ready(function () {
 	$('.wrs_clean_box_drag_drop').click(wrs_clean_box_drag_drop);
 	ABA_CLICK();
 	ABA_WIDTH_LI();
+	
 });
 
 function wrs_clean_box_drag_drop()
@@ -1443,18 +1380,33 @@ function wrs_panel_active_drag_drop()
 					      items			: "li:not(.placeholder)",
 					      placeholder	: "ui-state-highlight",
 					      zIndex		: 10000,
-					      stop			:	function(event){  insetDragDropEmpry();  sortable_attr_simples_composto(); },
-						  sort			: 	function() 
-									      {
+					      stop			:	function(event) { 
+					    	  					insetDragDropEmpry();  
+					    	  					sortable_attr_simples_composto(); 
+					    	  					$(this).find('li').each(function(){
+					    	  						$(this).removeClass('hide');
+					    	  						$(this).show();
+					    	  					});
+					    	  				},
+						  sort			: 	function(){
 									       	$( this ).removeClass( "ui-state-default" );
 									       },
-									       helper: function () { // modificando o helper pra clonar o objeto ao inves de move-lo
+									       helper: function(){ // modificando o helper pra clonar o objeto ao inves de move-lo
 										       return $(this).children('li.ui-state-hover').clone()
 										            .appendTo('body') 
 										            .css('zIndex',1000) 
 										            .show(); 
 										  } 			
-						,start: function (e, ui) { ui.item.show();} // quando iniciar o novo objeto exibi-lo na tela
+							,start: function (e, ui) { 
+									ui.item.show();
+									$(this).children('li.ui-state-hover').addClass('hide');
+							} // quando iniciar o novo objeto exibi-lo na tela			
+							,deactivate:function(){
+	    	  					$(this).find('li').each(function(){
+	    	  						$(this).removeClass('hide');
+	    	  						$(this).show();
+	    	  					});
+    	  					}// ao fim, exibe todos os filhos existentes
 					}
 
 
