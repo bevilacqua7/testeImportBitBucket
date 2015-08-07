@@ -14,8 +14,8 @@
 										  				<table class="table table-condensed">
 														      <thead>
 														        <tr>
-														          <th><?php echo LNG('ATTRIBUTOS_METRICA');?></th>
-														          <th><?php echo LNG('ACTION');?></th>
+														          <th style="padding-left: 8px;width: 128px;"><?php echo LNG('ATTRIBUTOS_METRICA');?></th>
+														          <th style="padding-left: 17px;width: 88px"><?php echo LNG('ACTION');?></th>
 														          <th><?php echo LNG('ACTIVE');?></th>
 														        </tr>
 														      </thead>
