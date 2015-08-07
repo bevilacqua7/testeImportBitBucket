@@ -47,86 +47,86 @@
 																	
 																</tr>
 																
-																<tr><td colspan="3" width="364"><table width="100%">
-																
-																
-																<tr class="wrs-container-legend">
-																	<td valign="baseline" colspan="2"  >
-																		<label class="">
-																			<img src="imagens/chart/legend.png"/> <input type="checkbox" name="LEGEND" id="LEGEND" class="LEGEND_WRS" value="true"> <?php echo LNG('LEGEND');?>
-																		</label>
+																<tr>
+																	<td colspan="3" width="364">
+																		<table style="width:354px">
+																	
 																		
-																		<div class="LEGEND_TYPES_WRS">
-																		<table class="margin-left">
-																			<tr><td>
-																					<label class=""><input type="radio" checked="checked"  name="LEGEND" class="legend-types"  value="bottom"> <?php echo LNG('CHART_LEGEND_BOTTOM');?> </label>
-																					<label class=""><input type="radio" name="LEGEND" class="legend-types"  value="top"> <?php echo LNG('CHART_LEGEND_TOP');?>  </label><br>
-																					<label class=""><input type="radio" name="LEGEND" class="legend-types"  value="left"> <?php echo LNG('CHART_LEGEND_LEFT');?>  </label> 
-																					<label class=""><input type="radio" name="LEGEND" class="legend-types"  value="right"> <?php echo LNG('CHART_LEGEND_RIGHT');?>  </label>
-																			</td></tr>
-																		</table>
-																		
-																		
-																		
-																		</div>
-																		<!-- END LEGEND_TYPES_WRS -->
-																		
-																	</td  >
-																	<td valign="baseline" colspan="1">
-																			<label class=""><input type="checkbox" name="PIE_DONUT_LEGEND" class="legend-types-config"  value="true" > <?php echo LNG('CHART_INSIDE_NOT_LEGEND');?>  </label></td></tr>
-																	</td>
-																</tr>
-																
-																
-																<tr class="line-total-bubble">
-																	<td colspan="2" >
-																				<div class="row padding-5">	 <b><?php echo  LNG('LINE_TOTAL_BUBBLE');?></b>
+																			<tr class="wrs-container-legend">
+																				<td valign="baseline" colspan="3" style="width:105px;" >
+																					<label class="">
+																						<img src="imagens/chart/legend.png"/> <input type="checkbox" name="LEGEND" id="LEGEND" class="LEGEND_WRS" value="true"> <?php echo LNG('LEGEND');?>
+																					</label>
+																					<label class="" style="position: relative;left: 120px;">
+																						<input type="checkbox" name="PIE_DONUT_LEGEND" class="legend-types-config"  value="true" > <?php echo LNG('CHART_INSIDE_NOT_LEGEND');?>  
+																					</label>
+																					<div class="LEGEND_TYPES_WRS">
+																						<table class="/*margin-left*/">
+																							<tr><td><table style="width: 165px;"><tr><td>
+																									<label class=""><input type="radio" checked="checked"  name="LEGEND" class="legend-types"  value="bottom"> <?php echo LNG('CHART_LEGEND_BOTTOM');?> </label>
+																									</td><td><label class=""><input type="radio" name="LEGEND" class="legend-types"  value="top"> <?php echo LNG('CHART_LEGEND_TOP');?>  </label>
+																									</td></tr><tr><td><label class=""><input type="radio" name="LEGEND" class="legend-types"  value="left"> <?php echo LNG('CHART_LEGEND_LEFT');?>  </label> 
+																									</td><td><label class=""><input type="radio" name="LEGEND" class="legend-types"  value="right"> <?php echo LNG('CHART_LEGEND_RIGHT');?>  </label>
+																							</td></tr></table></td></tr>
+																						</table>
+																					</div>
+																					<!-- END LEGEND_TYPES_WRS -->
+																				</td  >
+																			</tr>
+																			
+																			
+																			<tr class="line-total-bubble">
+																				<td colspan="2" >
+																							<div class="row padding-5">	 <b><?php echo  LNG('LINE_TOTAL_BUBBLE');?></b> </div>
+																								
+																							<div class="radio bubble-radio">
+																						    <label>
+																						      <input type="radio" name="line-total-bubble" value="true"> <?php echo LNG('BTN_SIM');?>
+																						    </label>
+																						     <label>
+																						      <input type="radio" checked="checked" value="false"  name="line-total-bubble"> <?php echo LNG('BTN_NAO');?>
+																						    </label>
+																						  </div>
+																							    
+																				</td>
+																				<td  colspan="1"></td>
+																			</tr>
+																			
+																			<tr class="gauge-container-size-line" >
+																				<td colspan="2"   >
+																							<div class="row padding-5" style="width:300px;">	 <b><?php echo  LNG('CHART_GAUGE_QUANTIDADE');?></b>
+																								
+																							<!--  <select class="input-slide-md-line col-md-12" ><option>1</option></select>  -->
+																							<div class="input-slide-md-line-radio col-md-12" ></div>
+																							
+																							</div>
+																							    
+																				</td>
+																				<td  colspan="1"></td>
+																			</tr>
+																			
+																			<!--  TAG CHART GAUGE -->
+																			
+																			<tr class="gauge-container-html">
+																				<td colspan="2"  >
+																					<!-- CONFIG GAUGE  Template-->
+																							<div class="row gauge_configure ">
+																								<b><?php echo  LNG('CHART_GAUGE_RANGE');?></b>
+																								<div class="layout-slider"></div>
+																						   </div><script type="text/javascript">/*WrsGougeConfigure();*/</script>
+																						     <!--  END PLUGINS GAUGE Template -->
+																					 
+																				</td >
+																				<td  colspan="1">
 																					
-																				<div class="radio bubble-radio">
-																			    <label>
-																			      <input type="radio" name="line-total-bubble" value="true"> <?php echo LNG('BTN_SIM');?>
-																			    </label>
-																			     <label>
-																			      <input type="radio" checked="checked" value="false"  name="line-total-bubble"> <?php echo LNG('BTN_NAO');?>
-																			    </label>
-																			  </div>
-																				    
-																	</td>
-																	<td  colspan="1"></td>
-																</tr>
-																
-																<tr class="gauge-container-size-line" >
-																	<td colspan="2"   >
-																				<div class="row padding-5" style="width:300px;">	 <b><?php echo  LNG('CHART_GAUGE_QUANTIDADE');?></b>
-																					
-																				<select class="input-slide-md-line col-md-12" ><option>1</option></select>
-																				
-																				</div>
-																				    
-																	</td>
-																	<td  colspan="1"></td>
-																</tr>
-																
-																<!--  TAG CHART GAUGE -->
-																
-																<tr class="gauge-container-html">
-																	<td colspan="2"  >
-																		<!-- CONFIG GAUGE  Template-->
-																				<div class="row gauge_configure ">
-																					<b><?php echo  LNG('CHART_GAUGE_RANGE');?></b>
-																					<div class="layout-slider"></div>
-																			   </div><script type="text/javascript">/*WrsGougeConfigure();*/</script>
-																			     <!--  END PLUGINS GAUGE Template -->
-																		 
-																	</td >
-																	<td  colspan="1">
-																		
-																	</td>
-																</tr>
-																
+																				</td>
+																			</tr>
+																			
 																<!-- END  -->
 																 	
-																</table></td></tr>
+																		</table>
+																	</td>
+																</tr>
 																 	
 													  		</tbody>		 
 													</table>		 
