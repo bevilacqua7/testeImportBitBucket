@@ -10,7 +10,7 @@
 					      			<!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
 										<div class="row">
 										  				
-										  				<div class="col-md-6 col-xs-12">
+										  				<div class="col-md-6 col-xs-12" style="height:440px;">
 										  				<table class="table table-condensed">
 														      <thead>
 														        <tr>
@@ -46,6 +46,10 @@
 																	</td>
 																	
 																</tr>
+																
+																<tr><td colspan="3" width="364"><table width="100%">
+																
+																
 																<tr class="wrs-container-legend">
 																	<td valign="baseline" colspan="2"  >
 																		<label class="">
@@ -74,35 +78,6 @@
 																</tr>
 																
 																
-																<!--  TAG CHART GAUGE -->
-																
-																<tr class="gauge-container-html">
-																	<td colspan="2"  >
-																		<!-- CONFIG GAUGE  Template-->
-																				<div class="row gauge_configure ">
-																					<b><?php echo  LNG('CHART_GAUGE_RANGE');?></b>
-																					<div class="layout-slider"></div>
-																			   </div><script type="text/javascript">/*WrsGougeConfigure();*/</script>
-																			     <!--  END PLUGINS GAUGE Template -->
-																		 
-																	</td >
-																	<td  colspan="1">
-																		
-																	</td>
-																</tr>
-																
-																<tr class="gauge-container-size-line" >
-																	<td colspan="2"   >
-																				<div class="row padding-5">	 <b><?php echo  LNG('CHART_GAUGE_QUANTIDADE');?></b>
-																					
-																				<select class="input-slide-md-line col-md-12" ><option>1</option></select>
-																				
-																				</div>
-																				    
-																	</td>
-																	<td  colspan="1"></td>
-																</tr>
-																
 																<tr class="line-total-bubble">
 																	<td colspan="2" >
 																				<div class="row padding-5">	 <b><?php echo  LNG('LINE_TOTAL_BUBBLE');?></b>
@@ -120,7 +95,38 @@
 																	<td  colspan="1"></td>
 																</tr>
 																
+																<tr class="gauge-container-size-line" >
+																	<td colspan="2"   >
+																				<div class="row padding-5" style="width:300px;">	 <b><?php echo  LNG('CHART_GAUGE_QUANTIDADE');?></b>
+																					
+																				<select class="input-slide-md-line col-md-12" ><option>1</option></select>
+																				
+																				</div>
+																				    
+																	</td>
+																	<td  colspan="1"></td>
+																</tr>
+																
+																<!--  TAG CHART GAUGE -->
+																
+																<tr class="gauge-container-html">
+																	<td colspan="2"  >
+																		<!-- CONFIG GAUGE  Template-->
+																				<div class="row gauge_configure ">
+																					<b><?php echo  LNG('CHART_GAUGE_RANGE');?></b>
+																					<div class="layout-slider"></div>
+																			   </div><script type="text/javascript">/*WrsGougeConfigure();*/</script>
+																			     <!--  END PLUGINS GAUGE Template -->
+																		 
+																	</td >
+																	<td  colspan="1">
+																		
+																	</td>
+																</tr>
+																
 																<!-- END  -->
+																 	
+																</table></td></tr>
 																 	
 													  		</tbody>		 
 													</table>		 
