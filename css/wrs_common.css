@@ -115,4 +115,21 @@
 	background-image: url("../imagens/btn/door-out-icon.png");
 }
 
+div.input-slide-md-line-radio {
+    display: table;
+	width: 340px;	
+    table-layout: fixed;    /* For cells of equal size */
+    position: relative;
+    left: 10px;
+}
+div.input-slide-md-line-radio span {
+    display: table-cell;
+    text-align: left;
+}
+div.input-slide-md-line-radio span label {
+	position: relative;
+    left: 6px;
+    top: -2px;
+}
+ 
  

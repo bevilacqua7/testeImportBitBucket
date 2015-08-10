@@ -37,6 +37,23 @@ function setOption(event,value,_selected)
 	
 }
 
+function setOptionRadio(event,value,_selected)
+{
+	var rand_name = Math.floor((Math.random() * 1000) + 1);
+	var _option	=	"<span><input type='radio' id='{rand}' name='"+rand_name+"' value='{value}' {selected} ><label for='{rand}'>{label}</label></span>";
+	var replace	=	['{value}','{label}','{selected}','{rand}'];
+	var elements = []; // inverter a ordem dos objetos, pois não da pra reordenar diretamente sem ser array
+	for(lineValue in value)
+		{
+			var _tag	=	'';
+			var _rand = 'radio_'+(Math.floor((Math.random() * 1000) + 1));			
+			if(_selected==value[lineValue]){
+				_tag	=	'checked';
+			}
+			elements.push($(str_replace(replace,[lineValue,value[lineValue],_tag,_rand],  _option)));
+		}	
+	event.append(elements.reverse());	
+}
 
 function array_length(array)
 {

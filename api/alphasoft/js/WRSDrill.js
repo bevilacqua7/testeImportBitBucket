@@ -500,7 +500,9 @@ function addTargetDisableContext(kendoUi)
     	if(length==1)
     	{
     		$(".k-grid-header .k-grid-header-wrap").attr('type','coluna_header');
-	    	context.attachWRS('.k-grid-header .k-grid-header-wrap tr:eq(0) th '	, menu_context_relation_ship_measure(jsonMeasure),$event);
+			var data_line_header2							=	 menu_context_relation_ship_measure(jsonMeasure);
+    		data_line_header2[data_line_header2.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
+	    	context.attachWRS('.k-grid-header .k-grid-header-wrap tr:eq(0) th '	, data_line_header2,$event);
     	}else{
     		
     		$('.k-grid-header .k-grid-header-wrap').attr('type','coluna_header_line');

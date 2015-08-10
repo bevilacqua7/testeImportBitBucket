@@ -90,106 +90,42 @@ function wrs_west_onresize(pane, $Pane)
 	
 	$('.wrs_panel_esquerdo_drag_drop ol').height(heightBox);
 	
-	limpa_resultado_filtros_tratados();
 	formata_texto_resultado_filtros();
 	
 }
 
-function limpa_resultado_filtros_tratados(){
-	$('.qtip-filtros').remove();
-}
-
-function formata_texto_resultado_filtros(){
-	$('.pws_click_triger_single').each(function(){
-		if($(this).text().trim()!=''){
-			formataNomeLongo($(this));
-		}
+// formatar textos muito longos nos filtros criando tooltip pra cada um
+function formata_texto_resultado_filtros(){	
+	var tamanho_letra = $("<div/>").text("W").textWidth();
+	$('.wrs_filter_body_container').each(function(){
+		$(this).find('.pws_filter_text').each(function(){
+			var tamanho_espaco = parseInt($(this).css('width'))+10;//+10=ajuste até a borda
+			if($(this).attr('text_original').length > ceil(tamanho_espaco/tamanho_letra)){
+				$(this).text($(this).attr('text_original').substring(0,ceil(tamanho_espaco/tamanho_letra))+'...');
+				bindQtip($(this));
+			}else{
+				$(this).text($(this).attr('text_original'));
+				$(this).qtip("destroy");
+			}
+		});
 	});
 }
 
-function formataNomeLongo(obj){
-	var text='';
-	var attr = obj.attr('text_original');
-	if(typeof attr !== typeof undefined && attr !== false){
-		text=obj.attr('text_original');
-		obj.text(text);
-	}else{
-		text=obj.text();
-	}
-	var tamanho_original = obj.textWidth();
-	var tamanho_espaco = parseInt(obj.css('width'));
-	while(obj.textWidth()+24>tamanho_espaco){
-		obj.text(obj.text().trim().substring(0,obj.text().trim().length-1));
-	}
-	if(text!=obj.text()){
-		obj.text(obj.text().trim()+'...').attr('text_original',text);				
-		obj.qtip({
-	         style: {                                                     
-	        	 	width: tamanho_original+25,
-	        	 	classes: 'qtip-bootstrap qtip-shadow qtip-filtros'
-	         },content: {
-					text: text
-   	         },position: {
-		        	 my: 'top left',
-		             at: 'top right',
-		             adjust: { x: -5, y: -2 }
-	         }
-	     });		
-	}else{
-		obj.qtip("destroy");
-	}
-}
-
-//Calculate width of text from DOM element or string. By Phil Freo <http://philfreo.com>
-$.fn.textWidth = function(text, font) {
-    if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
-    $.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
-    return $.fn.textWidth.fakeEl.width();
-};
-
-function limpa_resultado_filtros_tratados(){
-	$('.qtip-filtros').remove();
-}
-
-function formata_texto_resultado_filtros(){
-	$('.pws_click_triger_single').each(function(){
-		if($(this).text().trim()!=''){
-			formataNomeLongo($(this));
-		}
-	});
-}
-
-function formataNomeLongo(obj){
-	var text='';
-	var attr = obj.attr('text_original');
-	if(typeof attr !== typeof undefined && attr !== false){
-		text=obj.attr('text_original');
-		obj.text(text);
-	}else{
-		text=obj.text();
-	}
-	var tamanho_original = obj.textWidth();
-	var tamanho_espaco = parseInt(obj.css('width'));
-	while(obj.textWidth()+24>tamanho_espaco){
-		obj.text(obj.text().trim().substring(0,obj.text().trim().length-1));
-	}
-	if(text!=obj.text()){
-		obj.text(obj.text().trim()+'...').attr('text_original',text);				
-		obj.qtip({
-	         style: {                                                     
-	        	 	width: tamanho_original+25,
-	        	 	classes: 'qtip-bootstrap qtip-shadow qtip-filtros'
-	         },content: {
-					text: text
-   	         },position: {
-		        	 my: 'top left',
-		             at: 'top right',
-		             adjust: { x: -5, y: -2 }
-	         }
-	     });		
-	}else{
-		obj.qtip("destroy");
-	}
+// cria o qtip para o objeto em questão (fazer pra cada um, outra alternativa a mandar atualizar o DOM (varrendo um por um))
+function bindQtip(obj){
+	obj.qtip({
+         style: {                                                     
+        	 	width: $("<span/>").text(obj.attr('text_original')).textWidth()+80,
+        	 	classes: 'qtip-bootstrap qtip-shadow qtip-filtros'
+         },content: {
+				text: obj.attr('text_original')
+	         },position: {
+	        	 my: 'top left',
+	             at: 'top right',
+	             adjust: { x: -5, y: -2 }
+         }
+     });		
+	
 }
 
 //Calculate width of text from DOM element or string. By Phil Freo <http://philfreo.com>
@@ -399,6 +335,7 @@ $(document).ready(function () {
 	$('.wrs_clean_box_drag_drop').click(wrs_clean_box_drag_drop);
 	ABA_CLICK();
 	ABA_WIDTH_LI();
+	
 });
 
 function wrs_clean_box_drag_drop()
@@ -600,28 +537,51 @@ function cloneDragDrop(whoClone,toClone,cloneTAGWrsFlag,who_receive)
 
 function insetDragDropEmpry()
 {
-	var DragValues	=	[];
+	var DragValues	=	DragValues_LF	=	[]; // LF=level_full
 
 	$('.wrs_swap_drag_drop').each(function(){
 	
 		var htmlDefault			=	'<li class="placeholder">'+sprintf(LNG('DRAG_DROP_AREA'),LNG($(this).attr('LNG')))+'</li>';
 		var who_receive			=	 $(this).parent().attr('who_receive');
 		var count				=	0;
-		var notRepeatValueFlag	= 	[]; //Contem as informações dentro de cada bloco 
+		var notRepeatValueFlag	= 	notRepeatValueFlag_LF	= 	[]; //Contem as informações dentro de cada bloco 
 				
 		$(this).find('li').each(function(){
-				var vvalue				=	$(this).attr('vvalue');
-				
+				var json 			=	$.parseJSON(base64_decode($(this).attr('json')));
+				var level_full		=	(typeof json == 'object' && $(json).is('[LEVEL_FULL]'))?json.LEVEL_FULL:'';
+				var vvalue			=	$(this).attr('vvalue');
 				//Verificação apra confirmar a remoção de Filtro para linha ou coluna
 				if($(this).parent().parent().attr('type')!='filtro')
-				{
+				{		
+						/*// validacao pelo level-full ao inves do vvalue
 						if(isset(DragValues[vvalue]))
 							{
 								notRepeatValueFlag[vvalue]=	true;
 							}
 						DragValues[vvalue]	=	true;
-				}
+						*/
 					
+						// validacao pelo level-full ao inves do vvalue
+						if(isset(DragValues_LF[level_full]))
+						{
+							notRepeatValueFlag_LF[level_full]=	true;
+						}
+						DragValues_LF[level_full]	=	true;
+				}
+				
+				// validacao pelo level-full ao inves do vvalue
+				if(!isset(notRepeatValueFlag_LF[level_full]))
+				{
+						//PAra não permitir que a estrutura possa ir para a coluna e linhas
+						notRepeatValueFlag_LF[level_full]=	true;
+				}else{
+					if(!empty(level_full)){
+						WRS_ALERT(sprintf(LNG('DRAG_DROP_FILE_IN_USER_REMOVE'),vvalue),'warning');
+						$(this).remove();
+					}
+				}
+				
+				/*// validacao pelo level-full ao inves do vvalue
 				if(!isset(notRepeatValueFlag[vvalue]))
 				{
 						//PAra não permitir que a estrutura possa ir para a coluna e linhas
@@ -632,7 +592,7 @@ function insetDragDropEmpry()
 						$(this).remove();
 					}
 				}
-				
+				*/
 				
 				
 				//Validando repetição em Filtros
@@ -962,7 +922,8 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 				}
 				
 
-				var object	=	$(where_find).find('li.'+_class);
+				//var object	=	$(where_find).find('li.'+_class);				 
+				var object	=	$(where_find).find("li:containClass('"+_class+"')"); // alterado para procurar nas classes do objeto (case insensitive)
 				
 				
 				if(simples_composto)
@@ -977,6 +938,7 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 				if(!empty(is_filter))
 				{
 					var json 			=	$.parseJSON(base64_decode(object.attr('json')));
+					if(json!=null)
 						json['FILTER']	=	is_filter;
 						
 						object.attr('json',base64_encode(json_encode(json,true)));
@@ -1033,7 +995,20 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 	*/
 }
 
-
+// extensao para comparar valores case insensitive com as classes de um objeto
+// embasado e alterado de: http://www.jquerybyexample.net/2012/11/make-jquery-contains-selector-case-insensitive.html
+// felipebevi 20150806
+jQuery.expr[':'].containClass = function(a, i, m) {
+	var classes = jQuery(a).attr('class').toUpperCase().split(" ");
+	var existe=false;
+	for(i=0;i<classes.length;i++){
+		if(m[3].toUpperCase().trim() == classes[i].trim()){
+			existe=true;
+		}
+	}
+	return existe;
+};	
+	
 /**
  * 	Fazendos os inputs dos elementos na grid
  */
@@ -1443,18 +1418,33 @@ function wrs_panel_active_drag_drop()
 					      items			: "li:not(.placeholder)",
 					      placeholder	: "ui-state-highlight",
 					      zIndex		: 10000,
-					      stop			:	function(event){  insetDragDropEmpry();  sortable_attr_simples_composto(); },
-						  sort			: 	function() 
-									      {
+					      stop			:	function(event) { 
+					    	  					insetDragDropEmpry();  
+					    	  					sortable_attr_simples_composto(); 
+					    	  					$(this).find('li').each(function(){
+					    	  						$(this).removeClass('hide');
+					    	  						$(this).show();
+					    	  					});
+					    	  				},
+						  sort			: 	function(){
 									       	$( this ).removeClass( "ui-state-default" );
 									       },
-									       helper: function () { // modificando o helper pra clonar o objeto ao inves de move-lo
+									       helper: function(){ // modificando o helper pra clonar o objeto ao inves de move-lo
 										       return $(this).children('li.ui-state-hover').clone()
 										            .appendTo('body') 
 										            .css('zIndex',1000) 
 										            .show(); 
 										  } 			
-						,start: function (e, ui) { ui.item.show();} // quando iniciar o novo objeto exibi-lo na tela
+							,start: function (e, ui) { 
+									ui.item.show();
+									$(this).children('li.ui-state-hover').addClass('hide');
+							} // quando iniciar o novo objeto exibi-lo na tela			
+							,deactivate:function(){
+	    	  					$(this).find('li').each(function(){
+	    	  						$(this).removeClass('hide');
+	    	  						$(this).show();
+	    	  					});
+    	  					}// ao fim, exibe todos os filhos existentes
 					}
 
 

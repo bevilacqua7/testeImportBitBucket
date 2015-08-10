@@ -298,8 +298,6 @@ function is_wrs_change_to_run(param_request)
 	if(histoty_param['DRILL_HIERARQUIA_LINHA']!=param_request['DRILL_HIERARQUIA_LINHA'])				flag=false;
 	if(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']!=param_request['DRILL_HIERARQUIA_LINHA_DATA'])				flag=false;
 	
-	
-	
  
 	
 	//Gravando o Histórico
@@ -450,7 +448,7 @@ function wrsFilterClickFalse()
 	 
 (function ( $ ) {
     $.WrsFilter= function(typeEvent,typeValue) {
-    	limpa_resultado_filtros_tratados();
+
     	$event		=	 this;
     	
     	var G_MSG_FILTER_CLEAN	=	'';
@@ -889,7 +887,6 @@ function wrsFilterClickFalse()
      */
 	 var funCallBackRun	=	 function(data)
 	 	{
-		 	limpa_resultado_filtros_tratados();
 		 	$(data.data.id).find('.wrs_filter_body_container').html(data.html);
 
 	 		var index_data			=	 data.data.index_data;
