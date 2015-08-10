@@ -30,6 +30,7 @@
 		
 		
 		
+		
 
 		//Criando a DIV do MAPA o da CHART
 		var check_div_map_chart	=	 function(type)
@@ -282,6 +283,22 @@
 		};
 
 		NAV.find('.wrs_tools_options_window a').unbind('click').click(WRSWindowGridEventToolsClick);
+		
+		//Para o botão visão
+		var function_btn_open_type_vision		=	 function()
+	  	{
+			var wrsKendoUi			=	$.parseJSON(base64_decode(GRID.attr('wrsKendoUi')));
+			
+	  		$(this).parent().find('li a').each(function(){
+	  				$(this).removeClass('active_tools');
+	  				if(wrsKendoUi.WINDOW	==	$(this).attr('wrs-data'))$(this).addClass('active_tools');
+	  		});
+	  	}
+
+		
+		
+		NAV.find('.btn-open-type-vision').unbind('click').click(function_btn_open_type_vision);
+		
 		//Load event ptincipal
 		//WRSWindowGridEventToolsClick('','grid_map');
     };

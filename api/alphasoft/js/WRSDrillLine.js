@@ -20,6 +20,12 @@ function DRILL_LINE_check_header(wrsKendoUi,kendoUi,_lineDataArray)
 	var lineDataArray		=	_lineDataArray;
 	var flag_hide_show		=	false;
 	var columns				=	0;
+	var columnsName			=	[];
+	
+	
+	
+	
+	
 	
 	//Forçando a inserção para poder saber o total de colunas para retirar com as opções plus minus drill_linha
 	kendoUi['wrs_size_columns']	=	line_size.length;	
@@ -27,44 +33,54 @@ function DRILL_LINE_check_header(wrsKendoUi,kendoUi,_lineDataArray)
 	
 	if(empty(lineDataArray))	{
 		start	=	1;
-		lineDataArray		=	{column:"", query:""};
+		lineDataArray			=	{column:"", query:""};
+		lineDataArray.column	=	kendoUi.headerIndex.byFrozenLevelFull[line_size[0]].key;
+		columnsName				=	[lineDataArray.column];
+		columns					=	1;	
+		
 	}else{
 		start				=	1;
 		flag_hide_show		=	true;
 		columns				=	[];
-		columns				=	 explode(',',lineDataArray.column);
-		columns				=	parseInt(columns.length);
+		columnsName			=	explode(',',lineDataArray.column);
+		columns				=	parseInt(columnsName.length);
 	}
 	
 		
 	if(wrsKendoUi.DRILL_HIERARQUIA_LINHA!=	_TRUE) return true;
+
+
+	
+		var fitst_key		=	'';
+		for(lineRows in line_size)
+			{
+				var _key		=	line_size[lineRows];
+				var key_short	=	kendoUi.headerIndex.byFrozenLevelFull[_key].key;
+
+				
+					kendoUi.headerIndex.field[key_short].drill_line			=	 false;
+//					kendoUi.headerIndex.field[key_short].drill_line_button	=	 false;
+					
+					if(exist_in_array(columnsName,key_short))
+					{
+						kendoUi.headerIndex.field[key_short].drill_line_button	=	 true;
+						kendoUi.headerIndex.field[key_short].drill_line			=	 false;
+					}else{
+						//HIDEN
+						kendoUi.headerIndex.field[key_short].drill_line			=	 true;
+						kendoUi.hideColumn(kendoUi.headerIndex.field[key_short]);
+						
+					}
+			}
 		
-	//
-	//Apenas na estrutura das linhas 
-	for(var _line=start;_line<line_size.length;_line++)
-	{
-		//FAz com que não seha apresentado o botão de dril para o ultimo elemento
-		if(_line==(line_size.length-1))
-		{
-			kendoUi.headerIndex.byFrozenLevelFull[line_size[_line]].drill_line_button	=	 false;
-		}
 		
-		//Escondendo as colunas caso a estrutura estiver em branco
-		//console.log('ASS',kendoUi.headerIndex.byFrozenLevelFull[line_size[_line]]);
-		if(!flag_hide_show)
-		{			
-			kendoUi.headerIndex.byFrozenLevelFull[line_size[_line]].drill_line	=	 true;
-			kendoUi.hideColumn(kendoUi.headerIndex.byFrozenLevelFull[line_size[_line]]);
-		}else{
-				if(_line>columns){
-					kendoUi.headerIndex.byFrozenLevelFull[line_size[_line]].drill_line				=	 true;
-					kendoUi.hideColumn(kendoUi.headerIndex.byFrozenLevelFull[line_size[_line]]);
-				}
-			
-			
-			
-		}
-	}
+		//Remove o Botão da ultima opção
+		var last_column															=	kendoUi.headerIndex.byFrozenLevelFull[line_size[line_size.length-1]].key;
+			kendoUi.headerIndex.field[last_column].drill_line_button			=	 false;
+
+	
+	
+	
 }
 
 
@@ -111,11 +127,17 @@ function DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA()
 	var kendoUi				=	$(this).data('kendoGrid');
 	var query				=	[];
 	var idName 				=	'#'+kendoUi.element.attr('id');
+		kendoUi				=	[];
+		kendoUi				=	$(idName).data('kendoGrid');
+	
 	var wrsKendoUi			=	$.parseJSON(base64_decode($(idName).attr('wrsKendoUi')));
 	var DRILL_LINHA			=	$.parseJSON(base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA));
 	var _check_to_remove	=	[];
+
 	
-	
+	var layout					=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
+	var layoutROWS				=	 explode(',',layout.LAYOUT_ROWS);
+
 	//preenchendo o elemento 
 	var data_default		=	{	'parent_column'	:	parent_column, 
 									'data'			:	data,
@@ -153,8 +175,6 @@ function DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA()
 			{
 					count_line_elimine++;
 			}
-			
-			
 			
 			if(!flag_to_remove && i_type=='minus')
 			{
@@ -196,32 +216,12 @@ function DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA()
 				//Armazenando para remover
 				_check_to_remove[_check_to_remove.length]		=	sub_query[(sub_query.length-1)];
 			}
-			
 			sub_query[sub_query.length]						=	 data;
 			query[query.length]								=	 implode('{VIR}',sub_query);
 		}
-	
-	
-	var DRILL_COLUMN_PARENT_SIZE		=	explode(',',DRILL_LINHA.column);
-		
-		if(empty(DRILL_LINHA.column))
-		{
-			DRILL_LINHA.column			=	column;
-			DRILL_COLUMN_PARENT_SIZE	=	[];
-		}
 
-	var DRILL_COLUMN_PARENT									=		parent;
-		DRILL_COLUMN_PARENT[DRILL_COLUMN_PARENT.length]		=		column;
-	
-	
+		_array				=	DRILL_LINE_empty_array(_array,_check_to_remove);		
 		
-		if(DRILL_COLUMN_PARENT.length >  DRILL_COLUMN_PARENT_SIZE.length)
-		{
-			DRILL_LINHA.column	=	implode(',',DRILL_COLUMN_PARENT);
-		}
-		
-		
-		_array	=	DRILL_LINE_empty_array(_array,_check_to_remove);
 		
 		//Alimentado o array
 		
@@ -231,13 +231,26 @@ function DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA()
 		}else{
 			//Minus
 			var _is_user									=	[];
-				_array										=	DRILL_LINE_empty_array(_array,[implode('{VIR}',array_minus)]);
+				_array										=	DRILL_LINE_empty_array(_array,[implode('{VIR}',array_minus)],true);	
 				_check_to_remove[_check_to_remove.length]	=	data;
-				var data_remove								=	implode('{VIR}',_check_to_remove);
-					_array									=	DRILL_LINE_strpos(_array,data_remove);
+			
+			var data_remove							=	implode('{VIR}',_check_to_remove);
+			var get_array							=	DRILL_LINE_strpos(_array,data_remove);
+				_array								=	get_array.data;
+					
+					var _first_key	=	'';
+					//Remove
+					for(_lineLayoutROWS in layoutROWS)
+						{
+							var __key	=	kendoUi.headerIndex.byFrozenLevelFull[layoutROWS[_lineLayoutROWS]].key;
+							if(empty(_first_key)) _first_key=__key;
+							kendoUi.headerIndex.field[__key]['drill_line']			=	 true;
+							kendoUi.headerIndex.field[__key]['drill_line_button']	=	 true;
+						}
 		}
 		
-		
+		DRILL_LINHA.column	=	getColumnsFrozenTAGName(_array,layoutROWS,kendoUi);
+
 		//array_minus
 		DRILL_LINHA.query			=	implode('{SEP}',_array);
 		wrsKendoUiChange(idName,'DRILL_HIERARQUIA_LINHA_DATA',base64_encode(json_encode(DRILL_LINHA,true)));
@@ -245,6 +258,34 @@ function DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA()
 		$('.wrs_run_filter').trigger('click'); //executra o click
 }
 
+function getColumnsFrozenTAGName(_param,layoutROWS,kendoUi)
+{
+	var count	=	0;
+	var columns	=	[];
+	for(lineParamArray in _param)
+	{
+		var compare	=		explode_('{VIR}',_param[lineParamArray]);
+		
+		if(compare.length > count)  count	=	compare.length;
+	}
+	
+
+	if(_param.length==1)
+		{
+			if(empty(_param[0])) count=0;
+		}
+
+
+	
+	for(var _i=0;_i<=count;_i++)
+		{
+			columns[columns.length]	= kendoUi.headerIndex.byFrozenLevelFull[layoutROWS[_i]].key;
+		}
+	
+	
+	
+	return implode(',',columns);
+}
 
  
 
@@ -255,9 +296,11 @@ function DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA()
  * @param _arrayCopare
  * @returns
  */
-function DRILL_LINE_empty_array(_arrayMain,_arrayCopare)
+function DRILL_LINE_empty_array(_arrayMain,_arrayCopare,remove)
 {
-	var _tmp	=	[];
+	var _tmp			=	[];
+	var _size_column	=	0;
+	
 	if(_arrayCopare.length==0) 	return _arrayMain;
 	if(_arrayMain.length==0) 	return _arrayMain;
 	
@@ -269,35 +312,48 @@ function DRILL_LINE_empty_array(_arrayMain,_arrayCopare)
 				}
 		}
 	
+	
+	if(remove){
+		if(!_tmp.length)
+		{
+			if(!empty(_arrayCopare[0])){
+				_tmp[_tmp.length]		=	dirname_VIR(_arrayCopare[0]);
+			}
+			
+		}
+	}
+	
 	return _tmp;
+	
+	//return _tmp;
 }
 
+function dirname_VIR(name)
+{
+	var _explode	=	explode('{VIR}',name);
+	var data		=	[];
+		for(var i=0 ; i<_explode.length-1;i++)	data[data.length]=	_explode[i];
+	return implode('{VIR}',data);
+}
 
 function DRILL_LINE_strpos(_arrayMain,_value)
 {
-	var _tmp		=	[];
-	
-	
-
-	
-	
+	var _tmp			=	[];
+	var _size_column	=	0;
 	if(_arrayMain.length==0) 	return _arrayMain;
 	
 	for(linearrayMain in _arrayMain)
 		{
-
 			if(strpos(_arrayMain[linearrayMain],_value)===false)
 			{
-				_tmp[_tmp.length]	=	_arrayMain[linearrayMain];
-			}
-				
+				_tmp[_tmp.length]		=	_arrayMain[linearrayMain];
+				if(!empty(_arrayMain[linearrayMain])){
+					var __size_column		=	 explode('{VIR}',_arrayMain[linearrayMain]);				
+					if(__size_column.length > _size_column) _size_column	=__size_column.length;
+				}
+			}	
 		}
-	
-	
-	//_tmp[_tmp.length]	=	data;
-	
-	
-	return _tmp;
+	return {data: _tmp, column : _size_column};
 }
 
 

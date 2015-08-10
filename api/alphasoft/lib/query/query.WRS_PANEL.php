@@ -143,7 +143,7 @@ EOF;
 	 * @param int $DRILL_LINE
 	 * @return string
 	 */
-	public function SELECT_FAT_SSAS_TABLES($_QUERY_TABLE,$DRILL_LINE=0)
+	public function RECORDS_SSAS_TABLES( $_QUERY_TABLE, $DRILL_LINE=0 )
 	{
 		$FAT_SSAS_TABLES	=	<<<EOF
 		select TOTAL_ROWS from FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}'
@@ -217,24 +217,66 @@ EOF;
 	 * WARNING: Quando passa por essa função acrescenta-se o D no final do nome da tabela temporária
 	 * 
 	 * @param string $TABLE_NAME
+	 * @param int $LINE
 	 * @param string $FILTER
+	 * @param int $OPENROWS
+	 *
+	 * @return <string>
+	 */
+	public function DRILL_SSAS_TABLE( $TABLE_NAME, $LINE, $FILTER, $OPENROWS )
+	{
+		// Exemplo: Exec Drill_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F',5,'30 - MARCAS CLASSICAS E SIMILARES(_,_)110000 - JOSE RICARDO DOREA CARVALHO(_,_)112200 - OSVALDO LUIS CARDOZO DE ANDRADE',1
+		//(_,_) Separador de Campos
+		// OPENROWS = 1 (Abre) / 0 (Fecha)
+		$query = <<<EOF
+					EXEC Drill_SSAS_Table 	'{$TABLE_NAME}',
+											{$LINE},
+											'{$FILTER}',
+											{$OPENROWS}
+EOF;
+		return $query;
+	}
+
+	/**
+	 * Obtem Informações de Registros Abertos (DRILL) de uma Tabela Ordenada
+	 * 
+	 * WARNING: Quando passa por essa função acrescenta-se o I no final do nome da tabela temporária ordenada
+	 * 
+	 * @param string $TABLE_NAME
 	 * @param int $LINE
 	 *
 	 * @return <string>
 	 */
-	public function DRILL_SSAS_TABLE( $TABLE_NAME, $FILTER,$LINE )
+	public function INFO_SSAS_TABLE( $TABLE_NAME, $LINE )
 	{
-		// Exemplo: Exec Drill_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F','30 - MARCAS CLASSICAS E SIMILARES{VIR}110000 - JOSE RICARDO DOREA CARVALHO{VIR}112200 - OSVALDO LUIS CARDOZO DE ANDRADE',5
-		//{SEP} -- Quebra de LInhas
-		//{VIR} -- Nivel
+		// Exemplo: Exec Info_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_FS',5
 		$query = <<<EOF
-					EXEC Drill_SSAS_Table 	'{$TABLE_NAME}',
-											'{$FILTER}',
+					EXEC Info_SSAS_Table 	'{$TABLE_NAME}',
 											{$LINE}
 EOF;
 		return $query;
 	}
 
+	/**
+	 * Obtem Registros Abertos (Drill) juntamente com as Colunas Abertas
+	 *
+	 * @param string $TABLE_NAME
+	 * @param int $ROW_NUMBER_START
+	 * @param int $ROW_NUMBER_END
+	 *
+	 * @return <recordset>
+	 */	
+	public function SELECT_SSAS_INFO( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END )
+	{
+		$query = <<<EOF
+					SELECT ROW_NUMBER,DRILL_OPEN,LEVEL,OPENROWS
+					FROM {$TABLE_NAME}
+					WHERE ROW_NUMBER BETWEEN {$ROW_NUMBER_START} AND {$ROW_NUMBER_END}
+					ORDER BY ROW_NUMBER
+EOF;
+		return $query;
+	}
+	
 	/**
 	 * Obtem Registros no Formato utilizado para GRID, 
 	 *
