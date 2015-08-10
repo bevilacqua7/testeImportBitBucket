@@ -171,10 +171,13 @@ function getMeasuteChartUse(telerikGrid,frozenSize)
 function WrsGougeConfigureLineShow(_GRID,kendoUiTools)
 {
 	GRID_TMP	=	_GRID;
-	
-	var _input	=	$('.gauge-container-size-line').find('.input-slide-md-line');
+
 	//Segue o modelo do Bootstrap col-md-4
 	var options	=	{'6':2,'4':3,'3':4,'2':6,'1':12};
+	
+	/*// atualizacao do tipo de elemento (de select pra radio) a pedido do facioli
+	  // felipebevi 201508071340
+	var _input	=	$('.gauge-container-size-line').find('.input-slide-md-line');
 	
 	_input.html('');
 	setOption(_input,options,options[kendoUiTools.GAUGE_SIZE_BY_LINE]);
@@ -184,6 +187,19 @@ function WrsGougeConfigureLineShow(_GRID,kendoUiTools)
 		var _value	=	$(this).parent().find('option:selected').val();
 		wrsKendoUiChange('#'+GRID_TMP,'GAUGE_SIZE_BY_LINE',_value);
 	});
+	*/
+
+	var _input_radio	=	$('.gauge-container-size-line').find('.input-slide-md-line-radio');
+
+	_input_radio.html('');
+	setOptionRadio(_input_radio,options,options[kendoUiTools.GAUGE_SIZE_BY_LINE]);
+	
+	//CHANGE
+	_input_radio.unbind('change').change(function(){
+		var _value	=	$('input:checked', '.input-slide-md-line-radio').val();
+		wrsKendoUiChange('#'+GRID_TMP,'GAUGE_SIZE_BY_LINE',_value);
+	});
+	
 }
 
 /*

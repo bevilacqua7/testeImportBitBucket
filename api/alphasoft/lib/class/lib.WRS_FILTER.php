@@ -236,7 +236,7 @@ class WRS_FILTER  extends WRS_BASE
 			
 			$body[]	=	'<input type="'.$input_type.'" name="'.$LEVEL_FULL.'" class="wrs_input_filter_single" index-data="'.$index_data.'"  '.fwrs_checkbox($FILTER_ARRAY, $value).' value="'.$value.'">';
 			$body[]	=	$rows[$LEVEL_NAME];
-			$table_body.= $this->table_body($body,NULL,NULL,NULL,'pws_click_triger_single ' );
+			$table_body.= $this->table_body($body,"text_original='".$rows[$LEVEL_NAME]."'",NULL,NULL,array('pws_click_triger_single','pws_click_triger_single pws_filter_text') );
 		}
 		
 		

@@ -402,11 +402,15 @@ class WRS_BASE extends SQL_SERVER
 	 * @param array $body
 	 * @return string
 	 */
-	protected function table_body($body,$inset_td=NULL,$class=NULL,$title=NULL, $class_td=NULL)
+	protected function table_body($body,$inset_td=NULL,$class=NULL,$title=NULL, $_class_td=NULL)
 	{
 		$tabe_body		=	NULL;
 		$pws_tooltip	=	NULL;
 		$complement		=	NULL;
+		$class_td_array	=	array();
+		$count_class	=	0;
+		$class_td		=	$_class_td;
+		
 		
 		//Apenas para o Tooltipe
 		if($class){
@@ -414,8 +418,17 @@ class WRS_BASE extends SQL_SERVER
 			$complement		=	' data-toggle="tooltip" title="'.$title.'" ';
 		}
 		
-		foreach($body as $value){
+		foreach($body as $value)
+		{
+			
+			if(is_array($_class_td))
+			{
+				if(isset($_class_td[$count_class]))	{$class_td	=	$_class_td[$count_class];}else{$class_td	=	"";}
+			}
+			
 			$tabe_body.="<td class='".$class_td."'   ".$inset_td.">".$value."</td>".PHP_EOL;
+			
+			$count_class++;
 		}
 		
 		return "<tr class='".$class." ".$pws_tooltip." ' ".$complement.">".$tabe_body."</tr>".PHP_EOL;
