@@ -541,8 +541,6 @@ class WRS_PANEL  extends WRS_USER
 							$this->SAVE_CACHE_SSAS_USER('TABLE_CACHE',$QUERY_TABLE_CACHE);
 						}
 						$cube =	$this->getCube();
-						
-						
 					}
 					elseif ($rows['JOB_STATUS'] < 0)
 					{
@@ -574,7 +572,7 @@ class WRS_PANEL  extends WRS_USER
 			$DRILL_HIERARQUIA_LINHA_DATA	=	 json_decode(base64_decode($getRequestKendoUi['DRILL_HIERARQUIA_LINHA_DATA']),true);
 			$DRILL_HIERARQUIA_LINHA_DATA	=	empty($DRILL_HIERARQUIA_LINHA_DATA) ? '' : $DRILL_HIERARQUIA_LINHA_DATA['query'];
 			
-			$query_DRILL_SSAS_TABLE		=	$this->_query->DRILL_SSAS_TABLE( $cube['TABLE_CACHE'], $DRILL_HIERARQUIA_LINHA_DATA,$LAYOUT_ROWS_SIZE );
+			$query_DRILL_SSAS_TABLE		=	$this->_query->DRILL_SSAS_TABLE( $cube['TABLE_CACHE'], $LAYOUT_ROWS_SIZE, $DRILL_HIERARQUIA_LINHA_DATA, 1 );
 			if($this->query($query_DRILL_SSAS_TABLE)){
 				//Concatena apenas para inserir o D na frente
 				$cube['TABLE_CACHE']	=	$cube['TABLE_CACHE'].'D';
@@ -589,7 +587,7 @@ class WRS_PANEL  extends WRS_USER
 		
 		
 		// Obtem a Quantidade de Registros da Consulta		
-		$query_table = $this->query($this->_query->SELECT_FAT_SSAS_TABLES($cube['TABLE_CACHE'],((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+		$query_table = $this->query($this->_query->RECORDS_SSAS_TABLES($cube['TABLE_CACHE'],((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
 		if($this->num_rows($query_table))
 		{
 			$rows = $this->fetch_array($query_table);
@@ -603,7 +601,13 @@ class WRS_PANEL  extends WRS_USER
 		
 		//$LAYOUT_ROWS_SIZE			=	$LAYOUT_ROWS_SIZE > $rows['COLUMNS']  ?  1 : $LAYOUT_ROWS_SIZE ;
 		$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$LAYOUT_ROWS_SIZE,'1'));
-
+		if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
+		{
+			// Obtem a Tabela Contendo Registros Abertos (Drill)
+			$query_DRILL_SSAS_TABLE_INFO = $this->_query->INFO_SSAS_TABLE( $cube['TABLE_CACHE'].'S', $LAYOUT_ROWS_SIZE );
+			$this->query($query_DRILL_SSAS_TABLE_INFO);
+		}
+		
 		/*
 		 * Pegando a Header
 		 */
@@ -745,7 +749,7 @@ HTML;
 			WRS_DEBUG_QUERY('A consulta retornou vazia  '.$sqlGrid);
 			return false;
 		}
-		
+
 		//Processando a Grid
 		$resultGrid		=	array();
 		$resultGridTmp	=	array();
@@ -763,6 +767,20 @@ HTML;
 			}
 			$resultGrid[]		=	$resultGridTmp;
 		}
+
+		$resultGridDrill		=	array();
+		
+		// Caso Esteja no Modo Drill Obtem os Registros Abertos
+		if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
+		{
+			$sqlGridInfo		=	 $this->_query->SELECT_SSAS_INFO($TABLE_NAME.'SI', $ROW_NUMBER_START, $ROW_NUMBER_END);
+			$sqlGrid_Drill		=	 $this->query($sqlGridInfo);
+
+			while ($rows =  $this->fetch_array($sqlGrid_Drill))
+			{
+				$resultGridDrill[]		=	$rows;
+			}
+		}
 		
 		/*
 		 * Retorna os valores para o Json 
@@ -771,7 +789,8 @@ HTML;
 		$result				=	 array();
 		$result['total']	=	$numRows;
 		$result['data']		=	$resultGrid;
-		
+		$result['drill']	=	$resultGridDrill;
+
 		echo json_encode($result);
 		//echo json_encode($array_info,true);
 		WRS_TRACE('END SELECT_CACHE_GRID', __LINE__, __FILE__);
