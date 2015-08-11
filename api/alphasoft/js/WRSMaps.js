@@ -2,7 +2,7 @@
 
  
 
-WRSMaps
+
 function WRSMaps(KendoUi)
 {
 	
@@ -21,7 +21,6 @@ function WRSMaps(KendoUi)
 		
 	MAP.height(ELEMENT.height());
 	MAP.width(ELEMENT.width());
-	
 	 
 	MAP.show();
 	if(ELEMENT.attr('maps_wrs')=='true') 
@@ -143,13 +142,13 @@ function WRSMaps(KendoUi)
 						}else{
 							_title		=	titleByColumn[_cmp];
 						}
-						
 						maps[maps.length]	=	 {
 														latitude	:	_explode[0],
 														longitude	:	_explode[1],
 														icon		: 	'./api/gomap/map-marker-32_pink.png',
 														title		:	 _title,
-														html		: 	'<h5>'+_title+'</h5>'+data_value 
+														html		: 	'<h5>'+_title+'</h5>'+data_value,
+														id			:	_data[obj].C000
 												};
 						
 						indexLatLon[_explode[0]+'_'+_explode[1]]=true;;
@@ -158,7 +157,7 @@ function WRSMaps(KendoUi)
 			
 		
 	}
-	
+
 	if(ELEMENT.attr('maps')=='true')
 	{
 		$.goMap.clearMarkers();
@@ -167,7 +166,7 @@ function WRSMaps(KendoUi)
 			$.goMap.createMarker(maps[m]); 
 		}
 	}else{
-			MAP.goMap({markers: maps, hideByClick: true,zoom:13});
+			MAP.goMap({markers: maps, hideByClick: true,zoom:13,streetViewControl: true});
 			ELEMENT.attr('maps','true');
 	}
 	

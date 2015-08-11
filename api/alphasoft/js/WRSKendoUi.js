@@ -1139,7 +1139,7 @@ function  themeSUM(nameID,arg,wrsParam)
 									switch($(this).attr('name'))
 									{
 										case 'SUMARIZA'    :  	telerikGrid.dataSource.read(); break;
-										case 'COLORS_LINE' : 	telerikGrid.dataSource.read();; break; 
+										case 'COLORS_LINE' : 	telerikGrid.dataSource.read(); break; 
 									}
 									
 									
