@@ -269,9 +269,9 @@
 					case "chart_map"	: { WRSKendoUiChart(telerikGrid);WRSMaps(telerikGrid);};	break;
 					case "map_grid"		: {WRSMaps(telerikGrid); WRSKendoUiChart(telerikGrid);};	break;
 					case "map_chart"	: {WRSMaps(telerikGrid);	WRSKendoUiChart(telerikGrid);};	break;
-					case "grid_map"		: {WRSMaps(telerikGrid);};									break;
+					case "grid_map"		: {WRSMaps(telerikGrid); };									break;
 					case "chart"		: {WRSKendoUiChart(telerikGrid);};												break;
-					case "map"			: {WRSMaps(telerikGrid);};														break;
+					case "map"			: {WRSMaps(telerikGrid); goMapsResize(); };														break;
 				}
 				
 				

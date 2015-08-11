@@ -814,3 +814,14 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 }
 
 
+$(document).ready(function(){
+	$('a.changePage').each(function(){
+		var link = $(this).attr('href');
+		$(this).parents('div.wrs_item_santos').click(function(){
+			window.location.href = link;
+		}).css('cursor','pointer');
+		$(this).children().click(function(){
+			window.location.href = link;
+		}).css('cursor','pointer');
+	});
+});
