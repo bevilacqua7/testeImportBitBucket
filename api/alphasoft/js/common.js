@@ -747,12 +747,14 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 										else if(valor<0)
 										{
 											seta = "<img src='imagens/setinha_vermelha.png' width='9' height='9'/>";
+										}else if(number_format(valor*100,2,_casa_decimal,_milhar)=='0,00')
+										{
+											seta = "<img src='imagens/yellow_square.png' width='9' height='9'/>";
 										}
 										else
 										{
 											seta = "";
 										}
-										
 										if(!empty(notTAG))  return number_format(valor*100,2,_casa_decimal,_milhar);
 										
 										/*

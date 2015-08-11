@@ -145,7 +145,7 @@ function WRSMaps(KendoUi)
 						maps[maps.length]	=	 {
 														latitude	:	_explode[0],
 														longitude	:	_explode[1],
-														icon		: 	(data_value.indexOf('setinha_verde')>0)?'./api/gomap/map-marker-32_green.png':((data_value.indexOf('setinha_vermelha')>0)?'./api/gomap/map-marker-32_pink.png':'./api/gomap/map-marker-32_blue.png'),
+														icon		: 	(data_value.indexOf('setinha_verde')>0)?'./api/gomap/map-marker-32_green.png':((data_value.indexOf('setinha_vermelha')>0)?'./api/gomap/map-marker-32_pink.png':((data_value.indexOf('yellow_square')>0)?'./api/gomap/map-marker-32_yellow.png':'./api/gomap/map-marker-32_blue.png')),
 														title		:	 _title,
 														html		: 	'<h5>'+_title+'</h5>'+data_value,
 														id			:	_data[obj].C000
