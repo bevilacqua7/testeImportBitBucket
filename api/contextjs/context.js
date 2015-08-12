@@ -357,7 +357,7 @@ var context = context || (function () {
 		}
 		if(table_parents.first('div').attr('type')=='linha'){
 			var proxTd			=	$(this).next('td');
-			if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!=''){
+			if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!='' && $(this).attr('data-original')!='true'){
 				$('#dropdown-' + id).find('.VER_MAPA').removeClass('hide');	
 			}else{
 				$('#dropdown-' + id).find('.VER_MAPA').addClass('hide');				

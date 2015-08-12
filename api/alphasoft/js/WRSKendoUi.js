@@ -935,6 +935,7 @@ function  themeSUM(nameID,arg,wrsParam)
 															val_html	=	dataFrozenEmpty[odfe];
 														}
 														
+														$(IDName).find('.k-grid-content-locked tr:eq('+odfe+') td:eq('+tdIndex+')').attr('data-original','true');
 														$(IDName).find('.k-grid-content-locked tr:eq('+odfe+') td:eq('+tdIndex+')').html(val_html);
 													}
 													
