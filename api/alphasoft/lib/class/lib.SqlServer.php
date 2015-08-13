@@ -36,13 +36,14 @@ class SQL_SERVER
 	 * WARNING: Apenas use quando souber o que está fazendo
 	 */
 	public function runConnection()
-	{	
+	{
 		$connectionInfo = array('Database'=>BANCO,'UID'=>USUARIO,'PWD'=>SENHA,
-								'APP'=>'WRS',
+								'APP'=>'WRS','WSID'=>'WEBServer',
 								'CharacterSet'=>CODE,
 								'ConnectionPooling'=>0,
 								'MultipleActiveResultSets'=>true,
-								'TransactionIsolation'=>SQLSRV_TXN_READ_UNCOMMITTED);
+								'TransactionIsolation'=>SQLSRV_TXN_READ_UNCOMMITTED,
+								'LoginTimeout'=>1800);
 								//'TraceFile'=>'D;\WEB\TEMP\WRS_SQL_TRACE.TXT',
 								//'TraceOn'=>true);
 		$conn = sqlsrv_connect( SERVIDOR, $connectionInfo );

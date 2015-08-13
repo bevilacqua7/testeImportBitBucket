@@ -1250,16 +1250,13 @@ function wrs_run_filter()
 		$('.WRS_DRAG_DROP_RECEIVER_FILTER').hide();
 		$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
 		$('.wrs_panel_filter_icon').hide();
-			
+		
 		runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
 		
 		wrs_panel_layout.close('east');
 		$('.wrs_panel_center_body').hide();
 		$('.wrs_panel_filter_icon').hide();
-		
-		
-		
 	}
 	else
 	{

@@ -286,8 +286,26 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			var ChartDefault				=	$.parseJSON(base64_decode(kendoUiTools.CHART)); 
 			var DRILL_HIERARQUIA_LINHA		=	kendoUiTools.DRILL_HIERARQUIA_LINHA;
 			
+			var DRILL_COLUMN_TITLE		=	'';
+			var DRILL_FROZEN			=	'';
 			
+			if(DRILL_HIERARQUIA_LINHA==_TRUE)
+				{
+					var title_line		=	0;
 
+					if(telerikGrid.dataSource._wrs_request_data.drill!='')
+					{
+						title_line	=	telerikGrid.dataSource._wrs_request_data.drill.OPENCOLS;
+
+						
+					}
+					DRILL_FROZEN		=	title_line+1;
+					DRILL_COLUMN_TITLE	=	telerikGrid.wrsKendoUi.WRS_ROWS[title_line]
+				
+				
+				}
+			
+			
 			
 			var typeChart		=	[];
 						
@@ -328,14 +346,16 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			var _colum_frozen	=	parseInt($(GRID).find('.k-grid-content-locked').find('tr:last-child').find('td').length)-1;
 				
 			
+			
 			//Verificando se é DRILL LINHA para modificar as linhas de totais
 			if(DRILL_HIERARQUIA_LINHA==_TRUE)
 			{
-				_colum_frozen	=	0;
-				$(GRID).find('.k-grid-content-locked').find('tr:last-child').find('td').each(function(){
-					if(!$(this).is(':hidden')){_colum_frozen++;}
-				});
-				_colum_frozen		=	 _colum_frozen-1;
+			 	_colum_frozen	=	1;
+				if(telerikGrid.dataSource._wrs_request_data.drill!='')
+				{
+					_colum_frozen	=	telerikGrid.dataSource._wrs_request_data.drill.OPENCOLS+1
+				}
+				
 			}
 			
 			
@@ -1424,10 +1444,11 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 					 * TODO:
 					 */
 					var find_last			=	'last-child';
+					
 					//Verificando se é LINHA DRILL e se é linha de total
 					if(DRILL_HIERARQUIA_LINHA==_TRUE)
 						{
-							find_last	=	telerikGrid.DRILL_HIERARQUIA_LINHA_TITLE;
+							find_last	=	'eq('+DRILL_FROZEN+')';
 						}
 					
 					
@@ -1928,7 +1949,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 																										'color'				: palletCol[lineData]
 																							};
 																	
-																	
+
 																	if(empty(paramGetData.name))
 																	{
 																		paramGetData.name	=	strip_tags(GRID.find('.k-grid-content-locked table tr:eq('+(lineData)+')').attr('wrs-html-data'));

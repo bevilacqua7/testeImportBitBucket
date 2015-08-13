@@ -9,324 +9,275 @@
  * 
  * DRILL_HIERARQUIA_LINHA_DATA  - contem as variáveis necessaria para aplicar o DRILL_LINE
  * DRILL_HIERARQUIA_LINHA       - status
+ * DRILL_HIERARQUIA_LINHA_DATA_HEADER
  */ 
 
-function DRILL_LINE_check_header(wrsKendoUi,kendoUi,_lineDataArray)
-{
-	var kendoUiColumns		=	kendoUi.columns;
-	var layout				=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
-	var line_size			=	explode(',',layout.LAYOUT_ROWS);
-	var start				=	1;
-	var lineDataArray		=	_lineDataArray;
-	var flag_hide_show		=	false;
-	var columns				=	0;
-	var columnsName			=	[];
-	
-	
-	
-	
-	
-	
-	//Forçando a inserção para poder saber o total de colunas para retirar com as opções plus minus drill_linha
-	kendoUi['wrs_size_columns']	=	line_size.length;	
-	
-	
-	if(empty(lineDataArray))	{
-		start	=	1;
-		lineDataArray			=	{column:"", query:""};
-		lineDataArray.column	=	kendoUi.headerIndex.byFrozenLevelFull[line_size[0]].key;
-		columnsName				=	[lineDataArray.column];
-		columns					=	1;	
-		
-	}else{
-		start				=	1;
-		flag_hide_show		=	true;
-		columns				=	[];
-		columnsName			=	explode(',',lineDataArray.column);
-		columns				=	parseInt(columnsName.length);
-	}
-	
-		
-	if(wrsKendoUi.DRILL_HIERARQUIA_LINHA!=	_TRUE) return true;
 
-
-	
-		var fitst_key		=	'';
-		for(lineRows in line_size)
-			{
-				var _key		=	line_size[lineRows];
-				var key_short	=	kendoUi.headerIndex.byFrozenLevelFull[_key].key;
-
-				
-					kendoUi.headerIndex.field[key_short].drill_line			=	 false;
-//					kendoUi.headerIndex.field[key_short].drill_line_button	=	 false;
-					
-					if(exist_in_array(columnsName,key_short))
-					{
-						kendoUi.headerIndex.field[key_short].drill_line_button	=	 true;
-						kendoUi.headerIndex.field[key_short].drill_line			=	 false;
-					}else{
-						//HIDEN
-						kendoUi.headerIndex.field[key_short].drill_line			=	 true;
-						kendoUi.hideColumn(kendoUi.headerIndex.field[key_short]);
-						
-					}
-			}
-		
-		
-		//Remove o Botão da ultima opção
-		var last_column															=	kendoUi.headerIndex.byFrozenLevelFull[line_size[line_size.length-1]].key;
-			kendoUi.headerIndex.field[last_column].drill_line_button			=	 false;
-
-	
-	
-	
-}
-
-
-
-function DRILL_LINE_get_values_table(_array_line_query)
-{
-	
-	if(empty(_array_line_query)) return [];
-	
-	var param		=	 explode('{SEP}',_array_line_query);
-	var result		=	[];
-	var findResult	=	[];
-	var _count		=	0;	
-	for(lineParan in param)
-		{
-			findResult	=	 explode('{VIR}',param[lineParan]);
-			for(lineFindResult in findResult)
-				{
-					result[findResult[lineFindResult]]	=	true;
-					_count++;
-				}
-		}
-	
-	result['length']	=	_count;
-	return result;
-}
-
-
-/**
- * Click do Botão mais ou menos
+/*
+ * Retira o level full para o FIELD
  */
-function DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA()
+function DRILL_FCC(index,columns)
 {
-	//Elementos no CLick
-	var type				=	$(this).attr('wrs-type');
-	var data				=	$(this).attr('data');
-	var column				=	$(this).attr('column');
-	var line				=	$(this).attr('line');
-	var size_column			=	$(this).attr('size-column');
-	var parent_column		=	$(this).attr('parent_column');
-	var parent				=	explode(',',parent_column);
+	var columnTMP	=	[];
 	
-	//Info da GRID
-	var kendoUi				=	$(this).data('kendoGrid');
-	var query				=	[];
-	var idName 				=	'#'+kendoUi.element.attr('id');
-		kendoUi				=	[];
-		kendoUi				=	$(idName).data('kendoGrid');
-	
-	var wrsKendoUi			=	$.parseJSON(base64_decode($(idName).attr('wrsKendoUi')));
-	var DRILL_LINHA			=	$.parseJSON(base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA));
-	var _check_to_remove	=	[];
-
-	
-	var layout					=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
-	var layoutROWS				=	 explode(',',layout.LAYOUT_ROWS);
-
-	//preenchendo o elemento 
-	var data_default		=	{	'parent_column'	:	parent_column, 
-									'data'			:	data,
-									'line'			:	line,
-									'column'		:	column
-								};
-	
-	
-		//Obtendo os elementos para remover
-	var flag_to_remove		=	false;
-	var array_minus			=	[];
-	var count_column_line	=	0;
-	var count_line_elimine	=	0;
-	//END remove minus
-	if(type=='minus')
+	for(lineColumn in columns)
 	{
-		$(idName).find('.DRILL_HIERARQUIA_LINHA[line="'+line+'"]').each(function(){
-			
-			var i_type	=	$(this).attr('wrs-type');;
-			
-			if(!empty(parent_column) && i_type=='minus')
+		columnTMP[columnTMP.length]	=	index[columns[lineColumn]].field;
+	}
+	
+	return columnTMP;
+}
+
+
+
+
+function DRILL_HIERARQUIA_LINHA_hideColumn(	IDGRid,KendoUi,rows,drill)
+{
+	var startCol	=	0;
+
+	if(drill!='')	startCol	=	drill.OPENCOLS;
+	
+	for(var lineColumn in rows)
+	{
+		if(lineColumn!=0 && lineColumn > startCol)
 			{
-				if(data==$(this).attr('data') && i_type=='minus') 	
+				var column	=	KendoUi.headerIndex.field[rows[lineColumn]];
+					KendoUi.hideColumn(column);
+			}
+	}
+
+}
+
+function DRILL_HIERARQUIA_LINHA_setButtonExpandALL(IDGRid,columnSelected,lastColumn)
+{
+
+	
+	//DRILL_HIERARQUIA_LINHA_DATA_HEADER
+	$(IDGRid).find('.k-grid-header .k-grid-header-locked').find('tr:last-child').find('th').each(function(){
+	
+		
+		var column			=	 $(this).attr('data-field');
+		
+		if(column!='C000' && lastColumn!=column)
+		{
+			var btn_plus		=	'<button grid-id="'+IDGRid+'" class="DRILL_HIERARQUIA_LINHA_HEADER" column="'+column+'" type="button"  wrs-type="plus"><i class="fa fa-plus-square"></i></button>';
+			var btn_minus		=	'<button grid-id="'+IDGRid+'" class="DRILL_HIERARQUIA_LINHA_HEADER" column="'+column+'" type="button"  wrs-type="minus"><i class="fa  fa-minus-square"></i></button>';
+			var btn_use			=	btn_plus;
+			$(this).addClass('DRILL_HIERARQUIA_LINHA_HEADER_CONTAINER');
+			
+			if(exist_in_array(columnSelected,column))	btn_use	=	btn_minus;
+			
+			$(this).prepend(btn_use);
+		}
+		
+	});
+	
+	
+	$(IDGRid).find('.DRILL_HIERARQUIA_LINHA_HEADER').unbind('click').click(DRILL_HIERARQUIA_LINHA_HEADER_CLICK);
+	
+}
+
+function DRILL_HIERARQUIA_LINHA_setButton(_data,C000, line,column,DRILL_HIERARQUIA_REQUEST,LAYOUT_ROWS_B64,IDGrid,DRILL_FCC,DRILL_LINE_LAST_COLUMN,arg,next_column,data_line)
+{
+	
+	
+	
+	if(empty(_data) || column=='C000') 	return _data;
+	if(DRILL_LINE_LAST_COLUMN==column)	return _data;
+	/*
+	 * DRILL_HIERARQUIA_REQUEST  - FIELDS
+	 * line
+	 * data
+	 * OPENCOLS
+	 */
+	
+	
+	var data			=	_data;
+	var btn_plus		=	'<button class="DRILL_HIERARQUIA_LINHA" column="'+column+'" grid-id="'+IDGrid+'" rows="'+LAYOUT_ROWS_B64+'" line="'+line+'"  data="'+_data+'" type="button"  wrs-type="plus"><i class="fa fa-plus-square"></i></button>';
+	var btn_minus		=	'<button class="DRILL_HIERARQUIA_LINHA" column="'+column+'" grid-id="'+IDGrid+'" rows="'+LAYOUT_ROWS_B64+'" line="'+line+'"  data="'+_data+'" type="button"  wrs-type="minus"><i class="fa  fa-minus-square"></i></button>';
+
+	
+	//De o drill for nulo já assume a posição de Abertura
+	if(DRILL_HIERARQUIA_REQUEST=='')
+	{
+		arg.drill_line_total_data[line]=	true;
+		return btn_plus+data;
+	}else{
+		try{
+				if(DRILL_HIERARQUIA_REQUEST['line'][C000])
 				{
-					count_line_elimine++;
-					if(count_column_line > size_column )
+					if(DRILL_FCC[DRILL_HIERARQUIA_REQUEST['line'][C000]['LEVEL']-1]==column)
 					{
-						flag_to_remove	=	true;
+						return btn_minus+data;
 					}
 				}
-			}
-			
-			
-			if(count_line_elimine && i_type=='minus')
-			{
-					count_line_elimine++;
-			}
-			
-			if(!flag_to_remove && i_type=='minus')
-			{
-				array_minus[array_minus.length]	=	$(this).attr('data');
-			}
-			
-			count_column_line++;
-		});
-		
-		count_line_elimine	=	(count_line_elimine ? count_line_elimine-1 : count_line_elimine);
-	}
-	//END mount Remove minus
-		
-		//Caso esteja nulo crio o default
-		if(empty(DRILL_LINHA))
-		{
-			DRILL_LINHA		=	{	
-									'column'	:	[],
-									'query'		:	''
-								};
-		}
-	
-	
-	var _array				=	explode('{SEP}',DRILL_LINHA.query);
-	
-	
-	if(empty(DRILL_LINHA.query))	_array	=	[];
-	
-		if(empty(parent_column))
-		{
-			query[query.length]	=	data;	
-			parent				=	[];
-		}else{
-			//PRocessando os parents
-			var sub_query	=	[];
-			for(p_column in parent)
-			{
-				sub_query[sub_query.length]	=	kendoUi._wrs_data[line][parent[p_column]];
-				//Armazenando para remover
-				_check_to_remove[_check_to_remove.length]		=	sub_query[(sub_query.length-1)];
-			}
-			sub_query[sub_query.length]						=	 data;
-			query[query.length]								=	 implode('{VIR}',sub_query);
-		}
-
-		_array				=	DRILL_LINE_empty_array(_array,_check_to_remove);		
+			}catch(e){}		
 		
 		
-		//Alimentado o array
-		
-		if(type!='minus')
-		{
-			_array[_array.length]		=	query;
-		}else{
-			//Minus
-			var _is_user									=	[];
-				_array										=	DRILL_LINE_empty_array(_array,[implode('{VIR}',array_minus)],true);	
-				_check_to_remove[_check_to_remove.length]	=	data;
-			
-			var data_remove							=	implode('{VIR}',_check_to_remove);
-			var get_array							=	DRILL_LINE_strpos(_array,data_remove);
-				_array								=	get_array.data;
+		try{
+				if(DRILL_HIERARQUIA_REQUEST['data'][data])
+				{
+					//Verificanso se a p´roxima coluna está nula então ela é coluna de TOTAL
+					if(empty(data_line[next_column])){
+						return btn_plus+data;
+					}
 					
-					var _first_key	=	'';
-					//Remove
-					for(_lineLayoutROWS in layoutROWS)
-						{
-							var __key	=	kendoUi.headerIndex.byFrozenLevelFull[layoutROWS[_lineLayoutROWS]].key;
-							if(empty(_first_key)) _first_key=__key;
-							kendoUi.headerIndex.field[__key]['drill_line']			=	 true;
-							kendoUi.headerIndex.field[__key]['drill_line_button']	=	 true;
-						}
-		}
-		
-		DRILL_LINHA.column	=	getColumnsFrozenTAGName(_array,layoutROWS,kendoUi);
-
-		//array_minus
-		DRILL_LINHA.query			=	implode('{SEP}',_array);
-		wrsKendoUiChange(idName,'DRILL_HIERARQUIA_LINHA_DATA',base64_encode(json_encode(DRILL_LINHA,true)));
+					return  data;
+				}
+			}catch(e){}	
 	
-		$('.wrs_run_filter').trigger('click'); //executra o click
-}
-
-function getColumnsFrozenTAGName(_param,layoutROWS,kendoUi)
-{
-	var count	=	0;
-	var columns	=	[];
-	for(lineParamArray in _param)
-	{
-		var compare	=		explode_('{VIR}',_param[lineParamArray]);
-		
-		if(compare.length > count)  count	=	compare.length;
+	
 	}
 	
-
-	if(_param.length==1)
-		{
-			if(empty(_param[0])) count=0;
-		}
-
-
-	
-	for(var _i=0;_i<=count;_i++)
-		{
-			columns[columns.length]	= kendoUi.headerIndex.byFrozenLevelFull[layoutROWS[_i]].key;
-		}
-	
-	
-	
-	return implode(',',columns);
+	arg.drill_line_total_data[line]=	true;
+	return btn_plus+data;
 }
+
+
+function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
+{
+	var column		=	$(this).attr('column');
+	var grid_id		=	$(this).attr('grid-id');
+	var kendoGrid	=	$(grid_id).data('kendoGrid');
+	var DrillData	=	[];
+	var DrillDataCol=	[];
+	var flag_load	=	true;
+	var rows		=	kendoGrid.wrsKendoUi.WRS_ROWS;
+	var wrs_type	=	$(this).attr('wrs-type');
+	var DrillDataTMP=	"";
+	
+	for(lineData in rows)
+	{
+		if(flag_load)
+		{
+			DrillData[DrillData.length]			=	'{_*_}';
+			
+			DrillDataCol[DrillDataCol.length]	=	rows[lineData];
+
+			if(rows[lineData]==column)
+			{
+				flag_load	=	false;
+			}
+		}
+	}
+	
+	//Se for para remover removo o ultimo elemento
+	if(wrs_type=='minus')
+		{
+			DrillData.pop();
+			DrillDataCol.pop();
+		}
+	
+	
+	DrillDataTMP		=	implode('(_,_)',DrillData);
+	
+	
+	if(wrs_type=='minus')
+	{
+			if(DrillData.length==0)
+				{
+					DrillDataCol	=	[];
+					//Essa conferencia é direto na query
+					DrillDataTMP=	"DRILL_LINHA_RESTAR_CONSULTA";
+				}
+	}
+	
+	wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA_HEADER',base64_encode(implode(',',DrillDataCol)));
+	wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA',base64_encode(DrillDataTMP));
+	////Salvando a página corrente
+	wrsKendoUiChange(grid_id,'PAGE_CURRENT',kendoGrid.dataSource._page);
+	
+	
+	wrsRunFilter();
+	
+	return false; //Obriga a não reordenar a coluna
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
+{
+	var column		=	 $(this).attr('column');
+	var line		=	 $(this).attr('line');
+	var data		=	 $(this).attr('data');
+	var wrs_type	=	 $(this).attr('wrs-type');
+	var rows		=	 $.parseJSON(base64_decode($(this).attr('rows')));
+	var grid_id		=	 $(this).attr('grid-id');
+	var DrillData	=	[];
+	
+	var kendoGrid		=	$(grid_id).data('kendoGrid');
+	var flag_load	=	 true;
+
+	
+	for(lineData in rows)
+	{
+		
+		if(flag_load)
+		{
+			DrillData[DrillData.length]=	kendoGrid._wrs_data[line][rows[lineData]];
+
+			if(rows[lineData]==column)
+			{
+				flag_load	=	false;
+			}
+		}
+	}
+
+	wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA',base64_encode(implode('(_,_)',DrillData)));
+	
+	
+	if(wrs_type=='minus')
+	{
+			wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA_MINUS','remove_line');
+	}
+	
+	//Salvando a página corrente
+	wrsKendoUiChange(grid_id,'PAGE_CURRENT',kendoGrid.dataSource._page);
+	
+	
+	wrsRunFilter();
+
+}
+
+
+
+function DRILL_HIERARQUIA_LINHA_createEventClick(IDGrid)
+{
+	$(IDGrid).find('.DRILL_HIERARQUIA_LINHA').unbind('click').click(DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS);
+}
+
+
+function DRILL_HIERARQUIA_LINHA_onDataBindingHideColumn()
+{
+	
+	
+}
+
+
+
+
+
+
 
  
 
+ 
+ 
 
-/**
- * Removendo apenas informações repetidas
- * @param _arrayMain
- * @param _arrayCopare
- * @returns
- */
-function DRILL_LINE_empty_array(_arrayMain,_arrayCopare,remove)
-{
-	var _tmp			=	[];
-	var _size_column	=	0;
-	
-	if(_arrayCopare.length==0) 	return _arrayMain;
-	if(_arrayMain.length==0) 	return _arrayMain;
-	
-	for(linearrayMain in _arrayMain)
-		{
-			if(!exist_in_array(_arrayCopare,_arrayMain[linearrayMain]))
-				{
-					_tmp[_tmp.length]	=	_arrayMain[linearrayMain];
-				}
-		}
-	
-	
-	if(remove){
-		if(!_tmp.length)
-		{
-			if(!empty(_arrayCopare[0])){
-				_tmp[_tmp.length]		=	dirname_VIR(_arrayCopare[0]);
-			}
-			
-		}
-	}
-	
-	return _tmp;
-	
-	//return _tmp;
-}
+
+ 
 
 function dirname_VIR(name)
 {
@@ -336,39 +287,6 @@ function dirname_VIR(name)
 	return implode('{VIR}',data);
 }
 
-function DRILL_LINE_strpos(_arrayMain,_value)
-{
-	var _tmp			=	[];
-	var _size_column	=	0;
-	if(_arrayMain.length==0) 	return _arrayMain;
-	
-	for(linearrayMain in _arrayMain)
-		{
-			if(strpos(_arrayMain[linearrayMain],_value)===false)
-			{
-				_tmp[_tmp.length]		=	_arrayMain[linearrayMain];
-				if(!empty(_arrayMain[linearrayMain])){
-					var __size_column		=	 explode('{VIR}',_arrayMain[linearrayMain]);				
-					if(__size_column.length > _size_column) _size_column	=__size_column.length;
-				}
-			}	
-		}
-	return {data: _tmp, column : _size_column};
-}
 
-
-(function( $ ) {
-	
-  $.fn.wrsDrillLine = function() 
-  {
-	  var element	=	this;
-	  
-	  
  
-	  
-	  
-	  
-	  return element;
-	  
-  }
-});
+ 

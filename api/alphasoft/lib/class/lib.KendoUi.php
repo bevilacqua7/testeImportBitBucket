@@ -105,9 +105,18 @@ class KendoUi
 	 */
 	public function getRequestWrsKendoUi()
 	{
-		return array('page_size','PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','frozen','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL');	
+		return array('page_size','PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','frozen','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER');	
 	}
 	
+	
+	/**
+	 * Exeções que as vezes é utilizado para repassar informações ao request
+	 * @return multitype:string
+	 */
+	public function getRequestWrsExceptions()
+	{
+		return array('DRILL_HIERARQUIA_LINHA_DATA_MINUS','PAGE_CURRENT');
+	}
 
 	/*
 	 * Configurando o array acimapa para o Javascript
@@ -270,6 +279,8 @@ class KendoUi
 		//PArametros a ser passado pela Kendo
 		$wrsKendoUi							=  NULL;
 		$this->wrsKendoUi['ORDER_COLUMN']	= $ORDER_COLUMN;
+		
+		$this->wrsKendoUi['DRILL_HIERARQUIA_LINHA_DATA']	=	"";	//Manter sempre nullo 
 		$wrsKendoUi					=	 base64_encode(json_encode($this->wrsKendoUi,true));
 		
 		$html 	= <<<HTML
@@ -282,7 +293,7 @@ class KendoUi
 			
 		  <script>
 				$(function(){
-										var jsonDecode											= 	{$_jsonencode};
+											var jsonDecode											= 	{$_jsonencode};
 										jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
 										jsonDecode.dataBound									= 	function(arg){ return onDataBound(arg);}								
 										jsonDecode.dataBinding									=	function(arg){ return onDataBinding(arg);}
@@ -329,11 +340,13 @@ HTML;
 	 * Informa qual será a URL de Resposta
 	 * @param string $url
 	 */	
-	public function setRequestJson($urlRequest)
+	public function setRequestJson($urlRequest,$PAGE=1)
 	{
 		$this->_param['dataSource']['transport']['read']['url']				=	$urlRequest;
 		$this->_param['dataSource']['transport']['read']['contentType']		=	'application/json';
 		$this->_param['dataSource']['transport']['read']['type']			=	'POST';
+
+		$this->_param['dataSource']['page']			=	$PAGE;
 		//Passa os parametros atrávez do request
 		$this->_param['dataSource']['transport']['parameterMap']			=	"";
 	}
@@ -692,6 +705,7 @@ HTML;
 		$grid	=	<<<EOF
 					<div id="{$table}"></div>
 		            <script>
+
 		                $(document).ready(function () {
 		                    $("#{$table}").kendoGrid({
 		                    	columns: {$json_column},
@@ -721,7 +735,7 @@ HTML;
 									scrollable:true,
 									pageable:	{
 													refresh		:false,
-													pageSizes	:[25,50,100,200,500,1000],
+													pageSizes	:[10,25,50,100,200,500,1000],
 													input		:true,
 													numeric		:false
 												},

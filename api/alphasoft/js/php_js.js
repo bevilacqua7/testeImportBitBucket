@@ -1776,6 +1776,8 @@ function in_array(needle, haystack, argStrict) {
 
 
 function strip_tags(input, allowed) {
+	
+		if(empty(input)) return input;
 	  //  discuss at: http://phpjs.org/functions/strip_tags/
 	  // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
 	  // improved by: Luke Godfrey

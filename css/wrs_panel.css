@@ -411,8 +411,9 @@ h4{
 
 .WRS_TRACE{
 	position: absolute;
-	top: 0px;
-	right: 0px;
+	top: 5px;
+	right: 5px;
+	min-width: 100px;
 	max-width: 350px;
 	max-height: 500px;
 	overflow: auto;
@@ -1308,6 +1309,22 @@ background: #449D44 !important;
 	padding: 0px;
 	background: transparent;
 	border: none;
+	float: right;
+
+}
+
+.DRILL_HIERARQUIA_LINHA_HEADER_CONTAINER{
+	position: relative;	
+}
+
+.DRILL_HIERARQUIA_LINHA_HEADER{
+	padding: 0px;
+	background: transparent;
+	border: none;
+	position:absolute;
+	right:5px;
+	top:8px;
+	
 	float: right;
 
 }
