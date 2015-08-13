@@ -221,31 +221,41 @@ function getWrsKendoColumn(data)
 	var _arg			=	arg;
 	//Pegando a Header e informações de formatação das colunas
 	var _param			=	getWrsKendoColumn(arg.sender.columns);
-	var _width			=	[];
-	var frozen			=	0;
-	var sizeFrozen		=	$(id).find('.k-grid-header-locked tr:last-child').find('th').length-1;
-	var tmpFZ			=	0;
-	var totalFrozen		=	[];
-	var totalLastLabel	=	'';
-	var indexTh			=	0;
-	var lineToHideDrillLine	=	[];
-	var DRILL_HIERARQUIA_LINHA_DATA		=	$.parseJSON(base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA));
+	var _width							=	[];
+	var frozen							=	0;
+	var sizeFrozen						=	$(id).find('.k-grid-header-locked tr:last-child').find('th').length-1;
+	var tmpFZ							=	0;
+	var totalFrozen						=	[];
+	var totalLastLabel					=	'';
+	var indexTh							=	0;
+	var lineToHideDrillLine				=	[];
+	var DRILL_HIERARQUIA_LINHA_DATA		=	base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA);
+	var DRILL_HIERARQUIA_REQUEST		=	arg.sender.dataSource._wrs_request_data.drill;
+	var typeColumnFrozen				=	false;
+	
+	
+	
+	
+	
+	
+	var layout							=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
+	
+	var _DRILL_FCC						=	DRILL_FCC(arg.sender.headerIndex.byFrozenLevelFull,explode(',',layout.LAYOUT_ROWS));
+	var DRILL_LINE_LAST_COLUMN			=	_DRILL_FCC[_DRILL_FCC.length-1];
+	var LAYOUT_ROWS_B64					=	base64_encode(json_encode(_DRILL_FCC));
+	
+	arg.sender['wrsKendoUi']	=	[];
+	arg.sender['wrsKendoUi']['WRS_ROWS']							=	_DRILL_FCC;
+	arg.sender['wrsKendoUi']['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	explode(',',base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER));
+	arg.sender['wrsKendoUi']['DRILL_HIERARQUIA_LINHA']				=	wrsKendoUi.DRILL_HIERARQUIA_LINHA;
+	arg.sender['wrsKendoUi']['DRILL_LINE_LAST_COLUMN']				=	DRILL_LINE_LAST_COLUMN;
+	
+	arg.sender['drill_line_total_data']	=	[];
 	
 	//temporária para armazenar a coluna anterior a sendo chamada
-	var tmp_drill_line_column	=	[];
-		_arg.sender._wrs_data	=	[]	;
+	_arg.sender._wrs_data	=	[]	;
 	
-	var	drill_line_value_td			=	[];
 
-	//congela as linhas de DRILL
-	DRILL_LINE_check_header(wrsKendoUi,kendoUi,DRILL_HIERARQUIA_LINHA_DATA);
-	
-	
-	if(!empty(DRILL_HIERARQUIA_LINHA_DATA))
-	{
-		drill_line_value_td	=	DRILL_LINE_get_values_table(DRILL_HIERARQUIA_LINHA_DATA.query);
-	}
-	
 	//Apenas realimenta as colunas que deve ser preenchida caso existe totais
 	if(wrsKendoUi.ALL_ROWS)
 	{
@@ -268,7 +278,8 @@ function getWrsKendoColumn(data)
 		_arg.sender['wrs_frozen_data']['field']			=	totalLastLabel;
 	}
 	//END
-
+	var next_column			=	'';
+	var next_column_count	=	0;
 	for(var i=0;i<_arg.items.length;i++)
 	{
 			var idx		=	0;
@@ -276,11 +287,20 @@ function getWrsKendoColumn(data)
 				
 				_arg.sender._wrs_data[i]	=	[];//Loading
 			
-			tmp_drill_line_column	= [];//clean
+			next_column_count		=	0;	
 			for(obj in _param)
 			{
 				var word			=	_arg.items[i][obj];
 				var img				=	'';	
+				
+				next_column_count++;
+				
+				//Caso o valor seja maoir não se aplica
+				try{
+					next_column	=	kendoUi.headerIndex.column_count[next_column_count];
+				}catch(e){
+					next_column	=	null;
+				}
 				
 				
 				/*
@@ -334,53 +354,26 @@ function getWrsKendoColumn(data)
 					_arg.items[i][obj]	= strlen($.trim(_arg.items[i][obj]))==0 ? '' : _arg.items[i][obj]; //Removendo os NULL
 					_arg.sender._wrs_data[i][obj]	=	_arg.items[i][obj];
 					
-					
-					//Configurando o DRILL Line
-					if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE) 
-					{
-						
-						try{
-							
-							if(!lineToHideDrillLine[obj]) lineToHideDrillLine[obj]=0;
-							
-						}catch (e) {
-						}
-						
-						if(!empty(_arg.items[i][obj]))
+					typeColumnFrozen	=	true;
+					if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE)
 						{
-							lineToHideDrillLine[obj]++;
-							
-							if(!kendoUi.headerIndex.field[obj].drill_line && obj!='C000' && kendoUi.headerIndex.field[obj].drill_line_button)
-							{
-								
-								var drill_btn_plus		=	'<button class="DRILL_HIERARQUIA_LINHA" size-column="'+kendoUi.wrs_size_columns+'"  line="'+i+'"  column="'+obj+'" parent_column="'+implode(',',tmp_drill_line_column)+'" data="'+_arg.items[i][obj]+'" type="button"  wrs-type="plus"><i class="fa fa-plus-square"></i></button>';
-								var drill_btn_minus		=	'<button class="DRILL_HIERARQUIA_LINHA" size-column="'+kendoUi.wrs_size_columns+'"  line="'+i+'"  column="'+obj+'" parent_column="'+implode(',',tmp_drill_line_column)+'" data="'+_arg.items[i][obj]+'" type="button"  wrs-type="minus"><i class="fa  fa-minus-square"></i></button>';
-								var btn_drill			=	drill_btn_plus;	
-								
-								//Tratando opções para o botão
-								if(drill_line_value_td.length!=0)
-									{
-											try{
-												if(drill_line_value_td[_arg.items[i][obj]]){
-													btn_drill	=	drill_btn_minus;
-												}												
-											}catch(e){
-												btn_drill	=	drill_btn_plus;
-											}
-									}
-								
-								
-								_arg.items[i][obj]		=	btn_drill+_arg.items[i][obj];
-								tmp_drill_line_column[tmp_drill_line_column.length]	=	obj;
-							}
+							_arg.items[i][obj]		=	DRILL_HIERARQUIA_LINHA_setButton(	_arg.items[i][obj],
+																							_arg.items[i]['C000'],
+																							i,
+																							obj,
+																							DRILL_HIERARQUIA_REQUEST,
+																							LAYOUT_ROWS_B64,
+																							id,
+																							_DRILL_FCC,
+																							DRILL_LINE_LAST_COLUMN,
+																							arg.sender,
+																							next_column,
+																							_arg.items[i]);
 						}
-					}
 					
-					
-					
-					//END
 					
 				}else{
+					typeColumnFrozen	=	 false;
 					_arg.sender._wrs_data[i][obj]	=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word,false,true); //Full para complementar
 
 					
@@ -410,23 +403,19 @@ function getWrsKendoColumn(data)
 						}
 				}
 
+				var paddingText	=	20;
+				
+				if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE && typeColumnFrozen && obj!='C000'){
+					paddingText=50;
+				}
 				
 				if(!isset(_width[idx]))
 				{
 					var title		=	_param[obj]['title'];		
-					var startWidth	=	empty(title) ? 2 : title.length;
-					_width[idx]		= (startWidth*9)+5;
+					_width[idx]		= $("<div/>").text(title).textWidth()+paddingText;
 				}
 				
-				var len			=	empty(word) ? 2 :  word.length;
-				
-				//Se eixtsir imagem do PErcent
-				if(!empty(img))
-				{
-					len+=2
-				}
-				
-				var tmp_width	=	(len*9)+10;
+				var tmp_width	=	$("<div/>").text(word).textWidth()+paddingText;
 
 				if(tmp_width>_width[idx])
 				{
@@ -443,28 +432,6 @@ function getWrsKendoColumn(data)
 			
 	}
 	
-	//Configurando o DRILL Line
-	if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE){ 
-
-			for(lineDrillHide in lineToHideDrillLine)
-				{
-					if(lineToHideDrillLine[lineDrillHide]==0)
-					{
-						if(kendoUi.headerIndex.field[lineDrillHide]['drill_line'])
-						{
-							kendoUi.headerIndex.field[lineDrillHide]['drill_line']			=	 true;
-							kendoUi.headerIndex.field[lineDrillHide]['drill_line_button']	=	 true;
-							kendoUi.hideColumn(kendoUi.headerIndex.field[lineDrillHide]);
-						}
-						
-					}
-				}
-			
-			
-			//foreach(kendoUi.headerIndex.field['C002']);
-			
-			
-	}
 	
 	
 	for(idx in _width)
@@ -562,7 +529,20 @@ function onDataBound(arg)
 			
 			addDrillOnDataBound(nameID,arg);
 			//Aplicando o Evento do CLick no DRILL LINHA
-			$(nameID).find('.DRILL_HIERARQUIA_LINHA').data('kendoGrid',arg.sender).unbind('click').click(DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA);
+
+			
+			if(arg.sender.wrsKendoUi.DRILL_HIERARQUIA_LINHA	==_TRUE){
+			
+				DRILL_HIERARQUIA_LINHA_createEventClick(nameID);
+				
+				DRILL_HIERARQUIA_LINHA_setButtonExpandALL(nameID,arg.sender.wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER,arg.sender.wrsKendoUi.DRILL_LINE_LAST_COLUMN);
+				
+				DRILL_HIERARQUIA_LINHA_hideColumn(	nameID,
+													arg.sender,
+													arg.sender.wrsKendoUi.WRS_ROWS,
+													arg.sender.dataSource._wrs_request_data.drill);
+			}
+			
 			TRACE('END onDataBound');
 	}
 
@@ -675,46 +655,41 @@ function  buttonPlusMinus(nameID,hideShow,sizeFrozen)
 function  themeSUM(nameID,arg,wrsParam)
 {
 		var find_last			=	'last-child';
-			//Verificando se é LINHA DRILL e se é linha de total
-			if(wrsParam.DRILL_HIERARQUIA_LINHA==_TRUE)
-				{
-					var allFields				=	arg.sender.headerIndex.field;
-					var _count_drillLinehide	=	0;
-					var layout					=	wrsKendoUiContextMenuGetLayoutInfo(arg.sender);
-					var sizeLINE				=	 explode(',',layout.LAYOUT_ROWS);
-					
-					
-					for(lineAllFields in allFields)
-						{
-							if(allFields[lineAllFields].drill_line)
-								{
-									_count_drillLinehide++;
-								}
-						}
-					
-					find_last	=	'eq('+(sizeLINE.length-_count_drillLinehide)+')';
-					
-					arg.sender.DRILL_HIERARQUIA_LINHA_TITLE	=	find_last;
-						
-				}
 			
-			$(nameID).find('.k-grid-content-locked').find('tr').find('td:'+find_last).each(function(){
+
+
+		$(nameID).find('.k-grid-content-locked').find('tr').find('td:'+find_last).each(function(){
 			var index				=	$(this).parent().index();
 			var parent_index_data	=	parseInt($(this).index());
 			var html_data_index		=	'';
+			var isTotal				=	true;
+
 			
-			
-			if(empty($(this).html()) || $(this).attr('wrsNull')=='true')
-				{
-					$(nameID).find('.k-grid-content').find('tbody tr').eq(index).addClass('ui-state-default tag_total');
-					
-					//Caso seja nula a linha de Total pesquisa e insere a ultima encontrada
-					for(var i=parent_index_data; (i>=1 && empty(html_data_index)); i--){
-						html_data_index	=	 strip_tags($(this).parent().find('td:eq('+i+')').html());
+			//QUando for o caso se linha de DRILL habilita os totais apenas nas linhas corretas
+			if(arg.sender.wrsKendoUi.DRILL_HIERARQUIA_LINHA	==_TRUE){
+				
+				try{
+					if(arg.sender['drill_line_total_data'][index])
+					{
+						isTotal	=	 false;
 					}
-					$(this).parent().attr('wrs-html-data',html_data_index);
-					
-				}
+				} catch(e){}
+			}
+			
+			
+			if(isTotal)
+			{
+				if(empty($(this).html()) || $(this).attr('wrsNull')=='true')
+					{
+						$(nameID).find('.k-grid-content').find('tbody tr').eq(index).addClass('ui-state-default tag_total');
+						//Caso seja nula a linha de Total pesquisa e insere a ultima encontrada
+						for(var i=parent_index_data; (i>=1 && empty(html_data_index)); i--){
+							html_data_index	=	 strip_tags($(this).parent().find('td:eq('+i+')').html());
+						}
+						$(this).parent().attr('wrs-html-data',html_data_index);
+						
+					}
+			}
 			
 				
 			});
@@ -725,21 +700,22 @@ function  themeSUM(nameID,arg,wrsParam)
 			//Aplica bolde nas clunas de totais
 			var _param	=	getWrsKendoColumn(arg.sender.columns);
 					
-
-			var indexToUse		=	 [];
-			for(obj in _param)
-			{
-					if(_param[obj].wrsParam['TOTAL']=='S')
-					{
-						var _indexTD					=	parseInt(_param[obj].wrsParam.INDEX);
-						$(nameID).find('.k-grid-content').find('tbody tr').each(function(){
-																					$(this).find('td').eq(_indexTD).addClass('bold tag_total');
-																					
-																					//$('.k-grid-content-locked tr:eq('+$(this).index()+')').addClass('tag_total');
-																				});
-					}							
+			
+			var TOTAL			=	LNG('LINE_TOTAL');
+			var colTOTAL		=	arg.sender.headerIndex.column_total;
+			
+			
+			for(lineColTOTAL in colTOTAL){
+				$(nameID).find('.k-grid-header	.k-grid-header-wrap').find('tr:last-child').find('th[data-field='+lineColTOTAL+']').each(function(){
+					var th	=	 $(this).index();
+					$(nameID).find('.k-grid-content').find('tbody tr').each(function(){
+						$(this).find('td').eq(th).addClass('bold tag_total');
+						//$('.k-grid-content-locked tr:eq('+$(this).index()+')').addClass('tag_total');
+					});
+				});
 			}
-					
+			
+
 }													
 													
 /**
@@ -899,10 +875,9 @@ function  themeSUM(nameID,arg,wrsParam)
 														}
 														else
 														{
-															//Caso o drill line não o feche não abra novamente
-															if(!td_column.drill_line){
+
 																telerikGrid.showColumn(td_column);
-															}
+
 														}
 														
 														lastKey	=	i_key;

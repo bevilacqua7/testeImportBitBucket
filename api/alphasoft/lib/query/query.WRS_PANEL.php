@@ -225,13 +225,22 @@ EOF;
 	 */
 	public function DRILL_SSAS_TABLE( $TABLE_NAME, $LINE, $FILTER, $OPENROWS )
 	{
-		// Exemplo: Exec Drill_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F',5,'30 - MARCAS CLASSICAS E SIMILARES(_,_)110000 - JOSE RICARDO DOREA CARVALHO(_,_)112200 - OSVALDO LUIS CARDOZO DE ANDRADE',1
+		$_FILTER	=	$FILTER;
+		
+		//Comando enviado do JS WRSFDrillLine.js - Limpa a consulta drill
+		if($_FILTER=='DRILL_LINHA_RESTAR_CONSULTA')
+		{
+			$_FILTER	=	"";
+		}
+		
+		// Exemplos: Exec Drill_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F',5,'30 - MARCAS CLASSICAS E SIMILARES(_,_)110000 - JOSE RICARDO DOREA CARVALHO(_,_)112200 - OSVALDO LUIS CARDOZO DE ANDRADE',1
+		//           Exec Drill_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F',5,'{_*_}(_,_){_*_}',1
 		//(_,_) Separador de Campos
 		// OPENROWS = 1 (Abre) / 0 (Fecha)
 		$query = <<<EOF
 					EXEC Drill_SSAS_Table 	'{$TABLE_NAME}',
 											{$LINE},
-											'{$FILTER}',
+											'{$_FILTER}',
 											{$OPENROWS}
 EOF;
 		return $query;
@@ -268,11 +277,11 @@ EOF;
 	 */	
 	public function SELECT_SSAS_INFO( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END )
 	{
+		// Exemplo: Exec Select_SSAS_Info '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_FDSI' OUTPUT,51,100
 		$query = <<<EOF
-					SELECT ROW_NUMBER,DRILL_OPEN,LEVEL,OPENROWS
-					FROM {$TABLE_NAME}
-					WHERE ROW_NUMBER BETWEEN {$ROW_NUMBER_START} AND {$ROW_NUMBER_END}
-					ORDER BY ROW_NUMBER
+					EXEC Select_SSAS_Info '{$TABLE_NAME}',
+											{$ROW_NUMBER_START},
+											{$ROW_NUMBER_END}
 EOF;
 		return $query;
 	}
@@ -317,7 +326,7 @@ EOF;
 										'{$ATTRIBUTE}',
 										'{$LANGUAGE}'
 EOF;
-			return $query;
+		return $query;
 	}
 
 }

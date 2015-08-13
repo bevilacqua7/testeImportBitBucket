@@ -356,7 +356,7 @@ function is_wrs_change_to_run(param_request)
 		histoty_param['ALL_COLS']		=	param_request['ALL_COLS']	;
 		histoty_param['ALL_ROWS']		=	param_request['ALL_ROWS']	;
 		histoty_param['DRILL_HIERARQUIA_LINHA']			=	param_request['DRILL_HIERARQUIA_LINHA']	;
-		histoty_param['DRILL_HIERARQUIA_LINHA_DATA']	=	param_request['DRILL_HIERARQUIA_LINHA_DATA']	;
+		histoty_param['DRILL_HIERARQUIA_LINHA_DATA']	=	"";//Mante sempre nula para que possa fazer nova consulta//param_request['DRILL_HIERARQUIA_LINHA_DATA']	;
 		
 		
 		

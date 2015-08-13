@@ -461,6 +461,7 @@ function addTargetDisableContext(kendoUi)
         	return menuMain;
     	}
 
+    	
     	var kendoUi		=	$('#'+$event.attr('id')).data('kendoGrid');
     	var e_infos = wrsKendoUiContextMenu($event);
     	var e_colunas 	= explode(',',e_infos.layout_full['LAYOUT_COLUMNS']);
