@@ -84,17 +84,18 @@ class WRS_MAIN  extends WRS_BASE
 	private function getTheme()
 	{
 		$theme	=	array();
-		$theme['azul']	='Azul';
-		$theme['cinza']	='Cinza';
-		$theme['laranja']	='Laranja';
-		$theme['verde']	='Verde';
-		$theme['vermelho']='Vermelho';
-		
+		$theme['theme-azul']	='Azul';
+		$theme['theme-cinza']	='Cinza';
+		$theme['theme-laranja']	='Laranja';
+		$theme['theme-verde']	='Verde';
+		$theme['theme-vermelho']='Vermelho';
+
 		$implements		=	 array();
 		
 		$implements['name']		='WRSChangeTheme';
 		$implements['class']	='WRSChangeTheme';
 		
+
 		return select($theme,WRS::INFO_SSAS_LOGIN('USER_FORMAT'),$implements);
 	}
 	

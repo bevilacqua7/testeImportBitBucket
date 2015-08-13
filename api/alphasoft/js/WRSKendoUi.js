@@ -943,6 +943,7 @@ function  themeSUM(nameID,arg,wrsParam)
 															val_html	=	dataFrozenEmpty[odfe];
 														}
 														
+														$(IDName).find('.k-grid-content-locked tr:eq('+odfe+') td:eq('+tdIndex+')').attr('data-original','true');
 														$(IDName).find('.k-grid-content-locked tr:eq('+odfe+') td:eq('+tdIndex+')').html(val_html);
 													}
 													
@@ -1147,7 +1148,7 @@ function  themeSUM(nameID,arg,wrsParam)
 									switch($(this).attr('name'))
 									{
 										case 'SUMARIZA'    :  	telerikGrid.dataSource.read(); break;
-										case 'COLORS_LINE' : 	telerikGrid.dataSource.read();; break; 
+										case 'COLORS_LINE' : 	telerikGrid.dataSource.read(); break; 
 									}
 									
 									

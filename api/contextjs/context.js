@@ -112,10 +112,13 @@ var context = context || (function () {
 				var iconA='<span class="btn-left glyphicon glyphicon-font ui-sortable-handle"></span>';// letra A
 				var iconT='<span class="btn-left glyphicon glyphicon-trash ui-sortable-handle"></span>';// Trash
 				var iconS='<span class="btn-left glyphicon glyphicon-usd ui-sortable-handle"></span>';// $
+				var iconM='<span class="btn-left glyphicon glyphicon-map-marker ui-sortable-handle"></span>';// marcador no mapa
 				var icon='';
 				
 				if(data[i].hasOwnProperty('className') && data[i].className=='REMOVE_LINE_HEADER'){
 					icon=iconT;
+				}else if(data[i].hasOwnProperty('className') && data[i].className=='VER_MAPA'){
+					icon=iconM;
 				}else{
 					var jsonM = data[i].json;
 					if(!empty(jsonM)){
@@ -324,7 +327,12 @@ var context = context || (function () {
 					var size_tr			=	table_parents.length;					
 					$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
 					if(($(this).parent().index()+1)>=size_tr){
-						if($(table_parents[$(this).parent().index()]).find('th').length<=2){ // existe uma coluna vazia, por isso, se for maior que 2 é pq existe mais de uma coluna de informacoes
+						if( $(table_parents[$(this).parent().index()]).find('th').length<=2 || // existe uma coluna vazia, por isso, se for maior que 2 é pq existe mais de uma coluna de informacoes
+							(
+								$(table_parents[$(this).parent().index()]).find('th[data-title=LATITUDE]').length>0 &&
+								$(table_parents[$(this).parent().index()]).find('th').length==3
+							) // excecao quando existe a coluna LATITUDE que fica oculta
+						){
 							esconde=true;	
 						}
 					}else{
@@ -345,6 +353,14 @@ var context = context || (function () {
 			var qtde_colunas_measures 		= table_parents.first('div').find('table:first').find('tr:first').find('th').length;
 			if(qtde_colunas_measures<=1){
 				esconde=true;
+			}
+		}
+		if(table_parents.first('div').attr('type')=='linha'){
+			var proxTd			=	$(this).next('td');
+			if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!='' && $(this).attr('data-original')!='true'){
+				$('#dropdown-' + id).find('.VER_MAPA').removeClass('hide');	
+			}else{
+				$('#dropdown-' + id).find('.VER_MAPA').addClass('hide');				
 			}
 		}
 		if(esconde){
