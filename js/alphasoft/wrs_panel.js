@@ -88,8 +88,9 @@ function wrs_west_onresize(pane, $Pane)
 	
 	heightBox			=	(heightBox-padding) - offsetHeader - offsetHeader;
 	
-	$('.wrs_panel_esquerdo_drag_drop ol').height(heightBox);
+	heightBox			=	heightBox-$('.ui-layout-north').outerHeight();
 	
+	$('.wrs_panel_esquerdo_drag_drop ol').height(heightBox);
 	formata_texto_resultado_filtros();
 	
 }
@@ -340,10 +341,10 @@ $(document).ready(function () {
 
 function wrs_clean_box_drag_drop()
 {
-	var $this		=	 $(this);
-	var type		=	 $this.attr('parent');
-	var who_receive	= $this.parent().parent().find('.wrs_panel_receive').attr('who_receive');
-	var mensagem	=	"";
+	var $this			=	 $(this);
+	var type			=	 $this.attr('parent');
+	var who_receive		= $this.parent().parent().find('.wrs_panel_receive').attr('who_receive');
+	var mensagem		=	"";
 	var mensagem_sucess	=	"";
 	
 	if(empty(who_receive))
@@ -888,6 +889,7 @@ function setDraggable(name,use,who_receive)
 function find_relatorio_attributo_metrica(where_find,_values,_clone)
 {
 	
+
 	$(_clone).html('');
 	/*
 	 * Aplicando quando vier com CLASS
@@ -938,19 +940,15 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 				if(!empty(is_filter))
 				{
 					var json 			=	$.parseJSON(base64_decode(object.attr('json')));
+					
 					if(json!=null)
-						json['FILTER']	=	is_filter;
+						json['FILTER']	=	is_array(is_filter) ? implode(',',is_filter) : is_filter;
 						
 						object.attr('json',base64_encode(json_encode(json,true)));
 				}
 				
 				DROP_EVENT( 'DIRECT', object,$(_clone));
-				
-				//Limpando o LAdo dos ATTR Fixos
-/*				var json 			=	$.parseJSON(base64_decode(object.attr('json')));
-					json['FILTER']	=	[];
-					object.attr('json',base64_encode(json_encode(json,true)));
-					*/
+
 			}
 	}
 	
@@ -1014,6 +1012,7 @@ jQuery.expr[':'].containClass = function(a, i, m) {
  */
 function set_value_box_relatorio(object)
 {
+	
 	if(isset(object.LAYOUT_ROWS))
 	{
 		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR ',object.LAYOUT_ROWS,'.sortable_linha');
@@ -1055,6 +1054,7 @@ function rows_by_metrica_attr_base64(object,_type)
 {
 	var _flag		=	false;
 	var _request	=	[];
+	var _info_save	=	[];
 	
 	$(object).find('li').each(function(){
 		
@@ -1067,6 +1067,8 @@ function rows_by_metrica_attr_base64(object,_type)
 			//Pegando as informações para executar o Relatório
 			if(_type=='attr'){
 				_request[_request.length]	=	json.LEVEL_FULL;
+				//TRACE_DEBUG(json.LEVEL_FULL);
+
 			}else{
 				_request[_request.length]	=	json.MEASURE_UNIQUE_NAME;
 			}
@@ -1116,6 +1118,7 @@ function wrs_run_filter()
 	var run					=	 false;
 	var mensagem			=	"";
 	var flag_load			=	$(this).attr('flag_load');
+	var getAllFiltersToRun	=	"";
 	
 	
  
@@ -1134,6 +1137,7 @@ function wrs_run_filter()
 		mensagem	+= LNG('ATTRIBUTOS_METRICA')+'<br>';	
 	}
 
+	
 	if(!sortable_linha)
 	{
 		mensagem	+= LNG('ATTRIBUTOS_LINHA')+'<br>';
@@ -1166,14 +1170,20 @@ function wrs_run_filter()
 		var param_request	=	[];
 		//Pegando as informações já pre estabelecidas pelo gráfico atuak
 		var is_param		=	false;
+		
+		
+		
+		
 		//Buscando a Grid para poder pegar as  opções selecionadas
 		$('.container_panel_relatorio').find('.wrsGrid').each(function(){
+			changeTypeRun('#'+$(this).attr('id'),TYPE_RUN.direct);
 			param_request	=	getElementsWrsKendoUi($(this));
 			is_param	=	true;
 		});
 		//Se não encontrar a variábel pesquisa pela primeira div que encontrar na tela
 		if(!is_param){
 			$('.container_panel_relatorio').find('div').each(function(){
+				changeTypeRun('#'+$(this).attr('id'),TYPE_RUN.direct);
 				param_request	=	getElementsWrsKendoUi($(this));
 			});
 		}
@@ -1186,7 +1196,11 @@ function wrs_run_filter()
 
 		//Força a conversão do Menu 
 		wrsFilterShow();
-		param_request['LAYOUT_FILTERS']	=	base64_encode($.WrsFilter('getAllFiltersToRun'));
+		getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
+		param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
+		param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
+		
+
 		//Passando o ID do Cubo na sessão
 		var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;
 		//Verificando se existe multiplos cubos
@@ -1211,23 +1225,6 @@ function wrs_run_filter()
 		}
 		
 		//Verificnado se existe alterações de pesquisa 
-		if(is_wrs_change_to_run(param_request))
-		{
-			
-			if($(this).attr('is_atributo_simples')=='true'){
-				$(this).attr('is_atributo_simples','false');
-			}
-			$(this).attr('locked',false);//Libera o filtro
-			$(this).attr('flag_load','false');
-
-			return true;
-		}else{
-			if(flag_load!='true')
-			{
-				MODAL_LOADING_WRS_PANEL();
-				$(this).attr('flag_load','true');
-			}
-		}
 		
 		//foreach(param_request);
 		/*
@@ -1245,7 +1242,33 @@ function wrs_run_filter()
 					param_request	=	merge_objeto(param_request,wrsConfigGridDefault_data);
 				}
 			}
+			
+			
+		var is_wrs_change_to	=	is_wrs_change_to_run(param_request);
+			param_request		=	is_wrs_change_to.val;
 		
+			
+		if(is_wrs_change_to.status)
+		{
+			
+			if($(this).attr('is_atributo_simples')=='true'){
+				$(this).attr('is_atributo_simples','false');
+			}
+			$(this).attr('locked',false);//Libera o filtro
+			$(this).attr('flag_load','false');
+
+			return true;
+		}else{
+			if(flag_load!='true')
+			{
+				MODAL_LOADING_WRS_PANEL();
+				$(this).attr('flag_load','true');
+			}
+		}
+		
+		
+		
+			
 		//Ajustando ABAS HTML	
 		$('.WRS_DRAG_DROP_RECEIVER_FILTER').hide();
 		$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
@@ -1273,8 +1296,9 @@ function wrsRunGridButton(param_request)
 		var _file	=	'WRS_PANEL';
 		var _class	=	'WRS_PANEL';
 		var _event	=	'load_grid_header';
-		MODAL_LOADING_WRS_PANEL();
-		runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');	
+		
+			MODAL_LOADING_WRS_PANEL();
+			runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');	
 }
 
 /**
@@ -1284,10 +1308,8 @@ function wrsRunGridButton(param_request)
 function MOUNT_LAYOUT_GRID_HEADER(data)
 {
 	TRACE('START MOUNT_LAYOUT_GRID_HEADER'); 
-	
 	$('.container_panel_relatorio').html(data);
 	//CLOSE_LOAD_RELATORIO();
-	
 	//Apenas éexecutando quando existe atributo simples
 	if($('.wrs_run_filter').attr('is_atributo_simples')=='true')
 	{

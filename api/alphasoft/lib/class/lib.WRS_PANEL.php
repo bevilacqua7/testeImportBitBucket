@@ -235,6 +235,9 @@ class WRS_PANEL  extends WRS_USER
 			include PATH_TEMPLATE.'wrs_panel.php';
 		}
 		
+		
+		echo fwrs_javascript('WRSKendoGridRefresh("'.WRS::GET_REPORT_HISTORY_CURRENT($CUBE,true).'")');
+
 		WRS_TRACE('END eventDefault()', __LINE__, __FILE__);
 	}
 	
@@ -371,15 +374,116 @@ class WRS_PANEL  extends WRS_USER
 		$kendoUi['SUMARIZA']	=	$this->isEmptyNotZero($kendoUi['SUMARIZA'], 1);
 		$kendoUi['COLORS_LINE']	=	$this->isEmptyNotZero($kendoUi['COLORS_LINE'], 1);
 		
-		/*
-		 * TODO:Remover
-		 */
-		$kendoUi['ALL_ROWS']	=	$this->isEmptyNotZero($kendoUi['ALL_ROWS'], 1);
-		$kendoUi['ALL_COLS']	=	$this->isEmptyNotZero($kendoUi['ALL_COLS'], 1);
 		
 		return $kendoUi;
 
 	}
+	
+	
+	/**
+	 * Gerenciamento de Histórico
+	 * 
+	 * O Layout contem as seguintes infos
+	 * 	LAYOUT_ROWS
+	 *	LAYOUT_COLUMNS
+	 *	LAYOUT_MEASURES
+	 *	LAYOUT_FILTERS
+	 *
+	 * @param string $cube_id
+	 * @param array $getRequestKendoUi
+	 * @param array $layout
+	 * 
+	 * @return string
+	 */
+	private function managerHistoty($cube_id,$getRequestKendoUi,$layout)
+	{
+	
+		$flagEmpty				=	true;
+		$result_box				=	array();
+		$_getRequestKendoUi		=	$getRequestKendoUi;
+		$report_id				=	$_getRequestKendoUi['REPORT_ID'];
+		$history				=	array();
+		$history_data			=	array();
+		$type_run				=	$_getRequestKendoUi['TYPE_RUN'];
+		
+		foreach($layout as $lineData)
+		{
+			if(!empty($lineData)) $flagEmpty=false;
+		}
+		
+		if($flagEmpty)	return NULL;
+		
+		$tagClass			=	"__";
+		$LAYOUT_ROWS		=	$this->convertDataHistory($layout['LAYOUT_ROWS'],$tagClass);
+		$LAYOUT_COLUMNS		=	$this->convertDataHistory($layout['LAYOUT_COLUMNS'],$tagClass);
+		$LAYOUT_MEASURES	=	$this->convertDataHistory($layout['LAYOUT_MEASURES'],$tagClass);
+
+		/*
+		 * Retorna array com 
+		 * class, data -> Por linha
+		 */
+		$LAYOUT_FILTERS_TMP						=	json_decode(base64_decode($_getRequestKendoUi['FILTER_TMP']),true);
+		$LAYOUT_FILTERS							=	array();
+		$_getRequestKendoUi['FILTER_TMP']		=	NULL;
+		$_getRequestKendoUi['TRASH_HISTORY']	=	NULL;
+		
+		foreach($LAYOUT_FILTERS_TMP as $data)
+		{
+			$LAYOUT_FILTERS[]	=	array($data['class'],'', explode(',',$data['data']));
+		}
+		
+		$result_box['LAYOUT_ROWS']			=	$LAYOUT_ROWS;
+		$result_box['LAYOUT_COLUMNS']		=	$LAYOUT_COLUMNS;
+		$result_box['LAYOUT_MEASURES']		=	$LAYOUT_MEASURES;
+		$result_box['LAYOUT_FILTERS']		=	$LAYOUT_FILTERS;
+		
+		//
+		//WRS_DEBUG_QUERY(print_r($_SESSION,TRUE));
+		
+		$history		=	json_decode(base64_decode(WRS::GET_REPORT_HISTORY($cube_id, $report_id)),true);
+		
+		if(!is_array($history)) $history= array();
+		
+		$history_data	=	array(	
+									'layout'	=>	$result_box, 
+									'kendoUi'	=>	$_getRequestKendoUi,
+									'date'		=>	date('H:i:s'),
+									'type'		=>	$type_run,
+									'mktime'	=>	fwrs_mktime()
+								);
+		
+		
+
+		//Caso exista mais que 10 linhas de histórico remove a ultima
+		if(count($history)>=10){
+			array_pop($history);
+		}
+		
+
+		//Incrementa no histórico na primeira linha
+		array_unshift($history, $history_data);
+		
+		$history		=	base64_encode(json_encode($history,true));
+		//GRava na sessão
+		WRS::SET_REPORT_HISTORY($cube_id, $report_id, $history);
+		
+		return $history;
+	}
+	
+	
+	private function convertDataHistory($data,$tagClass="")
+	{
+		$explode	=	explode(',',$data);
+
+		foreach($explode as $line =>$_data)
+		{
+			$explode[$line]	=	$tagClass.fwrs_replace_attr($_data);
+		}
+		
+		return $explode;
+	}
+	
+	
 	
 	/**
 	 * Gerando a GRID
@@ -409,6 +513,10 @@ class WRS_PANEL  extends WRS_USER
 		//Pegando as integrações com o KendoUi
 		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi();		
 		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
+		
+		
+		
+		
 		
 		
 		/*
@@ -485,7 +593,15 @@ class WRS_PANEL  extends WRS_USER
 		$DillLayout['LAYOUT_MEASURES']	=	$MEASURES;
 		$DillLayout['LAYOUT_FILTERS']	=	$FILTERS;
 		
+		//Criando o ID do REPORT ID
+		if(empty($getRequestKendoUi['REPORT_ID']))
+		{
+			$getRequestKendoUi['REPORT_ID']	=	WRS::GET_REPORT_HISTORY_CURRENT($CUBE);
+		}
 		
+		$getRequestKendoUi['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$DillLayout);
+		
+
 		
 		$TelerikUi->setWrsKendoUi($getRequestKendoUi); //Passando para Gravar no JS as integrações recebidas
 				
@@ -523,6 +639,10 @@ class WRS_PANEL  extends WRS_USER
 					// Verifica o Status do Job
 					$rows =	$this->fetch_array($queryGrid_exec);
 					$this->SAVE_CACHE_SSAS_USER('QUERY_CACHE',$rows['QUERY_ID']);
+					
+					//Salvando na estrutura do quendo ui o ID da query
+					$getRequestKendoUi['QUERY_ID']	=	$rows['QUERY_ID'];
+					
 					$cube =	$this->getCube();
 					if($rows['JOB_STATUS'] != 4)
 					{

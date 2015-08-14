@@ -105,7 +105,33 @@ class KendoUi
 	 */
 	public function getRequestWrsKendoUi()
 	{
-		return array('page_size','PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','frozen','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER');	
+		/*
+		 * WARNING:O Comando 'TYPE_RUN' é apenas para saber qual o tipo de Execução está sendo solicitado e por esse motivo ele deve ser sempre empty quando finalizado o processo
+		 */
+		return array(	'page_size',
+						'PLUS_MINUS',
+						'ORDER_BY_COLUMN',
+						'ORDER_COLUMN_TYPE',
+						'frozen',
+						'SUMARIZA',
+						'COLORS_LINE',
+						'ALL_COLS',
+						'ALL_ROWS',
+						'WINDOW',
+						'CHART',
+						'GAUGE_COLOR',
+						'GAUGE_SIZE_BY_LINE',
+						'DRILL_HIERARQUIA_LINHA',
+						'DRILL_HIERARQUIA_LINHA_DATA',
+						'SHOW_LINE_TOTAL',
+						'DRILL_HIERARQUIA_LINHA_DATA_HEADER',
+						'TYPE_RUN',
+						'TITLE_ABA',		//Titulo da ABA
+						'REPORT_ID',//IDentificador da ABA
+						'FILTER_TMP',		//Contem a estrutura do filtro usada para o histórico
+						'QUERY_ID',			//ID da query que foi requisitada
+						'TRASH_HISTORY'		// Contem as informações hos HISTORICOS 
+					);	
 	}
 	
 	
@@ -268,7 +294,7 @@ class KendoUi
 		
 		$idTag		=	$this->getId();
 		
-		include PATH_TEMPLATE.'wrs_panel_header_table.php';
+		include PATH_TEMPLATE.'wrs_panel_header_options.php';
 		
 		$element	=	base64_encode(json_encode(array_merge($_request,$_element),true));
 		
@@ -277,8 +303,9 @@ class KendoUi
 		$ORDER_COLUMN  = empty($ORDER_COLUMN) ? 0 : $ORDER_COLUMN;	
 		
 		//PArametros a ser passado pela Kendo
-		$wrsKendoUi							=  NULL;
-		$this->wrsKendoUi['ORDER_COLUMN']	= $ORDER_COLUMN;
+		$wrsKendoUi							=  	NULL;
+		$this->wrsKendoUi['ORDER_COLUMN']	= 	$ORDER_COLUMN;
+		$this->wrsKendoUi['TYPE_RUN']		=	NULL;//QUam solicitou o tipo de Alteração do evento
 		
 		$this->wrsKendoUi['DRILL_HIERARQUIA_LINHA_DATA']	=	"";	//Manter sempre nullo 
 		$wrsKendoUi					=	 base64_encode(json_encode($this->wrsKendoUi,true));
@@ -303,6 +330,8 @@ class KendoUi
 										$("#{$this->getId()}").WrsGridKendoUiControlColumnPlusMinus({$PLUS_MINUS}).WrsDrill().WRSWindowGridEventTools();
 										$('.dropdown-menu-configuration form, .dropdown-menu-configuration li ').click(function (e) {e.stopPropagation();});
 										$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
+												
+										WRSKendoGridComplete("#{$this->getId()}");		
 																													
 										
 							});

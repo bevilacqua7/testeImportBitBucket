@@ -12,6 +12,33 @@
 var IS_TRACE	=	false;
 var RAND_TOKEN	=	js_rand(0,9999999999999);
 
+/*
+ * Tipos de Execuções que o sistema opera para gerar uma novo Report
+ */
+var TYPE_RUN	=	{
+						direct				:	'RunFiltro',
+						options				:	'Options',
+						reorden_column		:	'OrdenaColuna',
+						drildown			:	'DrillDown',
+						linha				:	'DrillLinha',
+						coluna_header		:	'DrillColuna',
+						coluna_header_line	:	'DrillLinhaHeader',
+						linha_header		:	'DrillHeaderData',
+						data				:	'DrillValue'
+					};
+
+
+function changeTypeRun(IDGrid,typeRun)
+{
+	var wrsKendoUi			=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
+	
+	if(empty(wrsKendoUi.TYPE_RUN))
+	{
+		wrsKendoUiChange(IDGrid,'TYPE_RUN',typeRun);
+	}
+	
+}
+
 function include_js(file)
 {
 	var script	=	$('<script/>',{type:"text/javascript",src:"api/alphasoft/js/"+file+".js?"+RAND_TOKEN});

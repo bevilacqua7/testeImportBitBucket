@@ -4,31 +4,30 @@ $GRID_HEADER_OPTION	=	LNG('GRID_HEADER_OPTION');
 $GRID_HEADER_EXPORT	=	LNG('GRID_HEADER_EXPORT');
 $GRID_HEADER_SEE	=	LNG('GRID_HEADER_SEE');
 
-$GRID_HEADER_OPTION_TOTAL_LINE			=	LNG('GRID_HEADER_OPTION_TOTAL_LINE');
-$GRID_HEADER_OPTION_TOTAL_COLUMN		=	LNG('GRID_HEADER_OPTION_TOTAL_COLUMN');
-$GRID_HEADER_OPTION_TOTAL_SUMARIZA		=	LNG('GRID_HEADER_OPTION_TOTAL_SUMARIZA');
-$GRID_HEADER_OPTION_TOTAL_LINE_COLOR	=	LNG('GRID_HEADER_OPTION_TOTAL_LINE_COLOR');
-
-$GRID_HEADER_EXPORT_PDF		=	LNG('GRID_HEADER_EXPORT_PDF');
-$GRID_HEADER_EXPORT_CSV		=	LNG('GRID_HEADER_EXPORT_CSV');
-$GRID_HEADER_EXPORT_EXCEL	=	LNG('GRID_HEADER_EXPORT_EXCEL');
-$GRID_HEADER_EXPORT_IMAGE	=	LNG('GRID_HEADER_EXPORT_IMAGE');
-$GRID_HEADER_EXPORT_IMAGE_SVG	=	LNG('GRID_HEADER_EXPORT_IMAGE_SVG');
-$GRID_HEADER_SEE_GRID		=	LNG('GRID_HEADER_SEE_GRID');
-$GRID_HEADER_SEE_CHART		=	LNG('GRID_HEADER_SEE_CHART');
-$GRID_HEADER_SEE_MAP		=	LNG('GRID_HEADER_SEE_MAP');
-
-$GRID_HEADER_TITLE_EXIBITION		=	LNG('GRID_HEADER_TITLE_EXIBITION');
-$GRID_HEADER_TITLE_DADOS			=	LNG('GRID_HEADER_TITLE_DADOS');
-$GRID_HEADER_OPTION_ORDER_COLUMN	=  	LNG('GRID_HEADER_OPTION_ORDER_COLUMN');
-$BTN_SAIR							=	LNG('BTN_SAIR');
-$BTN_SAVE							=	LNG('BTN_SAVE');
-$BTN_APLY							=	LNG('BTN_APLY');
-$CHART_CONFIG						=	LNG('CHART_CONFIG');
+$GRID_HEADER_OPTION_TOTAL_LINE				=	LNG('GRID_HEADER_OPTION_TOTAL_LINE');
+$GRID_HEADER_OPTION_TOTAL_COLUMN			=	LNG('GRID_HEADER_OPTION_TOTAL_COLUMN');
+$GRID_HEADER_OPTION_TOTAL_SUMARIZA			=	LNG('GRID_HEADER_OPTION_TOTAL_SUMARIZA');
+$GRID_HEADER_OPTION_TOTAL_LINE_COLOR		=	LNG('GRID_HEADER_OPTION_TOTAL_LINE_COLOR');
+$GRID_HEADER_EXPORT_PDF						=	LNG('GRID_HEADER_EXPORT_PDF');
+$GRID_HEADER_EXPORT_CSV						=	LNG('GRID_HEADER_EXPORT_CSV');
+$GRID_HEADER_EXPORT_EXCEL					=	LNG('GRID_HEADER_EXPORT_EXCEL');
+$GRID_HEADER_EXPORT_IMAGE					=	LNG('GRID_HEADER_EXPORT_IMAGE');
+$GRID_HEADER_EXPORT_IMAGE_SVG				=	LNG('GRID_HEADER_EXPORT_IMAGE_SVG');
+$GRID_HEADER_SEE_GRID						=	LNG('GRID_HEADER_SEE_GRID');
+$GRID_HEADER_SEE_CHART						=	LNG('GRID_HEADER_SEE_CHART');
+$GRID_HEADER_SEE_MAP						=	LNG('GRID_HEADER_SEE_MAP');
+$GRID_HEADER_TITLE_EXIBITION				=	LNG('GRID_HEADER_TITLE_EXIBITION');
+$GRID_HEADER_TITLE_DADOS					=	LNG('GRID_HEADER_TITLE_DADOS');
+$GRID_HEADER_OPTION_ORDER_COLUMN			=  	LNG('GRID_HEADER_OPTION_ORDER_COLUMN');
+$BTN_SAIR									=	LNG('BTN_SAIR');
+$BTN_SAVE									=	LNG('BTN_SAVE');
+$BTN_APLY									=	LNG('BTN_APLY');
+$CHART_CONFIG								=	LNG('CHART_CONFIG');
 $GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA	=	LNG('GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA');
-$script_tags						=	'';
+$REPORT_RESULT_HISTORY						=	LNG('REPORT_RESULT_HISTORY');
+$script_tags								=	'';
 //TAG pode ser enviada externamente pelo include
-if(!isset($HIDE_EXPORT)) $HIDE_EXPORT	=	'';
+if(!isset($HIDE_EXPORT)) $HIDE_EXPORT		=	'';
 
 if(!isset($getRequestKendoUiDefault)) $getRequestKendoUiDefault =json_encode('',true); 
 
@@ -67,12 +66,8 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 					  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" disabled_s >
 						    <i class="fa fa-history"></i> <span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu " role="history">
-						    <li><a href="#" ><i class="fa fa-history"></i> 15:05:00 - 14/04 - <span class="label label-info">Drill</span> </a></li>
-						    <li><a href="#" ><i class="fa fa-history"></i> 15:05:00 - 14/04 - <span class="label label-info">Filtro</span>  </a></li>
-						    <li><a href="#" ><i class="fa fa-history"></i> 15:05:00 - 14/04 - <span class="label label-info">Drag</span> </a></li>
-						    <li><a href="#" ><i class="fa fa-history"></i> 15:05:00 - 14/04 - <span class="label label-info">Filtro</span> </a></li>
-						    <li><a href="#" ><i class="fa fa-history"></i> 15:05:00 - 14/04 - <span class="label label-info">Drag</span> </a> </li>
+						<ul class="dropdown-menu wrs_history_report" role="history">
+						    <li><a href="#">{$REPORT_RESULT_HISTORY}</a></li>
 						</ul>
 						
 			 </div>
@@ -93,15 +88,11 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						    <i class="fa fa-cog"></i> {$GRID_HEADER_OPTION} <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" role="menu_export">
-						    
-					  		
-						    
 						    <li><h4>{$GRID_HEADER_TITLE_EXIBITION}</h4></li>
 					  		<li>
 						  		<form>
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="SUMARIZA"> {$GRID_HEADER_OPTION_TOTAL_SUMARIZA}</label></div>
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="COLORS_LINE"> {$GRID_HEADER_OPTION_TOTAL_LINE_COLOR}</label></div>
-						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="DRILL_HIERARQUIA_LINHA"> {$GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA}</label></div>
 						  		</form>
 					  		</li>
 					  		<li class="divider"></li>
@@ -109,8 +100,9 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 					  		<li>
 						  		<form>
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" dependence="DRILL_HIERARQUIA_LINHA"  name="ALL_ROWS" > {$GRID_HEADER_OPTION_TOTAL_LINE}</label></div>
-						  				<div class="checkbox"><label><input type="checkbox" value="1" name="ALL_COLS" > {$GRID_HEADER_OPTION_TOTAL_COLUMN}</label></div>
+						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="ALL_COLS" > {$GRID_HEADER_OPTION_TOTAL_COLUMN}</label></div>
 						  				<div class="checkbox"><label><input type="checkbox" value="1" name="ORDER_COLUMN"> {$GRID_HEADER_OPTION_ORDER_COLUMN}</label></div>
+						  				<div class="checkbox"><label><input type="checkbox" value="1" name="DRILL_HIERARQUIA_LINHA"> {$GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA}</label></div>
 						  		</form>
 					  		</li>
 					  		 

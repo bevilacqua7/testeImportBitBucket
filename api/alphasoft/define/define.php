@@ -728,6 +728,12 @@ function fwrs_array_comparar($array,$value)
 	return false;
 }
 
+function fwrs_mktime()
+{
+	return mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y"));
+}
+
+
 /**
  * Gravando info no cookie
  * @param string $value

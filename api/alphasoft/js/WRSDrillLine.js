@@ -39,6 +39,8 @@ function DRILL_HIERARQUIA_LINHA_hideColumn(	IDGRid,KendoUi,rows,drill)
 	
 	for(var lineColumn in rows)
 	{
+		//é mapa
+		
 		if(lineColumn!=0 && lineColumn > startCol)
 			{
 				var column	=	KendoUi.headerIndex.field[rows[lineColumn]];

@@ -296,8 +296,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 					if(telerikGrid.dataSource._wrs_request_data.drill!='')
 					{
 						title_line	=	telerikGrid.dataSource._wrs_request_data.drill.OPENCOLS;
-
-						
 					}
 					DRILL_FROZEN		=	title_line+1;
 					DRILL_COLUMN_TITLE	=	telerikGrid.wrsKendoUi.WRS_ROWS[title_line]
@@ -1760,7 +1758,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 									 */
 									for(lineAxis in chartData)
 									{
-										axisTmp[lineAxis]	=	{name: "",wrs_title:'', volume:'', title: { text: "" }, labels: {template:''},minorGridLines: {visible: true} /*,min: 900,max: 0*/};
+										axisTmp[lineAxis]	=	{name: "",wrs_title:'', volume:'', title: { text: "" }, labels: {template:''},/*minorGridLines: {visible: true}*/ /*,min: 900,max: 0*/};
 									}
 										
 									
