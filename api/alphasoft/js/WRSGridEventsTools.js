@@ -365,9 +365,9 @@ var getRequestKendoUiDefault	=	{};
   		btn_options				=	element.find('.btn-options-grid'),
   		btn_configute_chart		=	element.find('.btn-configute-chart'),
   		btn_open_type_vision	=	element.find('.btn-open-type-vision'),
-  		data					=	element.data(data_name);
-		nav_options.attr('id','wrs_grid_options_default');
-		
+  		data					=	element.data(data_name),
+		isClick					=	false;
+		nav_options.attr('id','wrs_grid_options_default');		
   		//WARNING:  O nome do ID nao pode ser removido pois existe outros lugares com pendencia no nome - wrs_panel
 		element.attr('id',data_name);
   	
@@ -413,6 +413,7 @@ var getRequestKendoUiDefault	=	{};
   	 * Função pesquisa no html por GRid complementar para que possa usar 
   	 */
   	var check_exist_grid	=	 function(){  		
+  		if(isClick) return true;
   		var searchGrid	=	$(document).find('.wrsGrid');
   		if(!empty(searchGrid.html()))
   		{
@@ -443,12 +444,12 @@ var getRequestKendoUiDefault	=	{};
 	  		opts[$(this).attr('name')]	= 	_checked ? 1 : '';
 	  		detect_event();//Abilita Evento
 	  		element.data(data_name,opts);  
+	  		isClick		=	true;
 	  		rules_pendences_checkbox($(this),$(this).parents('ul'));
   	}
   	
   	//Abrindo o Modal de opções do CHART
   	var event_btn_configute_chart	=	 function(){
-  		
   		
   			var get_measures_title	=	 [];
   			
@@ -502,7 +503,6 @@ var getRequestKendoUiDefault	=	{};
   		
   		
  // 		TRACE_DEBUG(nav_options.html());
-  		
   		
   		$($(this).attr('data-target')).modal('show');  		
   	}

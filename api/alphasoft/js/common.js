@@ -21,7 +21,7 @@ var TYPE_RUN	=	{
 						reorden_column		:	'OrdenaColuna',
 						drildown			:	'DrillDown',
 						linha				:	'DrillLinha',
-						coluna_header		:	'DrillColuna',
+						coluna_header		:	'DrillColuna',//Não modificar sem antes também modificar na lib pois é por esse nome que não insiro no histórico
 						coluna_header_line	:	'DrillLinhaHeader',
 						linha_header		:	'DrillHeaderData',
 						data				:	'DrillValue'

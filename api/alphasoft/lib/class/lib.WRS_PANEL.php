@@ -395,7 +395,7 @@ class WRS_PANEL  extends WRS_USER
 	 * 
 	 * @return string
 	 */
-	private function managerHistoty($cube_id,$getRequestKendoUi,$layout)
+	private function managerHistoty($cube_id,$getRequestKendoUi,$getRequestWrsExceptions,$layout)
 	{
 	
 		$flagEmpty				=	true;
@@ -422,23 +422,28 @@ class WRS_PANEL  extends WRS_USER
 		 * Retorna array com 
 		 * class, data -> Por linha
 		 */
-		$LAYOUT_FILTERS_TMP						=	json_decode(base64_decode($_getRequestKendoUi['FILTER_TMP']),true);
-		$LAYOUT_FILTERS							=	array();
-		$_getRequestKendoUi['FILTER_TMP']		=	NULL;
-		$_getRequestKendoUi['TRASH_HISTORY']	=	NULL;
+		$LAYOUT_FILTERS_TMP							=	json_decode(base64_decode($_getRequestKendoUi['FILTER_TMP']),true);
+		$LAYOUT_FILTERS								=	array();
+		$_getRequestKendoUi['FILTER_TMP']			=	NULL;
+		$getRequestWrsExceptions['TRASH_HISTORY']	=	NULL;
+		
+
+		
 		
 		foreach($LAYOUT_FILTERS_TMP as $data)
 		{
 			$LAYOUT_FILTERS[]	=	array($data['class'],'', explode(',',$data['data']));
 		}
 		
+		
+		
+		
 		$result_box['LAYOUT_ROWS']			=	$LAYOUT_ROWS;
 		$result_box['LAYOUT_COLUMNS']		=	$LAYOUT_COLUMNS;
 		$result_box['LAYOUT_MEASURES']		=	$LAYOUT_MEASURES;
 		$result_box['LAYOUT_FILTERS']		=	$LAYOUT_FILTERS;
 		
-		//
-		//WRS_DEBUG_QUERY(print_r($_SESSION,TRUE));
+	
 		
 		$history		=	json_decode(base64_decode(WRS::GET_REPORT_HISTORY($cube_id, $report_id)),true);
 		
@@ -452,20 +457,45 @@ class WRS_PANEL  extends WRS_USER
 									'mktime'	=>	fwrs_mktime()
 								);
 		
+	
+	
 		
-
-		//Caso exista mais que 10 linhas de histórico remove a ultima
-		if(count($history)>=10){
-			array_pop($history);
+		if($history_data['type']!='DrillColuna') 
+		{
+	
+				if(!empty($history))
+				{
+					if(is_array($history))
+					{
+						$historyTMP		=	array();
+						foreach($history as $dataHistory)
+						{
+							if( $dataHistory['mktime']!=$getRequestWrsExceptions['MKTIME_HISTORY'])
+							{
+								$historyTMP[]	=	$dataHistory;
+							}
+						}
+						
+						$history	=	$historyTMP;
+					}
+				}
+				//
+				//Caso exista mais que 10 linhas de histórico remove a ultima
+				if(count($history)>=10){
+					array_pop($history);
+				}
+				
+		
+				//Incrementa no histórico na primeira linha
+				array_unshift($history, $history_data);
+		
 		}
-		
-
-		//Incrementa no histórico na primeira linha
-		array_unshift($history, $history_data);
 		
 		$history		=	base64_encode(json_encode($history,true));
 		//GRava na sessão
 		WRS::SET_REPORT_HISTORY($cube_id, $report_id, $history);
+		
+		
 		
 		return $history;
 	}
@@ -599,7 +629,7 @@ class WRS_PANEL  extends WRS_USER
 			$getRequestKendoUi['REPORT_ID']	=	WRS::GET_REPORT_HISTORY_CURRENT($CUBE);
 		}
 		
-		$getRequestKendoUi['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$DillLayout);
+		$getRequestWrsExceptions['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$getRequestWrsExceptions,$DillLayout);
 		
 
 		
@@ -661,7 +691,6 @@ class WRS_PANEL  extends WRS_USER
 					if($rows['JOB_STATUS'] == 4)
 					{
 						// Verifica se o Job é de outro usuário
-						
 						//WRS_DEBUG_QUERY('Remover:::'.$getRequestKendoUi['DRILL_HIERARQUIA_LINHA']);
 						//Salvando o nome da tabela cache
 						$QUERY_TABLE_CACHE		=	$rows['QUERY_TABLE'];
@@ -706,11 +735,9 @@ class WRS_PANEL  extends WRS_USER
 			$OPENROWS	=	1;
 			if($getRequestWrsExceptions['DRILL_HIERARQUIA_LINHA_DATA_MINUS']=='remove_line') $OPENROWS=0;
 			
-			
 			$DRILL_HIERARQUIA_LINHA_DATA	=	 base64_decode($getRequestKendoUi['DRILL_HIERARQUIA_LINHA_DATA']);
 			$DRILL_HIERARQUIA_LINHA_DATA	=	empty($DRILL_HIERARQUIA_LINHA_DATA) ? '' : $DRILL_HIERARQUIA_LINHA_DATA;
 			$query_DRILL_SSAS_TABLE			=	$this->_query->DRILL_SSAS_TABLE( $cube['TABLE_CACHE'], $LAYOUT_ROWS_SIZE, $DRILL_HIERARQUIA_LINHA_DATA, $OPENROWS );
-			
 			
 			if($this->query($query_DRILL_SSAS_TABLE)){
 				//Concatena apenas para inserir o D na frente
@@ -721,8 +748,6 @@ class WRS_PANEL  extends WRS_USER
 			}
 			
 		}//END
-		
-		
 		
 		
 		// Obtem a Quantidade de Registros da Consulta		
@@ -835,7 +860,7 @@ HTML;
 //		$TelerikUi->setToolbarExcel('excel', 'ExportarExcel', $urlToExport);
 	//	$TelerikUi->setToolbarPDF('pdf', 'pdf', $urlToExport);
 		
-		echo $TelerikUi->render($this->param_encode($this->_param_ssas_reports));
+		echo $TelerikUi->render($this->param_encode($this->_param_ssas_reports),$getRequestWrsExceptions,$getRequestKendoUi['REPORT_ID']);
 		
 		//echo '<div class="#grid1_grafico"></div>';
 		

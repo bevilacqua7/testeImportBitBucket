@@ -130,7 +130,8 @@ class KendoUi
 						'REPORT_ID',//IDentificador da ABA
 						'FILTER_TMP',		//Contem a estrutura do filtro usada para o histórico
 						'QUERY_ID',			//ID da query que foi requisitada
-						'TRASH_HISTORY'		// Contem as informações hos HISTORICOS 
+						'IS_REFRESH'		//identifica se foi executado o F5 e ou o frefresh na tela
+						
 					);	
 	}
 	
@@ -141,7 +142,12 @@ class KendoUi
 	 */
 	public function getRequestWrsExceptions()
 	{
-		return array('DRILL_HIERARQUIA_LINHA_DATA_MINUS','PAGE_CURRENT');
+		return array(
+							'DRILL_HIERARQUIA_LINHA_DATA_MINUS',
+							'PAGE_CURRENT',
+							'TRASH_HISTORY',		// Contem as informações hos HISTORICOS
+							'MKTIME_HISTORY'		//Mktime do Histori
+		);
 	}
 
 	/*
@@ -269,7 +275,7 @@ class KendoUi
 	 * @param string $type
 	 * @return string
 	 */
-	public function render($_element)
+	public function render($_element,$getRequestWrsExceptions,$report_id)
 	{
 		//Pegando os padrões das páginas
 		$this->pageScheme();
@@ -319,6 +325,8 @@ class KendoUi
 			<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
 			
 		  <script>
+		  
+		  		WRSHistory[{$report_id}]	=	"{$getRequestWrsExceptions['TRASH_HISTORY']}";	
 				$(function(){
 											var jsonDecode											= 	{$_jsonencode};
 										jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}

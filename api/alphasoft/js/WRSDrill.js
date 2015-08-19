@@ -28,7 +28,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 	var columns_fixed	=	explode(',',__kendoUI.columns[keyName].layout['LAYOUT_ROWS']);
 		columns_fixed	=	columns_fixed.length+1;
 
-		
+
 
 	/*
 	 * Adicionando o DrilDown
@@ -100,6 +100,19 @@ function addDrillOnDataBound(nameID,kendoUI)
 								var aLink	=	$('<a/>',{href:'#'+json.LEVEL_DRILL,'class':'underline','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
 									aLink.click(clickDrillDown);
 								event.html(aLink);
+								
+								
+								//Trabalhando a exeção da estrutura da latitude e longitude do mapa
+								if(kendoUI.sender.wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE){							
+									event.find('.DRILL_HIERARQUIA_LINHA').each(function(){
+										var getElement	=	 $(this).clone();
+										getElement.click(DRILL_HIERARQUIA_LINHA_HEADER_CLICK);
+										$(this).parent().parent().append(getElement);
+										$(this).remove();
+									})
+								}
+								
+								//
 							}
 						})
 					}

@@ -44,7 +44,6 @@ function WRSHeaderIndex(kendoUi)
 				{
 					var _key	=	!empty(indexByField[label[llo]].c_parent) ?  indexByField[label[llo]].c_parent : indexByField[label[llo]].field;
 					
-					
 						if(!empty(indexByField[label[llo]].c_parent))
 							{
 								category[category.length]=tmpComeBack[_key]['title'];
@@ -101,7 +100,13 @@ function WRSHeaderIndex(kendoUi)
 			{
 				indexByField[vValue['field']]				=	tmpComeBack[key];	
 				countColumn[countColumn.length]				=	vValue['field'];
-				byFrozenLevelFull[vValue['LEVEL_FULL']]		=	tmpComeBack[key];	
+				
+				
+				if(tmpComeBack[key]['map']!="[LATITUDE]"){///Não preenche com a latitude
+					byFrozenLevelFull[vValue['LEVEL_FULL']]		=	tmpComeBack[key];
+				}
+				
+//				foreach(tmpComeBack[key])
 				
 				if(array_find_data(indexFullNameMeasure,vValue['LEVEL_FULL']))
 				{
@@ -153,10 +158,14 @@ function WRSHeaderIndex(kendoUi)
 				index_TD[index_TR]++;
 			}
 			
+			
+			
+			
 			tmpComeBack['field']					=	indexByField;
 			tmpComeBack['column_count']				=	countColumn;
 			tmpComeBack['column_total']				=	column_total
 			tmpComeBack['byFrozenLevelFull']		=	byFrozenLevelFull;
+			//foreach(byFrozenLevelFull);
 			tmpComeBack['chart']					=	[];
 			tmpComeBack['chart']['data']			=	indexFullNameMeasure;
 			tmpComeBack['chart']['category']		=	index_category_chart(tmpComeBack);

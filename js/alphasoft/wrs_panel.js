@@ -1197,9 +1197,16 @@ function wrs_run_filter()
 		//Força a conversão do Menu 
 		wrsFilterShow();
 		getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
+		
+
+		//foreach(getAllFiltersToRun);
 		param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
 		param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
 		
+		
+
+
+
 
 		//Passando o ID do Cubo na sessão
 		var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;
@@ -1233,13 +1240,20 @@ function wrs_run_filter()
 		 */
 		var wrsConfigGridDefault		=	$('#wrsConfigGridDefault');
 		var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
-
 		
 		//Se existir interação então faz o merge das informações 
 			if(!empty(wrsConfigGridDefault.attr('is-event'))){
 				if(!empty(wrsConfigGridDefault_data))
 				{
-					param_request	=	merge_objeto(param_request,wrsConfigGridDefault_data);
+					var getParamDefault = ['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN'];
+
+
+					//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);
+					for(var lineGetParamDefault in getParamDefault)
+					{
+						param_request[getParamDefault[lineGetParamDefault]]	=	wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]];
+					}
+					
 				}
 			}
 			
@@ -1256,6 +1270,7 @@ function wrs_run_filter()
 			}
 			$(this).attr('locked',false);//Libera o filtro
 			$(this).attr('flag_load','false');
+			
 
 			return true;
 		}else{
@@ -1273,6 +1288,8 @@ function wrs_run_filter()
 		$('.WRS_DRAG_DROP_RECEIVER_FILTER').hide();
 		$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
 		$('.wrs_panel_filter_icon').hide();
+		
+		
 		
 		runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
