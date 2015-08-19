@@ -262,11 +262,28 @@ function addTargetDisableContext(kendoUi)
 													
 													var indexTR			=	e.parent.parent().index();
 													var indexTD			=	parseInt(e.parent.index());
+													var proxTd			=	e.parent.next('td');
+													if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!=''){
+														$('a[wrs-data=grid_map]').last().trigger('click');														
+														var _explode		=	 explode('|',str_replace(' ','',proxTd.text()));
+														//centraliza o mapa no ponto em questao
+														$(IDName+'Elements .map').data('goMap').setMap({ 
+													        latitude: _explode[0], 
+													        longitude: _explode[1], 
+													        zoom: 15 
+													    });			
+														//aciona o clique do marcador em questao
+														google.maps.event.addListenerOnce($(IDName+'Elements .map').data('goMap').map, 'tilesloaded', function(event) {
+															google.maps.event.trigger($(IDName+'Elements .map').data(''+(parseInt(indexTR)+1)), 'click');
+													    });
+													    
+													}else{
 														value_select	=	strip_tags(_data[indexTR][name_column[indexTD]]);
-															rows_current_full_name				=	_layout['LAYOUT_ROWS'][indexParent];
-															_layout['LAYOUT_ROWS'][indexParent]	=	e.json['LEVEL_FULL'];
-															filter_add							=	[['__'+replace_attr(rows_current_full_name),'',rows_current_full_name+'.['+value_select+']']];
-															changeWithDrillFilter(_layout,filter_add);
+														rows_current_full_name				=	_layout['LAYOUT_ROWS'][indexParent];
+														_layout['LAYOUT_ROWS'][indexParent]	=	e.json['LEVEL_FULL'];
+														filter_add							=	[['__'+replace_attr(rows_current_full_name),'',rows_current_full_name+'.['+value_select+']']];
+														changeWithDrillFilter(_layout,filter_add);
+													}
 				};	
 				break;
 				case 'coluna_header'		:	
@@ -494,13 +511,17 @@ function addTargetDisableContext(kendoUi)
     	var data_line_header							=	 menu_context_relation_ship_measure(jsonRelationShip);
     		data_line_header[data_line_header.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
     		
+    	var data_line_row							=	 menu_context_relation_ship_measure(jsonRelationShip);
+    		data_line_row[data_line_row.length]	=	{text	: 'VER NO MAPA'		, className:'VER_MAPA',action:drill_click_option, json:''};
+    		
+    		
     	$(".k-grid-content-locked").attr('rel','noContext').attr('type','linha');
-    	context.attachWRS('.k-grid-content-locked td'				, menu_context_relation_ship_measure(jsonRelationShip),$event);
+    	context.attachWRS('.k-grid-content-locked td'				, data_line_row, $event);
+    	
+    	
     	
     	$(".k-grid-header .k-grid-header-locked").attr('type','linha_header');
-    	context.attachWRS('.k-grid-header .k-grid-header-locked th'	, data_line_header,$event);
-    	
-    	
+    	context.attachWRS('.k-grid-header .k-grid-header-locked th'	, data_line_header,$event);    	  	
 
     	//Dados
     	$(".k-grid-content").attr('type','data');

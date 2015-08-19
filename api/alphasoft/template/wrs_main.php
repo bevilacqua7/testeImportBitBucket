@@ -153,7 +153,7 @@ function WRS_RESIZE(){
 	function WRSChangeTheme()
 	{
 		TRACE('Mudando o Thema na função WRSChangeTheme  no file:wrs_main.php');
-		var theme	=	'theme-'+$(this).val();
+		var theme	=	$(this).val();
 		var param	=	{'theme':theme};
 		
 		runCall(param,'WRS_MAIN','WRS_MAIN','updateTheme');
