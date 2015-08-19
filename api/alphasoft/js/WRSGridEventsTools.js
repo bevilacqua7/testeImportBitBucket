@@ -357,8 +357,6 @@ var getRequestKendoUiDefault	=	{};
 	 
   $.fn.wrsConfigGridDefault = function(options) 
   {
-
-	  
   	var opts 					= 	$.extend( {}, getRequestKendoUiDefault, empty(options) ? {} : options),
   		element					=	this,
   		data_name				=	'wrsConfigGridDefault',//WARNING:Cuidado ao alterar essa variável pois ela reflete em outros lugares melhores pesquisaqr antes de modificar - WRSKendoUiCHart -wrs_panel

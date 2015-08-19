@@ -26,7 +26,82 @@ include_js('WRSDrillLine');	//Drill Line
 
 
 
+function WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi)
+{
+	
+	$('.WRS_DRAG_DROP_FILTER').html('');
+	$('.wrs_swap_drag_drop').html('');
+	set_value_box_relatorio(_layout);
+	$('.wrs_panel_filter_icon').attr('filter_hide','true').trigger('click');
+	wrsRunFilter();
+	
+}
 
+
+function WRSKendoGridRefresh(history)
+{
+	var _history		=	$.parseJSON(base64_decode(history));
+	
+	if(empty(_history)) return true;
+	
+	$(function(){
+	
+		var IDNav			=	'.wrs_history_report';
+		var _layout			=	_history['layout'];
+		var _paranKendoUi	=	_history['kendoUi'];
+		
+			getRequestKendoUiDefault=_paranKendoUi;
+			$('#wrsConfigGridDefault').attr('is-event','true').data('wrsConfigGridDefault',_paranKendoUi);
+			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
+	});
+	
+}
+
+
+function WRSKendoGridComplete(IDGrid)
+{
+	var wrsKendoUi		=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
+	var trashHistory	=	wrsKendoUi['TRASH_HISTORY'];
+	var history			=	$.parseJSON(base64_decode(trashHistory));
+	//var IDNav			=	IDGrid+'NAV .wrs_history_report';
+	var IDNav			=	'.wrs_history_report';
+	$(IDNav).html('');
+	
+	var html		=	'';
+	var li 			=	'<li><a href="#" json="{json}" wrs-id="'+IDGrid+'" ><i class="fa fa-history"></i> <span class="label label-info">{type}</span> {data}  </a></li>';
+	var liSubmit	=	['{data}','{type}','{json}'];
+
+	for(lineHistory in history)
+		{
+
+			var json 	= 	base64_encode(json_encode(history[lineHistory]));
+			var type	=	history[lineHistory]['type'];  
+				type	=	empty(type) ? TYPE_RUN.direct : type;
+			var liVal	=	[history[lineHistory]['date'],type,json];
+			
+				html	=	html+str_replace(liSubmit,liVal,li);
+				
+		}
+	
+	
+	
+	$(IDNav).html(html);
+	
+	
+	
+	var historyClick	=	 function()
+	{
+		var _wrs_id			=	$(this).attr('wrs-id');
+		var _history		=	$.parseJSON(base64_decode($(this).attr('json')));
+		var _layout			=	_history['layout'];
+		var _paranKendoUi	=	_history['kendoUi'];
+	
+		$(_wrs_id).attr('wrsKendoUi',base64_encode(json_encode(_paranKendoUi)));
+		WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi);
+	}
+	
+	$(IDNav+' a').unbind('click').click(historyClick);
+}
 
 /**
  * Criando o index do relationships para a consulta via level full
@@ -494,23 +569,30 @@ function onDataBound(arg)
 				ELEMENT.attr('maps_wrs','false');
 				 
 	
-			//Se o Somatório estiver ativo então faz a configuração do SUM
-			if(wrsKendoUi.ALL_ROWS)
-			{
-				$(nameID).find('.wrstelerikButtonHeader').each(function(){					
-					
-					var _rel	=	$(this).attr('rel');
-						_rel	= 	_rel=='plus' ? true : false;
-						
-					if(wrsKendoUi['PLUS_MINUS']==_rel)
-					{
-						$(this).trigger('click');
-					}
-					
-				});
 				
-				themeSUM(nameID,arg,wrsKendoUi);
-			}
+						//Se o Somatório estiver ativo então faz a configuração do SUM
+						if(wrsKendoUi.ALL_ROWS)
+						{
+							
+							if(wrsKendoUi.DRILL_HIERARQUIA_LINHA!=_TRUE)
+							{
+								$(nameID).find('.wrstelerikButtonHeader').each(function(){					
+									
+									var _rel	=	$(this).attr('rel');
+										_rel	= 	_rel=='plus' ? true : false;
+										
+									if(wrsKendoUi['PLUS_MINUS']==_rel)
+									{
+										$(this).trigger('click');
+									}
+									
+								});
+							}
+							
+
+							themeSUM(nameID,arg,wrsKendoUi);
+			
+						}
 			
 
 			//Removendo as cores entre as linhas
@@ -952,26 +1034,29 @@ function  themeSUM(nameID,arg,wrsParam)
 			//Abilita o Botão mais e menos só se existir o somatório
 			
 
-			if(wrsKendoUi['ALL_ROWS']==1)
+			if(wrsKendoUi.DRILL_HIERARQUIA_LINHA!=_TRUE)
 			{
-					this.find('.k-grid-header table:first tr:last').find('th:first-child').append(plusButton);
-					this.find('.k-grid-header table:first tr:last').find('th:first-child').append(minusButton);
-					//Eventos dos Botões
-					plusButton.unbind('click');
-					minusButton.unbind('click');
-					
-					
-					plusButton.click(buttonHideShow);
-					minusButton.click(buttonHideShow);
-
-					if(_openStart)
-					{
-						plusButton.trigger('click');
-					}
-					else
-					{
-						minusButton.trigger('click');
-					}
+				if(wrsKendoUi['ALL_ROWS']==1)
+				{
+						this.find('.k-grid-header table:first tr:last').find('th:first-child').append(plusButton);
+						this.find('.k-grid-header table:first tr:last').find('th:first-child').append(minusButton);
+						//Eventos dos Botões
+						plusButton.unbind('click');
+						minusButton.unbind('click');
+						
+						
+						plusButton.click(buttonHideShow);
+						minusButton.click(buttonHideShow);
+	
+						if(_openStart)
+						{
+							plusButton.trigger('click');
+						}
+						else
+						{
+							minusButton.trigger('click');
+						}
+				}
 			}
 			
 			
@@ -1015,6 +1100,7 @@ function  themeSUM(nameID,arg,wrsParam)
 								
 								getParam['ORDER_COLUMN']		=	flag;
 								wrsKendoUiChange($(IDName),'ORDER_COLUMN',flag);
+								changeTypeRun(IDName,TYPE_RUN.reorden_column);//Informando o tipo de RUN foi solicitado
 								wrsRunFilter();//Executa o plugin nativamente 
 						});
 			}
@@ -1126,10 +1212,8 @@ function  themeSUM(nameID,arg,wrsParam)
 										case 'COLORS_LINE' : 	telerikGrid.dataSource.read(); break; 
 									}
 									
-									
+									changeTypeRun(IDName,TYPE_RUN.options);//Informando o tipo de RUN foi solicitado
 									rules_pendences_checkbox($(this),$(this).parents('ul'));
-					
-				
 			}
 			
 			$(IDName+'NAV').find('.btn_add_opcoes').unbind('click').click(addOptionsHeader);//Criando o Evento de Clickes

@@ -1328,3 +1328,7 @@ background: #449D44 !important;
 	float: right;
 
 }
+
+.wrs_history_report{
+	z-index: 9999999;
+}

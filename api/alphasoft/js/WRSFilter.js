@@ -243,9 +243,12 @@ function compare_filter_change(_filters_compare)
 /**
  * Verificando se existe alteração nas vertentes para a pesquisa
  */
-function is_wrs_change_to_run(param_request)
+function is_wrs_change_to_run(_param_request)
 {
-
+	
+	var param_request	=	 _param_request;
+	
+	
 	var filter			=	$('.wrs_run_filter');
 	var history			=	filter.attr('history');
 	var histoty_param	=	{};
@@ -278,7 +281,7 @@ function is_wrs_change_to_run(param_request)
 		
 		filter.attr('history',base64);
 		
-		return false;
+		return {status:false, val:param_request};
 	}
 	
 	histoty_param	=	$.parseJSON(base64_decode(history));
@@ -288,8 +291,19 @@ function is_wrs_change_to_run(param_request)
 	
 	if(empty(param_request['ORDER_COLUMN'])) param_request['ORDER_COLUMN']=0;
 	
-	if(histoty_param['LAYOUT_ROWS']!=param_request['LAYOUT_ROWS']) 			flag=false;
-	if(histoty_param['LAYOUT_COLUMNS']!=param_request['LAYOUT_COLUMNS']) 	flag=false;
+	if(histoty_param['LAYOUT_ROWS']!=param_request['LAYOUT_ROWS']) 			{
+		flag=false;
+
+		param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
+		param_request['DRILL_HIERARQUIA_LINHA_DATA']	=	"";
+	}
+	
+	if(histoty_param['LAYOUT_COLUMNS']!=param_request['LAYOUT_COLUMNS']) 	{
+		flag=false;
+		param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
+		param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
+	}
+	
 	if(histoty_param['LAYOUT_MEASURES']!=param_request['LAYOUT_MEASURES']) 	flag=false;
 	if(histoty_param['LAYOUT_FILTERS']!=param_request['LAYOUT_FILTERS'])	flag=false;
 	if(histoty_param['ORDER_COLUMN']!=param_request['ORDER_COLUMN'])		flag=false;
@@ -298,9 +312,7 @@ function is_wrs_change_to_run(param_request)
 	if(histoty_param['DRILL_HIERARQUIA_LINHA']!=param_request['DRILL_HIERARQUIA_LINHA'])				flag=false;
 	if(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']!=param_request['DRILL_HIERARQUIA_LINHA_DATA'])				flag=false;
 	
- 
-	
-	//Gravando o Histórico
+ 	//Gravando o Histórico
 	if(flag)
 	{
 		
@@ -334,8 +346,8 @@ function is_wrs_change_to_run(param_request)
 			
 		}
 		
+		return {status:true, val:param_request};
 		
-		return true;
 	}
 	else
 	{
@@ -365,7 +377,7 @@ function is_wrs_change_to_run(param_request)
 
 	}
 	
-	return false;
+	return {status:false, val:param_request};
 }
 
 
@@ -597,6 +609,7 @@ function wrsFilterClickFalse()
 			var filters_up		=	[];
 			var empty_filter	=	true;
 			var tagQuery		=	'';
+			var FilterOriginal	=	[];
 			
 				levelUP			=	 explode(',',level_up);			
 			
@@ -617,6 +630,8 @@ function wrsFilterClickFalse()
 									filters_up[filters_up.length]	=	json.FILTER;	
 								}else{
 									*///PAssando para montar os Filtros 
+
+									FilterOriginal[FilterOriginal.length]	=	{'class':'__'+replace_attr(level_full),data:json.FILTER};
 									filters_up[filters_up.length]	=	'{'+json.FILTER+'}';								
 								//}
 								empty_filter					=	false;
@@ -634,6 +649,10 @@ function wrsFilterClickFalse()
 				}else{
 					tagQuery	=	'';
 				}
+			
+			
+			if(typeEvent=='all') return {data:tagQuery,full:FilterOriginal};
+			
  			return tagQuery; 			
 		}
 		

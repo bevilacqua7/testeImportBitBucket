@@ -431,6 +431,102 @@ class WRS
 		return $_SESSION['GET_SSAS_MEASURES'][$cube_id]	=	$rows;
 	}
 	
+	
+	
+	/**
+	 * 
+	 * Gravando informações do Historico dos Relatórios
+	 * 
+	 * @param string $cube_id
+	 * @param int 	 $report_id
+	 * @param array  $history
+	 */
+	public static function SET_REPORT_HISTORY($cube_id,$report_id,$history)
+	{
+		$TAG_NAME		=	'CUBE_REPORT_HISTORY';
+		
+		self::declare_REPORT_HISTORY($TAG_NAME, $cube_id, $report_id);
+		
+		 $_SESSION[$TAG_NAME][$cube_id][$report_id]	=	$history;
+	}
+	
+	
+	/**
+	 * Garante que seja gerado apenas um ID para quando não existir Registro de ID Report
+	 * @param string  $cube_id
+	 * @return number
+	 */
+	public static function GET_REPORT_HISTORY_CURRENT($cube_id,$return_data=false)
+	{
+		$TAG_NAME		=	'CUBE_REPORT_HISTORY';
+		$TMPMktime		=	fwrs_mktime();
+		$ReportId		=	rand(0,99999999999999);
+		$report_history	=	array();
+		
+		if(isset($_SESSION[$TAG_NAME][$cube_id]))
+		{
+			$cube_detail	=	 $_SESSION[$TAG_NAME][$cube_id];
+			
+			foreach($cube_detail as $data)
+			{
+				$data				=	 json_decode(base64_decode($data),true);
+				$dataHitorico		=	$data[0];
+					
+					if($dataHitorico['mktime']<=$TMPMktime){
+						$TMPMktime		=	$dataHitorico['mktime'];
+						$ReportId		=	$dataHitorico['kendoUi']['REPORT_ID'];
+						$report_history	=	$dataHitorico;
+					}
+				
+			}
+			
+		}
+		
+		if($return_data)	return base64_encode(json_encode($report_history,true));
+		
+		return $ReportId;
+	}
+	
+	
+	/**
+	 * 
+	 * PEgabd
+	 * 
+	 * @param string $cube_id
+	 * @param int $report_id
+	 */
+	public static function GET_REPORT_HISTORY($cube_id,$report_id)
+	{
+		$TAG_NAME		=	'CUBE_REPORT_HISTORY';
+	
+		self::declare_REPORT_HISTORY($TAG_NAME, $cube_id, $report_id);
+	
+		return $_SESSION[$TAG_NAME][$cube_id][$report_id];
+	}
+	
+	/**
+	 * Apenas confere o Array da estring History
+	 * 
+	 * @param string $TAG_NAME
+	 * @param string $cube_id
+	 * @param int    $report_id
+	 */
+	private static function declare_REPORT_HISTORY($TAG_NAME,$cube_id,$report_id)
+	{
+		if(!isset($_SESSION[$TAG_NAME][$cube_id]))
+		{
+			$_SESSION[$TAG_NAME][$cube_id]	=	array();
+		}
+	
+		//Garante que seha declarado
+		if(!isset($_SESSION[$TAG_NAME][$cube_id][$report_id]))
+		{
+			$_SESSION[$TAG_NAME][$cube_id][$report_id]	=	 '';
+		}
+	
+	}
+	
+	
 	/**
 	 * Gravando a Measure info Por MEASURE_NAME
 	 * @param string $cube_id

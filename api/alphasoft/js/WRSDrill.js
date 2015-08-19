@@ -40,6 +40,9 @@ function addDrillOnDataBound(nameID,kendoUI)
 					var LEVEL_FULL	=	 $(this).attr('LEVEL_FULL');
 					var rel			=	 $(this).attr('rel');
 					
+					
+					
+					
 					var indexParent			=	 $(this).parent().index();
 					var _layout				=	[];
 					var rows				=	explode(',',layout['LAYOUT_ROWS']);
@@ -61,6 +64,9 @@ function addDrillOnDataBound(nameID,kendoUI)
 					
 						filter_add							=	[['__'+replace_attr(LEVEL_FULL),'',LEVEL_FULL+'.['+strip_tags($(this).parent().html())+']']];
 					
+						
+						changeTypeRun(nameID,TYPE_RUN.drildown);//Informando o tipo de RUN foi solicitado
+						
 						changeWithDrillFilter(_layout,filter_add);
 		
 	};
@@ -233,7 +239,9 @@ function addTargetDisableContext(kendoUi)
     			}
     		
 
-
+    		
+    		changeTypeRun(IDName,TYPE_RUN[e.type]);//Informando o tipo de RUN foi solicitado
+    		
     		switch(e.type)
     		{
 				case 'linha' 				:  {
