@@ -14,7 +14,7 @@ var _TRUE	=	'1',
 	FALSE		=	false,
 	EMPTY		=	'';
 	
-	
+var WRSHistory	=	[];	
 
 
 include_js('WRSWindowGrid');
@@ -28,9 +28,9 @@ include_js('WRSDrillLine');	//Drill Line
 
 function WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi)
 {
-	
 	$('.WRS_DRAG_DROP_FILTER').html('');
 	$('.wrs_swap_drag_drop').html('');
+
 	set_value_box_relatorio(_layout);
 	$('.wrs_panel_filter_icon').attr('filter_hide','true').trigger('click');
 	wrsRunFilter();
@@ -46,11 +46,15 @@ function WRSKendoGridRefresh(history)
 	
 	$(function(){
 	
-		var IDNav			=	'.wrs_history_report';
-		var _layout			=	_history['layout'];
-		var _paranKendoUi	=	_history['kendoUi'];
-		
-			getRequestKendoUiDefault=_paranKendoUi;
+		var IDNav							=	'.wrs_history_report';
+		var _layout							=	_history['layout'];
+		var _paranKendoUi					=	_history['kendoUi'];
+			_paranKendoUi['MKTIME_HISTORY']	=	_history['mktime'];
+			getRequestKendoUiDefault		=	_paranKendoUi;
+			
+			//getRequestKendoUiDefault	=	merge_objeto(_paranKendoUi,_layout);
+			
+			_paranKendoUi['IS_REFRESH']	=true; //Informa que foi executado um refresh
 			$('#wrsConfigGridDefault').attr('is-event','true').data('wrsConfigGridDefault',_paranKendoUi);
 			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
 	});
@@ -60,24 +64,34 @@ function WRSKendoGridRefresh(history)
 
 function WRSKendoGridComplete(IDGrid)
 {
+ 
 	var wrsKendoUi		=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
-	var trashHistory	=	wrsKendoUi['TRASH_HISTORY'];
+	var trashHistory	=	"";
+	
+		try{
+			trashHistory	=	WRSHistory[wrsKendoUi['REPORT_ID']];
+		}catch(e){}
+		
+		
+		
 	var history			=	$.parseJSON(base64_decode(trashHistory));
 	//var IDNav			=	IDGrid+'NAV .wrs_history_report';
 	var IDNav			=	'.wrs_history_report';
 	$(IDNav).html('');
 	
+	
 	var html		=	'';
-	var li 			=	'<li><a href="#" json="{json}" wrs-id="'+IDGrid+'" ><i class="fa fa-history"></i> <span class="label label-info">{type}</span> {data}  </a></li>';
-	var liSubmit	=	['{data}','{type}','{json}'];
+	var li 			=	'<li><a href="#" json="{json}" wrs-id="'+IDGrid+'" mktime="{mktime}" ><i class="fa fa-history"></i> <span class="label label-default span-label-history">{type}</span> {data}  </a></li>';
+	var liSubmit	=	['{data}','{type}','{json}','{mktime}'];
 
 	for(lineHistory in history)
 		{
 
+			
 			var json 	= 	base64_encode(json_encode(history[lineHistory]));
 			var type	=	history[lineHistory]['type'];  
 				type	=	empty(type) ? TYPE_RUN.direct : type;
-			var liVal	=	[history[lineHistory]['date'],type,json];
+			var liVal	=	[history[lineHistory]['date'],type,json,history[lineHistory]['mktime']];
 			
 				html	=	html+str_replace(liSubmit,liVal,li);
 				
@@ -92,12 +106,14 @@ function WRSKendoGridComplete(IDGrid)
 	var historyClick	=	 function()
 	{
 		var _wrs_id			=	$(this).attr('wrs-id');
+		var _mktime			=	$(this).attr('mktime');
 		var _history		=	$.parseJSON(base64_decode($(this).attr('json')));
 		var _layout			=	_history['layout'];
 		var _paranKendoUi	=	_history['kendoUi'];
 	
-		$(_wrs_id).attr('wrsKendoUi',base64_encode(json_encode(_paranKendoUi)));
-		WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi);
+			_paranKendoUi['MKTIME_HISTORY']	=	_mktime;
+			$(_wrs_id).attr('wrsKendoUi',base64_encode(json_encode(_paranKendoUi)));
+			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi);
 	}
 	
 	$(IDNav+' a').unbind('click').click(historyClick);
@@ -290,13 +306,14 @@ function getWrsKendoColumn(data)
   */
  function onDataBinding(arg)
  {
+	 //TRACE_DEBUG('onDataBinding::'+date('H:i:s'));
 	var id 				=	 '#'+arg.sender.element.attr('id');
 	var kendoUi			=	arg.sender;
 	var wrsKendoUi		=	 $.parseJSON(base64_decode($(id).attr('wrsKendoUi')));
 	var _arg			=	arg;
 	//Pegando a Header e informações de formatação das colunas
 	var _param			=	getWrsKendoColumn(arg.sender.columns);
-	var _width							=	[];
+	var _width							=	[];	//Responsável por criar o width das columnas
 	var frozen							=	0;
 	var sizeFrozen						=	$(id).find('.k-grid-header-locked tr:last-child').find('th').length-1;
 	var tmpFZ							=	0;
@@ -309,9 +326,10 @@ function getWrsKendoColumn(data)
 	var typeColumnFrozen				=	false;
 	
 	
-	
-	
-	
+
+
+		
+		
 	
 	var layout							=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
 	
@@ -478,42 +496,62 @@ function getWrsKendoColumn(data)
 						}
 				}
 
-				var paddingText	=	20;
-				
-				if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE && typeColumnFrozen && obj!='C000'){
-					paddingText=50;
-				}
-				
+
+					
 				if(!isset(_width[idx]))
 				{
-					var title		=	_param[obj]['title'];		
-					_width[idx]		= $("<div/>").text(title).textWidth()+paddingText;
+					var title			=	_param[obj]['title'];
+						_width[idx]		=	{data:title,column:obj};	
+					//	_param[obj]['width']	=	200;
 				}
 				
-				var tmp_width	=	$("<div/>").text(word).textWidth()+paddingText;
-
-				if(tmp_width>_width[idx])
+				
+				if(empty(word)) word='W';
+			
+				
+					
+				
+				if(word.length>_width[idx].data.length)
 				{
-					_param[obj]['width']	=	_width[idx]				= 	tmp_width;			
+						//_param[obj]['width']	=	200;
+						//_param[obj]['width']	=	_width[idx]		= 	word;			
+						_width[idx]		= 	{data:word,column:obj};			
 				}
+				
 				 
 				idx++;
-				
-				
-				
-				
 			}
 
 			
 	}
 	
+	var _rows_frozen	=	 array_data(_arg.sender.wrsKendoUi.WRS_ROWS);
 	
-	
+
+	/*
+	 * Aplica a real formatação do resize
+	 */
 	for(idx in _width)
 		{
-			WRSSresize(id,idx, _width[idx],frozen-1); 
+			var padding	=	20;
+			
+			 
+			
+			try{
+				
+				if(_rows_frozen[_width[idx].column]){
+					padding	=	40;
+				}
+			}catch(e){}
+			
+			var r_width								=	$("<div/>").text(_width[idx].data).textWidth()+padding;
+				_param[_width[idx].column]['width']	=	r_width;
+				
+				//arg.sender.headerIndex.byFrozenLevelFull
+				WRSSresize(id,idx, r_width,frozen-1); 
 		}
 	
+	//TRACE_DEBUG('onDataBinding::'+date('H:i:s'));
 	return _arg;
  }
 
@@ -556,6 +594,7 @@ function wrsKendoUiChange(nameID,param,value)
 function onDataBound(arg)
 	{
 		
+		//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 			TRACE('START onDataBound');
 			resizeColumnKendoUi(arg);
 
@@ -626,6 +665,8 @@ function onDataBound(arg)
 			}
 			
 			TRACE('END onDataBound');
+			
+			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 	}
 
 	

@@ -21,7 +21,7 @@ var TYPE_RUN	=	{
 						reorden_column		:	'OrdenaColuna',
 						drildown			:	'DrillDown',
 						linha				:	'DrillLinha',
-						coluna_header		:	'DrillColuna',
+						coluna_header		:	'DrillColuna',//Não modificar sem antes também modificar na lib pois é por esse nome que não insiro no histórico
 						coluna_header_line	:	'DrillLinhaHeader',
 						linha_header		:	'DrillHeaderData',
 						data				:	'DrillValue'
@@ -838,6 +838,20 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 	
 	
 	
+}
+
+
+function array_data(input)
+{
+	var inputTMP		=	[];
+	
+	for(var lineInput in input)
+		{
+		
+			inputTMP[input[lineInput]]	=	lineInput;
+		}
+	
+	return inputTMP;
 }
 
 

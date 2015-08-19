@@ -135,7 +135,7 @@ function DRILL_HIERARQUIA_LINHA_setButton(_data,C000, line,column,DRILL_HIERARQU
 	return btn_plus+data;
 }
 
-
+		 
 function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 {
 	var column		=	$(this).attr('column');
@@ -147,6 +147,9 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 	var rows		=	kendoGrid.wrsKendoUi.WRS_ROWS;
 	var wrs_type	=	$(this).attr('wrs-type');
 	var DrillDataTMP=	"";
+	
+	
+	
 	
 	for(lineData in rows)
 	{
@@ -184,12 +187,26 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 				}
 	}
 	
+	
+	//TRACE_DEBUG(DrillDataTMP);
+	
+	var s_param		=	 [];
+		s_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	base64_encode(implode(',',DrillDataCol));
+		s_param['DRILL_HIERARQUIA_LINHA_DATA']			=	base64_encode(DrillDataTMP);
+		s_param['PAGE_CURRENT']							=	kendoGrid.dataSource._page;
+		s_param['TYPE_RUN']								=	TYPE_RUN.coluna_header;
+
+//		foreach(s_param);
+		wrsKendoUiChange(grid_id,'',s_param);
+		
+	/*
 	wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA_HEADER',base64_encode(implode(',',DrillDataCol)));
 	wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA',base64_encode(DrillDataTMP));
 	////Salvando a página corrente
 	wrsKendoUiChange(grid_id,'PAGE_CURRENT',kendoGrid.dataSource._page);
-	
-	
+	changeTypeRun(grid_id,TYPE_RUN.coluna_header);//Informando o tipo de RUN foi solicitado
+	//TYPE_RUN
+	*/
 	wrsRunFilter();
 	
 	return false; //Obriga a não reordenar a coluna
@@ -237,6 +254,7 @@ function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 		}
 	}
 
+	
 	wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA',base64_encode(implode('(_,_)',DrillData)));
 	
 	
@@ -245,6 +263,7 @@ function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 			wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA_MINUS','remove_line');
 	}
 	
+	changeTypeRun(grid_id,TYPE_RUN.coluna_header);//Informando o tipo de RUN foi solicitado
 	//Salvando a página corrente
 	wrsKendoUiChange(grid_id,'PAGE_CURRENT',kendoGrid.dataSource._page);
 	

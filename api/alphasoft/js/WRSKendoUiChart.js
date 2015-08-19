@@ -289,19 +289,25 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			var DRILL_COLUMN_TITLE		=	'';
 			var DRILL_FROZEN			=	'';
 			
-			if(DRILL_HIERARQUIA_LINHA==_TRUE)
-				{
-					var title_line		=	0;
-
-					if(telerikGrid.dataSource._wrs_request_data.drill!='')
-					{
-						title_line	=	telerikGrid.dataSource._wrs_request_data.drill.OPENCOLS;
-					}
-					DRILL_FROZEN		=	title_line+1;
-					DRILL_COLUMN_TITLE	=	telerikGrid.wrsKendoUi.WRS_ROWS[title_line]
-				
-				
-				}
+			
+			//Apenas garante que exista o drill Nullo
+			try{
+			
+					if(DRILL_HIERARQUIA_LINHA==_TRUE)
+						{
+							var title_line		=	0;
+		
+							
+							if(telerikGrid.dataSource._wrs_request_data.drill!='')
+							{
+								title_line	=	telerikGrid.dataSource._wrs_request_data.drill.OPENCOLS;
+							}
+							DRILL_FROZEN		=	title_line+1;
+							DRILL_COLUMN_TITLE	=	telerikGrid.wrsKendoUi.WRS_ROWS[title_line]
+						
+						
+						}
+			}catch(e){}
 			
 			
 			
@@ -344,17 +350,18 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			var _colum_frozen	=	parseInt($(GRID).find('.k-grid-content-locked').find('tr:last-child').find('td').length)-1;
 				
 			
-			
+			try{
 			//Verificando se é DRILL LINHA para modificar as linhas de totais
-			if(DRILL_HIERARQUIA_LINHA==_TRUE)
-			{
-			 	_colum_frozen	=	1;
-				if(telerikGrid.dataSource._wrs_request_data.drill!='')
+				if(DRILL_HIERARQUIA_LINHA==_TRUE)
 				{
-					_colum_frozen	=	telerikGrid.dataSource._wrs_request_data.drill.OPENCOLS+1
+				 	_colum_frozen	=	1;
+					if(telerikGrid.dataSource._wrs_request_data.drill!='')
+					{
+						_colum_frozen	=	telerikGrid.dataSource._wrs_request_data.drill.OPENCOLS+1
+					}
+					
 				}
-				
-			}
+			}catch(e){}
 			
 			
 			if(empty(kendoUiTools.GAUGE_COLOR)){

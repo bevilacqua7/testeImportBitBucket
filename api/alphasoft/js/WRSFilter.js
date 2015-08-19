@@ -270,8 +270,16 @@ function is_wrs_change_to_run(_param_request)
 		histoty_param['DRILL_HIERARQUIA_LINHA_DATA']		=	''	;
 		
 		
+		if(param_request['IS_REFRESH']==TRUE)
+		{
+			param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
+			param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
+			param_request['IS_REFRESH']							=	false;
+		}
+		
 		var base64						=	base64_encode(json_encode(histoty_param,true));
 		
+
 		if(eastonclose=='true')
 		{
 			MODAL_LOADING_WRS_PANEL();
@@ -291,26 +299,36 @@ function is_wrs_change_to_run(_param_request)
 	
 	if(empty(param_request['ORDER_COLUMN'])) param_request['ORDER_COLUMN']=0;
 	
-	if(histoty_param['LAYOUT_ROWS']!=param_request['LAYOUT_ROWS']) 			{
-		flag=false;
-
-		param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
-		param_request['DRILL_HIERARQUIA_LINHA_DATA']	=	"";
-	}
-	
-	if(histoty_param['LAYOUT_COLUMNS']!=param_request['LAYOUT_COLUMNS']) 	{
-		flag=false;
-		param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
-		param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
-	}
-	
+	if(histoty_param['LAYOUT_ROWS']!=param_request['LAYOUT_ROWS']) 			flag=false;
+	if(histoty_param['LAYOUT_COLUMNS']!=param_request['LAYOUT_COLUMNS']) 	flag=false;
 	if(histoty_param['LAYOUT_MEASURES']!=param_request['LAYOUT_MEASURES']) 	flag=false;
 	if(histoty_param['LAYOUT_FILTERS']!=param_request['LAYOUT_FILTERS'])	flag=false;
 	if(histoty_param['ORDER_COLUMN']!=param_request['ORDER_COLUMN'])		flag=false;
 	if(histoty_param['ALL_COLS']!=param_request['ALL_COLS'])				flag=false;
 	if(histoty_param['ALL_ROWS']!=param_request['ALL_ROWS'])				flag=false;
+	
+
+//	TYPE_RUN || DrillLinha
+
+	if(!flag)
+	{
+
+		//Garante que ao clicar na linha de drill na primeira vez seja executada
+		if(	(!empty(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']) && !empty(histoty_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']))  || 
+			param_request['TYPE_RUN']=='DrillLinha' || 
+			param_request['TYPE_RUN']=='DrillHeaderData')
+		{
+			param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
+			param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
+		}
+	}
+	
+	
 	if(histoty_param['DRILL_HIERARQUIA_LINHA']!=param_request['DRILL_HIERARQUIA_LINHA'])				flag=false;
 	if(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']!=param_request['DRILL_HIERARQUIA_LINHA_DATA'])				flag=false;
+	
+	
+ 
 	
  	//Gravando o Histórico
 	if(flag)
@@ -351,6 +369,8 @@ function is_wrs_change_to_run(_param_request)
 	}
 	else
 	{
+	
+		
 		if(eastonclose=='true')
 			{
 				if(loadStart)
@@ -368,7 +388,7 @@ function is_wrs_change_to_run(_param_request)
 		histoty_param['ALL_COLS']		=	param_request['ALL_COLS']	;
 		histoty_param['ALL_ROWS']		=	param_request['ALL_ROWS']	;
 		histoty_param['DRILL_HIERARQUIA_LINHA']			=	param_request['DRILL_HIERARQUIA_LINHA']	;
-		histoty_param['DRILL_HIERARQUIA_LINHA_DATA']	=	"";//Mante sempre nula para que possa fazer nova consulta//param_request['DRILL_HIERARQUIA_LINHA_DATA']	;
+		histoty_param['DRILL_HIERARQUIA_LINHA_DATA']	=	param_request['DRILL_HIERARQUIA_LINHA_DATA'];//Mante sempre nula para que possa fazer nova consulta//param_request['DRILL_HIERARQUIA_LINHA_DATA']	;
 		
 		
 		
@@ -461,8 +481,11 @@ function wrsFilterClickFalse()
 (function ( $ ) {
     $.WrsFilter= function(typeEvent,typeValue) {
 
-    	$event		=	 this;
     	
+    	
+    	$event		=	 this;
+    
+    
     	var G_MSG_FILTER_CLEAN	=	'';
     	//Esconde o ACordion para a busca do Filtro
     	
@@ -640,6 +663,7 @@ function wrsFilterClickFalse()
 					
 			});
 			
+
 			
 			if(empty_filter) return '';
 			
@@ -674,14 +698,18 @@ function wrsFilterClickFalse()
 		 
 		var getAllFiltersToRun	=	 function()
 			{
+
 					return getFiltersLevelUP('','all');
 				//	return getFiltersUP(size,true);
 			}
 		
 		 
 		
-		
-		
+		//Force Result Clean
+		switch(typeEvent)
+		{
+			case 'getAllFiltersToRun' 		: return getAllFiltersToRun()				; break;
+		}
 		
 	 
 		
