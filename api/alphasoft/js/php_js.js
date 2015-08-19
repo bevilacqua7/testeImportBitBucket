@@ -2151,3 +2151,19 @@ function array_keys(input, search_value, argStrict) {
 
 	  return tmp_arr;
 	}
+
+
+function array_data(input)
+{
+	var inputTMP		=	[];
+	
+	for(var lineInput in input)
+		{
+		
+			inputTMP[input[lineInput]]	=	lineInput;
+		}
+	
+	return inputTMP;
+}
+
+

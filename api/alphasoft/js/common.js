@@ -841,17 +841,3 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 }
 
 
-function array_data(input)
-{
-	var inputTMP		=	[];
-	
-	for(var lineInput in input)
-		{
-		
-			inputTMP[input[lineInput]]	=	lineInput;
-		}
-	
-	return inputTMP;
-}
-
-
