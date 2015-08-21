@@ -533,16 +533,17 @@ function getWrsKendoColumn(data)
 	 */
 	for(idx in _width)
 		{
-			var padding	=	20;
+			var padding	=	25;
 			
-			 
-			
-			try{
-				
-				if(_rows_frozen[_width[idx].column]){
-					padding	=	40;
+			if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE)
+				{
+						try{
+							
+							if(_rows_frozen[_width[idx].column]){
+								padding	=	40;
+							}
+						}catch(e){}
 				}
-			}catch(e){}
 			
 			var r_width								=	$("<div/>").text(_width[idx].data).textWidth()+padding;
 				_param[_width[idx].column]['width']	=	r_width;
@@ -778,9 +779,17 @@ function  buttonPlusMinus(nameID,hideShow,sizeFrozen)
 function  themeSUM(nameID,arg,wrsParam)
 {
 		var find_last			=	'last-child';
-			
-
-
+		
+		
+		//Garante que se for LATITUDE pega o ultimo elemento
+		$(nameID).find('.k-grid-header-locked').find('tr:last-child').find('th:'+find_last).each(function(){
+			if(arg.sender.headerIndex.field[$(this).attr('data-field')].map=="[LATITUDE]"){
+				var eq	=	$(this).index()-1;
+				find_last	=	 'eq('+eq+')';
+			}
+		});
+		//END
+		
 		$(nameID).find('.k-grid-content-locked').find('tr').find('td:'+find_last).each(function(){
 			var index				=	$(this).parent().index();
 			var parent_index_data	=	parseInt($(this).index());
@@ -859,7 +868,6 @@ function  themeSUM(nameID,arg,wrsParam)
 	 	
 	    $.fn.WrsGridKendoUiControlColumnPlusMinus = function(openStart) 
 	    {	
-	    	
 			addKendoUiColorJQueryGrid();
 			
 			var $eventTelerik		=	 this;
@@ -870,6 +878,7 @@ function  themeSUM(nameID,arg,wrsParam)
 			
 				telerikGrid['wrs_frozen_data']			=	[];
 				telerikGrid['wrs_frozen_data']['data']	=	[];
+				
 			
 			/*
 			 * Column Header Index criado por Marcelo Santos
@@ -1108,10 +1117,16 @@ function  themeSUM(nameID,arg,wrsParam)
 				}
 			
 			
+			/**
+			 * Configuraçõs dos TOP Options
+			 */
+			this.wrsTopOptions();
 			/*
 			 * Evento da Reordenação das Colunas
 			 */
-			 
+			
+			
+			 /*
 			if(!telerikGrid.columns[0].key)
 			{
 				//Apenas cria o Evento da Reodenação 
@@ -1144,7 +1159,7 @@ function  themeSUM(nameID,arg,wrsParam)
 								changeTypeRun(IDName,TYPE_RUN.reorden_column);//Informando o tipo de RUN foi solicitado
 								wrsRunFilter();//Executa o plugin nativamente 
 						});
-			}
+			}*/
 			
 			/*
 			 * Evento para Ordenação de colunas
@@ -1257,6 +1272,10 @@ function  themeSUM(nameID,arg,wrsParam)
 									rules_pendences_checkbox($(this),$(this).parents('ul'));
 			}
 			
+			/**
+			 * 
+			 * OPTIONS_CONFIGURE: Options
+			 */
 			$(IDName+'NAV').find('.btn_add_opcoes').unbind('click').click(addOptionsHeader);//Criando o Evento de Clickes
 			//End Painel Opções
 			
@@ -1350,6 +1369,155 @@ function  themeSUM(nameID,arg,wrsParam)
 				var maxWidth		=	_param.maxWidth;
 				return this;
 		}
+		
+		
+		
+		/**
+		 * Configurações das opções TOP
+		 */
+		$.fn.wrsTopOptions = function() 
+		{
+			var that	=	 this;
+			var IDGrid	=	 '#'+this.attr('id');
+
+			
+			var TAGButton		=	'	  <ul class="dropdown-menu wrsTopOptionsData ">'+
+									'	    <li tag="total"><a href="#"><i class="fa fa-arrow-right"></i>TOTAL</a></li>'+
+									'	    <li key="5"   class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i>TOP 5</a>  <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="10"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 10</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="15"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 15</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="20"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 20</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="25"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 25</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="50"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 50</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="100" class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 100</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	  </ul>';
+		
+			var convertTypeTOP		=	 function(key,data)
+			{
+				//IDGrid
+			//	TRACE_DEBUG(key+'|||'+data);
+				
+				//$(IDGrid).data('kendoGrid');
+				var wrsKendoUi		=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
+				var config			=	$.parseJSON(base64_decode(wrsKendoUi.TOP_CONFIG));
+
+					if(empty(config)) config=	{};
+					config[key]=data;
+
+				wrsKendoUiChange(IDGrid,'TOP_CONFIG',base64_encode(json_encode(config)));
+				wrsRunFilter();
+			}
+			
+			/*
+			 * LImpa quando clicar no TOtal
+			 */
+			var wrsTopOptionsData	=	 function()
+			{
+				var btnOption	=	 $(this).parent().data('wrsTopOptionsDataParent');
+				var tag			=	 $(this).attr('tag');
+				
+				var isROWS		=	 $(this).attr('isROWS');
+				
+				 if(empty(tag)) return true;
+				 
+				  
+				 wrsKendoUiChange(IDGrid,'TOP_CONFIG','');
+					
+			};
+			
+			
+			var wrsTopOptionsDataSub	=	 function()
+			{
+				var btnOption	=	 that.find('.wrsTopOptionsData').data('wrsTopOptionsDataParent');
+				var tag			=	 $(this).attr('tag');
+				var isROWS		=	 $(this).attr('isROWS');
+				var key			=	$(this).parent().parent().attr('key');
+				var val			=	'';
+				var index		=	'';
+				var full_name		=	$(this).attr('full_name');
+				
+				var kendoUi		=	 $(IDGrid).data('kendoGrid');
+				
+					 if(empty(tag)) return true;
+
+					 	
+					 	if(isROWS=='true')
+					 		{
+					 			index		=	btnOption.parent().index();	
+					 			var field	=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
+				 					full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
+					 		}else{
+					 			index	=	tag;		
+					 			var field		=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
+					 				full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
+					 		}
+					 	val =	'{'+key+'|'+index+'}';
+					 	convertTypeTOP(full_name,val);
+			}
+			
+			
+			var clickOptions		=	 function(event)
+			{
+				var telerikGrid 		= 	that.data('kendoGrid');
+				var p 					= 	$(this);
+				var offset 				= 	p.offset();
+				var optionsData			=	that.find('.wrsTopOptionsData');
+					optionsData.data('wrsTopOptionsDataParent',p);
+					optionsData.addClass('wrs_visible');
+					optionsData.css({left:offset.left,top:offset.top+p.outerHeight(),'z-index':99999});
+					
+				var layout			=	wrsKendoUiContextMenuGetLayoutInfo(telerikGrid);
+				var liHTML			=	''; 
+				var measure			=	 explode(',',layout['LAYOUT_MEASURES']);
+					
+				var isROWS			=	 Boolean(p.attr('isROWS'));
+						
+				
+		 			for(lineMeasure in measure)
+						{
+							var title	=	telerikGrid.headerIndex.byFrozenLevelFull[measure[lineMeasure]].title;
+								liHTML+=' <li isROWS='+isROWS+' full_name="'+measure[lineMeasure]+'"   tag='+(parseInt(lineMeasure)+1)+' class="wrsTopOptionsDataSubLi"><a href="#"><span class="glyphicon glyphicon glyphicon-usd"></span> '+title+'</a></li>';
+						}
+					
+					optionsData.find('.measure').attr('isROWS',isROWS).html(liHTML);
+					
+					$('html').one('click',function() {
+							 $('.wrsTopOptionsData').removeClass('wrs_visible');
+					});
+
+					that.find('.wrsTopOptionsData').find('.wrsTopOptionsDataSubLi').unbind('click').click(wrsTopOptionsDataSub);
+					
+					event.stopPropagation();
+
+					  
+					  
+					return false;
+			}
+
+				that.find('.k-grid-header table:first tr').find('th').each(function(){
+					var wrs_tops_configure		=	$('<span/>', {
+						type	: 'button',
+						title	: 'Opções TOP',
+						html	: $('<i/>',{'class':'fa fa-bars'}),
+						'class'	: 'wrs_tops_configure'
+					});
+					
+					$(this).prepend(wrs_tops_configure);
+					wrs_tops_configure.unbind('click').click(clickOptions);
+					
+				});
+				
+				
+				that.find('.k-grid-header table:first tr:last-child').find('th').find('.wrs_tops_configure').attr('isROWS',true);				
+				that.find('.k-grid-header table:first tr:last-child').find('th:first-child').find('.wrs_tops_configure').remove();				
+				that.prepend(TAGButton);				
+				that.find('.wrsTopOptionsData li').unbind('click').click(wrsTopOptionsData);
+		}
+		
+		
+		
+		
+		
 				
 	}( jQuery ));
  

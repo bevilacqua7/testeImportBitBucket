@@ -130,7 +130,8 @@ class KendoUi
 						'REPORT_ID',//IDentificador da ABA
 						'FILTER_TMP',		//Contem a estrutura do filtro usada para o histórico
 						'QUERY_ID',			//ID da query que foi requisitada
-						'IS_REFRESH'		//identifica se foi executado o F5 e ou o frefresh na tela
+						'IS_REFRESH',		//identifica se foi executado o F5 e ou o frefresh na tela
+						'TOP_CONFIG'		//COnfigurações dos tipos de TOPS e onde
 						
 					);	
 	}

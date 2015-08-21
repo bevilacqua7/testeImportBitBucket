@@ -125,6 +125,8 @@
 			var paddingCenter	=	((parseInt(BOX_PARENT.parent().css('padding-bottom').replace('px')))*3)-2;
 			var _heightToUse	=	'';
 			
+			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
+			
 			MAP.hide();
 			CHART.hide();
 			GRID.hide();
@@ -146,6 +148,22 @@
 					wrs_data	=	data;
 
 				}
+				
+					
+
+
+
+				var isHistory	=	Boolean($(this).parent().parent().attr('isHistory'));	
+				
+				if(isHistory===TRUE){
+				//Save Historico
+
+				var saveHistory	=	[];
+		  			saveHistory['WINDOW']	=	wrs_data;
+		  			saveHistoryEvents(saveHistory,kendoUiTools['REPORT_ID']);
+				}
+				
+		  		$(this).parent().parent().attr('isHistory',TRUE);
 				
 				//Default
 				switch(wrs_data){case "grid"			:  case "chart"		: case "map"			: {GRID.removeAttr('style');ELEMENT.removeAttr('style');GRID.removeAttr('style-data');ELEMENT.removeAttr('style-data');};break;}
@@ -226,9 +244,6 @@
 				}
 				
 				
-				
-				
-				
 				//Tamando para que possamos saber qual o tamano dos gráficos multiplos
 				ELEMENT.attr('chart-multiple-height',half);
 				
@@ -291,7 +306,10 @@
 			
 	  		$(this).parent().find('li a').each(function(){
 	  				$(this).removeClass('active_tools');
-	  				if(wrsKendoUi.WINDOW	==	$(this).attr('wrs-data'))$(this).addClass('active_tools');
+	  				if(wrsKendoUi.WINDOW	==	$(this).attr('wrs-data')){
+	  					$(this).addClass('active_tools');
+	  					
+	  				}
 	  		});
 	  	}
 
@@ -311,7 +329,25 @@
 
 
 
-
+function saveHistoryEvents(kendoParam,report_id)
+{
+	if(empty(report_id)) return false;
+	
+	var param 	=	{};
+	
+	
+		for(lineParan in kendoParam)
+			{
+			
+				param[lineParan]=	kendoParam[lineParan];
+			}
+	
+		
+		
+		param			=	 base64_encode(json_encode(param));
+	var param_request	=	{'report_id':report_id,'history_options':param,'cube_s':CUBE_S};
+		runCall(param_request, 'WRS_PANEL', 'WRS_PANEL', 'save_history', null, 'modal');
+}
 
 
 
@@ -354,7 +390,10 @@ var getRequestKendoUiDefault	=	{};
 */
 
 (function( $ ) {
-	 
+	 /*
+	  * Para encontrar o da base procure por 
+	  * OPTIONS_CONFIGURE na WRS KendoUi JS
+	  */
   $.fn.wrsConfigGridDefault = function(options) 
   {
   	var opts 					= 	$.extend( {}, getRequestKendoUiDefault, empty(options) ? {} : options),
@@ -394,7 +433,10 @@ var getRequestKendoUiDefault	=	{};
   		list_wrs_vision.find('li a').each(function(){
   				var _wrs_data		=	 $(this).attr('wrs-data');
   				$(this).removeClass('active_tools');
-  				if(opts.WINDOW	==	_wrs_data)$(this).addClass('active_tools');
+  				if(opts.WINDOW	==	_wrs_data){
+  					
+  					$(this).addClass('active_tools');
+  				}
   		});
   	}
   	
@@ -405,6 +447,14 @@ var getRequestKendoUiDefault	=	{};
   				detect_event();//Abilita Evento
   				list_wrs_vision.find('li a').removeClass('active_tools');
   				$(this).addClass('active_tools');
+  				
+
+  				//Salvando no histórico	
+  		 		var saveHistory			=	[];
+		  			saveHistory['WINDOW']	=	_wrs_data;
+		  			saveHistoryEvents(saveHistory,opts['REPORT_ID']);
+	  			
+					
   				return false;
   	}
   	
@@ -426,6 +476,8 @@ var getRequestKendoUiDefault	=	{};
   	//Click do Botão - nav_options
   	var event_click_btn_options	=	 function(){
   		check_exist_grid(); 
+
+
   		nav_options.find('input').each(function(){
   				if(opts[$(this).attr('name')]){
   					$(this).prop('checked',true);
@@ -445,15 +497,20 @@ var getRequestKendoUiDefault	=	{};
 	  		detect_event();//Abilita Evento
 	  		element.data(data_name,opts);  
 	  		isClick		=	true;
-	  		rules_pendences_checkbox($(this),$(this).parents('ul'));
+
+	  		//Salvando no histórico
+	  		var saveHistory	=	[];
+	  			saveHistory[$(this).attr('name')]	=	opts[$(this).attr('name')];
+	  			saveHistoryEvents(saveHistory,opts['REPORT_ID']);
+	  		
+	  			rules_pendences_checkbox($(this),$(this).parents('ul'));
   	}
   	
   	//Abrindo o Modal de opções do CHART
   	var event_btn_configute_chart	=	 function(){
   		
   			var get_measures_title	=	 [];
-  			
-  			
+
   			$('.WRS_MEASURE_DRAG').find('li').each(function(){
   				var _json		=	 $(this).attr('json');
   				var _json_data	=	getJsonDecodeBase64(_json);

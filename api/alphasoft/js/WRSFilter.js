@@ -262,7 +262,8 @@ function is_wrs_change_to_run(_param_request)
 		histoty_param['LAYOUT_ROWS']	=	param_request['LAYOUT_ROWS'];	
 		histoty_param['LAYOUT_COLUMNS']	=	param_request['LAYOUT_COLUMNS'];	
 		histoty_param['LAYOUT_MEASURES']=	param_request['LAYOUT_MEASURES'];	
-		histoty_param['LAYOUT_FILTERS']	=	param_request['LAYOUT_FILTERS']	;		
+		histoty_param['LAYOUT_FILTERS']	=	param_request['LAYOUT_FILTERS']	;
+		histoty_param['TOP_CONFIG']		=	''	;
 		histoty_param['ORDER_COLUMN']	=	0	;
 		histoty_param['ALL_COLS']		=	''	;
 		histoty_param['ALL_ROWS']		=	''	;
@@ -306,9 +307,10 @@ function is_wrs_change_to_run(_param_request)
 	if(histoty_param['ORDER_COLUMN']!=param_request['ORDER_COLUMN'])		flag=false;
 	if(histoty_param['ALL_COLS']!=param_request['ALL_COLS'])				flag=false;
 	if(histoty_param['ALL_ROWS']!=param_request['ALL_ROWS'])				flag=false;
+	if(histoty_param['TOP_CONFIG']!=param_request['TOP_CONFIG'])				flag=false;
 	
-
-//	TYPE_RUN || DrillLinha
+	
+	  
 
 	if(!flag)
 	{

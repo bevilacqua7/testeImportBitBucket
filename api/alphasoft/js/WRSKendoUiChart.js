@@ -1195,18 +1195,36 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 									cCHART['legend']	=	legend;
 									cCHART['labels']	=	labels;
 									
+
+									
 									ELEMENT.attr('chart','false');//Abilitando a construção 
 									
 									var chartParam	=	base64_encode(json_encode(cCHART,true));
-									wrsKendoUiChange('#'+idName,'CHART',chartParam);								
+										wrsKendoUiChange('#'+idName,'CHART',chartParam);								
 									
+									
+									var infoDefault		=	'';
+
+						  			
+						  			
 									if(onlyDefault){
 										//Quando for o Default
 										var configOptions	=	$('#wrsConfigGridDefault').data('wrsConfigGridDefault');			
 										configOptions.CHART	=	chartParam;
+										infoDefault			=	configOptions;
 									}else{
+										
+										infoDefault	=	kendoUiTools;
 										WRSKendoUiChart(KendoUi);//Run 
 									}
+									
+									
+									//Save Historico
+									var saveHistory	=	[];
+							  			saveHistory['CHART']	=	chartParam;
+							  			saveHistoryEvents(saveHistory,infoDefault['REPORT_ID']);
+
+							  			
 								
 							};
 							
@@ -2503,7 +2521,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 												_columns	=	reorderColumn(_columns);
 											
 											var order			=	0;
-	
+											
+											
+											
 												
 											/*
 											 * Multiplos PIE
@@ -2522,9 +2542,30 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 														var getVals							=	tmpSeries[_columns[lineCol].field];
 														var _merge							=	[];
 														
+														var _mergeChartConfigLegend			=	'';
+														
+														
+														//Apenas para não dar erro
+														try{
+															_mergeChartConfigLegend	=	typeChart[getVals[0].level_full];
+														}catch(e){
+															_mergeChartConfigLegend='';
+														}
+														
+														//Apenas para não dar erro 
+														if(empty(getVals))
+															{
+																getVals	=	[];
+																getVals[0]	=	{name:"" ,axis:""};
+															}
+														
+														 
+														
+														
+															
 														
 														_merge							=	$.extend( {}, 
-																												mergeChartConfigLegend(typeChart[getVals[0].level_full]), 
+																mergeChartConfigLegend(_mergeChartConfigLegend), 
 																												{
 																													data: getVals, 
 																													name: getVals[0].name,

@@ -14,6 +14,31 @@ function wrs_north_onresize()
 }
 
 
+
+function WRS_MENU_FOOTER(){
+	
+		
+		$('.wrs_menu_footer_sub').each(function(){
+			$(this).css('top', $(this).outerHeight()*-1);
+		});
+
+		$('.wrs_menu_footer li').click(function(event){
+
+			$('.wrs_menu_footer_sub').removeClass('wrs_visible');
+			
+			$(this).find('.wrs_menu_footer_sub').addClass('wrs_visible');
+
+
+			$('html').one('click',function() {
+				$('.wrs_menu_footer_sub').removeClass('wrs_visible');
+			  });
+
+			  event.stopPropagation();
+			  
+		});
+	 
+}
+
 function wrs_center_onresize()
 {
 	//BODY
