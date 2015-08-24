@@ -598,9 +598,7 @@ class WRS_PANEL  extends WRS_USER
 		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
 		
 		
-		
-		
-		
+		//WRS_DEBUG_QUERY(print_r($getRequestKendoUi,true));
 		
 		/*
 		 * Exceptions variáveis utilizadas exporadicamente

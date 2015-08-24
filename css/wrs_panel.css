@@ -381,7 +381,6 @@ h4{
 .WRS_DRAG_DROP_RECEIVER ol li {
 	min-height: 15px;
 	padding: 8px !important; 
-	
 	padding-right:30px !important;
 	text-align: left;
 }
@@ -1460,7 +1459,8 @@ box-shadow:         inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
  	display: block !important;
  	
  	position: absolute;
-	left: 170px;
+	left: 165px;
+	top: -10px;
 
  }
  
@@ -1470,6 +1470,27 @@ box-shadow:         inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
  }
  
 
+.wrsTopOptionsData .btn
+{
+	width: 100%;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+	margin: 0px;
+	width: 170px;
+}
 
 
-	
+.WRS_DRAG_DROP_RECEIVER ol.sortable_coluna li,
+.WRS_DRAG_DROP_RECEIVER ol.sortable_linha li {
+	padding-left: 25px !important;
+}
+
+
+.WRS_DRAG_DROP_RECEIVER  .wrs_tops_configure{
+	float: left;
+}
+
+.NAV_CONFIG_WRS .wrsTopOptionsData li a{
+	color: #333 !important;
+}

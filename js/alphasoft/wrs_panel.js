@@ -646,6 +646,8 @@ function insetDragDropEmpry()
 		}
 		
 	});
+	
+	
 }
 
 
@@ -787,6 +789,8 @@ function DROP_EVENT( event, ui ,eventReceive){
 			toEvent			=	ui.draggable;
 		}
 		
+		
+		setTimeout(DEFAULT_OPTIONS_TOPS,500);
 		
 		var filters			=	receiveEvent.parent().attr('type');
 		var who_receive 	=	receiveEvent.parent().attr('who_receive');
@@ -1268,14 +1272,18 @@ function wrs_run_filter()
 		
 		//Se existir interação então faz o merge das informações 
 			if(!empty(wrsConfigGridDefault.attr('is-event'))){
+				
+				
 				if(!empty(wrsConfigGridDefault_data))
 				{
-					var getParamDefault = ['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN'];
+					var getParamDefault = ['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
 
 
 					//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);
 					for(var lineGetParamDefault in getParamDefault)
 					{
+//						TRACE_DEBUG(getParamDefault[lineGetParamDefault]+'|||'+wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]]);
+						
 						param_request[getParamDefault[lineGetParamDefault]]	=	wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]];
 					}
 					
@@ -1491,15 +1499,22 @@ function wrs_panel_active_drag_drop()
 					    	  						$(this).removeClass('hide');
 					    	  						$(this).show();
 					    	  					});
+					    	  					
+					    	  					//setTimeout(DEFAULT_OPTIONS_TOPS,500);
+					    	  					
 					    	  				},
 						  sort			: 	function(){
-									       	$( this ).removeClass( "ui-state-default" );
+									       		$( this ).removeClass( "ui-state-default" );
 									       },
 									       helper: function(){ // modificando o helper pra clonar o objeto ao inves de move-lo
-										       return $(this).children('li.ui-state-hover').clone()
+										       var _data	=	 $(this).children('li.ui-state-hover').clone()
 										            .appendTo('body') 
 										            .css('zIndex',1000) 
 										            .show(); 
+										       
+										       return _data;
+										       
+										       
 										  } 			
 							,start: function (e, ui) { 
 									ui.item.show();

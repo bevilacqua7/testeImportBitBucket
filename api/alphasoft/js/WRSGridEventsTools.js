@@ -117,7 +117,6 @@
 		
 		var WRSWindowGridEventToolsClick	=	function(e,data)
 		{
-			
 			var wrs_data		=	"";
 			var height			=	BOX.parent().outerHeight();
 			var BOX_PARENT		=	BOX.parent();
@@ -146,12 +145,8 @@
 					wrs_data	=	$(this).attr('wrs-data');
 				}else{
 					wrs_data	=	data;
-
 				}
 				
-					
-
-
 
 				var isHistory	=	Boolean($(this).parent().parent().attr('isHistory'));	
 				
@@ -396,21 +391,31 @@ var getRequestKendoUiDefault	=	{};
 	  */
   $.fn.wrsConfigGridDefault = function(options) 
   {
+	
+	  var 	data_name				=	'wrsConfigGridDefault',//WARNING:Cuidado ao alterar essa variável pois ela reflete em outros lugares melhores pesquisaqr antes de modificar - WRSKendoUiCHart -wrs_panel
+			element					=	this,
+			data					=	element.data(data_name);
+	  
   	var opts 					= 	$.extend( {}, getRequestKendoUiDefault, empty(options) ? {} : options),
-  		element					=	this,
-  		data_name				=	'wrsConfigGridDefault',//WARNING:Cuidado ao alterar essa variável pois ela reflete em outros lugares melhores pesquisaqr antes de modificar - WRSKendoUiCHart -wrs_panel
   		nav_options				=	element.find('.wrs_grid_options'),
   		list_wrs_vision			=	element.find('.list-wrs-type-vision'),
   		btn_options				=	element.find('.btn-options-grid'),
   		btn_configute_chart		=	element.find('.btn-configute-chart'),
   		btn_open_type_vision	=	element.find('.btn-open-type-vision'),
-  		data					=	element.data(data_name),
 		isClick					=	false;
 		nav_options.attr('id','wrs_grid_options_default');		
+		
+		
+		
+		
+		
+		
   		//WARNING:  O nome do ID nao pode ser removido pois existe outros lugares com pendencia no nome - wrs_panel
 		element.attr('id',data_name);
   	
   		if(empty(options) && !empty(data)) opts	=	data;
+  		
+  		element.data(data_name,opts);
   		
   	
   	var detect_event	=	 function(type)
@@ -434,7 +439,6 @@ var getRequestKendoUiDefault	=	{};
   				var _wrs_data		=	 $(this).attr('wrs-data');
   				$(this).removeClass('active_tools');
   				if(opts.WINDOW	==	_wrs_data){
-  					
   					$(this).addClass('active_tools');
   				}
   		});
@@ -476,8 +480,6 @@ var getRequestKendoUiDefault	=	{};
   	//Click do Botão - nav_options
   	var event_click_btn_options	=	 function(){
   		check_exist_grid(); 
-
-
   		nav_options.find('input').each(function(){
   				if(opts[$(this).attr('name')]){
   					$(this).prop('checked',true);
@@ -493,6 +495,9 @@ var getRequestKendoUiDefault	=	{};
   	var event_find_nav_options_input	=	 function()
   	{
   		var _checked					=	$(this).prop('checked');
+  		
+  			opts						=	element.data(data_name);
+  		
 	  		opts[$(this).attr('name')]	= 	_checked ? 1 : '';
 	  		detect_event();//Abilita Evento
 	  		element.data(data_name,opts);  
@@ -583,6 +588,7 @@ var getRequestKendoUiDefault	=	{};
   	
   	btn_configute_chart.unbind('click').click(event_btn_configute_chart);
   	
+  	element.attr('isDefault',true).wrsTopOptions();
   		
       return element;
 

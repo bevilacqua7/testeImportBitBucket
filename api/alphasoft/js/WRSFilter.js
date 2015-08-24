@@ -253,7 +253,7 @@ function is_wrs_change_to_run(_param_request)
 	var history			=	filter.attr('history');
 	var histoty_param	=	{};
 	var flag			=	true;
-	var eastonclose	=	$('.wrs_run_filter').attr('eastonclose');
+	var eastonclose		=	$('.wrs_run_filter').attr('eastonclose');
 	var loadStart		=	 true;
 	
 	//foreach(param_request);
@@ -329,10 +329,7 @@ function is_wrs_change_to_run(_param_request)
 	if(histoty_param['DRILL_HIERARQUIA_LINHA']!=param_request['DRILL_HIERARQUIA_LINHA'])				flag=false;
 	if(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']!=param_request['DRILL_HIERARQUIA_LINHA_DATA'])				flag=false;
 	
-	
- 
-	
- 	//Gravando o Histórico
+	 	//Gravando o Histórico
 	if(flag)
 	{
 		

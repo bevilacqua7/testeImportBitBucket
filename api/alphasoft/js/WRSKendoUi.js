@@ -1377,10 +1377,17 @@ function  themeSUM(nameID,arg,wrsParam)
 		 */
 		$.fn.wrsTopOptions = function() 
 		{
-			var that	=	 this;
-			var IDGrid	=	 '#'+this.attr('id');
-
+			var that		=	this;
+			var IDGrid		=	'#'+this.attr('id');
+			var isDefault	=	Boolean(that.attr('isDefault'));
 			
+
+				
+					if(!$(IDGrid).hasClass('wrs_grid_options_default'))
+					{
+						$(IDGrid).addClass('wrs_grid_options_default');
+					}
+
 			var TAGButton		=	'	  <ul class="dropdown-menu wrsTopOptionsData ">'+
 									'	    <li tag="total"><a href="#"><i class="fa fa-arrow-right"></i>TOTAL</a></li>'+
 									'	    <li key="5"   class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i>TOP 5</a>  <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
@@ -1390,22 +1397,58 @@ function  themeSUM(nameID,arg,wrsParam)
 									'	    <li key="25"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 25</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
 									'	    <li key="50"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 50</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
 									'	    <li key="100" class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 100</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'		<li><a href="#"><span class="fa fa-times"></span> '+LNG('BTN_SAIR')+'</a></li>'
 									'	  </ul>';
 		
 			var convertTypeTOP		=	 function(key,data)
 			{
-				//IDGrid
-			//	TRACE_DEBUG(key+'|||'+data);
 				
-				//$(IDGrid).data('kendoGrid');
-				var wrsKendoUi		=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
-				var config			=	$.parseJSON(base64_decode(wrsKendoUi.TOP_CONFIG));
+				var wrsKendoUi		=	'';
+				var top_config		=	'';
+				var data_save		=	'';
+				
+				if(isDefault==true)
+					{
+							wrsKendoUi	=	$(IDGrid).data('wrsConfigGridDefault');
+							
+							if(empty(wrsKendoUi)){
+								wrsKendoUi	=	{};
+							}
+							
+							that.attr('is-event',true);//Ativa a mudança para quando executar o run filrer
+					}else{
+							wrsKendoUi	=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
+					}
+				
+				
+				
+				try{
+					top_config	=	wrsKendoUi.TOP_CONFIG;
+				}catch(e)
+				{
+					top_config	=	'';
+				}
+				 
+				var config			=	$.parseJSON(base64_decode(top_config));
 
 					if(empty(config)) config=	{};
-					config[key]=data;
+					
+					config[key]	=	data;
+					data_save	=	base64_encode(json_encode(config));
+					
+					
+					
 
-				wrsKendoUiChange(IDGrid,'TOP_CONFIG',base64_encode(json_encode(config)));
-				wrsRunFilter();
+				if(isDefault==true)	
+					{
+						wrsKendoUi['TOP_CONFIG']	=	data_save;
+						$(IDGrid).data('wrsConfigGridDefault',wrsKendoUi);
+					}
+					else
+					{
+						wrsKendoUiChange(IDGrid,'TOP_CONFIG',data_save);
+						wrsRunFilter();
+					}
 			}
 			
 			/*
@@ -1419,9 +1462,31 @@ function  themeSUM(nameID,arg,wrsParam)
 				var isROWS		=	 $(this).attr('isROWS');
 				
 				 if(empty(tag)) return true;
-				 
 				  
-				 wrsKendoUiChange(IDGrid,'TOP_CONFIG','');
+				 if(isDefault==true)
+					{
+					 
+					 btnOption	=	$(IDGrid).data('wrsConfigGridDefault');
+					 
+					 	
+					 try{
+						 btnOption.TOP_CONFIG	=	'';
+					 }catch(e)
+					 {
+						 btnOption					=	[];
+						 btnOption['TOP_CONFIG']	=	'';
+					 }
+					 
+					 
+					 btnOption['TOP_CONFIG']	=	base64_encode(json_encode(btnOption.TOP_CONFIG));
+					 
+					 
+					 $(IDGrid).data('wrsConfigGridDefault',btnOption);
+					 that.attr('is-event',true);//Ativa a mudança para quando executar o run filrer
+					}else{
+						 wrsKendoUiChange(IDGrid,'TOP_CONFIG',base64_encode(json_encode('')));
+						 wrsRunFilter();
+					}
 					
 			};
 			
@@ -1440,16 +1505,26 @@ function  themeSUM(nameID,arg,wrsParam)
 				
 					 if(empty(tag)) return true;
 
-					 	
-					 	if(isROWS=='true')
+					 	if(isDefault==true)
 					 		{
-					 			index		=	btnOption.parent().index();	
-					 			var field	=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
-				 					full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
+					 			//Opções na tela de Default
+					 				index			=	tag;	
+					 			var json		=	$.parseJSON(base64_decode( btnOption.parent().attr('json')));
+					 				full_name	=	json['LEVEL_FULL'];
+//						 				key			=	(btnOption.parent().index()+1);
+					 					
 					 		}else{
-					 			index	=	tag;		
-					 			var field		=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
-					 				full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
+									 	if(isROWS=='true')
+									 		{
+									 			index		=	btnOption.parent().index();	
+									 			var field	=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
+								 					full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
+									 		}else{
+									 			index	=	tag;		
+									 			var field		=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
+									 				full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
+									 		}
+					 	
 					 		}
 					 	val =	'{'+key+'|'+index+'}';
 					 	convertTypeTOP(full_name,val);
@@ -1462,21 +1537,48 @@ function  themeSUM(nameID,arg,wrsParam)
 				var p 					= 	$(this);
 				var offset 				= 	p.offset();
 				var optionsData			=	that.find('.wrsTopOptionsData');
+				
+				
 					optionsData.data('wrsTopOptionsDataParent',p);
 					optionsData.addClass('wrs_visible');
 					optionsData.css({left:offset.left,top:offset.top+p.outerHeight(),'z-index':99999});
 					
-				var layout			=	wrsKendoUiContextMenuGetLayoutInfo(telerikGrid);
-				var liHTML			=	''; 
-				var measure			=	 explode(',',layout['LAYOUT_MEASURES']);
 					
-				var isROWS			=	 Boolean(p.attr('isROWS'));
-						
+
+				var liHTML			=	''; 
+				
+				var isROWS			=	Boolean(p.attr('isROWS'));
+				var layout			=	'';
+				var measure			=	'';
+				
+				
+				if(isDefault==true)
+				{
+					measure			=	telerikGrid;
+				}else{
+					layout			=	wrsKendoUiContextMenuGetLayoutInfo(telerikGrid);
+					measure			=	explode(',',layout['LAYOUT_MEASURES']);
+				
+				}
 				
 		 			for(lineMeasure in measure)
 						{
-							var title	=	telerikGrid.headerIndex.byFrozenLevelFull[measure[lineMeasure]].title;
-								liHTML+=' <li isROWS='+isROWS+' full_name="'+measure[lineMeasure]+'"   tag='+(parseInt(lineMeasure)+1)+' class="wrsTopOptionsDataSubLi"><a href="#"><span class="glyphicon glyphicon glyphicon-usd"></span> '+title+'</a></li>';
+							var title		=	'';
+							var full_name	=	'';
+							var _tag		=	'';
+							
+							if(isDefault==true)
+								{
+									_tag		=	lineMeasure;
+									full_name	=	measure[lineMeasure].full_name;
+										title	=	measure[lineMeasure].name;
+								}else{
+									_tag		=	(parseInt(lineMeasure)+1);
+									full_name	=	measure[lineMeasure];
+									title		=	telerikGrid.headerIndex.byFrozenLevelFull[measure[lineMeasure]].title;
+								}
+								
+								liHTML+=' <li isROWS='+isROWS+' full_name="'+full_name+'"   tag='+_tag+' class="wrsTopOptionsDataSubLi"><a href="#"><span class="glyphicon glyphicon glyphicon-usd"></span> '+title+'</a></li>';
 						}
 					
 					optionsData.find('.measure').attr('isROWS',isROWS).html(liHTML);
@@ -1488,28 +1590,62 @@ function  themeSUM(nameID,arg,wrsParam)
 					that.find('.wrsTopOptionsData').find('.wrsTopOptionsDataSubLi').unbind('click').click(wrsTopOptionsDataSub);
 					
 					event.stopPropagation();
-
-					  
-					  
 					return false;
 			}
 
-				that.find('.k-grid-header table:first tr').find('th').each(function(){
-					var wrs_tops_configure		=	$('<span/>', {
-						type	: 'button',
-						title	: 'Opções TOP',
-						html	: $('<i/>',{'class':'fa fa-bars'}),
-						'class'	: 'wrs_tops_configure'
+				
+				if(isDefault!=true)
+				{
+	
+					//Configuração normal para quando a grid já estiver montada
+					that.find('.k-grid-header table:first tr').find('th').each(function(){
+						var wrs_tops_configure		=	$('<span/>', {
+							type	: 'button',
+							title	: 'Opções TOP',
+							html	: $('<i/>',{'class':'fa fa-bars'}),
+							'class'	: 'wrs_tops_configure'
+						});
+						
+						$(this).prepend(wrs_tops_configure);
+						wrs_tops_configure.unbind('click').click(clickOptions);
+						
 					});
 					
-					$(this).prepend(wrs_tops_configure);
-					wrs_tops_configure.unbind('click').click(clickOptions);
+					that.find('.k-grid-header table:first tr:last-child').find('th').find('.wrs_tops_configure').attr('isROWS',true);				
+					that.find('.k-grid-header table:first tr:last-child').find('th:first-child').find('.wrs_tops_configure').remove();
+				}else{
+
+					//COnfigurando para as ooções default
+					that.parent().find('.sortable_coluna li,.sortable_linha li').each(function(){		
+						var wrs_tops_configure		=	$('<span/>', {
+							type	: 'button',
+							title	: 'Opções TOP',
+							html	: $('<i/>',{'class':'fa fa-bars'}),
+							'class'	: 'wrs_tops_configure btn-link'
+						});
+						
+						$(this).find('.wrs_tops_configure').remove();
+						$(this).prepend(wrs_tops_configure);
+						wrs_tops_configure.unbind('click').click(clickOptions);
+						
+					});
 					
-				});
+					
+					var measure_data	=	[];
+					var measure_count	=	1;
+					that.parent().find('.sortable_metrica li').each(function(){						
+						var json	=	$.parseJSON(base64_decode( $(this).attr('json')));
+							measure_data[measure_count]	=	{'level_full':json['MEASURE_UNIQUE_NAME'],'name':json['MEASURE_CAPTION']};
+							measure_count++;
+					});
+					
+					that.data('kendoGrid',measure_data);
+				}
 				
 				
-				that.find('.k-grid-header table:first tr:last-child').find('th').find('.wrs_tops_configure').attr('isROWS',true);				
-				that.find('.k-grid-header table:first tr:last-child').find('th:first-child').find('.wrs_tops_configure').remove();				
+				
+				
+				that.find('.wrsTopOptionsData').remove();
 				that.prepend(TAGButton);				
 				that.find('.wrsTopOptionsData li').unbind('click').click(wrsTopOptionsData);
 		}
@@ -1524,7 +1660,12 @@ function  themeSUM(nameID,arg,wrsParam)
  
  
  
- 
+ function DEFAULT_OPTIONS_TOPS()
+ {
+	 $('.wrs_grid_options_default').wrsTopOptions();
+	 
+	 $('.DRAG_DROP_LATERAIS').find('.wrs_tops_configure').remove();
+ }
  
  
  
