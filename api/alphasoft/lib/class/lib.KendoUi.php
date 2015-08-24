@@ -688,8 +688,9 @@ HTML;
 		$model[0]['window_grid']		=	$param;
 		$json_column		= 	json_encode($model,true);
 		$modelField			= 	json_encode($modelField,true);
+		$cube_s				=	fwrs_request('cube_s');
 	
-		$grid	=	<<<EOF
+		$grid	=	<<<HTML
 					<div id="{$table}"></div>
 		            <script>
 		                $(document).ready(function () {
@@ -701,7 +702,7 @@ HTML;
 		                                read: {
 		                                		type		:'POST',
 		                                		contentType	: 'application/json',
-	                                			url			:	'run.php?file=WindowGrid&class=WindowGrid&event_grid_inside=grid&table={$table}'
+	                                			url			:	'run.php?file=WindowGrid&class=WindowGrid&event_grid_inside=grid&table={$table}&cube_s={$cube_s}'
 		                                	},
 		                                parameterMap		:	function(data) {return kendo.stringify(data);}
 		                            },
@@ -721,7 +722,7 @@ HTML;
 									scrollable:true,
 									pageable:	{
 													refresh		:false,
-													pageSizes	:[25,50,100,200,500,1000],
+													pageSizes	:[10,25,50,100,200,500,1000],
 													input		:true,
 													numeric		:false
 												},
@@ -733,7 +734,7 @@ HTML;
 		            </script>		
 		            
 		            
-EOF;
+HTML;
 
 		return $grid;	
 		

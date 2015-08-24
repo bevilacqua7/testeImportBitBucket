@@ -27,7 +27,7 @@ class WRS_MANAGE_PARAM
 		$functions['ATT_WRS_REPORT']	=	true;
 		$functions['ATT_WRS_DOWNLOAD']	=	true;
 		$functions['ATT_WRS_LOG']		=	true;
-
+		$functions['GET_SSAS_REPORT']	=	true;
 		
 		//Verificando se o eventos está a disposição
 		if(isset($functions[$_event])) return true;
@@ -46,7 +46,7 @@ class WRS_MANAGE_PARAM
 	 * @param int 	 $_start
 	 * @param int 	 $_end
 	 */
-	public function select($columns,$table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
+	public static function select($columns,$table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
 	{
 		$_columns	=	$columns;
 		$where		=	$_where;
@@ -112,7 +112,7 @@ class WRS_MANAGE_PARAM
 		//return $this->ATT_WRS_PERFIL();
 		//return $this->REL_WRS_CUBE_USER();
 		//return $this->ATT_WRS_REPORT();
-		return $this->ATT_WRS_DOWNLOAD();
+//		return $this->ATT_WRS_DOWNLOAD();
 		
 		
 		$order							=	array('order_by'=>'USER_ID' ,'order_type'=>'ASC');
@@ -373,4 +373,69 @@ class WRS_MANAGE_PARAM
 			);
 	}
 	
-}	
+	
+	
+	
+	public function GET_SSAS_REPORT()
+	{
+		$table		=	'GET_SSAS_REPORT';
+		$order		=	array();
+		$fields		=	array();
+		
+		$exceptions	=	array('file'=>'WRS_REPORT', 'class'=>'WRS_REPORT','type'=>'');
+		
+		/*
+		 REPORT_ID			1
+		 REPORT_DESC			TESTE DE RELATORIO
+		 REPORT_SHARE			0
+		 REPORT_DATE			2015-08-12 17:25:06.837
+		 REPORT_UPDATE			NULL
+		 REPORT_OPTIONS
+		 REPORT_FORMULAS
+		 REPORT_FILTER
+		 REPORT_FLAG
+		 REPORT_AUTOLOAD			0
+		 REPORT_STATUS			1
+		 SERVER_ID			192.168.1.3
+		 DATABASE_ID			GSK - DDD
+		 CUBE_ID				GSK - DDD
+		 USER_ID				1
+		 CUSTOMER_ID			1
+		 */
+		
+		
+		 $fields['REPORT_DESC']		=	array('title'=>'Nome',			'list'=>true,	'basic'=>true,  'grid'=>true);
+		 $fields['REPORT_SHARE']		=	array('title'=>'Compartilhado', 'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
+		 $fields['REPORT_DATE']		=	array('title'=>'Data',			'list'=>true,	'basic'=>true,  'grid'=>true, 		'type'=>'date' ,'format'=>'d-m-Y H:i:s' ,'type_convert'=>true);
+		 $fields['REPORT_AUTOLOAD']	=	array('title'=>'Carga', 		'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
+		 $fields['USER_DESC']		=	array('title'=>'Criador',		'list'=>true,	'basic'=>true,  'grid'=>true);
+		 $fields['LAYOUT_ROWS']		=	array('title'=>'Linhas',		'list'=>true,	'basic'=>false, 'grid'=>false);
+		 $fields['LAYOUT_COLUMNS']	=	array('title'=>'Colunas',		'list'=>true,	'basic'=>false, 'grid'=>false);
+		 $fields['LAYOUT_MEASURES']	=	array('title'=>'Medidas',		'list'=>true,	'basic'=>false, 'grid'=>false);
+		 $fields['LAYOUT_FILTERS']	=	array('title'=>'Filtros',		'list'=>true,	'basic'=>false, 'grid'=>false);
+		 $fields['FILTER_DESC']		=	array('title'=>'Filtrados',		'list'=>true,	'basic'=>false, 'grid'=>false);
+		
+		 //ROWS
+		 //COLUMNS
+		 //MEASURES
+		 //FILTERS
+		 //Checkbox REPORT_SHARE
+		 //Checkbox REPORT_AUTOLOAD
+		
+		 return array(	'title'		=>	LNG('TITLE_ATT_WRS_REPORT'),
+		 'button'	=>	$button,
+		 'field'		=>	$fields,
+		 'table'		=>	$table,
+		 'order'		=>	$order,
+		 'icon'		=>	'user.png',
+		 'exception'	=>$exceptions,
+		 'primary'	=>	'REPORT_ID'
+		 		
+		 );
+		
+	}
+	
+	
+
+	
+}

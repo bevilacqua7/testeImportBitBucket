@@ -589,7 +589,7 @@ class WRS_PANEL  extends WRS_USER
 		
 		
 		// Obtem a Quantidade de Registros da Consulta		
-		$query_table = $this->query($this->_query->SELECT_FAT_SSAS_TABLES($cube['TABLE_CACHE'],((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+		$query_table = $this->query($this->_query->RECORDS_SSAS_TABLES($cube['TABLE_CACHE'],((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
 		if($this->num_rows($query_table))
 		{
 			$rows = $this->fetch_array($query_table);

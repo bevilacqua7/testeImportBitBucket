@@ -247,5 +247,14 @@
 	$language['LINE_TOTAL']					=	'TOTAL';
 	$language['LINE_TOTAL_BUBBLE']			=	'Deseja usar as linha de totais no gráfico?';
 	
+	
+	
+	
+	
+	// MODAL GENERICA
+	$language['MODAL_GENERICA_SALVAR']		=	'Salvar';
+	$language['MODAL_GENERICA_ATUALIZAR']	=	'Atualizar';
+	$language['MODAL_GENERICA_APAGAR']		=	'Apagar';
+	$language['MODAL_GENERICA_CANCELAR']	=	'Sair';
 
 ?>

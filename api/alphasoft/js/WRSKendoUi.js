@@ -23,7 +23,8 @@ include_js('WRSKendoUiChart');
 include_js('WRSGridEventsTools');
 include_js('WRSHeaderIndex');
 include_js('WRSDrillLine');	//Drill Line
-
+include_js('WRSGenericModal');
+include_js('WRSMenu');
 
 
 

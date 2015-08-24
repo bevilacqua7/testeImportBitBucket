@@ -690,6 +690,12 @@ function fwrs_request($label)
 	return WRS_request($label);
 }
 
+
+function fwrs_remove_colchete($input)
+{
+	return str_replace(array('[',']'), '', $input);
+}
+
 /**
  * 
  * Delimitador para  Strings
