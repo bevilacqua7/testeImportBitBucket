@@ -3,7 +3,7 @@
 
 		<?php 
 				$HIDE_EXPORT	=	'hide';
-				include ('wrs_panel_header_table.php'); 
+				include ('wrs_panel_header_options.php'); 
 				echo $WRS_PANEL_HEADER_TABLE;
 		?>
 	<script type="text/javascript">$(function(){$('.wrs_panel_center_body_container .wrs_nav_relatorio').NavConfigure();});</script>

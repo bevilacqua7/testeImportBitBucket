@@ -285,7 +285,7 @@ EOF;
 EOF;
 		return $query;
 	}
-
+	
 	/**
 	 * Obtem Registros no Formato utilizado para GRID, 
 	 *

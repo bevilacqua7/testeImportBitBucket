@@ -14,7 +14,7 @@ var _TRUE	=	'1',
 	FALSE		=	false,
 	EMPTY		=	'';
 	
-	
+var WRSHistory	=	[];	
 
 
 include_js('WRSWindowGrid');
@@ -23,11 +23,103 @@ include_js('WRSKendoUiChart');
 include_js('WRSGridEventsTools');
 include_js('WRSHeaderIndex');
 include_js('WRSDrillLine');	//Drill Line
+include_js('WRSTopOptions');
 include_js('WRSGenericModal');
 include_js('WRSMenu');
 
 
+function WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi)
+{
+	$('.WRS_DRAG_DROP_FILTER').html('');
+	$('.wrs_swap_drag_drop').html('');
 
+	set_value_box_relatorio(_layout);
+	$('.wrs_panel_filter_icon').attr('filter_hide','true').trigger('click');
+	wrsRunFilter();
+	
+}
+
+
+function WRSKendoGridRefresh(history)
+{
+	var _history		=	$.parseJSON(base64_decode(history));
+	
+	if(empty(_history)) return true;
+	
+	$(function(){
+	
+		var IDNav							=	'.wrs_history_report';
+		var _layout							=	_history['layout'];
+		var _paranKendoUi					=	_history['kendoUi'];
+			_paranKendoUi['MKTIME_HISTORY']	=	_history['mktime'];
+			getRequestKendoUiDefault		=	_paranKendoUi;
+			
+			//getRequestKendoUiDefault	=	merge_objeto(_paranKendoUi,_layout);
+			
+			_paranKendoUi['IS_REFRESH']	=true; //Informa que foi executado um refresh
+			$('#wrsConfigGridDefault').attr('is-event','true').data('wrsConfigGridDefault',_paranKendoUi);
+			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
+	});
+	
+}
+
+
+function WRSKendoGridComplete(IDGrid)
+{
+ 
+	var wrsKendoUi		=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
+	var trashHistory	=	"";
+	
+		try{
+			trashHistory	=	WRSHistory[wrsKendoUi['REPORT_ID']];
+		}catch(e){}
+		
+		
+		
+	var history			=	$.parseJSON(base64_decode(trashHistory));
+	//var IDNav			=	IDGrid+'NAV .wrs_history_report';
+	var IDNav			=	'.wrs_history_report';
+	$(IDNav).html('');
+	
+	
+	var html		=	'';
+	var li 			=	'<li><a href="#" json="{json}" wrs-id="'+IDGrid+'" mktime="{mktime}" ><i class="fa fa-history"></i> <span class="label label-default span-label-history">{type}</span> {data}  </a></li>';
+	var liSubmit	=	['{data}','{type}','{json}','{mktime}'];
+
+	for(lineHistory in history)
+		{
+
+			
+			var json 	= 	base64_encode(json_encode(history[lineHistory]));
+			var type	=	history[lineHistory]['type'];  
+				type	=	empty(type) ? TYPE_RUN.direct : type;
+			var liVal	=	[history[lineHistory]['date'],type,json,history[lineHistory]['mktime']];
+			
+				html	=	html+str_replace(liSubmit,liVal,li);
+				
+		}
+	
+	
+	
+	$(IDNav).html(html);
+	
+	
+	
+	var historyClick	=	 function()
+	{
+		var _wrs_id			=	$(this).attr('wrs-id');
+		var _mktime			=	$(this).attr('mktime');
+		var _history		=	$.parseJSON(base64_decode($(this).attr('json')));
+		var _layout			=	_history['layout'];
+		var _paranKendoUi	=	_history['kendoUi'];
+	
+			_paranKendoUi['MKTIME_HISTORY']	=	_mktime;
+			$(_wrs_id).attr('wrsKendoUi',base64_encode(json_encode(_paranKendoUi)));
+			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi);
+	}
+	
+	$(IDNav+' a').unbind('click').click(historyClick);
+}
 
 /**
  * Criando o index do relationships para a consulta via level full
@@ -216,37 +308,49 @@ function getWrsKendoColumn(data)
   */
  function onDataBinding(arg)
  {
+	 //TRACE_DEBUG('onDataBinding::'+date('H:i:s'));
 	var id 				=	 '#'+arg.sender.element.attr('id');
 	var kendoUi			=	arg.sender;
 	var wrsKendoUi		=	 $.parseJSON(base64_decode($(id).attr('wrsKendoUi')));
 	var _arg			=	arg;
 	//Pegando a Header e informações de formatação das colunas
 	var _param			=	getWrsKendoColumn(arg.sender.columns);
-	var _width			=	[];
-	var frozen			=	0;
-	var sizeFrozen		=	$(id).find('.k-grid-header-locked tr:last-child').find('th').length-1;
-	var tmpFZ			=	0;
-	var totalFrozen		=	[];
-	var totalLastLabel	=	'';
-	var indexTh			=	0;
-	var lineToHideDrillLine	=	[];
-	var DRILL_HIERARQUIA_LINHA_DATA		=	$.parseJSON(base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA));
+	var _width							=	[];	//Responsável por criar o width das columnas
+	var frozen							=	0;
+	var sizeFrozen						=	$(id).find('.k-grid-header-locked tr:last-child').find('th').length-1;
+	var tmpFZ							=	0;
+	var totalFrozen						=	[];
+	var totalLastLabel					=	'';
+	var indexTh							=	0;
+	var lineToHideDrillLine				=	[];
+	var DRILL_HIERARQUIA_LINHA_DATA		=	base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA);
+	var DRILL_HIERARQUIA_REQUEST		=	arg.sender.dataSource._wrs_request_data.drill;
+	var typeColumnFrozen				=	false;
+	
+	
+
+
+		
+		
+	
+	var layout							=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
+	
+	var _DRILL_FCC						=	DRILL_FCC(arg.sender.headerIndex.byFrozenLevelFull,explode(',',layout.LAYOUT_ROWS));
+	var DRILL_LINE_LAST_COLUMN			=	_DRILL_FCC[_DRILL_FCC.length-1];
+	var LAYOUT_ROWS_B64					=	base64_encode(json_encode(_DRILL_FCC));
+	
+	arg.sender['wrsKendoUi']	=	[];
+	arg.sender['wrsKendoUi']['WRS_ROWS']							=	_DRILL_FCC;
+	arg.sender['wrsKendoUi']['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	explode(',',base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER));
+	arg.sender['wrsKendoUi']['DRILL_HIERARQUIA_LINHA']				=	wrsKendoUi.DRILL_HIERARQUIA_LINHA;
+	arg.sender['wrsKendoUi']['DRILL_LINE_LAST_COLUMN']				=	DRILL_LINE_LAST_COLUMN;
+	
+	arg.sender['drill_line_total_data']	=	[];
 	
 	//temporária para armazenar a coluna anterior a sendo chamada
-	var tmp_drill_line_column	=	[];
-		_arg.sender._wrs_data	=	[]	;
+	_arg.sender._wrs_data	=	[]	;
 	
-	var	drill_line_value_td			=	[];
 
-	//congela as linhas de DRILL
-	DRILL_LINE_check_header(wrsKendoUi,kendoUi,DRILL_HIERARQUIA_LINHA_DATA);
-	
-	
-	if(!empty(DRILL_HIERARQUIA_LINHA_DATA))
-	{
-		drill_line_value_td	=	DRILL_LINE_get_values_table(DRILL_HIERARQUIA_LINHA_DATA.query);
-	}
-	
 	//Apenas realimenta as colunas que deve ser preenchida caso existe totais
 	if(wrsKendoUi.ALL_ROWS)
 	{
@@ -269,7 +373,8 @@ function getWrsKendoColumn(data)
 		_arg.sender['wrs_frozen_data']['field']			=	totalLastLabel;
 	}
 	//END
-
+	var next_column			=	'';
+	var next_column_count	=	0;
 	for(var i=0;i<_arg.items.length;i++)
 	{
 			var idx		=	0;
@@ -277,11 +382,20 @@ function getWrsKendoColumn(data)
 				
 				_arg.sender._wrs_data[i]	=	[];//Loading
 			
-			tmp_drill_line_column	= [];//clean
+			next_column_count		=	0;	
 			for(obj in _param)
 			{
 				var word			=	_arg.items[i][obj];
 				var img				=	'';	
+				
+				next_column_count++;
+				
+				//Caso o valor seja maoir não se aplica
+				try{
+					next_column	=	kendoUi.headerIndex.column_count[next_column_count];
+				}catch(e){
+					next_column	=	null;
+				}
 				
 				
 				/*
@@ -335,53 +449,26 @@ function getWrsKendoColumn(data)
 					_arg.items[i][obj]	= strlen($.trim(_arg.items[i][obj]))==0 ? '' : _arg.items[i][obj]; //Removendo os NULL
 					_arg.sender._wrs_data[i][obj]	=	_arg.items[i][obj];
 					
-					
-					//Configurando o DRILL Line
-					if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE) 
-					{
-						
-						try{
-							
-							if(!lineToHideDrillLine[obj]) lineToHideDrillLine[obj]=0;
-							
-						}catch (e) {
-						}
-						
-						if(!empty(_arg.items[i][obj]))
+					typeColumnFrozen	=	true;
+					if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE)
 						{
-							lineToHideDrillLine[obj]++;
-							
-							if(!kendoUi.headerIndex.field[obj].drill_line && obj!='C000' && kendoUi.headerIndex.field[obj].drill_line_button)
-							{
-								
-								var drill_btn_plus		=	'<button class="DRILL_HIERARQUIA_LINHA" size-column="'+kendoUi.wrs_size_columns+'"  line="'+i+'"  column="'+obj+'" parent_column="'+implode(',',tmp_drill_line_column)+'" data="'+_arg.items[i][obj]+'" type="button"  wrs-type="plus"><i class="fa fa-plus-square"></i></button>';
-								var drill_btn_minus		=	'<button class="DRILL_HIERARQUIA_LINHA" size-column="'+kendoUi.wrs_size_columns+'"  line="'+i+'"  column="'+obj+'" parent_column="'+implode(',',tmp_drill_line_column)+'" data="'+_arg.items[i][obj]+'" type="button"  wrs-type="minus"><i class="fa  fa-minus-square"></i></button>';
-								var btn_drill			=	drill_btn_plus;	
-								
-								//Tratando opções para o botão
-								if(drill_line_value_td.length!=0)
-									{
-											try{
-												if(drill_line_value_td[_arg.items[i][obj]]){
-													btn_drill	=	drill_btn_minus;
-												}												
-											}catch(e){
-												btn_drill	=	drill_btn_plus;
-											}
-									}
-								
-								
-								_arg.items[i][obj]		=	btn_drill+_arg.items[i][obj];
-								tmp_drill_line_column[tmp_drill_line_column.length]	=	obj;
-							}
+							_arg.items[i][obj]		=	DRILL_HIERARQUIA_LINHA_setButton(	_arg.items[i][obj],
+																							_arg.items[i]['C000'],
+																							i,
+																							obj,
+																							DRILL_HIERARQUIA_REQUEST,
+																							LAYOUT_ROWS_B64,
+																							id,
+																							_DRILL_FCC,
+																							DRILL_LINE_LAST_COLUMN,
+																							arg.sender,
+																							next_column,
+																							_arg.items[i]);
 						}
-					}
 					
-					
-					
-					//END
 					
 				}else{
+					typeColumnFrozen	=	 false;
 					_arg.sender._wrs_data[i][obj]	=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word,false,true); //Full para complementar
 
 					
@@ -411,60 +498,63 @@ function getWrsKendoColumn(data)
 						}
 				}
 
-				
+
+					
 				if(!isset(_width[idx]))
 				{
-					var title		=	_param[obj]['title'];		
-					var startWidth	=	empty(title) ? 2 : title.length;
-					_width[idx]		= (startWidth*9)+5;
+					var title			=	_param[obj]['title'];
+						_width[idx]		=	{data:title,column:obj};	
+					//	_param[obj]['width']	=	200;
 				}
 				
-				var len			=	empty(word) ? 2 :  word.length;
 				
-				//Se eixtsir imagem do PErcent
-				if(!empty(img))
+				if(empty(word)) word='W';
+			
+				
+					
+				
+				if(word.length>_width[idx].data.length)
 				{
-					len+=2
+						//_param[obj]['width']	=	200;
+						//_param[obj]['width']	=	_width[idx]		= 	word;			
+						_width[idx]		= 	{data:word,column:obj};			
 				}
 				
-				var tmp_width	=	(len*9)+10;
-
-				if(tmp_width>_width[idx])
-				{
-					_param[obj]['width']	=	_width[idx]				= 	tmp_width;			
-				}
 				 
 				idx++;
-				
-				
-				
-				
 			}
 
 			
 	}
 	
-	//Configurando o DRILL Line
-	if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE){ 
+	var _rows_frozen	=	 array_data(_arg.sender.wrsKendoUi.WRS_ROWS);
+	
 
-			for(lineDrillHide in lineToHideDrillLine)
-				{
-					if(lineToHideDrillLine[lineDrillHide]==0)
-					{
-						kendoUi.headerIndex.field[lineDrillHide]['drill_line']			=	 true;
-						kendoUi.headerIndex.field[lineDrillHide]['drill_line_button']	=	 true;
-						kendoUi.hideColumn(kendoUi.headerIndex.field[lineDrillHide]);
-					}
-				}
-			
-	}
-	
-	
+	/*
+	 * Aplica a real formatação do resize
+	 */
 	for(idx in _width)
 		{
-			WRSSresize(id,idx, _width[idx],frozen-1); 
+			var padding	=	25;
+			
+			if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE)
+				{
+						try{
+							
+							if(_rows_frozen[_width[idx].column]){
+								padding	=	40;
+							}
+						}catch(e){}
+				}
+			
+			var r_width								=	$("<div/>").text(_width[idx].data).textWidth()+padding;
+				_param[_width[idx].column]['width']	=	r_width;
+				
+				//arg.sender.headerIndex.byFrozenLevelFull
+				WRSSresize(id,idx, r_width,frozen-1); 
 		}
 	
+	//TRACE_DEBUG('onDataBinding::'+date('H:i:s'));
 	return _arg;
  }
 
@@ -507,6 +597,7 @@ function wrsKendoUiChange(nameID,param,value)
 function onDataBound(arg)
 	{
 		
+		//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 			TRACE('START onDataBound');
 			resizeColumnKendoUi(arg);
 
@@ -520,23 +611,30 @@ function onDataBound(arg)
 				ELEMENT.attr('maps_wrs','false');
 				 
 	
-			//Se o Somatório estiver ativo então faz a configuração do SUM
-			if(wrsKendoUi.ALL_ROWS)
-			{
-				$(nameID).find('.wrstelerikButtonHeader').each(function(){					
-					
-					var _rel	=	$(this).attr('rel');
-						_rel	= 	_rel=='plus' ? true : false;
-						
-					if(wrsKendoUi['PLUS_MINUS']==_rel)
-					{
-						$(this).trigger('click');
-					}
-					
-				});
 				
-				themeSUM(nameID,arg,wrsKendoUi);
-			}
+						//Se o Somatório estiver ativo então faz a configuração do SUM
+						if(wrsKendoUi.ALL_ROWS)
+						{
+							
+							if(wrsKendoUi.DRILL_HIERARQUIA_LINHA!=_TRUE)
+							{
+								$(nameID).find('.wrstelerikButtonHeader').each(function(){					
+									
+									var _rel	=	$(this).attr('rel');
+										_rel	= 	_rel=='plus' ? true : false;
+										
+									if(wrsKendoUi['PLUS_MINUS']==_rel)
+									{
+										$(this).trigger('click');
+									}
+									
+								});
+							}
+							
+
+							themeSUM(nameID,arg,wrsKendoUi);
+			
+						}
 			
 
 			//Removendo as cores entre as linhas
@@ -555,8 +653,23 @@ function onDataBound(arg)
 			
 			addDrillOnDataBound(nameID,arg);
 			//Aplicando o Evento do CLick no DRILL LINHA
-			$(nameID).find('.DRILL_HIERARQUIA_LINHA').data('kendoGrid',arg.sender).unbind('click').click(DRILL_LINE_CLICK_DRILL_HIERARQUIA_LINHA);
+
+			
+			if(arg.sender.wrsKendoUi.DRILL_HIERARQUIA_LINHA	==_TRUE){
+			
+				DRILL_HIERARQUIA_LINHA_createEventClick(nameID);
+				
+				DRILL_HIERARQUIA_LINHA_setButtonExpandALL(nameID,arg.sender.wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER,arg.sender.wrsKendoUi.DRILL_LINE_LAST_COLUMN);
+				
+				DRILL_HIERARQUIA_LINHA_hideColumn(	nameID,
+													arg.sender,
+													arg.sender.wrsKendoUi.WRS_ROWS,
+													arg.sender.dataSource._wrs_request_data.drill);
+			}
+			
 			TRACE('END onDataBound');
+			
+			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 	}
 
 	
@@ -668,46 +781,49 @@ function  buttonPlusMinus(nameID,hideShow,sizeFrozen)
 function  themeSUM(nameID,arg,wrsParam)
 {
 		var find_last			=	'last-child';
-			//Verificando se é LINHA DRILL e se é linha de total
-			if(wrsParam.DRILL_HIERARQUIA_LINHA==_TRUE)
-				{
-					var allFields				=	arg.sender.headerIndex.field;
-					var _count_drillLinehide	=	0;
-					var layout					=	wrsKendoUiContextMenuGetLayoutInfo(arg.sender);
-					var sizeLINE				=	 explode(',',layout.LAYOUT_ROWS);
-					
-					
-					for(lineAllFields in allFields)
-						{
-							if(allFields[lineAllFields].drill_line)
-								{
-									_count_drillLinehide++;
-								}
-						}
-					
-					find_last	=	'eq('+(sizeLINE.length-_count_drillLinehide)+')';
-					
-					
-						
-				}
-			
-			$(nameID).find('.k-grid-content-locked').find('tr').find('td:'+find_last).each(function(){
+		
+		
+		//Garante que se for LATITUDE pega o ultimo elemento
+		$(nameID).find('.k-grid-header-locked').find('tr:last-child').find('th:'+find_last).each(function(){
+			if(arg.sender.headerIndex.field[$(this).attr('data-field')].map=="[LATITUDE]"){
+				var eq	=	$(this).index()-1;
+				find_last	=	 'eq('+eq+')';
+			}
+		});
+		//END
+		
+		$(nameID).find('.k-grid-content-locked').find('tr').find('td:'+find_last).each(function(){
 			var index				=	$(this).parent().index();
 			var parent_index_data	=	parseInt($(this).index());
 			var html_data_index		=	'';
+			var isTotal				=	true;
+
 			
-			
-			if(empty($(this).html()) || $(this).attr('wrsNull')=='true')
-				{
-					$(nameID).find('.k-grid-content').find('tbody tr').eq(index).addClass('ui-state-default tag_total');
-					
-					//Caso seja nula a linha de Total pesquisa e insere a ultima encontrada
-					for(var i=parent_index_data; (i>=1 && empty(html_data_index)); i--){
-						html_data_index	=	 strip_tags($(this).parent().find('td:eq('+i+')').html());
+			//QUando for o caso se linha de DRILL habilita os totais apenas nas linhas corretas
+			if(arg.sender.wrsKendoUi.DRILL_HIERARQUIA_LINHA	==_TRUE){
+				
+				try{
+					if(arg.sender['drill_line_total_data'][index])
+					{
+						isTotal	=	 false;
 					}
-					$(this).parent().attr('wrs-html-data',html_data_index);
-					
-				}
+				} catch(e){}
+			}
+			
+			
+			if(isTotal)
+			{
+				if(empty($(this).html()) || $(this).attr('wrsNull')=='true')
+					{
+						$(nameID).find('.k-grid-content').find('tbody tr').eq(index).addClass('ui-state-default tag_total');
+						//Caso seja nula a linha de Total pesquisa e insere a ultima encontrada
+						for(var i=parent_index_data; (i>=1 && empty(html_data_index)); i--){
+							html_data_index	=	 strip_tags($(this).parent().find('td:eq('+i+')').html());
+						}
+						$(this).parent().attr('wrs-html-data',html_data_index);
+						
+					}
+			}
 			
 				
 			});
@@ -718,21 +834,22 @@ function  themeSUM(nameID,arg,wrsParam)
 			//Aplica bolde nas clunas de totais
 			var _param	=	getWrsKendoColumn(arg.sender.columns);
 					
-
-			var indexToUse		=	 [];
-			for(obj in _param)
-			{
-					if(_param[obj].wrsParam['TOTAL']=='S')
-					{
-						var _indexTD					=	parseInt(_param[obj].wrsParam.INDEX);
-						$(nameID).find('.k-grid-content').find('tbody tr').each(function(){
-																					$(this).find('td').eq(_indexTD).addClass('bold tag_total');
-																					
-																					//$('.k-grid-content-locked tr:eq('+$(this).index()+')').addClass('tag_total');
-																				});
-					}							
+			
+			var TOTAL			=	LNG('LINE_TOTAL');
+			var colTOTAL		=	arg.sender.headerIndex.column_total;
+			
+			
+			for(lineColTOTAL in colTOTAL){
+				$(nameID).find('.k-grid-header	.k-grid-header-wrap').find('tr:last-child').find('th[data-field='+lineColTOTAL+']').each(function(){
+					var th	=	 $(this).index();
+					$(nameID).find('.k-grid-content').find('tbody tr').each(function(){
+						$(this).find('td').eq(th).addClass('bold tag_total');
+						//$('.k-grid-content-locked tr:eq('+$(this).index()+')').addClass('tag_total');
+					});
+				});
 			}
-					
+			
+
 }													
 													
 /**
@@ -753,7 +870,6 @@ function  themeSUM(nameID,arg,wrsParam)
 	 	
 	    $.fn.WrsGridKendoUiControlColumnPlusMinus = function(openStart) 
 	    {	
-	    	
 			addKendoUiColorJQueryGrid();
 			
 			var $eventTelerik		=	 this;
@@ -764,6 +880,7 @@ function  themeSUM(nameID,arg,wrsParam)
 			
 				telerikGrid['wrs_frozen_data']			=	[];
 				telerikGrid['wrs_frozen_data']['data']	=	[];
+				
 			
 			/*
 			 * Column Header Index criado por Marcelo Santos
@@ -892,10 +1009,9 @@ function  themeSUM(nameID,arg,wrsParam)
 														}
 														else
 														{
-															//Caso o drill line não o feche não abra novamente
-															if(!td_column.drill_line){
+
 																telerikGrid.showColumn(td_column);
-															}
+
 														}
 														
 														lastKey	=	i_key;
@@ -970,26 +1086,29 @@ function  themeSUM(nameID,arg,wrsParam)
 			//Abilita o Botão mais e menos só se existir o somatório
 			
 
-			if(wrsKendoUi['ALL_ROWS']==1)
+			if(wrsKendoUi.DRILL_HIERARQUIA_LINHA!=_TRUE)
 			{
-					this.find('.k-grid-header table:first tr:last').find('th:first-child').append(plusButton);
-					this.find('.k-grid-header table:first tr:last').find('th:first-child').append(minusButton);
-					//Eventos dos Botões
-					plusButton.unbind('click');
-					minusButton.unbind('click');
-					
-					
-					plusButton.click(buttonHideShow);
-					minusButton.click(buttonHideShow);
-
-					if(_openStart)
-					{
-						plusButton.trigger('click');
-					}
-					else
-					{
-						minusButton.trigger('click');
-					}
+				if(wrsKendoUi['ALL_ROWS']==1)
+				{
+						this.find('.k-grid-header table:first tr:last').find('th:first-child').append(plusButton);
+						this.find('.k-grid-header table:first tr:last').find('th:first-child').append(minusButton);
+						//Eventos dos Botões
+						plusButton.unbind('click');
+						minusButton.unbind('click');
+						
+						
+						plusButton.click(buttonHideShow);
+						minusButton.click(buttonHideShow);
+	
+						if(_openStart)
+						{
+							plusButton.trigger('click');
+						}
+						else
+						{
+							minusButton.trigger('click');
+						}
+				}
 			}
 			
 			
@@ -1000,10 +1119,16 @@ function  themeSUM(nameID,arg,wrsParam)
 				}
 			
 			
+			/**
+			 * Configuraçõs dos TOP Options
+			 */
+			this.wrsTopOptions();
 			/*
 			 * Evento da Reordenação das Colunas
 			 */
-			 
+			
+			
+			 /*
 			if(!telerikGrid.columns[0].key)
 			{
 				//Apenas cria o Evento da Reodenação 
@@ -1033,9 +1158,10 @@ function  themeSUM(nameID,arg,wrsParam)
 								
 								getParam['ORDER_COLUMN']		=	flag;
 								wrsKendoUiChange($(IDName),'ORDER_COLUMN',flag);
+								changeTypeRun(IDName,TYPE_RUN.reorden_column);//Informando o tipo de RUN foi solicitado
 								wrsRunFilter();//Executa o plugin nativamente 
 						});
-			}
+			}*/
 			
 			/*
 			 * Evento para Ordenação de colunas
@@ -1144,12 +1270,14 @@ function  themeSUM(nameID,arg,wrsParam)
 										case 'COLORS_LINE' : 	telerikGrid.dataSource.read(); break; 
 									}
 									
-									
+									changeTypeRun(IDName,TYPE_RUN.options);//Informando o tipo de RUN foi solicitado
 									rules_pendences_checkbox($(this),$(this).parents('ul'));
-					
-				
 			}
 			
+			/**
+			 * 
+			 * OPTIONS_CONFIGURE: Options
+			 */
 			$(IDName+'NAV').find('.btn_add_opcoes').unbind('click').click(addOptionsHeader);//Criando o Evento de Clickes
 			//End Painel Opções
 			
@@ -1243,13 +1371,303 @@ function  themeSUM(nameID,arg,wrsParam)
 				var maxWidth		=	_param.maxWidth;
 				return this;
 		}
+		
+		
+		
+		/**
+		 * Configurações das opções TOP
+		 */
+		$.fn.wrsTopOptions = function() 
+		{
+			var that		=	this;
+			var IDGrid		=	'#'+this.attr('id');
+			var isDefault	=	Boolean(that.attr('isDefault'));
+			
+
+				
+					if(!$(IDGrid).hasClass('wrs_grid_options_default'))
+					{
+						$(IDGrid).addClass('wrs_grid_options_default');
+					}
+
+			var TAGButton		=	'	  <ul class="dropdown-menu wrsTopOptionsData ">'+
+									'	    <li tag="total"><a href="#"><i class="fa fa-arrow-right"></i>TOTAL</a></li>'+
+									'	    <li key="5"   class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i>TOP 5</a>  <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="10"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 10</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="15"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 15</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="20"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 20</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="25"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 25</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="50"  class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 50</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'	    <li key="100" class="dropdown-wrs-submenu"><a href="#"><span class="fa fa-arrow-up"></span><i class="fa fa-angle-right"></i> TOP 100</a> <ul class="dropdown-menu measure wrsTopOptionsDataSub"></ul></li>'+
+									'		<li><a href="#"><span class="fa fa-times"></span> '+LNG('BTN_SAIR')+'</a></li>'
+									'	  </ul>';
+		
+			var convertTypeTOP		=	 function(key,data)
+			{
+				
+				var wrsKendoUi		=	'';
+				var top_config		=	'';
+				var data_save		=	'';
+				
+				if(isDefault==true)
+					{
+							wrsKendoUi	=	$(IDGrid).data('wrsConfigGridDefault');
+							
+							if(empty(wrsKendoUi)){
+								wrsKendoUi	=	{};
+							}
+							
+							that.attr('is-event',true);//Ativa a mudança para quando executar o run filrer
+					}else{
+							wrsKendoUi	=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
+					}
+				
+				
+				
+				try{
+					top_config	=	wrsKendoUi.TOP_CONFIG;
+				}catch(e)
+				{
+					top_config	=	'';
+				}
+				 
+				var config			=	$.parseJSON(base64_decode(top_config));
+
+					if(empty(config)) config=	{};
+					
+					config[key]	=	data;
+					data_save	=	base64_encode(json_encode(config));
+					
+					
+					
+
+				if(isDefault==true)	
+					{
+						wrsKendoUi['TOP_CONFIG']	=	data_save;
+						$(IDGrid).data('wrsConfigGridDefault',wrsKendoUi);
+					}
+					else
+					{
+						wrsKendoUiChange(IDGrid,'TOP_CONFIG',data_save);
+						wrsRunFilter();
+					}
+			}
+			
+			/*
+			 * LImpa quando clicar no TOtal
+			 */
+			var wrsTopOptionsData	=	 function()
+			{
+				var btnOption	=	 $(this).parent().data('wrsTopOptionsDataParent');
+				var tag			=	 $(this).attr('tag');
+				
+				var isROWS		=	 $(this).attr('isROWS');
+				
+				 if(empty(tag)) return true;
+				  
+				 if(isDefault==true)
+					{
+					 
+					 btnOption	=	$(IDGrid).data('wrsConfigGridDefault');
+					 
+					 	
+					 try{
+						 btnOption.TOP_CONFIG	=	'';
+					 }catch(e)
+					 {
+						 btnOption					=	[];
+						 btnOption['TOP_CONFIG']	=	'';
+					 }
+					 
+					 
+					 btnOption['TOP_CONFIG']	=	base64_encode(json_encode(btnOption.TOP_CONFIG));
+					 
+					 
+					 $(IDGrid).data('wrsConfigGridDefault',btnOption);
+					 that.attr('is-event',true);//Ativa a mudança para quando executar o run filrer
+					}else{
+						 wrsKendoUiChange(IDGrid,'TOP_CONFIG',base64_encode(json_encode('')));
+						 wrsRunFilter();
+					}
+					
+			};
+			
+			
+			var wrsTopOptionsDataSub	=	 function()
+			{
+				var btnOption	=	 that.find('.wrsTopOptionsData').data('wrsTopOptionsDataParent');
+				var tag			=	 $(this).attr('tag');
+				var isROWS		=	 $(this).attr('isROWS');
+				var key			=	$(this).parent().parent().attr('key');
+				var val			=	'';
+				var index		=	'';
+				var full_name		=	$(this).attr('full_name');
+				
+				var kendoUi		=	 $(IDGrid).data('kendoGrid');
+				
+					 if(empty(tag)) return true;
+
+					 	if(isDefault==true)
+					 		{
+					 			//Opções na tela de Default
+					 				index			=	tag;	
+					 			var json		=	$.parseJSON(base64_decode( btnOption.parent().attr('json')));
+					 				full_name	=	json['LEVEL_FULL'];
+//						 				key			=	(btnOption.parent().index()+1);
+					 					
+					 		}else{
+									 	if(isROWS=='true')
+									 		{
+									 			index		=	btnOption.parent().index();	
+									 			var field	=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
+								 					full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
+									 		}else{
+									 			index	=	tag;		
+									 			var field		=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
+									 				full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
+									 		}
+					 	
+					 		}
+					 	val =	'{'+key+'|'+index+'}';
+					 	convertTypeTOP(full_name,val);
+			}
+			
+			
+			var clickOptions		=	 function(event)
+			{
+				var telerikGrid 		= 	that.data('kendoGrid');
+				var p 					= 	$(this);
+				var offset 				= 	p.offset();
+				var optionsData			=	that.find('.wrsTopOptionsData');
+				
+				
+					optionsData.data('wrsTopOptionsDataParent',p);
+					optionsData.addClass('wrs_visible');
+					optionsData.css({left:offset.left,top:offset.top+p.outerHeight(),'z-index':99999});
+					
+					
+
+				var liHTML			=	''; 
+				
+				var isROWS			=	Boolean(p.attr('isROWS'));
+				var layout			=	'';
+				var measure			=	'';
+				
+				
+				if(isDefault==true)
+				{
+					measure			=	telerikGrid;
+				}else{
+					layout			=	wrsKendoUiContextMenuGetLayoutInfo(telerikGrid);
+					measure			=	explode(',',layout['LAYOUT_MEASURES']);
+				
+				}
+				
+		 			for(lineMeasure in measure)
+						{
+							var title		=	'';
+							var full_name	=	'';
+							var _tag		=	'';
+							
+							if(isDefault==true)
+								{
+									_tag		=	lineMeasure;
+									full_name	=	measure[lineMeasure].full_name;
+										title	=	measure[lineMeasure].name;
+								}else{
+									_tag		=	(parseInt(lineMeasure)+1);
+									full_name	=	measure[lineMeasure];
+									title		=	telerikGrid.headerIndex.byFrozenLevelFull[measure[lineMeasure]].title;
+								}
+								
+								liHTML+=' <li isROWS='+isROWS+' full_name="'+full_name+'"   tag='+_tag+' class="wrsTopOptionsDataSubLi"><a href="#"><span class="glyphicon glyphicon glyphicon-usd"></span> '+title+'</a></li>';
+						}
+					
+					optionsData.find('.measure').attr('isROWS',isROWS).html(liHTML);
+					
+					$('html').one('click',function() {
+							 $('.wrsTopOptionsData').removeClass('wrs_visible');
+					});
+
+					that.find('.wrsTopOptionsData').find('.wrsTopOptionsDataSubLi').unbind('click').click(wrsTopOptionsDataSub);
+					
+					event.stopPropagation();
+					return false;
+			}
+
+				
+				if(isDefault!=true)
+				{
+	
+					//Configuração normal para quando a grid já estiver montada
+					that.find('.k-grid-header table:first tr').find('th').each(function(){
+						var wrs_tops_configure		=	$('<span/>', {
+							type	: 'button',
+							title	: 'Opções TOP',
+							html	: $('<i/>',{'class':'fa fa-bars'}),
+							'class'	: 'wrs_tops_configure'
+						});
+						
+						$(this).prepend(wrs_tops_configure);
+						wrs_tops_configure.unbind('click').click(clickOptions);
+						
+					});
+					
+					that.find('.k-grid-header table:first tr:last-child').find('th').find('.wrs_tops_configure').attr('isROWS',true);				
+					that.find('.k-grid-header table:first tr:last-child').find('th:first-child').find('.wrs_tops_configure').remove();
+				}else{
+
+					//COnfigurando para as ooções default
+					that.parent().find('.sortable_coluna li,.sortable_linha li').each(function(){		
+						var wrs_tops_configure		=	$('<span/>', {
+							type	: 'button',
+							title	: 'Opções TOP',
+							html	: $('<i/>',{'class':'fa fa-bars'}),
+							'class'	: 'wrs_tops_configure btn-link'
+						});
+						
+						$(this).find('.wrs_tops_configure').remove();
+						$(this).prepend(wrs_tops_configure);
+						wrs_tops_configure.unbind('click').click(clickOptions);
+						
+					});
+					
+					
+					var measure_data	=	[];
+					var measure_count	=	1;
+					that.parent().find('.sortable_metrica li').each(function(){						
+						var json	=	$.parseJSON(base64_decode( $(this).attr('json')));
+							measure_data[measure_count]	=	{'level_full':json['MEASURE_UNIQUE_NAME'],'name':json['MEASURE_CAPTION']};
+							measure_count++;
+					});
+					
+					that.data('kendoGrid',measure_data);
+				}
+				
+				
+				
+				
+				that.find('.wrsTopOptionsData').remove();
+				that.prepend(TAGButton);				
+				that.find('.wrsTopOptionsData li').unbind('click').click(wrsTopOptionsData);
+		}
+		
+		
+		
+		
+		
 				
 	}( jQuery ));
  
  
  
  
- 
+ function DEFAULT_OPTIONS_TOPS()
+ {
+	 $('.wrs_grid_options_default').wrsTopOptions();
+	 
+	 $('.DRAG_DROP_LATERAIS').find('.wrs_tops_configure').remove();
+ }
  
  
  

@@ -1,4 +1,7 @@
-
+<ul class="nav nav-pills wrs_menu_footer">
+  <li role="presentation"><a href="run.php?file=WRS_MAIN&class=WRS_MAIN&ncon"><i class="fa fa-home"></i></a></li>
+  <li role="presentation"><a href="#" class="link"><i class="fa fa-file-text-o"></i></a>
+  
   
   <ul class="wrs_menu_footer_sub nav nav-stacked">
   		
@@ -34,3 +37,4 @@
 
 </div>
 
+<SCRIPT>	$(function(){WRS_MENU_FOOTER();});</SCRIPT>

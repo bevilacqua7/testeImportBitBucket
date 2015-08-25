@@ -286,8 +286,30 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			var ChartDefault				=	$.parseJSON(base64_decode(kendoUiTools.CHART)); 
 			var DRILL_HIERARQUIA_LINHA		=	kendoUiTools.DRILL_HIERARQUIA_LINHA;
 			
+			var DRILL_COLUMN_TITLE		=	'';
+			var DRILL_FROZEN			=	'';
 			
-
+			
+			//Apenas garante que exista o drill Nullo
+			try{
+			
+					if(DRILL_HIERARQUIA_LINHA==_TRUE)
+						{
+							var title_line		=	0;
+		
+							
+							if(telerikGrid.dataSource._wrs_request_data.drill!='')
+							{
+								title_line	=	telerikGrid.dataSource._wrs_request_data.drill.OPENCOLS;
+							}
+							DRILL_FROZEN		=	title_line+1;
+							DRILL_COLUMN_TITLE	=	telerikGrid.wrsKendoUi.WRS_ROWS[title_line]
+						
+						
+						}
+			}catch(e){}
+			
+			
 			
 			var typeChart		=	[];
 						
@@ -328,15 +350,18 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			var _colum_frozen	=	parseInt($(GRID).find('.k-grid-content-locked').find('tr:last-child').find('td').length)-1;
 				
 			
+			try{
 			//Verificando se é DRILL LINHA para modificar as linhas de totais
-			if(DRILL_HIERARQUIA_LINHA==_TRUE)
-			{
-				_colum_frozen	=	0;
-				$(GRID).find('.k-grid-content-locked').find('tr:last-child').find('td').each(function(){
-					if(!$(this).is(':hidden')){_colum_frozen++;}
-				});
-				_colum_frozen		=	 _colum_frozen-1;
-			}
+				if(DRILL_HIERARQUIA_LINHA==_TRUE)
+				{
+				 	_colum_frozen	=	1;
+					if(telerikGrid.dataSource._wrs_request_data.drill!='')
+					{
+						_colum_frozen	=	telerikGrid.dataSource._wrs_request_data.drill.OPENCOLS+1
+					}
+					
+				}
+			}catch(e){}
 			
 			
 			if(empty(kendoUiTools.GAUGE_COLOR)){
@@ -363,9 +388,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 							case 'gauge_radial':
 							case 'gauge_linear':{measures_receive.find('option').prop('selected',true); return true;}; break;
 						}
-						
-						
-						
 						
 					
 						event.parent().parent().find('input').each(function(){
@@ -657,11 +679,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 				{
 					infoFirst.value	=	kendoUiTools.ORDER_BY_COLUMN;
 				}
-				
-			 
-				
-		
 			}//END 
+			
 			
 
 			
@@ -1176,18 +1195,36 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 									cCHART['legend']	=	legend;
 									cCHART['labels']	=	labels;
 									
+
+									
 									ELEMENT.attr('chart','false');//Abilitando a construção 
 									
 									var chartParam	=	base64_encode(json_encode(cCHART,true));
-									wrsKendoUiChange('#'+idName,'CHART',chartParam);								
+										wrsKendoUiChange('#'+idName,'CHART',chartParam);								
 									
+									
+									var infoDefault		=	'';
+
+						  			
+						  			
 									if(onlyDefault){
 										//Quando for o Default
 										var configOptions	=	$('#wrsConfigGridDefault').data('wrsConfigGridDefault');			
 										configOptions.CHART	=	chartParam;
+										infoDefault			=	configOptions;
 									}else{
+										
+										infoDefault	=	kendoUiTools;
 										WRSKendoUiChart(KendoUi);//Run 
 									}
+									
+									
+									//Save Historico
+									var saveHistory	=	[];
+							  			saveHistory['CHART']	=	chartParam;
+							  			saveHistoryEvents(saveHistory,infoDefault['REPORT_ID']);
+
+							  			
 								
 							};
 							
@@ -1426,13 +1463,24 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 					
 				
 				//PEsquisando quem é o frozem original
-				GRID.find('.k-grid-header-locked tr:last-child').find('th:last-child').each(function(){
+					/*
+					 * TODO:
+					 */
+					var find_last			=	'last-child';
+					
+					//Verificando se é LINHA DRILL e se é linha de total
+					if(DRILL_HIERARQUIA_LINHA==_TRUE)
+						{
+							find_last	=	'eq('+DRILL_FROZEN+')';
+						}
+					
+					
+					
+				GRID.find('.k-grid-header-locked tr:last-child').find('th:'+find_last).each(function(){
 					var index		=	 parseInt($(this).index());
 					var key			=	$(this).parent().index()+'_'+index;
 					var header		=	headerIndex[key];
 					var _indexHigth	=	parseInt($(this).parent().index())-1;	
-					
-					
 					if(strpos(header.tb_field,'[LATITUDE]'))
 						{
 							key		=	$(this).parent().index()+'_'+(index-1);
@@ -1441,8 +1489,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 					columnToLabel	=	headerIndex[key].field ;
 					titleFrozen		=	headerIndex[key].title ;
 					ChartTitle[0]	=	titleFrozen;
+					
+					
 					if(_indexHigth>=0){
-						
 						var hIndex			=	$(this).parent().parent().find('tr:eq('+_indexHigth+')').find('th:last-child').index();
 							titleHigth		=	headerIndex[_indexHigth+'_'+hIndex].title ;
 							ChartTitle[1]	=	titleHigth;
@@ -1452,6 +1501,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 					
 						
 				});
+				
 				
 				
 				
@@ -1733,7 +1783,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 									 */
 									for(lineAxis in chartData)
 									{
-										axisTmp[lineAxis]	=	{name: "",wrs_title:'', volume:'', title: { text: "" }, labels: {template:''},minorGridLines: {visible: true} /*,min: 900,max: 0*/};
+										axisTmp[lineAxis]	=	{name: "",wrs_title:'', volume:'', title: { text: "" }, labels: {template:''},/*minorGridLines: {visible: true}*/ /*,min: 900,max: 0*/};
 									}
 										
 									
@@ -1912,21 +1962,20 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 																		 * Nesta opção a categoria é apenas para o PIE e o DONUT pois aqui a categoria é apenas a label
 																		 */
 																	var	paramGetData	=	{
-																										'category'			: _data[lineData][columnToLabel],
+																										'category'			: _data_wrs[lineData][columnToLabel],
 																										'category_title'	: headerIndex['chart']['category'][ccCategory],
 																										'value'				: __data_cC,
 																										'wrs_field'			: dataChartCol[linkdcC],	
 																										'level_full'		: lineDataMeasure,
-																										'name'				: _data[lineData][columnToLabel],	//Para ser usado do DONUT
+																										'name'				: _data_wrs[lineData][columnToLabel],	//Para ser usado do DONUT
 																										'axis'				: axisArray[lineDataMeasure], //para ser usado no DONUT
 																										'color'				: palletCol[lineData]
 																							};
 																	
 
-																	
 																	if(empty(paramGetData.name))
 																	{
-																		paramGetData.name	=	GRID.find('.k-grid-content-locked table tr:eq('+(lineData)+')').attr('wrs-html-data');
+																		paramGetData.name	=	strip_tags(GRID.find('.k-grid-content-locked table tr:eq('+(lineData)+')').attr('wrs-html-data'));
 																		
 																		if(empty(paramGetData.name)){
 																			paramGetData.name	=	LNG('LINE_TOTAL');
@@ -2002,7 +2051,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 																			_getDataParam	=	getData[lineDataMeasure][_line];
 																			
 																			
-																			_getDataParam.name								=	_data[lineData][columnToLabel];
+																			_getDataParam.name								=	_data_wrs[lineData][columnToLabel];
 																			_getDataParam.data[_getDataParam.data.length]	=	__data_cC;
 																			getData[lineDataMeasure][_line]	=	_getDataParam;
 																			
@@ -2013,7 +2062,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 																// opção para os gráficos covencionais
 																var options_series	=	 {
 																							data: getData, 
-																							name: _data[lineData][columnToLabel],
+																							name: _data_wrs[lineData][columnToLabel],
 																							axis: axisArray[lineDataMeasure],
 																							color: palletCol[lineData]
 																						};
@@ -2472,7 +2521,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 												_columns	=	reorderColumn(_columns);
 											
 											var order			=	0;
-	
+											
+											
+											
 												
 											/*
 											 * Multiplos PIE
@@ -2491,9 +2542,30 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 														var getVals							=	tmpSeries[_columns[lineCol].field];
 														var _merge							=	[];
 														
+														var _mergeChartConfigLegend			=	'';
+														
+														
+														//Apenas para não dar erro
+														try{
+															_mergeChartConfigLegend	=	typeChart[getVals[0].level_full];
+														}catch(e){
+															_mergeChartConfigLegend='';
+														}
+														
+														//Apenas para não dar erro 
+														if(empty(getVals))
+															{
+																getVals	=	[];
+																getVals[0]	=	{name:"" ,axis:""};
+															}
+														
+														 
+														
+														
+															
 														
 														_merge							=	$.extend( {}, 
-																												mergeChartConfigLegend(typeChart[getVals[0].level_full]), 
+																mergeChartConfigLegend(_mergeChartConfigLegend), 
 																												{
 																													data: getVals, 
 																													name: getVals[0].name,

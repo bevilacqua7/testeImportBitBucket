@@ -115,7 +115,7 @@ var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELA
  	
    <!--<script src="api/kendoUi/js/kendo.all.minDEBUG.js?<?php echo RAND_TOKEN;?>"></script>-->
    
-  <script src="api/kendoUi/js/kendo.all.min.js"></script>
+  <script src="api/kendoUi/src/js/kendo.all.js?<?php echo RAND_TOKEN;?>"></script>
 
    
     
@@ -203,11 +203,16 @@ var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELA
 	$result_box							= array();
 	
 	
-	$result_box['LAYOUT_ROWS']			=	array('__FORCADEVENDASREGIONAL','__FORCADEVENDASDISTRITAL','__FORCADEVENDASSETOR');
-	$result_box['LAYOUT_COLUMNS']		=	array('__PERIODOANO');
+	$result_box['LAYOUT_ROWS']			=	array('__FORCADEVENDASREGIONAL','__FORCADEVENDASDISTRITAL','__GEOGRAFIABRICK');
+	$result_box['LAYOUT_COLUMNS']		=	array('__PERIODOANO','__PERIODOSEMESTRE');
 	$result_box['LAYOUT_MEASURES']		=	array('__MeasuresShareDolar','__MeasuresEvolDolar','__MeasuresDolar');
-	$result_box['LAYOUT_FILTERS']		=	array(	array('__MERCADOMERCADO','','[MERCADO].[MERCADO].[D06-BACTROBAN]'),
+	$result_box['LAYOUT_FILTERS']		=	array(	array('__MERCADOMERCADO','',array('[MERCADO].[MERCADO].[D06-BACTROBAN]','[MERCADO].[MERCADO].[D-CX-ACNE LIMPEZA]')),
+			array('__PRODUTOLABORATORIO','','[PRODUTO].[LABORATORIO].[GSK FARMA]'));
+	
+	
+	/*$result_box['LAYOUT_FILTERS']		=	array(	array('__MERCADOMERCADO','',array('[MERCADO].[MERCADO].[D06-BACTROBAN]','[MERCADO].[MERCADO].[D-CX-ACNE LIMPEZA]')),
 													array('__PRODUTOLABORATORIO','','[PRODUTO].[LABORATORIO].[GSK FARMA]'));
+													*/
 	
 	
 	/*
