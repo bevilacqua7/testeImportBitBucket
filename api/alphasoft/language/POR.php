@@ -45,7 +45,7 @@
 	$language ['TITLE_GRID_WINDOW_MENU_MEDIUM_ICON'] 	= "Icone Médio";
 	$language ['TITLE_GRID_WINDOW_MENU_SMALL_ICON'] 	= "Icone Pequeno";
 	$language ['TITLE_GRID_WINDOW_MENU_LIST_INFO'] 		= "Lista Básica";
-	
+	$language ['REPORT_RESULT_HISTORY'] 		= "Não existe histórico";
 
 
 

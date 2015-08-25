@@ -14,6 +14,31 @@ function wrs_north_onresize()
 }
 
 
+
+function WRS_MENU_FOOTER(){
+	
+		
+		$('.wrs_menu_footer_sub').each(function(){
+			$(this).css('top', $(this).outerHeight()*-1);
+		});
+
+		$('.wrs_menu_footer li').click(function(event){
+
+			$('.wrs_menu_footer_sub').removeClass('wrs_visible');
+			
+			$(this).find('.wrs_menu_footer_sub').addClass('wrs_visible');
+
+
+			$('html').one('click',function() {
+				$('.wrs_menu_footer_sub').removeClass('wrs_visible');
+			  });
+
+			  event.stopPropagation();
+			  
+		});
+	 
+}
+
 function wrs_center_onresize()
 {
 	//BODY
@@ -88,8 +113,9 @@ function wrs_west_onresize(pane, $Pane)
 	
 	heightBox			=	(heightBox-padding) - offsetHeader - offsetHeader;
 	
-	$('.wrs_panel_esquerdo_drag_drop ol').height(heightBox);
+	heightBox			=	heightBox-$('.ui-layout-north').outerHeight();
 	
+	$('.wrs_panel_esquerdo_drag_drop ol').height(heightBox);
 	formata_texto_resultado_filtros();
 	
 }
@@ -340,10 +366,10 @@ $(document).ready(function () {
 
 function wrs_clean_box_drag_drop()
 {
-	var $this		=	 $(this);
-	var type		=	 $this.attr('parent');
-	var who_receive	= $this.parent().parent().find('.wrs_panel_receive').attr('who_receive');
-	var mensagem	=	"";
+	var $this			=	 $(this);
+	var type			=	 $this.attr('parent');
+	var who_receive		= $this.parent().parent().find('.wrs_panel_receive').attr('who_receive');
+	var mensagem		=	"";
 	var mensagem_sucess	=	"";
 	
 	if(empty(who_receive))
@@ -620,6 +646,8 @@ function insetDragDropEmpry()
 		}
 		
 	});
+	
+	
 }
 
 
@@ -762,6 +790,8 @@ function DROP_EVENT( event, ui ,eventReceive){
 		}
 		
 		
+		setTimeout(DEFAULT_OPTIONS_TOPS,500);
+		
 		var filters			=	receiveEvent.parent().attr('type');
 		var who_receive 	=	receiveEvent.parent().attr('who_receive');
 		
@@ -888,6 +918,7 @@ function setDraggable(name,use,who_receive)
 function find_relatorio_attributo_metrica(where_find,_values,_clone)
 {
 	
+
 	$(_clone).html('');
 	/*
 	 * Aplicando quando vier com CLASS
@@ -938,19 +969,15 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 				if(!empty(is_filter))
 				{
 					var json 			=	$.parseJSON(base64_decode(object.attr('json')));
+					
 					if(json!=null)
-						json['FILTER']	=	is_filter;
+						json['FILTER']	=	is_array(is_filter) ? implode(',',is_filter) : is_filter;
 						
 						object.attr('json',base64_encode(json_encode(json,true)));
 				}
 				
 				DROP_EVENT( 'DIRECT', object,$(_clone));
-				
-				//Limpando o LAdo dos ATTR Fixos
-/*				var json 			=	$.parseJSON(base64_decode(object.attr('json')));
-					json['FILTER']	=	[];
-					object.attr('json',base64_encode(json_encode(json,true)));
-					*/
+
 			}
 	}
 	
@@ -1014,6 +1041,7 @@ jQuery.expr[':'].containClass = function(a, i, m) {
  */
 function set_value_box_relatorio(object)
 {
+	
 	if(isset(object.LAYOUT_ROWS))
 	{
 		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR ',object.LAYOUT_ROWS,'.sortable_linha');
@@ -1055,6 +1083,7 @@ function rows_by_metrica_attr_base64(object,_type)
 {
 	var _flag		=	false;
 	var _request	=	[];
+	var _info_save	=	[];
 	
 	$(object).find('li').each(function(){
 		
@@ -1067,6 +1096,8 @@ function rows_by_metrica_attr_base64(object,_type)
 			//Pegando as informações para executar o Relatório
 			if(_type=='attr'){
 				_request[_request.length]	=	json.LEVEL_FULL;
+				//TRACE_DEBUG(json.LEVEL_FULL);
+
 			}else{
 				_request[_request.length]	=	json.MEASURE_UNIQUE_NAME;
 			}
@@ -1116,6 +1147,7 @@ function wrs_run_filter()
 	var run					=	 false;
 	var mensagem			=	"";
 	var flag_load			=	$(this).attr('flag_load');
+	var getAllFiltersToRun	=	"";
 	
 	
  
@@ -1134,6 +1166,7 @@ function wrs_run_filter()
 		mensagem	+= LNG('ATTRIBUTOS_METRICA')+'<br>';	
 	}
 
+	
 	if(!sortable_linha)
 	{
 		mensagem	+= LNG('ATTRIBUTOS_LINHA')+'<br>';
@@ -1166,14 +1199,20 @@ function wrs_run_filter()
 		var param_request	=	[];
 		//Pegando as informações já pre estabelecidas pelo gráfico atuak
 		var is_param		=	false;
+		
+		
+		
+		
 		//Buscando a Grid para poder pegar as  opções selecionadas
 		$('.container_panel_relatorio').find('.wrsGrid').each(function(){
+			changeTypeRun('#'+$(this).attr('id'),TYPE_RUN.direct);
 			param_request	=	getElementsWrsKendoUi($(this));
 			is_param	=	true;
 		});
 		//Se não encontrar a variábel pesquisa pela primeira div que encontrar na tela
 		if(!is_param){
 			$('.container_panel_relatorio').find('div').each(function(){
+				changeTypeRun('#'+$(this).attr('id'),TYPE_RUN.direct);
 				param_request	=	getElementsWrsKendoUi($(this));
 			});
 		}
@@ -1186,7 +1225,18 @@ function wrs_run_filter()
 
 		//Força a conversão do Menu 
 		wrsFilterShow();
-		param_request['LAYOUT_FILTERS']	=	base64_encode($.WrsFilter('getAllFiltersToRun'));
+		getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
+		
+
+		//foreach(getAllFiltersToRun);
+		param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
+		param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
+		
+		
+
+
+
+
 		//Passando o ID do Cubo na sessão
 		var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;
 		//Verificando se existe multiplos cubos
@@ -1211,7 +1261,41 @@ function wrs_run_filter()
 		}
 		
 		//Verificnado se existe alterações de pesquisa 
-		if(is_wrs_change_to_run(param_request))
+		
+		//foreach(param_request);
+		/*
+		 * Pega os elementos das Opções antes não Dashboard
+		 * 
+		 */
+		var wrsConfigGridDefault		=	$('#wrsConfigGridDefault');
+		var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
+		
+		//Se existir interação então faz o merge das informações 
+			if(!empty(wrsConfigGridDefault.attr('is-event'))){
+				
+				
+				if(!empty(wrsConfigGridDefault_data))
+				{
+					var getParamDefault = ['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
+
+
+					//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);
+					for(var lineGetParamDefault in getParamDefault)
+					{
+//						TRACE_DEBUG(getParamDefault[lineGetParamDefault]+'|||'+wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]]);
+						
+						param_request[getParamDefault[lineGetParamDefault]]	=	wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]];
+					}
+					
+				}
+			}
+			
+			
+		var is_wrs_change_to	=	is_wrs_change_to_run(param_request);
+			param_request		=	is_wrs_change_to.val;
+		
+			
+		if(is_wrs_change_to.status)
 		{
 			
 			if($(this).attr('is_atributo_simples')=='true'){
@@ -1219,6 +1303,7 @@ function wrs_run_filter()
 			}
 			$(this).attr('locked',false);//Libera o filtro
 			$(this).attr('flag_load','false');
+			
 
 			return true;
 		}else{
@@ -1229,32 +1314,22 @@ function wrs_run_filter()
 			}
 		}
 		
-		//foreach(param_request);
-		/*
-		 * Pega os elementos das Opções antes não Dashboard
-		 * 
-		 */
-		var wrsConfigGridDefault		=	$('#wrsConfigGridDefault');
-		var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
-
 		
-		//Se existir interação então faz o merge das informações 
-			if(!empty(wrsConfigGridDefault.attr('is-event'))){
-				if(!empty(wrsConfigGridDefault_data))
-				{
-					param_request	=	merge_objeto(param_request,wrsConfigGridDefault_data);
-				}
-			}
+		
 			
+		//Ajustando ABAS HTML	
+		$('.WRS_DRAG_DROP_RECEIVER_FILTER').hide();
+		$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
+		$('.wrs_panel_filter_icon').hide();
+		
+		
+		
 		runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
 		
 		wrs_panel_layout.close('east');
 		$('.wrs_panel_center_body').hide();
 		$('.wrs_panel_filter_icon').hide();
-		
-		
-		
 	}
 	else
 	{
@@ -1271,8 +1346,9 @@ function wrsRunGridButton(param_request)
 		var _file	=	'WRS_PANEL';
 		var _class	=	'WRS_PANEL';
 		var _event	=	'load_grid_header';
-		MODAL_LOADING_WRS_PANEL();
-		runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');	
+		
+			MODAL_LOADING_WRS_PANEL();
+			runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');	
 }
 
 /**
@@ -1282,10 +1358,8 @@ function wrsRunGridButton(param_request)
 function MOUNT_LAYOUT_GRID_HEADER(data)
 {
 	TRACE('START MOUNT_LAYOUT_GRID_HEADER'); 
-	
 	$('.container_panel_relatorio').html(data);
 	//CLOSE_LOAD_RELATORIO();
-	
 	//Apenas éexecutando quando existe atributo simples
 	if($('.wrs_run_filter').attr('is_atributo_simples')=='true')
 	{
@@ -1425,15 +1499,22 @@ function wrs_panel_active_drag_drop()
 					    	  						$(this).removeClass('hide');
 					    	  						$(this).show();
 					    	  					});
+					    	  					
+					    	  					//setTimeout(DEFAULT_OPTIONS_TOPS,500);
+					    	  					
 					    	  				},
 						  sort			: 	function(){
-									       	$( this ).removeClass( "ui-state-default" );
+									       		$( this ).removeClass( "ui-state-default" );
 									       },
 									       helper: function(){ // modificando o helper pra clonar o objeto ao inves de move-lo
-										       return $(this).children('li.ui-state-hover').clone()
+										       var _data	=	 $(this).children('li.ui-state-hover').clone()
 										            .appendTo('body') 
 										            .css('zIndex',1000) 
 										            .show(); 
+										       
+										       return _data;
+										       
+										       
 										  } 			
 							,start: function (e, ui) { 
 									ui.item.show();

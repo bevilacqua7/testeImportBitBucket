@@ -36,7 +36,7 @@ class SQL_SERVER
 	 * WARNING: Apenas use quando souber o que está fazendo
 	 */
 	public function runConnection()
-	{	
+	{
 		$connectionInfo = array('Database'=>BANCO,'UID'=>USUARIO,'PWD'=>SENHA,
 								'APP'=>'WRS','WSID'=>'WEBServer',
 								'CharacterSet'=>CODE,
@@ -71,9 +71,9 @@ class SQL_SERVER
 		}
 		
 		$_query	= sqlsrv_query($this->get_conn(),$query);		
-		if(IS_WRS_DEBUG){
-			//$this->query_debug('DONE::'.$query);
-		}
+		/*if(IS_WRS_DEBUG){
+			$this->query_debug('DONE::'.$query);
+		}*/
 
 		//session_regenerate_id(); //Retoma a escrita da sessão
 		if(!$_query) { $this->query_debug('ERROR:::: '.$query); return false; }

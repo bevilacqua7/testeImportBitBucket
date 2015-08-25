@@ -105,9 +105,51 @@ class KendoUi
 	 */
 	public function getRequestWrsKendoUi()
 	{
-		return array('page_size','PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','frozen','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA');	
+		/*
+		 * WARNING:O Comando 'TYPE_RUN' é apenas para saber qual o tipo de Execução está sendo solicitado e por esse motivo ele deve ser sempre empty quando finalizado o processo
+		 */
+		return array(	'page_size',
+						'PLUS_MINUS',
+						'ORDER_BY_COLUMN',
+						'ORDER_COLUMN_TYPE',
+						'frozen',
+						'SUMARIZA',
+						'COLORS_LINE',
+						'ALL_COLS',
+						'ALL_ROWS',
+						'WINDOW',
+						'CHART',
+						'GAUGE_COLOR',
+						'GAUGE_SIZE_BY_LINE',
+						'DRILL_HIERARQUIA_LINHA',
+						'DRILL_HIERARQUIA_LINHA_DATA',
+						'SHOW_LINE_TOTAL',
+						'DRILL_HIERARQUIA_LINHA_DATA_HEADER',
+						'TYPE_RUN',
+						'TITLE_ABA',		//Titulo da ABA
+						'REPORT_ID',//IDentificador da ABA
+						'FILTER_TMP',		//Contem a estrutura do filtro usada para o histórico
+						'QUERY_ID',			//ID da query que foi requisitada
+						'IS_REFRESH',		//identifica se foi executado o F5 e ou o frefresh na tela
+						'TOP_CONFIG'		//COnfigurações dos tipos de TOPS e onde
+						
+					);	
 	}
 	
+	
+	/**
+	 * Exeções que as vezes é utilizado para repassar informações ao request
+	 * @return multitype:string
+	 */
+	public function getRequestWrsExceptions()
+	{
+		return array(
+							'DRILL_HIERARQUIA_LINHA_DATA_MINUS',
+							'PAGE_CURRENT',
+							'TRASH_HISTORY',		// Contem as informações hos HISTORICOS
+							'MKTIME_HISTORY'		//Mktime do Histori
+		);
+	}
 
 	/*
 	 * Configurando o array acimapa para o Javascript
@@ -234,7 +276,7 @@ class KendoUi
 	 * @param string $type
 	 * @return string
 	 */
-	public function render($_element)
+	public function render($_element,$getRequestWrsExceptions,$report_id)
 	{
 		//Pegando os padrões das páginas
 		$this->pageScheme();
@@ -259,7 +301,7 @@ class KendoUi
 		
 		$idTag		=	$this->getId();
 		
-		include PATH_TEMPLATE.'wrs_panel_header_table.php';
+		include PATH_TEMPLATE.'wrs_panel_header_options.php';
 		
 		$element	=	base64_encode(json_encode(array_merge($_request,$_element),true));
 		
@@ -268,8 +310,11 @@ class KendoUi
 		$ORDER_COLUMN  = empty($ORDER_COLUMN) ? 0 : $ORDER_COLUMN;	
 		
 		//PArametros a ser passado pela Kendo
-		$wrsKendoUi							=  NULL;
-		$this->wrsKendoUi['ORDER_COLUMN']	= $ORDER_COLUMN;
+		$wrsKendoUi							=  	NULL;
+		$this->wrsKendoUi['ORDER_COLUMN']	= 	$ORDER_COLUMN;
+		$this->wrsKendoUi['TYPE_RUN']		=	NULL;//QUam solicitou o tipo de Alteração do evento
+		
+		$this->wrsKendoUi['DRILL_HIERARQUIA_LINHA_DATA']	=	"";	//Manter sempre nullo 
 		$wrsKendoUi					=	 base64_encode(json_encode($this->wrsKendoUi,true));
 		
 		$html 	= <<<HTML
@@ -281,8 +326,10 @@ class KendoUi
 			<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
 			
 		  <script>
+		  
+		  		WRSHistory[{$report_id}]	=	"{$getRequestWrsExceptions['TRASH_HISTORY']}";	
 				$(function(){
-										var jsonDecode											= 	{$_jsonencode};
+											var jsonDecode											= 	{$_jsonencode};
 										jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
 										jsonDecode.dataBound									= 	function(arg){ return onDataBound(arg);}								
 										jsonDecode.dataBinding									=	function(arg){ return onDataBinding(arg);}
@@ -292,6 +339,8 @@ class KendoUi
 										$("#{$this->getId()}").WrsGridKendoUiControlColumnPlusMinus({$PLUS_MINUS}).WrsDrill().WRSWindowGridEventTools();
 										$('.dropdown-menu-configuration form, .dropdown-menu-configuration li ').click(function (e) {e.stopPropagation();});
 										$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
+												
+										WRSKendoGridComplete("#{$this->getId()}");		
 																													
 										
 							});
@@ -329,11 +378,13 @@ HTML;
 	 * Informa qual será a URL de Resposta
 	 * @param string $url
 	 */	
-	public function setRequestJson($urlRequest)
+	public function setRequestJson($urlRequest,$PAGE=1)
 	{
 		$this->_param['dataSource']['transport']['read']['url']				=	$urlRequest;
 		$this->_param['dataSource']['transport']['read']['contentType']		=	'application/json';
 		$this->_param['dataSource']['transport']['read']['type']			=	'POST';
+
+		$this->_param['dataSource']['page']			=	$PAGE;
 		//Passa os parametros atrávez do request
 		$this->_param['dataSource']['transport']['parameterMap']			=	"";
 	}
@@ -693,6 +744,7 @@ HTML;
 		$grid	=	<<<HTML
 					<div id="{$table}"></div>
 		            <script>
+
 		                $(document).ready(function () {
 		                    $("#{$table}").kendoGrid({
 		                    	columns: {$json_column},

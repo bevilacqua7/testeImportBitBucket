@@ -103,7 +103,7 @@ define('PATH_LANGUAGE',PATH_WRS.'language'.DIRECTORY_SEPARATOR);
 
 define('PATH_SMARTY',PATH_API.'Smarty-3.1.20'.DIRECTORY_SEPARATOR);
 
-define('WRS_DEBUG_QUERY_FILE_NAME','WRS_QUERY_DEBUG.wrs');
+define('WRS_DEBUG_QUERY_FILE_NAME','WRS_QUERY_DEBUG.txt');
 define('WRS_DEMO',1);
 
 /**
@@ -114,7 +114,7 @@ define('WRS_DEMO',1);
  */
 define('PATH_DEFAULT',dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR);
 
-define('DEBUG_USER_SQL_NAME','_WRS_QUERY_DEBUG.wrs');
+define('DEBUG_USER_SQL_NAME','_WRS_QUERY_DEBUG.txt');
 
 	//Chama o script com funÃ§Ãµes gerais de banco de dados
 
@@ -130,7 +130,7 @@ function WRS_TRACE($word,$line,$file)
 	if(IS_WRS_TRACE)
 	{
 		$text_debug	=	WRS::LOGIN().' - '.$word.'  | LINE:'.$line.' | FILE:'.$file;
-		$fileName	=	'WRS_TRACE.wrs';
+		$fileName	=	'WRS_TRACE.txt';
 		$fp 		= 	fopen(dirname(__DIR__).DIRECTORY_SEPARATOR.'var'.DIRECTORY_SEPARATOR.$fileName,'a');
 		fwrite($fp,date('d-m-Y H:i:s | ').$text_debug.PHP_EOL); // grava a string no arquivo. Se o arquivo não existir ele será criado
 		fclose($fp);
@@ -733,6 +733,12 @@ function fwrs_array_comparar($array,$value)
 
 	return false;
 }
+
+function fwrs_mktime()
+{
+	return mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y"));
+}
+
 
 /**
  * Gravando info no cookie

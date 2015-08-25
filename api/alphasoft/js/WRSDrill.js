@@ -28,7 +28,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 	var columns_fixed	=	explode(',',__kendoUI.columns[keyName].layout['LAYOUT_ROWS']);
 		columns_fixed	=	columns_fixed.length+1;
 
-		
+
 
 	/*
 	 * Adicionando o DrilDown
@@ -39,6 +39,9 @@ function addDrillOnDataBound(nameID,kendoUI)
 					var LEVEL_DRILL	=	 $(this).attr('LEVEL_DRILL');
 					var LEVEL_FULL	=	 $(this).attr('LEVEL_FULL');
 					var rel			=	 $(this).attr('rel');
+					
+					
+					
 					
 					var indexParent			=	 $(this).parent().index();
 					var _layout				=	[];
@@ -61,6 +64,9 @@ function addDrillOnDataBound(nameID,kendoUI)
 					
 						filter_add							=	[['__'+replace_attr(LEVEL_FULL),'',LEVEL_FULL+'.['+strip_tags($(this).parent().html())+']']];
 					
+						
+						changeTypeRun(nameID,TYPE_RUN.drildown);//Informando o tipo de RUN foi solicitado
+						
 						changeWithDrillFilter(_layout,filter_add);
 		
 	};
@@ -94,6 +100,19 @@ function addDrillOnDataBound(nameID,kendoUI)
 								var aLink	=	$('<a/>',{href:'#'+json.LEVEL_DRILL,'class':'underline','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
 									aLink.click(clickDrillDown);
 								event.html(aLink);
+								
+								
+								//Trabalhando a exeção da estrutura da latitude e longitude do mapa
+								if(kendoUI.sender.wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE){							
+									event.find('.DRILL_HIERARQUIA_LINHA').each(function(){
+										var getElement	=	 $(this).clone();
+										getElement.click(DRILL_HIERARQUIA_LINHA_HEADER_CLICK);
+										$(this).parent().parent().append(getElement);
+										$(this).remove();
+									})
+								}
+								
+								//
 							}
 						})
 					}
@@ -233,7 +252,9 @@ function addTargetDisableContext(kendoUi)
     			}
     		
 
-
+    		
+    		changeTypeRun(IDName,TYPE_RUN[e.type]);//Informando o tipo de RUN foi solicitado
+    		
     		switch(e.type)
     		{
 				case 'linha' 				:  {
@@ -478,6 +499,7 @@ function addTargetDisableContext(kendoUi)
         	return menuMain;
     	}
 
+    	
     	var kendoUi		=	$('#'+$event.attr('id')).data('kendoGrid');
     	var e_infos = wrsKendoUiContextMenu($event);
     	var e_colunas 	= explode(',',e_infos.layout_full['LAYOUT_COLUMNS']);

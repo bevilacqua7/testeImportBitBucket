@@ -15,6 +15,8 @@ function WRSMaps(KendoUi)
 	var BOX				=	$('.'+idName+'BOX');
 
 
+	
+//	$('#'+idName+'Elements .map').data('WRS').setMaps('')
 	var _data		=	telerikGrid._data;
 	var maps		=	[];
 	//var tmpElParam	=	{_width:ELEMENT.width(),_height:ELEMENT.height()}
