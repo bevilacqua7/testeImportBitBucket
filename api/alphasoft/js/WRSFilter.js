@@ -253,6 +253,7 @@ function is_wrs_change_to_run(_param_request)
 	var history			=	filter.attr('history');
 	var histoty_param	=	{};
 	var flag			=	true;
+	var change_TOP		=	false;
 	var eastonclose		=	$('.wrs_run_filter').attr('eastonclose');
 	var loadStart		=	 true;
 	
@@ -307,11 +308,16 @@ function is_wrs_change_to_run(_param_request)
 	if(histoty_param['ORDER_COLUMN']!=param_request['ORDER_COLUMN'])		flag=false;
 	if(histoty_param['ALL_COLS']!=param_request['ALL_COLS'])				flag=false;
 	if(histoty_param['ALL_ROWS']!=param_request['ALL_ROWS'])				flag=false;
-	if(histoty_param['TOP_CONFIG']!=param_request['TOP_CONFIG'])				flag=false;
+	if(histoty_param['TOP_CONFIG']!=param_request['TOP_CONFIG'])				{
+		flag=false;
+		
+		if(!empty(histoty_param['TOP_CONFIG'])){
+			//Exceção para limpar os TOPs
+			param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
+			param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
+		}
+	}
 	
-	
-	  
-
 	if(!flag)
 	{
 
@@ -388,7 +394,7 @@ function is_wrs_change_to_run(_param_request)
 		histoty_param['ALL_ROWS']		=	param_request['ALL_ROWS']	;
 		histoty_param['DRILL_HIERARQUIA_LINHA']			=	param_request['DRILL_HIERARQUIA_LINHA']	;
 		histoty_param['DRILL_HIERARQUIA_LINHA_DATA']	=	param_request['DRILL_HIERARQUIA_LINHA_DATA'];//Mante sempre nula para que possa fazer nova consulta//param_request['DRILL_HIERARQUIA_LINHA_DATA']	;
-		
+		histoty_param['TOP_CONFIG']	=	param_request['TOP_CONFIG'];
 		
 		
 		

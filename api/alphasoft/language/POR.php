@@ -49,8 +49,14 @@
 
 
 
-
-
+	$language['TITLE_TOP_TOTAL'] 	= "TOTAL";
+	$language['TITLE_TOP_5'] 		= "TOP 5";
+	$language['TITLE_TOP_10'] 		= "TOP 10";
+	$language['TITLE_TOP_15'] 		= "TOP 15";
+	$language['TITLE_TOP_20'] 		= "TOP 20";
+	$language['TITLE_TOP_25'] 		= "TOP 25";
+	$language['TITLE_TOP_50'] 		= "TOP 50";
+	$language['TITLE_TOP_100'] 		= "TOP 100";
 
 
 	
@@ -183,6 +189,8 @@
 		
 	$language['WHAT_SEARCH'] = "O que procura?";
 	
+	
+	$language ['TITLE_TOP'] 		= "Opções Top";
 	$language ['BTN_SAIR'] 		= "Sair";
 	$language ['BTN_SIM'] 		= "Sim";
 	$language ['BTN_NAO'] 		= "Não";

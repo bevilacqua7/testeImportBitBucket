@@ -126,6 +126,7 @@ class KendoUi
 						'SHOW_LINE_TOTAL',
 						'DRILL_HIERARQUIA_LINHA_DATA_HEADER',
 						'TYPE_RUN',
+						'PAGE_CURRENT',		// Pagina corrente
 						'TITLE_ABA',		//Titulo da ABA
 						'REPORT_ID',//IDentificador da ABA
 						'FILTER_TMP',		//Contem a estrutura do filtro usada para o histórico
@@ -145,7 +146,6 @@ class KendoUi
 	{
 		return array(
 							'DRILL_HIERARQUIA_LINHA_DATA_MINUS',
-							'PAGE_CURRENT',
 							'TRASH_HISTORY',		// Contem as informações hos HISTORICOS
 							'MKTIME_HISTORY'		//Mktime do Histori
 		);
