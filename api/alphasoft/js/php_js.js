@@ -2153,6 +2153,20 @@ function array_keys(input, search_value, argStrict) {
 	}
 
 
+function array_key_data(input)
+{
+	var inputTMP		=	[];
+	
+	for(var lineInput in input)
+		{
+		
+			inputTMP[inputTMP.length]	=	lineInput;
+		}
+	
+	return inputTMP;
+}
+
+
 function array_data(input)
 {
 	var inputTMP		=	[];

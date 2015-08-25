@@ -509,7 +509,7 @@ class WRS_PANEL  extends WRS_USER
 	 * @param array $getRequestKendoUi
 	 * @param string $column
 	 */
-	private function managerHistotyChangeColOrder($cube_id,$getRequestKendoUi,$column,$order,$saveHistory=false)
+	private function managerHistotyChangeColOrder($cube_id,$getRequestKendoUi,$column,$order,$page_current,$rows_page,$saveHistory=false)
 	{
 		$report_id		=	 $getRequestKendoUi['REPORT_ID'];
 		$history		=	json_decode(base64_decode(WRS::GET_REPORT_HISTORY($cube_id, $report_id)),true);
@@ -520,6 +520,11 @@ class WRS_PANEL  extends WRS_USER
 		if(!$saveHistory){
 			$history[0]['kendoUi']['ORDER_BY_COLUMN']	=	$column;
 			$history[0]['kendoUi']['ORDER_COLUMN_TYPE']	=	$order;
+			
+			if($page_current)$history[0]['kendoUi']['PAGE_CURRENT']	=	$page_current;
+			
+			if($rows_page)$history[0]['kendoUi']['page_size']	=	$rows_page;
+			
 		}else{
 			//Se for a opção salvar 
 			foreach($column as $line => $data)
@@ -551,7 +556,7 @@ class WRS_PANEL  extends WRS_USER
 		
 		$getRequestKendoUi					=	 array();
 		$getRequestKendoUi['REPORT_ID']		=	$options['report_id'];
-		$this->managerHistotyChangeColOrder($cube_id, $getRequestKendoUi, $options['history_options'], NULL,true);
+		$this->managerHistotyChangeColOrder($cube_id, $getRequestKendoUi, $options['history_options'], NULL,NULL,NULL,true);
 	}
 	
 	private function convertDataHistory($data,$tagClass="")
@@ -933,13 +938,13 @@ HTML;
 		
 		$PAGE					=	1;
 	
-		if(isset($getRequestWrsExceptions['PAGE_CURRENT']))
+		if(isset($getRequestKendoUi['PAGE_CURRENT']))
 		{
 			$PAGE	=	ceil($num_rows/$page_size);
 			
-			if($PAGE>=$getRequestWrsExceptions['PAGE_CURRENT'])
+			if($PAGE>=$getRequestKendoUi['PAGE_CURRENT'])
 			{
-				$PAGE	=	$getRequestWrsExceptions['PAGE_CURRENT'];
+				$PAGE	=	$getRequestKendoUi['PAGE_CURRENT'];
 			}
 		}
 		
@@ -1056,11 +1061,14 @@ HTML;
 		
 		$param_chart	= array();
 
-		if(isset($sort[0]['field']))
-		{
-			$this->managerHistotyChangeColOrder($CUBE_ID, $getRequestKendoUi,$sort[0]['field'],$sort[0]['dir']);
-
-		}
+		//WRS_DEBUG_QUERY(print_r($request,true));
+		
+		
+			$order_field	=	isset($sort[0]['field']) ? $sort[0]['field'] : '';
+			$order_dir		=	isset($sort[0]['dir']) ? $sort[0]['dir'] : '';
+			
+			$this->managerHistotyChangeColOrder($CUBE_ID, $getRequestKendoUi,$order_field,$order_dir,$page,$pageSize);
+		
 		
 		while ($rows =  $this->fetch_array($sqlGrid_exec))
 		{

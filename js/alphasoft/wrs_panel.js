@@ -513,9 +513,10 @@ function btn_right_remove()
 			}
 			
 			$(this).parent().remove();
-			
-			
+
 			insetDragDropEmpry();
+			
+			DEFAULT_OPTIONS_TOPS();
 		
 	});
 }
@@ -788,7 +789,6 @@ function DROP_EVENT( event, ui ,eventReceive){
 		}else{
 			toEvent			=	ui.draggable;
 		}
-		
 		
 		setTimeout(DEFAULT_OPTIONS_TOPS,500);
 		
@@ -1270,15 +1270,17 @@ function wrs_run_filter()
 		var wrsConfigGridDefault		=	$('#wrsConfigGridDefault');
 		var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
 		
+		
 		//Se existir interação então faz o merge das informações 
 			if(!empty(wrsConfigGridDefault.attr('is-event'))){
 				
-				
-				if(!empty(wrsConfigGridDefault_data))
+					if(!empty(wrsConfigGridDefault_data))
 				{
-					var getParamDefault = ['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
-
-
+					var getParamDefault = array_key_data(wrsConfigGridDefault_data);
+					//['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
+					
+//					foreach(getParamDefault);
+					
 					//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);
 					for(var lineGetParamDefault in getParamDefault)
 					{
@@ -1289,6 +1291,7 @@ function wrs_run_filter()
 					
 				}
 			}
+			
 			
 			
 		var is_wrs_change_to	=	is_wrs_change_to_run(param_request);
@@ -1324,6 +1327,7 @@ function wrs_run_filter()
 		
 		
 		
+
 		runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
 		

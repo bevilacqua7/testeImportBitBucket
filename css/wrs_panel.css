@@ -1494,3 +1494,15 @@ box-shadow:         inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
 .NAV_CONFIG_WRS .wrsTopOptionsData li a{
 	color: #333 !important;
 }
+
+.label_top_wrs{
+	margin:0px;
+	margin-left:5px;
+	top: -5px;
+	padding: 1px;
+	
+	-webkit-border-radius: 0px;
+-moz-border-radius: 0px;
+border-radius: 0px;
+
+}
