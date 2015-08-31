@@ -12,11 +12,11 @@
         <li><i class="glyphicon glyphicon-book"></i> Books</li>
         <li><i class="glyphicon glyphicon-briefcase"></i> Tools</li>
         <li><i class="glyphicon glyphicon-time"></i> Real-time</li>
-        <li><i class="glyphicon glyphicon-plus"></i> Advanced..</li>
+        <li class="painel_administrativo_demo"><i class="glyphicon glyphicon-plus"></i> Demo ADM</li>
   </ul>
   </li>
-  <li role="presentation"><a href="#" class="wrs_open_modal" data-toggle="modal" data-target="#myModal"><i class="fa fa-folder-open"></i></a></li>
-  <li role="presentation"><a href="#" class="wrs_open_modal" data-toggle="modal" data-target="#myModal"> <i class="fa fa-floppy-o" ></i></a></li>
+  <li role="presentation"><a href="#" class="wrs_open_modal"><i class="fa fa-folder-open"></i></a></li>
+  <li role="presentation"><a href="#" class="wrs_open_save" data-toggle="modal" data-target="#myModal"> <i class="fa fa-floppy-o" ></i></a></li>
   <li role="presentation"><a href="#"  class="link"><i class="fa fa-download"></i></a>
   
   

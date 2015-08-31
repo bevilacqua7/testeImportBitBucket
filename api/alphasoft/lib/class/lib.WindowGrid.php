@@ -14,7 +14,7 @@ class WindowGrid extends FORM
 	
 	
 	/**
-	 * 
+	 *  
 	 * Contem os botões do sistema
 	 * @var string
 	 */
@@ -73,7 +73,6 @@ class WindowGrid extends FORM
 		 */
 		$this->manage_param	= new WRS_MANAGE_PARAM();
 		
-		WRS_TRACE('REQUEST: '.print_r($_REQUEST,1), __LINE__, __FILE__);
 		
 		/*
 		 *	Executando as ROWS das GRIDS
@@ -92,9 +91,10 @@ class WindowGrid extends FORM
 			$param['html']	=	fwrs_error(LNG('ERROR_NOT_EVENT'));
 			$param['button']= 	array();
 		}else{		
-			
+
 			if($this->manage_param->load($event))
 			{
+				
 				//CHamando o Eventos
 				$param			=	$this->manage_param->$event();
 				$param			=	$this->build_grid_form($param);				
@@ -107,7 +107,6 @@ class WindowGrid extends FORM
 			}	
 		}
 /*
-		WRS_TRACE('EXCECAO '.print_r($param['html'],1), __LINE__, __FILE__);
 		if($this->exception)
 		{
 			$param['html']		=	$this->exception->change_html($param['html']);
@@ -207,7 +206,6 @@ class WindowGrid extends FORM
 										'order_type'	=>true);
 		
 		
-		
 		//Formulário
 		if($wrs_type_grid=='form')
 		{
@@ -216,12 +214,12 @@ class WindowGrid extends FORM
 			return $param;
 		}
 		
-		
 		/*
 		 * 
 		 * Verifica se o Evento do Tipo da Ggrid Existe
 		 * 
 		 */
+
 		if(!isset($visao[$wrs_type_grid]))
 		{
 				$param['title']	=	LNG('ERROR_TITLE');
@@ -361,7 +359,18 @@ EOF;
 	
 	
 	
-	
+	private function checkbox_exist()
+	{
+		return array(
+				'title' 	=> 	"<input type='checkbox' class='checkline'>",
+				'list' 		=> 	1,
+				'basic'		=> 	1,
+				'grid' 		=> 	1,
+				'field' 	=> 	'checkbox_linha',//chamada muito importante 
+				'width' 	=> 	25/*,
+				'template'	=>	'#=checkbox_linha#'*/
+		);
+	}
 	
 	
 	private function vision_grid($_param,$actions_fiels,$exec_vision)
@@ -371,6 +380,9 @@ EOF;
 		$columns				=	array();
 		$primary_key			=	'';
 		
+		if(array_key_exists('checkbox', $param) && $param['checkbox']){
+				$columns[]				=	$this->checkbox_exist();
+		}
 		
 		 
 			foreach($param['field'] as $label =>$field)
@@ -381,7 +393,6 @@ EOF;
 						$primary_key			=	 array();
 						$primary_key[$label] 	=	$field;
 					}
-					
 					$_tmp_column			=	$field;
 					$_tmp_column['field']	=	$label;
 					if(!isset($_tmp_column['width'])){
@@ -450,6 +461,21 @@ EOF;
 		$param				=	$this->manage_param->$table();
 		$is_icon			=	false;
 		$is_select			=	NULL;
+		$checkbox_exist		=	false;
+		$checkbox_val		=	'';
+		
+		if(array_key_exists('checkbox', $param))
+		{
+			if($param['checkbox'])
+			{
+				$checkbox_val						=	$this->checkbox_exist();
+				$check_vale[$checkbox_val['field']]	=	$checkbox_val;
+				$param_tmp							=	array_merge($check_vale,$param['field']);
+				$param['field']						=	$param_tmp;
+				$checkbox_exist						=	true;
+			}
+		}
+		
 		
 		//Extend o Evento
 		$this->extendException($param,'runGrid');
@@ -476,7 +502,7 @@ EOF;
 			$query	=	$this->exception->change_query($table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
 		}
 		
-		
+
 		$query	=	 $this->query($query);
 		
 		
@@ -504,6 +530,8 @@ EOF;
 			
 			
 		}
+		
+
 		 
 		
 		
@@ -535,8 +563,16 @@ EOF;
 				foreach($is_select as $sel_label =>$sel_value)
 				{
 					
+					
+					if($sel_label=='checkbox_linha')
+					{
+						echo '<input type="checkbox"/>';
+						continue;
+					}
+					
 					if(is_array($sel_value))
 					{
+
 						$rows_tmp[$sel_label]=	$sel_value[$rows_tmp[$sel_label]];						
 					}else{
 						$param_select	=	$this->manage_param->$sel_value();
@@ -549,6 +585,8 @@ EOF;
 						{
 							$row_box	=	 $this->fetch_array($query_box);
 							
+							
+							
 							foreach($param_select['field'] as $param_select_label =>$param_select_value)
 								{
 									if(isset($param_select_value['select']))
@@ -557,7 +595,7 @@ EOF;
 									}
 								}
 								
-							$rows_tmp[$sel_label]		=	 implode(' - ',$html_option);
+							$rows_tmp[$sel_label]		=	is_array($html_option) ?  implode(' - ',$html_option) : '';
 						}
 					
 					}
@@ -567,6 +605,12 @@ EOF;
 			
 						
 			$rows_tmp[$sort['field']]	=	'<b>'.$rows_tmp[$sort['field']].'</b>';
+			
+			//Inserindo o checkbox field
+			if($checkbox_exist)
+			{
+				$rows_tmp[$checkbox_val['field']]	=	$checkbox_val['title'];
+			}
 			
 			$resultGrid[]	=	 $rows_tmp;	
 		}

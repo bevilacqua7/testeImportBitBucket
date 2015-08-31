@@ -26,20 +26,29 @@ function onDataBindingWindowGrid(arg)
 	return arg;
 }
 
-/**
- * Quando finalizou de construir os elemtnos da GRid
- * @param arg
- */
-var DELAY = 400, clicks = 0, timer = null;
+
 function onDataBoundWindowGrid(arg)
-{
+{	
 
 	var IDName				=	'#'+arg.sender.element.attr('id');
 	var telerikGrid 		= 	$(IDName).data('kendoGrid');
 	var HandleArg			=	arg;
-	console.log('dataBound',IDName);
 	var KendoGridWindowTools	=	 function ()
-	{
+	{		
+		var param			=	HandleArg.sender.columns[0].window_grid
+		var index			=	$(this).parent().index();
+		
+		try{
+			if(param['actionDouble']){			
+				var toAction	=	param['actionDouble'];
+				window[toAction](HandleArg.sender._data[index]);	
+				
+			}
+		}catch(e){}
+		
+	}
+	
+	var KendoGridWindowToolsAuxSingleClick	=	 function(){	
 		var param			=	HandleArg.sender.columns[0].window_grid
 		var parent			=	$(this).parent();
 		var index			=	$(this).parent().index();
@@ -48,49 +57,30 @@ function onDataBoundWindowGrid(arg)
 		var option						=	 [];
 			option['wrs_type_grid']		=	'form';
 			option[param['primary']]	=	value_primary;
-
-		if(table=='GET_SSAS_REPORT'){
-			clicks++;  //count clicks
-
-	        if(clicks === 1) {
-
-	            timer = setTimeout(function() {
-	            	
-	            	parent.find('.checklinha').val(option.REPORT_ID).prop('checked', !(parent.find('.checklinha').val(option.REPORT_ID).prop('checked')));
-	                clicks = 0;             //after action performed, reset counter
-
-	    	        console.log('Valores marcados: ');
-	    	        parent.parent().find('.checklinha:checked').each(function(){
-	    	        	console.log('check ',$(this).val());
-	    	        });
-	    	        
-	            }, DELAY);
-
-	        } else {
-
-	            clearTimeout(timer);    //prevent single-click action
-	            alert("carrega autoload do reportID: "+option.REPORT_ID);  //perform double-click action
-	            clicks = 0;             //after action performed, reset counter
-	        }
-	        return false;
-		}else{			
+			
+			
+		try{	
+				if(param['actionSingle']){
+					var toAction	=	param['actionSingle'];
+					window[toAction](HandleArg.sender._data[index]);	
+				}else{
+					grid_window_modal(option,table);
+				}
+		}catch(e){
 			grid_window_modal(option,table);
 		}
 	}
-	$(IDName).find('.k-grid-content').find('td').unbind('click').unbind('dblclick').click(KendoGridWindowTools);	
-	
+
+	$(IDName).find('.k-grid-content').find('td').unbind('dblclick').dblclick(KendoGridWindowTools);		
+	$(IDName).find('.k-grid-content').find('td').unbind('click').click(KendoGridWindowToolsAuxSingleClick);	
 	$(IDName).find('.k-grid-content').addClass('wrsGrid border_color');
-
 	
-	if(arg,HandleArg.sender.columns[0].window_grid.table=='GET_SSAS_REPORT'){
-		$(IDName).find('thead tr').prepend('<th/>');	
-		$(IDName).find('colgroup').prepend('<col style="width:30px">');	
-		$(IDName).find('tbody tr').each(function(){
-			$(this).prepend('<td role="gridcell"><input type="checkbox" class="checklinha" value=""></td>');
-		});
+	// se houver checkbox como parametro da tabela remove o action da coluna do checkbox	
+	if(HandleArg.sender.columns[0].field=='checkbox_linha'){
+		$(IDName).find('[data-field=checkbox_linha]').unbind('click').find('input.checkline').change(trataCheckColuna);
 	}
-}
 
+}
 
 function wrd_grid_window_to_form()
 {
@@ -161,30 +151,40 @@ function wrs_window_grid_events_tools()
 	
 }
 
-function grid_window_modal(param_request,Event)
+function grid_window_modal(param_request,Event,_funCallBack)
 {
 	//var param_request	=	 {wrs_type_grid:type};
 	var Ofile			=	'WindowGrid';
 	var Oclass			=	'WindowGrid';
 	var Oevent			=	empty(Event) ? 'ATT_WRS_USER' : Event;
-	var funCallBack		=	 function(data){
-			$('.modal-content-grid').html(data);
-			wrs_window_grid_events_tools();
+
+//	var funCallBack		=	 _funCallBack;
+
+	//if(!isset(_funCallBack)){
+	var funCallBack	=	function(data)
+		{
+				$('.modal-content-grid').html(data);
+				wrs_window_grid_events_tools();
 		};
+	//}
 		
 	var header	=	'<div class="modal-header ui-accordion-header  ui-accordion-header-active ui-state-active"><h4 class="modal-title" id="myModalLabel">'+LNG('LABEL_LOAD')+'</h4></div><div class="body_grid_window_center_Load"></div>';
 	$('.modal-content-grid').html(header);
 	setLoading($('.body_grid_window_center_Load'));	
 	runCall(param_request,Ofile,Oclass,Oevent,funCallBack,'modal');
-	//$('#myModal').modal('show');
 }
 
 $(function(){
 	addKendoUiColorJQueryGrid();
 });
 
+
+
+/*
+ * 
+ * Paginação
+ */
 (function( $ ) {
-	
  	$.fn.WrsGridWindowPagination = function() 
     {
 
