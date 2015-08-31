@@ -17,7 +17,15 @@
 
 function LNG(value)
 {
-	if(!isset(LNG_VAR[value])) return value;
+	var _value	= value;
+	try{
+			if(LNG_VAR[value])
+			{
+				_value	=	LNG_VAR[value];
+			}
+	}catch(e){
+		_value	= value;
+	}
 	
-	return LNG_VAR[value];
+	return _value;
 }

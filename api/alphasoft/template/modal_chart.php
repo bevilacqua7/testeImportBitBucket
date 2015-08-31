@@ -10,7 +10,7 @@
 					      			<!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
 										<div class="row">
 										  				
-										  				<div class="col-md-6 col-xs-12" style="height:440px;">
+										  				<div class="col-md-6 col-xs-12" style="height:370px;">
 										  				<table class="table table-condensed">
 														      <thead>
 														        <tr>

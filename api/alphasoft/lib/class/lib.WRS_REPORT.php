@@ -1,15 +1,16 @@
 <?php 
 /**
- * Concentra todas as interações HTMLS que o WRS venha necessitar a criar com o PHP
+ * LIB para a geracao de relatorios
  * 
- * Author: Marcelo Santos
+ * Author: Marcelo Santos / Felipe Bevilacqua
  * Company:Alpha Soft
- * Date: 17/12/2014 : 17:42
+ * Date: 31/08/2015
  */
 
 
 
 includeCLASS('WRS_USER');
+includeQUERY('WRS_PANEL');
 includeQUERY('WRS_REPORT');
 includeQUERY('WRS_MANAGE_PARAM');
 
@@ -28,16 +29,94 @@ class WRS_REPORT  extends  WRS_USER
 	
 	public function run($event,$paran_query,$cube_s)
 	{
-		$this->event		=	$event;
+		$this->event		=	empty($event)?fwrs_request('event'):$event;
 		$this->paran_query	=	$paran_query;
+		$cube_s				=	empty($cube_s)?fwrs_request('cube_s'):$cube_s;
 		
 		$cubes				=	WRS::GET_SSAS_USER();
 		$this->cube			=	$cubes[$cube_s];
 		$this->_query		=	new QUERY_WRS_REPORT();
+
+		if(!empty($this->event))
+		{
+			switch ($this->event)
+			{
+				case 'openModalSave' 	: return $this->openModalSave(); break;
+				case 'save' 			: return $this->save(); break;
+				
+			}
+		}
+	}
+	
+	
+	public function save(){
+
+
+		$layouts 			= fwrs_request('layouts');
+		$grupos 			= fwrs_request('grupos');		
+		$dadosJs			= json_decode(base64_decode(fwrs_request('dadosJs')));
+		$user				= WRS::INFO_SSAS_LOGIN();
+ 		$REPORT_DESC 		= fwrs_request('report_name');
+ 		$SERVER_ID 			= fwrs_remove_colchete($this->cube['SERVER_ID']);
+ 		$DATABASE_ID 		= fwrs_remove_colchete($this->cube['DATABASE_ID']);
+ 		$CUBE_ID 			= fwrs_remove_colchete($this->cube['CUBE_ID']);
+ 		$ROWS 				= $dadosJs->LAYOUT_ROWS->request;
+ 		$COLUMNS 			= $dadosJs->LAYOUT_COLUMNS->request;
+ 		$MEASURES 			= $dadosJs->LAYOUT_MEASURES->request;
+ 		$FILTERS 			= $dadosJs->LAYOUT_FILTERS->request;
+ 		$FILTERS_VALUES 	= '';
+ 		
+ 		if(trim($FILTERS)!=''){
+ 			$arr_filtros_sel=array();
+ 			$filtros	=	explode(",",$FILTERS);
+ 			if(count($filtros)>0){
+ 				foreach($filtros as $pos => $filtro){
+ 					if(count($dadosJs->filter_selected->full)>0){
+ 						$arr_filtros_sel[]=$filtro."(_,_)".$dadosJs->filter_selected->full[$pos]->data;
+ 					}
+ 				}
+ 				$FILTERS_VALUES = implode("(_|_)",$arr_filtros_sel);
+ 			}
+ 		}
+ 		
+ 		$ALL_ROWS 			= 0;
+ 		$ALL_COLS 			= 0;
+ 		$COLS_ORDER 		= 0;
+ 		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi));
+ 		$REPORT_FORMULAS 	= '';
+ 		$REPORT_FILTER 		= '';
+ 		$REPORT_FLAG 		= '';
+ 		$LAYOUT_SHARE 		= '';
+ 		$USER_TYPE 			= $grupos;
+ 		$REPORT_SHARE 		= fwrs_request('report_share')=='1'?1:0;
+ 		$REPORT_AUTOLOAD 	= fwrs_request('report_auto')=='1'?1:0;
+
+ 		$sql = QUERY_PANEL::SAVE_SSAS_REPORT($REPORT_DESC, $SERVER_ID, $DATABASE_ID, $CUBE_ID,
+                                      $ROWS, $COLUMNS, $MEASURES, $FILTERS, $FILTERS_VALUES, $ALL_ROWS, $ALL_COLS, $COLS_ORDER,
+									  $REPORT_OPTIONS, $REPORT_FORMULAS, $REPORT_FILTER, $REPORT_FLAG, 
+									  $LAYOUT_SHARE, $USER_TYPE, $REPORT_SHARE, $REPORT_AUTOLOAD);
 		
-	}	
 
+ 		$query			=	 $this->query($sql);
+ 		$res			=	 $this->fetch_array($query);
+ 		$rep_id			=	 $res['REPORT_ID'];
+ 		$error			=	 $res['ERROR_MESSAGE'];
+ 		if($rep_id=='0' || trim($error)!=''){
+ 			echo $error."<hr>Query: ".$sql;
+ 		}else{
+ 			echo "Salvo com sucesso, REPORT_ID: ".$rep_id;
+ 		}
+		exit();
+		
+	}
 
+	
+	
+	
+
+	/*
+	 * TODO: Mudar para  change_query_exception
+	 */
 	public function change_query($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
 	{
 		switch($this->event)
@@ -46,13 +125,14 @@ class WRS_REPORT  extends  WRS_USER
 		}
 	}
 	
+	
+	
+	
 	public function change_html($html)
 	{
-				WRS_TRACE('EVENTO: '.$this->event, __LINE__, __FILE__);
 		switch($this->event)
 		{
 			case 'runGrid':
-				WRS_TRACE('HTML: '.print_r($html,1), __LINE__, __FILE__);
 				return $html; 
 				break;
 			default: return $html;			
@@ -102,14 +182,40 @@ class WRS_REPORT  extends  WRS_USER
 			WRS_TRACE($last_error, __LINE__, __FILE__);
 			return false;
 		}
-		
-		
-		
-		
-		
 
 	}
-	 
+
+	
+	public function openModalSave()
+	{
+		$dadosJs			= json_decode(base64_decode(fwrs_request('dadosJs')));
+WRS_TRACE("DADOSJS: ".print_r($dadosJs,1),__LINE__,__FILE__);
+		// injeta as variaveis de ambiente (configuracao atual) no formulario para a inclusao no banco
+		$JS	=	<<<HTML
+		
+				var input	=	 $('<input/>',{name:"dadosJs",type:'text', value:base64_encode(json_encode(getLoadReport()))}).css('display','none');
+				$('#insert_report').append(input);
+
+HTML;
+		// preenche os 'grupos' do formulario com os tipos cadastrados no banco (query passada pelo facioli em 26-08-2015)
+		$user			=	WRS::INFO_SSAS_LOGIN();		
+		$sql			=	"select distinct USER_TYPE from ATT_WRS_USER where CUSTOMER_ID =".$user['CUSTOMER_ID'];		
+		$query			=	$this->query($sql);
+		$tipos=array();
+		while($res			=	$this->fetch_array($query)){
+			$tipos[]=$res['USER_TYPE'];
+		}
+		$JS2='';
+		foreach($tipos as $nome){
+			$JS2.= "\n$('#select2').find('.wrs-measures').append($('<option/>').html('".$nome."'));";
+		}
+		echo fwrs_javascript($JS);
+		echo fwrs_javascript($JS2);
+		include PATH_TEMPLATE.'modal_include_report.php';
+		exit();
+		
+	}
+	
 	 
 
 	
