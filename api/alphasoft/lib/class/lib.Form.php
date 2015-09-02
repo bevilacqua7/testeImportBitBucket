@@ -5,6 +5,7 @@
  */
 
 includeQUERY('WRS_MANAGE_PARAM');
+includeQUERY('WRS_MANAGE_PARAM_SP');
 includeCLASS('WRS_USER');
 
 	
@@ -300,6 +301,11 @@ EOF;
 			return $_tmp;
 		}
 	
+		
+		
+		
+		
+		
 	
 	
 	

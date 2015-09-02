@@ -1,7 +1,7 @@
 <?php
 
  
-function WRS_DEBUG_QUERY($texto,$fileName='WRS_DEBUG.txt')
+function _WRS_DEBUG_QUERY($texto,$fileName='WRS_DEBUG.txt')
 {
 	$fp = fopen(__DIR__.DIRECTORY_SEPARATOR.$fileName,'a');
 	fwrite($fp,$texto.PHP_EOL); 
@@ -15,7 +15,7 @@ function WRS_DEBUG_QUERY($texto,$fileName='WRS_DEBUG.txt')
  
     if ($type == 'save') {
     	
-    	WRS_DEBUG_QUERY('EXPORT');
+    	_WRS_DEBUG_QUERY('EXPORT');
         $fileName 		= $_POST['fileName'];
         $contentType 	= $_POST['contentType'];
         $base64 		= $_POST['base64'];
@@ -60,7 +60,7 @@ function WRS_DEBUG_QUERY($texto,$fileName='WRS_DEBUG.txt')
 	$limiByPage		=	$request['take'];
 	
 	
-//	WRS_DEBUG_QUERY(print_r($request,true));
+//	_WRS_DEBUG_QUERY(print_r($request,true));
 	
 	
     

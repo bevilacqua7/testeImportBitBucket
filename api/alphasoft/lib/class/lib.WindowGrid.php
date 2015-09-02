@@ -20,9 +20,37 @@ class WindowGrid extends FORM
 	 */
 	private $button		=	NULL;
 	
+	/**
+	 * Exceptions
+	 * @var WRS_REPORT
+	 */
+	private $exception	=	NULL;
 	
 	
-	
+	private function extendException($param,$event)
+	{
+		/*
+		 *
+		 * Obtendo o evento para extender a classe que contem a regra da estrutura
+		 *
+		 */
+
+		if(array_key_exists('exception', $param))
+		{
+			$this->exception	=	 $param['exception'];
+			includeCLASS($this->exception['file']);
+		
+			$class		=	$this->exception['class'];
+			$obj		=	 new $class();
+			$cube_s		=	 fwrs_request('cube_s');	
+			$obj->set_conn($this->get_conn());
+			$obj->run($event,$param,$cube_s);
+			
+			
+			$this->exception	=	$obj;
+		}
+		
+	}
 	
 	/**
 	 * Recebe todos os Eventos iniciais
@@ -37,19 +65,19 @@ class WindowGrid extends FORM
 		$param['title_menu']=	'';
 		$param['table']		=	'';
 		
-
+		$wrs_type_grid		=	fwrs_request('wrs_type_grid');
+		
 		/*
 		 * Eventos do Banco
 		 * @var WRS_MANAGE_PARAM
 		 */
 		$this->manage_param	= new WRS_MANAGE_PARAM();
 		
+		WRS_TRACE('REQUEST: '.print_r($_REQUEST,1), __LINE__, __FILE__);
 		
 		/*
-		 *	Separando o evento que será solicitado 
+		 *	Executando as ROWS das GRIDS
 		 */
-		
-	
 		if(!empty($event_grid_inside))
 		{	
 			if($event_grid_inside=='grid')
@@ -64,18 +92,27 @@ class WindowGrid extends FORM
 			$param['html']	=	fwrs_error(LNG('ERROR_NOT_EVENT'));
 			$param['button']= 	array();
 		}else{		
+			
 			if($this->manage_param->load($event))
 			{
 				//CHamando o Eventos
 				$param			=	$this->manage_param->$event();
 				$param			=	$this->build_grid_form($param);				
+				
+				$this->extendException($param,$wrs_type_grid);
 			}else{
 				$param['title']	=	LNG('ERROR_TITLE');
 				$param['html']	=	fwrs_error(LNG('ERROR_EVENT_NOT_FOUND'));
 				$param['button']= 	array();
 			}	
 		}
-		
+/*
+		WRS_TRACE('EXCECAO '.print_r($param['html'],1), __LINE__, __FILE__);
+		if($this->exception)
+		{
+			$param['html']		=	$this->exception->change_html($param['html']);
+		}
+*/
 		//Aplicando a conversão das TAGS para aplicar no HTML
 		$TPL_TITLE				=		$param['title'];
 		$TPL_HTML				=		$param['html'];		
@@ -85,9 +122,12 @@ class WindowGrid extends FORM
 		
 		$TPL_BUTTON				=		$this->getButton();
 				
-		//Chamando o Template
-		include PATH_TEMPLATE.'windows_grid.php';
-		
+		if(!fwrs_request('return_html')){
+			//Chamando o Template
+			include PATH_TEMPLATE.'windows_grid.php';
+		}else{
+			echo $TPL_HTML;
+		}
 		
 	}
 	
@@ -229,7 +269,19 @@ class WindowGrid extends FORM
 		$page_size		=  	empty($page_size) ? 25 : $page_size;
 		//$page_size		=	10;
 		$_query			=	$this->manage_param->select($param['field'], $param['table'], $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
-		$query			= 	$this->query($_query);
+		
+		
+		if($this->exception)
+		{
+			
+			$query			=	$this->exception->change_query($param['table'], $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
+			
+		}else{
+		
+			$query			= 	$this->query($_query);
+		
+		}
+		
 		$num_rows		=	0;
 	
 		/*
@@ -304,7 +356,6 @@ EOF;
 		
 		$param['title_menu']	=	$this->navMenu($param['table']);
 		$param['html']			=	str_replace('{TAG_ROWS}', $html, $TAG_ROWS).$this->pagination($param,$num_rows,$page_size,$page_current,$exec_vision);
-		
 		return $param;
 	}
 	
@@ -337,7 +388,21 @@ EOF;
 						$_tmp_column['width']	=	 (strlen($field['title'])*13)+10;
 					}
 							
-				
+					
+					// novo tratamento para exibicao das colunas de acordo com o configurado na libQuery
+					if(($exec_vision=='list' && (
+							!isset($field['grid']) ||
+							!isset($field['basic']) ||
+							!isset($field['list'])
+							)) || // se a visao for list e nao tiver parametro, mostra
+						($exec_vision=='list' 		&& isset($field['grid']) 	&& $field['grid']=='1') || // se a visao for list e tiver o parametro list, mostra
+						($exec_vision=='details' 	&& isset($field['list']) 	&& $field['list']=='1') || // se a visao for details e tiver o parametro details (list), mostra
+						($exec_vision=='date' 		&& isset($field['basic']) 	&& $field['basic']=='1')   // se a visao for date(lista basica) e tiver o parametro lista basica (basic), mostra
+					){
+								$columns[]				=	$_tmp_column;					
+					}
+					
+				/*
 					//Apenas informações do list é para apresentar
 					if($exec_vision=='list' || $exec_vision=='details')
 					{
@@ -357,11 +422,13 @@ EOF;
 									}	
 								}
 					}
+				*/
 					
 			}
 		 	
 			
 
+		
 		$kendoUI					=	new KendoUi();
 		$param['html']				=	$kendoUI->grid_window($columns, $param);
 		return $param;		
@@ -384,6 +451,9 @@ EOF;
 		$is_icon			=	false;
 		$is_select			=	NULL;
 		
+		//Extend o Evento
+		$this->extendException($param,'runGrid');
+		
 		if(!count($sort))
 		{
 				$sort				=	array();
@@ -400,7 +470,16 @@ EOF;
 		$query	=	$this->manage_param->select('*', $table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
 		
 		
+
+		if(!empty($this->exception))
+		{
+			$query	=	$this->exception->change_query($table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
+		}
+		
+		
 		$query	=	 $this->query($query);
+		
+		
 		
 		if(isset($param['field']['WRS_ICON']))
 		{
@@ -512,7 +591,6 @@ EOF;
 		
 		$param		=	$_param;
 
-//		WRS_DEBUG_QUERY(print_r($param,true));
 		
 		$size_page		=	ceil($num_rows/$page_size);
 
@@ -590,11 +668,11 @@ EOF;
 								              </a>
 								              <ul class="dropdown-menu wrs_grid_window_event" role="menu" aria-labelledby="drop1">
 								                <li role="presentation"><a role="menuitem" rel="list"			tabindex="-1" table="{$table}" href="#"><i class="fa fa-table"></i> {$TITLE_GRID_WINDOW_MENU_LIST}</a></li>
-								                <li role="presentation"><a role="menuitem" rel="details"		tabindex="-1" table="{$table}" href="#"><i class="fa fa-list"></i> {$TITLE_GRID_WINDOW_MENU_DETAILS}</a></li>
 												<li role="presentation"><a role="menuitem" rel="date"			tabindex="-1" table="{$table}" href="#"><i class="fa fa-bars"></i> {$TITLE_GRID_WINDOW_MENU_LIST_INFO}</a></li>
+								                <li role="presentation"><a role="menuitem" rel="details"		tabindex="-1" table="{$table}" href="#"><i class="fa fa-list"></i> {$TITLE_GRID_WINDOW_MENU_DETAILS}</a></li>
 								                <li role="presentation"><a role="menuitem" rel="icon_big" 		tabindex="-1" table="{$table}" href="#"><i class="fa fa-th-large"></i> {$TITLE_GRID_WINDOW_MENU_BIG_ICON}</a></li>
-								                <li role="presentation"><a role="menuitem" rel="icon_middle" 	tabindex="-1" table="{$table}" href="#"><i class="fa fa-ellipsis-h"></i> {$TITLE_GRID_WINDOW_MENU_MEDIUM_ICON}</a></li>
-								                <li role="presentation"><a role="menuitem" rel="icon_small" 	tabindex="-1" table="{$table}" href="#"><i class="fa fa-th"></i> {$TITLE_GRID_WINDOW_MENU_SMALL_ICON}</a></li>
+								                <li role="presentation"><a role="menuitem" rel="icon_middle" 	tabindex="-1" table="{$table}" href="#"><i class="fa fa-th"></i> {$TITLE_GRID_WINDOW_MENU_MEDIUM_ICON}</a></li>
+								                <li role="presentation"><a role="menuitem" rel="icon_small" 	tabindex="-1" table="{$table}" href="#"><i class="fa fa-ellipsis-h"></i> {$TITLE_GRID_WINDOW_MENU_SMALL_ICON}</a></li>
 								               </ul>
 								            </li>
 								         </ul>

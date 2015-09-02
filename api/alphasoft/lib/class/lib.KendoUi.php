@@ -318,34 +318,39 @@ class KendoUi
 		$wrsKendoUi					=	 base64_encode(json_encode($this->wrsKendoUi,true));
 		
 		$html 	= <<<HTML
-		<div class="wrs_box {$idTag}BOX">
-			{$WRS_PANEL_HEADER_TABLE}
 		
-			<div id="{$idTag}" class="wrsGrid table_border border_bottom" wrsParam="{$element}"  wrsKendoUi="{$wrsKendoUi}"></div>
 			
-			<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
-			
-		  <script>
-		  
-		  		WRSHistory[{$report_id}]	=	"{$getRequestWrsExceptions['TRASH_HISTORY']}";	
-				$(function(){
-											var jsonDecode											= 	{$_jsonencode};
-										jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
-										jsonDecode.dataBound									= 	function(arg){ return onDataBound(arg);}								
-										jsonDecode.dataBinding									=	function(arg){ return onDataBinding(arg);}
-										
-										$("#{$this->getId()}").kendoGrid(jsonDecode);
-										$('.wrs_box').hide();
-										$("#{$this->getId()}").WrsGridKendoUiControlColumnPlusMinus({$PLUS_MINUS}).WrsDrill().WRSWindowGridEventTools();
-										$('.dropdown-menu-configuration form, .dropdown-menu-configuration li ').click(function (e) {e.stopPropagation();});
-										$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
+			<div id="{$idTag}Main" class="container_panel_relatorio_rows">
+						<div class="wrs_box {$idTag}BOX">
+									{$WRS_PANEL_HEADER_TABLE}
+								
+									<div id="{$idTag}" class="wrsGrid table_border border_bottom" wrsParam="{$element}"  wrsKendoUi="{$wrsKendoUi}"></div>
+									
+									<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
+							
+								 	 <script>
+								  
+								  		WRSHistory[{$report_id}]	=	"{$getRequestWrsExceptions['TRASH_HISTORY']}";	
+										$(function(){
+																	var jsonDecode											= 	{$_jsonencode};
+																jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
+																jsonDecode.dataBound									= 	function(arg){ return onDataBound(arg);}								
+																jsonDecode.dataBinding									=	function(arg){ return onDataBinding(arg);}
+																
+																$("#{$this->getId()}").kendoGrid(jsonDecode);
+																$('.wrs_box').hide();
+																$("#{$this->getId()}").WrsGridKendoUiControlColumnPlusMinus({$PLUS_MINUS}).WrsDrill().WRSWindowGridEventTools();
+																$('.dropdown-menu-configuration form, .dropdown-menu-configuration li ').click(function (e) {e.stopPropagation();});
+																$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
+																		
+																WRSKendoGridComplete("#{$this->getId()}");		
+																																			
+																
+													});
+									</script>
+						</div>
 												
-										WRSKendoGridComplete("#{$this->getId()}");		
-																													
-										
-							});
-			</script>
-		</div>			
+			</div>
 HTML;
 	 
 		return $html;
@@ -739,8 +744,9 @@ HTML;
 		$model[0]['window_grid']		=	$param;
 		$json_column		= 	json_encode($model,true);
 		$modelField			= 	json_encode($modelField,true);
+		$cube_s				=	fwrs_request('cube_s');
 	
-		$grid	=	<<<EOF
+		$grid	=	<<<HTML
 					<div id="{$table}"></div>
 		            <script>
 
@@ -753,7 +759,7 @@ HTML;
 		                                read: {
 		                                		type		:'POST',
 		                                		contentType	: 'application/json',
-	                                			url			:	'run.php?file=WindowGrid&class=WindowGrid&event_grid_inside=grid&table={$table}'
+	                                			url			:	'run.php?file=WindowGrid&class=WindowGrid&event_grid_inside=grid&table={$table}&cube_s={$cube_s}'
 		                                	},
 		                                parameterMap		:	function(data) {return kendo.stringify(data);}
 		                            },
@@ -785,7 +791,7 @@ HTML;
 		            </script>		
 		            
 		            
-EOF;
+HTML;
 
 		return $grid;	
 		

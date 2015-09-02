@@ -11,7 +11,8 @@
 
 var IS_TRACE	=	false;
 var RAND_TOKEN	=	js_rand(0,9999999999999);
-
+	include_js('WRSThreadJobManager');
+	
 /*
  * Tipos de Execuções que o sistema opera para gerar uma novo Report
  */
@@ -35,8 +36,7 @@ function changeTypeRun(IDGrid,typeRun)
 	if(empty(wrsKendoUi.TYPE_RUN))
 	{
 		wrsKendoUiChange(IDGrid,'TYPE_RUN',typeRun);
-	}
-	
+	}	
 }
 
 function include_js(file)
@@ -60,9 +60,10 @@ function setOption(event,value,_selected)
 			}
 			
 			event.append(str_replace(replace,[lineValue,value[lineValue],_tag],  _option));
-		}
-	
+		}	
 }
+
+
 
 function setOptionRadio(event,value,_selected)
 {

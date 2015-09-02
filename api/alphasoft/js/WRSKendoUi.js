@@ -24,6 +24,9 @@ include_js('WRSGridEventsTools');
 include_js('WRSHeaderIndex');
 include_js('WRSDrillLine');	//Drill Line
 include_js('WRSTopOptions');
+include_js('WRSGenericModal');
+include_js('WRSMenu');
+
 
 
 function WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi)

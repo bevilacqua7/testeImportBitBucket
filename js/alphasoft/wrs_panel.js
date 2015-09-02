@@ -62,8 +62,8 @@ function wrs_center_onresize()
 	
 	var divisor_common			=	(((divMain-abaHeight)-paddingContainerCenter)/3);
 
-	
-
+		//Aplica o resize na tela re RUN onde fica passando os informativos das janelas
+		wrs_modal_filter_run();
 	
 	
 		$('.container_center').height(divisor_common);
@@ -431,6 +431,7 @@ function wrs_clean_box_drag_drop()
 													
 													insetDragDropEmpry();
 													
+													DEFAULT_OPTIONS_TOPS();
 													WRS_ALERT(mensagem_sucess,'success');
 												}
 									});
@@ -1325,9 +1326,6 @@ function wrs_run_filter()
 		$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
 		$('.wrs_panel_filter_icon').hide();
 		
-		
-		
-
 		runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
 		
@@ -1359,10 +1357,40 @@ function wrsRunGridButton(param_request)
  * Montando a Grid com header
  * @param data
  */
-function MOUNT_LAYOUT_GRID_HEADER(data)
+function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 {
+	
+	
+	
+	if(is_job_call!='ThreadMainLoadData')
+	{
+		if(is_array(data))
+		{
+			if(!$('body').ThreadJobManager(data.REPORT_ID))
+			{
+				return true;
+			}
+		}else{
+			console.log('MOUNT_LAYOUT_GRID_HEADER',data);
+		}
+	}
+	
+	
 	TRACE('START MOUNT_LAYOUT_GRID_HEADER'); 
-	$('.container_panel_relatorio').html(data);
+	
+	
+	
+//container_panel_relatorio_rows
+	
+	/*
+	 * WARNING: é essa variável que impede de repetir os conteiners
+	 */
+	var remove_report	=	 $('<div/>',{html:str_replace('script','',data)}).find('.container_panel_relatorio_rows').attr('id'); 
+	 
+	$('.container_panel_relatorio_rows').each(function(){var id_remove	=	 $(this).attr('id'); if(id_remove==remove_report)	$(this).remove();});
+	
+	$('.container_panel_relatorio').append(data);
+	
 	//CLOSE_LOAD_RELATORIO();
 	//Apenas éexecutando quando existe atributo simples
 	if($('.wrs_run_filter').attr('is_atributo_simples')=='true')
@@ -1372,7 +1400,6 @@ function MOUNT_LAYOUT_GRID_HEADER(data)
 	}
 	
 	$('.wrs_run_filter').attr('locked','false').attr('flag_load','false');
-	
 	
 	TRACE('END MOUNT_LAYOUT_GRID_HEADER'); 
 }
@@ -1424,7 +1451,7 @@ function MODAL_LOADING_WRS_PANEL(_title,_text_body,_class_button)
                             {
                             	TRACE('Cancelado pelo Usuário');
                             }
-                            
+
                             return true;
                         }
                     },
@@ -1432,13 +1459,21 @@ function MODAL_LOADING_WRS_PANEL(_title,_text_body,_class_button)
 				 center     : true, //Center Modal Box?
 				 autoclose  : false, //Auto Close Modal Box?
 				 callback   : function(){ if(_TIME_RUN_RELATORIO) MODAL_LOADING_WRS_PANEL(); }, //Callback Function after close Modal (ex: function(result){alert(result);})
-				 onShow     : function(r){ }, //After show Modal function
+				 onShow     : function(r){
+										 /*
+										  * TODO: configurando o resize da janela
+										  */
+					 
+					 						wrs_modal_filter_run();
+										 		
+				 	}, //After show Modal function
 				 closeClick : false, //Close Modal on click near the box
                  closable   : true, //If Modal is closable
 				 theme      : 'atlant', //Modal Custom Theme
                  animate    : false, //Slide animation
 				 background : 'rgba(0,0,0,0.6)', //Background Color, it can be null
 				 zIndex     : 1050, //z-index
+				 _class		:	'wrs-modal-filter-run',	//Criado por Marcelo Santos modificação na classe oficial				
 				 template   : '<div class="modal-box WRS_PANEL_LOADING_RELATORIO"><div class="modal-inner"><div class="modal-title modal-title-load"></div><div class="modal-text"></div><div class="modal-buttons TIME_RUN_RELATORIO"></div></div></div>',
 				 _classes   : {box:'.modal-box', boxInner: ".modal-inner", title:'.modal-title-load', content:'.modal-text', buttons:'.modal-buttons', closebtn:'.modal-close-btn'}
 			}
@@ -1639,4 +1674,21 @@ function wrs_panel_active_drag_drop()
 	 //alert(object);
  }
 
+ 
+ 
+function wrs_modal_filter_run()
+{
+	 var div_center = 	$('.ui-layout-center');
+	 var offset 	= 	div_center.offset();
+	 var WRS_ABA	=	$('.WRS_ABA');
+	 var _css		=	{
+	 						left	:	offset.left, 
+	 						top		:	offset.top,
+	 						width	:	div_center.outerWidth(),
+ 							height	:	div_center.outerHeight()-(WRS_ABA.outerHeight()+1),
+ 							position:	'absolute'
+	 					};
+	 
+	 	$('.wrs-modal-filter-run').css(_css);
+}
  

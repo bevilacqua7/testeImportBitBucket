@@ -339,12 +339,17 @@ EOF;
 	 *
 	 * @return string
 	 */
-	public function GET_SSAS_REPORT( $CUSTOMER_ID, $USER_TYPE, $DATABASE_ID, $CUBE_ID )
+	public function GET_SSAS_REPORT( $DATABASE_ID, $CUBE_ID )
 	{
-		// Exemplo: EXEC Get_SSAS_Report 1,'mfacioli','','GSK - DDD',''
-		$USER_CODE = WRS::USER_CODE();
+		// Exemplo: EXEC Get_SSAS_Reports 1,'mfacioli','','GSK - DDD',''
+		$USER_CODE 			= WRS::USER_CODE();
+		$USER_CUSTOMER_ID 	= WRS::CUSTOMER_ID();
+		$USER_TYPE 			= WRS::INFO_SSAS_LOGIN('PERFIL_ID');
+		$DATABASE_ID 		= str_replace(array('[',']'),'',$DATABASE_ID);
+		$CUBE_ID 			= str_replace(array('[',']'),'',$CUBE_ID);
+
 		$query = <<<EOF
-					EXEC Get_SSAS_Report {$CUSTOMER_ID}, '{$USER_CODE}', '{$USER_TYPE}', '{$DATABASE_ID}', '{$CUBE_ID}'
+					EXEC Get_SSAS_Reports {$USER_CUSTOMER_ID}, '{$USER_CODE}', '{$USER_TYPE}', '{$DATABASE_ID}', '{$CUBE_ID}'
 EOF;
 		return $query;
 	}

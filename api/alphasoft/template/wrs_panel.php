@@ -68,6 +68,12 @@ var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELA
   
   
   
+<link rel="stylesheet" href="api/alertify/themes/alertify.core.css" />
+<link rel="stylesheet" href="api/alertify/themes/alertify.default.css" id="toggleCSS" />
+<script src="api/alertify/lib/alertify.min.js"></script>
+	
+  
+  
   <!--  SLIDER -->
 
 	<link rel="stylesheet" href="api/jslider-master/css/jslider.css" type="text/css">
@@ -255,6 +261,10 @@ var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELA
 <!-- Modal MODAL CHART CONFIGURE-->
 <?php include 'modal_chart.php'; ?>
 <!--END MODAL CHART CONFIGURE-->
+
+<!-- Modal MODAL GENERIC CONFIGURE-->
+<?php include 'modal_generic.php'; ?>
+<!--END MODAL GENERIC CONFIGURE-->
 
 
 

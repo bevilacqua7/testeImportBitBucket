@@ -19,7 +19,10 @@
 	$language ['ERRO_CUBO_INDISPONIVEL'] 			= "ERRO: INDISPONIVEL";
 	$language ['ERROR_TABLE_CACHE_NO_HEADER']		= "Ops não existe cabeçalho para esta consulta..";
 	$language ['ERROR_CUBO_NOT_FOUND']				= "Ops não foi possível identificar o cubo que está sendo utilizado. <br> Se o erro persistir, favor informar ao suporte. <br><b>Obrigado</b>";
+	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executarar a abara ";
 	
+	$language ['JOB_COMPLETE_LOAD'] 		= "O Job acabou de carregar uma nova aba ";
+	$language ['JOB_COMPLETE'] 				= "Todos os processos estão finalizados";
 	/*
 	 * ALERTS
 	 */
@@ -255,5 +258,14 @@
 	$language['LINE_TOTAL']					=	'TOTAL';
 	$language['LINE_TOTAL_BUBBLE']			=	'Deseja usar as linha de totais no gráfico?';
 	
+	
+	
+	
+	
+	// MODAL GENERICA
+	$language['MODAL_GENERICA_SALVAR']		=	'Salvar';
+	$language['MODAL_GENERICA_ATUALIZAR']	=	'Atualizar';
+	$language['MODAL_GENERICA_APAGAR']		=	'Apagar';
+	$language['MODAL_GENERICA_CANCELAR']	=	'Sair';
 
 ?>

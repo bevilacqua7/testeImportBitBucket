@@ -24,7 +24,11 @@
 		var BOX				=	$('.'+idName+'BOX');
 		var MAP				=	$('#'+idName+'Elements .map');
 		var CHART			=	$('#'+idName+'Elements .chart');
-		var _height			=	BOX.parent().outerHeight();
+		
+		
+		$('.container_panel_relatorio_rows').height($('.container_panel_relatorio').height());
+		
+		var _height			=	BOX.parent().parent().outerHeight();
 		var navHeight		=	NAV.height();
 		
 		
@@ -118,8 +122,8 @@
 		var WRSWindowGridEventToolsClick	=	function(e,data)
 		{
 			var wrs_data		=	"";
-			var height			=	BOX.parent().outerHeight();
-			var BOX_PARENT		=	BOX.parent();
+			var height			=	BOX.parent().parent().outerHeight();
+			var BOX_PARENT		=	BOX.parent().parent();
 			var active_half		=	false;
 			var paddingCenter	=	((parseInt(BOX_PARENT.parent().css('padding-bottom').replace('px')))*3)-2;
 			var _heightToUse	=	'';
@@ -404,10 +408,6 @@ var getRequestKendoUiDefault	=	{};
   		btn_open_type_vision	=	element.find('.btn-open-type-vision'),
 		isClick					=	false;
 		nav_options.attr('id','wrs_grid_options_default');		
-		
-		
-		
-		
 		
 		
   		//WARNING:  O nome do ID nao pode ser removido pois existe outros lugares com pendencia no nome - wrs_panel

@@ -23,6 +23,8 @@ define('WRS_TEMP_RAND',rand(0,99999999999999));
 function WRS_DEBUG_QUERY($texto,$fileName='WRS_DEBUG.txt')
 {
 	
+	if(is_array($texto)) $texto = print_r($texto,true);
+	
 	$fp = fopen(PATH_VAR.DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR.$fileName,'a');
 
 	if($fileName=='WRS_DEBUG.txt')

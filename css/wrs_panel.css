@@ -503,8 +503,6 @@ border-bottom-left-radius: 3px;
 
 
 .container_panel_relatorio{
-	padding:10px;
-	
 	height: 100%;
 	width: 100%;
 	padding: 0; /* extra paddingTop being added by scrollpane? */
@@ -512,6 +510,16 @@ border-bottom-left-radius: 3px;
 	overflow-y: auto;
 	
 }
+
+
+.container_panel_relatorio_rows{
+	height: 100%;
+	width: 100%;
+	margin:0px !important;
+	padding: 0 !important; /* extra paddingTop being added by scrollpane? */
+
+}
+
 
 
 .container_panel_relatorio thead th{
@@ -1500,9 +1508,14 @@ box-shadow:         inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
 	margin-left:5px;
 	top: -5px;
 	padding: 1px;
-	
 	-webkit-border-radius: 0px;
 -moz-border-radius: 0px;
 border-radius: 0px;
 
+}
+
+
+.alertify-log-custom
+{
+			background: blue;
 }
