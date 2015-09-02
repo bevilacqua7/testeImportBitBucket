@@ -59,14 +59,14 @@ function select_work($id_div){
 <form id="insert_report" name="insert_report">
 
 				<label for="report_name">Nome:</label><br>
-					<input type="text" id="report_name" name="report_name" style="width: 640px;">	
+					<input type="text" id="report_name" name="report_name" style="width: 768px;">	
 				<br>
 				<input type="checkbox" id="report_auto" name="report_auto" value="1"> <label for="report_auto">Carregamento Automático </label>  &nbsp; &nbsp; &nbsp; <input type="checkbox" id="report_share" name="report_share" value="1"> <label for="report_share">Compartilhado</label>	
 								
 				<br>
 				<label for="select1">Layouts:</label>
 	      		<div class="row default_config" id="select1">
-      				<select class="select_altura col-sm-4 wrs-measures multiple" multiple>
+      				<select class="select_altura col-sm-5 wrs-measures multiple" multiple>
 					</select>		      		 
 		      		<div class="col-sm-2 spance_paddding_top_wrs">		      			
 		      			<button type="button" class="bt_pequeno toActive btn btn-block btn-default"><i class="fa fa-angle-right"></i></button>
@@ -74,13 +74,13 @@ function select_work($id_div){
 						<button type="button" class="bt_pequeno toAllActive btn btn-block btn-info color_write"><i class="fa fa-angle-double-right"></i></button>
 						<button type="button" class="bt_pequeno toAllMeasure btn btn-block btn-info color_write"><i class="fa fa-angle-double-left"></i></button>
 					</div>				
-  					<select name="layouts" class="select_altura col-sm-4 wrs-measures-receive multiple" multiple>
+  					<select name="layouts" class="select_altura col-sm-5 wrs-measures-receive multiple" multiple>
 					</select>				
 				</div>
 				<br>
 				<label for="select2">Grupos:</label>
 	      		<div class="row default_config" id="select2">
-      				<select class="select_altura col-sm-4 wrs-measures multiple" multiple>
+      				<select class="select_altura col-sm-5 wrs-measures multiple" multiple>
 					</select>		      		 
 		      		<div class="col-sm-2 spance_paddding_top_wrs">		      			
 		      			<button type="button" class="bt_pequeno toActive btn btn-block btn-default"><i class="fa fa-angle-right"></i></button>
@@ -88,7 +88,7 @@ function select_work($id_div){
 						<button type="button" class="bt_pequeno toAllActive btn btn-block btn-info color_write"><i class="fa fa-angle-double-right"></i></button>
 						<button type="button" class="bt_pequeno toAllMeasure btn btn-block btn-info color_write"><i class="fa fa-angle-double-left"></i></button>
 					</div>				
-  					<select name="grupos" class="select_altura col-sm-4 wrs-measures-receive multiple" multiple>
+  					<select name="grupos" class="select_altura col-sm-5 wrs-measures-receive multiple" multiple>
 					</select>				
 				</div>
 

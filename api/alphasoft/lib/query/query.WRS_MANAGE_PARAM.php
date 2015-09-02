@@ -380,6 +380,10 @@ class WRS_MANAGE_PARAM
 		$table		=	'GET_SSAS_REPORT';
 		$order		=	array();
 		$fields		=	array();
+		$button		=	array('new'=>'Abrir Relatório','update'=>'Abrir Layout','remove'=>'Apagar');
+		/*
+		 * TODO: pegar do language esses labels
+		 */
 		
 		$exceptions	=	array('file'=>'WRS_REPORT', 'class'=>'WRS_REPORT','type'=>'');
 				
@@ -396,17 +400,19 @@ class WRS_MANAGE_PARAM
 		 $fields['FILTERS_VALUES']	=	array('title'=>'Itens Filtrados',	'list'=>false,	'basic'=>false, 'grid'=>false);
 		
 		
-		 return array(	 'title'		=>	LNG('TITLE_ATT_WRS_REPORT'),
-						 'button'		=>	$button,
-						 'field'		=>	$fields,
-						 'table'		=>	$table,
-						 'order'		=>	$order,
-						 'icon'			=>	'user.png',
-						 'exception'	=>	$exceptions,
-						 'primary'		=>	'REPORT_ID',
-						 'checkbox'		=>	true,								//NEW
-						 'actionSingle'	=>	'callback_check_line_generic_modal',		//NEW
-						 'actionDouble'	=>	'callback_load_report_generic_modal'			//NEW
+		 return array(	 'title'				=>	LNG('TITLE_ATT_WRS_REPORT'),
+						 'button'				=>	$button,
+						 'button_force_label'	=>	true, // NEW
+						 'field'				=>	$fields,
+						 'table'				=>	$table,
+						 'order'				=>	$order,
+						 'icon'					=>	'user.png',
+						 'exception'			=>	$exceptions, // NEW
+						 'primary'				=>	'REPORT_ID',
+						 'checkbox'				=>	true, // NEW
+		 				 'callback_btn_events'	=>	'callback_report_btn_events', // NEW
+						 'actionSingle'			=>	'callback_check_line_generic_modal',		//NEW
+						 'actionDouble'			=>	'callback_load_report_generic_modal'			//NEW
 		 );
 		
 	}

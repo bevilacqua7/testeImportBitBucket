@@ -266,6 +266,10 @@ var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELA
 <?php include 'modal_generic.php'; ?>
 <!--END MODAL GENERIC CONFIGURE-->
 
+<!-- Modal MODAL CONFIRM-->
+<?php include 'modal_confirm.php'; ?>
+<!--END MODAL CONFIRM-->
+
 </body>
 
 

@@ -268,4 +268,8 @@
 	$language['MODAL_GENERICA_APAGAR']		=	'Apagar';
 	$language['MODAL_GENERICA_CANCELAR']	=	'Sair';
 
+
+	// MODAL CONFIRM
+	$language['MODAL_CONFIRM_BT_CONFIRM']	=	'Apagar';
+	$language['MODAL_CONFIRM_BT_CANCEL']	=	'Cancelar';
 ?>
