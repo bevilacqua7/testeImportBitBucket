@@ -116,8 +116,7 @@ class WindowGrid extends FORM
 		$TPL_TITLE				=		$param['title'];
 		$TPL_HTML				=		$param['html'];		
 		$TPL_COMPLEMENT_TITLE	=	$param['title_menu'];
-		
-		$this->setButton($param['button'],$param['table']);
+		$this->setButton($param['button'],$param['table'],((array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false));
 		
 		$TPL_BUTTON				=		$this->getButton();
 				
@@ -142,23 +141,27 @@ class WindowGrid extends FORM
 	 * 
 	 * 
 	 */
-	public function setButton($button,$table)
+	public function setButton($button,$table,$label_force=false)
 	{
 		$button_merge			=	array('new','update','remove');
 		$map_buttons			=	array();
 				
-		$map_buttons['new']		=	'<button type="button"  {complement} table="'.$table.'"	 action_type="new" 		class="btn btn-color-write btn-success 	btn_window_grid_event"><i class="fa fa-floppy-o"></i> '.LNG('BTN_SAVE').'</button>';
-		$map_buttons['update']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="update"  	class="btn btn-color-write btn-info		btn_window_grid_event"><i class="fa fa-pencil-square-o"></i> '.LNG('BTN_UPDATE').'</button>';
-		$map_buttons['remove']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="remove" 	class="btn btn-color-write btn-danger	btn_window_grid_event"><span class="glyphicon glyphicon-trash"></span> '.LNG('BTN_REMOVE').'</button>';
-
-		$map_buttons['out']		=	'<button type="button" 											class="btn btn-default" 	data-dismiss="modal"><span class="glyphicon glyphicon-off"></span> '.LNG('BTN_SAIR').'</button>';
+		$map_buttons['new']		=	'<button type="button"  {complement} table="'.$table.'"	 action_type="new" 		class="btn btn-color-write btn-success 	btn_window_grid_event">	<i class="fa fa-floppy-o"></i> '						.LNG('BTN_SAVE').	'</button>';
+		$map_buttons['update']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="update"  	class="btn btn-color-write btn-info		btn_window_grid_event">	<i class="fa fa-pencil-square-o"></i> '					.LNG('BTN_UPDATE').	'</button>';
+		$map_buttons['remove']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="remove" 	class="btn btn-color-write btn-danger	btn_window_grid_event">	<i class="glyphicon glyphicon-trash color_write"></i> '	.LNG('BTN_REMOVE').	'</button>';
+		$map_buttons['out']		=	'<button type="button" 															class="btn btn-default" 	data-dismiss="modal">				<i class="glyphicon glyphicon-off"></i> '				.LNG('BTN_SAIR').	'</button>';
 		
 		foreach($button as $label => $_btn)
 		{
 			if(isset($map_buttons[$label]))
 			{
-				$value_btn		=	 $_btn;
-				$this->button.=str_replace('{complement}', $value_btn, $map_buttons[$label]);
+				$value_btn		=	$_btn;
+				$partes_btn		=	explode("</i>",$map_buttons[$label]);
+				if($label_force){
+					$this->button.=$partes_btn[0]."</i>".$value_btn."</button>";
+				}else{
+					$this->button.=str_replace('{complement}', $value_btn, $map_buttons[$label]);
+				}
 			}
 		}
 		
@@ -272,7 +275,7 @@ class WindowGrid extends FORM
 		if($this->exception)
 		{
 			
-			$query			=	$this->exception->change_query($param['table'], $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
+			$query			=	$this->exception->change_query_exception($param['table'], $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
 			
 		}else{
 		
@@ -499,7 +502,7 @@ EOF;
 
 		if(!empty($this->exception))
 		{
-			$query	=	$this->exception->change_query($table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
+			$query	=	$this->exception->change_query_exception($table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
 		}
 		
 
