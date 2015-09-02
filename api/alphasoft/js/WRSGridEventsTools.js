@@ -410,6 +410,8 @@ var getRequestKendoUiDefault	=	{};
 		nav_options.attr('id','wrs_grid_options_default');		
 		
 		
+
+		
   		//WARNING:  O nome do ID nao pode ser removido pois existe outros lugares com pendencia no nome - wrs_panel
 		element.attr('id',data_name);
   	

@@ -1417,3 +1417,10 @@ function wrsFilterClickFalse()
         return $event;
     };
 }( jQuery ));
+
+
+
+
+
+ 
+

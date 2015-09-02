@@ -1,11 +1,10 @@
 <?php 
 
 
-$history	=	array();
-$history_data	=	10;
-//Incrementa no histórico na primeira linha
-array_unshift($history, $history_data);
+$_POST['DATA']	='10';
 
 
-print_r($history);
+
+
+
 ?>

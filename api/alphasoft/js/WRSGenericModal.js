@@ -13,6 +13,16 @@ function get_inputs_val(form)
 	});
 	
 	
+	form.find('input[type=checkbox]').each(function(){		
+		if($(this).is(':checked'))
+		{
+			param[$(this).attr('name')]	=	$(this).val();
+		}else{
+			param[$(this).attr('name')]	=	false;
+		}
+	});
+	
+	
 	form.find('select').each(function(){
 		param[$(this).attr('name')]	=	$(this).val();
 	});
@@ -62,11 +72,16 @@ $.fn.extend({
 			{
 				var o_param			=	janela_modal.data(_dataName);
 					o_param.event	=	'save';
-					
 				var  _param			=	 $.extend( {}, o_param, get_inputs_val(janela_modal_body) );
 				
-
+				//foreach(_param);
+				
 					_runCalll(_param);	
+					
+					
+				
+					
+					
 			}	
 		
 		var bt_atualizar	=	 function()
@@ -97,17 +112,13 @@ $.fn.extend({
 			janela_modal.find('.bt-apagar').toggle(_options.bt_apagar);
 			janela_modal.find('.bt-cancelar').toggle(_options.bt_cancelar);
 			janela_title.html(_options.title);
-			
-			
-		
+					
 			janela_modal.modal('show');
-
 			
 			janela_modal.find('.bt-salvar').unbind('click').click(bt_salvar);
 			janela_modal.find('.bt-atualizar').unbind('click').click(bt_atualizar);
 			janela_modal.find('.bt-apagar').unbind('click').click(bt_apagar);
-			
-			
+						
 			_runCalll(_options);
 		if(_options.returnModal)	
 			return janela_modal;
@@ -119,4 +130,10 @@ $.fn.extend({
 
 function getValuesWindow(){
 	return {'dados':'array'};
+}
+
+
+function carrega_report_generic_modal(arg)
+{
+	
 }

@@ -400,7 +400,8 @@ function runCall(param_request,Ofile,Oclass,Oevent,funCallBack,typeAlert,typeDat
 	
 	var param	=	{'class':Oclass,'file':Ofile,'event':Oevent};
 		param	=	merge_objeto(param,param_request);
-		
+
+
 	TRACE('Enviando parametro para o run.php mas sem esperar resposta file:common.js');	
 	$.post('run.php',param,funCallBack,typeData).fail(function() {
 			if(typeAlert=='modal')

@@ -362,17 +362,16 @@ class WRS_MANAGE_PARAM
 		$fields['MESSAGE']			=	array('title'=>'Mensagem',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
 		$fields['USER_DESC']		=	array('title'=>'Usuário',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
 		$fields['CUSTOMER_DESC']	=	array('title'=>'Cliente',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
-		
-		return array(	'title'		=>	LNG('TITLE_ATT_WRS_LOG'), 
+	
+		return array(	'title'		=>	LNG('TITLE_ATT_WRS_LOG'),
 				'button'	=>	$button,
 				'field'		=>	$fields,
 				'table'		=>	$table,
 				'order'		=>	$order,
 				'icon'		=>	'user.png',
 				'primary'	=>	'TRANSACTION_ID'
-			);
+		);
 	}
-	
 	
 	
 	
@@ -383,29 +382,9 @@ class WRS_MANAGE_PARAM
 		$fields		=	array();
 		
 		$exceptions	=	array('file'=>'WRS_REPORT', 'class'=>'WRS_REPORT','type'=>'');
-		
-		/*
-		 REPORT_ID			1
-		 REPORT_DESC			TESTE DE RELATORIO
-		 REPORT_SHARE			0
-		 REPORT_DATE			2015-08-12 17:25:06.837
-		 REPORT_UPDATE			NULL
-		 REPORT_OPTIONS
-		 REPORT_FORMULAS
-		 REPORT_FILTER
-		 REPORT_FLAG
-		 REPORT_AUTOLOAD			0
-		 REPORT_STATUS			1
-		 SERVER_ID			192.168.1.3
-		 DATABASE_ID			GSK - DDD
-		 CUBE_ID				GSK - DDD
-		 USER_ID				1
-		 CUSTOMER_ID			1
-		 */
-		
-		
+				
 		 $fields['REPORT_DESC']		=	array('title'=>'Nome',			'list'=>true,	'basic'=>true,  'grid'=>true);
-		 $fields['REPORT_SHARE']		=	array('title'=>'Compartilhado', 'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
+		 $fields['REPORT_SHARE']	=	array('title'=>'Compartilhado', 'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
 		 $fields['REPORT_DATE']		=	array('title'=>'Data',			'list'=>true,	'basic'=>true,  'grid'=>true, 		'type'=>'date' ,'format'=>'d-m-Y H:i:s' ,'type_convert'=>true);
 		 $fields['REPORT_AUTOLOAD']	=	array('title'=>'Carga', 		'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
 		 $fields['USER_DESC']		=	array('title'=>'Criador',		'list'=>true,	'basic'=>true,  'grid'=>true);
@@ -414,27 +393,28 @@ class WRS_MANAGE_PARAM
 		 $fields['LAYOUT_MEASURES']	=	array('title'=>'Medidas',		'list'=>true,	'basic'=>false, 'grid'=>false);
 		 $fields['LAYOUT_FILTERS']	=	array('title'=>'Filtros',		'list'=>true,	'basic'=>false, 'grid'=>false);
 		 $fields['FILTER_DESC']		=	array('title'=>'Filtrados',		'list'=>true,	'basic'=>false, 'grid'=>false);
+		 $fields['FILTERS_VALUES']	=	array('title'=>'Itens Filtrados',	'list'=>false,	'basic'=>false, 'grid'=>false);
 		
-		 //ROWS
-		 //COLUMNS
-		 //MEASURES
-		 //FILTERS
-		 //Checkbox REPORT_SHARE
-		 //Checkbox REPORT_AUTOLOAD
 		
-		 return array(	'title'		=>	LNG('TITLE_ATT_WRS_REPORT'),
-		 'button'	=>	$button,
-		 'field'		=>	$fields,
-		 'table'		=>	$table,
-		 'order'		=>	$order,
-		 'icon'		=>	'user.png',
-		 'exception'	=>$exceptions,
-		 'primary'	=>	'REPORT_ID'
-		 		
+		 return array(	 'title'		=>	LNG('TITLE_ATT_WRS_REPORT'),
+						 'button'		=>	$button,
+						 'field'		=>	$fields,
+						 'table'		=>	$table,
+						 'order'		=>	$order,
+						 'icon'			=>	'user.png',
+						 'exception'	=>	$exceptions,
+						 'primary'		=>	'REPORT_ID',
+						 'checkbox'		=>	true,								//NEW
+						 'actionSingle'	=>	'callback_check_line_generic_modal',		//NEW
+						 'actionDouble'	=>	'callback_load_report_generic_modal'			//NEW
 		 );
 		
 	}
 	
+	
+	
+
+}
 	
 
 	

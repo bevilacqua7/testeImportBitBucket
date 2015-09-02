@@ -1010,7 +1010,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 								
 								}	
 							
-							html	=	'<table class="table table-condensed table-hover wrs_chart_config_kynds">'+
+							html	=	'<table style="margin-bottom: 0px!important;" class="table table-condensed table-hover wrs_chart_config_kynds">'+
 										'  	<thead>'+
 										'		<tr>'+
 										'			<th>'+LNG('TYPE')+'</th>'+
