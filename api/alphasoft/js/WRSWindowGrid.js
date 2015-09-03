@@ -143,35 +143,54 @@ function btn_window_grid_event()
 		
 }
 
-function wrs_window_grid_events_tools()
+function wrs_window_grid_events_tools(objectClick)
 {
-	$('.wrs_grid_window_event a').unbind('click').click(wrs_grid_window_event);
-	$('.margin_fix_grid_window').unbind('click').click(wrd_grid_window_to_form);
-	$('.btn_window_grid_event').unbind('click').click(btn_window_grid_event);
+	var _options	=	{
+						visao	:	wrs_grid_window_event,
+						icon	:	wrd_grid_window_to_form,
+						btn		:	btn_window_grid_event
+					};
+	
+	var options		=	_options;
+	
+		if(!empty(objectClick)){
+			options		=	merge_objeto(_options,objectClick);
+		}
+		
+		
+		/*
+		$('.wrs_grid_window_event a').unbind('click').click(wrs_grid_window_event);
+		$('.margin_fix_grid_window').unbind('click').click(wrd_grid_window_to_form); //evento para quamdp for 	visão tipo icones
+		$('.btn_window_grid_event').unbind('click').click(btn_window_grid_event);
+		
+		*/
+		$('.wrs_grid_window_event a').unbind('click').click(options.visao);
+		$('.margin_fix_grid_window').unbind('click').click(options.icon); //evento para quamdp for 	visão tipo icones
+		$('.btn_window_grid_event').unbind('click').click(options.btn);
 	
 }
 
-function grid_window_modal(param_request,Event,_funCallBack)
+function grid_window_modal(param_request,Event,_funCallBackData)
 {
 	//var param_request	=	 {wrs_type_grid:type};
 	var Ofile			=	'WindowGrid';
 	var Oclass			=	'WindowGrid';
 	var Oevent			=	empty(Event) ? 'ATT_WRS_USER' : Event;
 
-//	var funCallBack		=	 _funCallBack;
+	var funCallBackData		=	 _funCallBackData;
 
-	//if(!isset(_funCallBack)){
-	var funCallBack	=	function(data)
+	if(!isset(_funCallBackData)){
+		funCallBackData	=	function(data)
 		{
 				$('.modal-content-grid').html(data);
 				wrs_window_grid_events_tools();
 		};
-	//}
+	}
 		
 	var header	=	'<div class="modal-header ui-accordion-header  ui-accordion-header-active ui-state-active"><h4 class="modal-title" id="myModalLabel">'+LNG('LABEL_LOAD')+'</h4></div><div class="body_grid_window_center_Load"></div>';
 	$('.modal-content-grid').html(header);
 	setLoading($('.body_grid_window_center_Load'));	
-	runCall(param_request,Ofile,Oclass,Oevent,funCallBack,'modal');
+	runCall(param_request,Ofile,Oclass,Oevent,funCallBackData,'modal');
 }
 
 $(function(){

@@ -28,7 +28,7 @@ class WRS_REPORT  extends  WRS_USER
 	private $_query			=	NULL;
 	
 	public function run($event,$paran_query,$cube_s)
-	{
+	{		
 		$this->event		=	empty($event)?fwrs_request('event'):$event;
 		$this->paran_query	=	$paran_query;
 		$cube_s				=	empty($cube_s)?fwrs_request('cube_s'):$cube_s;
@@ -43,14 +43,27 @@ class WRS_REPORT  extends  WRS_USER
 			{
 				case 'openModalSave' 	: return $this->openModalSave(); break;
 				case 'save' 			: return $this->save(); break;
+				case 'delete' 			: return $this->delete(); break;
 				
 			}
 		}
 	}
 	
+
+	public function delete(){
+
+		$user			=	WRS::INFO_SSAS_LOGIN();		
+		$arr_report_id	=	json_decode(fwrs_request('report_id'));
+		if(is_array($arr_report_id) && count($arr_report_id)>0){
+			foreach($arr_report_id as $report_id){
+				$sql			=	QUERY_PANEL::REMOVE_SSAS_REPORT( $report_id, $user['PERFIL_ID'] );
+		 		$query			=	$this->query($sql);
+			}
+		}
+ 		
+	}
 	
 	public function save(){
-
 
 		$layouts 			= fwrs_request('layouts');
 		$grupos 			= fwrs_request('grupos');		
@@ -104,7 +117,11 @@ class WRS_REPORT  extends  WRS_USER
  		if($rep_id=='0' || trim($error)!=''){
  			echo $error."<hr>Query: ".$sql;
  		}else{
- 			echo "Salvo com sucesso, REPORT_ID: ".$rep_id;
+ 			$JS=<<<HTML
+ 		$('#myModalGenericConfig').find('div.modal-footer').find('.bt-salvar').hide();		
+HTML;
+			echo fwrs_javascript($JS);
+ 			echo "<span onclick=\"$('.repId').toggle();\">Relatório salvo com sucesso</span><span style='display:none;' class='repId'>, REPORT_ID: ".$rep_id."</span>";
  		}
 		exit();
 		
@@ -113,11 +130,7 @@ class WRS_REPORT  extends  WRS_USER
 	
 	
 	
-
-	/*
-	 * TODO: Mudar para  change_query_exception
-	 */
-	public function change_query($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
+	public function change_query_exception($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
 	{
 		switch($this->event)
 		{
@@ -189,7 +202,6 @@ class WRS_REPORT  extends  WRS_USER
 	public function openModalSave()
 	{
 		$dadosJs			= json_decode(base64_decode(fwrs_request('dadosJs')));
-WRS_TRACE("DADOSJS: ".print_r($dadosJs,1),__LINE__,__FILE__);
 		// injeta as variaveis de ambiente (configuracao atual) no formulario para a inclusao no banco
 		$JS	=	<<<HTML
 		
