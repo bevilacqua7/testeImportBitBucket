@@ -60,20 +60,25 @@ function callback_load_report_generic_modal(data,return_params,nao_processa){
 			var quebra_temp1 	= quebra_temp0[0].split('.');
 			quebra_temp1.splice(-1,1);
 			var class_temp		= ajustaTags(quebra_temp1.join('.'));
-			var data_temp2		= filtros_values[filtro];
-			full_temp.push({'class':class_temp,'data':data_temp2});
+			var data_temp2		= filtros_values[filtro].split(',');
+			var arr_final		= [];
+			arr_final.push(class_temp);
+			arr_final.push('');
+			arr_final.push(data_temp2);
+			full_temp.push(arr_final);
 		}
-		_filter_selected = {'data':data_temp,'full':full_temp};
+		_filter_selected = full_temp;
 	}
 
 	var _param		=	{
 					'LAYOUT_ROWS'			:	ajustaTags(_ROWS),
 					'LAYOUT_COLUMNS'		:	ajustaTags(_COLUMNS),
 					'LAYOUT_MEASURES'		:	ajustaTags(_MEASURES),
-					'LAYOUT_FILTERS'		:	ajustaTags(_FILTERS),
-					'KendoUi'				:	_kendoui,
-					'filter_selected'		:	_filter_selected
+					'LAYOUT_FILTERS'		:	_filter_selected,
+					'KendoUi'				:	_kendoui
 	}
+	console.log('LAYOUT_FILTERS',ajustaTags(_FILTERS));
+	console.log('filter_selected',_filter_selected);
 	
 	if(return_params){
 		return _param;
