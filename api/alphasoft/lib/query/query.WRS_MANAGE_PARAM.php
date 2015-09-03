@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Contem as querys para a construção do Administrativo
+ * Contem as querys para a construÃ§Ã£o do Administrativo
  * @author msdantas
  *
  */
@@ -14,7 +14,7 @@ class WRS_MANAGE_PARAM
 		$functions	=	array();
 
 		/*
-		 * Funções liberadas para ter acesso via requisição
+		 * FunÃ§Ãµes liberadas para ter acesso via requisiÃ§Ã£o
 		 */
 		$functions['ATT_WRS_CUSTOMER']	=	true;
 		$functions['ATT_WRS_USER']		=	true;
@@ -29,7 +29,7 @@ class WRS_MANAGE_PARAM
 		$functions['ATT_WRS_LOG']		=	true;
 		$functions['GET_SSAS_REPORT']	=	true;
 		
-		//Verificando se o eventos está a disposição
+		//Verificando se o eventos estÃ¡ a disposiÃ§Ã£o
 		if(isset($functions[$_event])) return true;
 		
 		return false;
@@ -81,9 +81,9 @@ class WRS_MANAGE_PARAM
 		
 		$fields['WRS_ICON']			=	array('title'=>'#'					,   'width'=>50,     'basic'=>true, 'grid'=>true);
 		$fields['CUSTOMER_ID']		=	array('title'=>'ID'					,   'primary'=>true, 'type'=>'int', 'class'=>'hide');
-		$fields['CUSTOMER_CODE']	=	array('title'=>'Código'				,	'length'=>15,    'list'=>true,	'basic'=>true,  'grid'=>true);
+		$fields['CUSTOMER_CODE']	=	array('title'=>'CÃ³digo'				,	'length'=>15,    'list'=>true,	'basic'=>true,  'grid'=>true);
 		$fields['CUSTOMER_DESC']	=	array('title'=>'Nome'				,	'length'=>180,   'list'=>true,	'basic'=>true , 'grid'=>true);
-		$fields['CUSTOMER_GROUP']	=	array('title'=>'Corporação'			,	'length'=>180);
+		$fields['CUSTOMER_GROUP']	=	array('title'=>'CorporaÃ§Ã£o'			,	'length'=>180);
 		$fields['CUSTOMER_STATUS']	=	array('title'=>'Status'				,	'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','0'=>'Inativo'), 'basic'=>true, 'list'=>true, 'grid'=>true);
 		$fields['CUSTOMER_EXPIRY']	=	array('title'=>'Dias Expira Senha'	,	'type'=>'int');
 		//Falta o UPLOAD do LOGO
@@ -99,7 +99,7 @@ class WRS_MANAGE_PARAM
 	}
 	
 	
-	//Classe de Usuário ADMINISTRATIVO
+	//Classe de UsuÃ¡rio ADMINISTRATIVO
 	public function ATT_WRS_USER()
 	{
 		$button	=	array('new'=>'');
@@ -120,17 +120,17 @@ class WRS_MANAGE_PARAM
 		$fields							=	array();
 		$fields['WRS_ICON']				=	array('title'=>'#'						, 'width'=>50,     'basic'=>true, 'grid'=>true);
 		$fields['USER_ID']				=	array('title'=>'ID'						, 'primary'=>true, 'type'=>'int', 'class'=>'hide');
-		$fields['USER_CODE']			=	array('title'=>'Usuário'				, 'length'=>200,   'basic'=>true, 'list'=>true,  'grid'=>true);
+		$fields['USER_CODE']			=	array('title'=>'UsuÃ¡rio'				, 'length'=>200,   'basic'=>true, 'list'=>true,  'grid'=>true);
 		$fields['USER_PWD']				=	array('title'=>'Senha'					, 'length'=>30);
 		$fields['USER_DESC']			=	array('title'=>'Nome'					, 'length'=>200,   'basic'=>true, 'list'=>true,  'grid'=>true);
 		$fields['USER_EMAIL']			=	array('title'=>'Email'					, 'length'=>200);
 		$fields['USER_TYPE']			=	array('title'=>'Cargo'					, 'length'=>80);
-		$fields['USER_FILTER']			=	array('title'=>'Nível de Estrutura'		, 'length'=>80);
-		$fields['USER_FILTER_VALUE']	=	array('title'=>'Filtro Nível Estrutura' , 'length'=>160);
+		$fields['USER_FILTER']			=	array('title'=>'NÃ­vel de Estrutura'		, 'length'=>80);
+		$fields['USER_FILTER_VALUE']	=	array('title'=>'Filtro NÃ­vel Estrutura' , 'length'=>160);
 		$fields['USER_INTERNAL']		=	array('title'=>'Internal'				, 'length'=>160);
 		$fields['USER_STATUS']			=	array('title'=>'Status'					, 'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','0'=>'Inativo'), 'basic'=>true, 'list'=>true, 'grid'=>true);
 		$fields['USER_FORMAT']			=	array('title'=>'Tema'					, 'is_select'=>array('-1'=>'Selecionar','azul'=>'Azul','cinza'=>'Cinza','laranja'=>'Laranja','verde'=>'Verde','vermelho'=>'Vermelho'));
-		$fields['LANGUAGE_ID']			=	array('title'=>'Idioma'					, 'is_select'=>array('-1'=>'Selecionar','EN'=>'Inglês','ES'=>'Espanhol','POR'=>'Português'));
+		$fields['LANGUAGE_ID']			=	array('title'=>'Idioma'					, 'is_select'=>array('-1'=>'Selecionar','EN'=>'InglÃªs','ES'=>'Espanhol','POR'=>'PortuguÃªs'));
 		$fields['PERFIL_ID']			=	array('title'=>'Perfil'					, 'is_select'=>'ATT_WRS_PERFIL', 'length'=>255);
 		$fields['CUSTOMER_ID']			=	array('title'=>'Cliente'				, 'is_select'=>'ATT_WRS_CUSTOMER','length'=>255);
 
@@ -149,17 +149,17 @@ class WRS_MANAGE_PARAM
 	public function ATT_WRS_DATABASE()
 	{
 		
-		//Qdo é um COMBO sem Ser de Tabela, tipo o STATUS?
+		//Qdo Ã© um COMBO sem Ser de Tabela, tipo o STATUS?
 		$button	=	array('new'=>'');
 		$table	=	'ATT_WRS_DATABASE';
 		$order	=	array('order_by'=>'DATABASE_ID' ,'order_type'=>'ASC');
 		$fields	=	array();
 		
 		$fields['WRS_ICON']			=	array('title'=>'#',   			'width'=>50,     'basic'=>true, 'grid'=>true);
-		$fields['DATABASE_ID']		=	array('title'=>'Código',   		'primary'=>true, 'list'=>true,  'grid'=>true);
+		$fields['DATABASE_ID']		=	array('title'=>'CÃ³digo',   		'primary'=>true, 'list'=>true,  'grid'=>true);
 		$fields['DATABASE_DESC']	=	array('title'=>'Nome',			'length'=>255,   'basic'=>true, 'list'=>true,  'grid'=>true);
-		$fields['DATABASE_COMMENT']	=	array('title'=>'Comentários',   'length'=>255,   'list'=>true,  'grid'=>true);
-		$fields['DATABASE_USER']	=	array('title'=>'Usuário',   	'length'=>30,    'grid'=>true);
+		$fields['DATABASE_COMMENT']	=	array('title'=>'ComentÃ¡rios',   'length'=>255,   'list'=>true,  'grid'=>true);
+		$fields['DATABASE_USER']	=	array('title'=>'UsuÃ¡rio',   	'length'=>30,    'grid'=>true);
 		$fields['DATABASE_PWD']  	=	array('title'=>'Senha',   		'length'=>30);
 		$fields['DATABASE_STATUS']	=	array('title'=>'Status',		'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','2'=>'Bloqueado','3'=>'Inativo'),      'basic'=>true, 'list'=>true, 'grid'=>true);
 		$fields['DATABASE_LINK']  	=	array('title'=>'Link',   		'length'=>255);
@@ -188,7 +188,7 @@ class WRS_MANAGE_PARAM
 		$fields	=	array();
 		
 		$fields['WRS_ICON']			=	array('title'=>'#',   		'width'=>50,    'basic'=>true , 'grid'=>true);
-		$fields['CUBE_ID']		    =	array('title'=>'Código',   	'primary'=>true,'list'=>true,   'grid'=>true);
+		$fields['CUBE_ID']		    =	array('title'=>'CÃ³digo',   	'primary'=>true,'list'=>true,   'grid'=>true);
 		$fields['CUBE_DESC']	    =	array('title'=>'Nome',		'length'=>180,  'basic'=>true,  'list'=>true,  'grid'=>true);
 		$fields['CUBE_STATUS']		=	array('title'=>'Status',	'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','0'=>'Inativo'),     'basic'=>true, 'list'=>true, 'grid'=>true);
 		$fields['DATABASE_ID']		=	array('title'=>'Database',  'is_select'=>'ATT_WRS_DATABASE',  'length'=>180,    'list'=>true,  'grid'=>true);
@@ -240,9 +240,9 @@ class WRS_MANAGE_PARAM
 		$fields	=	array();
 		
 		$fields['WRS_ICON']			=	array('title'=>'#',   			'width'=>50,  		'basic'=>true,  'grid'=>true);
-		$fields['PERFIL_ID']		=	array('title'=>'Código',   		'primary'=>true	,	'length'=>15);
+		$fields['PERFIL_ID']		=	array('title'=>'CÃ³digo',   		'primary'=>true	,	'length'=>15);
 		$fields['PERFIL_DESC']		=	array('title'=>'Nome',			'length'=>180,	 	'basic'=>true,  'list'=>true,  'grid'=>true);
-		$fields['PERFIL_LEVEL']		=	array('title'=>'Nível'	,		'length'=>15);
+		$fields['PERFIL_LEVEL']		=	array('title'=>'NÃ­vel'	,		'length'=>15);
 		$fields['PERFIL_STATUS']	=	array('title'=>'Status',		'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','0'=>'Inativo'), 'basic'=>true, 'list'=>true, 'grid'=>true);
 		//$fields['PERFIL_FLAG']		=	array('title'=>'PERFIL_STATUS',	'type'=>'int',   'list'=>true, 	'basic'=>true );
 		//Marcar os checkbox do Perfil Flag
@@ -258,7 +258,7 @@ class WRS_MANAGE_PARAM
 	}
 		
 	
-	//Classe de Relação CUBO-USUÁRIO ADMINISTRATIVO
+	//Classe de RelaÃ§Ã£o CUBO-USUÃRIO ADMINISTRATIVO
 	public function REL_WRS_CUBE_USER()
 	{
 		$button	=	array('new'=>'');
@@ -285,7 +285,7 @@ class WRS_MANAGE_PARAM
 	}
 	
 	
-	//Classe de Relatórios ADMINISTRATIVO
+	//Classe de RelatÃ³rios ADMINISTRATIVO
 	public function ATT_WRS_REPORT()
 	{
 		$button	=	array('new'=>'');
@@ -298,8 +298,8 @@ class WRS_MANAGE_PARAM
 		$fields['DATABASE_ID']		=	array('title'=>'Database',		'list'=>true,	 'basic'=>true,  'grid'=>true);
 		$fields['CUBE_ID']			=	array('title'=>'Cubo',			'list'=>true,	 'basic'=>true,  'grid'=>true );
 		$fields['CUSTOMER_ID']		=	array('title'=>'Cliente',		'list'=>true, 	 'basic'=>true,  'grid'=>true);
-		$fields['USER_ID']			=	array('title'=>'Usuário',		'list'=>true,	 'basic'=>true,  'grid'=>true);
-		$fields['REPORT_DESC']		=	array('title'=>'Nome Relatório','list'=>true,	 'basic'=>true,  'grid'=>true);
+		$fields['USER_ID']			=	array('title'=>'UsuÃ¡rio',		'list'=>true,	 'basic'=>true,  'grid'=>true);
+		$fields['REPORT_DESC']		=	array('title'=>'Nome RelatÃ³rio','list'=>true,	 'basic'=>true,  'grid'=>true);
 		//ROWS
 		//COLUMNS
 		//MEASURES
@@ -358,9 +358,9 @@ class WRS_MANAGE_PARAM
 		$fields['TRANSACTION_ID']	=	array('title'=>'ID',   		'primary'=>true,  'list'=>true,  'grid'=>true,  'class'=>'hide');
 		$fields['DATE_ID']			=	array('title'=>'Data', 		'type'=>'date',   'list'=>true,	 'grid'=>true,  'class'=>'hide');
 		$fields['PROCESS']			=	array('title'=>'Processo',	'list'=>true,	  'grid'=>true,  'class'=>'hide');
-		$fields['OPERATION']		=	array('title'=>'Operação',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
+		$fields['OPERATION']		=	array('title'=>'OperaÃ§Ã£o',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
 		$fields['MESSAGE']			=	array('title'=>'Mensagem',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
-		$fields['USER_DESC']		=	array('title'=>'Usuário',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
+		$fields['USER_DESC']		=	array('title'=>'UsuÃ¡rio',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
 		$fields['CUSTOMER_DESC']	=	array('title'=>'Cliente',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
 	
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_LOG'),
@@ -380,7 +380,7 @@ class WRS_MANAGE_PARAM
 		$table		=	'GET_SSAS_REPORT';
 		$order		=	array();
 		$fields		=	array();
-		$button		=	array('new'=>'Abrir Relatório','update'=>'Abrir Layout','remove'=>'Apagar');
+		$button		=	array('new'=>'Abrir RelatÃ³rio','update'=>'Abrir Layout','remove'=>'Apagar');
 		/*
 		 * TODO: pegar do language esses labels
 		 */
@@ -388,9 +388,9 @@ class WRS_MANAGE_PARAM
 		$exceptions	=	array('file'=>'WRS_REPORT', 'class'=>'WRS_REPORT','type'=>'');
 				
 		 $fields['REPORT_DESC']		=	array('title'=>'Nome',			'list'=>true,	'basic'=>true,  'grid'=>true);
-		 $fields['REPORT_SHARE']	=	array('title'=>'Compartilhado', 'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
+		 $fields['REPORT_SHARE']	=	array('title'=>'Compartilhado', 'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'NÃ£o'));
 		 $fields['REPORT_DATE']		=	array('title'=>'Data',			'list'=>true,	'basic'=>true,  'grid'=>true, 		'type'=>'date' ,'format'=>'d-m-Y H:i:s' ,'type_convert'=>true);
-		 $fields['REPORT_AUTOLOAD']	=	array('title'=>'Carga', 		'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
+		 $fields['REPORT_AUTOLOAD']	=	array('title'=>'Carga', 		'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'NÃ£o'));
 		 $fields['USER_DESC']		=	array('title'=>'Criador',		'list'=>true,	'basic'=>true,  'grid'=>true);
 		 $fields['LAYOUT_ROWS']		=	array('title'=>'Linhas',		'list'=>true,	'basic'=>false, 'grid'=>false);
 		 $fields['LAYOUT_COLUMNS']	=	array('title'=>'Colunas',		'list'=>true,	'basic'=>false, 'grid'=>false);
