@@ -8,6 +8,27 @@
 
 class WRS_MANAGE_PARAM
 {
+	var $array_retorno_padrao = array(	 'title'				=>	'',
+										 'button'				=>	'',
+										 'field'				=>	'',
+										 'table'				=>	'',
+										 'order'				=>	'',
+										 'icon'					=>	'',	
+										 'primary'				=>	'',
+										 'button_force_label'	=>	false, 		// forca o label dos icones na visualizacao de ICON de acordo com o array abaixo
+						 				 'button_icon'			=>	'',			// altera o icone padrao de cada botao na WindowGrid
+										 'labels_icon_small'	=>	array(),	// array com os nomes das colunas que deseja adicionar de label nos icones quando a visao for ICON SMALL
+										 'labels_icon_middle'	=>	array(),	// array com os nomes das colunas que deseja adicionar de label nos icones quando a visao for ICON MEDIUM
+										 'labels_icon_big'		=>	array(),	// array com os nomes das colunas que deseja adicionar de label nos icones quando a visao for ICON BIG
+										 'exception'			=>	'', 		// quando houver exceptions (uma view ao inves de tabela) utilizar um array com o nome da classe em questão para esta excecao 
+										 'checkbox'				=>	false,		// se existe checkbox por linha na visualizacao de grid
+										 'use_auto_width'		=>	true, 		// usar o calculo de largura para a coluna de acordo com o nome do titulo da mesma
+						 				 'callback_btn_events'	=>	'', 		// se as acoes padrao dos botoes será alterada, adicionar o nome da acao de callback
+										 'actionSingle'			=>	'', 		// se a acao do clique simples sera alterada, adicionar o nome da acao de callback
+										 'actionDouble'			=>	'',			// se a acao do clique duplo sera alterada, adicionar o nome da acao de callback
+										 'aplicaClassLinhas'	=>	true,		// [false,true,ClassEspecifica] se o parametro classDataLine sera aplicado nas linhas da grid do KendoUi
+						 				 'aplicaClassHeaders'	=>	false		// [false,true,ClassEspecifica] se o parametro classDataHeader sera aplicado nas headers da grid do KendoUi
+		 );
 	
 	public function load($_event)
 	{
@@ -118,7 +139,7 @@ class WRS_MANAGE_PARAM
 		$order							=	array('order_by'=>'USER_ID' ,'order_type'=>'ASC');
 		
 		$fields							=	array();
-		$fields['WRS_ICON']				=	array('title'=>'#'						, 'width'=>50,     'basic'=>true, 'grid'=>true);
+		$fields['WRS_ICON']				=	array('title'=>'#'						, 'width'=>60,     'basic'=>true, 'grid'=>true);
 		$fields['USER_ID']				=	array('title'=>'ID'						, 'primary'=>true, 'type'=>'int', 'class'=>'hide');
 		$fields['USER_CODE']			=	array('title'=>'Usuário'				, 'length'=>200,   'basic'=>true, 'list'=>true,  'grid'=>true);
 		$fields['USER_PWD']				=	array('title'=>'Senha'					, 'length'=>30);
@@ -142,6 +163,7 @@ class WRS_MANAGE_PARAM
 						'icon'		=>	'user.png',
 						'primary'	=>	'USER_ID'
 					);
+		
 	}
 	
 	
@@ -381,38 +403,46 @@ class WRS_MANAGE_PARAM
 		$order		=	array();
 		$fields		=	array();
 		$button		=	array('new'=>'Abrir Relatório','update'=>'Abrir Layout','remove'=>'Apagar');
+		$button_icon=	array('new'=>'fa fa-folder-open');
 		/*
 		 * TODO: pegar do language esses labels
 		 */
 		
 		$exceptions	=	array('file'=>'WRS_REPORT', 'class'=>'WRS_REPORT','type'=>'');
 				
-		 $fields['REPORT_DESC']		=	array('title'=>'Nome',			'list'=>true,	'basic'=>true,  'grid'=>true);
-		 $fields['REPORT_SHARE']	=	array('title'=>'Compartilhado', 'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
-		 $fields['REPORT_DATE']		=	array('title'=>'Data',			'list'=>true,	'basic'=>true,  'grid'=>true, 		'type'=>'date' ,'format'=>'d-m-Y H:i:s' ,'type_convert'=>true);
-		 $fields['REPORT_AUTOLOAD']	=	array('title'=>'Carga', 		'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
-		 $fields['USER_DESC']		=	array('title'=>'Criador',		'list'=>true,	'basic'=>true,  'grid'=>true);
-		 $fields['LAYOUT_ROWS']		=	array('title'=>'Linhas',		'list'=>true,	'basic'=>false, 'grid'=>false);
-		 $fields['LAYOUT_COLUMNS']	=	array('title'=>'Colunas',		'list'=>true,	'basic'=>false, 'grid'=>false);
-		 $fields['LAYOUT_MEASURES']	=	array('title'=>'Medidas',		'list'=>true,	'basic'=>false, 'grid'=>false);
-		 $fields['LAYOUT_FILTERS']	=	array('title'=>'Filtros',		'list'=>true,	'basic'=>false, 'grid'=>false);
-		 $fields['FILTER_DESC']		=	array('title'=>'Filtrados',		'list'=>true,	'basic'=>false, 'grid'=>false);
+		 $fields['REPORT_DESC']		=	array('title'=>'Nome', 				'width'=>250,	'classDataLine'=>'text-left',		'list'=>true,	'basic'=>true,  'grid'=>true);
+		 $fields['REPORT_SHARE']	=	array('title'=>'Compartilhado', 	'width'=>100,	'classDataLine'=>'text-center', 	'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
+		 $fields['REPORT_DATE']		=	array('title'=>'Data', 				'width'=>130,	'classDataLine'=>'text-center',	'list'=>true,	'basic'=>true,  'grid'=>true, 		'type'=>'date' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true);
+		 $fields['REPORT_AUTOLOAD']	=	array('title'=>'Carga', 			'width'=>80,	'classDataLine'=>'text-center', 	'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
+		 $fields['USER_DESC']		=	array('title'=>'Criador', 			'width'=>150,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>true,  'grid'=>true);
+		 $fields['LAYOUT_ROWS']		=	array('title'=>'Linhas', 			'width'=>200,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
+		 $fields['LAYOUT_COLUMNS']	=	array('title'=>'Colunas', 			'width'=>200,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
+		 $fields['LAYOUT_MEASURES']	=	array('title'=>'Medidas', 			'width'=>200,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
+		 $fields['LAYOUT_FILTERS']	=	array('title'=>'Filtros', 			'width'=>200,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
+		 $fields['FILTER_DESC']		=	array('title'=>'Filtrados', 		'width'=>200,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
 		 $fields['FILTERS_VALUES']	=	array('title'=>'Itens Filtrados',	'list'=>false,	'basic'=>false, 'grid'=>false);
 		
 		
 		 return array(	 'title'				=>	LNG('TITLE_ATT_WRS_REPORT'),
 						 'button'				=>	$button,
-						 'button_force_label'	=>	true, // NEW
 						 'field'				=>	$fields,
 						 'table'				=>	$table,
 						 'order'				=>	$order,
-						 'icon'					=>	'user.png',
-						 'exception'			=>	$exceptions, // NEW
+						 'icon'					=>	'report.png',	
 						 'primary'				=>	'REPORT_ID',
-						 'checkbox'				=>	true, // NEW
-		 				 'callback_btn_events'	=>	'callback_report_btn_events', // NEW
-						 'actionSingle'			=>	'callback_check_line_generic_modal',		//NEW
-						 'actionDouble'			=>	'callback_load_report_generic_modal'			//NEW
+						 'button_force_label'	=>	true, 			  									// NEW
+						 'button_icon'			=>	$button_icon,										// NEW
+						 'labels_icon_small'	=>	array('REPORT_DESC'),								// NEW
+						 'labels_icon_middle'	=>	array('REPORT_DESC','USER_DESC'),					// NEW
+						 'labels_icon_big'		=>	array('REPORT_DESC','USER_DESC','REPORT_DATE'),		// NEW
+						 'exception'			=>	$exceptions, 										// NEW
+						 'checkbox'				=>	true, 												// NEW
+						 'use_auto_width'		=>	false, 												// NEW
+		 				 'callback_btn_events'	=>	'callback_report_btn_events', 						// NEW
+						 'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
+						 'actionDouble'			=>	'callback_load_report_generic_modal',				// NEW
+						 'aplicaClassLinhas'	=>	true,												// NEW
+						 'aplicaClassHeaders'	=>	'text-center'										// NEW
 		 );
 		
 	}

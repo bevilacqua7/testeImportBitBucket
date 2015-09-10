@@ -107,16 +107,21 @@ class WindowGrid extends FORM
 			}	
 		}
 /*
-		if($this->exception)
+		if(!empty($this->exception))
 		{
 			$param['html']		=	$this->exception->change_html($param['html']);
 		}
 */
 		//Aplicando a conversão das TAGS para aplicar no HTML
 		$TPL_TITLE				=		$param['title'];
-		$TPL_HTML				=		$param['html'];		
-		$TPL_COMPLEMENT_TITLE	=	$param['title_menu'];
-		$this->setButton($param['button'],$param['table'],((array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false));
+		$TPL_HTML				=		$param['html'];
+		$TPL_DATA				=		$param['data'];
+		$TPL_COMPLEMENT_TITLE	=		$param['title_menu'];
+		
+		
+		$this->setButton($param['button'],$param['table'],((array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false),((array_key_exists('button_icon',$param) && is_array($param['button_icon']) && count($param['button_icon'])>0)?$param['button_icon']:false));
+		
+		
 		
 		$TPL_BUTTON				=		$this->getButton();
 				
@@ -141,14 +146,14 @@ class WindowGrid extends FORM
 	 * 
 	 * 
 	 */
-	public function setButton($button,$table,$label_force=false)
+	public function setButton($button,$table,$label_force=false,$button_icon=false)
 	{
 		$button_merge			=	array('new','update','remove');
 		$map_buttons			=	array();
 				
-		$map_buttons['new']		=	'<button type="button"  {complement} table="'.$table.'"	 action_type="new" 		class="btn btn-color-write btn-success 	btn_window_grid_event">	<i class="fa fa-floppy-o"></i> '						.LNG('BTN_SAVE').	'</button>';
-		$map_buttons['update']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="update"  	class="btn btn-color-write btn-info		btn_window_grid_event">	<i class="fa fa-pencil-square-o"></i> '					.LNG('BTN_UPDATE').	'</button>';
-		$map_buttons['remove']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="remove" 	class="btn btn-color-write btn-danger	btn_window_grid_event">	<i class="glyphicon glyphicon-trash color_write"></i> '	.LNG('BTN_REMOVE').	'</button>';
+		$map_buttons['new']		=	'<button type="button"  {complement} table="'.$table.'"	 action_type="new" 		class="btn btn-color-write btn-success 	btn_window_grid_event">	<i class="'.(($button_icon && array_key_exists('new', $button_icon))		?$button_icon['new']:'fa fa-floppy-o')								.'"></i> '	.LNG('BTN_SAVE').	'</button>';
+		$map_buttons['update']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="update"  	class="btn btn-color-write btn-info		btn_window_grid_event">	<i class="'.(($button_icon && array_key_exists('update', $button_icon))		?$button_icon['update']:'fa fa-pencil-square-o')					.'"></i> '	.LNG('BTN_UPDATE').	'</button>';
+		$map_buttons['remove']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="remove" 	class="btn btn-color-write btn-danger	btn_window_grid_event">	<i class="'.(($button_icon && array_key_exists('remove', $button_icon))		?$button_icon['remove']:'glyphicon glyphicon-trash color_write')	.'"></i> '	.LNG('BTN_REMOVE').	'</button>';
 		$map_buttons['out']		=	'<button type="button" 															class="btn btn-default" 	data-dismiss="modal">				<i class="glyphicon glyphicon-off"></i> '				.LNG('BTN_SAIR').	'</button>';
 		
 		foreach($button as $label => $_btn)
@@ -261,6 +266,10 @@ class WindowGrid extends FORM
 	{
 		$param		=	$_param;
 		$html		=	'';
+		$data		=	array();
+		
+		//Extend o Evento
+		$this->extendException($param,'runGrid');		
 		
 		
 		$page_current	=	fwrs_request('page_current');
@@ -269,19 +278,21 @@ class WindowGrid extends FORM
 		$page_size		=	fwrs_request('page_size');
 		$page_size		=  	empty($page_size) ? 25 : $page_size;
 		//$page_size		=	10;
-		$_query			=	$this->manage_param->select($param['field'], $param['table'], $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
 		
-		
-		if($this->exception)
+
+		if(!empty($this->exception))
 		{
 			
 			$query			=	$this->exception->change_query_exception($param['table'], $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
 			
 		}else{
 		
-			$query			= 	$this->query($_query);
+			$query			=	$this->manage_param->select($param['field'], $param['table'], $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
 		
 		}
+		
+		
+		$query			= 	$this->query($query);
 		
 		$num_rows		=	0;
 	
@@ -310,8 +321,6 @@ class WindowGrid extends FORM
 			</div>
 EOF;
 		
-		
-		
 		while($rows = $this->fetch_array($query))
 		{
 			$rows_get		=	array();
@@ -319,19 +328,31 @@ EOF;
 			$primary_key	=	NULL;
 			
 			$num_rows		=	$rows['ROWS_TOTAL'];
+		
+			$data[]			=	$rows;
+
+			//Se houver especificacao das labels para os icones
+			if(array_key_exists('labels_'.$exec_vision,$param) && is_array($param['labels_'.$exec_vision]) && count($param['labels_'.$exec_vision])>0)
+			{
+				foreach($param['labels_'.$exec_vision] as $coluna)
+				{
+					$rows_get[]	=	(is_object($rows[$coluna]) && get_class($rows[$coluna])=='DateTime')?$rows[$coluna]->format('d/m/Y H:i:s'):$rows[$coluna]; 
+				}
+			}else
 			
 			foreach($param['field'] as $label =>$field)
 			{
 				//Pegando o ID primary
-				if(isset($field['primary']))
+				if(array_key_exists('primary', $field))
 				{
 					$primary_key			=	 array();
 					$primary_key[$label] 	=	$rows[$label];
 					$primary_key			=	 base64_encode(json_encode($primary_key,true));
 				}
 			
+				
 				//Apenas informações do list é para apresentar
-				if(isset($field['list']))
+				if(array_key_exists('list',$field))
 				{
 					if($field['list'])
 					{
@@ -340,23 +361,24 @@ EOF;
 				}
 				
 			}
-			 
 			
 			$replace	=	array(	implode(' - ',$rows_get),
 									$param['icon'],
 									$primary_key,
 									$param['table']
 								);
-								
-								
+																
 			$tag_html	=	str_replace($search, $replace, $TAG_DIV);
 			
 			$html.=$tag_html;
 		}
 		
+		$param['visao_atual']	=	$exec_vision;
+		$data['param_original'] = 	$param;
 		
 		$param['title_menu']	=	$this->navMenu($param['table']);
 		$param['html']			=	str_replace('{TAG_ROWS}', $html, $TAG_ROWS).$this->pagination($param,$num_rows,$page_size,$page_current,$exec_vision);
+		$param['data']			=	json_encode($data);
 		return $param;
 	}
 	
@@ -382,7 +404,6 @@ EOF;
 		$param['title_menu']	=	$this->navMenu($param['table']);
 		$columns				=	array();
 		$primary_key			=	'';
-		
 		if(array_key_exists('checkbox', $param) && $param['checkbox']){
 				$columns[]				=	$this->checkbox_exist();
 		}
@@ -398,7 +419,11 @@ EOF;
 					}
 					$_tmp_column			=	$field;
 					$_tmp_column['field']	=	$label;
-					if(!isset($_tmp_column['width'])){
+					
+					/*
+					 * TODO: Analisar o porquê do KendoUi não respeitar o tamanho das colunas enviadas para o script.  A coluna está sendo tratada corretamente de acordo com seu conteúdo e sua exceção (use_auto_width), porém o KendoUi parece espremer as colunas pela quantidade existente quando há muitas colunas a serem exibidas (tabela de usuarios por exmeplo)
+					 */
+					if(!isset($_tmp_column['width']) && (!array_key_exists('use_auto_width', $param) || $param['use_auto_width'])){
 						$_tmp_column['width']	=	 (strlen($field['title'])*13)+10;
 					}
 							
@@ -444,6 +469,7 @@ EOF;
 
 		
 		$kendoUI					=	new KendoUi();
+		
 		$param['html']				=	$kendoUI->grid_window($columns, $param);
 		return $param;		
 	}
@@ -482,10 +508,6 @@ EOF;
 			}
 		}
 		
-		
-		//Extend o Evento
-		$this->extendException($param,'runGrid');
-		
 		if(!count($sort))
 		{
 				$sort				=	array();
@@ -498,14 +520,13 @@ EOF;
 		}
 		
 
-		//		unset($_columns['WRS_ICON']);
-		$query	=	$this->manage_param->select('*', $table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
-		
-		
 
 		if(!empty($this->exception))
 		{
 			$query	=	$this->exception->change_query_exception($table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
+		}else{				
+			//		unset($_columns['WRS_ICON']);
+			$query	=	$this->manage_param->select('*', $table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
 		}
 		
 
@@ -584,7 +605,18 @@ EOF;
 						$param_select	=	$this->manage_param->$sel_value();
 						
 						$where_box		=	$param_select['primary']."=''".$rows_tmp[$sel_label]."''";
-						$query_box			=	$this->manage_param->select($param_select['field'], $param_select['table'], $param_select['order']['order_by'], $param_select['order']['order_type'], 1, 1,$where_box);
+
+						if(!empty($this->exception))
+						{
+								
+							$query_box			=	$this->exception->change_query_exception($param_select['field'], $param_select['table'], $param_select['order']['order_by'], $param_select['order']['order_type'], 1, 1);
+								
+						}else{
+						
+							$query_box			=	$this->manage_param->select($param_select['field'], $param_select['table'], $param_select['order']['order_by'], $param_select['order']['order_type'], 1, 1,$where_box);
+							
+						}
+						
 						$query_box			=	$this->query($query_box);
 						$html_option		=	'';
 						if($this->num_rows($query_box))
@@ -713,7 +745,7 @@ EOF;
 									  <ul class="nav navbar-nav navbar-right wrs_grid_window_custum_tools_menu">
 								            <li class="dropdown liin">
 								              <a id="drop1" href="#" class="dropdown-toggle liin" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="true">
-								                <i class="fa fa-cog"></i> {$TITLE_GRID_WINDOW_MENU_MANAGER}
+								                <i class="fa fa-eye"></i> {$TITLE_GRID_WINDOW_MENU_MANAGER}
 								                <span class="caret"></span>
 								              </a>
 								              <ul class="dropdown-menu wrs_grid_window_event" role="menu" aria-labelledby="drop1">

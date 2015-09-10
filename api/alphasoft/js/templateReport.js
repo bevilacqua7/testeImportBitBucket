@@ -23,12 +23,21 @@ function ajustaTags(arr){
 }
 
 function callback_check_line_generic_modal(data){
-	var linha=$('#GET_SSAS_REPORT .k-grid-content table').find('tr')[parseInt(data.ROW_ID)-1];
-	var check = !$(linha).find('td input.checkline').prop('checked');
-	$(linha).find('td input.checkline').prop('checked',check);
-	$('#GET_SSAS_REPORT .k-grid-header table').find('input.checkline').prop('checked',false); // qualquer alteracao na linha, desmarca o checkall da coluna
-	if($($(event.target).context).hasClass('checkline')){ // se o click vier do checkbox
-		$($(event.target).context).prop('checked',!check);
+	var attr = data.visao_atual;
+	if (typeof attr !== typeof undefined && attr !== false) {
+		if(data.obj_sel.hasClass('selecao_icon')){
+			data.obj_sel.removeClass('selecao_icon');
+		}else{
+			data.obj_sel.addClass('selecao_icon');
+		}
+	}else{	
+		var linha=$('#GET_SSAS_REPORT .k-grid-content table').find('tr')[parseInt(data.ROW_ID)-1];
+		var check = !$(linha).find('td input.checkline').prop('checked');
+		$(linha).find('td input.checkline').prop('checked',check);
+		$('#GET_SSAS_REPORT .k-grid-header table').find('input.checkline').prop('checked',false); // qualquer alteracao na linha, desmarca o checkall da coluna
+		if($($(event.target).context).hasClass('checkline')){ // se o click vier do checkbox
+			$($(event.target).context).prop('checked',!check);
+		}
 	}
 }
 
@@ -103,7 +112,7 @@ function carrega_grid_list_reports(){
 	};
 	
 	 grid_window_modal(
-			 				{wrs_type_grid:'list',cube_s:CUBE_S},
+			 				{wrs_type_grid:'icon_middle',cube_s:CUBE_S},
 			 				'GET_SSAS_REPORT',
 			 				funCallBack);
 	 
@@ -114,54 +123,96 @@ function btn_window_grid_event_report(data)
 	var action_type				=	 $(this).attr('action_type');
 	var table					=	 $(this).attr('table');
 	var values					=	 get_grid_window_values_form();
+
+	var _data					=	 $('.body_grid_window').data('wrsGrid');
+	var param					=	 _data.param_original;
+	var visao					=	'grid';
 	
-	var qtde_linhas_selecionadas=	$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content').find('tr:has(.checkline:checked)').length;
-	var linhas_selecionadas		=	$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content').find('tr:has(.checkline:checked)');
+	var qtde_linhas_selecionadas=	null;
+	var linhas_selecionadas		=	null;
 	
-		if(qtde_linhas_selecionadas>1){
+	var attr = param.visao_atual;
+	if (typeof attr !== typeof undefined && attr !== false) {		
+		visao 	= 	'icon';		
+	}
+	
+	if(visao=='icon'){
+
+		qtde_linhas_selecionadas=	$('.body_grid_window').find(':has(.selecao_icon)').length;
+		linhas_selecionadas		=	$('.body_grid_window').find(':has(.selecao_icon)');
 		
-			var arrObjetosSelecionados = [];
-			var arrReportsIds = [];
+	}else{
+		
+		qtde_linhas_selecionadas=	$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content').find('tr:has(.checkline:checked)').length;
+		linhas_selecionadas		=	$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content').find('tr:has(.checkline:checked)');
+		
+	}
+
+	if(qtde_linhas_selecionadas>1){
+	
+		var arrObjetosSelecionados = [];
+		var arrReportsIds = [];
+		
+		linhas_selecionadas.each(function(){
 			
-			linhas_selecionadas.each(function(){
-				var objDados = $('#GET_SSAS_REPORT').data().handler._data[$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content tr').index(this)];
-				arrReportsIds.push(objDados.REPORT_ID);
-				arrObjetosSelecionados.push(callback_load_report_generic_modal(objDados,true));
-			});
+			var objDados = null;
 			
-			switch(action_type)
-			{
-				case 'new' 		: 
-						//callback_load_report_generic_modal(objDados);	
-						break; // abre o relatorio
-				case 'update' 	: 
-						//callback_load_report_generic_modal(objDados,false,true);
-						break; // abre somente o layout
-				case 'remove' 	:
-						removeReport(arrReportsIds);
-						break; // apaga o relatorio
-				
+			if(visao=='icon'){
+				var index	=	 $('.body_grid_window').first().children().index($(this));
+				objDados 	= _data[index];
+			}else{
+				objDados = $('#GET_SSAS_REPORT').data().handler._data[$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content tr').index(this)];
 			}
 			
-			console.log('TODO: acoes multiplas nas guias',{'evento':action_type,'arrObjetos':arrObjetosSelecionados});
+			arrReportsIds.push(objDados.REPORT_ID);
+			arrObjetosSelecionados.push(callback_load_report_generic_modal(objDados,true));
 			
-		}else{
-			var objDados = $('#GET_SSAS_REPORT').data().handler._data[$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content tr').index(linhas_selecionadas)];
-			var report_id= objDados.REPORT_ID;
-			switch(action_type)
-			{
-				case 'new' 		: 
-						callback_load_report_generic_modal(objDados);	
-						break; // abre o relatorio
-				case 'update' 	: 
-						callback_load_report_generic_modal(objDados,false,true);
-						break; // abre somente o layout
-				case 'remove' 	: 
-						removeReport([report_id]);
-						break; // apaga o relatorio
-				
-			}
+		});
+		
+		switch(action_type)
+		{
+			case 'new' 		: 
+					//callback_load_report_generic_modal(objDados);	
+					break; // abre o relatorio
+			case 'update' 	: 
+					//callback_load_report_generic_modal(objDados,false,true);
+					break; // abre somente o layout
+			case 'remove' 	:
+					removeReport(arrReportsIds);
+					break; // apaga o relatorio
+			
 		}
+		
+		console.log('TODO: acoes multiplas nas guias',{'evento':action_type,'arrObjetos':arrObjetosSelecionados});
+		
+	}else if(qtde_linhas_selecionadas==1){
+
+		var objDados = null;
+		
+		if(visao=='icon'){
+			var index	=	 $('.body_grid_window').first().children().index(linhas_selecionadas);
+			objDados 	= _data[index];
+		}else{
+			objDados = $('#GET_SSAS_REPORT').data().handler._data[$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content tr').index(linhas_selecionadas)];
+		}
+
+		var report_id= objDados.REPORT_ID;
+		switch(action_type)
+		{
+			case 'new' 		: 
+					callback_load_report_generic_modal(objDados);	
+					break; // abre o relatorio
+			case 'update' 	: 
+					callback_load_report_generic_modal(objDados,false,true);
+					break; // abre somente o layout
+			case 'remove' 	: 
+					removeReport([report_id]);
+					break; // apaga o relatorio
+			
+		}
+	}else{
+		WRS_ALERT('selecione ao menos um relatório','warning'); 
+	}
 }
 
 function removeReport(arrRepIds){

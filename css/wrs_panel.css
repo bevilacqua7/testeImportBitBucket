@@ -668,10 +668,11 @@ td{
  	text-align: left !important;
  }
  
+ /* alinhamentos serao tratados no conteudo do WRSPARAM
  .k-grid-content tr td{
- 	text-align: right !important;
+ 	text-align: left !important;
  }
- 
+ */
  
 .k-header{
 	font-weight:bold !important;
@@ -1512,6 +1513,33 @@ box-shadow:         inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
 -moz-border-radius: 0px;
 border-radius: 0px;
 
+}
+
+
+
+div.k-grid-header thead tr th[data-field=checkbox_linha]
+{
+    text-align: center !important;
+}
+
+.selecao_icon
+{
+    background-color: #E8F5FF;
+}
+
+.text-right
+{
+    text-align: right !important;
+}
+
+.text-center
+{
+    text-align: center !important;
+}
+
+.text-left
+{
+    text-align: left !important;
 }
 
 

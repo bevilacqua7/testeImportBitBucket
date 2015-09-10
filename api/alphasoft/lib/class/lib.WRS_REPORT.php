@@ -118,10 +118,10 @@ class WRS_REPORT  extends  WRS_USER
  			echo $error."<hr>Query: ".$sql;
  		}else{
  			$JS=<<<HTML
- 		$('#myModalGenericConfig').find('div.modal-footer').find('.bt-salvar').hide();		
+ 		$('#myModalGenericConfig').modal('hide');		
+		WRS_ALERT('Relatório salvo com sucesso','success'); 
 HTML;
 			echo fwrs_javascript($JS);
- 			echo "<span onclick=\"$('.repId').toggle();\">Relatório salvo com sucesso</span><span style='display:none;' class='repId'>, REPORT_ID: ".$rep_id."</span>";
  		}
 		exit();
 		
@@ -151,18 +151,23 @@ HTML;
 			default: return $html;			
 		}
 	}
-		
-	private function runGrid($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
-	{
-		//return 'select * from TMP_REPORT_SSAS_1_3';
-		
+	
+	private function getQuerySelectReports(){
+
 		$cube_id		=	fwrs_remove_colchete($this->cube['CUBE_ID']);
 		$database_id	=	fwrs_remove_colchete($this->cube['DATABASE_ID']);
 		
 		$user			=	WRS::INFO_SSAS_LOGIN();
 		
 		$sql			=	$this->_query->Get_SSAS_Reports($user['CUSTOMER_ID'], $user['USER_CODE'], $user['PERFIL_ID'], $database_id, $cube_id);
+		return $sql;
 		
+	}
+		
+	private function runGrid($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
+	{
+		
+		$sql			=	$this->getQuerySelectReports();
 		
 		$query			=	 $this->query($sql);
 		$error			=	false;
@@ -223,6 +228,9 @@ HTML;
 		}
 		echo fwrs_javascript($JS);
 		echo fwrs_javascript($JS2);
+		
+		$nome_report='';
+		
 		include PATH_TEMPLATE.'modal_include_report.php';
 		exit();
 		

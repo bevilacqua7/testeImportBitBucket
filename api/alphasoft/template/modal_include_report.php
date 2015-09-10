@@ -58,13 +58,13 @@ function select_work($id_div){
 </script>
 <form id="insert_report" name="insert_report">
 
-				<label for="report_name">Nome:</label><br>
-					<input type="text" id="report_name" name="report_name" style="width: 768px;">	
+				<label for="report_name">Nome</label><br>
+					<input type="text" id="report_name" name="report_name" value="<?php echo $nome_report;?>" style="width: 768px;">	
 				<br>
-				<input type="checkbox" id="report_auto" name="report_auto" value="1"> <label for="report_auto">Carregamento Automático </label>  &nbsp; &nbsp; &nbsp; <input type="checkbox" id="report_share" name="report_share" value="1"> <label for="report_share">Compartilhado</label>	
+				<input type="checkbox" id="report_auto" name="report_auto" value="1"> <label for="report_auto">Carga Automática </label>  &nbsp; &nbsp; &nbsp; <input type="checkbox" id="report_share" name="report_share" value="1"> <label for="report_share">Compartilhado</label>	
 								
 				<br>
-				<label for="select1">Layouts:</label>
+				<label for="select1">Layouts</label>
 	      		<div class="row default_config" id="select1">
       				<select class="select_altura col-sm-5 wrs-measures multiple" multiple>
 					</select>		      		 
@@ -78,7 +78,7 @@ function select_work($id_div){
 					</select>				
 				</div>
 				<br>
-				<label for="select2">Grupos:</label>
+				<label for="select2">Grupos</label>
 	      		<div class="row default_config" id="select2">
       				<select class="select_altura col-sm-5 wrs-measures multiple" multiple>
 					</select>		      		 

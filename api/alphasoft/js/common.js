@@ -845,6 +845,8 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 }
 
 
+
+
 $(document).ready(function(){
 	$('a.changePage').each(function(){
 		var link = $(this).attr('href');
