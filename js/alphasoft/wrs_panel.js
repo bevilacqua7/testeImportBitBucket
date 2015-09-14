@@ -359,8 +359,7 @@ $(document).ready(function () {
 	wrs_center_onresize();
 
 	$('.wrs_clean_box_drag_drop').click(wrs_clean_box_drag_drop);
-	ABA_CLICK();
-	ABA_WIDTH_LI();
+ 
 	
 });
 
@@ -436,54 +435,6 @@ function wrs_clean_box_drag_drop()
 												}
 									});
 }
-
-
-
-
-function ABA_CLICK()
-{
-	
-	$('.WRS_ABA a').click(function(){
-
-		var getIcoRemove		=	 $(this).find('.icon-remove-aba').attr('type');
-		
-		if(getIcoRemove=='remove') return false;
-		
-		$('.WRS_ABA').find('li').each(function(){$(this).removeClass('active');});
-		$(this).parent().addClass('active');
-	});
-	
-	
-	$('.icon-remove-aba').click(function(){
-		$(this).attr('type','remove');
-		$(this).parent().parent().remove();
-		
-		ABA_WIDTH_LI();
-	});
-	
-}
-
-
-function ABA_WIDTH_LI()
-{
-		var widthMax		=	0;
-		
-		$('.WRS_ABA').find('li').each(function(){ widthMax+=$(this).width()+5;});
-		$('.WRS_ABA ul.nav').width(widthMax);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1097,8 +1048,6 @@ function rows_by_metrica_attr_base64(object,_type)
 			//Pegando as informações para executar o Relatório
 			if(_type=='attr'){
 				_request[_request.length]	=	json.LEVEL_FULL;
-				//TRACE_DEBUG(json.LEVEL_FULL);
-
 			}else{
 				_request[_request.length]	=	json.MEASURE_UNIQUE_NAME;
 			}
@@ -1128,6 +1077,8 @@ function wrs_run_filter()
 	
 	$.WrsFilter('wrs_filter_check_change_filter');
 	
+
+	
 	//Verificando se existe informações básicas para gerar um relatório
 	var sortable_metrica	=	 rows_by_metrica_attr_base64('.sortable_metrica','metrica');
 	var sortable_linha		=	 rows_by_metrica_attr_base64('.sortable_linha','attr');
@@ -1151,53 +1102,71 @@ function wrs_run_filter()
 	var getAllFiltersToRun	=	"";
 	
 	
+	
+	var demo_top	=	'';
+	
+	if(!empty($('.wrsGrid').html()))
+	{
+		demo_top	=	base64_decode($('.wrsGrid').attr('wrsKendoUi'));
+	}
  
-	//Verificando se todos tem informações
-	if(sortable_metrica && sortable_linha )
-	{
-		run		=	 true;
-	}
-	
-	/*
-	 *  Personalizando Mensagens
-	 */
-	
-	if(!sortable_metrica)
-	{
-		mensagem	+= LNG('ATTRIBUTOS_METRICA')+'<br>';	
-	}
-
-	
-	if(!sortable_linha)
-	{
-		mensagem	+= LNG('ATTRIBUTOS_LINHA')+'<br>';
-	}
-
-
-	if(run)
+		//Verificando se todos tem informações
+		if(sortable_metrica && sortable_linha )
 		{
-		//manda executar o Relatório
+			run		=	 true;
+		}
 		
-		if($(this).attr('is_atributo_simples')!='true')
-		{//Apenas abre o load se for diferente de informações simples no select
-			if($(this).attr('eastonclose')!='true')
+		/*
+		 *  Personalizando Mensagens
+		 */
+		
+		if(!sortable_metrica)
+		{
+			mensagem	+= LNG('ATTRIBUTOS_METRICA')+'<br>';	
+		}
+	
+		
+		if(!sortable_linha)
+		{
+			mensagem	+= LNG('ATTRIBUTOS_LINHA')+'<br>';
+		}
+
+
+		if(run)
 			{
-				if(empty($(this).attr('history')))
+			//manda executar o Relatório
+			
+			if($(this).attr('is_atributo_simples')!='true')
+			{//Apenas abre o load se for diferente de informações simples no select
+				if($(this).attr('eastonclose')!='true')
 				{
-					MODAL_LOADING_WRS_PANEL();
-					$(this).attr('flag_load','true');
-					flag_load	=	'true';
+					if(empty($(this).attr('history')))
+					{
+						MODAL_LOADING_WRS_PANEL();
+						$(this).attr('flag_load','true');
+						flag_load	=	'true';
+					}
 				}
-			}
-		} 
-		
+			} 
+			
 		WRS_PANEL_RELATORIO();
 		
 		var _file	=	'WRS_PANEL';
 		var _class	=	'WRS_PANEL';
 		var _event	=	'load_grid_header';
 		
-		var param_request	=	[];
+		var _param_request		=	[];
+		var _param_request_obj	=	[];
+		var _base64			=	'';
+		
+		 
+			if(!empty($('.wrsGrid').html()))
+			{
+				_base64				=	base64_decode($('.wrsGrid').attr('wrsKendoUi'));
+				_param_request_obj	=	json_decode(_base64);
+			}
+			
+		
 		//Pegando as informações já pre estabelecidas pelo gráfico atuak
 		var is_param		=	false;
 		
@@ -1205,49 +1174,87 @@ function wrs_run_filter()
 		
 		
 		//Buscando a Grid para poder pegar as  opções selecionadas
-		$('.container_panel_relatorio').find('.wrsGrid').each(function(){
-			changeTypeRun('#'+$(this).attr('id'),TYPE_RUN.direct);
-			param_request	=	getElementsWrsKendoUi($(this));
-			is_param	=	true;
-		});
-		//Se não encontrar a variábel pesquisa pela primeira div que encontrar na tela
-		if(!is_param){
-			$('.container_panel_relatorio').find('div').each(function(){
-				changeTypeRun('#'+$(this).attr('id'),TYPE_RUN.direct);
-				param_request	=	getElementsWrsKendoUi($(this));
-			});
+		if(!empty($('.wrsGrid').html()))
+		{
+			var _wrsGrid	=	$('.wrsGrid');
+			var __id		=	'#'+_wrsGrid.attr('id');
+			var _rand		=	 js_rand(0,99999);
+			
+			
+				
+				
+			try{
+				if(empty(_param_request.TYPE_RUN))
+				{
+					_param_request['TYPE_RUN']=TYPE_RUN.direct;
+				}
+			}catch(e){}
+			
+				//changeTypeRun( __id,TYPE_RUN.direct,_rand);
+				
+				is_param		=	true;
+			 	
 		}
+
+
+		
+		/*if(!is_param)
+		{
+				changeTypeRun('#'+$(this).attr('id'),TYPE_RUN.direct);
+		}
+		*/
+
+		
 		
 
-		param_request['LAYOUT_ROWS']		=	base64_encode(implode(',',request_linha));
-		param_request['LAYOUT_COLUMNS']		=	base64_encode(implode(',',request_coluna));
-		param_request['LAYOUT_MEASURES']	=	base64_encode(implode(',',request_metrica));
+		
+		
+		
+		_param_request['LAYOUT_ROWS']		=	base64_encode(implode(',',request_linha));
+		_param_request['LAYOUT_COLUMNS']	=	base64_encode(implode(',',request_coluna));
+		_param_request['LAYOUT_MEASURES']	=	base64_encode(implode(',',request_metrica));
 		
 
+		
+		
 		//Força a conversão do Menu 
 		wrsFilterShow();
+		
+		
+		
 		getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
 		
+		
+
 
 		//foreach(getAllFiltersToRun);
-		param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
-		param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
+		_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
+		_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
 		
 		
 
-
-
-
+//		console.log('getAllFiltersToRun.full',getAllFiltersToRun.full);
+		
+		/*
+		 * TODO:Revisando
+		 */
+	
+		
+		
+		 _param_request	=	merge_filter_data(_param_request,_param_request_obj);
+		
+			
+			
 		//Passando o ID do Cubo na sessão
 		var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;
 		//Verificando se existe multiplos cubos
 		if(_wrs_multiple_cube_event==1 || empty(_wrs_multiple_cube_event))
 		{	
 			//Caso não seja multiplo cubo pega o cubo corrente
-			param_request[TAG_URL_CUBE_SELECTED]=CUBE_S;
+			_param_request[TAG_URL_CUBE_SELECTED]=CUBE_S;
 		}else{
 			var jsonMukltiple			=	$('.wrs_multiple_cube_event').find('option:selected').attr('json');
-			param_request['json']		=	jsonMukltiple;
+			_param_request['json']		=	jsonMukltiple;
 		}
 		
 		
@@ -1272,31 +1279,46 @@ function wrs_run_filter()
 		var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
 		
 		
+		/*
+		 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
+		 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
+		 * Caso exista erro de variáveis que faltam passar para a estrutura normalmente será nesse processo
+		 * 
+		 * Esse processo é onde junta os dados do Default com o original
+		 */
 		//Se existir interação então faz o merge das informações 
-			if(!empty(wrsConfigGridDefault.attr('is-event'))){
+		
+			if(!empty(wrsConfigGridDefault.attr('is-event')) && wrsConfigGridDefault.attr('is-event')=='true'){
 				
-					if(!empty(wrsConfigGridDefault_data))
+				if(!empty(wrsConfigGridDefault_data))
 				{
 					var getParamDefault = array_key_data(wrsConfigGridDefault_data);
-					//['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
 					
 //					foreach(getParamDefault);
-					
+					//['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
 					//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);
 					for(var lineGetParamDefault in getParamDefault)
 					{
-//						TRACE_DEBUG(getParamDefault[lineGetParamDefault]+'|||'+wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]]);
-						
-						param_request[getParamDefault[lineGetParamDefault]]	=	wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]];
+						switch(getParamDefault[lineGetParamDefault])
+						{
+							case 'FILTER_TMP' :
+							case 'DRILL_HIERARQUIA_LINHA' :
+							case 'DRILL_HIERARQUIA_LINHA_DATA' :
+							case 'SHOW_LINE_TOTAL' :
+							case 'DRILL_HIERARQUIA_LINHA_DATA_HEADER' :
+							case 'TYPE_RUN' :
+							case 'PAGE_CURRENT' :
+							continue;
+						}
+						_param_request[getParamDefault[lineGetParamDefault]]	=	wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]];
 					}
 					
 				}
 			}
 			
 			
-			
-		var is_wrs_change_to	=	is_wrs_change_to_run(param_request);
-			param_request		=	is_wrs_change_to.val;
+		var is_wrs_change_to	=	is_wrs_change_to_run(_param_request);
+			_param_request		=	is_wrs_change_to.val;
 		
 			
 		if(is_wrs_change_to.status)
@@ -1326,7 +1348,13 @@ function wrs_run_filter()
 		$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
 		$('.wrs_panel_filter_icon').hide();
 		
-		runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
+		
+		//Libero a configuração das janelas 
+		wrsConfigGridDefaultManagerTopOptions();
+		
+		
+
+		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
 		
 		wrs_panel_layout.close('east');
@@ -1371,10 +1399,14 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 				return true;
 			}
 		}else{
-			console.log('MOUNT_LAYOUT_GRID_HEADER',data);
+			if(IS_TRACE)
+			{
+				console.log('MOUNT_LAYOUT_GRID_HEADER',data);
+			}
 		}
 	}
 	
+//	$('.wrsGrid').removeClass('wrsGrid');
 	
 	TRACE('START MOUNT_LAYOUT_GRID_HEADER'); 
 	
@@ -1406,7 +1438,9 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 
 
 
-
+/*
+ * TODO: Corrigir a janela de load
+ */
 function MODAL_LOADING_WRS_PANEL(_title,_text_body,_class_button)
 {
 	var l_title			=	_title;

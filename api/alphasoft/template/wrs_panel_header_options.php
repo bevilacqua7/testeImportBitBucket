@@ -55,7 +55,7 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 	getRequestKendoUiDefault = {$getRequestKendoUiDefault};	
 	{$script_tags}	
 </script>
-<nav class="navbar  wrs_nav_relatorio ui-state-active {$NAV_CONFIG_WRS}" id="{$idTag}NAV" >
+<nav class="navbar  wrs_nav_relatorio ui-state-active {$NAV_CONFIG_WRS} CONTROL_TITLE_EDIT"  id-tag="{$idTag}"   id="{$idTag}NAV" >
 		  <div class="container-fluid">
 		  
 		  <!-- Title -->
@@ -73,7 +73,7 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 			 </div>
 			<!-- END Botão Histórico -->
 			<div class="btn-group  " role="group" aria-label="...">
-					  <span class="h4">Title</span>
+					  <span class="h4 report_title" contenteditable="true">{$ABA_TITLE}</span>
 			</div>
 					
 			 </div>

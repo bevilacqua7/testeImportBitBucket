@@ -280,6 +280,7 @@ class KendoUi
 	{
 		//Pegando os padrões das páginas
 		$this->pageScheme();
+
 		
 		//Pegando O ID do Cubo
 		$_request	=	$_REQUEST;
@@ -301,6 +302,13 @@ class KendoUi
 		
 		$idTag		=	$this->getId();
 		
+		
+		//Adicionando title da aba
+		$ABA_TITLE					=	$this->wrsKendoUi['TITLE_ABA'];
+		$ABA_TITLE					=	 empty($ABA_TITLE) ? LNG('ABA_IN_USER') :  $ABA_TITLE;
+		
+		
+		
 		include PATH_TEMPLATE.'wrs_panel_header_options.php';
 		
 		$element	=	base64_encode(json_encode(array_merge($_request,$_element),true));
@@ -317,6 +325,8 @@ class KendoUi
 		$this->wrsKendoUi['DRILL_HIERARQUIA_LINHA_DATA']	=	"";	//Manter sempre nullo 
 		$wrsKendoUi					=	 base64_encode(json_encode($this->wrsKendoUi,true));
 		
+		
+		
 		$html 	= <<<HTML
 		
 			
@@ -330,7 +340,8 @@ class KendoUi
 							
 								 	 <script>
 								  
-								  		WRSHistory[{$report_id}]	=	"{$getRequestWrsExceptions['TRASH_HISTORY']}";	
+								  		WRSHistory['{$report_id}']	=	"{$getRequestWrsExceptions['TRASH_HISTORY']}";	
+								  		
 										$(function(){
 																	var jsonDecode											= 	{$_jsonencode};
 																jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
@@ -347,9 +358,18 @@ class KendoUi
 																																			
 																
 													});
+																		
+												//Adicionando nova ABA						
+												var _options_aba	=	{
+																			title		:'{$ABA_TITLE}',
+																			report_id	:'{$report_id}',
+																			active		:	true
+																		};
+												$(ABA_TAG_NAME).wrsAbas('add_new_aba',_options_aba);						
 									</script>
 						</div>
-												
+					
+																		
 			</div>
 HTML;
 	 

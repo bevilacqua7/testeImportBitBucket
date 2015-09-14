@@ -55,6 +55,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa){
 		var filtros_values = data.FILTER_VALUES.split('(_|_)');
 		var data_temp = "{"+data.FILTER_VALUES.replace('(_|_)','},{')+"}";
 		var full_temp = [];
+		
 		for(var filtro in filtros_values){
 			var quebra_temp0 	= filtros_values[filtro].split(',');
 			var quebra_temp1 	= quebra_temp0[0].split('.');
@@ -126,7 +127,7 @@ function btn_window_grid_event_report(data)
 			
 			switch(action_type)
 			{
-				case 'new' 		: 
+				case 'new' 		: $(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados);	
 						//callback_load_report_generic_modal(objDados);	
 						break; // abre o relatorio
 				case 'update' 	: 
@@ -147,6 +148,7 @@ function btn_window_grid_event_report(data)
 			{
 				case 'new' 		: 
 						callback_load_report_generic_modal(objDados);	
+						filter_configure_window();
 						break; // abre o relatorio
 				case 'update' 	: 
 						callback_load_report_generic_modal(objDados,false,true);
