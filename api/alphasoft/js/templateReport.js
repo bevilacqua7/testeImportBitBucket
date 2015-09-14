@@ -87,7 +87,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa){
 					'KendoUi'				:	_kendoui
 	}
 	
-	console.log('reportDATA: ',data);
+	console.log('reportDATA: ',data,'kendoUi carregado: ',_kendoui);
 	/*
 	 * TODO: adicionar os campos abaixo para ir para as abas e voltar para a tela na hora de salvar:
 	 * - REPORT_AUTOLOAD
@@ -112,16 +112,24 @@ function callback_load_report_generic_modal(data,return_params,nao_processa){
 }
 
 
-function carrega_grid_list_reports(){
+function carrega_grid_list_reports(options){
 
+	var funCallBackVision = function()
+	{
+		var rel		=	 $(this).attr('rel');
+		var table	=	 $(this).attr('table');
+		var option	=	 {wrs_type_grid:rel,cube_s:CUBE_S};
+		carrega_grid_list_reports(option);
+	}
+	
 	var funCallBack	=	function(data)
 	{
 			$('.modal-content-grid').html(data);
-			wrs_window_grid_events_tools({btn:btn_window_grid_event_report});
+			wrs_window_grid_events_tools({btn:btn_window_grid_event_report, visao: funCallBackVision});
 	};
 	
 	 grid_window_modal(
-			 				{wrs_type_grid:'icon_middle',cube_s:CUBE_S},
+			 				((options!=null)?options:{wrs_type_grid:'icon_middle',cube_s:CUBE_S}),
 			 				'GET_SSAS_REPORT',
 			 				funCallBack);
 	 
