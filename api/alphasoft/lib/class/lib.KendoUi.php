@@ -332,7 +332,7 @@ class KendoUi
 								  
 								  		WRSHistory[{$report_id}]	=	"{$getRequestWrsExceptions['TRASH_HISTORY']}";	
 										$(function(){
-																	var jsonDecode											= 	{$_jsonencode};
+															var jsonDecode											= 	{$_jsonencode};
 																jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
 																jsonDecode.dataBound									= 	function(arg){ return onDataBound(arg);}								
 																jsonDecode.dataBinding									=	function(arg){ return onDataBinding(arg);}
@@ -734,11 +734,19 @@ HTML;
 		$modelField			=	array();	
 		
 		
+		$_column		=	 json_encode($column,true);
+		$_param			=	 json_encode($param,true);
+		
+		
 		foreach($column as $col_param)
 		{
 			$field			=	$col_param['field'];
 			$model[]		=	array_merge($col_param,array('field'=>$col_param['field'],'template'=>'#='.$field.'#'));
-			$modelField[]	=	array('field'=>$col_param['field'],'type'=>'string');
+			$val_model		=	array('field'=>$col_param['field'],'type'=>'string');
+			if(array_key_exists('width', $col_param)){
+				$val_model['width']=$col_param['width'];
+			}
+			$modelField[]	=	$val_model;
 		}
 		
 		$model[0]['window_grid']		=	$param;
@@ -787,7 +795,7 @@ HTML;
 								dataBound		:	function(arg){ return onDataBoundWindowGrid(arg);}
 		                        
 		                    });
-		                });
+		                }).loadParanGridWindow({$_column},{$_param});
 		            </script>		
 		            
 		            

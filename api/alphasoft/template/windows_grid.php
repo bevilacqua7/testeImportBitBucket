@@ -14,3 +14,8 @@
 			<?php echo $TPL_BUTTON;?>
 	</div>
 </div>
+
+
+<script>
+	$('.body_grid_window').data('wrsGrid',<?php echo (($TPL_DATA!='')?$TPL_DATA:'{}');?>);
+</script>

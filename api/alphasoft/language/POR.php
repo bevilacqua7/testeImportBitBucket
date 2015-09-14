@@ -41,7 +41,7 @@
 	
 	$language ['TITLE_ATT_WRS_USER'] 	= "Usuários";
 	
-	$language ['TITLE_GRID_WINDOW_MENU_MANAGER'] 		= "Gerenciamento";
+	$language ['TITLE_GRID_WINDOW_MENU_MANAGER'] 		= "Visão";
 	$language ['TITLE_GRID_WINDOW_MENU_LIST'] 			= "Grid";
 	$language ['TITLE_GRID_WINDOW_MENU_DETAILS'] 		= "Detalhes";
 	$language ['TITLE_GRID_WINDOW_MENU_BIG_ICON'] 		= "Icone Grande";
