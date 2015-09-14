@@ -91,9 +91,9 @@ class WRS_REPORT  extends  WRS_USER
  				$FILTERS_VALUES = implode("(_|_)",$arr_filtros_sel);
  			}
  		}
- 		
- 		$ALL_ROWS 			= 0;
- 		$ALL_COLS 			= 0;
+ 		 		
+ 		$ALL_ROWS 			= ($dadosJs->KendoUi->ALL_ROWS=="1")?1:0;
+ 		$ALL_COLS 			= ($dadosJs->KendoUi->ALL_COLS=="1")?1:0;
  		$COLS_ORDER 		= 0;
  		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi));
  		$REPORT_FORMULAS 	= '';
