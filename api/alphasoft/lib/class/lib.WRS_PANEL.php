@@ -231,11 +231,12 @@ class WRS_PANEL  extends WRS_USER
 		}
 		else
 		{
+			$ABA_TITLE	=	 LNG('LABEL_NOVO');
 			$getRequestKendoUiDefault	=	$this->getRequestKendoUiDefault;
 			include PATH_TEMPLATE.'wrs_panel.php';
 		}
 		
-		
+		//Caso seja nulo ou executdo com F5 ou refresh executa o histórico
 		echo fwrs_javascript('WRSKendoGridRefresh("'.WRS::GET_REPORT_HISTORY_CURRENT($CUBE,true).'")');
 
 		WRS_TRACE('END eventDefault()', __LINE__, __FILE__);
@@ -396,8 +397,18 @@ class WRS_PANEL  extends WRS_USER
 			if(!empty($lineData)) $flagEmpty=false;
 		}
 		
-		if($flagEmpty)	return NULL;
+		WRS_DEBUG_QUERY($getRequestKendoUi);
 		
+
+		
+		if($getRequestKendoUi['IS_REFRESH']=='_false' || $flagEmpty)
+		{
+			$request	=	WRS::GET_REPORT_HISTORY($cube_id, $report_id);
+			return $request;
+		}
+		
+	 
+
 		$tagClass			=	"__";
 		$LAYOUT_ROWS		=	$this->convertDataHistory($layout['LAYOUT_ROWS'],$tagClass);
 		$LAYOUT_COLUMNS		=	$this->convertDataHistory($layout['LAYOUT_COLUMNS'],$tagClass);
@@ -412,9 +423,6 @@ class WRS_PANEL  extends WRS_USER
 		$_getRequestKendoUi['FILTER_TMP']			=	NULL;
 		$getRequestWrsExceptions['TRASH_HISTORY']	=	NULL;
 		
-
-		
-		
 		foreach($LAYOUT_FILTERS_TMP as $data)
 		{
 			$LAYOUT_FILTERS[]	=	array($data['class'],'', explode(',',$data['data']));
@@ -428,6 +436,7 @@ class WRS_PANEL  extends WRS_USER
 		$result_box['LAYOUT_MEASURES']		=	$LAYOUT_MEASURES;
 		$result_box['LAYOUT_FILTERS']		=	$LAYOUT_FILTERS;
 		
+	
 	
 		
 		$history		=	json_decode(base64_decode(WRS::GET_REPORT_HISTORY($cube_id, $report_id)),true);
@@ -476,13 +485,15 @@ class WRS_PANEL  extends WRS_USER
 		
 		}
 		
+		
 		$history		=	base64_encode(json_encode($history,true));
+		
+//		WRS_DEBUG_QUERY($history)
+		
 		//GRava na sessão
 		WRS::SET_REPORT_HISTORY($cube_id, $report_id, $history);
 		
-		
-		
-		return $history;
+			return $history;
 	}
 	
 	/**
@@ -589,6 +600,7 @@ class WRS_PANEL  extends WRS_USER
 		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi();		
 		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
 		
+		//WRS_DEBUG_QUERY($getRequestKendoUi);
 		
 		//WRS_DEBUG_QUERY(print_r($getRequestKendoUi,true));
 		
@@ -663,11 +675,13 @@ class WRS_PANEL  extends WRS_USER
 		$DillLayout['LAYOUT_MEASURES']	=	$MEASURES;
 		$DillLayout['LAYOUT_FILTERS']	=	$FILTERS;
 		
+
 		//Criando o ID do REPORT ID
 		if(empty($getRequestKendoUi['REPORT_ID']))
 		{
 			$getRequestKendoUi['REPORT_ID']	=	WRS::GET_REPORT_HISTORY_CURRENT($CUBE);
 		}
+		
 		
 		$getRequestWrsExceptions['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$getRequestWrsExceptions,$DillLayout);
 		
@@ -831,11 +845,8 @@ class WRS_PANEL  extends WRS_USER
 //		$TelerikUi				=	$thread_job_manager['TelerikUi'];
 		$CUBE					=	$thread_job_manager['CUBE'];
 		
-		
 		$threadJobManager	=	$this->threadJobManager->runThreadJobManager($thread_job_manager,$getRequestKendoUi['REPORT_ID'],$this->_query,$checkThreadJobManager);
-		
-			
-			
+
 		if(is_array($threadJobManager))
 		{
 			//O correu um erro  no processo da runThreadJobManager 
@@ -843,7 +854,6 @@ class WRS_PANEL  extends WRS_USER
 			
 			$cube			=	$threadJobManager['cube'];
 			$this->_param	=	$threadJobManager['_param'];
-				
 			
 				//Verificando se é para esperar a thread
 				if($threadJobManager['wait_thread'])
@@ -1039,6 +1049,8 @@ HTML;
 //		$TelerikUi->setToolbarExcel('excel', 'ExportarExcel', $urlToExport);
 	//	$TelerikUi->setToolbarPDF('pdf', 'pdf', $urlToExport);
 		
+
+
 		$HTML	=	 $TelerikUi->render($this->param_encode($this->_param_ssas_reports),$getRequestWrsExceptions,$getRequestKendoUi['REPORT_ID']);
 		
 		

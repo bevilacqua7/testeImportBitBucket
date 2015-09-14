@@ -268,7 +268,7 @@ function getFisrtChartValue(ChartDefault)
  * END SLIDE
 */
 
-function	WRSKendoUiChart(KendoUi,_onlyDefault) 
+function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal) 
 	    {	
 		
 			var onlyDefault		=	empty(_onlyDefault) ? false : _onlyDefault; //Apenas quando for configurações Default
@@ -288,7 +288,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 			
 			var DRILL_COLUMN_TITLE		=	'';
 			var DRILL_FROZEN			=	'';
-			
 			
 			//Apenas garante que exista o drill Nullo
 			try{
@@ -700,11 +699,11 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 				kendoChart.height(ELEMENT.height());
 				kendoChart.width(ELEMENT.width());
 				
-				
 				/*
 				 * Verificando se é para recriar o gráfico ou apena fazer o resize
 				 * 
 				 */
+				
 				if(!exist_in_array(exceptionChartResize(),getFisrtChartValue(ChartDefault)))//VErifica se é alguns charts que não precisa fazer o resize
 				{
 					if(ELEMENT.attr('chart')=='true') 
@@ -714,10 +713,12 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 						 	if(!empty(chart)){
 						 	 chart.redraw();
 						 	}
-						return true;
+						 	
+						 	if(empty(_start_modal)){
+						 			return true;
+						 	}
 					}
 				}
-				
 				
 				
 				 
@@ -744,7 +745,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 				
 				
 
-				
 				
 				
 				/*
@@ -1038,12 +1038,15 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 				var loadTypesMeasuresAction	=	 function()
 					{
 					
+					
 						var bodyConfigChart			=	$('.chart-config-body');
 						var measures				=	bodyConfigChart.find('.wrs-measures');
 						var measures_receive		=	bodyConfigChart.find('.wrs-measures-receive');
 						
-						
-							if(GRID.attr('chart-wrs')=='true') return true;
+						/*
+						 * TODO:COmentado em 11/09/2015 
+						 */
+//							if(GRID.attr('chart-wrs')=='true') return true;
 						
 							measures.find('option').remove();
 							measures_receive.find('option').remove();
@@ -1067,6 +1070,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 										
 									}
 								
+
 								to_add.append($('<option/>',{'json':_json,'value':lineChartTitles,'html':chartTitles[lineChartTitles]}));
 							}
 							
@@ -1457,6 +1461,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 					};
 					
 					loadTypesMeasuresAction();
+					
+
+					if(!empty(_start_modal)) return false;
 					
 					//Quando for o Default Para o processo neste estágio
 					if(onlyDefault) return true;
@@ -2195,7 +2202,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 											{
 											//TRACE_DEBUG(optionBubble.xAxis.max);
 								  		
-											
 													if(getInfoTotalColumn(true,true))
 														{
 																var getAllTotal	=	getInfoTotalColumn('All');
@@ -2746,7 +2752,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault)
 													kendoChartOptions.title.text+=_titleSubNivel;
 													
 													
-													console.log('CHART',kendoChartOptions);
+													//console.log('CHART',kendoChartOptions);
 													
 													
 													//Value

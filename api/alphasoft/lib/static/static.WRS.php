@@ -462,7 +462,7 @@ class WRS
 	{
 		$TAG_NAME		=	'CUBE_REPORT_HISTORY';
 		$TMPMktime		=	fwrs_mktime();
-		$ReportId		=	rand(0,99999999999999);
+		$ReportId		=	'ABA_'.rand(0,99999999999999);
 		$report_history	=	array();
 		
 		if(isset($_SESSION[$TAG_NAME][$cube_id]))

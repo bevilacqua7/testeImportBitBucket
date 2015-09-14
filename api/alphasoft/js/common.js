@@ -28,16 +28,25 @@ var TYPE_RUN	=	{
 						data				:	'DrillValue'
 					};
 
+var ABA_TAG_NAME		=	'.WRSAbas ul';
 
 function changeTypeRun(IDGrid,typeRun)
 {
-	var wrsKendoUi			=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
+
+	var _base64				=	base64_decode($(IDGrid).attr('wrsKendoUi'));
 	
-	if(empty(wrsKendoUi.TYPE_RUN))
-	{
-		wrsKendoUiChange(IDGrid,'TYPE_RUN',typeRun);
-	}	
+	var wrsKendoUi			=	$.parseJSON(_base64);
+	
+	try{
+		if(empty(wrsKendoUi.TYPE_RUN))
+		{
+			wrsKendoUiChange(IDGrid,'TYPE_RUN',typeRun);
+		}	
+	}catch(e){}
 }
+
+
+
 
 function include_js(file)
 {
@@ -219,6 +228,60 @@ function getJsonEncodeToElement(element)
 function getJsonDecodeBase64(json)
 {
 	return $.parseJSON(base64_decode(json));
+}
+
+
+function filter_array_convert(input)
+{
+	if(empty(input)) return [];
+	
+	var input_array	=	 explode(',',input);
+	var tmp_input	=	[];
+	
+	for(var lineInput in input_array)
+		{
+			tmp_input[tmp_input.length]		=	'__'+replace_attr(input_array[lineInput]);
+		}
+	return tmp_input;
+}
+
+
+function filter_TMP_to_array(input)
+{
+	if(empty(input)) return [];
+	
+	var tmp_input	=	[];
+	
+	
+	for(var lineInput in input)
+		{
+			var inputData		=	input[lineInput];
+			var _filter			=	explode(',',inputData['data']);
+				_filter			=	empty(_filter) ? '' : _filter;
+				
+				tmp_input[tmp_input.length]		=	[inputData['class'],'',_filter];				
+		}
+	
+	
+	return tmp_input;
+}
+
+
+function filter_configure_window()
+{
+	var filter_h	=	$('.wrs_panel_filter_icon').attr('filter_hide'); 
+	var label		=	'true';
+		$('.WRS_DRAG_DROP_RECEIVER_FILTER').show();
+		$('.WRS_DRAG_DROP_FILTER_CONTAINER').hide();
+	
+
+		if(filter_h=='true')
+		{
+			label	=	 'false';
+		}
+		
+		$('.wrs_panel_filter_icon').attr('filter_hide',label).trigger('click'); 
+	
 }
 
 /**
@@ -647,7 +710,7 @@ function WRSGridLoadComplete(object)
 }
 
 
-
+ 
 /*
  * COntruindo o resize da Grid Simples
  * TODO: Tenho que sincronizar essa informação com o WRSWindowGridEventTools
@@ -681,6 +744,32 @@ function resizeGridSimple()
 } 
 
 
+/*
+ * TODO: Verificar se está correto as informações
+ */
+function merge_filter_data(input,inputMerge)
+{
+
+	var _tmp_merge		=	[];
+		_tmp_merge		=	inputMerge;
+
+
+
+	for(lineInputMerge in input)
+		{
+			var _key	=	String(lineInputMerge);
+			
+				if(!empty(input[_key]))
+				{
+					
+						_tmp_merge[_key]		=	input[_key];
+				}
+		}
+
+	return _tmp_merge;
+	
+}
+
 /**
  * 
  * Está vinculado a formataValue
@@ -688,10 +777,9 @@ function resizeGridSimple()
  */
 function sumarizaValor(valor)
 {
-	
-	var _casa_decimal 	= '.';
-	var _milhar 		= ',';
-	var _value 			= valor;
+	var _casa_decimal 	= 	'.';
+	var _milhar 		= 	',';
+	var _value 			= 	valor;
 	var _value_limit	=	0;
 	var _WORD			=	'';
 	
