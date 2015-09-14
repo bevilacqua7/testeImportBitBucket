@@ -496,9 +496,7 @@
 					var _report_id		=	'';
 					
 					tagABA.find('.'+tag_aba_empty).remove();
-					console.log('options',options);
-					
-					return true;
+
 					
 					for(var lineOptions	=0 ; lineOptions	<	options.length ;lineOptions++)
 						{
