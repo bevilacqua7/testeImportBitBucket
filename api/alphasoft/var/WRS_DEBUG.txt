@@ -149,3 +149,983 @@ getAbasAutoLoad Não tem resultados
 ---------------------------------------------------------------------------------------------
 getAbasAutoLoad Não tem resultados
 ---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_260797524
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_92658079
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_43464848
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_186379158
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_161938617
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_138755115
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_274228432
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => Novo (1)
+    [REPORT_ID] => ABA_36532472702674
+    [FILTER_TMP] => W10=
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_36532472702674
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 25
+    [PLUS_MINUS] => true
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => Novo (1)
+    [REPORT_ID] => ABA_36532472702674
+    [FILTER_TMP] => W10=
+    [QUERY_ID] => 
+    [IS_REFRESH] => _false
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_139700003
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_208330931
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_265758186
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_187872418
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_20112616
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_50306849
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_46493551
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_108864596
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => Novo (1)
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => W3siY2xhc3MiOiJfX01FUkNBRE9NRVJDQURPIiwiZGF0YSI6IltNRVJDQURPXS5bTUVSQ0FET10uW0QwNi1CQUNUUk9CQU5dLFtNRVJDQURPXS5bTUVSQ0FET10uW0QtQ1gtQUNORSBMSU1QRVpBXSJ9LHsiY2xhc3MiOiJfX1BST0RVVE9MQUJPUkFUT1JJTyIsImRhdGEiOiJbUFJPRFVUT10uW0xBQk9SQVRPUklPXS5bR1NLIEZBUk1BXSJ9XQ==
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 25
+    [PLUS_MINUS] => true
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => Novo (1)
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => W3siY2xhc3MiOiJfX01FUkNBRE9NRVJDQURPIiwiZGF0YSI6IltNRVJDQURPXS5bTUVSQ0FET10uW0QwNi1CQUNUUk9CQU5dLFtNRVJDQURPXS5bTUVSQ0FET10uW0QtQ1gtQUNORSBMSU1QRVpBXSJ9LHsiY2xhc3MiOiJfX1BST0RVVE9MQUJPUkFUT1JJTyIsImRhdGEiOiJbUFJPRFVUT10uW0xBQk9SQVRPUklPXS5bR1NLIEZBUk1BXSJ9XQ==
+    [QUERY_ID] => 
+    [IS_REFRESH] => _false
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 25
+    [PLUS_MINUS] => true
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => Novo (1)
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => W3siY2xhc3MiOiJfX01FUkNBRE9NRVJDQURPIiwiZGF0YSI6IltNRVJDQURPXS5bTUVSQ0FET10uW0QwNi1CQUNUUk9CQU5dLFtNRVJDQURPXS5bTUVSQ0FET10uW0QtQ1gtQUNORSBMSU1QRVpBXSJ9LHsiY2xhc3MiOiJfX1BST0RVVE9MQUJPUkFUT1JJTyIsImRhdGEiOiJbUFJPRFVUT10uW0xBQk9SQVRPUklPXS5bR1NLIEZBUk1BXSJ9XQ==
+    [QUERY_ID] => 
+    [IS_REFRESH] => _false
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 25
+    [PLUS_MINUS] => true
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => Novo (1)
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => W3siY2xhc3MiOiJfX01FUkNBRE9NRVJDQURPIiwiZGF0YSI6IltNRVJDQURPXS5bTUVSQ0FET10uW0QwNi1CQUNUUk9CQU5dLFtNRVJDQURPXS5bTUVSQ0FET10uW0QtQ1gtQUNORSBMSU1QRVpBXSJ9LHsiY2xhc3MiOiJfX1BST0RVVE9MQUJPUkFUT1JJTyIsImRhdGEiOiJbUFJPRFVUT10uW0xBQk9SQVRPUklPXS5bR1NLIEZBUk1BXSJ9XQ==
+    [QUERY_ID] => 
+    [IS_REFRESH] => _false
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 25
+    [PLUS_MINUS] => true
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => Novo (1)
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => W3siY2xhc3MiOiJfX01FUkNBRE9NRVJDQURPIiwiZGF0YSI6IltNRVJDQURPXS5bTUVSQ0FET10uW0QwNi1CQUNUUk9CQU5dLFtNRVJDQURPXS5bTUVSQ0FET10uW0QtQ1gtQUNORSBMSU1QRVpBXSJ9LHsiY2xhc3MiOiJfX1BST0RVVE9MQUJPUkFUT1JJTyIsImRhdGEiOiJbUFJPRFVUT10uW0xBQk9SQVRPUklPXS5bR1NLIEZBUk1BXSJ9XQ==
+    [QUERY_ID] => 
+    [IS_REFRESH] => _false
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 25
+    [PLUS_MINUS] => true
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => Novo (1)
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => W3siY2xhc3MiOiJfX01FUkNBRE9NRVJDQURPIiwiZGF0YSI6IltNRVJDQURPXS5bTUVSQ0FET10uW0QwNi1CQUNUUk9CQU5dLFtNRVJDQURPXS5bTUVSQ0FET10uW0QtQ1gtQUNORSBMSU1QRVpBXSJ9LHsiY2xhc3MiOiJfX1BST0RVVE9MQUJPUkFUT1JJTyIsImRhdGEiOiJbUFJPRFVUT10uW0xBQk9SQVRPUklPXS5bR1NLIEZBUk1BXSJ9XQ==
+    [QUERY_ID] => 
+    [IS_REFRESH] => _false
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 
+    [PLUS_MINUS] => 1
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => 
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => 
+    [QUERY_ID] => 
+    [IS_REFRESH] => 
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------
+getAbasAutoLoad Não tem resultados
+---------------------------------------------------------------------------------------------
+Array
+(
+    [page_size] => 25
+    [PLUS_MINUS] => true
+    [ORDER_BY_COLUMN] => 
+    [ORDER_COLUMN_TYPE] => 
+    [frozen] => 0
+    [SUMARIZA] => 1
+    [COLORS_LINE] => 1
+    [ALL_COLS] => 
+    [ALL_ROWS] => 
+    [WINDOW] => grid
+    [CHART] => 
+    [GAUGE_COLOR] => 
+    [GAUGE_SIZE_BY_LINE] => 
+    [DRILL_HIERARQUIA_LINHA] => 
+    [DRILL_HIERARQUIA_LINHA_DATA] => 
+    [SHOW_LINE_TOTAL] => 
+    [DRILL_HIERARQUIA_LINHA_DATA_HEADER] => 
+    [TYPE_RUN] => 
+    [PAGE_CURRENT] => 
+    [TITLE_ABA] => Novo (1)
+    [REPORT_ID] => ABA_20813530893065
+    [FILTER_TMP] => W3siY2xhc3MiOiJfX01FUkNBRE9NRVJDQURPIiwiZGF0YSI6IltNRVJDQURPXS5bTUVSQ0FET10uW0QwNi1CQUNUUk9CQU5dLFtNRVJDQURPXS5bTUVSQ0FET10uW0QtQ1gtQUNORSBMSU1QRVpBXSJ9LHsiY2xhc3MiOiJfX1BST0RVVE9MQUJPUkFUT1JJTyIsImRhdGEiOiJbUFJPRFVUT10uW0xBQk9SQVRPUklPXS5bR1NLIEZBUk1BXSJ9XQ==
+    [QUERY_ID] => 
+    [IS_REFRESH] => _false
+    [TOP_CONFIG] => 
+)
+
+---------------------------------------------------------------------------------------------

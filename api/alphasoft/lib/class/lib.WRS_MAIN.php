@@ -138,24 +138,25 @@ class WRS_MAIN  extends WRS_BASE
 
 		$count		=	0;
 		
-
 		foreach($cubo_info as $label =>$value)
 		{
-			$DATABASE_DESC		=	$value['DATABASE_DESC'];
-			$CUBE_EDITION		=	$value['CUBE_EDITION'];
-			$CUBE_UPDATE		=	$value['CUBE_UPDATE'];
-			$DATABASE_IMAGE		=	$value['DATABASE_IMAGE'];
-			$DATABASE_COMMENT	=	$value['DATABASE_COMMENT'];
-			$WARNING			=	NULL;
+			$DATABASE_DESC			=	$value['DATABASE_DESC'];
+			$CUBE_EDITION			=	$value['CUBE_EDITION'];
+			$CUBE_UPDATE			=	$value['CUBE_UPDATE'];
+			$DATABASE_IMAGE			=	$value['DATABASE_IMAGE'];
+			$DATABASE_COMMENT		=	$value['DATABASE_COMMENT'];
+			$STATUS					=	$value['STATUS'];
+			$WARNING				=	NULL;
 			$flag_cube_indisponivel	=	false;
 			
 			$LINK				=	'run.php?file=WRS_PANEL&class=WRS_PANEL&'.TAG_URL_CUBE_SELECTED.'='.($count++);
 		
-			if(empty($CUBE_UPDATE) && empty($value['DATABASE_LINK']))
+			if(empty($CUBE_UPDATE) && empty($value['DATABASE_LINK']) || $STATUS==0)
 			{
 				$WARNING 				= fwrs_error(LNG('ERRO_CUBO_INDISPONIVEL'));
 				$flag_cube_indisponivel	=	true;
 			}
+			
 			
 			if(!empty($value['DATABASE_LINK'])){
 				$LINK	=$value['DATABASE_LINK'];

@@ -8,7 +8,45 @@
  * Options
  * 
  */
-		
+
+
+/**
+ * WARNING: As funções com nomeclaturas 'wrsConfigGridDefaultManager' é para garantir que nas configurações TOP não ocorra problemas ao executar uma nova ABA
+ * Garantindo que ao criar uma nova apa
+ */
+function wrsConfigGridDefaultManagerTopOptions()
+{
+	$('#wrsConfigGridDefault').each(function(){
+		$(this).attr('wrsConfigGridDefaultManagerTopOptions',false);
+	});	
+}
+
+function wrsConfigGridDefaultManagerTopOptionsLock()
+{
+	$('#wrsConfigGridDefault').each(function(){
+		$(this).attr('wrsConfigGridDefaultManagerTopOptions',true);
+	});	
+}
+
+function wrsConfigGridDefaultManagerTopOptionsStatus()
+{
+	var status	=	 false;
+	
+		$('#wrsConfigGridDefault').each(function(){
+			status	=	$(this).attr('wrsConfigGridDefaultManagerTopOptions');
+			
+			if(empty(status)) status=false;
+		});	
+	
+	return status;
+}
+
+
+
+
+
+/* END CONFIGURE*/
+
 function DEFAULT_OPTIONS_TOPS()
  {
 	 $('.wrs_grid_options_default').wrsTopOptions();
@@ -33,7 +71,24 @@ function DEFAULT_OPTIONS_TOPS()
 			var IDGrid		=	'#'+this.attr('id');
 			var isDefault	=	Boolean(that.attr('isDefault'));
 			
-			var telerikGrid 		= 	that.data('kendoGrid');
+			
+
+			var telerikGrid		=	that.data('kendoGrid');
+			
+			if(!wrsConfigGridDefaultManagerTopOptionsStatus())
+				{
+					that.data('kendoGridWrsTopOptions',{});
+					telerikGrid		=	{};
+				}else{
+					
+					if(empty(telerikGrid)) telerikGrid	=	{};
+					
+					that.data('kendoGridWrsTopOptions',telerikGrid);
+				}
+			
+
+			
+			
 			var layout			=	'';
 			var measure			=	'';
 			
@@ -129,7 +184,8 @@ function DEFAULT_OPTIONS_TOPS()
 					{
 							wrsKendoUi	=	$(IDGrid).data('wrsConfigGridDefault');
 							
-							if(empty(wrsKendoUi)){
+							if(empty(wrsKendoUi))
+							{
 								wrsKendoUi	=	{};
 							}
 							
@@ -156,8 +212,8 @@ function DEFAULT_OPTIONS_TOPS()
 					data_save	=	base64_encode(json_encode(config));
 					
 					
-					
 
+				
 				if(isDefault==true)	
 					{
 						wrsKendoUi['TOP_CONFIG']	=	data_save;
@@ -165,9 +221,9 @@ function DEFAULT_OPTIONS_TOPS()
 						that.wrsTopOptions();
 					}
 					else
-					{
-						wrsKendoUiChange(IDGrid,'TOP_CONFIG',data_save);
+					{	wrsKendoUiChange(IDGrid,'TOP_CONFIG',data_save);
 						wrsRunFilter();
+						return true;
 					}
 			}
 			
@@ -226,7 +282,38 @@ function DEFAULT_OPTIONS_TOPS()
 				var full_name	=	$(this).attr('full_name');
 				
 
-				var kendoUi		=	 $(IDGrid).data('kendoGrid');
+			
+				var kendoUi		=	 $(IDGrid).data('kendoGridWrsTopOptions');
+				
+				
+					
+					try{
+
+							var _kendo	=	$(IDGrid).data('kendoGrid');
+								if(!empty(_kendo))	kendoUi=_kendo;
+					}catch(e){
+							//Continua com a origem
+					}
+					
+
+				
+				//IDGrid
+/*
+				var telerikGrid		=	that.data('kendoGrid');
+				
+				if(!wrsConfigGridDefaultManagerTopOptionsStatus())
+					{
+						that.data('kendoGridWrsTopOptions',{});
+						telerikGrid		=	{};
+					}else{
+						
+						if(empty(telerikGrid)) telerikGrid	=	{};
+						
+						that.data('kendoGridWrsTopOptions',telerikGrid);
+					}
+				*/
+				
+				
 				
 					 if(empty(tag)) return true;
 
@@ -241,13 +328,13 @@ function DEFAULT_OPTIONS_TOPS()
 					 				
 					 					
 					 		}else{
+					 			
+
 					 								index	=	tag;//btnOption.parent().index();			
 									 			var field		=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
 									 				full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
-									 				
-					 	
-									 	
 					 		}
+					 	
 					 	val =	'{'+key+'|'+index+'}';
 					 	convertTypeTOP(full_name,val);
 			}
@@ -377,38 +464,44 @@ function DEFAULT_OPTIONS_TOPS()
 					
 					measure	=	measure_data;
 					
-					that.data('kendoGrid',measure);
+					//console.log('wrsTopOptionsDataSub 02: ',measure);
+					
+					
+					that.data('kendoGridWrsTopOptions',measure);
 					
 					//COnfigurando para as ooções default
 					that.parent().find('.sortable_coluna li,.sortable_linha li').each(function(){		
 						
 						var json	=	$.parseJSON(base64_decode( $(this).attr('json')));
 						
-						
-						
-						var wrs_tops_configure		=	$('<span/>', {
-							type	: 'button',
-							title	: LNG('TITLE_TOP'),
-							html	: $('<i/>',{'class':'fa fa-bars'}),
-							'class'	: 'wrs_tops_configure btn-link'
-						});
-						
-						$(this).find('.wrs_tops_configure').remove();
-						$(this).prepend(wrs_tops_configure);
-						
-						
-					
-						TAGLabel(json.LEVEL_FULL,_top_config,$(this),measure_data);
-						
-						
-						wrs_tops_configure.unbind('click').click(clickOptions);
+
+							if(!empty(json)){
+			
+										var wrs_tops_configure		=	$('<span/>', {
+											type	: 'button',
+											title	: LNG('TITLE_TOP'),
+											html	: $('<i/>',{'class':'fa fa-bars'}),
+											'class'	: 'wrs_tops_configure btn-link'
+										});
+										
+										$(this).find('.wrs_tops_configure').remove();
+										$(this).prepend(wrs_tops_configure);
+										
+										
+									
+										TAGLabel(json.LEVEL_FULL,_top_config,$(this),measure_data);
+										
+										
+										wrs_tops_configure.unbind('click').click(clickOptions);
+							}
 						
 							
 					});
 					
 					
-					
-					that.data('kendoGrid',measure_data);
+					//console.log('kendoGrid ID 0::',that.attr('id'));
+					//console.log('wrsTopOptionsDataSub 01: ',measure_data);
+					that.data('kendoGridWrsTopOptions',measure_data);
 				}
 				
 				
