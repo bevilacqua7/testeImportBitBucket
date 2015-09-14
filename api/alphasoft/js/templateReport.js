@@ -86,6 +86,15 @@ function callback_load_report_generic_modal(data,return_params,nao_processa){
 					'LAYOUT_FILTERS'		:	_filter_selected,
 					'KendoUi'				:	_kendoui
 	}
+	
+	console.log('reportDATA: ',data);
+	/*
+	 * TODO: adicionar os campos abaixo para ir para as abas e voltar para a tela na hora de salvar:
+	 * - REPORT_AUTOLOAD
+	 * - REPORT_SHARE
+	 * - ver onde gravar os layouts e retorna-los
+	 * - USER_TYPE (grupos)
+	 */
 	console.log('LAYOUT_FILTERS',ajustaTags(_FILTERS));
 	console.log('filter_selected',_filter_selected);
 	

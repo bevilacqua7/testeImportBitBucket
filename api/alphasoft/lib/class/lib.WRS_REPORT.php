@@ -99,8 +99,8 @@ class WRS_REPORT  extends  WRS_USER
  		$REPORT_FORMULAS 	= '';
  		$REPORT_FILTER 		= '';
  		$REPORT_FLAG 		= '';
- 		$LAYOUT_SHARE 		= '';
- 		$USER_TYPE 			= $grupos;
+ 		$LAYOUT_SHARE 		= '';//(is_array($layouts)?implode("(_,_)",$layouts):$layouts); // TODO: ver onde salvar estes valores
+ 		$USER_TYPE 			= (is_array($grupos)?implode("(_,_)",$grupos):$grupos);
  		$REPORT_SHARE 		= fwrs_request('report_share')=='1'?1:0;
  		$REPORT_AUTOLOAD 	= fwrs_request('report_auto')=='1'?1:0;
 
@@ -212,6 +212,8 @@ HTML;
 		
 				var input	=	 $('<input/>',{name:"dadosJs",type:'text', value:base64_encode(json_encode(getLoadReport()))}).css('display','none');
 				$('#insert_report').append(input);
+				var kendoUiAtual = getLoadReport();
+				$('#report_name').val(kendoUiAtual.KendoUi.TITLE_ABA); // preenche com o nome atual vindo do JS
 
 HTML;
 		// preenche os 'grupos' do formulario com os tipos cadastrados no banco (query passada pelo facioli em 26-08-2015)
@@ -224,12 +226,14 @@ HTML;
 		}
 		$JS2='';
 		foreach($tipos as $nome){
-			$JS2.= "\n$('#select2').find('.wrs-measures').append($('<option/>').html('".$nome."'));";
+			$JS2.= "\n$('#select2').find('.wrs-measures').append($('<option/>').html('".$nome."').val('".$nome."'));
+					console.log(".json_encode($user).");
+					";
 		}
 		echo fwrs_javascript($JS);
 		echo fwrs_javascript($JS2);
 		
-		$nome_report='';
+		$nome_report='report_name';
 		
 		include PATH_TEMPLATE.'modal_include_report.php';
 		exit();
