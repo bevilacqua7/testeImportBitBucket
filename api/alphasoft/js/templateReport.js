@@ -180,6 +180,7 @@ function btn_window_grid_event_report(data)
 		switch(action_type)
 		{
 			case 'new' 		: 
+						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados);
 					//callback_load_report_generic_modal(objDados);	
 					break; // abre o relatorio
 			case 'update' 	: 
