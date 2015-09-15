@@ -189,6 +189,7 @@ function btn_window_grid_event_report(data)
 					//callback_load_report_generic_modal(objDados);	
 					break; // abre o relatorio
 			case 'update' 	: 
+						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados,true);
 					//callback_load_report_generic_modal(objDados,false,true);
 					break; // abre somente o layout
 			case 'remove' 	:

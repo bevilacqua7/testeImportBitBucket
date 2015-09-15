@@ -488,9 +488,11 @@
 			}
 			
 			
-			var __load_multiple		=	 function(options)
+			var __load_multiple		=	 function(options,noactive)
 			{
+					var _noactive	= false;
 
+					if(!empty(noactive)) _noactive = noactive;
 					if(empty(options)) return false;
 					
 					var _report_id		=	'';
@@ -511,7 +513,7 @@
 								};
 						
 								var	opts 			= 	$.extend( {}, optionsAba, options[lineOptions]);
-								var _active			=	lineOptions==0 ? true : false;
+								var _active			=	lineOptions==0 && !_noactive ? true : false;
 								
 								if(empty(_report_id))	_report_id	=	opts.KendoUi['REPORT_ID'];
 								
