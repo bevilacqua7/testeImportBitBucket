@@ -525,7 +525,8 @@
 					btn_add_new_aba();
 					
 					$('.NAV_CONFIG_WRS').attr('is-event',true);
-					tagABA.find('.'+_report_id).trigger('click');
+					
+					if(_report_id!='') tagABA.find('.'+_report_id).trigger('click');
 			}
 			
 			/*
