@@ -1233,7 +1233,7 @@ function wrs_run_filter()
 		
 		
 
-//		console.log('getAllFiltersToRun.full',getAllFiltersToRun.full);
+//		WRS_CONSOLE('getAllFiltersToRun.full',getAllFiltersToRun.full);
 		
 		/*
 		 * TODO:Revisando
@@ -1401,7 +1401,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		}else{
 			if(IS_TRACE)
 			{
-				console.log('MOUNT_LAYOUT_GRID_HEADER',data);
+				WRS_CONSOLE('MOUNT_LAYOUT_GRID_HEADER',data);
 			}
 		}
 	}
@@ -1573,7 +1573,7 @@ function wrs_panel_active_drag_drop()
 								sortable_attr_simples_composto(); 								
 								if(houve_mudanca){
 									$(pai_final).find('li').each(function(){
-										console.log('antes',$(this));
+										WRS_CONSOLE('antes',$(this));
 										$(this).removeClass('hide');
 										$(this).show();
 									});
@@ -1581,48 +1581,48 @@ function wrs_panel_active_drag_drop()
 									var index_final='';
 									if(pai_final!=pai_original){
 										index_final = $(pai_final).find('li').last().parent().children().index($(pai_final).find('li').last());
-										console.log('calculado por index');
+										WRS_CONSOLE('calculado por index');
 									}else{
 										index_final = $(pai_final).find('li').last().parent().children().size()-1;
-										console.log('calculado por size');
+										WRS_CONSOLE('calculado por size');
 									}
 									index_final = (index_final<0)?0:index_final;
 									if(ultimo_index_sel!=index_final){
-										console.log('posicao nova',ultimo_index_sel,'posicao anterior',index_final);
+										WRS_CONSOLE('posicao nova',ultimo_index_sel,'posicao anterior',index_final);
 										var obj = $(pai_final).find('li').last();
 										if(ultimo_index_sel>index_final){
 											for(var i=ultimo_index_sel;i>index_final;i--){
-												console.log('aumentou 1');
+												WRS_CONSOLE('aumentou 1');
 												obj.before(obj.next());
 											}					    	  							
 										}else{
 											for(var i=ultimo_index_sel;i<index_final;i++){
-												console.log('diminuiu 1');
+												WRS_CONSOLE('diminuiu 1');
 												obj.after(obj.prev());
 											}
 										}
 									}else{															
-										console.log('mesma posicao','posicao nova',ultimo_index_sel,'posicao anterior',index_final);
+										WRS_CONSOLE('mesma posicao','posicao nova',ultimo_index_sel,'posicao anterior',index_final);
 									}
 									$(pai_final).find('li').each(function(){
-										console.log('depois',$(this));
+										WRS_CONSOLE('depois',$(this));
 										$(this).removeClass('hide');
 										$(this).show();
 									});
 									$( ".WRS_DRAG_DROP_RECEIVER ol").sortable("refresh").sortable("refreshPositions");
 								}
-								console.log('======================================================================');
+								WRS_CONSOLE('======================================================================');
 	    	  				}
 						,change:function(e,ui){
 							pai_final = $(ui.placeholder).parent()[0];
 							ultimo_index_sel = $(ui.placeholder).parent().children().index($(ui.placeholder)) - ((pai_final==pai_inicial)?1:0);
-							console.log('ultima posicao',ultimo_index_sel,(pai_final==pai_inicial));
+							WRS_CONSOLE('ultima posicao',ultimo_index_sel,(pai_final==pai_inicial));
 							houve_mudanca=true;
 						}
 						,start:function(e,ui){
 							pai_inicial = pai_final= $(ui.placeholder).parent()[0];
 							ultimo_index_sel = $(ui.placeholder).parent().children().index($(ui.placeholder))-1;
-							console.log('start posicao',ultimo_index_sel);
+							WRS_CONSOLE('start posicao',ultimo_index_sel);
 							houve_mudanca=true;
 						}
 						,helper: function(){ // modificando o helper pra clonar o objeto ao inves de move-lo
