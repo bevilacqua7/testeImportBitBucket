@@ -135,6 +135,7 @@ class WRS_FILTER  extends WRS_BASE
 		
 		$LIMIT_PAGE		=	11;
 		$PAGE_ROWS		=	0;
+
 		
 		//Conexão
 		$SERVER			=	$cube_info['SERVER_ID'];
@@ -229,14 +230,14 @@ class WRS_FILTER  extends WRS_BASE
 		while($rows =  $this->fetch_array($query))
 		{
 			$body	=	 array();
-			$value	=	$LEVEL_FULL.'.['.$rows[$LEVEL_NAME].']';
+			$value	=	$LEVEL_FULL.'.['.$rows[$LEVEL_FULL].']';
 			
 			$count++;
 			if($LIMIT_PAGE==$count) continue;
 			
 			$body[]	=	'<input type="'.$input_type.'" name="'.$LEVEL_FULL.'" class="wrs_input_filter_single" index-data="'.$index_data.'"  '.fwrs_checkbox($FILTER_ARRAY, $value).' value="'.$value.'">';
-			$body[]	=	$rows[$LEVEL_NAME];
-			$table_body.= $this->table_body($body,"text_original='".$rows[$LEVEL_NAME]."'",NULL,NULL,array('pws_click_triger_single','pws_click_triger_single pws_filter_text') );
+			$body[]	=	$rows[$LEVEL_FULL];
+			$table_body.= $this->table_body($body,"text_original='".$rows[$LEVEL_FULL]."'",NULL,NULL,array('pws_click_triger_single','pws_click_triger_single pws_filter_text') );
 		}
 		
 		

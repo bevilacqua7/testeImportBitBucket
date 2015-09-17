@@ -994,6 +994,10 @@ jQuery.expr[':'].containClass = function(a, i, m) {
 function set_value_box_relatorio(object)
 {
 	
+	
+	$('.wrs_panel_receive').find('li').remove();
+	$('.WRS_DRAG_DROP_FILTER').html('');
+	
 	if(isset(object.LAYOUT_ROWS))
 	{
 		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR ',object.LAYOUT_ROWS,'.sortable_linha');
@@ -1224,9 +1228,6 @@ function wrs_run_filter()
 		
 		getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
 		
-		
-
-
 		//foreach(getAllFiltersToRun);
 		_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
 		_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
@@ -1294,6 +1295,7 @@ function wrs_run_filter()
 				{
 					var getParamDefault = array_key_data(wrsConfigGridDefault_data);
 					
+//					foreach(wrsConfigGridDefault_data);
 //					foreach(getParamDefault);
 					//['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
 					//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);

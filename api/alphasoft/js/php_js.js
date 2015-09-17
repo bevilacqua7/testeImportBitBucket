@@ -556,6 +556,8 @@ function base64_decode(data) {
 
 
 function base64_encode(data) {
+	
+//	if(empty(data) || data=='null') return data;
 	  //  discuss at: http://phpjs.org/functions/base64_encode/
 	  // original by: Tyler Akins (http://rumkin.com)
 	  // improved by: Bayron Guevara

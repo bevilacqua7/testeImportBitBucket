@@ -365,7 +365,7 @@ class KendoUi
 																			report_id	:'{$report_id}',
 																			active		:	true
 																		};
-												$(ABA_TAG_NAME).wrsAbas('add_new_aba',_options_aba);						
+												//$(ABA_TAG_NAME).wrsAbas('add_new_aba',_options_aba);						
 									</script>
 						</div>
 					

@@ -30,7 +30,6 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
  
     $.fn.ThreadJobManager = function(report_id) 
     {
-    	
     	var that			=	this;
     	var DATA_NAME		=	'WrsThreadJobManager';
     	var WHO_CALL		=	'body'; // o evento principal é sempre em cima da body
@@ -101,7 +100,6 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     	 */
     	var ThreadMainLoadData	=	 function(data)
     	{
-    		
 
     		for(var lineData in data)
     			{
@@ -191,9 +189,6 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     	{
     		var _data_param		=	that.data(DATA_NAME);
     		var _mktime			=	mktime();
-    		
-//    		console.log('ThreadMainManagerTimeOut',_mktime);
-    		
     		
     		
     		if(array_length(_data_param)>=1)

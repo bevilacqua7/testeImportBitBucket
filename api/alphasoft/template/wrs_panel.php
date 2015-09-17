@@ -206,6 +206,7 @@ var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELA
 
 
 <?php 
+/*
 	$result_box							= array();
 	
 	
@@ -213,7 +214,7 @@ var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELA
 	$result_box['LAYOUT_COLUMNS']		=	array('__PERIODOANO','__PERIODOSEMESTRE');
 	$result_box['LAYOUT_MEASURES']		=	array('__MeasuresShareDolar','__MeasuresEvolDolar','__MeasuresDolar');
 	$result_box['LAYOUT_FILTERS']		=	array(	array('__MERCADOMERCADO','',array('[MERCADO].[MERCADO].[D06-BACTROBAN]','[MERCADO].[MERCADO].[D-CX-ACNE LIMPEZA]')),
-			array('__PRODUTOLABORATORIO','','[PRODUTO].[LABORATORIO].[GSK FARMA]'));
+			array('__PRODUTOLABORATORIO','','[PRODUTO].[LABORATORIO].[GSK FARMA]'));*/
 	
 	
 	/*$result_box['LAYOUT_FILTERS']		=	array(	array('__MERCADOMERCADO','',array('[MERCADO].[MERCADO].[D06-BACTROBAN]','[MERCADO].[MERCADO].[D-CX-ACNE LIMPEZA]')),
@@ -246,7 +247,7 @@ var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELA
 	*/
 ?>
  <script>
- set_value_box_relatorio(<?php echo json_encode($result_box,true);?>);
+// set_value_box_relatorio(<?php echo json_encode($result_box,true);?>);
  </script>
  
  

@@ -203,8 +203,10 @@ function wrd_grid_window_to_form_dbl(arg)
 	if(!is_exception){
 		grid_window_modal(_local_merge_array(primary,option),table);
 	}else{
-		if(param['actionDouble']){			
+		if(param['actionDouble'])
+		{			
 			var toAction	=	param['actionDouble'];
+			
 			window[toAction](_data[index]);				
 		}
 	}
