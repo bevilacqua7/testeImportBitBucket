@@ -1560,45 +1560,83 @@ function wrs_panel_active_drag_drop()
 	  	      zIndex		: 10000,
 	  	      drop			: DROP_EVENT
 	  	 };
-	
+
+		var ultimo_index_sel=pai_original=pai_final=pai_inicial=houve_mudanca='';
 		var droppableOptionsOlSortable	=	{
 					      items			: "li:not(.placeholder)",
 					      placeholder	: "ui-state-highlight",
-					      zIndex		: 10000,
-					      stop			:	function(event) { 
-					    	  					insetDragDropEmpry();  
-					    	  					sortable_attr_simples_composto(); 
-					    	  					$(this).find('li').each(function(){
-					    	  						$(this).removeClass('hide');
-					    	  						$(this).show();
-					    	  					});
-					    	  					
-					    	  					//setTimeout(DEFAULT_OPTIONS_TOPS,500);
-					    	  					
-					    	  				},
-						  sort			: 	function(){
-									       		$( this ).removeClass( "ui-state-default" );
-									       },
-									       helper: function(){ // modificando o helper pra clonar o objeto ao inves de move-lo
-										       var _data	=	 $(this).children('li.ui-state-hover').clone()
-										            .appendTo('body') 
-										            .css('zIndex',1000) 
-										            .show(); 
-										       
-										       return _data;
-										       
-										       
-										  } 			
-							,start: function (e, ui) { 
-									ui.item.show();
-									$(this).children('li.ui-state-hover').addClass('hide');
-							} // quando iniciar o novo objeto exibi-lo na tela			
-							,deactivate:function(){
-	    	  					$(this).find('li').each(function(){
-	    	  						$(this).removeClass('hide');
-	    	  						$(this).show();
-	    	  					});
-    	  					}// ao fim, exibe todos os filhos existentes
+					      zIndex		: 9999,
+					      forcePlaceholderSize: true,
+					      opacity: 0.8
+					      ,stop:function(event,itemoriginal) { 
+								insetDragDropEmpry();  
+								sortable_attr_simples_composto(); 								
+								if(houve_mudanca){
+									$(pai_final).find('li').each(function(){
+										console.log('antes',$(this));
+										$(this).removeClass('hide');
+										$(this).show();
+									});
+									
+									var index_final='';
+									if(pai_final!=pai_original){
+										index_final = $(pai_final).find('li').last().parent().children().index($(pai_final).find('li').last());
+										console.log('calculado por index');
+									}else{
+										index_final = $(pai_final).find('li').last().parent().children().size()-1;
+										console.log('calculado por size');
+									}
+									index_final = (index_final<0)?0:index_final;
+									if(ultimo_index_sel!=index_final){
+										console.log('posicao nova',ultimo_index_sel,'posicao anterior',index_final);
+										var obj = $(pai_final).find('li').last();
+										if(ultimo_index_sel>index_final){
+											for(var i=ultimo_index_sel;i>index_final;i--){
+												console.log('aumentou 1');
+												obj.before(obj.next());
+											}					    	  							
+										}else{
+											for(var i=ultimo_index_sel;i<index_final;i++){
+												console.log('diminuiu 1');
+												obj.after(obj.prev());
+											}
+										}
+									}else{															
+										console.log('mesma posicao','posicao nova',ultimo_index_sel,'posicao anterior',index_final);
+									}
+									$(pai_final).find('li').each(function(){
+										console.log('depois',$(this));
+										$(this).removeClass('hide');
+										$(this).show();
+									});
+									$( ".WRS_DRAG_DROP_RECEIVER ol").sortable("refresh").sortable("refreshPositions");
+								}
+								console.log('======================================================================');
+	    	  				}
+						,change:function(e,ui){
+							pai_final = $(ui.placeholder).parent()[0];
+							ultimo_index_sel = $(ui.placeholder).parent().children().index($(ui.placeholder)) - ((pai_final==pai_inicial)?1:0);
+							console.log('ultima posicao',ultimo_index_sel,(pai_final==pai_inicial));
+							houve_mudanca=true;
+						}
+						,start:function(e,ui){
+							pai_inicial = pai_final= $(ui.placeholder).parent()[0];
+							ultimo_index_sel = $(ui.placeholder).parent().children().index($(ui.placeholder))-1;
+							console.log('start posicao',ultimo_index_sel);
+							houve_mudanca=true;
+						}
+						,helper: function(){ // modificando o helper pra clonar o objeto ao inves de move-lo
+							pai_original = $(this).children('li.ui-state-hover').parent()[0];
+							houve_mudanca=false;
+							var _data	=	 $(this).children('li.ui-state-hover').clone().appendTo('body'); 
+							return _data;
+						} 			
+						,deactivate:function(e,ui){											
+    	  					$(this).find('li').each(function(){
+    	  						$(this).removeClass('hide');
+    	  						$(this).show();
+    	  					});											
+	  					}
 					}
 
 
