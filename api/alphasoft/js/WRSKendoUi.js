@@ -608,9 +608,6 @@ function wrsKendoUiChange(nameID,param,value)
 			wrsKendoUi[param]	=	value;
 		}
 		
-		
-
-		
 		_tmpWrsKendoUi		=	 base64_encode(json_encode(wrsKendoUi,true));
 		$(nameID).attr('wrsKendoUi',_tmpWrsKendoUi);
 }
