@@ -27,7 +27,7 @@
 		var CHART			=	$('#'+idName+'Elements .chart');
 		
 		
-			$('.container_panel_relatorio_rows').height($('.container_panel_relatorio').height());
+		$('.container_panel_relatorio_rows').height($('.container_panel_relatorio').height());
 		
 		var _height			=	BOX.parent().parent().outerHeight();
 		var navHeight		=	NAV.height();
@@ -322,9 +322,6 @@
 		//WRSWindowGridEventToolsClick('','grid_map');
 		if(!empty(loadByAba))
 			{
-				 
-					 
-					
 					switch(loadByAba)
 					{
 						case "chart"		: 
@@ -439,7 +436,10 @@ var getRequestKendoUiDefault	=	{};
   		btn_configute_chart		=	element.find('.btn-configute-chart'),
   		btn_open_type_vision	=	element.find('.btn-open-type-vision'),
 		isClick					=	false;
-		nav_options.attr('id','wrs_grid_options_default');		
+		nav_options.attr('id','wrs_grid_options_default');	
+		
+		
+//		console.log('wrsConfigGridDefault::opts',opts);
 		
 
 		
@@ -505,18 +505,23 @@ var getRequestKendoUiDefault	=	{};
   	 */
   	var check_exist_grid	=	 function(){  		
   		if(isClick) return true;
-  		var searchGrid	=	$(document).find('.wrsGrid');
-  		if(!empty(searchGrid.html()))
-  		{
-  			opts	=	getJsonDecodeBase64(searchGrid.attr('wrskendoui'));  			
-  			element.data(data_name,opts);
-  		}  		
+  		var searchGrid		=	$(document).find('.wrsGrid');
+		var hasDefault		=	 $('.wrs_panel_filter_measure').is(':hidden');
+		
+		/*
+		 * TODO: Validar
+		 */
+			  		if(!empty(searchGrid.html()) && hasDefault==true)
+			  		{
+			  			opts	=	getJsonDecodeBase64(searchGrid.attr('wrskendoui'));  			
+			  			element.data(data_name,opts);
+			  			TRACE_DEBUG('insert');
+			  		}  		
   	}
   	
   	
   	//Click do Botão - nav_options
   	var event_click_btn_options	=	 function(){
-  		
   		check_exist_grid(); 
   		nav_options.find('input').each(function(){
   				if(opts[$(this).attr('name')]){

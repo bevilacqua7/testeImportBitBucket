@@ -664,6 +664,7 @@ function wrsFilterClickFalse()
 				levelUP			=	 explode(',',level_up);			
 			
 			if(empty(level_up) && empty(typeEvent)) return '';
+
 				
 			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 					var level_full					=	$(this).attr('level-full');	
@@ -692,7 +693,6 @@ function wrsFilterClickFalse()
 					
 			});
 			
-
 			//foreach(FilterOriginal);
 			//if(empty_filter) return '';
 			

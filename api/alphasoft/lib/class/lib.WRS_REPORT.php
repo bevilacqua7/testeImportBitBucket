@@ -63,39 +63,57 @@ class WRS_REPORT  extends  WRS_USER
  		
 	}
 	
-	public function save(){
+	public function save()
+	{
 
 		$layouts 			= fwrs_request('layouts');
 		$grupos 			= fwrs_request('grupos');		
 		$dadosJs			= json_decode(base64_decode(fwrs_request('dadosJs')));
 		$user				= WRS::INFO_SSAS_LOGIN();
- 		$REPORT_DESC 		= fwrs_request('report_name');
+
+		$REPORT_DESC 		= fwrs_request('report_name');
  		$SERVER_ID 			= fwrs_remove_colchete($this->cube['SERVER_ID']);
  		$DATABASE_ID 		= fwrs_remove_colchete($this->cube['DATABASE_ID']);
  		$CUBE_ID 			= fwrs_remove_colchete($this->cube['CUBE_ID']);
+ 		
  		$ROWS 				= $dadosJs->LAYOUT_ROWS->request;
  		$COLUMNS 			= $dadosJs->LAYOUT_COLUMNS->request;
  		$MEASURES 			= $dadosJs->LAYOUT_MEASURES->request;
  		$FILTERS 			= $dadosJs->LAYOUT_FILTERS->request;
  		$FILTERS_VALUES 	= '';
  		
- 		if(trim($FILTERS)!=''){
- 			$arr_filtros_sel=array();
- 			$filtros	=	explode(",",$FILTERS);
- 			if(count($filtros)>0){
- 				foreach($filtros as $pos => $filtro){
- 					if(count($dadosJs->filter_selected->full)>0){
- 						$arr_filtros_sel[]=$filtro."(_,_)".$dadosJs->filter_selected->full[$pos]->data;
+ 		
+ 		
+ 		
+ 		
+ 		if(trim($FILTERS)!='')
+ 		{
+ 			$arr_filtros_sel	=	array();
+ 			$filtros			=	explode(",",$FILTERS);
+
+ 			if(count($filtros)>0)
+ 			{
+ 				foreach($filtros as $pos => $filtro)
+ 				{
+ 					if(count($dadosJs->filter_selected->full)>0)
+ 					{
+ 						$arr_filtros_sel[]	=	$filtro."(_,_)".$dadosJs->filter_selected->full[$pos]->data;
  					}
  				}
+ 				
  				$FILTERS_VALUES = implode("(_|_)",$arr_filtros_sel);
+ 				
  			}
  		}
+ 		
+
+ 		
+ 		
  		 		
  		$ALL_ROWS 			= ($dadosJs->KendoUi->ALL_ROWS=="1")?1:0;
  		$ALL_COLS 			= ($dadosJs->KendoUi->ALL_COLS=="1")?1:0;
  		$COLS_ORDER 		= 0;
- 		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi));
+ 		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi,true));
  		$REPORT_FORMULAS 	= '';
  		$REPORT_FILTER 		= '';
  		$REPORT_FLAG 		= '';

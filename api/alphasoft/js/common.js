@@ -182,6 +182,43 @@ function addJsonEncodeToElement(array,element)
 }
 
 
+
+function activeToGetAllFilters()
+{
+	var _filter_hide_string		=	$('.wrs_panel_filter_icon').attr('filter_hide');
+		_filter_hide			=	 _filter_hide_string=='true'	? true : false;
+
+	if(!_filter_hide)
+	{
+			$('.wrs_panel_filter_icon').attr('filter_hide','false').trigger('click');
+	}
+	
+	return _filter_hide;
+}
+
+
+function activeToGetAllFiltersRecover(_filter_hide)
+{
+	if(!_filter_hide)
+	{
+		$('.wrs_panel_filter_icon').trigger('click');
+	}
+	
+}
+
+function wrs_base64encode(inputArray)
+{
+	
+	return base64_encode(inputArray);
+}
+
+function base64_json(inputArray)
+{
+	return base64_encode(json_encode(inputArray));
+}
+
+
+
 function cleanJsonEncodeToElement(element)
 {
 	element.attr('json','');
@@ -227,6 +264,8 @@ function getJsonEncodeToElement(element)
  */
 function getJsonDecodeBase64(json)
 {
+	
+	if(empty(json) || json=='null') return json;
 	return $.parseJSON(base64_decode(json));
 }
 
@@ -237,7 +276,7 @@ function filter_array_convert(input)
 	
 	var input_array	=	 explode(',',input);
 	var tmp_input	=	[];
-	
+
 	for(var lineInput in input_array)
 		{
 			tmp_input[tmp_input.length]		=	'__'+replace_attr(input_array[lineInput]);

@@ -159,7 +159,7 @@ SET_RELATIONSHIPS_FULL_NAME();
  	{
  		var _base64			=	_event.attr('wrsKendoUi');
  		var _base		=	base64_decode(_base64);
-
+/*
  		if(empty(_base))
  			{
  				return [];
@@ -169,11 +169,11 @@ SET_RELATIONSHIPS_FULL_NAME();
 		 eval('var obj='+_base);
 		
 		 
-		return obj;
+		return obj;*/
 		
  		var wrsKendoUi	=	{};
- 			wrsKendoUi	=	$.parseJSON('['+_base+']');
- 		return wrsKendoUi[0];
+ 			wrsKendoUi	=	$.parseJSON(_base);
+ 		return wrsKendoUi;
  	} 	
  	
  	return [];
