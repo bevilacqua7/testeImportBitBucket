@@ -22,7 +22,19 @@ function DRILL_FCC(index,columns)
 	
 	for(lineColumn in columns)
 	{
-		columnTMP[columnTMP.length]	=	index[columns[lineColumn]].field;
+		
+		var field	=	'';
+		
+		
+		try{
+			field	=	index[columns[lineColumn]].field;
+		}catch(e){
+			field	=	'';
+		}
+		
+		if(empty(field)) continue;
+		
+		columnTMP[columnTMP.length]	=	field;
 	}
 	
 	return columnTMP;

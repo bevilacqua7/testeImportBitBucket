@@ -141,6 +141,54 @@ class WRS_USER extends WRS_BASE
 	{
 		return $this->_user['SYSTEM_TYPE'];
 	}
+	
+	
+	
+	/**
+	 * Parametros do WRS_PANEL
+	 * @var array
+	 */
+	protected $_param			=	 array();
+	
+	/**
+	 * Usado no WRS_PANEL
+	 * Gravando as informações do cubo
+	 * @param string $cube
+	 */
+	protected function setCube($cube)
+	{
+		$this->_param['cube']	=	$cube;
+	}
+	
+	/**
+	 * Pegando as informações do cubo selecionado
+	 * @return multitype:
+	 */
+	protected function getCube()
+	{
+		return $this->_param['cube'];
+	}
+	
+	
+	
+	
+	/**
+	 * Apenas grava a tabela do cache no banco
+	 * Usado apeas no WRS_PANEL e ThreadJobManager
+	 *
+	 * @param unknown $value
+	 */
+	protected function SAVE_CACHE_SSAS_USER($key,$value,$_cube_pos_session)
+	{
+		WRS_TRACE('SAVE_CACHE_SSAS_USER()', __LINE__, __FILE__);
+	
+		WRS::SET_SSAS_USER($_cube_pos_session,$key,$value);
+	
+		$SSAS_USER		=	WRS::GET_SSAS_USER();
+		$this->setCube($SSAS_USER[$_cube_pos_session]);
+	
+		WRS_TRACE('END SAVE_CACHE_SSAS_USER()', __LINE__, __FILE__);
+	}
 
 }
 

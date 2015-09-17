@@ -19,7 +19,11 @@
 	$language ['ERRO_CUBO_INDISPONIVEL'] 			= "ERRO: INDISPONIVEL";
 	$language ['ERROR_TABLE_CACHE_NO_HEADER']		= "Ops não existe cabeçalho para esta consulta..";
 	$language ['ERROR_CUBO_NOT_FOUND']				= "Ops não foi possível identificar o cubo que está sendo utilizado. <br> Se o erro persistir, favor informar ao suporte. <br><b>Obrigado</b>";
+	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executarar a abara ";
+	$language ['ABA_IN_USER'] 						= "Aba em uso ";
 	
+	$language ['JOB_COMPLETE_LOAD'] 		= "O Job acabou de carregar uma nova aba ";
+	$language ['JOB_COMPLETE'] 				= "Todos os processos estão finalizados";
 	/*
 	 * ALERTS
 	 */
@@ -38,7 +42,7 @@
 	
 	$language ['TITLE_ATT_WRS_USER'] 	= "Usuários";
 	
-	$language ['TITLE_GRID_WINDOW_MENU_MANAGER'] 		= "Gerenciamento";
+	$language ['TITLE_GRID_WINDOW_MENU_MANAGER'] 		= "Visão";
 	$language ['TITLE_GRID_WINDOW_MENU_LIST'] 			= "Grid";
 	$language ['TITLE_GRID_WINDOW_MENU_DETAILS'] 		= "Detalhes";
 	$language ['TITLE_GRID_WINDOW_MENU_BIG_ICON'] 		= "Icone Grande";
@@ -57,6 +61,11 @@
 	$language['TITLE_TOP_25'] 		= "TOP 25";
 	$language['TITLE_TOP_50'] 		= "TOP 50";
 	$language['TITLE_TOP_100'] 		= "TOP 100";
+	
+	
+	
+	
+	$language['ERROR_LOAD_ABA'] 		= "ERRO:ABA01 - Ocorreu um erro ao abrir a aba..";
 
 
 	

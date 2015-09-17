@@ -280,6 +280,7 @@ class KendoUi
 	{
 		//Pegando os padrões das páginas
 		$this->pageScheme();
+
 		
 		//Pegando O ID do Cubo
 		$_request	=	$_REQUEST;
@@ -301,6 +302,13 @@ class KendoUi
 		
 		$idTag		=	$this->getId();
 		
+		
+		//Adicionando title da aba
+		$ABA_TITLE					=	$this->wrsKendoUi['TITLE_ABA'];
+		$ABA_TITLE					=	 empty($ABA_TITLE) ? LNG('ABA_IN_USER') :  $ABA_TITLE;
+		
+		
+		
 		include PATH_TEMPLATE.'wrs_panel_header_options.php';
 		
 		$element	=	base64_encode(json_encode(array_merge($_request,$_element),true));
@@ -317,35 +325,52 @@ class KendoUi
 		$this->wrsKendoUi['DRILL_HIERARQUIA_LINHA_DATA']	=	"";	//Manter sempre nullo 
 		$wrsKendoUi					=	 base64_encode(json_encode($this->wrsKendoUi,true));
 		
-		$html 	= <<<HTML
-		<div class="wrs_box {$idTag}BOX">
-			{$WRS_PANEL_HEADER_TABLE}
 		
-			<div id="{$idTag}" class="wrsGrid table_border border_bottom" wrsParam="{$element}"  wrsKendoUi="{$wrsKendoUi}"></div>
+		
+		$html 	= <<<HTML
+		
 			
-			<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
-			
-		  <script>
-		  
-		  		WRSHistory[{$report_id}]	=	"{$getRequestWrsExceptions['TRASH_HISTORY']}";	
-				$(function(){
-											var jsonDecode											= 	{$_jsonencode};
-										jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
-										jsonDecode.dataBound									= 	function(arg){ return onDataBound(arg);}								
-										jsonDecode.dataBinding									=	function(arg){ return onDataBinding(arg);}
-										
-										$("#{$this->getId()}").kendoGrid(jsonDecode);
-										$('.wrs_box').hide();
-										$("#{$this->getId()}").WrsGridKendoUiControlColumnPlusMinus({$PLUS_MINUS}).WrsDrill().WRSWindowGridEventTools();
-										$('.dropdown-menu-configuration form, .dropdown-menu-configuration li ').click(function (e) {e.stopPropagation();});
-										$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
-												
-										WRSKendoGridComplete("#{$this->getId()}");		
-																													
-										
-							});
-			</script>
-		</div>			
+			<div id="{$idTag}Main" class="container_panel_relatorio_rows">
+						<div class="wrs_box {$idTag}BOX">
+									{$WRS_PANEL_HEADER_TABLE}
+								
+									<div id="{$idTag}" class="wrsGrid table_border border_bottom" wrsParam="{$element}"  wrsKendoUi="{$wrsKendoUi}"></div>
+									
+									<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
+							
+								 	 <script>
+								  
+								  		WRSHistory['{$report_id}']	=	"{$getRequestWrsExceptions['TRASH_HISTORY']}";	
+								  		
+										$(function(){
+															var jsonDecode											= 	{$_jsonencode};
+																jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
+																jsonDecode.dataBound									= 	function(arg){ return onDataBound(arg);}								
+																jsonDecode.dataBinding									=	function(arg){ return onDataBinding(arg);}
+																
+																$("#{$this->getId()}").kendoGrid(jsonDecode);
+																$('.wrs_box').hide();
+																$("#{$this->getId()}").WrsGridKendoUiControlColumnPlusMinus({$PLUS_MINUS}).WrsDrill().WRSWindowGridEventTools();
+																$('.dropdown-menu-configuration form, .dropdown-menu-configuration li ').click(function (e) {e.stopPropagation();});
+																$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
+																		
+																WRSKendoGridComplete("#{$this->getId()}");		
+																																			
+																
+													});
+																		
+												//Adicionando nova ABA						
+												var _options_aba	=	{
+																			title		:'{$ABA_TITLE}',
+																			report_id	:'{$report_id}',
+																			active		:	true
+																		};
+												//$(ABA_TAG_NAME).wrsAbas('add_new_aba',_options_aba);						
+									</script>
+						</div>
+					
+																		
+			</div>
 HTML;
 	 
 		return $html;
@@ -729,11 +754,19 @@ HTML;
 		$modelField			=	array();	
 		
 		
+		$_column		=	 json_encode($column,true);
+		$_param			=	 json_encode($param,true);
+		
+		
 		foreach($column as $col_param)
 		{
 			$field			=	$col_param['field'];
 			$model[]		=	array_merge($col_param,array('field'=>$col_param['field'],'template'=>'#='.$field.'#'));
-			$modelField[]	=	array('field'=>$col_param['field'],'type'=>'string');
+			$val_model		=	array('field'=>$col_param['field'],'type'=>'string');
+			if(array_key_exists('width', $col_param)){
+				$val_model['width']=$col_param['width'];
+			}
+			$modelField[]	=	$val_model;
 		}
 		
 		$model[0]['window_grid']		=	$param;
@@ -782,7 +815,7 @@ HTML;
 								dataBound		:	function(arg){ return onDataBoundWindowGrid(arg);}
 		                        
 		                    });
-		                });
+		                }).loadParanGridWindow({$_column},{$_param});
 		            </script>		
 		            
 		            

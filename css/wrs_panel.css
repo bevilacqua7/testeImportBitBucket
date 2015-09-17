@@ -400,7 +400,12 @@ h4{
 
 .WRS_ABA li  a {
 	padding: 6px 10px 6px 10px;
+	background: #EBEBEB;
+	text-decoration: none;
+	color: #333;
+	border: none !important;
 }
+
 
 .WRS_DRAG_DROP_RECEIVER li {
 	margin-right: 5px;
@@ -503,8 +508,6 @@ border-bottom-left-radius: 3px;
 
 
 .container_panel_relatorio{
-	padding:10px;
-	
 	height: 100%;
 	width: 100%;
 	padding: 0; /* extra paddingTop being added by scrollpane? */
@@ -512,6 +515,16 @@ border-bottom-left-radius: 3px;
 	overflow-y: auto;
 	
 }
+
+
+.container_panel_relatorio_rows{
+	height: 100%;
+	width: 100%;
+	margin:0px !important;
+	padding: 0 !important; /* extra paddingTop being added by scrollpane? */
+
+}
+
 
 
 .container_panel_relatorio thead th{
@@ -660,10 +673,11 @@ td{
  	text-align: left !important;
  }
  
+ /* alinhamentos serao tratados no conteudo do WRSPARAM
  .k-grid-content tr td{
- 	text-align: right !important;
+ 	text-align: left !important;
  }
- 
+ */
  
 .k-header{
 	font-weight:bold !important;
@@ -1500,9 +1514,56 @@ box-shadow:         inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
 	margin-left:5px;
 	top: -5px;
 	padding: 1px;
-	
 	-webkit-border-radius: 0px;
 -moz-border-radius: 0px;
 border-radius: 0px;
 
+}
+
+.WRS_ABA .new_file a
+{
+	background: #FFF;	
+	border-color:#FFF;
+	padding: 0px;
+	padding-left: 3px;
+	padding-right: 3px;
+	color: #A3A3A3;
+}
+.WRS_ABA .new_file a:hover{
+	color: #666;
+}
+
+
+div.k-grid-header thead tr th[data-field=checkbox_linha]
+{
+    text-align: center !important;
+}
+
+.selecao_icon
+{
+    background-color: #E8F5FF;
+}
+
+.text-right
+{
+    text-align: right !important;
+}
+
+.text-center
+{
+    text-align: center !important;
+}
+
+.text-left
+{
+    text-align: left !important;
+}
+
+
+.WRS_ABA ul .title{
+	cursor: pointer;
+}
+.alertify-log-custom
+{
+			background: blue;
 }

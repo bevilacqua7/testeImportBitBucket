@@ -22,15 +22,25 @@ function get_inputs_val(form)
 		}
 	});
 	
+
 	
 	form.find('select').each(function(){
-		param[$(this).attr('name')]	=	$(this).val();
+		
+		var _option	=	[];
+		
+		$(this).find('option').each(function(){
+			_option.push($(this).val());
+		});
+		
+		param[$(this).attr('name')]	=	_option;
+		
+		
 	});
+	
 	
 	return param;
 	
 }
-
 
 $.fn.extend({
 	/*
@@ -42,16 +52,19 @@ $.fn.extend({
 		var janela_title		=	$('#myModalGenericConfig  #myModalGenericConfigLabel');
 		var _dataName			=	'WRSGeneridModal';
 		var optionsDefault		= {
-										'file'			:	null, 
-										'classe'		:	null,
-										'event'			:	'default',
-										'title'			:	null,
-										'bt_salvar'		:	true,
-										'bt_atualizar'	:	false,
-										'bt_apagar'		:	false,
-										'bt_cancelar'	:	true,
-										'returnModal'	:	false,
-										'extraParam'	:	null
+										'file'									:	null, 
+										'classe'								:	null,
+										'event'									:	'default',
+										'title'									:	null,
+										'bt_salvar'								:	true,
+										'bt_atualizar'							:	false,
+										'bt_apagar'								:	false,
+										'bt_salvar_extra_action_validator'		:	null,
+										'bt_atualizar_extra_action_validator'	:	null,
+										'bt_apagar_extra_action_validator'		:	null,
+										'bt_cancelar'							:	true,
+										'returnModal'							:	false,
+										'extraParam'							:	null
 									};
 		
 		var  _options	=	 $.extend( {}, optionsDefault, options );						
@@ -72,35 +85,54 @@ $.fn.extend({
 			{
 				var o_param			=	janela_modal.data(_dataName);
 					o_param.event	=	'save';
+					
 				var  _param			=	 $.extend( {}, o_param, get_inputs_val(janela_modal_body) );
+
+				var _continue=true;
 				
-				//foreach(_param);
+				if(_options.bt_salvar_extra_action_validator!=null){
+					_continue = _options.bt_salvar_extra_action_validator(_param);
+				}
 				
+				if(_continue){
 					_runCalll(_param);	
-					
-					
-				
-					
-					
+				}
+							
 			}	
 		
 		var bt_atualizar	=	 function()
 			{
-				TRACE_DEBUG('bt_atualizar')
 				var o_param			=	janela_modal.data(_dataName);
 					o_param.event	=	'atualizar';
 				var  _param			=	 $.extend( {}, o_param, get_inputs_val(janela_modal_body) );
+				
+				var _continue=true;
+				
+				if(_options.bt_atualizar_extra_action_validator!=null){
+					_continue = _options.bt_atualizar_extra_action_validator(_param);
+				}
+				
+				if(_continue){
 					_runCalll(_param);	
+				}
 				
 			}
 		
 		var bt_apagar	=	 function()
 			{
-				TRACE_DEBUG('bt_apagar')
 				var o_param			=	janela_modal.data(_dataName);
 					o_param.event	=	'apagar';
 				var  _param			=	 $.extend( {}, o_param, get_inputs_val(janela_modal_body) );
+				
+				var _continue=true;
+				
+				if(_options.bt_apagar_extra_action_validator!=null){
+					_continue = _options.bt_apagar_extra_action_validator(_param);
+				}
+				
+				if(_continue){
 					_runCalll(_param);	
+				}
 			}
 	
 		
@@ -129,11 +161,12 @@ $.fn.extend({
 });
 
 function getValuesWindow(){
+	console.log('GET');
 	return {'dados':'array'};
 }
 
 
 function carrega_report_generic_modal(arg)
 {
-	
+	console.log('ARG',arg);
 }

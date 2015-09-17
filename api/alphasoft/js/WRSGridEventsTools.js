@@ -13,7 +13,8 @@
 	}
 	
 	
-    $.fn.WRSWindowGridEventTools = function(){
+    $.fn.WRSWindowGridEventTools = function(loadByAba){
+    	
     	
     	var eventTelerik	=	this;
 		var idName			=	eventTelerik.attr('id');
@@ -24,14 +25,15 @@
 		var BOX				=	$('.'+idName+'BOX');
 		var MAP				=	$('#'+idName+'Elements .map');
 		var CHART			=	$('#'+idName+'Elements .chart');
-		var _height			=	BOX.parent().outerHeight();
+		
+		
+		$('.container_panel_relatorio_rows').height($('.container_panel_relatorio').height());
+		
+		var _height			=	BOX.parent().parent().outerHeight();
 		var navHeight		=	NAV.height();
 		
 		
 		
-		
-		
-
 		//Criando a DIV do MAPA o da CHART
 		var check_div_map_chart	=	 function(type)
 		{
@@ -117,9 +119,10 @@
 		
 		var WRSWindowGridEventToolsClick	=	function(e,data)
 		{
+			
 			var wrs_data		=	"";
-			var height			=	BOX.parent().outerHeight();
-			var BOX_PARENT		=	BOX.parent();
+			var height			=	BOX.parent().parent().outerHeight();
+			var BOX_PARENT		=	BOX.parent().parent();
 			var active_half		=	false;
 			var paddingCenter	=	((parseInt(BOX_PARENT.parent().css('padding-bottom').replace('px')))*3)-2;
 			var _heightToUse	=	'';
@@ -313,7 +316,34 @@
 		NAV.find('.btn-open-type-vision').unbind('click').click(function_btn_open_type_vision);
 		
 		//Load event ptincipal
+		
+//		TRACE_DEBUG('empty');
+
 		//WRSWindowGridEventToolsClick('','grid_map');
+		if(!empty(loadByAba))
+			{
+					switch(loadByAba)
+					{
+						case "chart"		: 
+						case "grid_chart"	: 
+						case "chart_grid"	:
+						case "chart_map"	:
+						case "map_chart"	: WRSKendoUiChart(telerikGrid,null,true);				break;
+					}
+					
+					//only maps
+					switch(loadByAba)
+					{
+						case "map"			: 
+						case "grid_map"		:
+						case "map_grid"		:
+						case "map_chart"	:
+						case "chart_map"	: WRSMaps(telerikGrid);goMapsResize();				break;
+					}
+					
+				 
+				
+			}
     };
  
 }( jQuery ));
@@ -384,6 +414,9 @@ var getRequestKendoUiDefault	=	{};
 * Configuração de Gráfico e Visão para o DRAG AND DROP
 */
 
+
+
+
 (function( $ ) {
 	 /*
 	  * Para encontrar o da base procure por 
@@ -403,9 +436,12 @@ var getRequestKendoUiDefault	=	{};
   		btn_configute_chart		=	element.find('.btn-configute-chart'),
   		btn_open_type_vision	=	element.find('.btn-open-type-vision'),
 		isClick					=	false;
-		nav_options.attr('id','wrs_grid_options_default');		
+		nav_options.attr('id','wrs_grid_options_default');	
 		
 		
+//		console.log('wrsConfigGridDefault::opts',opts);
+		
+
 		
   		//WARNING:  O nome do ID nao pode ser removido pois existe outros lugares com pendencia no nome - wrs_panel
 		element.attr('id',data_name);
@@ -417,9 +453,13 @@ var getRequestKendoUiDefault	=	{};
   	
   	var detect_event	=	 function(type)
   	{
-  			if(type=='clean') 
-  				element.removeAttr('is-event');
-  			else
+  			if(type=='clean') {
+  				
+  				if(element.attr('is-event')==_TRUE)
+  						{
+  					element.removeAttr('is-event');
+  				}
+  			}else
   				element.attr('is-event',true);
   	}
   	
@@ -465,12 +505,18 @@ var getRequestKendoUiDefault	=	{};
   	 */
   	var check_exist_grid	=	 function(){  		
   		if(isClick) return true;
-  		var searchGrid	=	$(document).find('.wrsGrid');
-  		if(!empty(searchGrid.html()))
-  		{
-  			opts	=	getJsonDecodeBase64(searchGrid.attr('wrskendoui'));  			
-  			element.data(data_name,opts);
-  		}  		
+  		var searchGrid		=	$(document).find('.wrsGrid');
+		var hasDefault		=	 $('.wrs_panel_filter_measure').is(':hidden');
+		
+		/*
+		 * TODO: Validar
+		 */
+			  		if(!empty(searchGrid.html()) && hasDefault==true)
+			  		{
+			  			opts	=	getJsonDecodeBase64(searchGrid.attr('wrskendoui'));  			
+			  			element.data(data_name,opts);
+			  			TRACE_DEBUG('insert');
+			  		}  		
   	}
   	
   	
@@ -511,8 +557,11 @@ var getRequestKendoUiDefault	=	{};
   	//Abrindo o Modal de opções do CHART
   	var event_btn_configute_chart	=	 function(){
   		
+
+
   			var get_measures_title	=	 [];
 
+  			
   			$('.WRS_MEASURE_DRAG').find('li').each(function(){
   				var _json		=	 $(this).attr('json');
   				var _json_data	=	getJsonDecodeBase64(_json);
@@ -549,6 +598,8 @@ var getRequestKendoUiDefault	=	{};
   			//save options
   			detect_event();//Abilita Evento
   			nav_options.attr('wrsKendoUi',base64_encode(json_encode(opts,true)));
+  			
+
   			nav_options.data('kendoGrid',KendoUi);	
   			
   		/*
@@ -583,8 +634,12 @@ var getRequestKendoUiDefault	=	{};
   	});
   	
   	
-  	btn_configute_chart.unbind('click').click(event_btn_configute_chart);
   	
+  	btn_configute_chart.each(function(){
+  		$(this).unbind('click').click(event_btn_configute_chart);
+  	});
+  	
+
   	element.attr('isDefault',true).wrsTopOptions();
   		
       return element;

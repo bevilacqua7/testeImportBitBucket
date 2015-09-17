@@ -5,6 +5,24 @@
  */
 
 
+/*
+ * API para salvar os elementos do Kendo Ui na estrutura
+ */
+(function( $ ) {
+	
+	
+	/**
+	 * Configurações das opções TOP
+	 */
+	$.fn.loadParanGridWindow = function(column,param) 
+	{
+		var that		=	 '#'+param.table;
+			$(that).data('loadParanGridWindow',{'column':column,'param':param});
+	}
+	
+}( jQuery ));
+
+
 /**
  * COnstrulçao do Dado da GRid
  */
@@ -29,9 +47,77 @@ function onDataBindingWindowGrid(arg)
 
 function onDataBoundWindowGrid(arg)
 {	
-
+	
 	var IDName				=	'#'+arg.sender.element.attr('id');
+	var loadParanGridWindow	=	$(IDName).data('loadParanGridWindow');
 	var telerikGrid 		= 	$(IDName).data('kendoGrid');
+		
+	arg.sender['wrs_grid']		=	loadParanGridWindow;
+
+	var _linhas_tabela 	= arg.sender.content.find('table tr');
+	var _linha_header	= arg.sender.thead.children('tr');
+	var _classes_Line 		= [];
+	var _classes_Header		= [];
+	var _param_aplicaClassLinhas 	= arg.sender.wrs_grid.param.aplicaClassLinhas;
+	var _param_aplicaClassHeaders 	= arg.sender.wrs_grid.param.aplicaClassHeaders;
+	
+	// preencho o array com as classes existentes
+	for(idx in arg.sender.wrs_grid.column){
+		// se houver classe por linha de coluna OU houver uma classe forcada para todas as linhas de colunas
+		if(arg.sender.wrs_grid.column[idx].classDataLine!=undefined || (_param_aplicaClassLinhas!=false && _param_aplicaClassLinhas!=true)){
+			_classes_Line[idx]=(_param_aplicaClassLinhas!=false && _param_aplicaClassLinhas!=true)?_param_aplicaClassLinhas:arg.sender.wrs_grid.column[idx].classDataLine;
+		}
+		// se houver classe por coluna OU houver uma classe forcada para todas as colunas
+		if(arg.sender.wrs_grid.column[idx].classDataHeader!=undefined || (_param_aplicaClassHeaders!=false && _param_aplicaClassHeaders!=true)){
+			_classes_Header[idx]=(_param_aplicaClassHeaders!=false && _param_aplicaClassHeaders!=true)?_param_aplicaClassHeaders:arg.sender.wrs_grid.column[idx].classDataHeader;
+		}
+	}
+
+	// se houverem classes para preencher na grid, varre a linha e adiciona as classes na coluna correspondente
+	if(_classes_Line.length>0 || (arg.sender.wrs_grid.param.aplicaClassLinhas!=false && arg.sender.wrs_grid.param.aplicaClassLinhas!=true)){
+		if(arg.sender.wrs_grid.param.aplicaClassLinhas==true){ // verifica parametro na WRSPARAM
+			_linhas_tabela.each(function(){ // aplica em cada linha do conteudo
+				if($(this).find('input.checkline').length){ // excecao para alinhar no centro quando houver checkbox na linha
+					$($(this).find('td')[$(this).find('input.checkline').index()]).addClass('text-center');				
+				}
+				for(posicao in _classes_Line){ // aplica a classe na coluna correspondente
+					$($(this).find('td')[posicao]).addClass(_classes_Line[posicao]);
+				}
+			});
+		}else if(arg.sender.wrs_grid.param.aplicaClassLinhas!=false){ // se ela nao for false, nem true é porque está forçando uma Class especifica padrao
+			_linhas_tabela.each(function(){ // aplica em cada coluna da linha do conteudo
+				if($(this).find('input.checkline').length){ // excecao para alinhar no centro quando houver checkbox na linha
+					$($(this).find('td')[$(this).find('input.checkline').index()]).addClass('text-center');				
+				}
+				for(posicao in _classes_Line){ // aplica a classe na coluna da linha correspondente
+					$($(this).find('td')[posicao]).addClass(arg.sender.wrs_grid.param.aplicaClassLinhas);
+				}
+			});
+		}
+	}
+	// se houverem classes para preencher na grid, varre a linha das headers e adiciona as classes na coluna correspondente
+	if(_classes_Header.length>0 || (arg.sender.wrs_grid.param.aplicaClassHeaders!=false && arg.sender.wrs_grid.param.aplicaClassHeaders!=true)){
+		if(arg.sender.wrs_grid.param.aplicaClassHeaders==true){ // verifica parametro na WRSPARAM
+			_linha_header.each(function(){ // aplica a classe tambem na linha de cabecalho para corresponder ao conteudo
+				if($(this).find('input.checkline').length){ // excecao para alinhar no centro quando houver checkbox na linha
+					$($(this).find('th')[$(this).find('input.checkline').index()]).addClass('text-center');				
+				}
+				for(posicao in _classes_Header){ // aplica a classe na coluna correspondente
+					$($(this).find('th')[posicao]).addClass(_classes_Header[posicao]);
+				}
+			});
+		}else if(arg.sender.wrs_grid.param.aplicaClassHeaders!=false){ // se ela nao for false, nem true é porque está forçando uma Class especifica padrao
+			_linha_header.each(function(){ // aplica a classe tambem na linha de cabecalho para corresponder ao conteudo
+				if($(this).find('input.checkline').length){ // excecao para alinhar no centro quando houver checkbox na linha
+					$($(this).find('th')[$(this).find('input.checkline').index()]).addClass('text-center');				
+				}
+				for(posicao in _classes_Header){ // aplica a classe na coluna correspondente
+					$($(this).find('th')[posicao]).addClass(arg.sender.wrs_grid.param.aplicaClassHeaders);
+				}
+			});
+		}
+	}
+	
 	var HandleArg			=	arg;
 	var KendoGridWindowTools	=	 function ()
 	{		
@@ -39,7 +125,8 @@ function onDataBoundWindowGrid(arg)
 		var index			=	$(this).parent().index();
 		
 		try{
-			if(param['actionDouble']){			
+			var is_exception 	= ('exception' in param && typeof param['exception'] == 'object');
+			if(is_exception && param['actionDouble']){			
 				var toAction	=	param['actionDouble'];
 				window[toAction](HandleArg.sender._data[index]);	
 				
@@ -57,15 +144,16 @@ function onDataBoundWindowGrid(arg)
 		var option						=	 [];
 			option['wrs_type_grid']		=	'form';
 			option[param['primary']]	=	value_primary;
-			
-			
+
 		try{	
-				if(param['actionSingle']){
-					var toAction	=	param['actionSingle'];
-					window[toAction](HandleArg.sender._data[index]);	
-				}else{
-					grid_window_modal(option,table);
-				}
+			var is_exception 	= ('exception' in param && typeof param['exception'] == 'object');
+
+			if(is_exception && param['actionSingle']){
+				var toAction	=	param['actionSingle'];
+				window[toAction](HandleArg.sender._data[index]);	
+			}else{
+				grid_window_modal(option,table);
+			}
 		}catch(e){
 			grid_window_modal(option,table);
 		}
@@ -84,11 +172,44 @@ function onDataBoundWindowGrid(arg)
 
 function wrd_grid_window_to_form()
 {
-	var primary		=	 $.parseJSON(base64_decode($(this).attr('primary')));
-	var table		=	 $(this).attr('table');
-	var option		=	 {wrs_type_grid:'form'};
-	grid_window_modal(_local_merge_array(primary,option),table);
+	var primary			=	 $.parseJSON(base64_decode($(this).attr('primary')));
+	var table			=	 $(this).attr('table');
+	var option			=	 {wrs_type_grid:'form'};
+	var _data			=	 $('.body_grid_window').data('wrsGrid');
+	var param			=	 _data.param_original;
+	var index			=	 $(this).parents('.body_grid_window').first().children().index($(this));
+	var is_exception 	= 	 ('exception' in param && typeof param['exception'] == 'object');
+	if(!is_exception){
+		grid_window_modal(_local_merge_array(primary,option),table);
+	}else{
+		if(param['actionSingle']){
+			var toAction				=	param['actionSingle'];
+			_data[index]['visao_atual']	= 	'icon';
+			_data[index]['obj_sel']		= 	$(this).children('div.wrs_grid_'+param.visao_atual+'_custom');
+			window[toAction](_data[index]);	
+		}
+	}
+}
 
+function wrd_grid_window_to_form_dbl(arg)
+{
+	var primary			=	 $.parseJSON(base64_decode($(this).attr('primary')));
+	var table			=	 $(this).attr('table');
+	var option			=	 {wrs_type_grid:'form'};
+	var _data			=	 $('.body_grid_window').data('wrsGrid');
+	var param			=	 _data.param_original;
+	var index			=	 $(this).parents('.body_grid_window').first().children().index($(this));
+	var is_exception 	= 	 ('exception' in param && typeof param['exception'] == 'object');
+	if(!is_exception){
+		grid_window_modal(_local_merge_array(primary,option),table);
+	}else{
+		if(param['actionDouble'])
+		{			
+			var toAction	=	param['actionDouble'];
+			
+			window[toAction](_data[index]);				
+		}
+	}
 }
 
 
@@ -148,6 +269,7 @@ function wrs_window_grid_events_tools(objectClick)
 	var _options	=	{
 						visao	:	wrs_grid_window_event,
 						icon	:	wrd_grid_window_to_form,
+						icondbl	:	wrd_grid_window_to_form_dbl,
 						btn		:	btn_window_grid_event
 					};
 	
@@ -165,7 +287,7 @@ function wrs_window_grid_events_tools(objectClick)
 		
 		*/
 		$('.wrs_grid_window_event a').unbind('click').click(options.visao);
-		$('.margin_fix_grid_window').unbind('click').click(options.icon); //evento para quamdp for 	visão tipo icones
+		$('.margin_fix_grid_window').unbind('click').click(options.icon).unbind('dblclick').dblclick(options.icondbl); //evento para quamdp for 	visão tipo icones
 		$('.btn_window_grid_event').unbind('click').click(options.btn);
 	
 }

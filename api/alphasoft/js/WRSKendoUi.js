@@ -27,7 +27,7 @@ include_js('WRSTopOptions');
 include_js('WRSGenericModal');
 include_js('WRSMenu');
 include_js('templateReport');
-
+include_js('WRSAbas'); 
 
 function WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi)
 {
@@ -45,6 +45,7 @@ function WRSKendoGridRefresh(history)
 {
 	var _history		=	$.parseJSON(base64_decode(history));
 	
+
 	if(empty(_history)) return true;
 	
 	$(function(){
@@ -75,13 +76,14 @@ function WRSKendoGridComplete(IDGrid)
 			trashHistory	=	WRSHistory[wrsKendoUi['REPORT_ID']];
 		}catch(e){}
 		
-		
+	//console.log('WRSHistory',WRSHistory);
 		
 	var history			=	$.parseJSON(base64_decode(trashHistory));
 	//var IDNav			=	IDGrid+'NAV .wrs_history_report';
 	var IDNav			=	'.wrs_history_report';
 	$(IDNav).html('');
 	
+
 	
 	var html		=	'';
 	var li 			=	'<li><a href="#" json="{json}" wrs-id="'+IDGrid+'" mktime="{mktime}" ><i class="fa fa-history"></i> <span class="label label-default span-label-history">{type}</span> {data}  </a></li>';
@@ -100,7 +102,7 @@ function WRSKendoGridComplete(IDGrid)
 				
 		}
 	
-	//console.log('history',history[0]);
+	
 	
 	$(IDNav).html(html);
 	
@@ -155,7 +157,22 @@ SET_RELATIONSHIPS_FULL_NAME();
  {
  	if(!empty(_event.html()))
  	{
- 		var wrsKendoUi	=	$.parseJSON(base64_decode(_event.attr('wrsKendoUi'))); 		
+ 		var _base64			=	_event.attr('wrsKendoUi');
+ 		var _base		=	base64_decode(_base64);
+/*
+ 		if(empty(_base))
+ 			{
+ 				return [];
+				
+ 			}
+ 		
+		 eval('var obj='+_base);
+		
+		 
+		return obj;*/
+		
+ 		var wrsKendoUi	=	{};
+ 			wrsKendoUi	=	$.parseJSON(_base);
  		return wrsKendoUi;
  	} 	
  	
@@ -569,27 +586,33 @@ function getWrsKendoColumn(data)
  
 function wrsKendoUiChange(nameID,param,value)
 {
-	var wrsKendoUi		=	$.parseJSON(base64_decode($(nameID).attr('wrsKendoUi')));
-	var _tmpWrsKendoUi	=	"";
+	
+	var _base				=	base64_decode($(nameID).attr('wrsKendoUi'));
+	var wrsKendoUi			=	$.parseJSON(_base);
+	var _tmpWrsKendoUi		=	"";
 	
 	
-	if(empty(param))
-	{
-		//Para quando for passado Array como parametro
-		if(is_array(value))
+
+		if(empty(param))
 		{
-			for(obj in value)
+			//Para quando for passado Array como parametro
+			if(is_array(value))
 			{
-				wrsKendoUi[obj]	=	value[obj];
+				for(obj in value)
+				{
+					wrsKendoUi[obj]	=	value[obj];
+				}
 			}
+		}else{
+			//Quando for passado apenas parametro normal
+			wrsKendoUi[param]	=	value;
 		}
-	}else{
-		//Quando for passado apenas parametro normal
-		wrsKendoUi[param]	=	value;
-	}
-	
-	_tmpWrsKendoUi		=	 base64_encode(json_encode(wrsKendoUi,true));
-	$(nameID).attr('wrsKendoUi',_tmpWrsKendoUi);
+		
+		
+
+		
+		_tmpWrsKendoUi		=	 base64_encode(json_encode(wrsKendoUi,true));
+		$(nameID).attr('wrsKendoUi',_tmpWrsKendoUi);
 }
  
 
@@ -602,11 +625,15 @@ function onDataBound(arg)
 			TRACE('START onDataBound');
 			resizeColumnKendoUi(arg);
 
-			var nameID		=	 '#'+arg.sender.element.attr('id');
+			var classGrid	=	arg.sender.element.attr('id');
+			var nameID		=	 '#'+classGrid;
 			var ELEMENT		=	$(nameID+'Elements');
 			var wrsKendoUi	=	$.parseJSON(base64_decode($(nameID).attr('wrsKendoUi')));
 				wrsKendoUiChange(nameID,'page_size',arg.sender.dataSource._pageSize);
 			
+				
+				//Aplicando e salvando a estrutura das abas
+				$(ABA_TAG_NAME).wrsAbas('refresh',wrsKendoUi);
 				
 				ELEMENT.attr('chart','false');
 				ELEMENT.attr('maps_wrs','false');
@@ -667,6 +694,21 @@ function onDataBound(arg)
 													arg.sender.wrsKendoUi.WRS_ROWS,
 													arg.sender.dataSource._wrs_request_data.drill);
 			}
+			
+			
+			
+			
+			
+			
+			
+			//var nameID		=	 '#'+arg.sender.element.attr('id');
+			
+			 
+			
+			$('.WRS_ABA').find('.'+classGrid).data('kendoUiDataAba',arg.sender);
+			
+			
+			wrsKendoUiChange(nameID,'IS_REFRESH',false);
 			
 			TRACE('END onDataBound');
 			

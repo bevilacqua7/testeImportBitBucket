@@ -447,6 +447,8 @@ class WRS
 		
 		self::declare_REPORT_HISTORY($TAG_NAME, $cube_id, $report_id);
 		
+		if(empty($history)) return false;
+		
 		 $_SESSION[$TAG_NAME][$cube_id][$report_id]	=	$history;
 	}
 	
@@ -460,7 +462,7 @@ class WRS
 	{
 		$TAG_NAME		=	'CUBE_REPORT_HISTORY';
 		$TMPMktime		=	fwrs_mktime();
-		$ReportId		=	rand(0,99999999999999);
+		$ReportId		=	'ABA_'.rand(0,99999999999999);
 		$report_history	=	array();
 		
 		if(isset($_SESSION[$TAG_NAME][$cube_id]))
@@ -513,16 +515,15 @@ class WRS
 	 */
 	private static function declare_REPORT_HISTORY($TAG_NAME,$cube_id,$report_id)
 	{
+		
+		if(empty($cube_id)) return false;
+		
 		if(!isset($_SESSION[$TAG_NAME][$cube_id]))
 		{
 			$_SESSION[$TAG_NAME][$cube_id]	=	array();
 		}
 	
-		//Garante que seha declarado
-		if(!isset($_SESSION[$TAG_NAME][$cube_id][$report_id]))
-		{
-			$_SESSION[$TAG_NAME][$cube_id][$report_id]	=	 '';
-		}
+		 
 	
 	}
 	

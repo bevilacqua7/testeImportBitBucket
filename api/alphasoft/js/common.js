@@ -11,7 +11,8 @@
 
 var IS_TRACE	=	false;
 var RAND_TOKEN	=	js_rand(0,9999999999999);
-
+	include_js('WRSThreadJobManager');
+	
 /*
  * Tipos de Execuções que o sistema opera para gerar uma novo Report
  */
@@ -27,17 +28,25 @@ var TYPE_RUN	=	{
 						data				:	'DrillValue'
 					};
 
+var ABA_TAG_NAME		=	'.WRSAbas ul';
 
 function changeTypeRun(IDGrid,typeRun)
 {
-	var wrsKendoUi			=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
+
+	var _base64				=	base64_decode($(IDGrid).attr('wrsKendoUi'));
 	
-	if(empty(wrsKendoUi.TYPE_RUN))
-	{
-		wrsKendoUiChange(IDGrid,'TYPE_RUN',typeRun);
-	}
+	var wrsKendoUi			=	$.parseJSON(_base64);
 	
+	try{
+		if(empty(wrsKendoUi.TYPE_RUN))
+		{
+			wrsKendoUiChange(IDGrid,'TYPE_RUN',typeRun);
+		}	
+	}catch(e){}
 }
+
+
+
 
 function include_js(file)
 {
@@ -60,9 +69,10 @@ function setOption(event,value,_selected)
 			}
 			
 			event.append(str_replace(replace,[lineValue,value[lineValue],_tag],  _option));
-		}
-	
+		}	
 }
+
+
 
 function setOptionRadio(event,value,_selected)
 {
@@ -172,6 +182,43 @@ function addJsonEncodeToElement(array,element)
 }
 
 
+
+function activeToGetAllFilters()
+{
+	var _filter_hide_string		=	$('.wrs_panel_filter_icon').attr('filter_hide');
+		_filter_hide			=	 _filter_hide_string=='true'	? true : false;
+
+	if(!_filter_hide)
+	{
+			$('.wrs_panel_filter_icon').attr('filter_hide','false').trigger('click');
+	}
+	
+	return _filter_hide;
+}
+
+
+function activeToGetAllFiltersRecover(_filter_hide)
+{
+	if(!_filter_hide)
+	{
+		$('.wrs_panel_filter_icon').trigger('click');
+	}
+	
+}
+
+function wrs_base64encode(inputArray)
+{
+	
+	return base64_encode(inputArray);
+}
+
+function base64_json(inputArray)
+{
+	return base64_encode(json_encode(inputArray));
+}
+
+
+
 function cleanJsonEncodeToElement(element)
 {
 	element.attr('json','');
@@ -217,7 +264,63 @@ function getJsonEncodeToElement(element)
  */
 function getJsonDecodeBase64(json)
 {
+	
+	if(empty(json) || json=='null') return json;
 	return $.parseJSON(base64_decode(json));
+}
+
+
+function filter_array_convert(input)
+{
+	if(empty(input)) return [];
+	
+	var input_array	=	 explode(',',input);
+	var tmp_input	=	[];
+
+	for(var lineInput in input_array)
+		{
+			tmp_input[tmp_input.length]		=	'__'+replace_attr(input_array[lineInput]);
+		}
+	return tmp_input;
+}
+
+
+function filter_TMP_to_array(input)
+{
+	if(empty(input)) return [];
+	
+	var tmp_input	=	[];
+	
+	
+	for(var lineInput in input)
+		{
+			var inputData		=	input[lineInput];
+			var _filter			=	explode(',',inputData['data']);
+				_filter			=	empty(_filter) ? '' : _filter;
+				
+				tmp_input[tmp_input.length]		=	[inputData['class'],'',_filter];				
+		}
+	
+	
+	return tmp_input;
+}
+
+
+function filter_configure_window()
+{
+	var filter_h	=	$('.wrs_panel_filter_icon').attr('filter_hide'); 
+	var label		=	'true';
+		$('.WRS_DRAG_DROP_RECEIVER_FILTER').show();
+		$('.WRS_DRAG_DROP_FILTER_CONTAINER').hide();
+	
+
+		if(filter_h=='true')
+		{
+			label	=	 'false';
+		}
+		
+		$('.wrs_panel_filter_icon').attr('filter_hide',label).trigger('click'); 
+	
 }
 
 /**
@@ -281,6 +384,11 @@ function WRS_CONFIRM(_text,_type,_callback)
 
 function WRS_ALERT(_text,_type)
 {
+	/*
+	 * TODO: corrigir este tipo de modal pois nao se pode ter mais de uma modal ao mesmo tempo, ou seja, estas moais de alerta sempre causarao conflito com o titulo e conteudo de outras modais já abertas/existentes:
+	 * http://v4-alpha.getbootstrap.com/components/modal/#multiple-open-modals-not-supported
+	 * http://getbootstrap.com/javascript/#callout-stacked-modals
+	 */
 	var _tite		=	"ALERT_TITLE_INFO";
 	var _is_type	=	_type;
 	
@@ -641,7 +749,7 @@ function WRSGridLoadComplete(object)
 }
 
 
-
+ 
 /*
  * COntruindo o resize da Grid Simples
  * TODO: Tenho que sincronizar essa informação com o WRSWindowGridEventTools
@@ -675,6 +783,32 @@ function resizeGridSimple()
 } 
 
 
+/*
+ * TODO: Verificar se está correto as informações
+ */
+function merge_filter_data(input,inputMerge)
+{
+
+	var _tmp_merge		=	[];
+		_tmp_merge		=	inputMerge;
+
+
+
+	for(lineInputMerge in input)
+		{
+			var _key	=	String(lineInputMerge);
+			
+				if(!empty(input[_key]))
+				{
+					
+						_tmp_merge[_key]		=	input[_key];
+				}
+		}
+
+	return _tmp_merge;
+	
+}
+
 /**
  * 
  * Está vinculado a formataValue
@@ -682,10 +816,9 @@ function resizeGridSimple()
  */
 function sumarizaValor(valor)
 {
-	
-	var _casa_decimal 	= '.';
-	var _milhar 		= ',';
-	var _value 			= valor;
+	var _casa_decimal 	= 	'.';
+	var _milhar 		= 	',';
+	var _value 			= 	valor;
 	var _value_limit	=	0;
 	var _WORD			=	'';
 	
@@ -842,6 +975,8 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 	
 	
 }
+
+
 
 
 $(document).ready(function(){

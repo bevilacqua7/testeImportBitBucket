@@ -63,44 +63,62 @@ class WRS_REPORT  extends  WRS_USER
  		
 	}
 	
-	public function save(){
+	public function save()
+	{
 
 		$layouts 			= fwrs_request('layouts');
 		$grupos 			= fwrs_request('grupos');		
 		$dadosJs			= json_decode(base64_decode(fwrs_request('dadosJs')));
 		$user				= WRS::INFO_SSAS_LOGIN();
- 		$REPORT_DESC 		= fwrs_request('report_name');
+
+		$REPORT_DESC 		= fwrs_request('report_name');
  		$SERVER_ID 			= fwrs_remove_colchete($this->cube['SERVER_ID']);
  		$DATABASE_ID 		= fwrs_remove_colchete($this->cube['DATABASE_ID']);
  		$CUBE_ID 			= fwrs_remove_colchete($this->cube['CUBE_ID']);
+ 		
  		$ROWS 				= $dadosJs->LAYOUT_ROWS->request;
  		$COLUMNS 			= $dadosJs->LAYOUT_COLUMNS->request;
  		$MEASURES 			= $dadosJs->LAYOUT_MEASURES->request;
  		$FILTERS 			= $dadosJs->LAYOUT_FILTERS->request;
  		$FILTERS_VALUES 	= '';
  		
- 		if(trim($FILTERS)!=''){
- 			$arr_filtros_sel=array();
- 			$filtros	=	explode(",",$FILTERS);
- 			if(count($filtros)>0){
- 				foreach($filtros as $pos => $filtro){
- 					if(count($dadosJs->filter_selected->full)>0){
- 						$arr_filtros_sel[]=$filtro."(_,_)".$dadosJs->filter_selected->full[$pos]->data;
+ 		
+ 		
+ 		
+ 		
+ 		if(trim($FILTERS)!='')
+ 		{
+ 			$arr_filtros_sel	=	array();
+ 			$filtros			=	explode(",",$FILTERS);
+
+ 			if(count($filtros)>0)
+ 			{
+ 				foreach($filtros as $pos => $filtro)
+ 				{
+ 					if(count($dadosJs->filter_selected->full)>0)
+ 					{
+ 						$arr_filtros_sel[]	=	$filtro."(_,_)".$dadosJs->filter_selected->full[$pos]->data;
  					}
  				}
+ 				
  				$FILTERS_VALUES = implode("(_|_)",$arr_filtros_sel);
+ 				
  			}
  		}
  		
- 		$ALL_ROWS 			= 0;
- 		$ALL_COLS 			= 0;
+
+ 		
+ 		
+ 		 		
+ 		$ALL_ROWS 			= ($dadosJs->KendoUi->ALL_ROWS=="1")?1:0;
+ 		$ALL_COLS 			= ($dadosJs->KendoUi->ALL_COLS=="1")?1:0;
  		$COLS_ORDER 		= 0;
- 		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi));
+ 		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi,true));
  		$REPORT_FORMULAS 	= '';
  		$REPORT_FILTER 		= '';
  		$REPORT_FLAG 		= '';
- 		$LAYOUT_SHARE 		= '';
- 		$USER_TYPE 			= $grupos;
+ 		$LAYOUT_SHARE 		= '';//(is_array($layouts)?implode("(_,_)",$layouts):$layouts); // TODO: ver onde salvar estes valores
+ 		$USER_TYPE 			= (is_array($grupos)?implode("(_,_)",$grupos):$grupos);
  		$REPORT_SHARE 		= fwrs_request('report_share')=='1'?1:0;
  		$REPORT_AUTOLOAD 	= fwrs_request('report_auto')=='1'?1:0;
 
@@ -118,10 +136,10 @@ class WRS_REPORT  extends  WRS_USER
  			echo $error."<hr>Query: ".$sql;
  		}else{
  			$JS=<<<HTML
- 		$('#myModalGenericConfig').find('div.modal-footer').find('.bt-salvar').hide();		
+ 		$('#myModalGenericConfig').modal('hide');		
+		WRS_ALERT('Relatório salvo com sucesso','success'); 
 HTML;
 			echo fwrs_javascript($JS);
- 			echo "<span onclick=\"$('.repId').toggle();\">Relatório salvo com sucesso</span><span style='display:none;' class='repId'>, REPORT_ID: ".$rep_id."</span>";
  		}
 		exit();
 		
@@ -151,18 +169,23 @@ HTML;
 			default: return $html;			
 		}
 	}
-		
-	private function runGrid($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
-	{
-		//return 'select * from TMP_REPORT_SSAS_1_3';
-		
+	
+	private function getQuerySelectReports(){
+
 		$cube_id		=	fwrs_remove_colchete($this->cube['CUBE_ID']);
 		$database_id	=	fwrs_remove_colchete($this->cube['DATABASE_ID']);
 		
 		$user			=	WRS::INFO_SSAS_LOGIN();
 		
 		$sql			=	$this->_query->Get_SSAS_Reports($user['CUSTOMER_ID'], $user['USER_CODE'], $user['PERFIL_ID'], $database_id, $cube_id);
+		return $sql;
 		
+	}
+		
+	private function runGrid($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
+	{
+		
+		$sql			=	$this->getQuerySelectReports();
 		
 		$query			=	 $this->query($sql);
 		$error			=	false;
@@ -207,6 +230,8 @@ HTML;
 		
 				var input	=	 $('<input/>',{name:"dadosJs",type:'text', value:base64_encode(json_encode(getLoadReport()))}).css('display','none');
 				$('#insert_report').append(input);
+				var kendoUiAtual = getLoadReport();
+				$('#report_name').val(kendoUiAtual.KendoUi.TITLE_ABA); // preenche com o nome atual vindo do JS
 
 HTML;
 		// preenche os 'grupos' do formulario com os tipos cadastrados no banco (query passada pelo facioli em 26-08-2015)
@@ -219,10 +244,15 @@ HTML;
 		}
 		$JS2='';
 		foreach($tipos as $nome){
-			$JS2.= "\n$('#select2').find('.wrs-measures').append($('<option/>').html('".$nome."'));";
+			$JS2.= "\n$('#select2').find('.wrs-measures').append($('<option/>').html('".$nome."').val('".$nome."'));
+					console.log(".json_encode($user).");
+					";
 		}
 		echo fwrs_javascript($JS);
 		echo fwrs_javascript($JS2);
+		
+		$nome_report='report_name';
+		
 		include PATH_TEMPLATE.'modal_include_report.php';
 		exit();
 		

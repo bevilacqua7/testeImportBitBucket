@@ -167,11 +167,11 @@ EOF;
 			$html		.=	str_replace($liSearch, $replace, $li);
 		}
 
-		
+		/*
 		if(empty($html)){
 			$replace	=	array(LNG('LABEL_NOVO'),'active');
 			$html		.=	str_replace($liSearch, $replace, $li);
-		}
+		}*/
 		
 		
 		return str_replace($abaSearch, $html, $aba);
