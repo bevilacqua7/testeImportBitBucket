@@ -63,13 +63,16 @@
 			{
 				var getElement						=	{};
 				
-				
 					getElement['REPORT_ID']			=	id_report;
 					getElement['TITLE_ABA']			=	title;
 					getElement['SUMARIZA']			=	1;
 					getElement['COLORS_LINE']		=	1;
-					$('.NAV_CONFIG_WRS').attr('is-event',true).data('wrsConfigGridDefault',getElement);
+					
+
+					$('.NAV_CONFIG_WRS,#wrsConfigGridDefault').attr('is-event',true).data('wrsConfigGridDefault',getElement);
+					
 					WRS_clean_filter();
+					return getElement;
 			}
 			
 			
@@ -82,18 +85,42 @@
 					{
 							var aba_active		=	tagABA.find('.active');
 								save_info_aba_current(aba_active);
-					
-							var id_report	=	add_aba_html('','',true,true);		
+					/*
+							var id_report	=	add_aba_html('','',true,true,base64_json({}));		
 								wrsConfigGridDefaultManagerTopOptionsLock();
-							
-								btn_add_new_aba();
-								
-								open_configure_default();
-							
+															
+								open_configure_default();							
 								wrs_panel_layout.open('east');
 								
+							var get_info	=	create_new_default(id_report.report_id,id_report.title);	
+							
+								tagABA.find('.'+id_report.report_id).attr('wrsparam',base64_json(get_info)).data('WINDOW',get_info);
 								
-								create_new_default(id_report,tagABA.find('.'+tag_aba_empty).find('.title').html());	
+								*/
+								
+					
+					
+									
+										var getElement						=	{};	
+											getElement['TITLE_ABA']			=	__new_name_aba();
+											getElement['REPORT_ID']			=	generateReportId();
+											getElement['SUMARIZA']			=	1;
+											getElement['COLORS_LINE']		=	1;
+					
+											var optionsAba		=	{
+																		LAYOUT_ROWS			:base64_json({}),
+																		LAYOUT_COLUMNS		:base64_json({}),
+																		LAYOUT_MEASURES		:base64_json({}),
+																		LAYOUT_FILTERS		:base64_json({}),
+																		KendoUi				:base64_json(getElement),
+																		FILTER_TMP			:""
+																	};
+					
+											 
+											__load_multiple([optionsAba]);
+								
+								
+								btn_add_new_aba();	
 					}
 				
 				
@@ -101,6 +128,7 @@
 					tagABA.find('.'+className).remove();
 					tagABA.append(htmlABA);
 					tagABA.find('.'+className).unbind('click').click(_click_btn_new_aba);
+						 
 			}
 			
 			
@@ -410,7 +438,49 @@
 			
 			
 			
-			
+			var activeKeyPress		=	 function(event)
+			{
+				//Apenas evita o Enter
+				event.unbind('keypress').keypress(function(event){
+					var code = event.keyCode || event.which;
+					if ( code == 13 ) return false;
+				});
+				
+				event.unbind('keyup').keyup(function(event)
+				{
+					//Não permite o enter
+					var code = event.keyCode || event.which;
+					
+					if ( code == 13 ) return false;
+					
+						var getID					=	$(this).attr('id-tag');
+						
+							if(!empty($('.NAV_CONFIG_WRS').attr('id-tag')))  getID=$('.NAV_CONFIG_WRS').attr('id-tag');
+						
+						var getElement				=	$('.NAV_CONFIG_WRS').data('wrsConfigGridDefault');
+						var title					=	$(this).html();
+
+						var _report_id_new			=	'';
+							getElement['TITLE_ABA']	=	title;
+							
+							if(empty(getID))
+							{
+								getID	=	_report_id_new	=	getElement['REPORT_ID']	=	generateReportId();
+								$(this).attr('id-tag',_report_id_new);												
+								$('.wrsAbaNew').attr('id-aba',_report_id_new).addClass(_report_id_new).removeClass('wrsAbaNew');
+							}
+
+							$('.'+getID).find('.title').html(title);
+							
+							$('.NAV_CONFIG_WRS').attr('is-event',true).data('wrsConfigGridDefault',getElement);
+							/*
+							$('#'+getID+'NAV').find('.report_title').html(title);
+							$('#wrsConfigGridDefault').find('.report_title').html(title);
+							*/
+
+				});
+				
+			}
 			
 			
 			
@@ -435,67 +505,11 @@
 					
 					_title.attr('id-tag',id_tag).each(function(){
 						
-								//Apenas evita o Enter
-								$(this).unbind('keypress').keypress(function(event){
-									var code = event.keyCode || event.which;
-									if ( code == 13 ) return false;
-								});
-								
-								$(this).unbind('keyup').keyup(function(event)
-								{
-									//Não permite o enter
-									var code = event.keyCode || event.which;
-									
-									if ( code == 13 ) return false;
-									
-										var getID					=	$(this).attr('id-tag');
-										
-											if(!empty($('.NAV_CONFIG_WRS').attr('id-tag')))  getID=$('.NAV_CONFIG_WRS').attr('id-tag');
-										
-										var getElement				=	$('.NAV_CONFIG_WRS').data('wrsConfigGridDefault');
-										var title					=	$(this).html();
-
-										var _report_id_new			=	'';
-											getElement['TITLE_ABA']	=	title;
-											
-											if(empty(getID))
-											{
-												getID	=	_report_id_new	=	getElement['REPORT_ID']	=	generateReportId();
-												$(this).attr('id-tag',_report_id_new);												
-												$('.wrsAbaNew').attr('id-aba',_report_id_new).addClass(_report_id_new).removeClass('wrsAbaNew');
-											}
-
-											$('.'+getID).find('.title').html(title);
-											
-											$('.NAV_CONFIG_WRS').attr('is-event',true).data('wrsConfigGridDefault',getElement);
-											/*
-											$('#'+getID+'NAV').find('.report_title').html(title);
-											$('#wrsConfigGridDefault').find('.report_title').html(title);
-											*/
-
-								});
+								activeKeyPress($(this));
 								
 							});
 					
-					/*
 					
-					var _tagEditable	=	 'contenteditable';
-						$(this).attr('edit',$(this).attr('contenteditable'));
-						
-						//$(this).attr('contenteditable',false);
-						
-						$(this).unbind('click').click(function(event){
-							
-							$(this).attr('contenteditable',true);
-							
-							$('body').one('click',function() {
-								tagABA.find('.title').each(function(){$(this).attr('contenteditable',false);});
-							});
-							
-							event.stopPropagation();
-						});
-						
-						*/
 				});
 				
 				tagABA.find('li').unbind('click').click(dblclick_open_aba);
@@ -529,6 +543,7 @@
 					_title_tag	=	 false;
 					
 					tagABA.find('li').find('.title').each(function(){
+						
 						if($.trim(_title)==$.trim($(this).html()))
 						{
 							_title_tag	=	 true;
@@ -553,6 +568,7 @@
 				var full_data		=	_full_data;
 				
 				
+				
 				var getElement				=	[];	
 					getElement['TITLE_ABA']	=	title;
 					getElement['REPORT_ID']	=	report_id;
@@ -569,7 +585,7 @@
 							
 					}
 					
-					
+
 					
 					tagABA.find('.active').removeClass('active');	
 
@@ -582,6 +598,7 @@
 				
 				var	encode_full		=	base64_json(full_data);
 					
+
 				var _replace		=	[
 				            		 	 	title,
 				            		 	 	active,
@@ -589,10 +606,13 @@
 				            		 	 	tag_editable,
 				            		 	 	encode_full
 				            		 	 ];
+				
 				var html			=	str_replace(htmlABAReplace, _replace, htmlABA);
 				
-				
+					
+					
 					tagABA.find('.'+report_id).remove();
+					
 					tagABA.append(html);
 					
 					//Controle para manter as alterações nas abas
@@ -619,7 +639,7 @@
 					
 					event_span_editable();
 					
-					return report_id;
+					return {'report_id':report_id, 'title':title};
 			}
 			
 			
@@ -663,15 +683,24 @@
 			 */
 			var __add_new_aba		=	 function(options)
 			{
+				TRACE_DEBUG('Adicionarndo ABAS desativado');
+				/*
 				var optionsAba		=	{title:'',report_id:'',active:false};
 				var	opts 			= 	$.extend( {}, optionsAba, options );
-				tagABA.find('.'+tag_aba_empty).remove();
+					tagABA.find('.'+tag_aba_empty).remove();
 				
 					//console.log('opts',opts);
 				
-					add_aba_html(opts.title, opts.report_id,opts.active,true);
+				var aba_request	=	add_aba_html(opts.title, opts.report_id,opts.active,true);
 					btn_add_new_aba();
+//					tagABA.find('.active').trigger('click');
 					
+
+				var get_info	=	create_new_default(aba_request.report_id,aba_request.title);
+					
+				TRACE_DEBUG(aba_request.report_id);
+					tagABA.find('.'+aba_request.report_id).attr('wrsparam',base64_json(get_info));
+					*/
 			}
 			
 			
@@ -679,16 +708,32 @@
 			/**
 			 * Faz a interceptação dos Eventos da Janela do evento default e efetua o refresh da aba
 			 */
-			var __refresh			=	 function(options)
+			var __refresh			=	 function(opts)
 			{
-
-					try{
-						tagABA.find('.'+options['REPORT_ID']).data(abaData,options);
-					}
-					catch(e)
+				
+				
+				var REPORT_ID	=	opts.REPORT_ID;
+				
+					if(empty(REPORT_ID)) return false;
+				
+				var _ABA	=	tagABA.find('.'+REPORT_ID);
+				
+					if(_ABA.length==0)
 					{
-						WRS_ALERT(LNG('ERROR_LOAD_ABA'),'error');
+						//Se não existir aba então cria uma
+						__load_multiple([opts]);
+					}else{
+						var _box		=	 $('.'+REPORT_ID+'BOX');
+						var _title		=	_box.find('.report_title');
+						
+						_title.attr('id-tag',REPORT_ID).each(function(){
+									activeKeyPress($(this));
+								});
+					
 					}
+				
+				
+
 			}
 
 			
@@ -706,7 +751,8 @@
 					
 					var _report_id		=	'';
 					
-					tagABA.find('.'+tag_aba_empty).remove();
+					
+					tagABA.find('.'+tag_aba_empty).each(function(){$(this).remove();});
 
 					var _object_open		=	[];
 					var _kenoUiWindow		=	[];
@@ -729,7 +775,7 @@
 								var kendoUi			=	json_decode(base64_decode(opts.KendoUi));
 								
 								
-								
+								if(empty(kendoUi)) continue;
 								if(empty(_report_id))	_report_id	=	kendoUi['REPORT_ID'];
 								
 								
@@ -769,10 +815,11 @@
 							open_configure_default(optionsAba);
 					
 					
-					
+
 					$('.NAV_CONFIG_WRS').attr('is-event',true);
 					
-					if(_report_id!='') tagABA.find('.'+_report_id).trigger('click');
+					if(empty(_report_id)) return false;
+					tagABA.find('.'+_report_id).trigger('click');
 			}
 			
 			/*
@@ -788,9 +835,7 @@
 			        load_multiple	:	__load_multiple
 			};
 			
-			
 			 
-			
 				/*
 				 * 
 				 * Inicia a construção dos metodos

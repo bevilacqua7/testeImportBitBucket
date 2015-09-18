@@ -625,12 +625,17 @@ function onDataBound(arg)
 			var classGrid	=	arg.sender.element.attr('id');
 			var nameID		=	 '#'+classGrid;
 			var ELEMENT		=	$(nameID+'Elements');
-			var wrsKendoUi	=	$.parseJSON(base64_decode($(nameID).attr('wrsKendoUi')));
+			var _kendoUiParam=	$(nameID).attr('wrsKendoUi');
+			var wrsKendoUi	=	$.parseJSON(base64_decode(_kendoUiParam));
+			var wrsparam	=	$.parseJSON(base64_decode($(nameID).attr('wrsparam')));
 				wrsKendoUiChange(nameID,'page_size',arg.sender.dataSource._pageSize);
 			
 				
+				/*Options To ABAS */
+				wrsparam['KendoUi']				=	_kendoUiParam;
+				
 				//Aplicando e salvando a estrutura das abas
-				$(ABA_TAG_NAME).wrsAbas('refresh',wrsKendoUi);
+				$(ABA_TAG_NAME).wrsAbas('refresh',wrsparam);
 				
 				ELEMENT.attr('chart','false');
 				ELEMENT.attr('maps_wrs','false');
