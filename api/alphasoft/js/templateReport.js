@@ -136,6 +136,8 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	
 //	console.log('_filter_selected',_filter_selected);
 	
+	_kendoui.REPORT_ID = data.REPORT_ID;
+	
 
 	var _param		=	{
 							'LAYOUT_ROWS'			:	wrs_base64encode(_ROWS),
@@ -182,17 +184,16 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 
 		$(ABA_TAG_NAME).wrsAbas('load_multiple',[_param]);
 		
-		//wrsRunFilter();
+		//wrsRunFilter();		
+		//set_value_box_relatorio(_param);		
 		
-		/*
-		set_value_box_relatorio(_param);
 		$('#myModal').modal('hide');
 		if(!nao_processa){
 			wrsRunFilter();
 		}else{
 			wrs_panel_layout.open('east');
 		}
-		*/
+		
 	}
 }
 
@@ -201,7 +202,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 
 
 function carrega_grid_list_reports(options){
-
+	
 	var funCallBackVision = function()
 	{
 		var rel		=	 $(this).attr('rel');
@@ -215,12 +216,22 @@ function carrega_grid_list_reports(options){
 			$('.modal-content-grid').html(data);
 			wrs_window_grid_events_tools({btn:btn_window_grid_event_report, visao: funCallBackVision});
 	};
+
+	var retorno ='';
+	if(options!='' && options!=null){
+		retorno = $.parseJSON(options);
+		if(retorno!= null && typeof retorno == 'object' && typeof retorno.relatorios_apagados != 'undefined'){
+			$('#myModalGenericConfig').modal('hide');	
+			var s = (retorno.relatorios_apagados>1)?'s':'';
+			WRS_ALERT('Relatório'+s+' removido'+s+' com sucesso','success');	
+		}
+	}
 	
-	 grid_window_modal(
-			 				((options!=null)?options:{wrs_type_grid:'icon_middle',cube_s:CUBE_S}),
+	grid_window_modal(
+			 				((options!=null && options!='' && typeof options == 'object')?options:{wrs_type_grid:'icon_middle',cube_s:CUBE_S}),
 			 				'GET_SSAS_REPORT',
 			 				funCallBack);
-	 
+	
 }
 
 
@@ -331,21 +342,17 @@ function btn_window_grid_event_report(data)
 
 function removeReport(arrRepIds){
 
-	$('#confirmModal').find('.modal-body').html('Deseja realmente apagar este relatório?');
-    $('#confirmModal').find('.modal-header h4').html('Apagar');
-    $('#confirmModal').modal({ backdrop: 'static', keyboard: false }).on('click', '#deleteModalConfirm', function (e) {
-    		$('#confirmModal').modal('hide');
+   var _callbackDelete = function (confirm) {
+	   if(confirm){
 			var param_request	=	 {'report_id':JSON.stringify(arrRepIds)};
 			var Ofile			=	'WRS_REPORT';
 			var Oclass			=	'WRS_REPORT';
 			var Oevent			=	'delete';
-
-				
-			var header	=	'<div class="modal-header ui-accordion-header  ui-accordion-header-active ui-state-active"><h4 class="modal-title" id="myModalLabel">'+LNG('LABEL_LOAD')+'</h4></div><div class="body_grid_window_center_Load"></div>';
-				setLoading($('.body_grid_window_center_Load'));	
-				runCall(param_request,Ofile,Oclass,Oevent,carrega_grid_list_reports,'modal');		
-						
-    });
+			runCall(param_request,Ofile,Oclass,Oevent,carrega_grid_list_reports,'modal');
+	   }
+   }
+   
+   WRS_CONFIRM("Deseja apagar este(s) relatório(s)?",'warning',_callbackDelete);
     
 }
 
