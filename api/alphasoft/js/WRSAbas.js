@@ -9,6 +9,15 @@
 /*
  * TODO: Falta salvar as informações do chante quando clica em abrir um relatório
  */
+
+function wrsABAAddValue(grid,key,value)
+{
+	var _aba	=	$('.WRS_ABA ul').find('.'+currentABA).data('WINDOW');
+	
+	
+//	aba_active.data('WINDOW',configure_default_chart);
+}
+
 (function( $ ) {
 		
 		/**

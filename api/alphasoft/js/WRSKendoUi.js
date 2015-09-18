@@ -357,6 +357,7 @@ function getWrsKendoColumn(data)
 	var DRILL_LINE_LAST_COLUMN			=	_DRILL_FCC[_DRILL_FCC.length-1];
 	var LAYOUT_ROWS_B64					=	base64_encode(json_encode(_DRILL_FCC));
 	
+
 	arg.sender['wrsKendoUi']	=	[];
 	arg.sender['wrsKendoUi']['WRS_ROWS']							=	_DRILL_FCC;
 	arg.sender['wrsKendoUi']['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	explode(',',base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER));
@@ -606,6 +607,9 @@ function wrsKendoUiChange(nameID,param,value)
 		}else{
 			//Quando for passado apenas parametro normal
 			wrsKendoUi[param]	=	value;
+			
+			//nameID
+			
 		}
 		
 		_tmpWrsKendoUi		=	 base64_encode(json_encode(wrsKendoUi,true));

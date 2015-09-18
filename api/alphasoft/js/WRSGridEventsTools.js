@@ -119,7 +119,6 @@
 		
 		var WRSWindowGridEventToolsClick	=	function(e,data)
 		{
-			
 			var wrs_data		=	"";
 			var height			=	BOX.parent().parent().outerHeight();
 			var BOX_PARENT		=	BOX.parent().parent();
@@ -528,6 +527,7 @@ var getRequestKendoUiDefault	=	{};
   	//Click do Botão - nav_options
   	var event_click_btn_options	=	 function(){
   		check_exist_grid(); 
+
   		nav_options.find('input').each(function(){
   				if(opts[$(this).attr('name')]){
   					$(this).prop('checked',true);
