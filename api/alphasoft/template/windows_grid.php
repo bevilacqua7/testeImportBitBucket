@@ -17,5 +17,5 @@
 
 
 <script>
-	$('#myModal, .body_grid_window').data('wrsGrid',<?php echo (($TPL_DATA!='')?$TPL_DATA:'{}');?>);
+	$('.body_grid_window').data('wrsGrid',<?php echo (($TPL_DATA!='')?$TPL_DATA:'{}');?>);
 </script>

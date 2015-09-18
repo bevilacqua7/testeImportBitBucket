@@ -17,9 +17,11 @@ class WRS_MANAGE_PARAM
 										 'primary'				=>	'',
 										 'button_force_label'	=>	false, 		// forca o label dos icones na visualizacao de ICON de acordo com o array abaixo
 						 				 'button_icon'			=>	'',			// altera o icone padrao de cada botao na WindowGrid
+										 'labels_icon_small'	=>	array(),	// array com os nomes das colunas que deseja adicionar de label nos icones quando a visao for ICON SMALL
+										 'labels_icon_middle'	=>	array(),	// array com os nomes das colunas que deseja adicionar de label nos icones quando a visao for ICON MEDIUM
+										 'labels_icon_big'		=>	array(),	// array com os nomes das colunas que deseja adicionar de label nos icones quando a visao for ICON BIG
 										 'exception'			=>	'', 		// quando houver exceptions (uma view ao inves de tabela) utilizar um array com o nome da classe em questão para esta excecao 
 										 'checkbox'				=>	false,		// se existe checkbox por linha na visualizacao de grid
-						 				 'label_icon_custom'	=>	false,		// se existir labels personalizados por visao de icone
 										 'use_auto_width'		=>	true, 		// usar o calculo de largura para a coluna de acordo com o nome do titulo da mesma
 						 				 'callback_btn_events'	=>	'', 		// se as acoes padrao dos botoes será alterada, adicionar o nome da acao de callback
 										 'actionSingle'			=>	'', 		// se a acao do clique simples sera alterada, adicionar o nome da acao de callback
@@ -278,7 +280,7 @@ class WRS_MANAGE_PARAM
 	}
 		
 	
-	//Classe de Relação CUBO-USU�?RIO ADMINISTRATIVO
+	//Classe de Relação CUBO-USUÁRIO ADMINISTRATIVO
 	public function REL_WRS_CUBE_USER()
 	{
 		$button	=	array('new'=>'');
@@ -408,11 +410,11 @@ class WRS_MANAGE_PARAM
 		
 		$exceptions	=	array('file'=>'WRS_REPORT', 'class'=>'WRS_REPORT','type'=>'');
 				
-		 $fields['REPORT_DESC']		=	array('title'=>'Nome', 				'width'=>250,	'classDataLine'=>'text-left',	'label_icon_small'=>true,	'label_icon_middle'=>true,	'label_icon_big'=>true,		'list'=>true,	'basic'=>true,  'grid'=>true);
-		 $fields['REPORT_SHARE']	=	array('title'=>'Compartilhado', 	'width'=>100,	'classDataLine'=>'text-center', 																					'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
-		 $fields['REPORT_DATE']		=	array('title'=>'Data', 				'width'=>130,	'classDataLine'=>'text-center',															'label_icon_big'=>true,		'list'=>true,	'basic'=>true,  'grid'=>true, 		'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true);
-		 $fields['REPORT_AUTOLOAD']	=	array('title'=>'Carga', 			'width'=>80,	'classDataLine'=>'text-center', 																					'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
-		 $fields['USER_DESC']		=	array('title'=>'Criador', 			'width'=>150,	'classDataLine'=>'text-left',								'label_icon_middle'=>true,	'label_icon_big'=>true,		'list'=>true,	'basic'=>true,  'grid'=>true);
+		 $fields['REPORT_DESC']		=	array('title'=>'Nome', 				'width'=>250,	'classDataLine'=>'text-left',		'list'=>true,	'basic'=>true,  'grid'=>true);
+		 $fields['REPORT_SHARE']	=	array('title'=>'Compartilhado', 	'width'=>100,	'classDataLine'=>'text-center', 	'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
+		 $fields['REPORT_DATE']		=	array('title'=>'Data', 				'width'=>130,	'classDataLine'=>'text-center',	'list'=>true,	'basic'=>true,  'grid'=>true, 		'type'=>'date' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true);
+		 $fields['REPORT_AUTOLOAD']	=	array('title'=>'Carga', 			'width'=>80,	'classDataLine'=>'text-center', 	'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
+		 $fields['USER_DESC']		=	array('title'=>'Criador', 			'width'=>150,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>true,  'grid'=>true);
 		 $fields['LAYOUT_ROWS']		=	array('title'=>'Linhas', 			'width'=>200,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
 		 $fields['LAYOUT_COLUMNS']	=	array('title'=>'Colunas', 			'width'=>200,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
 		 $fields['LAYOUT_MEASURES']	=	array('title'=>'Medidas', 			'width'=>200,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
@@ -430,9 +432,11 @@ class WRS_MANAGE_PARAM
 						 'primary'				=>	'REPORT_ID',
 						 'button_force_label'	=>	true, 			  									// NEW
 						 'button_icon'			=>	$button_icon,										// NEW
+						 'labels_icon_small'	=>	array('REPORT_DESC'),								// NEW
+						 'labels_icon_middle'	=>	array('REPORT_DESC','USER_DESC'),					// NEW
+						 'labels_icon_big'		=>	array('REPORT_DESC','USER_DESC','REPORT_DATE'),		// NEW
 						 'exception'			=>	$exceptions, 										// NEW
 						 'checkbox'				=>	true, 												// NEW
-						 'label_icon_custom'	=>	true, 												// NEW
 						 'use_auto_width'		=>	false, 												// NEW
 		 				 'callback_btn_events'	=>	'callback_report_btn_events', 						// NEW
 						 'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW

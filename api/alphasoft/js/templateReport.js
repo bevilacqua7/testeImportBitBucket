@@ -136,8 +136,6 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	
 //	console.log('_filter_selected',_filter_selected);
 	
-	_kendoui.REPORT_ID = data.REPORT_ID;
-	
 
 	var _param		=	{
 							'LAYOUT_ROWS'			:	wrs_base64encode(_ROWS),
@@ -161,8 +159,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 
 */
 	
-	//console.log('reportDATA: ',data,'kendoUi carregado: ',_kendoui, 'PARAM: '._param);
-	WRS_CONSOLE('reportDATA: ',data,'kendoUi carregado: ',_kendoui, 'PARAM: '._param);
+//	console.log('reportDATA: ',data,'kendoUi carregado: ',_kendoui, 'PARAM: ',_param);
 	/*
 	 * TODO: adicionar os campos abaixo para ir para as abas e voltar para a tela na hora de salvar:
 	 * - REPORT_AUTOLOAD
@@ -170,10 +167,8 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	 * - ver onde gravar os layouts e retorna-los
 	 * - USER_TYPE (grupos)
 	 */
-	//console.log('LAYOUT_FILTERS',ajustaTags(_FILTERS));
+//	console.log('LAYOUT_FILTERS',ajustaTags(_FILTERS));
 	//console.log('filter_selected',_filter_selected);
-	WRS_CONSOLE('LAYOUT_FILTERS',ajustaTags(_FILTERS));
-	WRS_CONSOLE('filter_selected',_filter_selected);
 	
 	if(return_params)
 	{
@@ -184,16 +179,17 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 
 		$(ABA_TAG_NAME).wrsAbas('load_multiple',[_param]);
 		
-		//wrsRunFilter();		
-		//set_value_box_relatorio(_param);		
+		//wrsRunFilter();
 		
+		/*
+		set_value_box_relatorio(_param);
 		$('#myModal').modal('hide');
 		if(!nao_processa){
 			wrsRunFilter();
 		}else{
 			wrs_panel_layout.open('east');
 		}
-		
+		*/
 	}
 }
 
@@ -202,7 +198,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 
 
 function carrega_grid_list_reports(options){
-	
+
 	var funCallBackVision = function()
 	{
 		var rel		=	 $(this).attr('rel');
@@ -216,22 +212,12 @@ function carrega_grid_list_reports(options){
 			$('.modal-content-grid').html(data);
 			wrs_window_grid_events_tools({btn:btn_window_grid_event_report, visao: funCallBackVision});
 	};
-
-	var retorno ='';
-	if(options!='' && options!=null){
-		retorno = $.parseJSON(options);
-		if(retorno!= null && typeof retorno == 'object' && typeof retorno.relatorios_apagados != 'undefined'){
-			$('#myModalGenericConfig').modal('hide');	
-			var s = (retorno.relatorios_apagados>1)?'s':'';
-			WRS_ALERT('Relatório'+s+' removido'+s+' com sucesso','success');	
-		}
-	}
 	
-	grid_window_modal(
-			 				((options!=null && options!='' && typeof options == 'object')?options:{wrs_type_grid:'icon_middle',cube_s:CUBE_S}),
+	 grid_window_modal(
+			 				((options!=null)?options:{wrs_type_grid:'icon_middle',cube_s:CUBE_S}),
 			 				'GET_SSAS_REPORT',
 			 				funCallBack);
-	
+	 
 }
 
 
@@ -243,7 +229,8 @@ function btn_window_grid_event_report(data)
 	var action_type				=	 $(this).attr('action_type');
 	var table					=	 $(this).attr('table');
 	var values					=	 get_grid_window_values_form();
-	var _data					=	 $('#myModal, .body_grid_window').data('wrsGrid');
+
+	var _data					=	 $('.body_grid_window').data('wrsGrid');
 	//console.log('_data',_data);
 	var param					=	 _data.param_original;
 	var visao					=	'grid';
@@ -292,13 +279,11 @@ function btn_window_grid_event_report(data)
 		switch(action_type)
 		{
 			case 'new' 		: 
-					$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados);
-					$('#myModal').modal('hide');
+						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados);
 					//callback_load_report_generic_modal(objDados);	
 					break; // abre o relatorio
 			case 'update' 	: 
-					$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados,true);
-					$('#myModal').modal('hide');
+						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados,true);
 					//callback_load_report_generic_modal(objDados,false,true);
 					break; // abre somente o layout
 			case 'remove' 	:
@@ -307,8 +292,7 @@ function btn_window_grid_event_report(data)
 			
 		}
 		
-		//console.log('TODO: acoes multiplas nas guias',{'evento':action_type,'arrObjetos':arrObjetosSelecionados});
-		WRS_CONSOLE('TODO: acoes multiplas nas guias',{'evento':action_type,'arrObjetos':arrObjetosSelecionados});
+//		console.log('TODO: acoes multiplas nas guias',{'evento':action_type,'arrObjetos':arrObjetosSelecionados});
 		
 	}else if(qtde_linhas_selecionadas==1){
 
@@ -342,17 +326,21 @@ function btn_window_grid_event_report(data)
 
 function removeReport(arrRepIds){
 
-   var _callbackDelete = function (confirm) {
-	   if(confirm){
+	$('#confirmModal').find('.modal-body').html('Deseja realmente apagar este relatório?');
+    $('#confirmModal').find('.modal-header h4').html('Apagar');
+    $('#confirmModal').modal({ backdrop: 'static', keyboard: false }).on('click', '#deleteModalConfirm', function (e) {
+    		$('#confirmModal').modal('hide');
 			var param_request	=	 {'report_id':JSON.stringify(arrRepIds)};
 			var Ofile			=	'WRS_REPORT';
 			var Oclass			=	'WRS_REPORT';
 			var Oevent			=	'delete';
-			runCall(param_request,Ofile,Oclass,Oevent,carrega_grid_list_reports,'modal');
-	   }
-   }
-   
-   WRS_CONFIRM("Deseja apagar este(s) relatório(s)?",'warning',_callbackDelete);
+
+				
+			var header	=	'<div class="modal-header ui-accordion-header  ui-accordion-header-active ui-state-active"><h4 class="modal-title" id="myModalLabel">'+LNG('LABEL_LOAD')+'</h4></div><div class="body_grid_window_center_Load"></div>';
+				setLoading($('.body_grid_window_center_Load'));	
+				runCall(param_request,Ofile,Oclass,Oevent,carrega_grid_list_reports,'modal');		
+						
+    });
     
 }
 
