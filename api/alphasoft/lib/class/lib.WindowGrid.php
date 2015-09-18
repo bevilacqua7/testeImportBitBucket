@@ -330,6 +330,15 @@ EOF;
 			$num_rows		=	$rows['ROWS_TOTAL'];
 		
 			$data[]			=	$rows;
+
+			//Se houver especificacao das labels para os icones
+			if(array_key_exists('labels_'.$exec_vision,$param) && is_array($param['labels_'.$exec_vision]) && count($param['labels_'.$exec_vision])>0)
+			{
+				foreach($param['labels_'.$exec_vision] as $coluna)
+				{
+					$rows_get[]	=	(is_object($rows[$coluna]) && get_class($rows[$coluna])=='DateTime')?$rows[$coluna]->format('d/m/Y H:i:s'):$rows[$coluna]; 
+				}
+			}else
 			
 			foreach($param['field'] as $label =>$field)
 			{
@@ -341,17 +350,12 @@ EOF;
 					$primary_key			=	 base64_encode(json_encode($primary_key,true));
 				}
 			
+				
 				//Apenas informações do list é para apresentar
-				if(
-						(array_key_exists('list',$field) && $field['list'] && (!array_key_exists('label_icon_custom',$param) || !$param['label_icon_custom'])) ||
-						(array_key_exists('label_'.$exec_vision, $field) && $field['label_'.$exec_vision])
-				)
+				if(array_key_exists('list',$field))
 				{
-					//Fazendo as correções de formatação
-					if(!empty($field['type_convert']))
+					if($field['list'])
 					{
-						$rows_get[]	=	$this->type_convert($field['type_convert'],$rows[$label],$field);						
-					}else{
 						$rows_get[]	=	$rows[$label];
 					}
 				}
@@ -396,7 +400,6 @@ EOF;
 	
 	private function vision_grid($_param,$actions_fiels,$exec_vision)
 	{
-		$data					=	array();
 		$param					=	$_param;
 		$param['title_menu']	=	$this->navMenu($param['table']);
 		$columns				=	array();
@@ -466,8 +469,7 @@ EOF;
 
 		
 		$kendoUI					=	new KendoUi();
-		$data['param_original'] 	= 	$param;
-		$param['data']				=	json_encode($data);
+		
 		$param['html']				=	$kendoUI->grid_window($columns, $param);
 		return $param;		
 	}

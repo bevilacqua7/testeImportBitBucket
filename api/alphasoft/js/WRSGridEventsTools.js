@@ -119,7 +119,6 @@
 		
 		var WRSWindowGridEventToolsClick	=	function(e,data)
 		{
-			
 			var wrs_data		=	"";
 			var height			=	BOX.parent().parent().outerHeight();
 			var BOX_PARENT		=	BOX.parent().parent();
@@ -429,14 +428,14 @@ var getRequestKendoUiDefault	=	{};
 			element					=	this,
 			data					=	element.data(data_name);
 	  
-  	var opts 					= 	$.extend( {}, getRequestKendoUiDefault, empty(options) ? {} : options),
-  		nav_options				=	element.find('.wrs_grid_options'),
-  		list_wrs_vision			=	element.find('.list-wrs-type-vision'),
-  		btn_options				=	element.find('.btn-options-grid'),
-  		btn_configute_chart		=	element.find('.btn-configute-chart'),
-  		btn_open_type_vision	=	element.find('.btn-open-type-vision'),
-		isClick					=	false;
-		nav_options.attr('id','wrs_grid_options_default');	
+	  	var opts 					= 	$.extend( {}, getRequestKendoUiDefault, empty(options) ? {} : options),
+	  		nav_options				=	element.find('.wrs_grid_options'),
+	  		list_wrs_vision			=	element.find('.list-wrs-type-vision'),
+	  		btn_options				=	element.find('.btn-options-grid'),
+	  		btn_configute_chart		=	element.find('.btn-configute-chart'),
+	  		btn_open_type_vision	=	element.find('.btn-open-type-vision'),
+			isClick					=	false;
+			nav_options.attr('id','wrs_grid_options_default');	
 		
 		
 //		console.log('wrsConfigGridDefault::opts',opts);
@@ -503,26 +502,32 @@ var getRequestKendoUiDefault	=	{};
   	 * Atualiza de acordo com as informações contidas na original
   	 * Função pesquisa no html por GRid complementar para que possa usar 
   	 */
-  	var check_exist_grid	=	 function(){  		
+  	var check_exist_grid	=	 function()
+  	{  	
+
   		if(isClick) return true;
+
   		var searchGrid		=	$(document).find('.wrsGrid');
 		var hasDefault		=	 $('.wrs_panel_filter_measure').is(':hidden');
 		
+
 		/*
 		 * TODO: Validar
 		 */
-			  		if(!empty(searchGrid.html()) && hasDefault==true)
-			  		{
-			  			opts	=	getJsonDecodeBase64(searchGrid.attr('wrskendoui'));  			
-			  			element.data(data_name,opts);
-			  			TRACE_DEBUG('insert');
-			  		}  		
+	  		if(!empty(searchGrid.html()) && hasDefault==true)
+	  		{
+	  			opts	=	getJsonDecodeBase64(searchGrid.attr('wrskendoui'));  			
+	  			element.data(data_name,opts);
+
+	  		}  		
+			  		
   	}
   	
   	
   	//Click do Botão - nav_options
   	var event_click_btn_options	=	 function(){
   		check_exist_grid(); 
+
   		nav_options.find('input').each(function(){
   				if(opts[$(this).attr('name')]){
   					$(this).prop('checked',true);
