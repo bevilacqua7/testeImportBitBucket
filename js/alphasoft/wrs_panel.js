@@ -1292,11 +1292,10 @@ function wrs_run_filter()
 			}
 			
 		 _param_request	=	merge_filter_data(_param_request,_param_request_obj);
-		
 		 //Merge com a estrutura da aba
-		 _param_request	=	merge_filter_data(_data_aba,_param_request);
+		 _param_request	=	merge_filter_data(_param_request,_data_aba);
 		 
-			
+		
 			
 		//Passando o ID do Cubo na sessão
 		var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;

@@ -65,7 +65,6 @@ function DRILL_HIERARQUIA_LINHA_hideColumn(	IDGRid,KendoUi,rows,drill)
 function DRILL_HIERARQUIA_LINHA_setButtonExpandALL(IDGRid,columnSelected,lastColumn)
 {
 
-	
 	//DRILL_HIERARQUIA_LINHA_DATA_HEADER
 	$(IDGRid).find('.k-grid-header .k-grid-header-locked').find('tr:last-child').find('th').each(function(){
 	
@@ -77,8 +76,10 @@ function DRILL_HIERARQUIA_LINHA_setButtonExpandALL(IDGRid,columnSelected,lastCol
 			var btn_plus		=	'<button grid-id="'+IDGRid+'" class="DRILL_HIERARQUIA_LINHA_HEADER" column="'+column+'" type="button"  wrs-type="plus"><i class="fa fa-plus-square"></i></button>';
 			var btn_minus		=	'<button grid-id="'+IDGRid+'" class="DRILL_HIERARQUIA_LINHA_HEADER" column="'+column+'" type="button"  wrs-type="minus"><i class="fa  fa-minus-square"></i></button>';
 			var btn_use			=	btn_plus;
+			
 			$(this).addClass('DRILL_HIERARQUIA_LINHA_HEADER_CONTAINER');
 			
+
 			if(exist_in_array(columnSelected,column))	btn_use	=	btn_minus;
 			
 			$(this).prepend(btn_use);
@@ -160,9 +161,7 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 	var wrs_type	=	$(this).attr('wrs-type');
 	var DrillDataTMP=	"";
 	
-	
-	
-	
+
 	for(lineData in rows)
 	{
 		if(flag_load)
@@ -203,7 +202,8 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 	//TRACE_DEBUG(DrillDataTMP);
 	
 	var s_param		=	 [];
-		s_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	base64_encode(implode(',',DrillDataCol));
+		
+		s_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	base64_encode(DrillDataCol.join(','));
 		s_param['DRILL_HIERARQUIA_LINHA_DATA']			=	base64_encode(DrillDataTMP);
 		s_param['PAGE_CURRENT']							=	kendoGrid.dataSource._page;
 		s_param['TYPE_RUN']								=	TYPE_RUN.coluna_header;

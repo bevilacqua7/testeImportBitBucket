@@ -397,7 +397,7 @@ class WRS_PANEL  extends WRS_USER
 			if(!empty($lineData)) $flagEmpty=false;
 		}
 		
-		WRS_DEBUG_QUERY($getRequestKendoUi);
+//		WRS_DEBUG_QUERY($getRequestKendoUi);
 		
 
 		

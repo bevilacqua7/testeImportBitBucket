@@ -446,6 +446,8 @@ function is_wrs_change_to_run(_param_request)
 			
 			
 			histoty_param['DRILL_HIERARQUIA_LINHA_DATA_MINUS']='';
+			//histoty_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']='';
+			histoty_param['DRILL_HIERARQUIA_LINHA_DATA']='';
 			
 	
 			filter.attr('history',base64_encode(json_encode(histoty_param,true)));
