@@ -208,18 +208,11 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 		s_param['PAGE_CURRENT']							=	kendoGrid.dataSource._page;
 		s_param['TYPE_RUN']								=	TYPE_RUN.coluna_header;
 
-//		foreach(s_param);
+
 		wrsKendoUiChange(grid_id,'',s_param);
 		
-	/*
-	wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA_HEADER',base64_encode(implode(',',DrillDataCol)));
-	wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA',base64_encode(DrillDataTMP));
-	////Salvando a página corrente
-	wrsKendoUiChange(grid_id,'PAGE_CURRENT',kendoGrid.dataSource._page);
-	changeTypeRun(grid_id,TYPE_RUN.coluna_header);//Informando o tipo de RUN foi solicitado
-	//TYPE_RUN
-	*/
-	wrsRunFilter();
+
+		wrsRunFilter();
 	
 	return false; //Obriga a não reordenar a coluna
 
@@ -266,7 +259,6 @@ function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 		}
 	}
 
-	
 	wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA',base64_encode(implode('(_,_)',DrillData)));
 	
 	
@@ -281,7 +273,6 @@ function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 	
 	
 	wrsRunFilter();
-
 }
 
 

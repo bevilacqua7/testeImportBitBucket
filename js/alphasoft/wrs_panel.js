@@ -1242,8 +1242,60 @@ function wrs_run_filter()
 	
 		
 		
+//Verificnado se existe alterações de pesquisa 
+		
+		//foreach(param_request);
+		/*
+		 * Pega os elementos das Opções antes não Dashboard
+		 * 
+		 */
+		var wrsConfigGridDefault		=	$('#wrsConfigGridDefault');
+		var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
+		
+		var _data_aba				=	{};
+		/*
+		 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
+		 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
+		 * Caso exista erro de variáveis que faltam passar para a estrutura normalmente será nesse processo
+		 * 
+		 * Esse processo é onde junta os dados do Default com o original
+		 */
+		//Se existir interação então faz o merge das informações 
+		
+			if(!empty(wrsConfigGridDefault.attr('is-event')) && wrsConfigGridDefault.attr('is-event')=='true'){
+				
+				if(!empty(wrsConfigGridDefault_data))
+				{
+					var getParamDefault = array_key_data(wrsConfigGridDefault_data);
+					
+//					foreach(wrsConfigGridDefault_data);
+//					foreach(getParamDefault);
+					//['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
+					//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);
+					for(var lineGetParamDefault in getParamDefault)
+					{
+						/*switch(getParamDefault[lineGetParamDefault])
+						{
+							case 'FILTER_TMP' :
+							case 'DRILL_HIERARQUIA_LINHA' :
+							case 'DRILL_HIERARQUIA_LINHA_DATA' :
+							case 'SHOW_LINE_TOTAL' :
+							case 'DRILL_HIERARQUIA_LINHA_DATA_HEADER' :
+							case 'TYPE_RUN' :
+							case 'PAGE_CURRENT' :
+							continue;
+						}*/
+						_data_aba[getParamDefault[lineGetParamDefault]]	=	wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]];
+					}
+					
+				}
+			}
+			
 		 _param_request	=	merge_filter_data(_param_request,_param_request_obj);
 		
+		 //Merge com a estrutura da aba
+		 _param_request	=	merge_filter_data(_data_aba,_param_request);
+		 
 			
 			
 		//Passando o ID do Cubo na sessão
@@ -1269,56 +1321,10 @@ function wrs_run_filter()
 			return false;
 		}
 		
-		//Verificnado se existe alterações de pesquisa 
-		
-		//foreach(param_request);
-		/*
-		 * Pega os elementos das Opções antes não Dashboard
-		 * 
-		 */
-		var wrsConfigGridDefault		=	$('#wrsConfigGridDefault');
-		var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
 		
 		
-		/*
-		 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
-		 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
-		 * Caso exista erro de variáveis que faltam passar para a estrutura normalmente será nesse processo
-		 * 
-		 * Esse processo é onde junta os dados do Default com o original
-		 */
-		//Se existir interação então faz o merge das informações 
-		
-			if(!empty(wrsConfigGridDefault.attr('is-event')) && wrsConfigGridDefault.attr('is-event')=='true'){
-				
-				if(!empty(wrsConfigGridDefault_data))
-				{
-					var getParamDefault = array_key_data(wrsConfigGridDefault_data);
+
 					
-//					foreach(wrsConfigGridDefault_data);
-//					foreach(getParamDefault);
-					//['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
-					//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);
-					for(var lineGetParamDefault in getParamDefault)
-					{
-						switch(getParamDefault[lineGetParamDefault])
-						{
-							case 'FILTER_TMP' :
-							case 'DRILL_HIERARQUIA_LINHA' :
-							case 'DRILL_HIERARQUIA_LINHA_DATA' :
-							case 'SHOW_LINE_TOTAL' :
-							case 'DRILL_HIERARQUIA_LINHA_DATA_HEADER' :
-							case 'TYPE_RUN' :
-							case 'PAGE_CURRENT' :
-							continue;
-						}
-						_param_request[getParamDefault[lineGetParamDefault]]	=	wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]];
-					}
-					
-				}
-			}
-			
-			
 		var is_wrs_change_to	=	is_wrs_change_to_run(_param_request);
 			_param_request		=	is_wrs_change_to.val;
 		

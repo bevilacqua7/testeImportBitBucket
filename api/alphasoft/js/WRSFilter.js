@@ -138,6 +138,7 @@ function changeWithDrillFilter(layout,filter_to_add)
 	var 	btnRun	=	$('.wrs_run_filter');
 	var 	json	=	$.parseJSON(base64_decode(btnRun.attr('history'))) ;
 	
+	
 	//btnRun.attr('history','');
 	//Mudando o status para que possa ser renderizado
 
@@ -277,6 +278,9 @@ function is_wrs_change_to_run(_param_request)
 	var eastonclose		=	$('.wrs_run_filter').attr('eastonclose');
 	var loadStart		=	 true;
 	
+//	console.log('isHistory',_param_request);
+	
+	
 	//foreach(param_request);
 	if(empty(history))
 	{
@@ -297,6 +301,9 @@ function is_wrs_change_to_run(_param_request)
 		histoty_param['ALL_ROWS']		=	''	;
 		histoty_param['DRILL_HIERARQUIA_LINHA']		=	''	;
 		histoty_param['DRILL_HIERARQUIA_LINHA_DATA']		=	''	;*/
+		
+		
+//		console.log('histoty_param',histoty_param);
 		
 		
 		if(param_request['IS_REFRESH']==TRUE){
@@ -320,20 +327,28 @@ function is_wrs_change_to_run(_param_request)
 	
 	histoty_param	=	$.parseJSON(base64_decode(history));
 
-	
+
 	if(empty(param_request['ALL_COLS'])) param_request['ALL_COLS']='';
+	
 	if(empty(param_request['ALL_ROWS'])) param_request['ALL_ROWS']='';
-	
+
 	if(empty(param_request['ORDER_COLUMN'])) param_request['ORDER_COLUMN']=0;
-	
 	if(histoty_param['LAYOUT_ROWS']!=param_request['LAYOUT_ROWS']) 			flag=false;
+	
 	if(histoty_param['LAYOUT_COLUMNS']!=param_request['LAYOUT_COLUMNS']) 	flag=false;
+
 	if(histoty_param['LAYOUT_MEASURES']!=param_request['LAYOUT_MEASURES']) 	flag=false;
 	if(histoty_param['LAYOUT_FILTERS']!=param_request['LAYOUT_FILTERS'])	flag=false;
+
 	if(histoty_param['ORDER_COLUMN']!=param_request['ORDER_COLUMN'])		flag=false;
+	
 	if(histoty_param['ALL_COLS']!=param_request['ALL_COLS'])				flag=false;
+	
 	if(histoty_param['ALL_ROWS']!=param_request['ALL_ROWS'])				flag=false;
-	if(histoty_param['TOP_CONFIG']!=param_request['TOP_CONFIG'])				{
+
+	if(histoty_param['DRILL_HIERARQUIA_LINHA_DATA_MINUS']!=param_request['DRILL_HIERARQUIA_LINHA_DATA_MINUS'])				flag=false;
+	
+	if(histoty_param['TOP_CONFIG']!=param_request['TOP_CONFIG']){
 		flag=false;
 		
 		if(!empty(histoty_param['TOP_CONFIG'])){
@@ -355,11 +370,10 @@ function is_wrs_change_to_run(_param_request)
 			param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
 		}
 	}
-	
-	
+
 	if(histoty_param['DRILL_HIERARQUIA_LINHA']!=param_request['DRILL_HIERARQUIA_LINHA'])				flag=false;
-	if(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']!=param_request['DRILL_HIERARQUIA_LINHA_DATA'])				flag=false;
 	
+	if(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']!=param_request['DRILL_HIERARQUIA_LINHA_DATA'])				flag=false;
 	 	//Gravando o Histórico
 	if(flag)
 	{
@@ -410,6 +424,7 @@ function is_wrs_change_to_run(_param_request)
 				$('.wrs_run_filter').attr('eastonclose','false');
 			}
 		
+		/*
 			histoty_param['LAYOUT_ROWS']	=	param_request['LAYOUT_ROWS'];	
 			histoty_param['LAYOUT_COLUMNS']	=	param_request['LAYOUT_COLUMNS'];	
 			histoty_param['LAYOUT_MEASURES']=	param_request['LAYOUT_MEASURES'];	
@@ -420,6 +435,18 @@ function is_wrs_change_to_run(_param_request)
 			histoty_param['DRILL_HIERARQUIA_LINHA']			=	param_request['DRILL_HIERARQUIA_LINHA']	;
 			histoty_param['DRILL_HIERARQUIA_LINHA_DATA']	=	param_request['DRILL_HIERARQUIA_LINHA_DATA'];//Mante sempre nula para que possa fazer nova consulta//param_request['DRILL_HIERARQUIA_LINHA_DATA']	;
 			histoty_param['TOP_CONFIG']	=	param_request['TOP_CONFIG'];
+			
+			*/
+			
+			for(lineHistoty_param in param_request)
+			{
+				histoty_param[lineHistoty_param]	=	param_request[lineHistoty_param];
+			}
+			
+			
+			
+			histoty_param['DRILL_HIERARQUIA_LINHA_DATA_MINUS']='';
+			
 	
 			filter.attr('history',base64_encode(json_encode(histoty_param,true)));
 	}
