@@ -159,7 +159,8 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 
 */
 	
-//	console.log('reportDATA: ',data,'kendoUi carregado: ',_kendoui, 'PARAM: ',_param);
+	//console.log('reportDATA: ',data,'kendoUi carregado: ',_kendoui, 'PARAM: '._param);
+	WRS_CONSOLE('reportDATA: ',data,'kendoUi carregado: ',_kendoui, 'PARAM: '._param);
 	/*
 	 * TODO: adicionar os campos abaixo para ir para as abas e voltar para a tela na hora de salvar:
 	 * - REPORT_AUTOLOAD
@@ -167,8 +168,10 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	 * - ver onde gravar os layouts e retorna-los
 	 * - USER_TYPE (grupos)
 	 */
-//	console.log('LAYOUT_FILTERS',ajustaTags(_FILTERS));
+	//console.log('LAYOUT_FILTERS',ajustaTags(_FILTERS));
 	//console.log('filter_selected',_filter_selected);
+	WRS_CONSOLE('LAYOUT_FILTERS',ajustaTags(_FILTERS));
+	WRS_CONSOLE('filter_selected',_filter_selected);
 	
 	if(return_params)
 	{
@@ -229,8 +232,7 @@ function btn_window_grid_event_report(data)
 	var action_type				=	 $(this).attr('action_type');
 	var table					=	 $(this).attr('table');
 	var values					=	 get_grid_window_values_form();
-
-	var _data					=	 $('.body_grid_window').data('wrsGrid');
+	var _data					=	 $('#myModal, .body_grid_window').data('wrsGrid');
 	//console.log('_data',_data);
 	var param					=	 _data.param_original;
 	var visao					=	'grid';
@@ -279,11 +281,13 @@ function btn_window_grid_event_report(data)
 		switch(action_type)
 		{
 			case 'new' 		: 
-						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados);
+					$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados);
+					$('#myModal').modal('hide');
 					//callback_load_report_generic_modal(objDados);	
 					break; // abre o relatorio
 			case 'update' 	: 
-						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados,true);
+					$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados,true);
+					$('#myModal').modal('hide');
 					//callback_load_report_generic_modal(objDados,false,true);
 					break; // abre somente o layout
 			case 'remove' 	:
@@ -292,7 +296,8 @@ function btn_window_grid_event_report(data)
 			
 		}
 		
-//		console.log('TODO: acoes multiplas nas guias',{'evento':action_type,'arrObjetos':arrObjetosSelecionados});
+		//console.log('TODO: acoes multiplas nas guias',{'evento':action_type,'arrObjetos':arrObjetosSelecionados});
+		WRS_CONSOLE('TODO: acoes multiplas nas guias',{'evento':action_type,'arrObjetos':arrObjetosSelecionados});
 		
 	}else if(qtde_linhas_selecionadas==1){
 

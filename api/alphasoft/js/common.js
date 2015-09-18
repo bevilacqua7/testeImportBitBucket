@@ -30,6 +30,12 @@ var TYPE_RUN	=	{
 
 var ABA_TAG_NAME		=	'.WRSAbas ul';
 
+function WRS_CONSOLE(){
+	if(IS_TRACE){
+		console.log(arguments);
+	}
+}
+
 function changeTypeRun(IDGrid,typeRun)
 {
 
