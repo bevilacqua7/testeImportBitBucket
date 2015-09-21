@@ -130,11 +130,17 @@ class WRS_PANEL  extends WRS_USER
 			$this->setCube(json_decode(base64_decode($json_request),true));
 		}
 		
+		$exception	=	array('TITLE_ABA','cube_s','WINDOW','TYPE_RUN','TOP_CONFIG','SUMARIZA','SHOW_LINE_TOTAL','REPORT_ID','PLUS_MINUS','PAGE_CURRENT','MKTIME_HISTORY','IS_REFRESH','DRILL_HIERARQUIA_LINHA','COLORS_LINE','ALL_ROWS','ALL_COLS');
 		//Pegando informações do Request
 		foreach ($this->_param_ssas_reports as $label =>$value)
 		{
 			$tmp_value		=	fwrs_request($label);
-			$tmp_value		=	 empty($tmp_value) ? NULL : base64_decode($tmp_value);
+			
+			if(!in_array($label,$exception))
+			{
+				$tmp_value		=	 empty($tmp_value) ? NULL :  utf8_encode(base64_decode($tmp_value));
+			}
+			
 			$this->_param_ssas_reports[$label]		=	 $tmp_value;
 		}
 		
@@ -160,6 +166,7 @@ class WRS_PANEL  extends WRS_USER
 		$DATABASE		=	$_cube['DATABASE_ID'];
 		$CUBE			=	$_cube['CUBE_ID'];
 		$USER_CODE      = 	WRS::USER_CODE();
+
 
 		$gridFlag		=	$this->getGrid($SERVER,$DATABASE,$CUBE,$USER_CODE);
 	}
@@ -595,11 +602,11 @@ class WRS_PANEL  extends WRS_USER
 		$MEASURE_RELATIONSSHIPS		=	 array();
 
 		$cube		=	'';
-		
+
 		//Pegando as integrações com o KendoUi
 		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi();		
 		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
-		
+		//print_r($getRequestKendoUi);
 		//WRS_DEBUG_QUERY($getRequestKendoUi);
 		
 		//WRS_DEBUG_QUERY(print_r($getRequestKendoUi,true));

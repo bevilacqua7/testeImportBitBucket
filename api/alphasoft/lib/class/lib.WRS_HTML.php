@@ -50,7 +50,7 @@ class WRS_HTML
 EOF;
 		
 		$li			=	<<<EOF
-								<li 	class="ui-widget-content box_wrs_panel {class}" api="wrs" type="{type}"
+								<li  	class="ui-widget-content box_wrs_panel {class}" tag-class="{class}" api="wrs" type="{type}"
 										vvalue="{label}" json="{json}"><span class="btn-left glyphicon glyphicon glyphicon-{$icon}"></span>{value}</li>
 EOF;
 

@@ -2,8 +2,7 @@
 <HTML xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br" class="k-webkit k-webkit43 k-bootstrap"> 
 
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="content-type" content="text/html;charset=utf-8;" />
+ <meta charset="ISO_8859-1">
 
 <script>
 var wrs_panel_layout		=	'';
