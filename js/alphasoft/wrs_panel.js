@@ -1043,12 +1043,18 @@ function rows_by_metrica_attr_base64(object,_type)
 	
 	$(object).find('li').each(function(){
 		
-		var json		=	 $.parseJSON(base64_decode($(this).attr('json')));
+		//Foi incrementado a TAG  tag_class e get_object para resolver o problema de acentuação
+		var tag_class	=	$(this).attr('tag-class');
+		var get_object	=	$('.ui-layout-pane-east ul').find('.'+tag_class);
 		
+		
+
+		var json		=	 $.parseJSON(base64_decode(get_object.attr('json')));
+//		var json		=	 $.parseJSON(base64_decode($(this).attr('json'))); //- Chamada original mas com problema de acentuação
+
 		if(!$(this).hasClass('placeholder'))
 		{
 			_flag	=	true;
-		
 			//Pegando as informações para executar o Relatório
 			if(_type=='attr'){
 				_request[_request.length]	=	json.LEVEL_FULL;
@@ -1264,7 +1270,8 @@ function wrs_run_filter()
 		
 			if(!empty(wrsConfigGridDefault.attr('is-event')) && wrsConfigGridDefault.attr('is-event')=='true'){
 				
-				if(!empty(wrsConfigGridDefault_data))
+				
+//				if(!empty(wrsConfigGridDefault_data))
 				{
 					var getParamDefault = array_key_data(wrsConfigGridDefault_data);
 					
@@ -1296,6 +1303,7 @@ function wrs_run_filter()
 		 _param_request	=	merge_filter_data(_param_request,_data_aba);
 		 
 		
+		 //console.log('_param_request_param_request',_param_request);
 			
 		//Passando o ID do Cubo na sessão
 		var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;
@@ -1360,7 +1368,10 @@ function wrs_run_filter()
 		wrsConfigGridDefaultManagerTopOptions();
 		
 		
-
+		
+		
+//		TRACE_DEBUG(_class+'::_event'+_event)
+		console.log('_param_request',_param_request);
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
 		
@@ -1591,7 +1602,6 @@ function wrs_panel_active_drag_drop()
 										            .appendTo('body') 
 										            .css('zIndex',1000) 
 										            .show(); 
-										       
 										       return _data;
 										       
 										       

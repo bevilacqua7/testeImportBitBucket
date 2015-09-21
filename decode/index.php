@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html >
+<HTML xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br" class="k-webkit k-webkit43 k-bootstrap"> 
   <head>
     <meta charset="ISO_8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

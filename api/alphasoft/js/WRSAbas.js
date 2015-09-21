@@ -10,12 +10,25 @@
  * TODO: Falta salvar as informações do chante quando clica em abrir um relatório
  */
 
-function wrsABAAddValue(grid,key,value)
+function wrsABAAddValue(grid,_kendoUi)
 {
-	var _aba	=	$('.WRS_ABA ul').find('.'+currentABA).data('WINDOW');
-	
-	
-//	aba_active.data('WINDOW',configure_default_chart);
+	var _IDGrid		=	 str_replace('#','',grid);
+	var _aba		=	$('.WRS_ABA ul').find('.'+_IDGrid);
+		
+	var _paran		=	json_decode(base64_decode(_aba.attr('wrsparam')));
+		
+		_paran		=	merge_objeto(_paran,_kendoUi);
+		
+		_aba.data('WINDOW',_paran).attr('wrsparam',base64_json(_paran));
+		$('#wrsConfigGridDefault').data('wrsConfigGridDefault',_kendoUi).wrsConfigGridDefault(_kendoUi);
+		
+		
+}
+
+function trace_change_kendo(kendoUi)
+{
+	TRACE_DEBUG('CHANGE');
+	console.log('trace_change_kendo',kendoUi);
 }
 
 (function( $ ) {
@@ -76,7 +89,6 @@ function wrsABAAddValue(grid,key,value)
 					getElement['TITLE_ABA']			=	title;
 					getElement['SUMARIZA']			=	1;
 					getElement['COLORS_LINE']		=	1;
-					
 
 					$('.NAV_CONFIG_WRS,#wrsConfigGridDefault').attr('is-event',true).data('wrsConfigGridDefault',getElement);
 					
@@ -406,6 +418,8 @@ function wrsABAAddValue(grid,key,value)
 							var getKendoUi	=	$(this).data('WINDOW');
 							getKendoUi	= empty(getKendoUi) ? {} : getKendoUi;
 							$('.NAV_CONFIG_WRS').attr('is-event',true).data('wrsConfigGridDefault',getKendoUi).wrsConfigGridDefault(getKendoUi);
+							
+							
 						}
 					}else{
 						

@@ -607,10 +607,10 @@ function wrsKendoUiChange(nameID,param,value)
 		}else{
 			//Quando for passado apenas parametro normal
 			wrsKendoUi[param]	=	value;
-			
-			//nameID
-			
 		}
+		
+		//Adicionando na Estrutura da ABA
+		wrsABAAddValue(nameID,wrsKendoUi);
 		
 		_tmpWrsKendoUi		=	 base64_encode(json_encode(wrsKendoUi,true));
 		$(nameID).attr('wrsKendoUi',_tmpWrsKendoUi);
@@ -1284,14 +1284,13 @@ function  themeSUM(nameID,arg,wrsParam)
 																					{
 																						getSelected[$(this).attr('name')]		=	 $(this).prop('checked') ? 1 : 0;
 																					}
-																	
+															
+															
 															$(IDName+'NAV').find('.dropdown-menu-configuration').find('input[type=checkbox]').each(eachFind); //Starta o eventos
 															
 															//Gravando os Parametros
 															wrsKendoUiChange(IDName,'',getSelected);
-															
-															
-															wrsKendoUiChange($(IDName),'',getSelected);
+														//	wrsKendoUiChange($(IDName),'',getSelected);
 															wrsRunFilter();//Executa o plugin nativamente 
 															/*
 														var getParam	=	$.parseJSON(base64_decode($(IDName).attr('wrsParam')));	
@@ -1311,7 +1310,7 @@ function  themeSUM(nameID,arg,wrsParam)
 								var getSelected=[];
 									getSelected[$(this).attr('name')] = $(this).prop('checked') ? 1 : 0;
 								
-									wrsKendoUiChange($(IDName),'',getSelected);
+									wrsKendoUiChange(IDName,'',getSelected);
 									
 									switch($(this).attr('name'))
 									{
