@@ -7,7 +7,7 @@
 	 * event: INterno para cada processo
 	 */
 //	header("Content-Type: text/html; charset=ISO-8859-1",true);
-	header("Content-Type: text/html; charset=ISO-8859-1",true);
+//	header("Content-Type: text/html; charset=ISO-8859-1",true);
 	include_once 'config/configCommon.php';
 	includeCLASS(fwrs_request('file'));
 	$class	=	 fwrs_request('class');	
