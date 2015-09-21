@@ -51,16 +51,17 @@ class WRS_REPORT  extends  WRS_USER
 	
 
 	public function delete(){
-
 		$user			=	WRS::INFO_SSAS_LOGIN();		
 		$arr_report_id	=	json_decode(fwrs_request('report_id'));
+		$retorno_del	=	array();
 		if(is_array($arr_report_id) && count($arr_report_id)>0){
 			foreach($arr_report_id as $report_id){
 				$sql			=	QUERY_PANEL::REMOVE_SSAS_REPORT( $report_id, $user['PERFIL_ID'] );
 		 		$query			=	$this->query($sql);
 			}
+			$retorno_del['relatorios_apagados']		= 	count($arr_report_id);
 		}
- 		
+		echo json_encode($retorno_del);
 	}
 	
 	public function save()

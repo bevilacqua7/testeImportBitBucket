@@ -30,6 +30,12 @@ var TYPE_RUN	=	{
 
 var ABA_TAG_NAME		=	'.WRSAbas ul';
 
+function WRS_CONSOLE(){
+	if(IS_TRACE){
+		console.log(arguments);
+	}
+}
+	
 function changeTypeRun(IDGrid,typeRun)
 {
 
@@ -384,11 +390,6 @@ function WRS_CONFIRM(_text,_type,_callback)
 
 function WRS_ALERT(_text,_type)
 {
-	/*
-	 * TODO: corrigir este tipo de modal pois nao se pode ter mais de uma modal ao mesmo tempo, ou seja, estas moais de alerta sempre causarao conflito com o titulo e conteudo de outras modais já abertas/existentes:
-	 * http://v4-alpha.getbootstrap.com/components/modal/#multiple-open-modals-not-supported
-	 * http://getbootstrap.com/javascript/#callout-stacked-modals
-	 */
 	var _tite		=	"ALERT_TITLE_INFO";
 	var _is_type	=	_type;
 	

@@ -136,7 +136,6 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	
 //	console.log('_filter_selected',_filter_selected);
 	
-
 	var _param		=	{
 							'LAYOUT_ROWS'			:	wrs_base64encode(_ROWS),
 							'LAYOUT_COLUMNS'		:	wrs_base64encode(_COLUMNS),
@@ -180,16 +179,15 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 		$(ABA_TAG_NAME).wrsAbas('load_multiple',[_param]);
 		
 		//wrsRunFilter();
+		//set_value_box_relatorio(_param);
 		
-		/*
-		set_value_box_relatorio(_param);
 		$('#myModal').modal('hide');
 		if(!nao_processa){
 			wrsRunFilter();
 		}else{
 			wrs_panel_layout.open('east');
 		}
-		*/
+		
 	}
 }
 
@@ -199,6 +197,8 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 
 function carrega_grid_list_reports(options){
 
+	WRS_CONSOLE('optionsWindow',options);
+	
 	var funCallBackVision = function()
 	{
 		var rel		=	 $(this).attr('rel');
@@ -206,15 +206,25 @@ function carrega_grid_list_reports(options){
 		var option	=	 {wrs_type_grid:rel,cube_s:CUBE_S};
 		carrega_grid_list_reports(option);
 	}
-	
+
 	var funCallBack	=	function(data)
 	{
 			$('.modal-content-grid').html(data);
 			wrs_window_grid_events_tools({btn:btn_window_grid_event_report, visao: funCallBackVision});
 	};
 	
-	 grid_window_modal(
-			 				((options!=null)?options:{wrs_type_grid:'icon_middle',cube_s:CUBE_S}),
+	var retorno ='';
+	if(options!='' && options!=null){
+		retorno = $.parseJSON(options);
+		if(retorno!= null && typeof retorno == 'object' && typeof retorno.relatorios_apagados != 'undefined'){
+			$('#myModalGenericConfig').modal('hide');	
+			var s = (retorno.relatorios_apagados>1)?'s':'';
+			WRS_ALERT('Relatório'+s+' removido'+s+' com sucesso','success');	
+		}
+	}
+
+	grid_window_modal(
+			 				((options!=null && options!='' && typeof options == 'object')?options:{wrs_type_grid:'icon_middle',cube_s:CUBE_S}),
 			 				'GET_SSAS_REPORT',
 			 				funCallBack);
 	 
@@ -230,7 +240,7 @@ function btn_window_grid_event_report(data)
 	var table					=	 $(this).attr('table');
 	var values					=	 get_grid_window_values_form();
 
-	var _data					=	 $('.body_grid_window').data('wrsGrid');
+	var _data					=	 $('#myModal, .body_grid_window').data('wrsGrid');
 	//console.log('_data',_data);
 	var param					=	 _data.param_original;
 	var visao					=	'grid';
@@ -280,10 +290,12 @@ function btn_window_grid_event_report(data)
 		{
 			case 'new' 		: 
 						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados);
+						$('#myModal').modal('hide');
 					//callback_load_report_generic_modal(objDados);	
 					break; // abre o relatorio
 			case 'update' 	: 
 						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados,true);
+						$('#myModal').modal('hide');
 					//callback_load_report_generic_modal(objDados,false,true);
 					break; // abre somente o layout
 			case 'remove' 	:
@@ -326,22 +338,13 @@ function btn_window_grid_event_report(data)
 
 function removeReport(arrRepIds){
 
-	$('#confirmModal').find('.modal-body').html('Deseja realmente apagar este relatório?');
-    $('#confirmModal').find('.modal-header h4').html('Apagar');
-    $('#confirmModal').modal({ backdrop: 'static', keyboard: false }).on('click', '#deleteModalConfirm', function (e) {
-    		$('#confirmModal').modal('hide');
-			var param_request	=	 {'report_id':JSON.stringify(arrRepIds)};
-			var Ofile			=	'WRS_REPORT';
-			var Oclass			=	'WRS_REPORT';
-			var Oevent			=	'delete';
+	var _callbackDelete = function (confirm) {
+		   if(confirm){
+			   runCall(param_request,Ofile,Oclass,Oevent,carrega_grid_list_reports,'modal');
+		   }
+	}
 
-				
-			var header	=	'<div class="modal-header ui-accordion-header  ui-accordion-header-active ui-state-active"><h4 class="modal-title" id="myModalLabel">'+LNG('LABEL_LOAD')+'</h4></div><div class="body_grid_window_center_Load"></div>';
-				setLoading($('.body_grid_window_center_Load'));	
-				runCall(param_request,Ofile,Oclass,Oevent,carrega_grid_list_reports,'modal');		
-						
-    });
-    
+	WRS_CONFIRM("Deseja apagar este(s) relatório(s)?",'warning',_callbackDelete);
 }
 
 
