@@ -333,6 +333,10 @@ function fwrs_trigger_js($obj,$event)
 	return fwrs_javascript('$("'.$obj.'").trigger("'.$event.'")');
 }
 
+function fwrs_utf8d($input)
+{
+	return utf8_decode($input);
+}
 /**
  * Faz a padronização da formatação do Cubo
  * @param string $time

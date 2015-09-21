@@ -139,7 +139,7 @@
 				
 				
 
-				
+					
 			var half		=	(_height-paddingCenter)/2;
 				_heightToUse=	half*2;
 				
@@ -210,6 +210,8 @@
 				//Save alteration in MAP
 				wrsKendoUiChange('#'+idName,'WINDOW',wrs_data);
 				
+				
+
 				
 				
 				//CRiando a DIV do MAPA ou CHART
@@ -494,6 +496,7 @@ var getRequestKendoUiDefault	=	{};
 		  			saveHistory['WINDOW']	=	_wrs_data;
 		  			saveHistoryEvents(saveHistory,opts['REPORT_ID']);
 	  			
+				addWrsKendoUiChange(opts['REPORT_ID'],'WINDOW',_wrs_data);	
 					
   				return false;
   	}
@@ -528,7 +531,12 @@ var getRequestKendoUiDefault	=	{};
   	var event_click_btn_options	=	 function(){
   		check_exist_grid(); 
 
+  		
+  		
   		nav_options.find('input').each(function(){
+  				
+  				$(this).prop('checked',false);
+  			
   				if(opts[$(this).attr('name')]){
   					$(this).prop('checked',true);
   				}else{
@@ -538,25 +546,44 @@ var getRequestKendoUiDefault	=	{};
   		});
   	}
   	
+	var addWrsKendoUiChange	=	 function(report_id,_key,value)
+	{
+		var _report_id_exist	=	false;
+		var	_report_id			=	'#'+report_id;
+		
+			$(_report_id).each(function(){_report_id_exist=true;});
+			
+		if(_report_id_exist)
+			{
+				wrsKendoUiChange(_report_id,_key,value);	
+			}
+	}
   	
   	//Evento de click nos INPUT do Options
   	var event_find_nav_options_input	=	 function()
   	{
   		var _checked					=	$(this).prop('checked');
-  		
+		var _key						=	$(this).attr('name');
+		
   			opts						=	element.data(data_name);
-  		
-	  		opts[$(this).attr('name')]	= 	_checked ? 1 : '';
+	  		opts[_key]	= 	_checked ? 1 : 0;
 	  		detect_event();//Abilita Evento
-	  		element.data(data_name,opts);  
-	  		isClick		=	true;
+	  		element.data(data_name,opts).attr('is-event',true);  
 
+		var _report_id			=	opts['REPORT_ID'];
+
+			
 	  		//Salvando no histórico
-	  		var saveHistory	=	[];
-	  			saveHistory[$(this).attr('name')]	=	opts[$(this).attr('name')];
+	  		var saveHistory			=	[];
+	  			saveHistory[_key]	=	opts[$(this).attr('name')];
 	  			saveHistoryEvents(saveHistory,opts['REPORT_ID']);
-	  		
+
 	  			rules_pendences_checkbox($(this),$(this).parents('ul'));
+			
+			//Salvando na estrutura original
+
+
+				addWrsKendoUiChange(_report_id,_key,opts[_key]);	
   	}
   	
   	//Abrindo o Modal de opções do CHART
