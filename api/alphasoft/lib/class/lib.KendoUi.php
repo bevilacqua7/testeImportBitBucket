@@ -112,6 +112,7 @@ class KendoUi
 						'PLUS_MINUS',
 						'ORDER_BY_COLUMN',
 						'ORDER_COLUMN_TYPE',
+						'ORDER_COLUMN',
 						'frozen',
 						'SUMARIZA',
 						'COLORS_LINE',

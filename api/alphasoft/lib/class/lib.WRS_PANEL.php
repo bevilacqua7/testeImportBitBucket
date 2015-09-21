@@ -540,7 +540,6 @@ class WRS_PANEL  extends WRS_USER
 			
 		}
 		
-	//	WRS_DEBUG_QUERY($history);
 		
 		$history		=	base64_encode(json_encode($history,true));
 		
@@ -689,7 +688,9 @@ class WRS_PANEL  extends WRS_USER
 			$getRequestKendoUi['REPORT_ID']	=	WRS::GET_REPORT_HISTORY_CURRENT($CUBE);
 		}
 		
-		
+//		WRS_DEBUG_QUERY($_REQUEST);
+//		WRS_DEBUG_QUERY($getRequestKendoUi);
+		WRS_DEBUG_QUERY($getRequestKendoUi);
 		$getRequestWrsExceptions['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$getRequestWrsExceptions,$DillLayout);
 		
 
