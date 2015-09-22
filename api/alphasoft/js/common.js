@@ -448,7 +448,7 @@ function fwrs_alert(msg,type)
 	return '<div class="alert '+type+'">'+msg+'</div>';
 }
 
-function wrsCheckLogin(login,pwd,event)
+function wrsCheckLogin(login,pwd,event,perfil)
 {
 	TRACE('Iniciando wrsCheckLogin na common.js');
 	
@@ -459,7 +459,7 @@ function wrsCheckLogin(login,pwd,event)
 	
 	
 	TRACE('Enviando parametro para o Post run.php wrsCheckLogin na common.js');
-	$.post('run.php',{'login':login,'pwd':pwd,'file':'WRS_LOGIN','class':'WRS_LOGIN','event':event,'isCookie':isCookie},function(data){
+	$.post('run.php',{'login':login,'pwd':pwd,'perfil':((perfil!=undefined && perfil!='')?perfil:''),'file':'WRS_LOGIN','class':'WRS_LOGIN','event':event,'isCookie':isCookie},function(data){
 
 				TRACE('recebendo parametro do Post run.php wrsCheckLogin na common.js');
 		
