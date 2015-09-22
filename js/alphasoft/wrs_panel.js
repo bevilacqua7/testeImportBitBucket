@@ -1581,82 +1581,23 @@ function wrs_panel_active_drag_drop()
 	
 		var ultimo_index_sel=pai_original=pai_final=pai_inicial=houve_mudanca='';
 		var droppableOptionsOlSortable	=	{
-					      items			: "li:not(.placeholder)",
-					      placeholder	: "ui-state-highlight",
-					      zIndex		: 9999,
+					      items				: "li:not(.placeholder)",
+					      placeholder		: "ui-state-highlight",
+					      zIndex			: 9999,
 					      forcePlaceholderSize: true,
-					      opacity: 0.8
-					      ,stop:function(event,itemoriginal) { 
+					      opacity			: 0.8,
+					      tolerance			: "pointer",
+					      scrollSensitivity	: 10,
+					      revert			: true,
+					      stop				:function(event,itemoriginal) { 	
 								insetDragDropEmpry();  
-								sortable_attr_simples_composto(); 								
-								if(houve_mudanca){
-									$(pai_final).find('li').each(function(){
-										WRS_CONSOLE('antes',$(this));
-										$(this).removeClass('hide');
-										$(this).show();
-									});
-									
-									var index_final='';
-									if(pai_final!=pai_original){
-										index_final = $(pai_final).find('li').last().parent().children().index($(pai_final).find('li').last());
-										WRS_CONSOLE('calculado por index');
-									}else{
-										index_final = $(pai_final).find('li').last().parent().children().size()-1;
-										WRS_CONSOLE('calculado por size');
-									}
-									index_final = (index_final<0)?0:index_final;
-									if(ultimo_index_sel!=index_final){
-										WRS_CONSOLE('posicao nova',ultimo_index_sel,'posicao anterior',index_final);
-										var obj = $(pai_final).find('li').last();
-										if(ultimo_index_sel>index_final){
-											for(var i=ultimo_index_sel;i>index_final;i--){
-												WRS_CONSOLE('aumentou 1');
-												obj.before(obj.next());
-											}					    	  							
-										}else{
-											for(var i=ultimo_index_sel;i<index_final;i++){
-												WRS_CONSOLE('diminuiu 1');
-												obj.after(obj.prev());
-											}
-										}
-									}else{															
-										WRS_CONSOLE('mesma posicao','posicao nova',ultimo_index_sel,'posicao anterior',index_final);
-									}
-									$(pai_final).find('li').each(function(){
-										WRS_CONSOLE('depois',$(this));
-										$(this).removeClass('hide');
-										$(this).show();
-									});
-									$( ".WRS_DRAG_DROP_RECEIVER ol").sortable("refresh").sortable("refreshPositions");
-								}
-								WRS_CONSOLE('======================================================================');
-	    	  				}
-						,change:function(e,ui){
-							pai_final = $(ui.placeholder).parent()[0];
-							ultimo_index_sel = $(ui.placeholder).parent().children().index($(ui.placeholder)) - ((pai_final==pai_inicial)?1:0);
-							WRS_CONSOLE('ultima posicao',ultimo_index_sel,(pai_final==pai_inicial));
-							houve_mudanca=true;
-						}
-						,start:function(e,ui){
-							pai_inicial = pai_final= $(ui.placeholder).parent()[0];
-							ultimo_index_sel = $(ui.placeholder).parent().children().index($(ui.placeholder))-1;
-							WRS_CONSOLE('start posicao',ultimo_index_sel);
-							houve_mudanca=true;
-						}
-						,helper: function(){ // modificando o helper pra clonar o objeto ao inves de move-lo
-							pai_original = $(this).children('li.ui-state-hover').parent()[0];
-							houve_mudanca=false;
-							var _data	=	 $(this).children('li.ui-state-hover').clone().appendTo('body'); 
-							return _data;
-						} 			
-						,deactivate:function(e,ui){											
-    	  					$(this).find('li').each(function(){
-    	  						$(this).removeClass('hide');
-    	  						$(this).show();
-    	  					});											
-	  					}
+								sortable_attr_simples_composto();
+								$('.wrs_panel_center_body_container').css({position: 'relative'});
+						  }					
+						  ,start:function(e,ui){
+							    $('.wrs_panel_center_body_container').css({position: 'inherit'});
+						  }
 					}
-
 
 		//Ativando o DRAG AND DROP
 		$( ".WRS_DRAG_DROP_RECEIVER ol").sortable(droppableOptionsOlSortable).droppable(droppableOptionsOl);
