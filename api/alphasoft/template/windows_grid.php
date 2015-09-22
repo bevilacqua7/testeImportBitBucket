@@ -1,5 +1,5 @@
  <div class="modal-header ui-accordion-header  ui-accordion-header-active ui-state-active">
-        <h4 class="modal-title" id="myModalLabel"><?php echo $TPL_TITLE;?>
+        <h4 class="modal-title2" id="myModalLabel"><?php echo $TPL_TITLE;?>
 		<?php echo $TPL_COMPLEMENT_TITLE;?>
         </h4>
         
