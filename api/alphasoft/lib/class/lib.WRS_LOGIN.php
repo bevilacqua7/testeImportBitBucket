@@ -11,6 +11,7 @@ class WRS_LOGIN extends WRS_BASE
 		WRS_TRACE('run()', __LINE__, __FILE__);
 		$login		=	 fwrs_request('login');
 		$pwd		=	 fwrs_request('pwd');
+		$perfil		=	 fwrs_request('perfil');
 		$event		=	 fwrs_request('event');
 		
 		if(strpos($pwd,WRS_COMPLEMENT)!==false)
@@ -20,7 +21,7 @@ class WRS_LOGIN extends WRS_BASE
 		
 		switch($event)
 		{
-			case 'login' :{echo $this->setLogin($login, $pwd);};break;
+			case 'login' :{echo $this->setLogin($login, $pwd, $perfil);};break;
 			case 'remove':{ $this->remove($login);}; break;
 		}
 		
@@ -72,9 +73,10 @@ class WRS_LOGIN extends WRS_BASE
 	 * Fazendo a query de Login
 	 * @param string $USER_CODE
 	 * @param string $USER_PWD
+	 * @param string $USER_PERFIL // opcional
 	 * @return string
 	 */
-	public function setLogin($USER_CODE,$USER_PWD)
+	public function setLogin($USER_CODE,$USER_PWD,$USER_PERFIL)
 	{
 		WRS_TRACE('setLogin()', __LINE__, __FILE__);
 		
@@ -100,7 +102,7 @@ class WRS_LOGIN extends WRS_BASE
 		$rules_session	=	array();
 		
 		WRS_TRACE('Executando a query QUERY_LOGIN::LOGIN_SSAS ', __LINE__, __FILE__);
-		$query			=	 QUERY_LOGIN::LOGIN_SSAS( $USER_PWD, '', $USER_CODE, $ADDRESS, $SESSION, $BROWSER, $SYSTEM );
+		$query			=	 QUERY_LOGIN::LOGIN_SSAS( $USER_PWD, $USER_PERFIL, $USER_CODE, $ADDRESS, $SESSION, $BROWSER, $SYSTEM );
 		$query			=	 $this->query($query);
 		
 		if($query)

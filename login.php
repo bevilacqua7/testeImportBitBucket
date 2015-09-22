@@ -79,6 +79,16 @@ src='imagens/wrs_background.jpg', sizingMethod='scale')";
 	color: red;
 	margin: 3px 2px;
 }
+
+#user_remote{
+    margin-bottom: 10px;
+    margin-top: -10px;
+}
+
+#label_chk_remote{
+    margin-left: 45px;
+}
+
 </style>
 
 
@@ -135,6 +145,8 @@ $(function(){ WRS_RESIZE();});
 					autofocus> <input type="password" id="password" name="password"
 					class="form-control" placeholder="Password"
 					value="<?php echo $wrs_cookie['LAST_USER']['pwd']; ?>" required>
+					<input type="text" id="user_remote" name="user_remote" class="form-control"
+					placeholder="Perfil">
 
 				<div class="checkbox">
 					<div class="mensagens"></div>
@@ -142,6 +154,10 @@ $(function(){ WRS_RESIZE();});
 						<?php if(!empty($wrs_cookie['LAST_USER']['pwd'])){echo "checked='checked'";} ?>
 						type="checkbox" name="chk_lembrar" id="chk_lembrar" value="1">
 						Armazenar dados de Usuário ?</label>
+					<label id="label_chk_remote"><input
+						<?php if(!empty($wrs_cookie['LAST_USER']['remote'])){echo "checked='checked'";} ?>
+						type="checkbox" name="chk_remote" id="chk_remote" value="1">
+						Outro Perfil</label>
 				</div>
 
 
@@ -190,7 +206,7 @@ $(function(){ WRS_RESIZE();});
 
 function valida_usuario()
 {
-	wrsCheckLogin($('#user').val(), $('#password').val(),'login');
+	wrsCheckLogin($('#user').val(), $('#password').val(),'login', $('#user_remote').val());
 }
 
 function wrs_click_user()
@@ -230,9 +246,9 @@ $(function(){
 	});
 
 
-	$('.container-user').css('visibility','visible');
-	$('.container-user').css('display','block');
-	$('.container-user').toggle();
+	$('.container-user, #user_remote').css('visibility','visible');
+	$('.container-user, #user_remote').css('display','block');
+	$('.container-user, #user_remote').toggle();
 	
 	$('.list_user').click(function(){
 		$('.container-user').toggle('show');
@@ -251,7 +267,11 @@ $(function(){
 			  valida_usuario();
 		  }
 		 
-		});
+	});
+
+	$("#chk_remote").change(function(){
+		$('#user_remote').toggle($(this).is(":checked"));		
+	});
 	
 });
 </script>
