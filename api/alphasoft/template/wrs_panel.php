@@ -60,6 +60,8 @@ var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELA
 <!-- <script src="api/bootstrap-3.3.0/dist/js/bootstrap.min.js"></script> -->   
   
 <!-- API MODAL ALERT-->
+
+<link href="api/jquery.modal-1.2/css/jquery.modal.wrs.job.css" type="text/css" rel="stylesheet" /> <!-- Gerenciador de JOBS -->
 <link href="api/jquery.modal-1.2/css/jquery.modal.css" type="text/css" rel="stylesheet" />
 <link href="api/jquery.modal-1.2/css/jquery.modal.theme-xenon.css" type="text/css" rel="stylesheet" />
 <link href="api/jquery.modal-1.2/css/jquery.modal.theme-atlant.css" type="text/css" rel="stylesheet" />
@@ -69,7 +71,7 @@ var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELA
   
 <link rel="stylesheet" href="api/alertify/themes/alertify.core.css" />
 <link rel="stylesheet" href="api/alertify/themes/alertify.default.css" id="toggleCSS" />
-<script src="api/alertify/lib/alertify.min.js"></script>
+<script src="api/alertify/src/alertify.js"></script>
 	
   
   
