@@ -100,11 +100,15 @@ class WRS_LOGIN extends WRS_BASE
 		$BROWSER		=	 $browserInfo['browser'].' - '.$browserInfo['version'];
 		$SYSTEM			=	 $this->getOs();
 		$rules_session	=	array();
-		
+
 		WRS_TRACE('Executando a query QUERY_LOGIN::LOGIN_SSAS ', __LINE__, __FILE__);
-		$query			=	 QUERY_LOGIN::LOGIN_SSAS( $USER_PWD, $USER_PERFIL, $USER_CODE, $ADDRESS, $SESSION, $BROWSER, $SYSTEM );
+		if ($USER_PERFIL != ''){
+			$query		=	 QUERY_LOGIN::LOGIN_SSAS( $USER_PWD, $USER_CODE, $USER_PERFIL, $ADDRESS, $SESSION, $BROWSER, $SYSTEM );
+		}else{
+			$query		=	 QUERY_LOGIN::LOGIN_SSAS( $USER_PWD, '', $USER_CODE, $ADDRESS, $SESSION, $BROWSER, $SYSTEM );
+		}
 		$query			=	 $this->query($query);
-		
+
 		if($query)
 		{
 			if($this->num_rows($query))
