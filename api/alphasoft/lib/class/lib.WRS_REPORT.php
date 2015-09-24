@@ -114,6 +114,10 @@ class WRS_REPORT  extends  WRS_USER
  		$ALL_ROWS 			= ($dadosJs->KendoUi->ALL_ROWS=="1")?1:0;
  		$ALL_COLS 			= ($dadosJs->KendoUi->ALL_COLS=="1")?1:0;
  		$COLS_ORDER 		= 0;
+ 		
+ 		//ajustando e garantindo que o nome do report no kendoUi seja o mesmo digitado pelo user
+ 		$dadosJs->KendoUi->TITLE_ABA = $REPORT_DESC;
+ 		
  		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi,true));
  		$REPORT_FORMULAS 	= '';
  		$REPORT_FILTER 		= '';

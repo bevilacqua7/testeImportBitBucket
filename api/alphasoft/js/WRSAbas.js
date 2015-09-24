@@ -738,7 +738,7 @@ function trace_change_kendo(kendoUi)
 				
 				var REPORT_ID	=	opts.REPORT_ID;
 				
-					if(empty(REPORT_ID)) return false;
+					if(empty(REPORT_ID) || !$.isNumeric(REPORT_ID)) return false;
 				
 				var _ABA	=	tagABA.find('.'+REPORT_ID);
 				

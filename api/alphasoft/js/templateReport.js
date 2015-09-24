@@ -98,6 +98,8 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	if(nao_processa==undefined) 	nao_processa=false;
 	//wrs_panel_layout.open('east');
 	
+	data = repair_reportname_kendoui(data);
+	
 	var _ROWS 				=	data.LAYOUT_ROWS;//.split(',');
 	var _COLUMNS 			=	data.LAYOUT_COLUMNS;//.split(',');
 	var _MEASURES 			=	data.LAYOUT_MEASURES;//.split(',');
@@ -106,7 +108,6 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	var _filter_selected 	=	'';
 	var _FILTERS_TMP		=	report_array_to_key(_FILTERS.split(','));
 	
-
 	
 	if(data.FILTER_VALUES!='' && data.FILTER_VALUES!=null && data.FILTER_VALUES.length>0)
 	{
@@ -134,8 +135,6 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	
 
 	
-//	console.log('_filter_selected',_filter_selected);
-	
 	var _param		=	{
 							'LAYOUT_ROWS'			:	wrs_base64encode(_ROWS),
 							'LAYOUT_COLUMNS'		:	wrs_base64encode(_COLUMNS),
@@ -144,7 +143,6 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 							'KendoUi'				:	base64_json(_kendoui),
 							'FILTER_TMP'			:	base64_json(reoprt_convert_load(_FILTERS_TMP))//wrs_base64encode(_filter_selected)
 						}
-
 
 /*	
 	var _param		=	{
@@ -158,7 +156,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 
 */
 	
-//	console.log('reportDATA: ',data,'kendoUi carregado: ',_kendoui, 'PARAM: ',_param);
+	//console.log('reportDATA: ',data,'kendoUi carregado: ',_kendoui, 'PARAM: ',_param);
 	/*
 	 * TODO: adicionar os campos abaixo para ir para as abas e voltar para a tela na hora de salvar:
 	 * - REPORT_AUTOLOAD
@@ -231,7 +229,17 @@ function carrega_grid_list_reports(options){
 }
 
 
-
+function repair_reportname_kendoui(obj){
+	if(obj!=undefined && typeof obj == 'object'){
+		var attr = obj.REPORT_OPTIONS;
+		if (typeof attr !== typeof undefined && attr !== false) {
+			var param_options 		= 	$.parseJSON(base64_decode(obj.REPORT_OPTIONS));
+			param_options.TITLE_ABA		=	obj.REPORT_DESC;
+			obj.REPORT_OPTIONS	= base64_json(param_options);
+		}
+	}
+	return obj;
+}
 
 
 function btn_window_grid_event_report(data)
@@ -241,7 +249,6 @@ function btn_window_grid_event_report(data)
 	var values					=	 get_grid_window_values_form();
 
 	var _data					=	 $('#myModal, .body_grid_window').data('wrsGrid');
-	//console.log('_data',_data);
 	var param					=	 _data.param_original;
 	var visao					=	'grid';
 	
@@ -271,12 +278,13 @@ function btn_window_grid_event_report(data)
 		var arrReportsIds = [];
 		
 		linhas_selecionadas.each(function(){
-			var objDados = null;
+			var objDados = param_options = null;
 			if(visao=='icon'){
-				var index	=	 $('.body_grid_window').first().children().index($(this));
-				objDados 	= _data[index];
+				var index			=	$('.body_grid_window').first().children().index($(this));
+				objDados 			= repair_reportname_kendoui(_data[index]);
 			}else{
-				objDados = $('#GET_SSAS_REPORT').data().handler._data[$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content tr').index(this)];
+				var index			=	$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content tr').index(this);
+				objDados 			= repair_reportname_kendoui($('#GET_SSAS_REPORT').data().handler._data[index]);
 			}
 			
 			
@@ -308,15 +316,15 @@ function btn_window_grid_event_report(data)
 		
 	}else if(qtde_linhas_selecionadas==1){
 
-		var objDados = null;
-		
+		var objDados = param_options = null;
 		if(visao=='icon'){
-			var index	=	 $('.body_grid_window').first().children().index(linhas_selecionadas);
-			objDados 	= _data[index];
+			var index			=	$('.body_grid_window').first().children().index(linhas_selecionadas);
+			objDados 			= repair_reportname_kendoui(_data[index]);
 		}else{
-			objDados = $('#GET_SSAS_REPORT').data().handler._data[$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content tr').index(linhas_selecionadas)];
+			var index			=	$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content tr').index(linhas_selecionadas);			
+			objDados 			= repair_reportname_kendoui($('#GET_SSAS_REPORT').data().handler._data[index]);
 		}
-
+		
 		var report_id= objDados.REPORT_ID;
 		switch(action_type)
 		{

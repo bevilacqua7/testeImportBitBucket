@@ -1523,13 +1523,34 @@ function wrs_panel_active_drag_drop()
 					      tolerance			: "pointer",
 					      scrollSensitivity	: 10,
 					      revert			: true,
-					      stop				:function(event,itemoriginal) { 	
+					      stop				:function(e,ui) { 	
 								insetDragDropEmpry();  
 								sortable_attr_simples_composto();
+								
+								// volta ao position original do objeto que tranca o draganddrop dentro da div pai do em questao
 								$('.wrs_panel_center_body_container').css({position: 'relative'});
-						  }					
-						  ,start:function(e,ui){
-							    $('.wrs_panel_center_body_container').css({position: 'inherit'});
+								
+								// como o botao em drag estava com o status hover forcado, volta ao status normal dele (mouseout) apos soltar o clique
+								$(ui.item).unbind('mouseout').trigger("mouseout");
+								
+								// mostrar ou nao os icones identificadores (A, $,...)
+								if($(ui.item).find('span.btn-left').length != 0 && $(ui.item).parents('div.ui-layout-pane').hasClass('ui-layout-pane-center')){
+									$(ui.item).find('span.btn-left').show();
+								}else{
+									$(ui.item).find('span.btn-left').hide();
+								}
+						  }	
+						  ,start:function(e,ui){							  
+							  	// ao iniciar o drag, verifica se o mouse sai de cima do objeto (mouseout) e forca o estado do hover para continuar 
+							  	// acima dos elementos, tambem forca a acao de hover dos paineis, necessarios para manter o correto funcionamento 
+							  	// visual do botao enquanto permanecer no draganddrop!
+							  	$(ui.item).trigger("mouseover").on('mouseout',function(){ 
+							  																$(this).trigger("mouseover"); 
+							  																force_show_drag_on_drop($(this).parents('div.ui-layout-pane').hasClass('ui-layout-pane-center'));
+							  															});
+							  	
+							  	// forca um position menor restritivo para que o botao em drag nao seja ocultado pelo elemento div pai
+							  	$('.wrs_panel_center_body_container').css({position: 'inherit'});
 						  }
 					}
 
@@ -1540,6 +1561,21 @@ function wrs_panel_active_drag_drop()
 		
 		insetDragDropEmpry();
 }
+
+// funcao para identificar qual é o painel pai de origem e destino do drag em seleção, para efetuar o mouseover/mouseout correspondente e
+// exibir corretamente o botao em drag enquanto está sendo reposicionado entre os paineis na tela
+function force_show_drag_on_drop(painel_origem,count){
+	_count = (count==undefined)?0:count;
+	if(_count>=0 && _count<5){ // tentativas necessarias para que o browser acabe de processar o mouseout e reconheca que deva reajustar os focos dos paineis envolvidos no drag
+		window.setTimeout(function(){ 
+			$('.ui-layout-pane-west').trigger(((painel_origem)?"mouseout":"mouseover")); 
+			$('.ui-layout-pane-center').trigger(((!painel_origem)?"mouseout":"mouseover"));
+			var __count=_count+1;
+			force_show_drag_on_drop(painel_origem,__count);
+		},20); 
+	}
+}
+
 /**
  * Processo principal
  */
