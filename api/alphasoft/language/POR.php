@@ -19,11 +19,17 @@
 	$language ['ERRO_CUBO_INDISPONIVEL'] 			= "ERRO: INDISPONIVEL";
 	$language ['ERROR_TABLE_CACHE_NO_HEADER']		= "Ops não existe cabeçalho para esta consulta..";
 	$language ['ERROR_CUBO_NOT_FOUND']				= "Ops não foi possível identificar o cubo que está sendo utilizado. <br> Se o erro persistir, favor informar ao suporte. <br><b>Obrigado</b>";
-	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executarar a abara ";
+	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executarar a aba <b>%s</b> <br>";
 	$language ['ABA_IN_USER'] 						= "Aba em uso ";
 	
-	$language ['JOB_COMPLETE_LOAD'] 		= "O Job acabou de carregar uma nova aba ";
-	$language ['JOB_COMPLETE'] 				= "Todos os processos estão finalizados";
+	$language ['JOB_COMPLETE_LOAD'] 		= "O job <b>%s</b> foi carregado";
+	$language ['JOB_COMPLETE'] 				= "Não existe mais processos a serem executados.";
+	$language ['JOB_CANCEL'] 				= "O JOB <b>%s</b> foi cancelado com sucesso";
+	$language ['JOB_CANCEL_ERRO'] 				= "ERROR-JOB:01 : ERro ao cancelar o JOB <b>%s</b> favor tentar novamente";
+	$language ['JOB_NOTFOUND'] 				= "Não foi encontrado job para cancelar, ou o mesmo encontra-se já concluido";
+
+	$language ['JOB_CLOSE_ALERT'] 				= "Fechar Janela de Alerta";
+	 
 	/*
 	 * ALERTS
 	 */
@@ -204,7 +210,7 @@
 	$language ['BTN_SIM'] 		= "Sim";
 	$language ['BTN_NAO'] 		= "Não";
 	$language ['BTN_CONFIRM'] 	= "Confirmado";
-	$language ['BTN_CANCEL_CONSULTA'] 	= "Cancelar Relatório | ";
+	$language ['BTN_CANCEL_CONSULTA'] 	= "Cancelar Consulta ";
 	$language ['BTN_APLY'] 		= "Aplicar";
 	$language ['BTN_REMOVE'] 	= "Remover";
 	$language ['BTN_UPDATE'] 	= "Alterar";

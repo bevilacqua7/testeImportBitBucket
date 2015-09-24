@@ -133,8 +133,14 @@ class ThreadJobManager extends WRS_USER
 		}
 		
 		
+//		
+		
+		
 		//compartilhando apenas algumas informações da querty para comparações
 		$rows_GET_SSAS_JOB		=	$rows_CREATE_SSAS_JOB;
+		
+//		$rows_GET_SSAS_JOB['JOB_STATUS']	=	3;
+		
 		
 		//TODO:Remover esse IF inteiro
 		if(empty($rows_CREATE_SSAS_JOB['QUERY_ID']))
@@ -142,15 +148,17 @@ class ThreadJobManager extends WRS_USER
 			//return array('cube'=>$cube,'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'], '_param'=>$this->_param,'wait_thread'=>true);
 		}
 		
+
 		if($rows_CREATE_SSAS_JOB['JOB_STATUS'] != 4)
 		{
 			$job_status 		= $this->_query->GET_SSAS_JOB($rows_CREATE_SSAS_JOB['QUERY_ID']);
 			$job_status_exec	= $this->query($job_status);
 			$rows_GET_SSAS_JOB 		= $this->fetch_array($job_status_exec);
 		
+			
 			if(($rows_GET_SSAS_JOB['JOB_STATUS'] == 1) || ($rows_GET_SSAS_JOB['JOB_STATUS'] == 2) || ($rows_GET_SSAS_JOB['JOB_STATUS'] == 3))
 			{
-				return array('cube'=>$cube, 'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'_param'=>$this->_param,'wait_thread'=>true);
+				return array('cube'=>$cube, 'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'_param'=>$this->_param,'wait_thread'=>true,'data'=>$rows_GET_SSAS_JOB);
 			}
 			
 		}
@@ -165,7 +173,9 @@ class ThreadJobManager extends WRS_USER
 			//WRS_DEBUG_QUERY('Remover:::'.$getRequestKendoUi['DRILL_HIERARQUIA_LINHA']);
 			//Salvando o nome da tabela cache
 			$QUERY_TABLE_CACHE		=	$rows_GET_SSAS_JOB['QUERY_TABLE'];
+			
 			$this->SAVE_CACHE_SSAS_USER('TABLE_CACHE',$QUERY_TABLE_CACHE,$cube_s);
+			
 			if($rows_GET_SSAS_JOB['USER_CODE'] != $USER_CODE)
 			{
 				$copy_table 			= $this->_query->COPY_SSAS_TABLE($rows_CREATE_SSAS_JOB['QUERY_ID']);
@@ -186,7 +196,7 @@ class ThreadJobManager extends WRS_USER
 			
 			if($checkThreadJobManager)
 			{
-				return array('error'=>$msg,'REPORT_ID'=>$report_id);
+				return array('error'=>$msg,'REPORT_ID'=>$report_id,'data'=>$rows_GET_SSAS_JOB);
 			}else{
 				echo $msg;
 			}
@@ -201,7 +211,7 @@ class ThreadJobManager extends WRS_USER
 			
 			if($checkThreadJobManager)
 			{
-				return array('error'=>$msg,'REPORT_ID'=>$report_id);
+				return array('error'=>$msg,'REPORT_ID'=>$report_id,'data'=>$rows_GET_SSAS_JOB);
 			}else{
 				echo $msg;
 			}
@@ -209,7 +219,7 @@ class ThreadJobManager extends WRS_USER
 			return false;
 		}
 		
-		return array('cube'=>$cube, 'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'_param'=>$this->_param,'wait_thread'=>false);
+		return array('cube'=>$cube, 'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'_param'=>$this->_param,'wait_thread'=>false,'data'=>$rows_GET_SSAS_JOB);
 		
 	}
 	

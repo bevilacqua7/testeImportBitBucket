@@ -242,8 +242,6 @@ function trace_change_kendo(kendoUi)
 					_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
 					_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
 					
-					
-					
 					eventGridActive.attr('wrsparam',base64_encode(json_encode(_param_request,true)));
 					
 				//Salva atualizações da aba corrente mas esse evento somente quando troca de aba
@@ -300,9 +298,12 @@ function trace_change_kendo(kendoUi)
 				var idReport		=	"";
 				var IDMain			=	"";
 				var hasDefault		=	 $('.wrs_panel_filter_measure').is(':hidden');
-				var IDCurrent		=	'#'+$(this).attr('id-aba');
+				var _report_id		=	$(this).attr('id-aba');
+				var IDCurrent		=	'#'+_report_id;
 				
 				 
+				
+				$('body').WRSJobModal('click_aba',{report_id:_report_id});
 				
 					$(this).addClass('active');
 					
@@ -845,6 +846,16 @@ function trace_change_kendo(kendoUi)
 					tagABA.find('.'+_report_id).trigger('click');
 			}
 			
+			
+			var __aba_title	= function(options)
+			{
+				
+				var _opts			=	{report_id:''};
+				var	opts 			= 	$.extend( {}, _opts, options);
+				
+				return tagABA.find('.'+opts.report_id).find('.title').html();
+			}
+			
 			/*
 			 * Metodos de funções
 			 * formas de chamadas externas
@@ -855,7 +866,8 @@ function trace_change_kendo(kendoUi)
 			        add_new_aba		:	__add_new_aba,
 			        remove			:	__remove,
 			        refresh			:	__refresh,
-			        load_multiple	:	__load_multiple
+			        load_multiple	:	__load_multiple,
+			        aba_title		:	__aba_title,
 			};
 			
 			 

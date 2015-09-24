@@ -1152,8 +1152,8 @@ function wrs_run_filter()
 				{
 					if(empty($(this).attr('history')))
 					{
-						MODAL_LOADING_WRS_PANEL();
 						$(this).attr('flag_load','true');
+						$('body').WRSJobModal('add_load');
 						flag_load	=	'true';
 					}
 				}
@@ -1329,9 +1329,6 @@ function wrs_run_filter()
 		}
 		
 		
-		
-
-					
 		var is_wrs_change_to	=	is_wrs_change_to_run(_param_request);
 			_param_request		=	is_wrs_change_to.val;
 		
@@ -1350,14 +1347,10 @@ function wrs_run_filter()
 		}else{
 			if(flag_load!='true')
 			{
-				MODAL_LOADING_WRS_PANEL();
 				$(this).attr('flag_load','true');
 			}
 		}
 		
-		
-		
-			
 		//Ajustando ABAS HTML	
 		$('.WRS_DRAG_DROP_RECEIVER_FILTER').hide();
 		$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
@@ -1368,10 +1361,14 @@ function wrs_run_filter()
 		wrsConfigGridDefaultManagerTopOptions();
 		
 		
+		//Verificando se o relatório está liberado para ser executado
+		//$('body').WRSJobModal('is_active',{report_id : _param_request['REPORT_ID']});
 		
 		
 //		TRACE_DEBUG(_class+'::_event'+_event)
-		console.log('_param_request',_param_request);
+//		console.log('_param_request',_param_request);
+		$('body').WRSJobModal('aba',{report_id:_param_request['REPORT_ID'],wait:true,title_aba:_param_request['TITLE_ABA']});
+		
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
 		
@@ -1391,12 +1388,15 @@ function wrs_run_filter()
 
 function wrsRunGridButton(param_request)
 {
+	TRACE_DEBUG('wrsRunGridButton função removida');
+	/*
 		var _file	=	'WRS_PANEL';
 		var _class	=	'WRS_PANEL';
 		var _event	=	'load_grid_header';
 		
 			MODAL_LOADING_WRS_PANEL();
 			runCall(param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');	
+			*/
 }
 
 /**
@@ -1406,7 +1406,7 @@ function wrsRunGridButton(param_request)
 function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 {
 	
-	
+
 	
 	if(is_job_call!='ThreadMainLoadData')
 	{
@@ -1437,6 +1437,11 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	 */
 	var remove_report	=	 $('<div/>',{html:str_replace('script','',data)}).find('.container_panel_relatorio_rows').attr('id'); 
 	 
+	var _report_id		=	 str_replace('Main','',remove_report);
+
+	
+	
+	
 	$('.container_panel_relatorio_rows').each(function(){var id_remove	=	 $(this).attr('id'); if(id_remove==remove_report)	$(this).remove();});
 	
 	$('.container_panel_relatorio').append(data);
@@ -1451,6 +1456,9 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	$('.wrs_run_filter').attr('locked','false').attr('flag_load','false');
 	
+	
+	//$('body').WRSJobModal('close',{'report_id':_report_id});
+	
 	TRACE('END MOUNT_LAYOUT_GRID_HEADER'); 
 }
 
@@ -1461,81 +1469,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
  */
 function MODAL_LOADING_WRS_PANEL(_title,_text_body,_class_button)
 {
-	var l_title			=	_title;
-	var l_text_body		=	_text_body;
-	var l_class_button	=	_class_button;
-	
-	if(empty(_title)){
-		l_title	=	'GERANDO_RELATORIO_TITLE';
-	}
-	
-	if(empty(_text_body))
-	{
-		l_text_body	=	'GERANDO_RELATORIO';
-	}
-	
-	if(empty(_class_button)){
-		l_class_button	=	'';
-	}
-	
-	modal(
-			{
-				 type       : 'info', //Type of Modal Box (alert | confirm | prompt | success | warning | error | info | inverted | primary)
-				 title      : LNG(l_title)+' <img src="./imagens/wrs_loading.gif"/>', //Modal Title
-				 text       : LNG(l_text_body), //Modal HTML Content
-                 size       : 'normal', //Modal Size (normal | large | small)
-				 buttons: [
-					{
-                        text: LNG('BTN_CANCEL_CONSULTA')+' 00:00', //Button Text
-                        eKey: true, //Enter Keypress
-                        val:"ok",
-                        addClass: 'btn-light-blue TIME_RUN_RELATORIO_button '+l_class_button, //Button Classes (btn-large | btn-small | btn-green | btn-light-green | btn-purple | btn-orange | btn-pink | btn-turquoise | btn-blue | btn-light-blue | btn-light-red | btn-red | btn-yellow | btn-white | btn-black | btn-rounded | btn-circle | btn-square | btn-disabled)
-                        onClick: function(dialog){
-                        	var cancelSystem		=	dialog.bObj.attr('whoCancel');
-                        	//Para o time do relogio 
-                            _TIME_RUN_RELATORIO 		= false;
-                            
-                            /*
-                             * TODO: Depois temos que criar o botão para Cancelar a Consulta no banco
-                             */
-                            //TRACE('++'+dialog.val);
-                            if(cancelSystem!='system')
-                            {
-                            	TRACE('Cancelado pelo Usuário');
-                            }
-
-                            return true;
-                        }
-                    },
-			     ],
-				 center     : true, //Center Modal Box?
-				 autoclose  : false, //Auto Close Modal Box?
-				 callback   : function(){ if(_TIME_RUN_RELATORIO) MODAL_LOADING_WRS_PANEL(); }, //Callback Function after close Modal (ex: function(result){alert(result);})
-				 onShow     : function(r){
-										 /*
-										  * TODO: configurando o resize da janela
-										  */
-					 
-					 						wrs_modal_filter_run();
-										 		
-				 	}, //After show Modal function
-				 closeClick : false, //Close Modal on click near the box
-                 closable   : true, //If Modal is closable
-				 theme      : 'atlant', //Modal Custom Theme
-                 animate    : false, //Slide animation
-				 background : 'rgba(0,0,0,0.6)', //Background Color, it can be null
-				 zIndex     : 1050, //z-index
-				 _class		:	'wrs-modal-filter-run',	//Criado por Marcelo Santos modificação na classe oficial				
-				 template   : '<div class="modal-box WRS_PANEL_LOADING_RELATORIO"><div class="modal-inner"><div class="modal-title modal-title-load"></div><div class="modal-text"></div><div class="modal-buttons TIME_RUN_RELATORIO"></div></div></div>',
-				 _classes   : {box:'.modal-box', boxInner: ".modal-inner", title:'.modal-title-load', content:'.modal-text', buttons:'.modal-buttons', closebtn:'.modal-close-btn'}
-			}
-			);
-	
-
-	if(!_TIME_RUN_RELATORIO)
-	{
-		TIME_RUN_RELATORIO();
-	}
+	TRACE_DEBUG('Função Removida::MODAL_LOADING_WRS_PANEL');
 }
 
 /**
@@ -1637,63 +1571,6 @@ function wrs_panel_active_drag_drop()
  });
  
  
-	
-
- /*
-  * TIME PARA O RELOGIO
-  */
- var _TIME_RUN_RELATORIO	=	 false;
- var wrs_relatorio_h	=	0;
- var wrs_relatorio_m	=	0;
- var wrs_relatorio_s	=	0;
-
- function TIME_RUN_RELATORIO()
- {
- 	wrs_relatorio_h	=	0;
- 	wrs_relatorio_m	=	0;
- 	wrs_relatorio_s	=	0;
-
- 	
-  
- 	_TIME_RUN_RELATORIO	=	 true;
- 	setTimeout(TIME_RUN_RELATORIO_CLOCK,1000);
- }
-
- /**
-  * Relotio para cancelamento
-  */
- function TIME_RUN_RELATORIO_CLOCK()
- {
- 	wrs_relatorio_s++;
- 	var tmp_wrs_relatorio_m	=	0;
- 	var tmp_wrs_relatorio_h	=	0;
- 	
- 	if(wrs_relatorio_s>=60){
- 		wrs_relatorio_m++;
- 		wrs_relatorio_s	= 0;
- 		
- 	}
- 	
- 	if(wrs_relatorio_m>=60)
- 	{
- 		wrs_relatorio_h++;
- 		wrs_relatorio_m	=	0;
- 	}
- 	
- 	if(wrs_relatorio_s<10) wrs_relatorio_s = '0'+wrs_relatorio_s;
- 	if(wrs_relatorio_m<10) tmp_wrs_relatorio_m = '0';
- 	if(wrs_relatorio_h<10) tmp_wrs_relatorio_h = '0';
- 	
- 	//var time		=	LNG('BTN_CANCEL_CONSULTA')+(tmp_wrs_relatorio_h+wrs_relatorio_h)+':'+(tmp_wrs_relatorio_m+wrs_relatorio_m)+':'+wrs_relatorio_s;
-	var time		=	LNG('BTN_CANCEL_CONSULTA')+(tmp_wrs_relatorio_m+wrs_relatorio_m)+':'+wrs_relatorio_s;
-
- 	$('.TIME_RUN_RELATORIO_button').html(time);
- 	
- 	if(_TIME_RUN_RELATORIO){
- 		setTimeout(TIME_RUN_RELATORIO_CLOCK,1000);
- 	}
- 	
- }
  
  
  /**

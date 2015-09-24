@@ -128,6 +128,8 @@
 			
 			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
 			
+			
+			$('body').WRSJobModal('resize',{'height':height}),
 			MAP.hide();
 			CHART.hide();
 			GRID.hide();
@@ -137,8 +139,6 @@
 				_height		=	height;
 				_height		=	_height-navHeight;
 				
-				
-
 					
 			var half		=	(_height-paddingCenter)/2;
 				_heightToUse=	half*2;
@@ -530,14 +530,9 @@ var getRequestKendoUiDefault	=	{};
   	//Click do Botão - nav_options
   	var event_click_btn_options	=	 function(){
   		check_exist_grid(); 
-
-  		
-  		
   		nav_options.find('input').each(function(){
-  				
   				$(this).prop('checked',false);
-  			
-  				if(opts[$(this).attr('name')]){
+  				if(!empty(opts[$(this).attr('name')])){
   					$(this).prop('checked',true);
   				}else{
   					$(this).prop('checked',false);
