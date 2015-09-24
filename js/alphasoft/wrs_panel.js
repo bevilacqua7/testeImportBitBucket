@@ -1766,7 +1766,7 @@ $(function(){
 });
 
 function acoes_multiplas_menu_painel(){
-	$('.wrs_panel_options li.ui-draggable').each(function(){
+	$('.wrs_panel_options li.ui-draggable.ui-widget-content').each(function(){
 		$(this).click(function(){
 			if($(this).hasClass('ui-state-focus')){
 				$(this).removeClass('ui-state-focus').bind('mouseover').bind('mouseout');
@@ -1779,12 +1779,145 @@ function acoes_multiplas_menu_painel(){
 }
 
 function confere_se_existe_menu_panel_selecionado(painel){
-	var menu_painel = $('<div/>').addClass('menu_selecionados_painel_filtros').css({width:'100px',height:'50px','background-color':'#ddd'});
-	if(painel.find('li.ui-draggable.ui-state-focus').length>0 && painel.find('.menu_selecionados_painel_filtros').length<=0){
-		menu_painel.insertAfter(painel.find('.wrs_drag_direita_find'));
-	}
 
-	if(painel.find('li.ui-draggable.ui-state-focus').length<=0){
-		painel.find('.menu_selecionados_painel_filtros').remove();
+	var qtde_selecionados 			= painel.find('li.ui-draggable.ui-state-focus').length;
+	var _s							= qtde_selecionados>1?'s':'';
+	var _ns							= qtde_selecionados>1?'ns':'m';
+	
+	var menu_painel 				= $('<div/>').addClass('menu_selecionados_painel_filtros').css(
+			{
+				'width'				: '100%',
+				'height'			: '40px',
+				'background-color'	: '#ddd',
+				'margin-bottom'		: '5px',
+				'margin-top'		: '-20px',
+				'display'			: 'none'
+			});
+
+	var botao_ver_selecionados		= $('<div/>')
+										.css(
+												{
+													'width'		:	'33%',
+													'padding'	:	'12px'
+												}
+											)
+										.addClass('btn btn-color-write btn-success')
+										.append(
+												$('<li/>').addClass('glyphicon glyphicon-ok-circle color_write')
+											/*	,$('<span/>').addClass('qtde_sel').css(
+														{
+															'font-size'		: '15px',
+															'padding-left'	: '5px'															
+														}
+												)
+											*/
+										)
+										.click(action_button_ver_itens_selecionados_nos_filtros)
+										;	
+
+	var botao_limpa_selecionados	= $('<div/>')
+										.css(
+												{
+													'width'		:	'33%',
+													'padding'	:	'12px'
+												}
+											)
+										.addClass('btn btn-color-write btn-danger')
+										.append(
+												$('<li/>').addClass('glyphicon glyphicon-remove-circle color_write')
+											/*	,$('<span/>').addClass('qtde_sel').css(
+														{
+															'font-size'		: '15px',
+															'padding-left'	: '5px'															
+														}
+												)
+											*/
+										)
+										.click(limpa_botoes_selecionados_filtros)
+										;	
+	
+	var botao_qtde_selecionados	= $('<div/>')
+										.css(
+												{
+													'width'		:	'34%',
+													'padding'	:	'12px'
+												}
+											)
+										.addClass('btn-group ui-state-focus')
+										.append(
+												$('<span/>').addClass('qtde_sel').css(
+														{
+															'font-size'		: '15px',
+															'padding-left'	: '10px'															
+														}
+												)
+										)
+										;	
+	
+	menu_painel.append(botao_ver_selecionados,botao_qtde_selecionados,botao_limpa_selecionados);
+	
+
+	if(qtde_selecionados>0){
+		if(painel.find('.menu_selecionados_painel_filtros').length<=0){
+			menu_painel.insertAfter(painel.find('.wrs_drag_direita_find')).slideDown(300);
+		}
+		painel.find('div.menu_selecionados_painel_filtros div span.qtde_sel').html(qtde_selecionados);
+		painel.find('div.menu_selecionados_painel_filtros div.btn-success').attr('title',LNG('FILTER_CONTEX_MENU_SELECTION_VIEW').replace('%s',_s).replace('%ns',_ns)).qtip(
+										{
+										         content: $(this).attr('title'),
+											     style: {
+											     	 classes: 'qtip-bootstrap qtip-shadow'
+											     },
+												 position: {
+													 //at: 'left',
+													 my: 'top right',
+											          target: 'mouse', // Track the mouse as the positioning target
+											          adjust: { x: 10, y: 10 } // Offset it slightly from under the mouse
+											      }
+										});
+
+		painel.find('div.menu_selecionados_painel_filtros div.btn-danger').attr('title',LNG('FILTER_CONTEX_MENU_SELECTION_REMOVE').replace('%s',_s).replace('%ns',_ns)).qtip(
+										{
+										         content: $(this).attr('title'),
+											     style: {
+											     	 classes: 'qtip-bootstrap qtip-shadow'
+											     },
+												 position: {
+													// at: 'left',
+													 my: 'top right',
+											          target: 'mouse', // Track the mouse as the positioning target
+											          adjust: { x: 10, y: 10 } // Offset it slightly from under the mouse
+											      }
+										});
+	}else{
+		limpa_botoes_selecionados_filtros(painel);
 	}
+}
+
+function action_button_ver_itens_selecionados_nos_filtros(e){
+	var painel	= $(e.currentTarget).parents('div.wrs_panel_options');
+	if(painel.find('li.botoes_nao_selecionados').length<=0){
+		var itens_nao_selecionados = painel.find('li.ui-draggable.ui-widget-content:not(.ui-state-focus)').addClass('botoes_nao_selecionados');
+		if(itens_nao_selecionados.length>0){
+			painel.find('li.botoes_nao_selecionados').hide(250);
+		}
+	}else{
+		mostrar_botoes_nao_selecionados_ocultos(painel);
+	}
+}
+
+function mostrar_botoes_nao_selecionados_ocultos(painel){
+	painel.find('li.botoes_nao_selecionados').show(250,function(){ $(this).removeClass('botoes_nao_selecionados'); });		
+}
+
+function limpa_botoes_selecionados_filtros(painel){
+	var _painel='';
+	if(painel.type=='click'){ // quando for evento vindo de click ao inves de uma funcao, gerar o painel manualmente
+		_painel	= $(painel.currentTarget).parents('div.wrs_panel_options');		
+	}else{
+		_painel = painel; 
+	}
+	_painel.find('.menu_selecionados_painel_filtros').slideUp(250,function(){ $(this).remove(); });
+	mostrar_botoes_nao_selecionados_ocultos(_painel);
+	_painel.find('li.ui-draggable.ui-state-focus').removeClass('ui-state-focus');
 }
