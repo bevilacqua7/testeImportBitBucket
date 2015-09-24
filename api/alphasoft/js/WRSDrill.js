@@ -18,7 +18,6 @@ function addDrillOnDataBound(nameID,kendoUI)
 	var rows_tag		=	explode(',',layout['LAYOUT_ROWS']);
 	var column_tag		=	explode(',',layout['LAYOUT_COLUMNS']);
 
-	
 	var _data			=	kendoUI.sender._data;
 	var __kendoUI		=	kendoUI.sender;
 
@@ -48,20 +47,18 @@ function addDrillOnDataBound(nameID,kendoUI)
 					var rows				=	explode(',',layout['LAYOUT_ROWS']);
 					var column				=	explode(',',layout['LAYOUT_COLUMNS']);
 					var filter_add			=	'';
+					
 					if(rel=='column')
 						{
-							indexParent			=	 $(this).parent().parent().index();
-							column[indexParent]	=	LEVEL_DRILL;
+							indexParent					=	 $(this).parent().parent().index();
+							column[indexParent]			=	LEVEL_DRILL;
 							_layout['LAYOUT_COLUMNS']	=	column;
-							
-							
-						
 						}else{
 							rows[indexParent-1]		=	LEVEL_DRILL;
 							_layout['LAYOUT_ROWS']	=	rows;
 						}
 					
-					
+						
 						filter_add							=	[['__'+replace_attr(LEVEL_FULL),'',LEVEL_FULL+'.['+strip_tags($(this).parent().html())+']']];
 					
 						

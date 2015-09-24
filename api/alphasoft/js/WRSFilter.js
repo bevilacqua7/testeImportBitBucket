@@ -315,7 +315,7 @@ function is_wrs_change_to_run(_param_request)
 
 		if(eastonclose=='true')
 		{
-			MODAL_LOADING_WRS_PANEL();
+			//MODAL_LOADING_WRS_PANEL();
 			$('.wrs_run_filter').attr('eastonclose','false');
 			loadStart	=	false;
 		}
@@ -419,7 +419,7 @@ function is_wrs_change_to_run(_param_request)
 			{
 				if(loadStart)
 				{	
-					MODAL_LOADING_WRS_PANEL();
+					//MODAL_LOADING_WRS_PANEL();
 				}
 				$('.wrs_run_filter').attr('eastonclose','false');
 			}

@@ -567,6 +567,23 @@ function setWRSTime()
  */
 
 
+
+function removeKey(inputArray, line)
+{
+	var _tmp		=	[];
+	
+	    for(var lineArray in inputArray) 
+	    {
+	        if(lineArray != line) 
+	        {
+	        	_tmp[lineArray]	=	inputArray[lineArray];
+	        }
+	    }
+    
+    return _tmp;
+}
+
+
 function buttonClickRightRelatorios(nameObject,itemsElement)
 {
 	$(nameObject).each(function(){
@@ -981,6 +998,9 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 
 
 $(document).ready(function(){
+	
+	$('body').WRSJobModal(); //Criando o BOX de CSS
+	
 	$('a.changePage').each(function(){
 		var link = $(this).attr('href');
 		$(this).parents('div.wrs_item_santos').click(function(){

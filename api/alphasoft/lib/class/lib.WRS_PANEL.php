@@ -130,7 +130,7 @@ class WRS_PANEL  extends WRS_USER
 			$this->setCube(json_decode(base64_decode($json_request),true));
 		}
 		
-		$exception	=	array('TITLE_ABA','cube_s','WINDOW','TYPE_RUN','TOP_CONFIG','SUMARIZA','SHOW_LINE_TOTAL','REPORT_ID','PLUS_MINUS','PAGE_CURRENT','MKTIME_HISTORY','IS_REFRESH','DRILL_HIERARQUIA_LINHA','COLORS_LINE','ALL_ROWS','ALL_COLS');
+		$exception	=	array('TITLE_ABA','cube_s','WINDOW','TYPE_RUN','TOP_CONFIG','SUMARIZA','SHOW_LINE_TOTAL','REPORT_ID','PLUS_MINUS','PAGE_CURRENT','MKTIME_HISTORY','IS_REFRESH','DRILL_HIERARQUIA_LINHA','COLORS_LINE','ALL_ROWS','ALL_COLS','ORDER_COLUMN');
 		//Pegando informações do Request
 		foreach ($this->_param_ssas_reports as $label =>$value)
 		{
@@ -150,7 +150,8 @@ class WRS_PANEL  extends WRS_USER
 			case 'gridRowsCache'	:	$this->SELECT_CACHE_GRID()		;	break;
 			case 'change_cube'		:	$this->CHANGE_CUBE()			;	break;
 			case 'save_history'		:	$this->saveHistory()			;	break;
-			case 'threadJobManager'	: 	$this->threadJobManagerVoid()	;		break;		
+			case 'threadJobManager'	: 	$this->threadJobManagerVoid()	;		break;	
+			case 'stopjob'			:	$this->threadJobManagerStop()	;		break;
 			default 				: 	$this->eventDefault()			; 	break;
 		}		
 		
@@ -690,7 +691,7 @@ class WRS_PANEL  extends WRS_USER
 		
 //		WRS_DEBUG_QUERY($_REQUEST);
 //		WRS_DEBUG_QUERY($getRequestKendoUi);
-		WRS_DEBUG_QUERY($getRequestKendoUi);
+		//WRS_DEBUG_QUERY($getRequestKendoUi);
 		$getRequestWrsExceptions['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$getRequestWrsExceptions,$DillLayout);
 		
 
@@ -855,6 +856,8 @@ class WRS_PANEL  extends WRS_USER
 		
 		$threadJobManager	=	$this->threadJobManager->runThreadJobManager($thread_job_manager,$getRequestKendoUi['REPORT_ID'],$this->_query,$checkThreadJobManager);
 
+
+		
 		if(is_array($threadJobManager))
 		{
 			//O correu um erro  no processo da runThreadJobManager 
@@ -1061,11 +1064,9 @@ HTML;
 
 		$HTML	=	 $TelerikUi->render($this->param_encode($this->_param_ssas_reports),$getRequestWrsExceptions,$getRequestKendoUi['REPORT_ID']);
 		
-		
-		
 		if($checkThreadJobManager)
 		{
-			return array('html'=>$HTML,'warning'=>$msg,'REPORT_ID'=>$getRequestKendoUi['REPORT_ID']);
+			return array('html'=>$HTML,'warning'=>$msg,'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'data'=>$getRequestKendoUi);
 		}else{
 			echo $HTML;
 		}
@@ -1266,7 +1267,54 @@ HTML;
 	
 	
 	
+	private function threadJobManagerStop()
+	{
+		
+		$report_id				=	 fwrs_request('report_id');
+		$html_data				=	array();
+		$html_data['report_id']	=	$report_id;
+		
+		header('Content-Type: application/json');
+	 
 	
+		$job			=	$this->threadJobManager->getJOB($report_id);
+		
+		if(!empty($job))
+		{
+			
+			if(isset($job['CREATE_SSAS_JOB']['QUERY_ID']))
+			{
+					$query	=	$this->_query->STOP_SSAS_JOB($job['CREATE_SSAS_JOB']['QUERY_ID']);
+
+					if(!$this->query($query))
+					{
+						$html_data['html']	=	 str_replace('%s',$job['getRequestKendoUi']['TITLE_ABA'],LNG('JOB_CANCEL_ERRO'));
+						$html_data['status']	=	-1;
+						echo json_encode($html_data,true);
+						exit();
+					}else{
+						$html_data['html']	=	 str_replace('%s',$job['getRequestKendoUi']['TITLE_ABA'],LNG('JOB_CANCEL'));
+						$html_data['status']	=	1;
+						$this->threadJobManager->removeJOB($report_id);
+						echo json_encode($html_data,true);
+						exit();
+					}
+			
+			}
+			
+			
+		}
+
+		
+		$html_data['html'] 		=	LNG('JOB_NOTFOUND');
+		$html_data['status']	=	-1;	
+		$this->threadJobManager->removeJOB($report_id);
+		
+		
+		echo json_encode($html_data,true);
+		//STOP_SSAS_JOB
+		
+	}
 	
 	
 	/**
@@ -1279,10 +1327,9 @@ HTML;
 		header('Content-Type: application/json');
 		
 		includeCLASS('KendoUi');
-		
 
 		$job_val		=	base64_decode(fwrs_request('jobs_manager'));
-		$job_param		=	 json_decode($job_val,true);
+		$job_param		=	json_decode($job_val,true);
 	 	$param_manager	=	array();
 		
 		if(!empty($job_val))
@@ -1290,14 +1337,17 @@ HTML;
 			foreach($job_param as $line =>$report_data)
 			{
 				//WRS_DEBUG_QUERY($report_data);
+
 				$job			=	$this->threadJobManager->getJOB($report_data);
 				
 				if($job)
 				{
 						$TelerikUi			= new KendoUi();
 						$getRequestKendoUi	=	$job['getRequestKendoUi'];
+						
 						$TelerikUi->setId($getRequestKendoUi['REPORT_ID']);		
 						$TelerikUi->setWrsKendoUi($getRequestKendoUi); //Passando para Gravar no JS as integrações recebidas
+						
 						$MountReport		=	$this->mountScriptReport($job,$TelerikUi,true);
 						
 						//Removendo o Report ID da lista de array
@@ -1305,6 +1355,7 @@ HTML;
 						{
 							$this->threadJobManager->removeJOB($getRequestKendoUi['REPORT_ID']);	
 						}
+						
 						$param_manager[$report_data]	=	$MountReport;
 				}
 			}
