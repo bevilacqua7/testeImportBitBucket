@@ -14,8 +14,6 @@
 	
 	
     $.fn.WRSWindowGridEventTools = function(loadByAba){
-    	
-    	
     	var eventTelerik	=	this;
 		var idName			=	eventTelerik.attr('id');
 		var GRID			=	$('#'+idName);
@@ -121,6 +119,7 @@
 		{
 			var wrs_data		=	"";
 			var height			=	BOX.parent().parent().outerHeight();
+			var width			=	BOX.parent().parent().outerWidth();
 			var BOX_PARENT		=	BOX.parent().parent();
 			var active_half		=	false;
 			var paddingCenter	=	((parseInt(BOX_PARENT.parent().css('padding-bottom').replace('px')))*3)-2;
@@ -129,7 +128,7 @@
 			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
 			
 			
-			$('body').WRSJobModal('resize',{'height':height}),
+			$('body').WRSJobModal('resize',{'height':height,'width':width}),
 			MAP.hide();
 			CHART.hide();
 			GRID.hide();

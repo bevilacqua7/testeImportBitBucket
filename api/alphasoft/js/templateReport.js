@@ -173,15 +173,15 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	}
 	else
 	{
-
-		$(ABA_TAG_NAME).wrsAbas('load_multiple',[_param]);
 		
+		$(ABA_TAG_NAME).wrsAbas('load_multiple',[_param],true);
+
 		//wrsRunFilter();
 		//set_value_box_relatorio(_param);
 		
 		$('#myModal').modal('hide');
 		if(!nao_processa){
-			wrsRunFilter();
+			//wrsRunFilter();
 		}else{
 			wrs_panel_layout.open('east');
 		}
@@ -297,12 +297,12 @@ function btn_window_grid_event_report(data)
 		switch(action_type)
 		{
 			case 'new' 		: 
-						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados);
+						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados,true);
 						$('#myModal').modal('hide');
 					//callback_load_report_generic_modal(objDados);	
 					break; // abre o relatorio
 			case 'update' 	: 
-						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados,true);
+						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados);
 						$('#myModal').modal('hide');
 					//callback_load_report_generic_modal(objDados,false,true);
 					break; // abre somente o layout
