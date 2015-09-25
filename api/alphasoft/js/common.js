@@ -603,8 +603,12 @@ function send_filters_to_painel(type,obj,painel){
 	var itens_selecionados = obj.parents('div.wrs_panel_options').find('li.ui-draggable.ui-state-focus');
 	if(itens_selecionados.length>0){
 		var item_ja_existe=[];
+		var _painel_find = painel;
+		if(painel.hasClass('sortable_coluna') || painel.hasClass('sortable_linha')){
+			_painel_find = $('.sortable_coluna, .sortable_linha');
+		}
 		itens_selecionados.each(function(){
-			if(painel.find('li.'+$(this).attr('tag-class')).length<=0){
+			if(_painel_find.find('li.'+$(this).attr('tag-class')).length<=0){
 				DROP_EVENT(type, $(this).removeClass('ui-state-focus'),painel);
 			}else{
 				item_ja_existe.push($(this).text());

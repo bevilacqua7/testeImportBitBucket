@@ -80,11 +80,6 @@ src='imagens/wrs_background.jpg', sizingMethod='scale')";
 	margin: 3px 2px;
 }
 
-#user_remote{
-    margin-bottom: 10px;
-    margin-top: -10px;
-}
-
 #label_chk_remote{
     margin-left: 45px;
 }
@@ -270,7 +265,13 @@ $(function(){
 	});
 
 	$("#chk_remote").change(function(){
-		$('#user_remote').toggle($(this).is(":checked"));		
+		if($(this).is(":checked")){
+			$('#password').css({ 'border-bottom-right-radius': '0', 'border-bottom-left-radius': '0' });
+			$('#user_remote').show(200);
+		}else{
+			$('#password').css({ 'border-bottom-right-radius': '4px', 'border-bottom-left-radius': '4px' });
+			$('#user_remote').hide(200);
+		}
 	});
 	
 });
