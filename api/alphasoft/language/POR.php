@@ -236,8 +236,11 @@
 	$language ['WARNING_BODY_RESULT_NOT_FOUND']		= "A consulta não retornou resultado..";
 	
 		
-	
-	$language ['TITLE_CONTEX_MENU'] 	= "Adicionar á";
+
+	$language ['TITLE_CONTEX_MENU'] 						= "Adicionar à";
+	$language ['FILTER_CONTEX_MENU_SELECTION_REMOVE'] 		= "Remover seleção do%s ite%ns";
+	$language ['FILTER_CONTEX_MENU_SELECTION_VIEW'] 		= "Visualizar ite%ns selecionado%s";
+	$language ['FILTER_CONTEX_MENU_SELECTION_ITEM_EXISTS'] 	= "O%s ite%ns abaixo já existia%m e não fo%ram adicionado%s:";
 	
 	$language ['TITLE_MENU_DASHBOARD'] 	= "('Visões Consolidadas com Relatórios de Diferentes Bases Segmentadas em Quadrantes Independentes')";
 	

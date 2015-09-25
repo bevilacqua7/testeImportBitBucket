@@ -76,7 +76,7 @@ function WRS_RESIZE(){
 					  function() {
 
 						$(this).attr('hover','hover');
-
+					/*
 						$('.fullwidth').each(function(){
 
 							if($(this).attr('hover')!='hover'){
@@ -91,10 +91,10 @@ function WRS_RESIZE(){
 							}
 							
 						});
-						    
+					*/
 					  }, function() {
 						  $(this).attr('hover','');
-						  
+						  /*
 						  $( '.fullwidth' ).animate({
 							    opacity: 1
 							  }, {
@@ -103,7 +103,7 @@ function WRS_RESIZE(){
 								    	opacity: "easeInOutCirc"
 								    }
 								  });
-						  
+						  */
 					  }
 					);
 				

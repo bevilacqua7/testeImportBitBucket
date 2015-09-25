@@ -612,22 +612,52 @@ function wrs_contex_menu_options_panel_atributos()
 	
 	var itemsElement	=	{};
 	
-	itemsElement[0]	=	{name:LNG('ATTRIBUTOS_FILTRO')	,icon : 'add', callback:function(){DROP_EVENT( 'DIRECT', $(this),$('.sortable_filtro'));  }};
-	itemsElement[1]	=	{name:LNG('ATTRIBUTOS_COLUNA')	,icon : 'add', callback:function(){DROP_EVENT( 'DIRECT', $(this),$('.sortable_coluna')); }};
-	itemsElement[2]	=	{name:LNG('ATTRIBUTOS_LINHA')	,icon : 'add', callback:function(){DROP_EVENT( 'DIRECT', $(this),$('.sortable_linha')); }};
+	itemsElement[0]	=	{name:LNG('ATTRIBUTOS_FILTRO')	,icon : 'add', callback:function(){ send_filters_to_painel( 'DIRECT', $(this),$('.sortable_filtro'));  }};
+	itemsElement[1]	=	{name:LNG('ATTRIBUTOS_COLUNA')	,icon : 'add', callback:function(){ send_filters_to_painel( 'DIRECT', $(this),$('.sortable_coluna')); }};
+	itemsElement[2]	=	{name:LNG('ATTRIBUTOS_LINHA')	,icon : 'add', callback:function(){ send_filters_to_painel( 'DIRECT', $(this),$('.sortable_linha')); }};
 	itemsElement[3]	=	'---------';
 	itemsElement[4]	=	{name:LNG('BTN_SAIR'),icon : 'quit' , callback:function(){}};
 	
 	buttonClickRightRelatorios('.wrs_options_panel_atributo li',itemsElement);
 }
 
-
+function send_filters_to_painel(type,obj,painel){
+	var itens_selecionados = obj.parents('div.wrs_panel_options').find('li.ui-draggable.ui-state-focus');
+	if(itens_selecionados.length>0){
+		var item_ja_existe=[];
+		var _painel_find = painel;
+		if(painel.hasClass('sortable_coluna') || painel.hasClass('sortable_linha')){
+			_painel_find = $('.sortable_coluna, .sortable_linha');
+		}
+		itens_selecionados.each(function(){
+			if(_painel_find.find('li.'+$(this).attr('tag-class')).length<=0){
+				DROP_EVENT(type, $(this).removeClass('ui-state-focus'),painel);
+			}else{
+				item_ja_existe.push($(this).text());
+			}
+		});
+		limpa_botoes_selecionados_filtros(obj.parents('div.wrs_panel_options'));
+		if(item_ja_existe.length>0){
+			var _s 		= item_ja_existe.length>1?'s':'';
+			var _ns 	= item_ja_existe.length>1?'ns':'m';
+			var _m 		= item_ja_existe.length>1?'m':'';
+			var _ram 	= item_ja_existe.length>1?'ram':'i';
+			var text 	= LNG('FILTER_CONTEX_MENU_SELECTION_ITEM_EXISTS').replace('%s',_s).replace('%ns',_ns).replace('%m',_m).replace('%ram',_ram).replace('%s',_s);
+			for(var item in item_ja_existe){
+				text   += "<br/> - "+item_ja_existe[item];
+			}
+			WRS_ALERT(text,'warning');
+		}
+	}else{
+		DROP_EVENT(type, obj, painel);
+	}	
+}
 
 function wrs_contex_menu_options_panel_metrica()
 {
 	var itemsElement	=	{};
 	
-	itemsElement[0]	=	{name:LNG('ATTRIBUTOS_METRICA')	,icon : 'add', callback:function(){ DROP_EVENT( 'DIRECT', $(this),$('.sortable_metrica')); }};
+	itemsElement[0]	=	{name:LNG('ATTRIBUTOS_METRICA')	,icon : 'add', callback:function(){ send_filters_to_painel('DIRECT',$(this),$('.sortable_metrica')); }};
 	itemsElement[1]	=	'---------';
 	itemsElement[2]	=	{name:LNG('BTN_SAIR'),icon : 'quit' , callback:function(){}};
 	

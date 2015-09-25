@@ -861,13 +861,26 @@ function setDraggable(name,use,who_receive)
 		 
 		 return true;
 	 }
-	 
+	 	var callbk_reativa_button_selected=function(){};
 	 	var draggableOptionsLi		=	{
 									   	     helper		: "clone",
 									   	     cursor		: "move", 
 									   	     appendTo	: "body",
 									   	     zIndex		: 10000,
-									   	     cursorAt	: { top: 10, left: 20 }
+									   	     cursorAt	: { top: 10, left: 20 },
+									   	     start		: function(e,ui){ 
+									   	    	 							if($(ui.helper.context).hasClass('ui-state-focus')){
+										   	    	 							$(ui.helper.context).removeClass('ui-state-focus');
+										   	    	 							callbk_reativa_button_selected=function(){
+										   	    	 									$(ui.helper.context).addClass('ui-state-focus');
+										   	    	 							};
+									   	    	 							}else{
+									   	    	 								callbk_reativa_button_selected=function(){};
+									   	    	 							}
+									   	    	 						},
+									   	     stop		: function(e,ui){
+									   	    	 			callbk_reativa_button_selected();
+									   	     				}
 								   	     };
 		 
 	
@@ -1534,7 +1547,7 @@ function wrs_panel_active_drag_drop()
 					      opacity			: 0.8,
 					      tolerance			: "pointer",
 					      scrollSensitivity	: 10,
-					      revert			: true,
+					      cursorAt			: { left: 20,top: 10 },
 					      stop				:function(e,ui) { 	
 								insetDragDropEmpry();  
 								sortable_attr_simples_composto();
@@ -1545,11 +1558,11 @@ function wrs_panel_active_drag_drop()
 								// como o botao em drag estava com o status hover forcado, volta ao status normal dele (mouseout) apos soltar o clique
 								$(ui.item).unbind('mouseout').trigger("mouseout");
 								
-								// mostrar ou nao os icones identificadores (A, $,...)
-								if($(ui.item).find('span.btn-left').length != 0 && $(ui.item).parents('div.ui-layout-pane').hasClass('ui-layout-pane-center')){
-									$(ui.item).find('span.btn-left').show();
+								// mostrar ou nao o icone de menu quando estiver no painel de filtros
+								if($(ui.item).find('span.wrs_tops_configure').length != 0 && $(ui.item).parents('div.ui-layout-pane').hasClass('ui-layout-pane-center')){
+									$(ui.item).find('span.wrs_tops_configure').show();
 								}else{
-									$(ui.item).find('span.btn-left').hide();
+									$(ui.item).find('span.wrs_tops_configure').hide();
 								}
 						  }	
 						  ,start:function(e,ui){							  
@@ -1648,3 +1661,194 @@ function wrs_modal_filter_run()
 	 	$('.wrs-modal-filter-run').css(_css);
 }
  
+var tecla_shift_press=false;
+$(function(){
+	acoes_multiplas_menu_painel();
+	$(document).keydown(function(e){
+		if(e.keyCode==16){
+			tecla_shift_press=true;
+		}
+	}).keyup(function(e){
+		if(e.keyCode==16){
+			tecla_shift_press=false;
+		}
+	});
+});
+
+function acoes_multiplas_menu_painel(){
+	$('.wrs_panel_options li.ui-draggable.ui-widget-content').each(function(){
+		$(this).click(function(){
+			if($(this).hasClass('ui-state-focus')){
+				$(this).removeClass('ui-state-focus');
+			}else{
+				$(this).addClass('ui-state-focus');
+				
+				// regra para utilizar o shift (ja identificado na funcao acima) para verificar as seguintes regras:
+				// - se quando houver a selecao APENAS DO SEGUNDO ITEM
+				// - se o shift estiver pressionado
+				// - se a diferenca entre os itens for maior que 1 (tiver algum item entre eles)
+				// - ENTAO:
+				// - seleciona os itens dentro do intervalo
+				if(
+						$(this).parent().find('li.ui-draggable.ui-state-focus').length==2 &&
+						tecla_shift_press
+				){
+					var primeiro_item 			= $(this).parent().find('li.ui-draggable.ui-state-focus').first();
+					var segundo_item 			= $(this).parent().find('li.ui-draggable.ui-state-focus').last();
+					var primeiro_item_index 	= $(this).parent().find('li.ui-draggable').index(primeiro_item);
+					var segundo_item_index 		= $(this).parent().find('li.ui-draggable').index(segundo_item);					
+					if(segundo_item_index-primeiro_item_index>1){
+						for(var o=primeiro_item_index+1;o<segundo_item_index;o++){
+							$(this).parent().find('li.ui-draggable').eq(o).addClass('ui-state-focus');
+						}
+					}
+				}
+			}
+			confere_se_existe_menu_panel_selecionado($(this).parents('div.wrs_panel_options'));
+		});
+	}); 
+}
+
+function confere_se_existe_menu_panel_selecionado(painel){
+
+	var qtde_selecionados 			= painel.find('li.ui-draggable.ui-state-focus').length;
+	var _s							= qtde_selecionados>1?'s':'';
+	var _ns							= qtde_selecionados>1?'ns':'m';
+	
+	var menu_painel 				= $('<div/>').addClass('menu_selecionados_painel_filtros').css(
+			{
+				'width'				: '100%',
+				'height'			: '40px',
+				'background-color'	: '#ddd',
+				'margin-bottom'		: '5px',
+				'margin-top'		: '-20px',
+				'display'			: 'none'
+			});
+
+	var botao_ver_selecionados		= $('<div/>')
+										.css(
+												{
+													'width'		:	'33%',
+													'padding'	:	'12px'
+												}
+											)
+										.addClass('btn btn-color-write btn-success')
+										.append(
+												$('<i/>').addClass('glyphicon glyphicon-ok-circle color_write')
+											/*	,$('<span/>').addClass('qtde_sel').css(
+														{
+															'font-size'		: '15px',
+															'padding-left'	: '5px'															
+														}
+												)
+											*/
+										)
+										.click(action_button_ver_itens_selecionados_nos_filtros)
+										;	
+
+	var botao_limpa_selecionados	= $('<div/>')
+										.css(
+												{
+													'width'		:	'33%',
+													'padding'	:	'12px'
+												}
+											)
+										.addClass('btn btn-color-write btn-danger')
+										.append(
+												$('<i/>').addClass('glyphicon glyphicon-remove-circle color_write')
+											/*	,$('<span/>').addClass('qtde_sel').css(
+														{
+															'font-size'		: '15px',
+															'padding-left'	: '5px'															
+														}
+												)
+											*/
+										)
+										.click(limpa_botoes_selecionados_filtros)
+										;	
+	
+	var botao_qtde_selecionados	= $('<div/>')
+										.css(
+												{
+													'width'			:	'34%',
+													'padding'		:	'12px',
+													'text-align'	:	'center'
+												}
+											)
+										.addClass('btn-group ui-state-focus')
+										.append(
+												$('<span/>').addClass('qtde_sel').css(
+														{
+															'font-size'		: '15px'															
+														}
+												)
+										)
+										;	
+	
+	menu_painel.append(botao_ver_selecionados,botao_qtde_selecionados,botao_limpa_selecionados);
+	
+
+	if(qtde_selecionados>0){
+		if(painel.find('.menu_selecionados_painel_filtros').length<=0){
+			menu_painel.insertAfter(painel.find('.wrs_drag_direita_find')).slideDown();
+		}
+		painel.find('div.menu_selecionados_painel_filtros div span.qtde_sel').html(qtde_selecionados);
+		painel.find('div.menu_selecionados_painel_filtros div.btn-success').attr('title',LNG('FILTER_CONTEX_MENU_SELECTION_VIEW').replace('%s',_s).replace('%ns',_ns)).qtip(
+										{
+										         content: $(this).attr('title'),
+											     style: {
+											     	 classes: 'qtip-bootstrap qtip-shadow'
+											     },
+												 position: {
+													 //at: 'left',
+													 my: 'top right',
+											          target: 'mouse', // Track the mouse as the positioning target
+											          adjust: { x: 10, y: 10 } // Offset it slightly from under the mouse
+											      }
+										});
+
+		painel.find('div.menu_selecionados_painel_filtros div.btn-danger').attr('title',LNG('FILTER_CONTEX_MENU_SELECTION_REMOVE').replace('%s',_s).replace('%ns',_ns)).qtip(
+										{
+										         content: $(this).attr('title'),
+											     style: {
+											     	 classes: 'qtip-bootstrap qtip-shadow'
+											     },
+												 position: {
+													// at: 'left',
+													 my: 'top right',
+											          target: 'mouse', // Track the mouse as the positioning target
+											          adjust: { x: 10, y: 10 } // Offset it slightly from under the mouse
+											      }
+										});
+	}else{
+		limpa_botoes_selecionados_filtros(painel);
+	}
+}
+
+function action_button_ver_itens_selecionados_nos_filtros(e){
+	var painel	= $(e.currentTarget).parents('div.wrs_panel_options');
+	if(painel.find('li.botoes_nao_selecionados').length<=0){
+		var itens_nao_selecionados = painel.find('li.ui-draggable.ui-widget-content:not(.ui-state-focus)').addClass('botoes_nao_selecionados');
+		if(itens_nao_selecionados.length>0){
+			painel.find('li.botoes_nao_selecionados').hide();
+		}
+	}else{
+		mostrar_botoes_nao_selecionados_ocultos(painel);
+	}
+}
+
+function mostrar_botoes_nao_selecionados_ocultos(painel){
+	painel.find('li.botoes_nao_selecionados').show(0,function(){ $(this).removeClass('botoes_nao_selecionados'); });		
+}
+
+function limpa_botoes_selecionados_filtros(painel){
+	var _painel='';
+	if(painel.type=='click'){ // quando for evento vindo de click ao inves de uma funcao, gerar o painel manualmente
+		_painel	= $(painel.currentTarget).parents('div.wrs_panel_options');		
+	}else{
+		_painel = painel; 
+	}
+	_painel.find('.menu_selecionados_painel_filtros').slideUp(100,function(){ $(this).remove(); });
+	mostrar_botoes_nao_selecionados_ocultos(_painel);
+	_painel.find('li.ui-draggable.ui-state-focus').removeClass('ui-state-focus');
+}
