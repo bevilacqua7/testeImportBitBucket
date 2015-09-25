@@ -242,8 +242,6 @@ function trace_change_kendo(kendoUi)
 					_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
 					_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
 					
-					
-					
 					eventGridActive.attr('wrsparam',base64_encode(json_encode(_param_request,true)));
 					
 				//Salva atualizações da aba corrente mas esse evento somente quando troca de aba
@@ -300,9 +298,13 @@ function trace_change_kendo(kendoUi)
 				var idReport		=	"";
 				var IDMain			=	"";
 				var hasDefault		=	 $('.wrs_panel_filter_measure').is(':hidden');
-				var IDCurrent		=	'#'+$(this).attr('id-aba');
+				var _report_id		=	$(this).attr('id-aba');
+				var IDCurrent		=	'#'+_report_id;
 				
+				wrs_run_filter_unlocked();
 				 
+				
+				$('body').WRSJobModal('click_aba',{report_id:_report_id});
 				
 					$(this).addClass('active');
 					
@@ -340,35 +342,37 @@ function trace_change_kendo(kendoUi)
 				
 				
 				var isGrid			=	false;
+				var _paran_aba		=	$(this).attr('wrsparam');
 				
-				
-				
-				$(IDMain).each(function(){
-					isGrid	=	 true;
-				});
-				
-				
-				
-				if(hasDefault==false)
-				{
-					gridValue		=	getJsonDecodeBase64($(this).attr('wrsparam'));
-					only_aba		=	 true;
-				}else{
-					
-					gridValue		=	getJsonDecodeBase64($(this).attr('wrsparam'));
+					wrs_run_filter_add_history(_paran_aba)
 					
 					
-					$(IDCurrent).each(function(){
+					$(IDMain).each(function(){
 						isGrid	=	 true;
 					});
 					
 					
-					if(!isGrid)
-					{
-						wrs_panel_layout.open('east');
-					}
 					
-				}
+					if(hasDefault==false)
+					{
+						gridValue		=	getJsonDecodeBase64(_paran_aba);
+						only_aba		=	 true;
+					}else{
+						
+						gridValue		=	getJsonDecodeBase64(_paran_aba);
+						
+						
+						$(IDCurrent).each(function(){
+							isGrid	=	 true;
+						});
+						
+						
+						if(!isGrid)
+						{
+							wrs_panel_layout.open('east');
+						}
+						
+					}
 				
 				
 				
@@ -545,6 +549,14 @@ function trace_change_kendo(kendoUi)
 			var event_remove_btn_close	=	 function()
 			{
 				var _report_id	=	 $(this).parent().parent().attr('id-aba');
+				var size_li		=	tagABA.find('li').length;
+				
+				
+					if(size_li==2)
+						{
+							WRS_ALERT(sprintf(LNG('ABA_LIMIT_SEE'),__aba_title({report_id:_report_id})),'warning');
+							return true;
+						}
 				
 					__remove({'report_id':_report_id});
 
@@ -737,7 +749,7 @@ function trace_change_kendo(kendoUi)
 				
 				var REPORT_ID	=	opts.REPORT_ID;
 				
-					if(empty(REPORT_ID) || !$.isNumeric(REPORT_ID)) return false;
+					if(empty(REPORT_ID)) return false;
 				
 				var _ABA	=	tagABA.find('.'+REPORT_ID);
 				
@@ -760,14 +772,12 @@ function trace_change_kendo(kendoUi)
 			}
 
 			
-
-			
-			
 			
 			var __load_multiple		=	 function(options,noactive)
 			{
 					var _noactive	= false;
 					
+
 					if(!empty(noactive)) _noactive = noactive;
 					
 					if(empty(options)) return false;
@@ -794,7 +804,7 @@ function trace_change_kendo(kendoUi)
 														};
 						
 								var	opts 			= 	$.extend( {}, optionsAba, options[lineOptions]);
-								var _active			=	lineOptions==0 && !_noactive ? true : false;
+								var _active			=	true;
 								var kendoUi			=	json_decode(base64_decode(opts.KendoUi));
 								
 								
@@ -843,7 +853,40 @@ function trace_change_kendo(kendoUi)
 					
 					if(empty(_report_id)) return false;
 					tagABA.find('.'+_report_id).trigger('click');
+					
+					
+					if(_noactive)
+						{
+							wrsRunFilter();
+						}
 			}
+			
+			
+			var __aba_title	= function(options)
+			{
+				
+				var _opts			=	{report_id:''};
+				var	opts 			= 	$.extend( {}, _opts, options);
+				
+				return tagABA.find('.'+opts.report_id).find('.title').html();
+			}
+			
+			var __show_grid		=	 function()
+			{
+				
+				
+				var report_id	=	 '#'+tagABA.find('.active').attr('id-aba');
+				var _main		=	report_id+'Main';
+				
+				$('.container_panel_relatorio_rows').addClass('hide');
+				
+				
+				$(_main).removeClass('hide');
+				$(report_id).WRSWindowGridEventTools()
+				
+				
+			}
+			
 			
 			/*
 			 * Metodos de funções
@@ -851,11 +894,13 @@ function trace_change_kendo(kendoUi)
 			 */
 			var methods = 
 			{
-			        init 			: 	__init,
-			        add_new_aba		:	__add_new_aba,
-			        remove			:	__remove,
-			        refresh			:	__refresh,
-			        load_multiple	:	__load_multiple
+			        init 					: 	__init,
+			        add_new_aba				:	__add_new_aba,
+			        remove					:	__remove,
+			        refresh					:	__refresh,
+			        load_multiple			:	__load_multiple,
+			        aba_title				:	__aba_title,
+			        show_grid				:	__show_grid
 			};
 			
 			 

@@ -289,22 +289,7 @@ function is_wrs_change_to_run(_param_request)
 			{
 				histoty_param[lineHistoty_param]	=	param_request[lineHistoty_param];
 			}
-		
-		/*
-		histoty_param['LAYOUT_ROWS']	=	param_request['LAYOUT_ROWS'];	
-		histoty_param['LAYOUT_COLUMNS']	=	param_request['LAYOUT_COLUMNS'];	
-		histoty_param['LAYOUT_MEASURES']=	param_request['LAYOUT_MEASURES'];	
-		histoty_param['LAYOUT_FILTERS']	=	param_request['LAYOUT_FILTERS']	;
-		histoty_param['TOP_CONFIG']		=	''	;
-		histoty_param['ORDER_COLUMN']	=	0	;
-		histoty_param['ALL_COLS']		=	''	;
-		histoty_param['ALL_ROWS']		=	''	;
-		histoty_param['DRILL_HIERARQUIA_LINHA']		=	''	;
-		histoty_param['DRILL_HIERARQUIA_LINHA_DATA']		=	''	;*/
-		
-		
-//		console.log('histoty_param',histoty_param);
-		
+			
 		
 		if(param_request['IS_REFRESH']==TRUE){
 			param_request['IS_REFRESH']							=	'_false';
@@ -315,7 +300,7 @@ function is_wrs_change_to_run(_param_request)
 
 		if(eastonclose=='true')
 		{
-			MODAL_LOADING_WRS_PANEL();
+			//MODAL_LOADING_WRS_PANEL();
 			$('.wrs_run_filter').attr('eastonclose','false');
 			loadStart	=	false;
 		}
@@ -326,37 +311,38 @@ function is_wrs_change_to_run(_param_request)
 	}
 	
 	histoty_param	=	$.parseJSON(base64_decode(history));
-
-
-	if(empty(param_request['ALL_COLS'])) param_request['ALL_COLS']='';
 	
-	if(empty(param_request['ALL_ROWS'])) param_request['ALL_ROWS']='';
+	var _compare	= ['LAYOUT_ROWS','LAYOUT_COLUMNS','LAYOUT_MEASURES','LAYOUT_FILTERS','ORDER_COLUMN','ALL_COLS','ALL_ROWS','DRILL_HIERARQUIA_LINHA_DATA_MINUS','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA'];
 
-	if(empty(param_request['ORDER_COLUMN'])) param_request['ORDER_COLUMN']=0;
-	if(histoty_param['LAYOUT_ROWS']!=param_request['LAYOUT_ROWS']) 			flag=false;
-	
-	if(histoty_param['LAYOUT_COLUMNS']!=param_request['LAYOUT_COLUMNS']) 	flag=false;
-
-	if(histoty_param['LAYOUT_MEASURES']!=param_request['LAYOUT_MEASURES']) 	flag=false;
-	if(histoty_param['LAYOUT_FILTERS']!=param_request['LAYOUT_FILTERS'])	flag=false;
-
-	if(histoty_param['ORDER_COLUMN']!=param_request['ORDER_COLUMN'])		flag=false;
-	
-	if(histoty_param['ALL_COLS']!=param_request['ALL_COLS'])				flag=false;
-	
-	if(histoty_param['ALL_ROWS']!=param_request['ALL_ROWS'])				flag=false;
-
-	if(histoty_param['DRILL_HIERARQUIA_LINHA_DATA_MINUS']!=param_request['DRILL_HIERARQUIA_LINHA_DATA_MINUS'])				flag=false;
-	
-	if(histoty_param['TOP_CONFIG']!=param_request['TOP_CONFIG']){
-		flag=false;
+		if(empty(param_request['ALL_COLS'])) param_request['ALL_COLS']='';
 		
-		if(!empty(histoty_param['TOP_CONFIG'])){
-			//Exceção para limpar os TOPs
-			param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
-			param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
+		if(empty(param_request['ALL_ROWS'])) param_request['ALL_ROWS']='';
+	
+		if(empty(param_request['ORDER_COLUMN'])) param_request['ORDER_COLUMN']=0;
+	
+	
+		for(lineCompare in _compare)
+		{
+			var __key	=	_compare[lineCompare];
+
+				if(_trim(histoty_param[__key])!=_trim(param_request[__key]))
+				{
+					flag=false;
+				}
+				//console.log(__key,flag);
 		}
-	}
+	
+		
+		if(_trim(histoty_param['TOP_CONFIG'])!=_trim(param_request['TOP_CONFIG'])){
+			flag=false;
+			
+			if(!empty(histoty_param['TOP_CONFIG'])){
+				//Exceção para limpar os TOPs
+				param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
+				param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
+			}
+		}
+
 	
 	if(!flag)
 	{
@@ -370,11 +356,10 @@ function is_wrs_change_to_run(_param_request)
 			param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
 		}
 	}
-
-	if(histoty_param['DRILL_HIERARQUIA_LINHA']!=param_request['DRILL_HIERARQUIA_LINHA'])				flag=false;
 	
-	if(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']!=param_request['DRILL_HIERARQUIA_LINHA_DATA'])				flag=false;
-	 	//Gravando o Histórico
+	
+	
+	
 	if(flag)
 	{
 		
@@ -419,24 +404,12 @@ function is_wrs_change_to_run(_param_request)
 			{
 				if(loadStart)
 				{	
-					MODAL_LOADING_WRS_PANEL();
+					//MODAL_LOADING_WRS_PANEL();
 				}
 				$('.wrs_run_filter').attr('eastonclose','false');
 			}
 		
-		/*
-			histoty_param['LAYOUT_ROWS']	=	param_request['LAYOUT_ROWS'];	
-			histoty_param['LAYOUT_COLUMNS']	=	param_request['LAYOUT_COLUMNS'];	
-			histoty_param['LAYOUT_MEASURES']=	param_request['LAYOUT_MEASURES'];	
-			histoty_param['LAYOUT_FILTERS']	=	param_request['LAYOUT_FILTERS']	;		
-			histoty_param['ORDER_COLUMN']	=	param_request['ORDER_COLUMN']	;
-			histoty_param['ALL_COLS']		=	param_request['ALL_COLS']	;
-			histoty_param['ALL_ROWS']		=	param_request['ALL_ROWS']	;
-			histoty_param['DRILL_HIERARQUIA_LINHA']			=	param_request['DRILL_HIERARQUIA_LINHA']	;
-			histoty_param['DRILL_HIERARQUIA_LINHA_DATA']	=	param_request['DRILL_HIERARQUIA_LINHA_DATA'];//Mante sempre nula para que possa fazer nova consulta//param_request['DRILL_HIERARQUIA_LINHA_DATA']	;
-			histoty_param['TOP_CONFIG']	=	param_request['TOP_CONFIG'];
-			
-			*/
+		 
 			
 			for(lineHistoty_param in param_request)
 			{

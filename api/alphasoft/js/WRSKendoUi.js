@@ -701,18 +701,11 @@ function onDataBound(arg)
 													arg.sender.dataSource._wrs_request_data.drill);
 			}
 			
-			
-			
-			
-			
-			
-			
 			//var nameID		=	 '#'+arg.sender.element.attr('id');
-			
-			 
-			
 			$('.WRS_ABA').find('.'+classGrid).data('kendoUiDataAba',arg.sender);
 			
+			
+			$('body').WRSJobModal('close',{'report_id':classGrid});
 			
 			wrsKendoUiChange(nameID,'IS_REFRESH',false);
 			

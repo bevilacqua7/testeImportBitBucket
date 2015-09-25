@@ -12,7 +12,8 @@
 var IS_TRACE	=	false;
 var RAND_TOKEN	=	js_rand(0,9999999999999);
 	include_js('WRSThreadJobManager');
-	
+
+
 /*
  * Tipos de Execuções que o sistema opera para gerar uma novo Report
  */
@@ -52,6 +53,10 @@ function changeTypeRun(IDGrid,typeRun)
 }
 
 
+function _trim(input)
+{
+	return $.trim(input);
+}
 
 
 function include_js(file)
@@ -567,6 +572,23 @@ function setWRSTime()
  */
 
 
+
+function removeKey(inputArray, line)
+{
+	var _tmp		=	[];
+	
+	    for(var lineArray in inputArray) 
+	    {
+	        if(lineArray != line) 
+	        {
+	        	_tmp[lineArray]	=	inputArray[lineArray];
+	        }
+	    }
+    
+    return _tmp;
+}
+
+
 function buttonClickRightRelatorios(nameObject,itemsElement)
 {
 	$(nameObject).each(function(){
@@ -1011,6 +1033,9 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 
 
 $(document).ready(function(){
+	
+	$('body').WRSJobModal(); //Criando o BOX de CSS
+	
 	$('a.changePage').each(function(){
 		var link = $(this).attr('href');
 		$(this).parents('div.wrs_item_santos').click(function(){
