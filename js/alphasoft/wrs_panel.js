@@ -14,6 +14,16 @@ function wrs_north_onresize()
 }
 
 
+function wrs_run_filter_unlocked()
+{
+	$('.wrs_run_filter').attr('locked','');
+}
+
+function wrs_run_filter_add_history(inputHistory)
+{
+	$('.wrs_run_filter').attr('history',inputHistory);
+}
+
 
 function WRS_MENU_FOOTER(){
 	
@@ -325,6 +335,7 @@ $(document).ready(function () {
 			east__onclose: function () 
 			{
 				//Executa o Click para executar o Gráfico
+				
 				
 				if($('.wrs_run_filter').attr('locked')!='locked')
 				{
@@ -1078,6 +1089,7 @@ function rows_by_metrica_attr_base64(object,_type)
  */
 function wrs_run_filter()
 {
+
 	$(this).attr('locked','locked');
 
 	//Para poder saber se oculta as mensagems ou não
@@ -1086,8 +1098,6 @@ function wrs_run_filter()
 	TRACE('START wrs_run_filter()');
 	
 	$.WrsFilter('wrs_filter_check_change_filter');
-	
-
 	
 	//Verificando se existe informações básicas para gerar um relatório
 	var sortable_metrica	=	 rows_by_metrica_attr_base64('.sortable_metrica','metrica');
@@ -1110,7 +1120,6 @@ function wrs_run_filter()
 	var mensagem			=	"";
 	var flag_load			=	$(this).attr('flag_load');
 	var getAllFiltersToRun	=	"";
-	
 	
 	
 	var demo_top	=	'';
@@ -1142,208 +1151,211 @@ function wrs_run_filter()
 		}
 
 
+		
+		
 		if(run)
 			{
-			//manda executar o Relatório
-			
-			if($(this).attr('is_atributo_simples')!='true')
-			{//Apenas abre o load se for diferente de informações simples no select
-				if($(this).attr('eastonclose')!='true')
-				{
-					if(empty($(this).attr('history')))
-					{
-						$(this).attr('flag_load','true');
-						$('body').WRSJobModal('add_load');
-						flag_load	=	'true';
-					}
-				}
-			} 
-			
-		WRS_PANEL_RELATORIO();
-		
-		var _file	=	'WRS_PANEL';
-		var _class	=	'WRS_PANEL';
-		var _event	=	'load_grid_header';
-		
-		var _param_request		=	[];
-		var _param_request_obj	=	[];
-		var _base64			=	'';
-		
-		 
-			if(!empty($('.wrsGrid').html()))
-			{
-				_base64				=	base64_decode($('.wrsGrid').attr('wrsKendoUi'));
-				_param_request_obj	=	json_decode(_base64);
-			}
-			
-		
-		//Pegando as informações já pre estabelecidas pelo gráfico atuak
-		var is_param		=	false;
-		
-		
-		
-		
-		//Buscando a Grid para poder pegar as  opções selecionadas
-		if(!empty($('.wrsGrid').html()))
-		{
-			var _wrsGrid	=	$('.wrsGrid');
-			var __id		=	'#'+_wrsGrid.attr('id');
-			var _rand		=	 js_rand(0,99999);
-			
-			
-				
-				
-			try{
-				if(empty(_param_request.TYPE_RUN))
-				{
-					_param_request['TYPE_RUN']=TYPE_RUN.direct;
-				}
-			}catch(e){}
-			
-				//changeTypeRun( __id,TYPE_RUN.direct,_rand);
-				
-				is_param		=	true;
-			 	
-		}
-
-
-		
-		/*if(!is_param)
-		{
-				changeTypeRun('#'+$(this).attr('id'),TYPE_RUN.direct);
-		}
-		*/
-
-		
-		
-
-		
-		
-		
-		_param_request['LAYOUT_ROWS']		=	base64_encode(implode(',',request_linha));
-		_param_request['LAYOUT_COLUMNS']	=	base64_encode(implode(',',request_coluna));
-		_param_request['LAYOUT_MEASURES']	=	base64_encode(implode(',',request_metrica));
-		
-
-		
-		
-		//Força a conversão do Menu 
-		wrsFilterShow();
-		
-		
-		
-		getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
-		
-		//foreach(getAllFiltersToRun);
-		_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
-		_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
-		
-		
-
-//		console.log('getAllFiltersToRun.full',getAllFiltersToRun.full);
-		
-		/*
-		 * TODO:Revisando
-		 */
-	
-		
-		
-//Verificnado se existe alterações de pesquisa 
-		
-		//foreach(param_request);
-		/*
-		 * Pega os elementos das Opções antes não Dashboard
-		 * 
-		 */
-		var wrsConfigGridDefault		=	$('#wrsConfigGridDefault');
-		var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
-		
-		var _data_aba				=	{};
-		/*
-		 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
-		 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
-		 * Caso exista erro de variáveis que faltam passar para a estrutura normalmente será nesse processo
-		 * 
-		 * Esse processo é onde junta os dados do Default com o original
-		 */
-		//Se existir interação então faz o merge das informações 
-		
-			if(!empty(wrsConfigGridDefault.attr('is-event')) && wrsConfigGridDefault.attr('is-event')=='true'){
-				
-				
-//				if(!empty(wrsConfigGridDefault_data))
-				{
-					var getParamDefault = array_key_data(wrsConfigGridDefault_data);
+						//manda executar o Relatório
+						
+						if($(this).attr('is_atributo_simples')!='true')
+						{//Apenas abre o load se for diferente de informações simples no select
+							if($(this).attr('eastonclose')!='true')
+							{
+								if(empty($(this).attr('history')))
+								{
+									$(this).attr('flag_load','true');
+									$('body').WRSJobModal('add_load');
+									flag_load	=	'true';
+								}
+							}
+						} 
+						
+					WRS_PANEL_RELATORIO();
 					
-//					foreach(wrsConfigGridDefault_data);
-//					foreach(getParamDefault);
-					//['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
-					//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);
-					for(var lineGetParamDefault in getParamDefault)
-					{
-						/*switch(getParamDefault[lineGetParamDefault])
+					var _file	=	'WRS_PANEL';
+					var _class	=	'WRS_PANEL';
+					var _event	=	'load_grid_header';
+					
+					var _param_request		=	[];
+					var _param_request_obj	=	[];
+					var _base64			=	'';
+					
+					 
+						if(!empty($('.wrsGrid').html()))
 						{
-							case 'FILTER_TMP' :
-							case 'DRILL_HIERARQUIA_LINHA' :
-							case 'DRILL_HIERARQUIA_LINHA_DATA' :
-							case 'SHOW_LINE_TOTAL' :
-							case 'DRILL_HIERARQUIA_LINHA_DATA_HEADER' :
-							case 'TYPE_RUN' :
-							case 'PAGE_CURRENT' :
-							continue;
-						}*/
-						_data_aba[getParamDefault[lineGetParamDefault]]	=	wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]];
+							_base64				=	base64_decode($('.wrsGrid').attr('wrsKendoUi'));
+							_param_request_obj	=	json_decode(_base64);
+						}
+						
+					
+					//Pegando as informações já pre estabelecidas pelo gráfico atuak
+					var is_param		=	false;
+					
+					
+					
+					
+					//Buscando a Grid para poder pegar as  opções selecionadas
+					if(!empty($('.wrsGrid').html()))
+					{
+						var _wrsGrid	=	$('.wrsGrid');
+						var __id		=	'#'+_wrsGrid.attr('id');
+						var _rand		=	 js_rand(0,99999);
+						
+						
+							
+							
+						try{
+							if(empty(_param_request.TYPE_RUN))
+							{
+								_param_request['TYPE_RUN']=TYPE_RUN.direct;
+							}
+						}catch(e){}
+						
+							//changeTypeRun( __id,TYPE_RUN.direct,_rand);
+							
+							is_param		=	true;
+						 	
+					}
+			
+			
+					
+					/*if(!is_param)
+					{
+							changeTypeRun('#'+$(this).attr('id'),TYPE_RUN.direct);
+					}
+					*/
+			
+					
+					
+			
+					
+					
+					
+					_param_request['LAYOUT_ROWS']		=	base64_encode(implode(',',request_linha));
+					_param_request['LAYOUT_COLUMNS']	=	base64_encode(implode(',',request_coluna));
+					_param_request['LAYOUT_MEASURES']	=	base64_encode(implode(',',request_metrica));
+					
+			
+					
+					
+					//Força a conversão do Menu 
+					wrsFilterShow();
+					
+					
+					
+					getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
+					
+					//foreach(getAllFiltersToRun);
+					_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
+					_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
+					
+					
+			
+			//		console.log('getAllFiltersToRun.full',getAllFiltersToRun.full);
+					
+					/*
+					 * TODO:Revisando
+					 */
+				
+					
+					
+			//Verificnado se existe alterações de pesquisa 
+					
+					//foreach(param_request);
+					/*
+					 * Pega os elementos das Opções antes não Dashboard
+					 * 
+					 */
+					var wrsConfigGridDefault		=	$('#wrsConfigGridDefault');
+					var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
+					
+					var _data_aba				=	{};
+					/*
+					 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
+					 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
+					 * Caso exista erro de variáveis que faltam passar para a estrutura normalmente será nesse processo
+					 * 
+					 * Esse processo é onde junta os dados do Default com o original
+					 */
+					//Se existir interação então faz o merge das informações 
+					
+						if(!empty(wrsConfigGridDefault.attr('is-event')) && wrsConfigGridDefault.attr('is-event')=='true'){
+							
+							
+			//				if(!empty(wrsConfigGridDefault_data))
+							{
+								var getParamDefault = array_key_data(wrsConfigGridDefault_data);
+								
+			//					foreach(wrsConfigGridDefault_data);
+			//					foreach(getParamDefault);
+								//['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
+								//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);
+								for(var lineGetParamDefault in getParamDefault)
+								{
+									/*switch(getParamDefault[lineGetParamDefault])
+									{
+										case 'FILTER_TMP' :
+										case 'DRILL_HIERARQUIA_LINHA' :
+										case 'DRILL_HIERARQUIA_LINHA_DATA' :
+										case 'SHOW_LINE_TOTAL' :
+										case 'DRILL_HIERARQUIA_LINHA_DATA_HEADER' :
+										case 'TYPE_RUN' :
+										case 'PAGE_CURRENT' :
+										continue;
+									}*/
+									_data_aba[getParamDefault[lineGetParamDefault]]	=	wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]];
+								}
+								
+							}
+						}
+						
+					 _param_request	=	merge_filter_data(_param_request,_param_request_obj);
+					 //Merge com a estrutura da aba
+					 _param_request	=	merge_filter_data(_param_request,_data_aba);
+					 
+					
+					 //console.log('_param_request_param_request',_param_request);
+						
+					//Passando o ID do Cubo na sessão
+					var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;
+					//Verificando se existe multiplos cubos
+					if(_wrs_multiple_cube_event==1 || empty(_wrs_multiple_cube_event))
+					{	
+						//Caso não seja multiplo cubo pega o cubo corrente
+						_param_request[TAG_URL_CUBE_SELECTED]=CUBE_S;
+					}else{
+						var jsonMukltiple			=	$('.wrs_multiple_cube_event').find('option:selected').attr('json');
+						_param_request['json']		=	jsonMukltiple;
 					}
 					
-				}
-			}
-			
-		 _param_request	=	merge_filter_data(_param_request,_param_request_obj);
-		 //Merge com a estrutura da aba
-		 _param_request	=	merge_filter_data(_param_request,_data_aba);
-		 
-		
-		 //console.log('_param_request_param_request',_param_request);
-			
-		//Passando o ID do Cubo na sessão
-		var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;
-		//Verificando se existe multiplos cubos
-		if(_wrs_multiple_cube_event==1 || empty(_wrs_multiple_cube_event))
-		{	
-			//Caso não seja multiplo cubo pega o cubo corrente
-			_param_request[TAG_URL_CUBE_SELECTED]=CUBE_S;
-		}else{
-			var jsonMukltiple			=	$('.wrs_multiple_cube_event').find('option:selected').attr('json');
-			_param_request['json']		=	jsonMukltiple;
-		}
-		
-		
-		/*
-		 * Verificnado os Filtros simples
-		 * nesse caso inpede o fluxo completo
-		 */
-		
-		if(!$.WrsFilter('wrs_check_filter_simples')) {
-			TRACE('EXISTE FILTRO SIMPLES');
-			return false;
-		}
-		
-		
-		var is_wrs_change_to	=	is_wrs_change_to_run(_param_request);
-			_param_request		=	is_wrs_change_to.val;
-		
-			
-		if(is_wrs_change_to.status)
-		{
-			
-			if($(this).attr('is_atributo_simples')=='true'){
-				$(this).attr('is_atributo_simples','false');
-			}
-			$(this).attr('locked',false);//Libera o filtro
-			$(this).attr('flag_load','false');
-			
-
-			return true;
+					
+					/*
+					 * Verificnado os Filtros simples
+					 * nesse caso inpede o fluxo completo
+					 */
+					
+					if(!$.WrsFilter('wrs_check_filter_simples')) {
+						TRACE('EXISTE FILTRO SIMPLES');
+						return false;
+					}
+					
+					
+					var is_wrs_change_to	=	is_wrs_change_to_run(_param_request);
+						_param_request		=	is_wrs_change_to.val;
+					
+						
+					if(is_wrs_change_to.status)
+					{
+						
+						if($(this).attr('is_atributo_simples')=='true'){
+							$(this).attr('is_atributo_simples','false');
+						}
+						$(this).attr('locked',false);//Libera o filtro
+						$(this).attr('flag_load','false');
+						
+						$('body').wrsAbas('show_grid');
+						
+						return true;
 		}else{
 			if(flag_load!='true')
 			{

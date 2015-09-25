@@ -21,6 +21,7 @@
 	$language ['ERROR_CUBO_NOT_FOUND']				= "Ops não foi possível identificar o cubo que está sendo utilizado. <br> Se o erro persistir, favor informar ao suporte. <br><b>Obrigado</b>";
 	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executarar a aba <b>%s</b> <br>";
 	$language ['ABA_IN_USER'] 						= "Aba em uso ";
+	$language ['ABA_LIMIT_SEE'] 					= "Não é possivel remover a ABA <b>%s</b><br>É necessário ficar ao menos uma aba ativa.<br>Obrigado.";
 	
 	$language ['JOB_COMPLETE_LOAD'] 		= "O job <b>%s</b> foi carregado";
 	$language ['JOB_COMPLETE'] 				= "Não existe mais processos a serem executados.";

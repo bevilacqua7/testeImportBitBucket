@@ -12,7 +12,8 @@
 var IS_TRACE	=	false;
 var RAND_TOKEN	=	js_rand(0,9999999999999);
 	include_js('WRSThreadJobManager');
-	
+
+
 /*
  * Tipos de Execuções que o sistema opera para gerar uma novo Report
  */
@@ -52,6 +53,10 @@ function changeTypeRun(IDGrid,typeRun)
 }
 
 
+function _trim(input)
+{
+	return $.trim(input);
+}
 
 
 function include_js(file)

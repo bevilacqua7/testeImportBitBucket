@@ -155,7 +155,7 @@ class ThreadJobManager extends WRS_USER
 			$job_status_exec	= $this->query($job_status);
 			$rows_GET_SSAS_JOB 		= $this->fetch_array($job_status_exec);
 		
-			
+//			$rows_GET_SSAS_JOB['JOB_STATUS']		=	3;
 			if(($rows_GET_SSAS_JOB['JOB_STATUS'] == 1) || ($rows_GET_SSAS_JOB['JOB_STATUS'] == 2) || ($rows_GET_SSAS_JOB['JOB_STATUS'] == 3))
 			{
 				return array('cube'=>$cube, 'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'_param'=>$this->_param,'wait_thread'=>true,'data'=>$rows_GET_SSAS_JOB);

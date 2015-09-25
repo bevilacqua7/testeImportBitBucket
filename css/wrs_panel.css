@@ -1568,6 +1568,16 @@ div.k-grid-header thead tr th[data-field=checkbox_linha]
 			background: blue;
 }
 
+.wrs-modal-time{
+	background: #141414;
+	color: #FFF;
+	font-weight: bold;
+	padding: 4px 6px;
+	
+	-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+}
 
 
  
