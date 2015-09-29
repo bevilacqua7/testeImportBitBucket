@@ -6,6 +6,10 @@
  * @link http://layout.jquery-dev.com/demos/custom_scrollbars.html
  */
 
+var qtde_max_linhas		=	10;
+var qtde_max_colunas	=	15;
+var qtde_max_metricas	=	30;
+
 
 function wrs_north_onresize()
 {
@@ -769,6 +773,17 @@ function DROP_EVENT( event, ui ,eventReceive){
 		var typesDraggable		=	toEvent.attr('type');
 		var whereFoundReceive	=	$('.wrs_panel_receive_coluna_linha');
 
+		// tratamento para quantidade maxima de opcoes por box de draganddrop
+		if(
+				(who_receive=='linha' && receiveEvent.find('li').length>=qtde_max_linhas)
+				||
+				(who_receive=='coluna' && receiveEvent.find('li').length>=qtde_max_colunas)
+				||
+				(who_receive=='metrica' && receiveEvent.find('li').length>=qtde_max_metricas)
+		){
+			WRS_ALERT(sprintf(LNG('DRAG_DROP_MSG_ERROX_MAX_QTDE'),receiveEvent.find('li').length,who_receive),'error');
+			return false;
+		}
 
 	if(filters!='metrica')
 	{
@@ -1577,6 +1592,24 @@ function wrs_panel_active_drag_drop()
 							  	// forca um position menor restritivo para que o botao em drag nao seja ocultado pelo elemento div pai
 							  	$('.wrs_panel_center_body_container').css({position: 'inherit'});
 						  }
+						  // tratamento para quantidade maxima de opcoes por box de draganddrop
+						  ,receive: function(e,ui) {
+					            var $this = $(this);
+					            var who_receive = $(this).parent().attr('who_receive');
+								var qtde_in_who_receive	=	$this.children('li.ui-sortable').length-1;//-1 por causa do placeholder
+
+								if(
+										(who_receive=='linha' && qtde_in_who_receive>=qtde_max_linhas)
+										||
+										(who_receive=='coluna' && qtde_in_who_receive>=qtde_max_colunas)
+										||
+										(who_receive=='metrica' && qtde_in_who_receive>=qtde_max_metricas)
+								){
+									WRS_ALERT(sprintf(LNG('DRAG_DROP_MSG_ERROX_MAX_QTDE'),qtde_in_who_receive,who_receive),'error');
+									$(ui.sender).sortable('cancel');
+								}
+								
+					        }
 					}
 
 		//Ativando o DRAG AND DROP
@@ -1681,16 +1714,14 @@ function acoes_multiplas_menu_painel(){
 			if($(this).hasClass('ui-state-focus')){
 				$(this).removeClass('ui-state-focus');
 			}else{
-				$(this).addClass('ui-state-focus');
-				
+				$(this).addClass('ui-state-focus');				
 				// regra para utilizar o shift (ja identificado na funcao acima) para verificar as seguintes regras:
-				// - se quando houver a selecao APENAS DO SEGUNDO ITEM
 				// - se o shift estiver pressionado
 				// - se a diferenca entre os itens for maior que 1 (tiver algum item entre eles)
 				// - ENTAO:
-				// - seleciona os itens dentro do intervalo
+				// - seleciona os itens dentro do intervalo do primeiro ao último selecionado
 				if(
-						$(this).parent().find('li.ui-draggable.ui-state-focus').length==2 &&
+						//$(this).parent().find('li.ui-draggable.ui-state-focus').length==2 && // regra antiga para funcionar com apenas 2 itens
 						tecla_shift_press
 				){
 					var primeiro_item 			= $(this).parent().find('li.ui-draggable.ui-state-focus').first();
@@ -1699,7 +1730,9 @@ function acoes_multiplas_menu_painel(){
 					var segundo_item_index 		= $(this).parent().find('li.ui-draggable').index(segundo_item);					
 					if(segundo_item_index-primeiro_item_index>1){
 						for(var o=primeiro_item_index+1;o<segundo_item_index;o++){
-							$(this).parent().find('li.ui-draggable').eq(o).addClass('ui-state-focus');
+							if(!$(this).parent().find('li.ui-draggable').eq(o).hasClass()){
+								$(this).parent().find('li.ui-draggable').eq(o).addClass('ui-state-focus');
+							}
 						}
 					}
 				}

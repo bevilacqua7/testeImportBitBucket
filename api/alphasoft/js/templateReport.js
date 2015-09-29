@@ -348,7 +348,11 @@ function removeReport(arrRepIds){
 
 	var _callbackDelete = function (confirm) {
 		   if(confirm){
-			   runCall(param_request,Ofile,Oclass,Oevent,carrega_grid_list_reports,'modal');
+				var param_request	=	 {'report_id':JSON.stringify(arrRepIds)};
+				var Ofile			=	'WRS_REPORT';
+				var Oclass			=	'WRS_REPORT';
+				var Oevent			=	'delete';
+				runCall(param_request,Ofile,Oclass,Oevent,carrega_grid_list_reports,'modal');
 		   }
 	}
 
