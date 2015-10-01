@@ -189,6 +189,16 @@ class WRS_USER extends WRS_BASE
 	
 		WRS_TRACE('END SAVE_CACHE_SSAS_USER()', __LINE__, __FILE__);
 	}
+	
+	
+	public function getArrPerfUser($perfilTest=null){
+		$arrPerfil = explode('-',WRS::INFO_SSAS_LOGIN('PERFIL_ID'));;
+		if($perfilTest==null){
+			return $arrPerfil;
+		}else{
+			return (is_string($perfilTest)?in_array($perfilTest,$arrPerfil):false)?'1':'0';
+		}
+	}
 
 }
 

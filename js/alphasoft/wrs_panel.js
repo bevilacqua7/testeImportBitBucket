@@ -6,9 +6,10 @@
  * @link http://layout.jquery-dev.com/demos/custom_scrollbars.html
  */
 
-var qtde_max_linhas		=	10;
-var qtde_max_colunas	=	15;
+var qtde_max_linhas		=	15;
+var qtde_max_colunas	=	10;
 var qtde_max_metricas	=	30;
+var hideeast			=	in_array('DRG',PERFIL_ID_USER)?true:false;
 
 
 function wrs_north_onresize()
@@ -197,6 +198,12 @@ function BTN_HOVER_BOX_DROP()
 	$('.box_wrs_panel').hover(function() {$( this ).addClass( "ui-state-hover" );}, function() {$( this ).removeClass( "ui-state-hover" );});
 }
 
+function hide_east(){
+	wrs_panel_layout.east.pane.css('visibility','hidden');
+	wrs_panel_layout.east.pane.hide();
+	wrs_panel_layout.hide('east',true);
+	return true;
+}
 
 //Controlando o Evento do Layout
 $(document).ready(function () {
@@ -326,8 +333,8 @@ $(document).ready(function () {
 			east__resizerTip				: "Redimensiona Layouts",
 			east__togglerContent_open		: "<span class='ui-icon ui-icon-triangle-1-e' style='margin-left:-4px'></span>",
 			east__togglerContent_closed		: "<span class='ui-icon ui-icon-triangle-1-w' style='margin-left:-4px'></span>",
-			east__onresize 	: wrs_east_onresize,
-			east__onopen: function () {
+			east__onresize 	: hideeast?hide_east: wrs_east_onresize,
+			east__onopen: hideeast?hide_east:function () {
 											WRS_PANEL_DRAG();
 											$('.WRS_DRAG_DROP_RECEIVER_FILTER').show();
 											$('.WRS_DRAG_DROP_FILTER_CONTAINER').hide();
@@ -336,7 +343,7 @@ $(document).ready(function () {
 											
 											
 										},
-			east__onclose: function () 
+			east__onclose: hideeast?hide_east:function () 
 			{
 				//Executa o Click para executar o Gráfico
 				
@@ -375,7 +382,7 @@ $(document).ready(function () {
 
 	$('.wrs_clean_box_drag_drop').click(wrs_clean_box_drag_drop);
  
-	
+	if(hideeast){ hide_east(); }
 });
 
 function wrs_clean_box_drag_drop()
