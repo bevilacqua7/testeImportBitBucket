@@ -8,8 +8,8 @@
 	 */
 	$language ['USUARIO_SEM_PRIVILEGIOS'] 				= "Usuário sem privilégios";
 	$language ['USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS'] 	= "Usuário sem privilégios para visualizar a grid, ela contém mais de 65 mil registros";
-	$language ['ERROR_NOT_ROWS'] 						= "Ops Erro interno ao executar o processo...";
-	$language ['ERROR_DRILL_LINE_RESULT'] 				= "(Ops) Erro interno ao processar a criação do DRILL LINHA, se o erro persistir entre em contato com o suporte";
+	$language ['ERROR_NOT_ROWS'] 						= "Erro interno ao executar a Consulta...";
+	$language ['ERROR_DRILL_LINE_RESULT'] 				= "Erro interno ao processar a criação do DRILL LINHA, se o erro persistir entre em contato com o suporte";
 	$language ['MSG_ERROR_TABLE_CACHE'] 				= "Consulta não pode ser executada, favor modificar o Layout dos Atributos selecionados..";
 	$language ['VALOR'] 								= "Valor";
 	
@@ -17,17 +17,17 @@
 	 * CUBO ERRO
 	 */
 	$language ['ERRO_CUBO_INDISPONIVEL'] 			= "ERRO: INDISPONIVEL";
-	$language ['ERROR_TABLE_CACHE_NO_HEADER']		= "Ops não existe cabeçalho para esta consulta..";
+	$language ['ERROR_TABLE_CACHE_NO_HEADER']		= "Ops não existe Dados para esta Consulta..";
 	$language ['ERROR_CUBO_NOT_FOUND']				= "Ops não foi possível identificar o cubo que está sendo utilizado. <br> Se o erro persistir, favor informar ao suporte. <br><b>Obrigado</b>";
-	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executarar a aba <b>%s</b> <br>";
-	$language ['ABA_IN_USER'] 						= "Aba em uso ";
-	$language ['ABA_LIMIT_SEE'] 					= "Não é possivel remover a ABA <b>%s</b><br>É necessário ficar ao menos uma aba ativa.<br>Obrigado.";
+	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executar a Consulta <b>%s</b> <br>";
+	$language ['ABA_IN_USER'] 						= "Consulta em uso ";
+	$language ['ABA_LIMIT_SEE'] 					= "Não é possivel remover a Consulta <b>%s</b><br> pelo menos uma deve continuar visível.";
 	
-	$language ['JOB_COMPLETE_LOAD'] 		= "O job <b>%s</b> foi carregado";
-	$language ['JOB_COMPLETE'] 				= "Não existe mais processos a serem executados.";
-	$language ['JOB_CANCEL'] 				= "O JOB <b>%s</b> foi cancelado com sucesso";
-	$language ['JOB_CANCEL_ERRO'] 				= "ERROR-JOB:01 : ERro ao cancelar o JOB <b>%s</b> favor tentar novamente";
-	$language ['JOB_NOTFOUND'] 				= "Não foi encontrado job para cancelar, ou o mesmo encontra-se já concluido";
+	$language ['JOB_COMPLETE_LOAD'] 		= "A Consulta <b>%s</b> foi carregada";
+	$language ['JOB_COMPLETE'] 				= "Não existe mais Consultas a serem executados.";
+	$language ['JOB_CANCEL'] 				= "A Consulta <b>%s</b> foi cancelada com sucesso";
+	$language ['JOB_CANCEL_ERRO'] 				= "Erro ao cancelar a Consulta <b>%s</b> favor tentar novamente";
+	$language ['JOB_NOTFOUND'] 				= "Não foi encontrado a Consulta para cancelar ou a mesma foi concluida";
 
 	$language ['JOB_CLOSE_ALERT'] 				= "Fechar Janela de Alerta";
 	 
@@ -36,7 +36,7 @@
 	 */
 	
 	$language ['SELECT_NULL'] 					= "Consulta retornou vazia";
-	$language ['RUN_GRID_CHANGE_NOT'] 			= "Não há modificações para gerar um novo relatório..";
+	$language ['RUN_GRID_CHANGE_NOT'] 			= "Não há modificações para gerar uma nova Consulta..";
 	
 	/*
 	 * TITULOS

@@ -321,8 +321,8 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 			{
 					var _html	=	'<!--  Modal JOB -->'+
 									'		<div class="modal-window-wrs hide" >'+
-									'			<div class="modal-box  modal-type-primary modal-size-normal" style="position: absolute; top: 50%; margin-top: -72px; ">'+
-									'				<div class="modal-inner">'+
+									'			<div class="modal-box-wrs  modal-type-primary modal-size-normal" style="position: absolute; top: 50%; margin-top: -72px; ">'+
+									'				<div class="modal-inner-wrs">'+
 									'						<div class="modal-title-wrs-job">'+
 									'							<h3><!-- Primary --></h3> '+
 									'						</div>'+
