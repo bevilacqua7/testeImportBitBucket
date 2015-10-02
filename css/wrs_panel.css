@@ -419,7 +419,7 @@ h4{
 	right: 5px;
 	min-width: 100px;
 	max-width: 350px;
-	max-height: 500px;
+	max-height: 500px;/*500*/
 	overflow: auto;
 	background: #FFF;
 	font-size:11px;

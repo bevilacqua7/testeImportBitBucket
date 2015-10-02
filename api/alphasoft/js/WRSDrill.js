@@ -85,10 +85,16 @@ function addDrillOnDataBound(nameID,kendoUI)
 	}
 	for(x in rows_tag)
 		{
-			var json	=	$.parseJSON(base64_decode($('.'+replace_attr(rows_tag[x])).attr('json')));
+			var json				=	$.parseJSON(base64_decode($('.'+replace_attr(rows_tag[x])).attr('json')));
+			var json_level_drill	=	 null;
 			
-			if(!empty(json.LEVEL_DRILL) && !in_array('DRD',PERFIL_ID_USER))
-				{
+			try{
+				json_level_drill	=	json.LEVEL_DRILL;
+				
+			}catch(e){
+				json_level_drill	=	 null;
+			}
+			if(!empty(json.LEVEL_DRILL) && !in_array('DRD',PERFIL_ID_USER))				{
 					if(is_in_array(json.LEVEL_DRILL)){
 						$(nameID).find('.k-grid-content-locked tr').each(function(){
 							if(!$('.k-grid-content tr:eq('+$(this).index()+')').hasClass('tag_total'))

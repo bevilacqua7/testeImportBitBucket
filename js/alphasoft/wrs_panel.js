@@ -232,7 +232,7 @@ $(document).ready(function () {
 
 
 	 
-	var jqueryLayoutOptions	=	{
+	jqueryLayoutOptions	=	{
 			applyDefaultStyles			: true,
 			name						: "wrs_Layouts",
 
@@ -346,13 +346,23 @@ $(document).ready(function () {
 			east__onclose: hideeast?hide_east:function () 
 			{
 				//Executa o Click para executar o Gráfico
-				
-				
-				if($('.wrs_run_filter').attr('locked')!='locked')
+				var east__onclose	=	$('.wrs_run_filter').attr('east__onclose');
+					east__onclose	=	empty(east__onclose) ? false : true;
+					
+				if(!east__onclose)
 				{
-					$('.wrs_run_filter').attr('eastonclose','true').attr('flag_load','true');//Pra informar que o clique partir da opção para feixare a tela da direira 
-					wrsRunFilter();
+					if($('.wrs_run_filter').attr('locked')!='locked')
+					{
+						$('.wrs_run_filter').attr('eastonclose','true').attr('flag_load','true');//Pra informar que o clique partir da opção para feixare a tela da direira 
+						wrsRunFilter();
+					}
 				}
+				
+				
+				
+				$('.wrs_run_filter').removeAttr('east__onclose');
+				
+				
 				
 				//Muda visão
 			},
@@ -367,11 +377,16 @@ $(document).ready(function () {
 
 	
 	
+	
+	
 
 	BTN_HOVER_BOX_DROP();
 
-	 wrs_panel_layout	 = $('body').layout(jqueryLayoutOptions);
+	 wrs_panel_layout	 = 	$('body').layout(jqueryLayoutOptions);
 	
+//	 $('body').data('wrs_panel_layout',wrs_panel_layout);
+	
+	 
 	
 	
 	wrs_north_onresize('west', wrs_panel_layout.panes.west);
@@ -384,6 +399,18 @@ $(document).ready(function () {
  
 	if(hideeast){ hide_east(); }
 });
+
+
+
+function layout_east_close()
+{
+	if(wrs_panel_layout.state.east.isClosed)
+	{
+		jqueryLayoutOptions.east__onclose();
+	}else{
+		wrs_panel_layout.close('east');
+	}
+}
 
 function wrs_clean_box_drag_drop()
 {
@@ -1124,9 +1151,31 @@ function rows_by_metrica_attr_base64(object,_type)
  */
 function wrs_run_filter()
 {
+	var manager_aba			=	$(this).attr('manager_aba');
+		manager_aba			=	empty(manager_aba) ? false : true;
+		$(this).removeAttr('manager_aba');
+	
+	var status_load			=	$(this).attr('status_load');
+		status_load			=	empty(status_load) ? false : true;
+		
+		
+	var noactive			=	$(this).attr('noactive');
+		noactive			=	empty(noactive) ? false : true;
+		
 
+		if(noactive)
+		{
+			$(this).removeAttr('noactive');
+			return true;
+		}
+		
+		
+		
+		
+		
+		
 	$(this).attr('locked','locked');
-
+		
 	//Para poder saber se oculta as mensagems ou não
 	$('.wrs_panel_center_body').attr('index-visible',$('.wrs_panel_center_body').css('display'));
 	
@@ -1191,7 +1240,7 @@ function wrs_run_filter()
 		if(run)
 			{
 						//manda executar o Relatório
-						
+			
 						if($(this).attr('is_atributo_simples')!='true')
 						{//Apenas abre o load se for diferente de informações simples no select
 							if($(this).attr('eastonclose')!='true')
@@ -1343,10 +1392,18 @@ function wrs_run_filter()
 								
 							}
 						}
-						
+					
+//					TRACE_DEBUG('BEGIN::'+_param_request_obj['REPORT_ID']);
+					
 					 _param_request	=	merge_filter_data(_param_request,_param_request_obj);
+					 
+					 
+	//				 TRACE_DEBUG('START::'+_param_request['REPORT_ID']);
+					 
 					 //Merge com a estrutura da aba
 					 _param_request	=	merge_filter_data(_param_request,_data_aba);
+
+				
 					 
 					
 					 //console.log('_param_request_param_request',_param_request);
@@ -1371,14 +1428,16 @@ function wrs_run_filter()
 					
 					if(!$.WrsFilter('wrs_check_filter_simples')) {
 						TRACE('EXISTE FILTRO SIMPLES');
+						$('body').wrsAbas('remove_event_click');
 						return false;
 					}
 					
-					
-					var is_wrs_change_to	=	is_wrs_change_to_run(_param_request);
+
+					var is_wrs_change_to	=	is_wrs_change_to_run(_param_request,manager_aba);
 						_param_request		=	is_wrs_change_to.val;
-					
 						
+						
+
 					if(is_wrs_change_to.status)
 					{
 						
@@ -1389,6 +1448,8 @@ function wrs_run_filter()
 						$(this).attr('flag_load','false');
 						
 						$('body').wrsAbas('show_grid');
+						
+						$('body').wrsAbas('remove_event_click');
 						
 						return true;
 		}else{
@@ -1408,25 +1469,56 @@ function wrs_run_filter()
 		wrsConfigGridDefaultManagerTopOptions();
 		
 		
+		
+
+		//tagABA.find('.'+REPORT_ID);
+		
 		//Verificando se o relatório está liberado para ser executado
 		//$('body').WRSJobModal('is_active',{report_id : _param_request['REPORT_ID']});
 		
 		
-//		TRACE_DEBUG(_class+'::_event'+_event)
 //		console.log('_param_request',_param_request);
+
 		$('body').WRSJobModal('aba',{report_id:_param_request['REPORT_ID'],wait:true,title_aba:_param_request['TITLE_ABA']});
 		
-		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
-
+		$('body').wrsAbas('remove_event_click');
 		
+		
+		
+		
+		if(status_load) {
+			$('.wrs_run_filter').removeAttr('status_load');
+			
+			return true;
+		}
+		
+		
+		
+		//TRACE_DEBUG(_param_request['REPORT_ID']);
+		$('body').ThreadJobManager(_param_request['REPORT_ID']);
+		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
+		
+		$('.wrs_run_filter').attr('east__onclose','true');
 		wrs_panel_layout.close('east');
+		
 		$('.wrs_panel_center_body').hide();
 		$('.wrs_panel_filter_icon').hide();
+		
+		
 	}
 	else
 	{
+		
+			
+			$('body').wrsAbas('remove_event_click');
+		
+			
 			//Falta informações para executar o relatório
-			WRS_ALERT(sprintf(LNG('RUN_RELATORIO_FALTA_INFORMACAO'),mensagem),'error');
+			
+			if(!manager_aba){
+				WRS_ALERT(sprintf(LNG('RUN_RELATORIO_FALTA_INFORMACAO'),mensagem),'error');
+			}
+			
 	}
 	
 	TRACE('END wrs_run_filter()');
@@ -1459,6 +1551,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	{
 		if(is_array(data))
 		{
+
 			if(!$('body').ThreadJobManager(data.REPORT_ID))
 			{
 				return true;
@@ -1483,15 +1576,28 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	 * WARNING: é essa variável que impede de repetir os conteiners
 	 */
 	var remove_report	=	 $('<div/>',{html:str_replace('script','',data)}).find('.container_panel_relatorio_rows').attr('id'); 
-	 
 	var _report_id		=	 str_replace('Main','',remove_report);
-
+	var aba_ativa		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
+	
+	
 	
 	
 	
 	$('.container_panel_relatorio_rows').each(function(){var id_remove	=	 $(this).attr('id'); if(id_remove==remove_report)	$(this).remove();});
 	
 	$('.container_panel_relatorio').append(data);
+	
+	
+	//Se não for a aba ativa então faz o hide nbo HTML 
+
+		$('.container_panel_relatorio_rows').addClass('hide');
+		$('#'+aba_ativa+'Main').removeClass('hide');
+	
+		
+		if(aba_ativa!=_report_id){
+			$('.wrsGrid').removeClass('wrsGrid');
+		}	
+		
 	
 	//CLOSE_LOAD_RELATORIO();
 	//Apenas éexecutando quando existe atributo simples
@@ -1504,6 +1610,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	$('.wrs_run_filter').attr('locked','false').attr('flag_load','false');
 	
 	
+	$(window).resize();
 	//$('body').WRSJobModal('close',{'report_id':_report_id});
 	
 	TRACE('END MOUNT_LAYOUT_GRID_HEADER'); 

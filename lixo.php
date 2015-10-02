@@ -1,9 +1,10 @@
 <?php 
 
 
-$_POST['DATA']	='10';
+session_start();
 
 
+print_r($_SESSION['WRS_ThreadJobManager']);
 
 
 

@@ -139,7 +139,7 @@ class ThreadJobManager extends WRS_USER
 		//compartilhando apenas algumas informações da querty para comparações
 		$rows_GET_SSAS_JOB		=	$rows_CREATE_SSAS_JOB;
 		
-//		$rows_GET_SSAS_JOB['JOB_STATUS']	=	3;
+
 		
 		
 		//TODO:Remover esse IF inteiro
@@ -155,7 +155,12 @@ class ThreadJobManager extends WRS_USER
 			$job_status_exec	= $this->query($job_status);
 			$rows_GET_SSAS_JOB 		= $this->fetch_array($job_status_exec);
 		
-//			$rows_GET_SSAS_JOB['JOB_STATUS']		=	3;
+			/*
+			 * TODO: Remover
+			 */
+			
+			//$rows_GET_SSAS_JOB['JOB_STATUS']		=	3;	
+			
 			if(($rows_GET_SSAS_JOB['JOB_STATUS'] == 1) || ($rows_GET_SSAS_JOB['JOB_STATUS'] == 2) || ($rows_GET_SSAS_JOB['JOB_STATUS'] == 3))
 			{
 				return array('cube'=>$cube, 'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'_param'=>$this->_param,'wait_thread'=>true,'data'=>$rows_GET_SSAS_JOB);
@@ -164,7 +169,10 @@ class ThreadJobManager extends WRS_USER
 		}
 		
 		
-		
+		/*
+		 * TODO: Remover
+		 */
+		//$rows_GET_SSAS_JOB['JOB_STATUS']	=	3; 
 			
 		// Verifica o Retorno do Job
 		if($rows_GET_SSAS_JOB['JOB_STATUS'] == 4)
@@ -209,6 +217,7 @@ class ThreadJobManager extends WRS_USER
 			WRS_TRACE('ERROR::CREATE_SSAS_JOB não retornou informações QUERY:::'.$queryGrid, __LINE__, __FILE__);
 			$msg	=	fwrs_warning(LNG('ERROR_NOT_ROWS'),$getRequestKendoUi_TAG);
 			
+
 			if($checkThreadJobManager)
 			{
 				return array('error'=>$msg,'REPORT_ID'=>$report_id,'data'=>$rows_GET_SSAS_JOB);
