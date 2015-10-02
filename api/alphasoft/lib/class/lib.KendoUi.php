@@ -48,7 +48,21 @@ class KendoUi
 	private $wrsKendoUi	=	array();
 	
 	private $Drilllayout		=	 array();
+	
+	private $param_wrs			=	 array();
 
+	
+	public function setParamWRS($input)
+	{
+		$this->param_wrs		=	$input;	
+	}
+	
+	
+	public function getParamWRS()
+	{
+		return $this->param_wrs;
+	}
+	
 	
 	public function setDrillLayout($_layout)
 	{
@@ -302,6 +316,7 @@ class KendoUi
 		 */
 		
 		$idTag		=	$this->getId();
+		
 		
 		
 		//Adicionando title da aba

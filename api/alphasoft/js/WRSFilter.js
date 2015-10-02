@@ -264,11 +264,11 @@ function WRS_filter_hide()
 /**
  * Verificando se existe alteração nas vertentes para a pesquisa
  */
-function is_wrs_change_to_run(_param_request)
+function is_wrs_change_to_run(_param_request,manager_aba)
 {
 	
 	var param_request	=	 _param_request;
-	
+	var _status			=	 false;
 	
 	var filter			=	$('.wrs_run_filter');
 	var history			=	filter.attr('history');
@@ -307,7 +307,7 @@ function is_wrs_change_to_run(_param_request)
 		
 		filter.attr('history',base64);
 		
-		return {status:false, val:param_request};
+		return {status:_status, val:param_request};
 	}
 	
 	histoty_param	=	$.parseJSON(base64_decode(history));
@@ -372,7 +372,9 @@ function is_wrs_change_to_run(_param_request)
 		{
 			if(empty($('.wrs_run_filter').attr('history')))
 			{
-				WRS_ALERT(LNG('RUN_GRID_CHANGE_NOT'),'warning');
+				if(!manager_aba){
+					WRS_ALERT(LNG('RUN_GRID_CHANGE_NOT'),'warning');
+				}
 
 			}else{
 				CLOSE_LOAD_RELATORIO();
@@ -382,7 +384,9 @@ function is_wrs_change_to_run(_param_request)
 						var _visible	=	$('.wrs_panel_center_body').attr('index-visible');
 						if(_visible!='block')
 						{
-							WRS_ALERT(LNG('RUN_GRID_CHANGE_NOT'),'warning');
+							if(!manager_aba){
+								WRS_ALERT(LNG('RUN_GRID_CHANGE_NOT'),'warning');
+							}
 						}
 					}
 					
@@ -392,6 +396,8 @@ function is_wrs_change_to_run(_param_request)
 			}
 			
 		}
+		
+
 		
 		return {status:true, val:param_request};
 		
@@ -426,7 +432,7 @@ function is_wrs_change_to_run(_param_request)
 			filter.attr('history',base64_encode(json_encode(histoty_param,true)));
 	}
 	
-	return {status:false, val:param_request};
+	return {status:_status, val:param_request};
 }
 
 

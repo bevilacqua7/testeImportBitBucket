@@ -6,6 +6,7 @@
 
 <script>
 var wrs_panel_layout		=	'';
+var jqueryLayoutOptions		=	{};
 var CUBE_S					=  <?php echo fwrs_request(TAG_URL_CUBE_SELECTED); ?>;
 var TAG_URL_CUBE_SELECTED	=  '<?php echo TAG_URL_CUBE_SELECTED; ?>';
 
