@@ -684,13 +684,13 @@ function trace_change_kendo(kendoUi)
 							return true;
 						}
 				
-					var prox_aba = $('li.'+_report_id).next('li');
+					var outra_aba = $('li.'+_report_id).parent().children('li:not(.new_file)').first();
 					var _aba_e_ativa = $('li.'+_report_id).hasClass('active');
 					
 					__remove({'report_id':_report_id});
 					
 					if(_aba_e_ativa){
-						prox_aba.trigger('click');
+						outra_aba.trigger('click');
 					}
 
 			}
