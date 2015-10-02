@@ -94,7 +94,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 			}catch(e){
 				json_level_drill	=	 null;
 			}
-			if(!empty(json.LEVEL_DRILL) && !in_array('DRD',PERFIL_ID_USER))				{
+			if(!empty(json_level_drill) && !in_array('DRD',PERFIL_ID_USER))				{
 					if(is_in_array(json.LEVEL_DRILL)){
 						$(nameID).find('.k-grid-content-locked tr').each(function(){
 							if(!$('.k-grid-content tr:eq('+$(this).index()+')').hasClass('tag_total'))
@@ -131,7 +131,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 			
 		var json	=	$.parseJSON(base64_decode($('.'+replace_attr(column_tag[c])).attr('json')));
 		
-		if(!empty(json.LEVEL_DRILL) && !in_array('DRD',PERFIL_ID_USER))
+		if(!empty(json_level_drill) && !in_array('DRD',PERFIL_ID_USER))
 			{
 				if(is_in_array(json.LEVEL_DRILL)){
 					
