@@ -33,18 +33,15 @@ function WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi)
 {
 	$('.WRS_DRAG_DROP_FILTER').html('');
 	$('.wrs_swap_drag_drop').html('');
-
 	set_value_box_relatorio(_layout);
 	$('.wrs_panel_filter_icon').attr('filter_hide','true').trigger('click');
 	wrsRunFilter();
-	
 }
 
 
 function WRSKendoGridRefresh(history)
 {
 	var _history		=	$.parseJSON(base64_decode(history));
-	
 
 	if(empty(_history)) return true;
 	
@@ -57,7 +54,7 @@ function WRSKendoGridRefresh(history)
 			getRequestKendoUiDefault		=	_paranKendoUi;
 			
 			//getRequestKendoUiDefault	=	merge_objeto(_paranKendoUi,_layout);
-			
+
 			_paranKendoUi['IS_REFRESH']	=true; //Informa que foi executado um refresh
 			$('#wrsConfigGridDefault').attr('is-event','true').data('wrsConfigGridDefault',_paranKendoUi);
 			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
@@ -348,7 +345,7 @@ function getWrsKendoColumn(data)
 	
 
 
-		
+
 		
 	
 	var layout							=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
@@ -593,7 +590,12 @@ function wrsKendoUiChange(nameID,param,value)
 	var _tmpWrsKendoUi		=	"";
 	
 	
-
+	/*
+		LAYOUT_ROWS 
+		LAYOUT_COLUMNS 
+		LAYOUT_MEASURES 
+		LAYOUT_FILTERS 
+*/
 		if(empty(param))
 		{
 			//Para quando for passado Array como parametro
@@ -637,12 +639,14 @@ function onDataBound(arg)
 				
 				/*Options To ABAS */
 				wrsparam['KendoUi']				=	_kendoUiParam;
+
 				
-				//Aplicando e salvando a estrutura das abas
-				$(ABA_TAG_NAME).wrsAbas('refresh',wrsparam);
 				
 				ELEMENT.attr('chart','false');
 				ELEMENT.attr('maps_wrs','false');
+				
+				
+				
 				 
 	
 				
@@ -708,6 +712,11 @@ function onDataBound(arg)
 			$('body').WRSJobModal('close',{'report_id':classGrid});
 			
 			wrsKendoUiChange(nameID,'IS_REFRESH',false);
+			
+	//		 console.log('wrsKendoUi',wrsKendoUi);
+			//Aplicando e salvando a estrutura das abas
+			$(ABA_TAG_NAME).wrsAbas('refresh',wrsKendoUi);
+			
 			
 			TRACE('END onDataBound');
 			

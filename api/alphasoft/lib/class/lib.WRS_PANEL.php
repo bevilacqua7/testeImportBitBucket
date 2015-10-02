@@ -49,6 +49,8 @@ class WRS_PANEL  extends WRS_USER
 	 */
 	private $_param_ssas_reports		=	 array();
 	
+	private $ssas_request				=	array();
+	
 	
 	/**
 	 * Armazena o array do muliplo cubo
@@ -136,6 +138,7 @@ class WRS_PANEL  extends WRS_USER
 		{
 			$tmp_value		=	fwrs_request($label);
 			
+			$this->ssas_request[$label]	=	$tmp_value;
 			if(!in_array($label,$exception))
 			{
 				$tmp_value		=	 empty($tmp_value) ? NULL :  utf8_encode(base64_decode($tmp_value));
@@ -143,6 +146,9 @@ class WRS_PANEL  extends WRS_USER
 			
 			$this->_param_ssas_reports[$label]		=	 $tmp_value;
 		}
+		
+		
+
 		
 		switch(fwrs_request('event'))
 		{
@@ -631,6 +637,8 @@ class WRS_PANEL  extends WRS_USER
 		{
 			$getRequestKendoUi['PLUS_MINUS']	=	 true;
 		}
+		
+		
 
 		$getRequestKendoUi				=	$this->loadWrsKEndoUi($getRequestKendoUi);
 		$this->getRequestKendoUiDefault	=	$getRequestKendoUiDefault	=	json_encode(array_merge($TelerikUi->jsRequestWrsKendoUiParam(),$getRequestKendoUi),true);
@@ -681,6 +689,9 @@ class WRS_PANEL  extends WRS_USER
 		$DillLayout['LAYOUT_COLUMNS']	=	$COLUMNS;
 		$DillLayout['LAYOUT_MEASURES']	=	$MEASURES;
 		$DillLayout['LAYOUT_FILTERS']	=	$FILTERS;
+		
+		
+		
 		
 
 		//Criando o ID do REPORT ID
@@ -786,6 +797,11 @@ class WRS_PANEL  extends WRS_USER
 					/*
 					 * Criando a estrutura de arrey para ficar no gereciador de thread
 					 */
+					
+					$getRequestKendoUi	=	 array_merge($getRequestKendoUi,$this->ssas_request);
+					
+						
+					
 					$thread_job_manager	=	array(		'ROWSL'						=>	$ROWSL,
 														'getRequestKendoUi'			=>	$getRequestKendoUi,
 														'getRequestWrsExceptions'	=>	$getRequestWrsExceptions,
@@ -796,7 +812,8 @@ class WRS_PANEL  extends WRS_USER
 														//'TelerikUi'					=>	$TelerikUi,
 														'CUBE'						=>	$CUBE,
 														'USER_CODE'					=>	$USER_CODE,
-														'CREATE_SSAS_JOB'			=>	$rows_CREATE_SSAS_JOB,			//Retorno do processo da query CREATE_SSAS_JOB	
+														'CREATE_SSAS_JOB'			=>	$rows_CREATE_SSAS_JOB,
+														'_param_ssas_reports'		=>	$this->_param_ssas_reports//Retorno do processo da query CREATE_SSAS_JOB	
 					);
 					
 					
@@ -853,6 +870,7 @@ class WRS_PANEL  extends WRS_USER
 		$DillLayout				=	$thread_job_manager['DillLayout'];
 //		$TelerikUi				=	$thread_job_manager['TelerikUi'];
 		$CUBE					=	$thread_job_manager['CUBE'];
+		$_param_ssas_reports	=	$thread_job_manager['_param_ssas_reports'];
 		
 		$threadJobManager	=	$this->threadJobManager->runThreadJobManager($thread_job_manager,$getRequestKendoUi['REPORT_ID'],$this->_query,$checkThreadJobManager);
 
@@ -1342,8 +1360,10 @@ HTML;
 				
 				if($job)
 				{
-						$TelerikUi			= new KendoUi();
+						$TelerikUi			= 	new KendoUi();
 						$getRequestKendoUi	=	$job['getRequestKendoUi'];
+						
+
 						
 						$TelerikUi->setId($getRequestKendoUi['REPORT_ID']);		
 						$TelerikUi->setWrsKendoUi($getRequestKendoUi); //Passando para Gravar no JS as integrações recebidas
