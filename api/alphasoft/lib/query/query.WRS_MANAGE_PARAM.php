@@ -400,7 +400,14 @@ class WRS_MANAGE_PARAM
 		$table		=	'GET_SSAS_REPORT';
 		$order		=	array();
 		$fields		=	array();
-		$button		=	array('new'=>'Abrir Relatório','update'=>'Abrir Layout','remove'=>'Apagar');
+		$button		=	array();
+		
+		$button['new']		=	'Abrir Relatório';
+		if(!WRS_USER::getArrPerfUser('DRG')){
+			$button['update']	=	'Abrir Layout';
+			$button['remove']	=	'Apagar';
+		}
+		
 		$button_icon=	array('new'=>'fa fa-folder-open');
 		/*
 		 * TODO: pegar do language esses labels

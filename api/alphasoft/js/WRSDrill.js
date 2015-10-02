@@ -94,9 +94,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 			}catch(e){
 				json_level_drill	=	 null;
 			}
-			
-			if(!empty(json_level_drill))
-				{
+			if(!empty(json.LEVEL_DRILL) && !in_array('DRD',PERFIL_ID_USER))				{
 					if(is_in_array(json.LEVEL_DRILL)){
 						$(nameID).find('.k-grid-content-locked tr').each(function(){
 							if(!$('.k-grid-content tr:eq('+$(this).index()+')').hasClass('tag_total'))
@@ -133,7 +131,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 			
 		var json	=	$.parseJSON(base64_decode($('.'+replace_attr(column_tag[c])).attr('json')));
 		
-		if(!empty(json.LEVEL_DRILL))
+		if(!empty(json.LEVEL_DRILL) && !in_array('DRD',PERFIL_ID_USER))
 			{
 				if(is_in_array(json.LEVEL_DRILL)){
 					
@@ -520,17 +518,21 @@ function addTargetDisableContext(kendoUi)
     		data_line_row[data_line_row.length]	=	{text	: 'VER NO MAPA'		, className:'VER_MAPA',action:drill_click_option, json:''};
     		
     		
-    	$(".k-grid-content-locked").attr('rel','noContext').attr('type','linha');
-    	context.attachWRS('.k-grid-content-locked td'				, data_line_row, $event);
+    	if(!in_array('DRT',PERFIL_ID_USER)){
+	    	// cabecalho de cada linha	
+	    	$(".k-grid-content-locked").attr('rel','noContext').attr('type','linha');
+	    	context.attachWRS('.k-grid-content-locked td'				, data_line_row, $event);
+	    	    	
+	    	// cabecalho inicial (canto superior esquerdo) da coluna e da linha apenas
+	    	$(".k-grid-header .k-grid-header-locked").attr('type','linha_header');
+	    	context.attachWRS('.k-grid-header .k-grid-header-locked th'	, data_line_header,$event);    	  	
+    	}
     	
-    	
-    	
-    	$(".k-grid-header .k-grid-header-locked").attr('type','linha_header');
-    	context.attachWRS('.k-grid-header .k-grid-header-locked th'	, data_line_header,$event);    	  	
-
     	//Dados
-    	$(".k-grid-content").attr('type','data');
-    	context.attachWRS('.k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event);
+    	if(!in_array('DRV',PERFIL_ID_USER)){
+    		$(".k-grid-content").attr('type','data');
+    		context.attachWRS('.k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event);    		
+    	}
 
     	
     	
@@ -543,14 +545,17 @@ function addTargetDisableContext(kendoUi)
     	
     	
     		
-    		addTargetDisableContext(kendoUi.columns)
+    	addTargetDisableContext(kendoUi.columns)
     	
     	if(length==1)
     	{
     		$(".k-grid-header .k-grid-header-wrap").attr('type','coluna_header');
 			var data_line_header2							=	 menu_context_relation_ship_measure(jsonMeasure);
     		data_line_header2[data_line_header2.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
-	    	context.attachWRS('.k-grid-header .k-grid-header-wrap tr:eq(0) th '	, data_line_header2,$event);
+    		// header de cada coluna
+        	if(!in_array('DRT',PERFIL_ID_USER)){
+        		context.attachWRS('.k-grid-header .k-grid-header-wrap tr:eq(0) th '	, data_line_header2,$event);
+        	}
     	}else{
     		
     		$('.k-grid-header .k-grid-header-wrap').attr('type','coluna_header_line');
@@ -561,12 +566,17 @@ function addTargetDisableContext(kendoUi)
     			{    			
     					tag		=	'.k-grid-header .k-grid-header-wrap tr:eq('+i+') th ';
     					if(i!=(length-1))
-    					{
-    						context.attachWRS(tag	, menu_context_relation_ship_measure(jsonRelationShip),$event);
+    					{	// header de cada coluna
+    				    	if(!in_array('DRT',PERFIL_ID_USER)){
+    				    		context.attachWRS(tag	, menu_context_relation_ship_measure(jsonRelationShip),$event);
+    				    	}
     					}else{
-    						var data_line_header2							=	 menu_context_relation_ship_measure(jsonMeasure);
-    		        		data_line_header2[data_line_header2.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
-    						context.attachWRS(tag	, data_line_header2,$event);
+    				    	if(!in_array('DRM',PERFIL_ID_USER)){
+	    						var data_line_header2							=	 menu_context_relation_ship_measure(jsonMeasure);
+	    		        		data_line_header2[data_line_header2.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
+	    		        		// metricas
+	    						context.attachWRS(tag	, data_line_header2,$event);
+    				    	}
     					}
     			}   		 
     	}

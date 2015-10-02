@@ -6,6 +6,11 @@
  * @link http://layout.jquery-dev.com/demos/custom_scrollbars.html
  */
 
+var qtde_max_linhas		=	15;
+var qtde_max_colunas	=	10;
+var qtde_max_metricas	=	30;
+var hideeast			=	in_array('DRG',PERFIL_ID_USER)?true:false;
+
 
 function wrs_north_onresize()
 {
@@ -193,6 +198,12 @@ function BTN_HOVER_BOX_DROP()
 	$('.box_wrs_panel').hover(function() {$( this ).addClass( "ui-state-hover" );}, function() {$( this ).removeClass( "ui-state-hover" );});
 }
 
+function hide_east(){
+	wrs_panel_layout.east.pane.css('visibility','hidden');
+	wrs_panel_layout.east.pane.hide();
+	wrs_panel_layout.hide('east',true);
+	return true;
+}
 
 //Controlando o Evento do Layout
 $(document).ready(function () {
@@ -322,8 +333,8 @@ $(document).ready(function () {
 			east__resizerTip				: "Redimensiona Layouts",
 			east__togglerContent_open		: "<span class='ui-icon ui-icon-triangle-1-e' style='margin-left:-4px'></span>",
 			east__togglerContent_closed		: "<span class='ui-icon ui-icon-triangle-1-w' style='margin-left:-4px'></span>",
-			east__onresize 	: wrs_east_onresize,
-			east__onopen: function () {
+			east__onresize 	: hideeast?hide_east: wrs_east_onresize,
+			east__onopen: hideeast?hide_east:function () {
 											WRS_PANEL_DRAG();
 											$('.WRS_DRAG_DROP_RECEIVER_FILTER').show();
 											$('.WRS_DRAG_DROP_FILTER_CONTAINER').hide();
@@ -332,7 +343,7 @@ $(document).ready(function () {
 											
 											
 										},
-			east__onclose: function () 
+			east__onclose: hideeast?hide_east:function () 
 			{
 				//Executa o Click para executar o Gráfico
 				var east__onclose	=	$('.wrs_run_filter').attr('east__onclose');
@@ -386,7 +397,7 @@ $(document).ready(function () {
 
 	$('.wrs_clean_box_drag_drop').click(wrs_clean_box_drag_drop);
  
-	
+	if(hideeast){ hide_east(); }
 });
 
 
@@ -796,6 +807,17 @@ function DROP_EVENT( event, ui ,eventReceive){
 		var typesDraggable		=	toEvent.attr('type');
 		var whereFoundReceive	=	$('.wrs_panel_receive_coluna_linha');
 
+		// tratamento para quantidade maxima de opcoes por box de draganddrop
+		if(
+				(who_receive=='linha' && receiveEvent.find('li').length>=qtde_max_linhas)
+				||
+				(who_receive=='coluna' && receiveEvent.find('li').length>=qtde_max_colunas)
+				||
+				(who_receive=='metrica' && receiveEvent.find('li').length>=qtde_max_metricas)
+		){
+			WRS_ALERT(sprintf(LNG('DRAG_DROP_MSG_ERROX_MAX_QTDE'),receiveEvent.find('li').length,who_receive),'error');
+			return false;
+		}
 
 	if(filters!='metrica')
 	{
@@ -1684,6 +1706,24 @@ function wrs_panel_active_drag_drop()
 							  	// forca um position menor restritivo para que o botao em drag nao seja ocultado pelo elemento div pai
 							  	$('.wrs_panel_center_body_container').css({position: 'inherit'});
 						  }
+						  // tratamento para quantidade maxima de opcoes por box de draganddrop
+						  ,receive: function(e,ui) {
+					            var $this = $(this);
+					            var who_receive = $(this).parent().attr('who_receive');
+								var qtde_in_who_receive	=	$this.children('li.ui-sortable').length-1;//-1 por causa do placeholder
+
+								if(
+										(who_receive=='linha' && qtde_in_who_receive>=qtde_max_linhas)
+										||
+										(who_receive=='coluna' && qtde_in_who_receive>=qtde_max_colunas)
+										||
+										(who_receive=='metrica' && qtde_in_who_receive>=qtde_max_metricas)
+								){
+									WRS_ALERT(sprintf(LNG('DRAG_DROP_MSG_ERROX_MAX_QTDE'),qtde_in_who_receive,who_receive),'error');
+									$(ui.sender).sortable('cancel');
+								}
+								
+					        }
 					}
 
 		//Ativando o DRAG AND DROP
@@ -1788,16 +1828,14 @@ function acoes_multiplas_menu_painel(){
 			if($(this).hasClass('ui-state-focus')){
 				$(this).removeClass('ui-state-focus');
 			}else{
-				$(this).addClass('ui-state-focus');
-				
+				$(this).addClass('ui-state-focus');				
 				// regra para utilizar o shift (ja identificado na funcao acima) para verificar as seguintes regras:
-				// - se quando houver a selecao APENAS DO SEGUNDO ITEM
 				// - se o shift estiver pressionado
 				// - se a diferenca entre os itens for maior que 1 (tiver algum item entre eles)
 				// - ENTAO:
-				// - seleciona os itens dentro do intervalo
+				// - seleciona os itens dentro do intervalo do primeiro ao último selecionado
 				if(
-						$(this).parent().find('li.ui-draggable.ui-state-focus').length==2 &&
+						//$(this).parent().find('li.ui-draggable.ui-state-focus').length==2 && // regra antiga para funcionar com apenas 2 itens
 						tecla_shift_press
 				){
 					var primeiro_item 			= $(this).parent().find('li.ui-draggable.ui-state-focus').first();
@@ -1806,7 +1844,9 @@ function acoes_multiplas_menu_painel(){
 					var segundo_item_index 		= $(this).parent().find('li.ui-draggable').index(segundo_item);					
 					if(segundo_item_index-primeiro_item_index>1){
 						for(var o=primeiro_item_index+1;o<segundo_item_index;o++){
-							$(this).parent().find('li.ui-draggable').eq(o).addClass('ui-state-focus');
+							if(!$(this).parent().find('li.ui-draggable').eq(o).hasClass()){
+								$(this).parent().find('li.ui-draggable').eq(o).addClass('ui-state-focus');
+							}
 						}
 					}
 				}

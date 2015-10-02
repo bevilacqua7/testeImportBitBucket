@@ -15,6 +15,18 @@ var METRICAS_JSON			= '<?php echo $METRICAS_JSON; ?>';
 
 var MEASURE_RELATIONSSHIPS	= '<?php echo base64_encode(json_encode($MEASURE_RELATIONSSHIPS,true));?>';
 
+var PERFIL_ID_USER			= [];
+<?php 
+$arr_perfil_user = WRS_USER::getArrPerfUser();
+if(is_array($arr_perfil_user)){
+	foreach($arr_perfil_user as $perfil){
+		?>
+				PERFIL_ID_USER.push('<?php echo $perfil; ?>');
+		<?php 
+	}
+}
+?>
+
 </script>
 <title><?PHP echo LNG('TITLE');?></title>
 

@@ -102,6 +102,7 @@
 	$language ['DRAG_DROP_CLEAN_SELECTION'] 		= "Tem certeza que deseja remover todos(as) <b>%s</b> ?";
 	$language ['DRAG_DROP_CLEAN_SELECTION_INSIDE']	= "Tem certeza que deseja limpar todas as seleções do Filtro?";
 	
+	$language ['DRAG_DROP_MSG_ERROX_MAX_QTDE'] 		= "Não é possível inserir mais de %s atributos no campo %s";
 		
 	$language ['DRAG_DROP_CLEAN_SELECTION_SUCCESS'] 		= "Remoção dos(as) <b>%s</b>(s) realizadas com sucesso.";
 	$language ['DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE'] = "Seleções do filtro removido com sucesso .";
