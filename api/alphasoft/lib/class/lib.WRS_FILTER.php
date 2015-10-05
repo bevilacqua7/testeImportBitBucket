@@ -230,14 +230,15 @@ class WRS_FILTER  extends WRS_BASE
 		while($rows =  $this->fetch_array($query))
 		{
 			$body	=	 array();
-			$value	=	$LEVEL_FULL.'.['.$rows[$LEVEL_FULL].']';
-			
+			$_value	=	$rows['ATTRIBUTE_DESC'];
+			$value	=	$LEVEL_FULL.'.['.$_value.']';
+
 			$count++;
 			if($LIMIT_PAGE==$count) continue;
 			
 			$body[]	=	'<input type="'.$input_type.'" name="'.$LEVEL_FULL.'" class="wrs_input_filter_single" index-data="'.$index_data.'"  '.fwrs_checkbox($FILTER_ARRAY, $value).' value="'.$value.'">';
-			$body[]	=	$rows[$LEVEL_FULL];
-			$table_body.= $this->table_body($body,"text_original='".$rows[$LEVEL_FULL]."'",NULL,NULL,array('pws_click_triger_single','pws_click_triger_single pws_filter_text') );
+			$body[]	=	$_value;
+			$table_body.= $this->table_body($body,"text_original='".$_value."'",NULL,NULL,array('pws_click_triger_single','pws_click_triger_single pws_filter_text') );
 		}
 		
 		

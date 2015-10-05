@@ -360,7 +360,7 @@ function removeReport(arrRepIds){
 }
 
 
-function getLoadReport()
+function getLoadReport(no_request)
 {
 	var _param						=	{};
 	var sortable_metrica			=	rows_by_metrica_attr_base64('.sortable_metrica','metrica');
@@ -372,6 +372,20 @@ function getLoadReport()
 	var _filter_hide=activeToGetAllFilters();
 	var filter_selected				=	$.WrsFilter('getAllFiltersToRun');
 	
+	
+	
+	if(no_request){
+		
+		_param	=	{
+				'LAYOUT_ROWS'			:	sortable_linha.request,
+				'LAYOUT_COLUMNS'		:	sortable_coluna.request,
+				'LAYOUT_MEASURES'		:	sortable_metrica.request,
+				'FILTER_TMP'		:	filter_selected.full,
+				
+}
+		
+		
+	}else{
 	_param	=	{
 					'LAYOUT_ROWS'			:	sortable_linha,
 					'LAYOUT_COLUMNS'		:	sortable_coluna,
@@ -379,6 +393,7 @@ function getLoadReport()
 					'LAYOUT_FILTERS'		:	sortable_filtro,
 					'KendoUi'				:	wrs_grid_options_default,
 					'filter_selected'		:	filter_selected
+	}
 	}
 	
 //	console.log('filter_selected',filter_selected);

@@ -28,15 +28,37 @@ function wrsABAAddValue(grid,_kendoUi)
 			$('#wrsConfigGridDefault').data('wrsConfigGridDefault',_kendoUi).wrsConfigGridDefault(_kendoUi);
 		}
 		
-		
-		
-		
 }
 
 function trace_change_kendo(kendoUi)
 {
 	TRACE_DEBUG('CHANGE');
 	console.log('trace_change_kendo',kendoUi);
+}
+
+
+
+function optionsDataConvert(gridValue,with_decode)
+{
+	
+	if(with_decode)
+	{
+		var optionsAba		=	{
+				LAYOUT_ROWS			:	filter_array_convert(gridValue['LAYOUT_ROWS']),
+				LAYOUT_COLUMNS		:	filter_array_convert(gridValue['LAYOUT_COLUMNS']),
+				LAYOUT_MEASURES		:	filter_array_convert(gridValue['LAYOUT_MEASURES']),
+				LAYOUT_FILTERS		:	filter_TMP_to_array(gridValue['FILTER_TMP'])
+			};
+		
+	}else{
+		var optionsAba		=	{
+				LAYOUT_ROWS			:	filter_array_convert(base64_decode(gridValue['LAYOUT_ROWS'])),
+				LAYOUT_COLUMNS		:	filter_array_convert(base64_decode(gridValue['LAYOUT_COLUMNS'])),
+				LAYOUT_MEASURES		:	filter_array_convert(base64_decode(gridValue['LAYOUT_MEASURES'])),
+				LAYOUT_FILTERS		:	filter_TMP_to_array(getJsonDecodeBase64(gridValue['FILTER_TMP']))
+			};
+	}
+	return optionsAba;
 }
 
 
@@ -380,18 +402,7 @@ function trace_change_kendo(kendoUi)
 			}
 			
 			
-			function optionsDataConvert(gridValue)
-			{
-				
-				var optionsAba		=	{
-						LAYOUT_ROWS			:	filter_array_convert(base64_decode(gridValue['LAYOUT_ROWS'])),
-						LAYOUT_COLUMNS		:	filter_array_convert(base64_decode(gridValue['LAYOUT_COLUMNS'])),
-						LAYOUT_MEASURES		:	filter_array_convert(base64_decode(gridValue['LAYOUT_MEASURES'])),
-						LAYOUT_FILTERS		:	filter_TMP_to_array(getJsonDecodeBase64(gridValue['FILTER_TMP']))
-					};
-				
-				return optionsAba;
-			}
+			
 			/**
 			 * Evento do click da ABA 
 			 * para abrir a estrutura da aba
@@ -932,6 +943,7 @@ function trace_change_kendo(kendoUi)
 					var _kendoUiLast		=	[];
 					
 					
+
 					
 					
 					for(var lineOptions	=0 ; lineOptions	<	options.length ;lineOptions++)

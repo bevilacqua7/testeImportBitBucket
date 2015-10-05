@@ -120,8 +120,17 @@ function filterMergeLoad(filter_current,filterMerge)
 
 function changeWithDrillColumnRows(column,columnName)
 {
-	var _column						=	[];
+	
+	
+	var current_layout		=	getLoadReport(true);
+	
+	var _column				=	optionsDataConvert(current_layout,true);
+	
+	
 		_column[columnName]	=	 convert_to_class(column);
+		
+
+		
 		set_value_box_relatorio(_column);
 		cleanPlaceholder();
 		$('.wrs_panel_filter_icon').attr('filter_hide','false').trigger('click');
@@ -141,10 +150,14 @@ function changeWithDrillFilter(layout,filter_to_add)
 	
 	//btnRun.attr('history','');
 	//Mudando o status para que possa ser renderizado
+	var current_layout	=	getLoadReport(true);
+	
 
-	var changeLayout	=	{};
+	var changeLayout	=	optionsDataConvert(current_layout,true);
 	var filtersCurrent	=	tagFilterWRS(true);
 	
+	
+
 	
 	if(!empty(layout['LAYOUT_ROWS']))
 	{
@@ -180,8 +193,12 @@ function changeWithDrillFilter(layout,filter_to_add)
 		changeLayout['LAYOUT_FILTERS'] =  filterMergeLoad(filtersCurrent,filter_to_add);	
 	}
 	
-	
 
+	
+//	changeLayout	=	getLoadReport()
+
+
+	
 	set_value_box_relatorio(changeLayout);
 	
 	//Removendo qualquer informação de placeholder que é a mensagem de que não há valores na tela 

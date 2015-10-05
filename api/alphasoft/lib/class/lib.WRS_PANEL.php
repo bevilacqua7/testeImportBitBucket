@@ -974,7 +974,8 @@ class WRS_PANEL  extends WRS_USER
 		
 		
 		//$LAYOUT_ROWS_SIZE			=	$LAYOUT_ROWS_SIZE > $rows['COLUMNS']  ?  1 : $LAYOUT_ROWS_SIZE ;
-		$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$LAYOUT_ROWS_SIZE,'1'));
+		$SORT_SSAS_TABLE	=	$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$LAYOUT_ROWS_SIZE,'1'));
+		
 		if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
 		{
 			// Obtem a Tabela Contendo Registros Abertos (Drill)
@@ -985,6 +986,12 @@ class WRS_PANEL  extends WRS_USER
 		/*
 		 * Pegando a Header
 		 */
+		
+		if(!$SORT_SSAS_TABLE)
+		{
+				return array('error'=>LNG('SORT_SSAS_TABLE_ERROR'),'REPORT_ID'=>$getRequestKendoUi['REPORT_ID']);
+		}
+		
 		//ACRESCENTA-SE O (S) PARA	AS DEMAIS CONSULTAS 
 		$TABLE_NAME_CACHE	=	 $cube['TABLE_CACHE'].'S';		
 		$queryHeader		=	 $this->_query->GET_SSAS_HEADER( $TABLE_NAME_CACHE, '[*]', $this->getUserLanguage());

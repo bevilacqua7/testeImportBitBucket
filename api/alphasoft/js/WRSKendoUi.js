@@ -349,8 +349,16 @@ function getWrsKendoColumn(data)
 		
 	
 	var layout							=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
+	var byFrozenLevelFull				=	[];
 	
-	var _DRILL_FCC						=	DRILL_FCC(arg.sender.headerIndex.byFrozenLevelFull,explode(',',layout.LAYOUT_ROWS));
+	
+	try{
+		byFrozenLevelFull	=	arg.sender.headerIndex.byFrozenLevelFull;
+	}catch(e){
+		byFrozenLevelFull	=	[];
+	}
+	
+	var _DRILL_FCC						=	DRILL_FCC(byFrozenLevelFull,explode(',',layout.LAYOUT_ROWS));
 	var DRILL_LINE_LAST_COLUMN			=	_DRILL_FCC[_DRILL_FCC.length-1];
 	var LAYOUT_ROWS_B64					=	base64_encode(json_encode(_DRILL_FCC));
 	
