@@ -49,7 +49,9 @@ function changeTypeRun(IDGrid,typeRun)
 		{
 			wrsKendoUiChange(IDGrid,'TYPE_RUN',typeRun);
 		}	
-	}catch(e){}
+	}catch(e){
+		console.error('ERROR::changeTypeRun');
+	}
 }
 
 
@@ -311,7 +313,6 @@ function filter_TMP_to_array(input)
 				
 				tmp_input[tmp_input.length]		=	[inputData['class'],'',_filter];				
 		}
-	
 	
 	return tmp_input;
 }

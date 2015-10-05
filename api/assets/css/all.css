@@ -3672,7 +3672,7 @@ th.hidden-lg, td.hidden-lg {
 }
 
 .dragging, .dragging * {
-	cursor: url(https://mail.google.com/mail/images/2/closedhand.cur), move
+	cursor:  move
 }
 
 .util-theme-default .util-pagination {

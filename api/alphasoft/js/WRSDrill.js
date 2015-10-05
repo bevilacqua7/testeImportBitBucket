@@ -40,8 +40,6 @@ function addDrillOnDataBound(nameID,kendoUI)
 					var rel			=	 $(this).attr('rel');
 					
 					
-					
-					
 					var indexParent			=	 $(this).parent().index();
 					var _layout				=	[];
 					var rows				=	explode(',',layout['LAYOUT_ROWS']);
@@ -250,7 +248,7 @@ function addTargetDisableContext(kendoUi)
     		var _layout				=	 [];
     		var layout				=	e.layout;
     		
-    		
+
     		for(x in layout)
     			{
     					_layout[x]	=	explode(',',layout[x]);

@@ -76,7 +76,7 @@ class SQL_SERVER
 		}*/
 
 		//session_regenerate_id(); //Retoma a escrita da sessão
-		if(!$_query) { $this->query_debug('ERROR:::: '.$query); return false; }
+		if(!$_query) { $this->query_debug('ERROR:::: '.$query.PHP_EOL.'result::'.print_r($_query,true).PHP_EOL.'typeError::'.print_r(sqlsrv_errors(),true)); return false; }
 		
 		return $_query;
 	}

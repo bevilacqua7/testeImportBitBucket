@@ -8,29 +8,30 @@
 	 */
 	$language ['USUARIO_SEM_PRIVILEGIOS'] 				= "Usuário sem privilégios";
 	$language ['USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS'] 	= "Usuário sem privilégios para visualizar a grid, ela contém mais de 65 mil registros";
-	$language ['ERROR_NOT_ROWS'] 						= "Erro interno ao executar a Consulta...";
+	$language ['ERROR_NOT_ROWS'] 						= "Erro interno ao executar a Consulta";
 	$language ['ERROR_DRILL_LINE_RESULT'] 				= "Erro interno ao processar a criação do DRILL LINHA, se o erro persistir entre em contato com o suporte";
-	$language ['MSG_ERROR_TABLE_CACHE'] 				= "Consulta não pode ser executada, favor modificar o Layout dos Atributos selecionados..";
+	$language ['MSG_ERROR_TABLE_CACHE'] 				= "Consulta não pode ser executada, favor modificar o Layout dos Atributos selecionados";
 	$language ['VALOR'] 								= "Valor";
 	
 	/*
 	 * CUBO ERRO
 	 */
 	$language ['ERRO_CUBO_INDISPONIVEL'] 			= "ERRO: INDISPONIVEL";
-	$language ['ERROR_TABLE_CACHE_NO_HEADER']		= "Ops não existe Dados para esta Consulta..";
-	$language ['ERROR_CUBO_NOT_FOUND']				= "Ops não foi possível identificar o cubo que está sendo utilizado. <br> Se o erro persistir, favor informar ao suporte. <br><b>Obrigado</b>";
-	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executar a Consulta <b>%s</b> <br>";
-	$language ['ABA_IN_USER'] 						= "Consulta em uso ";
+	$language ['ERROR_TABLE_CACHE_NO_HEADER']		= "Não existem Dados para esta Consulta..";
+	$language ['ERROR_CUBO_NOT_FOUND']				= "Não foi possível identificar o Cubo utilizado. <br> Se o erro persistir, favor informar ao suporte";
+	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executar a Consulta <b>%s</b>";
+	$language ['ABA_IN_USER'] 						= "Consulta em uso";
 	$language ['ABA_LIMIT_SEE'] 					= "Não é possivel remover a Consulta <b>%s</b><br> pelo menos uma deve continuar visível.";
 	
-	$language ['JOB_COMPLETE_LOAD'] 		= "A Consulta <b>%s</b> foi carregada";
-	$language ['JOB_COMPLETE'] 				= "Não existe mais Consultas a serem executados.";
-	$language ['JOB_CANCEL'] 				= "A Consulta <b>%s</b> foi cancelada com sucesso";
-	$language ['JOB_CANCEL_ERRO'] 				= "Erro ao cancelar a Consulta <b>%s</b> favor tentar novamente";
+	$language ['JOB_COMPLETE_LOAD'] 		= "Consulta <b>%s</b> foi concluída";
+	$language ['JOB_COMPLETE'] 				= "Não existem mais Consultas em execução";
+	$language ['JOB_CANCEL'] 				= "Consulta <b>%s</b> foi cancelada com sucesso";
+	$language ['JOB_CANCEL_ERRO'] 			= "Erro ao cancelar a Consulta <b>%s</b> favor tentar novamente";
 	$language ['JOB_NOTFOUND'] 				= "Não foi encontrado a Consulta para cancelar ou a mesma foi concluida";
 
 	$language ['JOB_CLOSE_ALERT'] 				= "Fechar Janela de Alerta";
-	 
+	$language['SORT_SSAS_TABLE_ERROR']			=	'ERROR::008 Não foi possível Sortear a tabela';	
+	
 	/*
 	 * ALERTS
 	 */
@@ -106,17 +107,17 @@
 	$language ['DRAG_DROP_CLEAN_SELECTION_SUCCESS'] 		= "Remoção dos(as) <b>%s</b>(s) realizadas com sucesso.";
 	$language ['DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE'] = "Seleções do filtro removido com sucesso .";
 	
-	$language ['RUN_RELATORIO_FALTA_INFORMACAO'] 	= "Para execurar o relatório falta informações em: <br> <b>%s</b>";
+	$language ['RUN_RELATORIO_FALTA_INFORMACAO'] 	= "Para execurar a Consulta falta informações em: <br> <b>%s</b>";
 	
 	
 	
 	$language ['DRAG_DROP_FIELD_ATRIBUTO'] 	= "um Atributo";
 	$language ['DRAG_DROP_FIELD_METRICA'] 	= "uma Metrica";
 	
-	$language ['GERANDO_RELATORIO'] 		= "Aguarde um instante enquando o sistema está gerando o relatório. <br> Obrigado";
-	$language ['GERANDO_RELATORIO_TITLE'] 	= "Gerando Relatório";
+	$language ['GERANDO_RELATORIO'] 		= "Aguarde um instante enquando a Consulta é criada";
+	$language ['GERANDO_RELATORIO_TITLE'] 	= "Gerando Consulta";
 	
-	$language ['GERANDO_MULTI_CUBE_BODY'] 		= "Aguarde um instante enquando o sistema está trocando o cubo. <br> Obrigado";
+	$language ['GERANDO_MULTI_CUBE_BODY'] 		= "Aguarde um instante para troca de Cubo";
 	$language ['GERANDO_MULTI_CUBE_TITLE'] 	= "Trocando o Cubo";
 	
 	
