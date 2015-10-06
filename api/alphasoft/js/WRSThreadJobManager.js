@@ -177,7 +177,9 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 			var MSG_JOBS		=	'WrsThreadJobManagerMessager';
 			var ERROR			=	'WrsThreadJobManagerERROR';
 			var CANCEL_JOB		=	'WrsThreadJobManagerCancelJOB';	
-			
+
+			var layout_center	=	$('.ui-layout-center');
+			$(MODAL_JOB).width(layout_center.outerWidth()-2).height(layout_center.outerHeight()-3);
 			/*
 			 * Removendo
 			 */
