@@ -230,6 +230,13 @@ function optionsDataConvert(gridValue,with_decode)
 			}
 			
 			
+			
+			
+			
+			
+			
+			
+			
 			var btn_add_new_aba	=	 function()
 			{
 				var className				=	'new_file';
@@ -790,10 +797,20 @@ function optionsDataConvert(gridValue,with_decode)
 				var html			=	str_replace(htmlABAReplace, _replace, htmlABA);
 				
 					
+				var get_aba_current		=	tagABA.find('.'+report_id);
+				var before_insert			=	get_aba_current.next('li');
 					
-					tagABA.find('.'+report_id).remove();
+				
+				
 					
-					tagABA.append(html);
+					get_aba_current.remove();
+					
+					
+					if(empty(before_insert.attr('class'))){
+						tagABA.append(html);
+					}else{
+						before_insert.before(html);
+					}
 					
 					//Controle para manter as alterações nas abas
 				//	tagABA.find('.'+report_id).data(abaData,getElement);
@@ -811,6 +828,7 @@ function optionsDataConvert(gridValue,with_decode)
 						tagABA.find('.'+classIDName).remove();
 					}
 					
+
 					//Gravando informações das abas na tela 
 					if(!empty(data))
 					{
@@ -927,6 +945,8 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			var __load_multiple		=	 function(options,noactive)
 			{
+				
+
 					var _noactive	= false;
 
 					if(!empty(noactive)) _noactive = noactive;
@@ -960,6 +980,8 @@ function optionsDataConvert(gridValue,with_decode)
 						
 								var	opts 			= 	$.extend( {}, optionsAba, options[lineOptions]);
 								var _active			=	true;
+								
+
 								var kendoUi			=	json_decode(base64_decode(opts.KendoUi));
 								
 									if(empty(kendoUi)) continue;
@@ -970,8 +992,6 @@ function optionsDataConvert(gridValue,with_decode)
 									_kendoUiLast						=	kendoUi;
 									
 									_object_open	=	opts;
-									
-									
 										add_aba_html(	kendoUi['TITLE_ABA'], 
 												kendoUi['REPORT_ID'],
 														_active,
@@ -1027,6 +1047,124 @@ function optionsDataConvert(gridValue,with_decode)
 			}
 			
 			
+			var encode_to_aba_create			=	 function(_opts,_optsDefault)
+			{
+				
+				var opts			=	_opts;
+				var optsDefault		=	_optsDefault;
+				var FILTER_TMP		=	[];
+				
+					optsDefault['KendoUi']	=	opts['KendoUi'];
+					
+				// construindo o reverso
+				for(var lineOptions in opts)
+					{
+						
+							var object_class			=	'';
+							var is_filter				=	false;
+							var key						=	'LEVEL_FULL';
+							switch(lineOptions)
+							{
+								case 	'LAYOUT_FILTERS' 	:	is_filter	=	true;
+								case 	'LAYOUT_ROWS'		:
+								case 	'LAYOUT_COLUMNS'	:	object_class	=	'WRS_DRAG_DROP_ATTR'	;		break;
+								case 	'LAYOUT_MEASURES'	:	{
+																	key				=	'MEASURE_UNIQUE_NAME';
+																	object_class	=	'WRS_DRAG_DROP_METRICA'	;		
+																}; break;
+								default						:	continue;
+							}
+						
+							var s_opts		=	opts[lineOptions];
+							
+								for(var lineFull in s_opts)
+									{
+									
+										var _tmp_opts		=	s_opts[lineFull];
+										
+										if(is_filter)
+										{
+											_tmp_opts		=	s_opts[lineFull][0];
+											FILTER_TMP.push({'class':_tmp_opts, 'data': s_opts[lineFull][2].join(',')});
+										}
+										
+										
+										var _class			=	str_replace('__','',_tmp_opts);
+
+										if(empty(_class)) continue;
+										
+										var object_param	=	$('.'+object_class).find('.wrs_panel_options').find('.'+_class);
+										var _json			=	getJsonEncodeToElement(object_param);
+
+											optsDefault[lineOptions].push(_json[key]);
+									}
+						
+						
+					}
+				
+				
+					optsDefault['FILTER_TMP']	=	FILTER_TMP;
+
+					
+					for(var lineDefault in optsDefault)
+						{
+							
+								if(!empty(optsDefault[lineDefault]))
+								{
+									var _data							=	optsDefault[lineDefault];
+									
+									
+									switch(lineDefault)
+									{
+										case 	'LAYOUT_FILTERS' 	:	
+										case 	'LAYOUT_ROWS'		:
+										case 	'LAYOUT_COLUMNS'	:	
+										case 	'LAYOUT_MEASURES'	:	 _data	=	_data.join(','); break;
+										default	: _data	=	json_encode(_data,true); break;
+									}
+									
+									   optsDefault[lineDefault]			=	"";
+										optsDefault[lineDefault]		=	 base64_encode(_data);
+									
+								}else{
+									optsDefault[lineDefault]	=	"";
+								}
+						
+						}
+					
+					
+					return optsDefault;
+					
+				
+			}
+			
+			
+			var __refresh_F5		=	 function(options)
+			{
+						if(empty(options)) return false;
+				
+				
+						var optionsAba		=	{
+								LAYOUT_ROWS			:[],
+								LAYOUT_COLUMNS		:[],
+								LAYOUT_MEASURES		:[],
+								LAYOUT_FILTERS		:[],
+								KendoUi				:[],
+								FILTER_TMP			:""
+							};
+				
+						var	opts 				= 	$.extend( {}, optionsAba, options);
+						var	opts_encode			=	encode_to_aba_create(opts,optionsAba);
+						
+						
+						__load_multiple([opts_encode],true);
+			}
+			
+			
+			
+			
+			
+			
 			var __aba_title	= function(options)
 			{
 				
@@ -1035,6 +1173,9 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				return tagABA.find('.'+opts.report_id).find('.title').html();
 			}
+			
+			
+			
 			
 			var __show_grid		=	 function()
 			{
@@ -1066,7 +1207,8 @@ function optionsDataConvert(gridValue,with_decode)
 			        load_multiple			:	__load_multiple,
 			        aba_title				:	__aba_title,
 			        show_grid				:	__show_grid,
-			        remove_event_click		:	__remove_event_click
+			        remove_event_click		:	__remove_event_click,
+			        refresh_F5				:	__refresh_F5
 			};
 			
 			 

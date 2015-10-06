@@ -108,7 +108,6 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	var _filter_selected 	=	'';
 	var _FILTERS_TMP		=	report_array_to_key(_FILTERS.split(','));
 	
-	
 	if(data.FILTER_VALUES!='' && data.FILTER_VALUES!=null && data.FILTER_VALUES.length>0)
 	{
 		var filtros_values 	= data.FILTER_VALUES.split('(_|_)');
@@ -173,7 +172,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	}
 	else
 	{
-		
+		console.log('_param_template',_param);
 		$(ABA_TAG_NAME).wrsAbas('load_multiple',[_param],true);
 
 		//wrsRunFilter();
@@ -294,6 +293,7 @@ function btn_window_grid_event_report(data)
 			
 		});
 		
+
 		switch(action_type)
 		{
 			case 'new' 		: 

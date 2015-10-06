@@ -29,13 +29,20 @@ include_js('WRSMenu');
 include_js('templateReport');
 include_js('WRSAbas'); 
 
-function WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi)
+function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
 {
+	var _layout	=	layout;
+	/*
 	$('.WRS_DRAG_DROP_FILTER').html('');
 	$('.wrs_swap_drag_drop').html('');
-	set_value_box_relatorio(_layout);
-	$('.wrs_panel_filter_icon').attr('filter_hide','true').trigger('click');
-	wrsRunFilter();
+	*/
+//	set_value_box_relatorio(_layout);
+//	$('.wrs_panel_filter_icon').attr('filter_hide','true').trigger('click');
+	
+	_layout['KendoUi']	=	_paranKendoUi;
+	
+	$(ABA_TAG_NAME).wrsAbas('refresh_F5',_layout);
+	//wrsRunFilter();
 }
 
 
@@ -55,8 +62,11 @@ function WRSKendoGridRefresh(history)
 			
 			//getRequestKendoUiDefault	=	merge_objeto(_paranKendoUi,_layout);
 
-			_paranKendoUi['IS_REFRESH']	=true; //Informa que foi executado um refresh
+			_paranKendoUi['IS_REFRESH']		=	true; //Informa que foi executado um refresh
+			
 			$('#wrsConfigGridDefault').attr('is-event','true').data('wrsConfigGridDefault',_paranKendoUi);
+			
+			
 			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
 	});
 	
@@ -77,7 +87,9 @@ function WRSKendoGridComplete(IDGrid)
 		
 	var history			=	$.parseJSON(base64_decode(trashHistory));
 	//var IDNav			=	IDGrid+'NAV .wrs_history_report';
-	var IDNav			=	'.wrs_history_report';
+	var IDNav			=	IDGrid+'Main .wrs_history_report';
+	
+
 	$(IDNav).html('');
 	
 
