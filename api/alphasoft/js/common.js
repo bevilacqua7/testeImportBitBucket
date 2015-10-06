@@ -321,7 +321,7 @@ function filter_TMP_to_array(input)
 function filter_configure_window()
 {
 	var filter_h	=	$('.wrs_panel_filter_icon').attr('filter_hide'); 
-	var label		=	'true';
+	var label		=	'false';
 		$('.WRS_DRAG_DROP_RECEIVER_FILTER').show();
 		$('.WRS_DRAG_DROP_FILTER_CONTAINER').hide();
 	
