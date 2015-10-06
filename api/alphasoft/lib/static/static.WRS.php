@@ -473,6 +473,7 @@ class WRS
 			{
 				$data				=	 json_decode(base64_decode($data),true);
 				$dataHitorico		=	$data[0];
+				//WRS_DEBUG_QUERY($dataHitorico);
 					
 					if($dataHitorico['mktime']<=$TMPMktime){
 						$TMPMktime		=	$dataHitorico['mktime'];
