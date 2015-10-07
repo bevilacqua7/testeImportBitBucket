@@ -149,8 +149,13 @@ class WRS_MAIN  extends WRS_BASE
 			$WARNING				=	NULL;
 			$flag_cube_indisponivel	=	false;
 			
-			$LINK				=	'run.php?file=WRS_PANEL&class=WRS_PANEL&'.TAG_URL_CUBE_SELECTED.'='.($count++);
-		
+			$LINK				=	'run.php?file=WRS_PANEL&class=WRS_PANEL&'.TAG_URL_CUBE_SELECTED.'='.($count)."&exec_reports=1";
+			$LINK_LAYOUT		=	'run.php?file=WRS_PANEL&class=WRS_PANEL&'.TAG_URL_CUBE_SELECTED.'='.($count)."&exec_reports=0";
+			$TITLE_LINK			=	LNG('MAIN_OPEN_REPORT');
+			$TITLE_LINK_LAYOUT	=	LNG('MAIN_OPEN_LAYOUT');
+			
+			$count++;
+			
 			if(empty($CUBE_UPDATE) && empty($value['DATABASE_LINK']) || $STATUS==0)
 			{
 				$WARNING 				= fwrs_error(LNG('ERRO_CUBO_INDISPONIVEL'));

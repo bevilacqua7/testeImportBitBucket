@@ -88,7 +88,15 @@ function reoprt_convert_load(inputArray)
 	
 }
 
-
+function load_multiple_reports_autoload(obj){
+	if(typeof obj=='object'){
+		console.log('Reports autoload:',obj);
+		for(var key in obj){
+			var report = obj[key];
+			//callback_load_report_generic_modal($.parseJSON(report));
+		}
+	}
+}
 
 function callback_load_report_generic_modal(data,return_params,nao_processa)
 {
@@ -106,9 +114,10 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	var _FILTERS 			=	data.LAYOUT_FILTERS;//.split(',');
 	var _kendoui			=	$.parseJSON(base64_decode(data.REPORT_OPTIONS));
 	var _filter_selected 	=	'';
-	var _FILTERS_TMP		=	report_array_to_key(_FILTERS.split(','));
 	
-	if(data.FILTER_VALUES!='' && data.FILTER_VALUES!=null && data.FILTER_VALUES.length>0)
+	var _FILTERS_TMP		=	(_FILTERS!='' && _FILTERS!=undefined)?report_array_to_key(_FILTERS.split(',')):'';
+	
+	if(data.FILTER_VALUES!='' && data.FILTER_VALUES!=null && data.FILTER_VALUES!=undefined && data.FILTER_VALUES.length>0)
 	{
 		var filtros_values 	= data.FILTER_VALUES.split('(_|_)');
 		var data_temp 		= "{"+data.FILTER_VALUES.replace('(_|_)','},{')+"}";

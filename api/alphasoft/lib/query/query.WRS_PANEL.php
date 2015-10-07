@@ -339,7 +339,7 @@ EOF;
 	 *
 	 * @return string
 	 */
-	public function GET_SSAS_REPORT( $DATABASE_ID, $CUBE_ID )
+	public static function GET_SSAS_REPORT( $DATABASE_ID, $CUBE_ID )
 	{
 		// Exemplo: EXEC Get_SSAS_Reports 1,'mfacioli','','GSK - DDD',''
 		$USER_CODE 			= WRS::USER_CODE();
