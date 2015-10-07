@@ -59,6 +59,8 @@
 	$language ['TITLE_GRID_WINDOW_MENU_LIST_INFO'] 		= "Lista Básica";
 	$language ['REPORT_RESULT_HISTORY'] 		= "Não existe histórico";
 
+	$language ['MAIN_OPEN_REPORT'] 		= "Abrir relatórios";
+	$language ['MAIN_OPEN_LAYOUT'] 		= "Abrir layouts";
 
 
 	$language['TITLE_TOP_TOTAL'] 	= "TOTAL";

@@ -96,7 +96,7 @@ class WRS_PANEL  extends WRS_USER
 		$this->_param['layout_measure']	=	 NULL;
 		$this->_param['layout_filters']	=	 NULL;
 		$this->_param['layout_rows']	=	 NULL;
-		
+				
 		//Salvando as variáveis da URL para gerar uma nova URL com base nos parametros
 		$this->getTagUrlAll();
 		
@@ -252,8 +252,39 @@ class WRS_PANEL  extends WRS_USER
 		
 		//Caso seja nulo ou executdo com F5 ou refresh executa o histórico
 		echo fwrs_javascript('WRSKendoGridRefresh("'.WRS::GET_REPORT_HISTORY_CURRENT($CUBE,true).'")');
+		
+		$this->load_reports_autoload();
+		
 
 		WRS_TRACE('END eventDefault()', __LINE__, __FILE__);
+	}
+	
+	private function load_reports_autoload(){
+
+		$_cube			=	$this->getCube();
+		$DATABASE		=	$_cube['DATABASE_ID'];
+		$CUBE			=	$_cube['CUBE_ID'];
+				
+		$sql			= 	QUERY_PANEL::GET_SSAS_REPORT($DATABASE, $CUBE);
+		$queryGrid_exec	=	$this->query($sql);
+		$rows_REPORTS	=	array();
+		if($this->num_rows($queryGrid_exec))
+		{
+			$table_temp				=	$this->fetch_array($queryGrid_exec);
+			$sql2					=	'select * from '.reset($table_temp); // pega o primeiro resultado do array
+			$queryGrid_table_temp	=	$this->query($sql2);
+
+			if($this->num_rows($queryGrid_table_temp))
+			{
+				while($report	=	$this->fetch_array($queryGrid_table_temp)){
+					if(trim($report['REPORT_AUTOLOAD'])=='1'){
+						$rows_REPORTS[] 	=	json_encode($report,1);
+					}			
+				}
+			}
+		}
+		
+		echo fwrs_javascript('load_multiple_reports_autoload('.json_encode($rows_REPORTS,1).');');
 	}
 	
 	private function is_multiple_cube($cube,$CUBE_ID)
