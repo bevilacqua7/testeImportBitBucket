@@ -676,8 +676,6 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			
 			
-			
-			
 			/*
 			 * 
 			 * @link http://stackoverflow.com/questions/2441565/how-do-i-make-a-div-element-editable-like-a-textarea-when-i-click-it
@@ -934,8 +932,8 @@ function optionsDataConvert(gridValue,with_decode)
 					if(_ABA.length==0)
 					{
 						//Se não existir aba então cria uma
+
 						__load_multiple([opts]);
-						
 					}else{
 						var _box		=	 $('.'+REPORT_ID+'BOX');
 						var _title		=	_box.find('.report_title');
@@ -943,9 +941,8 @@ function optionsDataConvert(gridValue,with_decode)
 						_title.attr('id-tag',REPORT_ID).each(function(){
 									activeKeyPress($(this));
 								});
+
 					}
-					
-					
 					
 					tagABA.find('.'+REPORT_ID).removeAttr('is_load');
 			}
@@ -1044,6 +1041,12 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					tagABA.find('.'+_report_id).trigger('click');
 					
+
+					
+					if(_noactive)
+					{
+						wrsRunFilter();
+					}
 					
 					
 					if(!_noactive)

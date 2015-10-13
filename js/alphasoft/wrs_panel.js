@@ -1532,10 +1532,9 @@ function wrs_run_filter()
 		
 		
 		//TRACE_DEBUG(_param_request['REPORT_ID']);
+
 		$('body').ThreadJobManager(_param_request['REPORT_ID']);
 
-
-		
 		
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 		
@@ -1623,6 +1622,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	if(is_job_call!='ThreadMainLoadData')
 	{
+		
 		if(is_array(data))
 		{
 			if(!$('body').ThreadJobManager(data.REPORT_ID),true)
@@ -1700,7 +1700,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 			
 		}
 		
-		
+	
 	
 	//CLOSE_LOAD_RELATORIO();
 	//Apenas éexecutando quando existe atributo simples
