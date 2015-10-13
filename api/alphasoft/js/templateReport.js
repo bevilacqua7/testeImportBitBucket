@@ -172,7 +172,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	}
 	else
 	{
-		console.log('_param_template',_param);
+
 		$(ABA_TAG_NAME).wrsAbas('load_multiple',[_param],true);
 
 		//wrsRunFilter();

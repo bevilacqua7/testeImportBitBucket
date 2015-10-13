@@ -19,7 +19,7 @@
 	$language ['ERRO_CUBO_INDISPONIVEL'] 			= "ERRO: INDISPONIVEL";
 	$language ['ERROR_TABLE_CACHE_NO_HEADER']		= "Não existem Dados para esta Consulta..";
 	$language ['ERROR_CUBO_NOT_FOUND']				= "Não foi possível identificar o Cubo utilizado. <br> Se o erro persistir, favor informar ao suporte";
-	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executar a Consulta <b>%s</b>";
+	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executar a Consulta <b>%s</b> <br>";
 	$language ['ABA_IN_USER'] 						= "Consulta em uso";
 	$language ['ABA_LIMIT_SEE'] 					= "Não é possivel remover a Consulta <b>%s</b><br> pelo menos uma deve continuar visível.";
 	

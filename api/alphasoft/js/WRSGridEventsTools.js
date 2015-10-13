@@ -30,7 +30,14 @@
 		var _height			=	BOX.parent().parent().outerHeight();
 		var navHeight		=	NAV.height();
 		
+		var firstValue		=	$('body').data('navHeight');
 		
+			if(firstValue==null)
+				{
+					$('body').data('navHeight',navHeight);
+				}else{
+					navHeight	=	firstValue;
+				}
 		
 		//Criando a DIV do MAPA o da CHART
 		var check_div_map_chart	=	 function(type)
@@ -135,9 +142,12 @@
 			
 				NAV.find('.info_chart').hide();
 			
+
 				_height		=	height;
 				_height		=	_height-navHeight;
 				
+				
+
 					
 			var half		=	(_height-paddingCenter)/2;
 				_heightToUse=	half*2;

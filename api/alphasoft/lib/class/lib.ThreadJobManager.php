@@ -84,6 +84,7 @@ class ThreadJobManager extends WRS_USER
 	 */
 	public function removeJOB($report_id)
 	{
+	
 		$this->threadExist($report_id);
 		
 		if(!array_key_exists($report_id, $_SESSION[$this->labelSession]))

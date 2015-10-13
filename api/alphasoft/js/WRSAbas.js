@@ -147,6 +147,7 @@ function optionsDataConvert(gridValue,with_decode)
 								}
 						}
 						
+
 						
 						if(_box_container.length==0 && !_isLoad)
 							{
@@ -166,6 +167,8 @@ function optionsDataConvert(gridValue,with_decode)
 							event.attr('is_load','true');
 						}
 						
+						
+						
 						if(!_isLoad)
 						{
 								if(_report_id_h!=report_id)
@@ -184,10 +187,12 @@ function optionsDataConvert(gridValue,with_decode)
 						}else{
 							
 
-							
 							__remove_event_click();
+
 							$('.wrs_run_filter').attr('status_load','true');
 							//wrs_panel_layout.close('east');
+							
+
 							layout_east_close();
 							//$('.wrs_run_filter').removeAttr('status_load');
 /*							
@@ -438,11 +443,7 @@ function optionsDataConvert(gridValue,with_decode)
 					noactive			=	empty(noactive) ? false : true;
 				
 
-				
-					
-
-					
-				wrs_run_filter_unlocked();
+					wrs_run_filter_unlocked();
 				
 				
 				
@@ -462,16 +463,17 @@ function optionsDataConvert(gridValue,with_decode)
 						save_info_aba_current(aba_active);
 					}
 					
+
 					var wrsConfigGridDefault		=	$('#wrsConfigGridDefault').data({}); //Zera a estrutura inicial
 					$('.wrsGrid').removeClass('wrsGrid');
 					
 					$('.NAV_CONFIG_WRS').attr('id-tag',$(this).attr('id-aba')).find('.report_title').html($(this).find('.title').html());
 
+					
 				//Pegando os dados salvo nessa aba
 				var aba_data			=	$(this).data(abaData);
 	
 
-				
 			//	console.log('aba_data',aba_data);
 				
 				//Ainda não existe estrutura na ABA
@@ -482,6 +484,7 @@ function optionsDataConvert(gridValue,with_decode)
 							open_configure_default();
 							__manager_vision_grid_edit($(this),_report_id,noactive);
 							//$(window).resize();
+
 							return true;
 						}
 						
@@ -496,13 +499,21 @@ function optionsDataConvert(gridValue,with_decode)
 						
 				}
 				
+
 				
+				
+				
+				
+				
+
 				var isGrid			=	false;
 				var _paran_aba		=	$(this).attr('wrsparam');
 
-					wrs_run_filter_add_history(_paran_aba)
+				
+					wrs_run_filter_add_history(_paran_aba);
 					
-					
+
+									
 					$(IDMain).each(function(){
 						isGrid	=	 true;
 					});
@@ -857,9 +868,8 @@ function optionsDataConvert(gridValue,with_decode)
 					/*
 					 * TODO: Remove classIDName
 					 */
-					add_aba_html('',classIDName,true,true);					
 					btn_add_new_aba();
-					tagABA.find('.active').trigger('click');
+					tagABA.find('.new_file').trigger('click');
 			}
 			
 			
@@ -945,8 +955,6 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			var __load_multiple		=	 function(options,noactive)
 			{
-				
-
 					var _noactive	= false;
 
 					if(!empty(noactive)) _noactive = noactive;
@@ -1194,6 +1202,47 @@ function optionsDataConvert(gridValue,with_decode)
 			}
 			
 			
+			
+			
+			var slice_top		=	 function (input)
+			{
+				var input_tmp	=	 [];
+				for(var lineInput in input)
+				{
+					if(lineInput!=0){
+						input_tmp.push(input[lineInput]);
+					}
+				}
+				return input_tmp;
+			}
+
+			
+			
+			var __auto_load		=	 function (inputBase64,event)
+			{
+				var aba_active	=	 tagABA.find('.active');
+				
+				if(empty(inputBase64)) return false;
+				
+				var input		=	 getJsonDecodeBase64(inputBase64);
+
+
+					if(input.length!=0)
+					{
+						__load_multiple([input[0]],true);
+						$('.wrs_run_filter').data('auto_load_data',base64_encode(json_encode(slice_top(input))));
+						$('.wrs_run_filter').attr('auto_load','true').trigger('click');
+					}else{
+						$('.wrs_run_filter').removeAttr('auto_load');
+						$('.wrs_run_filter').data('auto_load_data','');
+					}
+					
+					
+			}
+			
+			
+			
+			
 			/*
 			 * Metodos de funções
 			 * formas de chamadas externas
@@ -1208,7 +1257,8 @@ function optionsDataConvert(gridValue,with_decode)
 			        aba_title				:	__aba_title,
 			        show_grid				:	__show_grid,
 			        remove_event_click		:	__remove_event_click,
-			        refresh_F5				:	__refresh_F5
+			        refresh_F5				:	__refresh_F5,
+			        auto_load				:	__auto_load
 			};
 			
 			 
@@ -1237,4 +1287,7 @@ function optionsDataConvert(gridValue,with_decode)
 }( jQuery ));
 
 
-$(function(){$(ABA_TAG_NAME).wrsAbas({})})
+$(function(){
+	$(ABA_TAG_NAME).wrsAbas({});
+	//$(ABA_TAG_NAME).wrsAbas('auto_load', AUTO_LOAD);
+});

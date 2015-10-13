@@ -700,6 +700,8 @@ class WRS_PANEL  extends WRS_USER
 			$getRequestKendoUi['REPORT_ID']	=	WRS::GET_REPORT_HISTORY_CURRENT($CUBE);
 		}
 		
+		$_REPORT_ID		=	$getRequestKendoUi['REPORT_ID'];	
+		
 //		WRS_DEBUG_QUERY($_REQUEST);
 //		WRS_DEBUG_QUERY($getRequestKendoUi);
 		//WRS_DEBUG_QUERY($getRequestKendoUi);
@@ -823,6 +825,8 @@ class WRS_PANEL  extends WRS_USER
 					/*
 					 *	Criando a base do script para o Data Report 
 					 */
+
+					
 					return $this->mountScriptReport($thread_job_manager,$TelerikUi);
 					
 
@@ -830,7 +834,14 @@ class WRS_PANEL  extends WRS_USER
 				else
 				{
 					WRS_TRACE('ERROR::CREATE_SSAS_JOB não retornou informações QUERY:::'.$queryGrid, __LINE__, __FILE__);
-					echo fwrs_warning(LNG('ERROR_NOT_ROWS'),$getRequestKendoUi_TAG);
+					
+					$result_error =	 $this->fetch_array($queryGrid_exec);
+
+					WRS_DEBUG_QUERY($queryGrid_exec);
+					echo $TelerikUi->container_error($_REPORT_ID, fwrs_warning(LNG('ERROR_NOT_ROWS').' - ('.$result_error['JOB_ERROR'].')',$getRequestKendoUi_TAG));
+					
+
+					
 					return false;
 				}
 		
@@ -936,6 +947,7 @@ class WRS_PANEL  extends WRS_USER
 	{
 		WRS_TRACE('Start mountGrid', __LINE__, __FILE__);
 		
+
 		$LAYOUT_ROWS_SIZE			=	count(explode(',',$ROWSL));
 		$msg						=	''; //mensagens do sistema ela muda a cada conjunto de regras
 		
@@ -1061,7 +1073,7 @@ HTML;
 		$url					=	'run.php?'.fwrs_array_to_url($tagToUrl);
 		
 
-		$page_size				=	 fwrs_request('page_size');
+		$page_size				=	 $getRequestKendoUi['page_size'];
 		$page_size				=	 empty($page_size) ? 25 : $page_size;
 		
 		$PAGE					=	1;
@@ -1086,8 +1098,13 @@ HTML;
 	//	$TelerikUi->setToolbarPDF('pdf', 'pdf', $urlToExport);
 		
 
-
-		$HTML	=	 $TelerikUi->render($this->param_encode($this->_param_ssas_reports),$getRequestWrsExceptions,$getRequestKendoUi['REPORT_ID']);
+		$HTML	=	 $TelerikUi->render(
+											$this->param_encode($this->_param_ssas_reports),
+											$getRequestWrsExceptions,
+											$getRequestKendoUi['REPORT_ID'],
+											$getRequestKendoUi
+										);
+		
 		
 		if($checkThreadJobManager)
 		{
@@ -1106,6 +1123,42 @@ HTML;
 	
 	
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -1139,10 +1192,10 @@ HTML;
 
 		
 		includeCLASS('KendoUi');
-		$TelerikUi					= new KendoUi();
+		$TelerikUi					= 	new KendoUi();
 		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi();
 		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
-		$CUBE_ID					=	 fwrs_request('CUBE_ID');
+		$CUBE_ID					=	fwrs_request('CUBE_ID');
 		//
 		//WRS_DEBUG_QUERY(print_r($getRequestKendoUi,true));
 		/*
@@ -1313,13 +1366,13 @@ HTML;
 
 					if(!$this->query($query))
 					{
-						$html_data['html']	=	 str_replace('%s',$job['getRequestKendoUi']['TITLE_ABA'],LNG('JOB_CANCEL_ERRO'));
+						$html_data['html']		=	 str_replace('%s',$job['getRequestKendoUi']['TITLE_ABA'],LNG('JOB_CANCEL_ERRO'));
 						$html_data['status']	=	-1;
 						echo json_encode($html_data,true);
 						exit();
 					}else{
 						$html_data['html']	=	 str_replace('%s',$job['getRequestKendoUi']['TITLE_ABA'],LNG('JOB_CANCEL'));
-						$html_data['status']	=	1;
+						$html_data['status']	=	7;
 						$this->threadJobManager->removeJOB($report_id);
 						echo json_encode($html_data,true);
 						exit();
@@ -1374,7 +1427,7 @@ HTML;
 						
 						$TelerikUi->setId($getRequestKendoUi['REPORT_ID']);		
 						$TelerikUi->setWrsKendoUi($getRequestKendoUi); //Passando para Gravar no JS as integrações recebidas
-						
+
 						$MountReport		=	$this->mountScriptReport($job,$TelerikUi,true);
 						
 						//Removendo o Report ID da lista de array
