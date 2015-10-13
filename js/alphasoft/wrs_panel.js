@@ -26,6 +26,7 @@ function wrs_run_filter_unlocked()
 
 function wrs_run_filter_add_history(inputHistory)
 {
+
 	$('.wrs_run_filter').attr('history',inputHistory);
 }
 
@@ -298,6 +299,14 @@ $(document).ready(function () {
 								//Chama o tamanho do posicionamento
 								
 			},
+			
+			onresize_end	:	function()
+			{//http://layout.jquery-dev.com/demos/complex.html
+				
+									var MODAL_JOB		=	'.modal-window-wrs';
+									var layout_center	=	$('.ui-layout-center');
+									$(MODAL_JOB).width(layout_center.outerWidth()-2).height(layout_center.outerHeight()-3);
+			},
 			south__onclose: function () 
 							{
 								//Chama o tamanho do posicionamento
@@ -404,11 +413,29 @@ $(document).ready(function () {
 
 function layout_east_close()
 {
+	
+	var report_id		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
+	
+	
+	var active_f5		=	$('#wrsConfigGridDefault').attr('f5_ative');
+		active_f5		=	 active_f5==null ? false :  true;
+		
+		if(active_f5)
+		{
+			$('#wrsConfigGridDefault').removeAttr('f5_ative');
+		}
+	
+	
+	
 	if(wrs_panel_layout.state.east.isClosed)
 	{
 		jqueryLayoutOptions.east__onclose();
 	}else{
-		wrs_panel_layout.close('east');
+		
+		if($('#'+report_id).length!=0 || active_f5)
+			{
+				wrs_panel_layout.close('east');
+			}
 	}
 }
 
@@ -1169,8 +1196,7 @@ function wrs_run_filter()
 			return true;
 		}
 		
-		
-		
+	
 		
 		
 		
@@ -1199,6 +1225,9 @@ function wrs_run_filter()
 		sortable_linha		=	 sortable_linha.flag;
 		sortable_coluna		=	 sortable_coluna.flag;
 		sortable_filtro		=	 sortable_filtro.flag;
+		
+	var history				=	$(this).attr('history');
+	var history_decode		=	 getJsonDecodeBase64(history);
 		
 	var run					=	 false;
 	var mensagem			=	"";
@@ -1245,7 +1274,7 @@ function wrs_run_filter()
 						{//Apenas abre o load se for diferente de informações simples no select
 							if($(this).attr('eastonclose')!='true')
 							{
-								if(empty($(this).attr('history')))
+								if(empty(history))
 								{
 									$(this).attr('flag_load','true');
 									$('body').WRSJobModal('add_load');
@@ -1429,33 +1458,40 @@ function wrs_run_filter()
 					if(!$.WrsFilter('wrs_check_filter_simples')) {
 						TRACE('EXISTE FILTRO SIMPLES');
 						$('body').wrsAbas('remove_event_click');
+
 						return false;
 					}
-					
 
-					var is_wrs_change_to	=	is_wrs_change_to_run(_param_request,manager_aba);
+					
+					var is_wrs_change_to	=	is_wrs_change_to_run(_param_request,manager_aba,_param_request['REPORT_ID']);
 						_param_request		=	is_wrs_change_to.val;
 						
 						
+						
 
+						
 					if(is_wrs_change_to.status)
 					{
 						
-						if($(this).attr('is_atributo_simples')=='true'){
+						if($(this).attr('is_atributo_simples')=='true')
+						{
 							$(this).attr('is_atributo_simples','false');
 						}
+						
 						$(this).attr('locked',false);//Libera o filtro
 						$(this).attr('flag_load','false');
 						
 						$('body').wrsAbas('show_grid');
 						
 						$('body').wrsAbas('remove_event_click');
-						
+
 						return true;
 		}else{
 			if(flag_load!='true')
 			{
 				$(this).attr('flag_load','true');
+				
+				
 			}
 		}
 		
@@ -1486,9 +1522,10 @@ function wrs_run_filter()
 		
 		
 		
-		if(status_load) {
+		if(status_load)
+		{
+
 			$('.wrs_run_filter').removeAttr('status_load');
-			
 			return true;
 		}
 		
@@ -1496,7 +1533,19 @@ function wrs_run_filter()
 		
 		//TRACE_DEBUG(_param_request['REPORT_ID']);
 		$('body').ThreadJobManager(_param_request['REPORT_ID']);
+
+
+		
+		
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
+		
+		
+		//AUTO LOAD
+		if($(this).attr('auto_load')=='true')
+		{
+			$(ABA_TAG_NAME).wrsAbas('auto_load',$(this).data('auto_load_data'),true);
+		}
+		
 		
 		$('.wrs_run_filter').attr('east__onclose','true');
 		wrs_panel_layout.close('east');
@@ -1516,6 +1565,7 @@ function wrs_run_filter()
 			//Falta informações para executar o relatório
 			
 			if(!manager_aba){
+
 				WRS_ALERT(sprintf(LNG('RUN_RELATORIO_FALTA_INFORMACAO'),mensagem),'error');
 			}
 			
@@ -1538,6 +1588,31 @@ function wrsRunGridButton(param_request)
 			*/
 }
 
+
+function ThreadJobManagerDONEJOB(report_id)
+{
+	
+	var DATA_NAME		=	'WrsThreadJobManager';
+	var data_param		=	$('body').data(DATA_NAME);
+	var tmp_data_param	=	{};
+	
+		if(empty(data_param)) data_param	=	{};
+	
+		for(var line_data_param in data_param)
+			{
+					if(data_param[line_data_param].report_id!=report_id)
+					{
+						tmp_data_param[line_data_param]		=	 data_param[line_data_param];
+					}
+			}
+	
+	
+		$('body').data(DATA_NAME,tmp_data_param);
+	
+	
+}
+
+
 /**
  * Montando a Grid com header
  * @param data
@@ -1545,17 +1620,16 @@ function wrsRunGridButton(param_request)
 function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 {
 	
-
 	
 	if(is_job_call!='ThreadMainLoadData')
 	{
 		if(is_array(data))
 		{
-
-			if(!$('body').ThreadJobManager(data.REPORT_ID))
+			if(!$('body').ThreadJobManager(data.REPORT_ID),true)
 			{
 				return true;
 			}
+			
 		}else{
 			if(IS_TRACE)
 			{
@@ -1576,6 +1650,8 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	 * WARNING: é essa variável que impede de repetir os conteiners
 	 */
 	var remove_report	=	 $('<div/>',{html:str_replace('script','',data)}).find('.container_panel_relatorio_rows').attr('id'); 
+	
+	
 	var _report_id		=	 str_replace('Main','',remove_report);
 	var aba_ativa		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
 	
@@ -1588,15 +1664,42 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	$('.container_panel_relatorio').append(data);
 	
 	
+	var msg_error		=	$('#'+remove_report).attr('rel');
+	
+	
+	
+	
 	//Se não for a aba ativa então faz o hide nbo HTML 
 
 		$('.container_panel_relatorio_rows').addClass('hide');
 		$('#'+aba_ativa+'Main').removeClass('hide');
 	
-		
+		var is_active	=	 true;
 		if(aba_ativa!=_report_id){
 			$('.wrsGrid').removeClass('wrsGrid');
+			is_active	=	 false;
 		}	
+		
+		
+		if(msg_error=='error')
+		{
+			//$('body').ThreadJobManager(_report_id,{report_id:_report_id, error:'<br>'+$('#'+remove_report).find('div').html()}) ;
+			var body_html_error		=	$('#'+remove_report).find('div').html();
+		
+			
+			$('body').WRSJobModal('error',{report_id:_report_id,msg:body_html_error, active:is_active});
+			
+			//$('body').WRSJobModal('request_consulta_cancelada',{status:0, report_id:_report_id, html:body_html_error});
+		}else{
+			
+			ThreadJobManagerDONEJOB(_report_id);
+			
+			var _kendoUiParam	=	$('#'+_report_id).attr('wrsKendoUi');
+			var wrsKendoUi		=	$.parseJSON(base64_decode(_kendoUiParam));
+			$(ABA_TAG_NAME).wrsAbas('refresh',wrsKendoUi);
+			
+		}
+		
 		
 	
 	//CLOSE_LOAD_RELATORIO();

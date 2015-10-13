@@ -29,6 +29,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 
 
 
+
 	/*
 	 * Adicionando o DrilDown
 	 */
@@ -81,6 +82,9 @@ function addDrillOnDataBound(nameID,kendoUI)
 			return true;
 	
 	}
+	
+	
+
 	for(x in rows_tag)
 		{
 			var json				=	$.parseJSON(base64_decode($('.'+replace_attr(rows_tag[x])).attr('json')));
@@ -92,13 +96,15 @@ function addDrillOnDataBound(nameID,kendoUI)
 			}catch(e){
 				json_level_drill	=	 null;
 			}
-			if(!empty(json_level_drill) && !in_array('DRD',PERFIL_ID_USER))				{
+
+			
+			if(!empty(json_level_drill) && !in_array('DRD',PERFIL_ID_USER)){
 					if(is_in_array(json.LEVEL_DRILL)){
 						$(nameID).find('.k-grid-content-locked tr').each(function(){
 							if(!$('.k-grid-content tr:eq('+$(this).index()+')').hasClass('tag_total'))
 							{
 								var event	=	$(this).find('td:eq('+(parseInt(x)+1)+')');
-								var aLink	=	$('<a/>',{href:'#'+json.LEVEL_DRILL,'class':'underline','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
+								var aLink	=	$('<a/>',{href:'#','class':'underline','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
 									aLink.click(clickDrillDown);
 								event.html(aLink);
 								
@@ -121,35 +127,54 @@ function addDrillOnDataBound(nameID,kendoUI)
 		}
 	
 
-	
+
 	for(c in column_tag)
 		{
 		
-			if(empty(column_tag[c])) continue;
+
+		
+			if(column_tag[c]==null) continue;
 			
+			
+			var json				=	$.parseJSON(base64_decode($('.'+replace_attr(column_tag[c])).attr('json')));
+			var json_level_drill	=	 null;
+			
+			try{
+				json_level_drill	=	json.LEVEL_DRILL;
+				
+			}catch(e){
+				json_level_drill	=	 null;
+			}
+			
+			
+			
+
 		var json	=	$.parseJSON(base64_decode($('.'+replace_attr(column_tag[c])).attr('json')));
 		
-		if(!empty(json_level_drill) && !in_array('DRD',PERFIL_ID_USER))
-			{
-				if(is_in_array(json.LEVEL_DRILL)){
-					
-					$(nameID).find('.k-grid-header-wrap tr:eq('+c+')').each(function(){
-						
-						$(this).find('th').each(function(){
-								var event	=	 $(this);
+
+		
+			if(!empty(json_level_drill) && !in_array('DRD',PERFIL_ID_USER))
+				{
+						if(is_in_array(json.LEVEL_DRILL))
+						{
+							
+							$(nameID).find('.k-grid-header-wrap tr:eq('+c+')').each(function(){
 								
-									if(!event.hasClass('tag_total'))
-									{
-										var aLink	=	$('<a/>',{href:'#'+json.LEVEL_DRILL,'class':'underline','rel':'column','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
-											aLink.click(clickDrillDown);
-										event.html(aLink);
-									}
+								$(this).find('th').each(function(){
+										var event	=	 $(this);
+										
+											if(!event.hasClass('tag_total'))
+											{
+												var aLink	=	$('<a/>',{href:'#','class':'underline','rel':'column','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
+													aLink.click(clickDrillDown);
+												event.html(aLink);
+											}
+										
+								});
 								
-						});
-						
-					})
-				}
-			}	
+							})
+						}
+				}	
 			
 		}
 
