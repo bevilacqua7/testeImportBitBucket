@@ -103,7 +103,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	
 	if(return_params==undefined) 	return_params=false;
 	
-	if(nao_processa==undefined) 	nao_processa=false;
+	if(nao_processa==undefined) 	nao_processa=true;
 	//wrs_panel_layout.open('east');
 	
 	data = repair_reportname_kendoui(data);
@@ -181,18 +181,21 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	}
 	else
 	{
-
-		$(ABA_TAG_NAME).wrsAbas('load_multiple',[_param],true);
+		$(ABA_TAG_NAME).wrsAbas('load_multiple',[_param],nao_processa);
 
 		//wrsRunFilter();
 		//set_value_box_relatorio(_param);
 		
 		$('#myModal').modal('hide');
+		
+		/*
 		if(!nao_processa){
 			//wrsRunFilter();
-		}else{
-			wrs_panel_layout.open('east');
 		}
+		
+		else{
+			wrs_panel_layout.open('east');
+		}*/
 		
 	}
 }
@@ -305,14 +308,14 @@ function btn_window_grid_event_report(data)
 
 		switch(action_type)
 		{
-			case 'new' 		: 
+			case 'new' 		: {
 						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados,true);
-						$('#myModal').modal('hide');
+						$('#myModal').modal('hide');}
 					//callback_load_report_generic_modal(objDados);	
 					break; // abre o relatorio
-			case 'update' 	: 
-						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados);
-						$('#myModal').modal('hide');
+			case 'update' 	: {
+						$(ABA_TAG_NAME).wrsAbas('load_multiple',arrObjetosSelecionados,false);
+						$('#myModal').modal('hide');}
 					//callback_load_report_generic_modal(objDados,false,true);
 					break; // abre somente o layout
 			case 'remove' 	:
@@ -338,10 +341,10 @@ function btn_window_grid_event_report(data)
 		switch(action_type)
 		{
 			case 'new' 		: 
-					callback_load_report_generic_modal(objDados);	
+					callback_load_report_generic_modal(objDados,false,true);	
 					break; // abre o relatorio
 			case 'update' 	: 
-					callback_load_report_generic_modal(objDados,false,true);
+					callback_load_report_generic_modal(objDados,false,false);
 					break; // abre somente o layout
 			case 'remove' 	: 
 					removeReport([report_id]);

@@ -646,7 +646,9 @@ function onDataBound(arg)
 		
 		//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 			TRACE('START onDataBound');
+			
 			resizeColumnKendoUi(arg);
+			 
 
 			var classGrid	=	arg.sender.element.attr('id');
 			var nameID		=	 '#'+classGrid;
@@ -655,7 +657,7 @@ function onDataBound(arg)
 			var wrsKendoUi	=	$.parseJSON(base64_decode(_kendoUiParam));
 			var wrsparam	=	$.parseJSON(base64_decode($(nameID).attr('wrsparam')));
 				wrsKendoUiChange(nameID,'page_size',arg.sender.dataSource._pageSize);
-			
+				 
 				
 				/*Options To ABAS */
 				wrsparam['KendoUi']				=	_kendoUiParam;
@@ -694,7 +696,7 @@ function onDataBound(arg)
 			
 						}
 			
-
+						 
 			//Removendo as cores entre as linhas
 			$(nameID).find('.k-grid-content').find('tbody tr').each(function(){if(wrsKendoUi.COLORS_LINE!=1){$(this).removeClass('k-alt');}});
 			
@@ -706,9 +708,9 @@ function onDataBound(arg)
 			CLOSE_LOAD_RELATORIO();
 			$('.wrs_box').show();
 			
-			
+			 
 			resizeGridSimple();
-			
+
 			addDrillOnDataBound(nameID,arg);
 			//Aplicando o Evento do CLick no DRILL LINHA
 
@@ -726,17 +728,17 @@ function onDataBound(arg)
 			}
 			
 			//var nameID		=	 '#'+arg.sender.element.attr('id');
+
 			$('.WRS_ABA').find('.'+classGrid).data('kendoUiDataAba',arg.sender);
-			
 			
 			$('body').WRSJobModal('close',{'report_id':classGrid});
 			
-			wrsKendoUiChange(nameID,'IS_REFRESH',false);
 			
+			wrsKendoUiChange(nameID,'IS_REFRESH',false);
 	//		 console.log('wrsKendoUi',wrsKendoUi);
 			//Aplicando e salvando a estrutura das abas
+
 			$(ABA_TAG_NAME).wrsAbas('refresh',wrsKendoUi);
-			
 			
 			TRACE('END onDataBound');
 			

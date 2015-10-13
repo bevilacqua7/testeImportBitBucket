@@ -87,7 +87,10 @@ function addDrillOnDataBound(nameID,kendoUI)
 
 	for(x in rows_tag)
 		{
-			var json				=	$.parseJSON(base64_decode($('.'+replace_attr(rows_tag[x])).attr('json')));
+			
+			var class_tag_for		=	 '.'+replace_attr(rows_tag[x]);
+
+			var json				=	$.parseJSON(base64_decode($(class_tag_for).attr('json')));
 			var json_level_drill	=	 null;
 			
 			try{
@@ -127,16 +130,17 @@ function addDrillOnDataBound(nameID,kendoUI)
 		}
 	
 
-
+	
 	for(c in column_tag)
 		{
 		
 
-		
-			if(column_tag[c]==null) continue;
 			
+			if(empty(column_tag[c])) continue;
 			
-			var json				=	$.parseJSON(base64_decode($('.'+replace_attr(column_tag[c])).attr('json')));
+			var class_tag			=	'.'+replace_attr(column_tag[c]);
+			console.log('class_tag',class_tag);
+			var json				=	$.parseJSON(base64_decode($(class_tag).attr('json')));
 			var json_level_drill	=	 null;
 			
 			try{
@@ -148,11 +152,11 @@ function addDrillOnDataBound(nameID,kendoUI)
 			
 			
 			
-
-		var json	=	$.parseJSON(base64_decode($('.'+replace_attr(column_tag[c])).attr('json')));
+		
+		var json	=	$.parseJSON(base64_decode($(class_tag).attr('json')));
 		
 
-		
+
 			if(!empty(json_level_drill) && !in_array('DRD',PERFIL_ID_USER))
 				{
 						if(is_in_array(json.LEVEL_DRILL))
@@ -174,15 +178,17 @@ function addDrillOnDataBound(nameID,kendoUI)
 								
 							})
 						}
-				}	
+				}
+			
+			
+
 			
 		}
 
 	
 	
 	
-	
-	
+
 	
 }
 
