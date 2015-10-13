@@ -5,7 +5,7 @@ $wrs_cookie = json_decode ( $_COOKIE ['WRS_LOGIN'], true );
 // exit();
 ?>
 <!DOCTYPE html>
-<HTML xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br">
+<HTML xmlns="http://www.w3.org/1999/xhtml" class="full" xml:lang="pt-br" lang="pt-br">
 <HEAD>
 <meta charset="utf-8" />
 <meta http-equiv="content-type" content="text/html;charset=utf-8;" />
@@ -38,27 +38,33 @@ $wrs_cookie = json_decode ( $_COOKIE ['WRS_LOGIN'], true );
 <style type="text/css">
 <!--
 body {
-	background-image: url(imagens/bg.jpg);
-	background-repeat: repeat-x;
+	background: transparent;
+	margin:0px;
 	text-align: center;
 }
--->
-</style>
 
-<style type="text/css">
-body {
+.full {
+  background: url(imagens/wrs_background.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
 	margin: 0px;
-	background-image: url(imagens/wrs_background.jpg);
-	background-repeat: no-repeat;
+
+
 	text-align: center;
-	background-size: 100% auto;
+	
 	background-position: top center;
 	background-color: #BADAFF;
+	
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( 
 src='imagens/wrs_background.jpg', sizingMethod='scale');
 	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader( 
 src='imagens/wrs_background.jpg', sizingMethod='scale')";
 }
+
+
 
 .wrs_logo_left, .wrs_logo_right {
 	position: fixed;
@@ -103,9 +109,9 @@ function WRS_RESIZE()
 
 
 		$('body').width(width);
-		$('body').height(height);
+//		$('body').height(height);
 		
-		var posX	=	($(window).width()/2)-(($('.form-signin').width()+50)/2);
+		var posX	=	($(window).width()/2)-(($('.form-signin').width())/2);
 		
 		//var posX	=	height/2;
 		var pos	=	($(window).height()/2)-(($('.form-signin').height()+50)/2);

@@ -190,7 +190,8 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 	    		
 		    		for(var lineParan in _data_param)
 		    			{
-			    			if(_data_param[lineParan].report_id!=report_id){
+			    			if(_data_param[lineParan].report_id!=report_id)
+			    			{
 			    				tmp_param[tmp_param.length]=	_data_param[lineParan];
 			    			}
 		    			}
@@ -265,11 +266,11 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 						alertify.success(data.html,0);
 						removeThread(data.report_id);
 						$(MODAL_JOB).addClass('hide');
-						
-						
-						
-					}else{
-						alertify.error(data.html,0);
+					}
+					else
+					{
+						console.log('Error no JOB'+data.report_id,data.html);
+						//alertify.error(data.html,0);
 					}
 			}
 			
@@ -351,6 +352,15 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 					$('.action_WRSJobModalCloseWindow').unbind('click').click(__click__action_WRSJobModalCloseWindow);
 			}
 			
+			
+			var __clean		=	 function()
+			{
+				var modal		=	 $(MODAL_JOB);
+				
+					modal.find('.action_WRSJobModalCloseWindow').addClass('hide');
+					modal.find('.modal-btn-job-wrs').removeClass('hide');
+					modal.find('.modal-text-wrs-job').html(LNG('GERANDO_RELATORIO'));
+			}
 			
 			
 			var __resize		=	 function(options)
@@ -639,7 +649,60 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 		 }
 		
 	 
+		var __error			=	 function(options)
+		{
+			var _report_id		=	options.report_id;
+			var msg				=	options.msg;
 			
+			var _data			=	that.data(DATA_NAME);
+			var _error			=	that.data(ERROR);
+			
+			
+		
+			
+			if(empty(_data)) 	_data	=	{};
+			
+			var tmp_data			=	{};
+			
+			
+			if(empty(_error))	_error	=	{};
+			
+				_error[_report_id]	= msg;
+				that.data(ERROR,_error);
+	
+				
+			__close({report_id:_report_id,wait:false});
+			
+			
+			for(var lineData in _data)
+				{
+						if(_data[lineData].report_id==_report_id)
+							{
+							
+							}else{
+									tmp_data[lineData]	=	_data[lineData];
+							}
+				}
+			
+			
+			
+			
+			if(options.active)
+			{
+				var _modal			=	$(MODAL_JOB);
+					_modal.find('.modal-text-wrs-job').html(msg);
+			}
+			
+			
+			var _title		=	that.wrsAbas('aba_title',{report_id:_report_id});
+			
+				alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+msg, 0);
+				
+			that.data(DATA_NAME,tmp_data);
+			
+		}
+		
+		
 		var __time			=	 function(options)
 		{
 				that.WRSTimerLoader('init',options);
@@ -654,7 +717,9 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 			        aba				:	__aba,
 			        close			:	__close,
 			        click_aba		:	__click_aba,
-			        resize			:	__resize
+			        resize			:	__resize,
+			        error			:	__error,
+			        clean			:	__clean
 			      //  time			:	__time
 			};
 		
@@ -729,6 +794,7 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 	
 	
 	
+	
     $.fn.ThreadJobManager = function(report_id) 
     {
     	var that			=	this;
@@ -736,8 +802,8 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     	var WHO_CALL		=	'body'; // o evento principal é sempre em cima da body
     	var time			=	0;
     	
-
-
+    	
+    	
     	//Valor da Thread Principal
     	var THREAD_MAIN		=	'WrsThreadJobManagerTHREAD';
 
@@ -751,6 +817,9 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     	
     	//TRACE_DEBUG('receive::'+report_id);
     	var data_param		=	that.data(DATA_NAME);
+    	
+    		that.WRSJobModal('clean');
+    	
     	
     		if(empty(report_id))
     		{
@@ -791,6 +860,7 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     		var _data_param		=		that.data(DATA_NAME);
     		var tmp_param		=		[];
     		
+
     		for(var lineParan in _data_param)
     			{
 	    			if(_data_param[lineParan].report_id!=report_id){
@@ -826,8 +896,11 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     	 */
     	var ThreadMainLoadData	=	 function(data)
     	{
-    		
+
     		that.data(MSG_JOBS,data);
+    		
+        	var data_param		=	that.data(DATA_NAME);
+        	
 
     		var modal			=	$('.modal-window-wrs');
     		var report_id_modal	=	modal.find('.modal-buttons-wrs-job').attr('report_id');
@@ -947,12 +1020,15 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     		var _mktime			=		mktime();
     		var param_request	=	 	[];
     		
+
     		if(array_length(_data_param)>=1)
     		{
     			var _file			=	'WRS_PANEL';
     			var _class			=	'WRS_PANEL';
     			var _event			=	'threadJobManager';
+
      				param_request	=	base64_encode(json_encode(get_report_ids(_data_param)));
+
      				
     				runCall(
     							{'jobs_manager':param_request},

@@ -65,7 +65,7 @@ function WRSKendoGridRefresh(history)
 			_paranKendoUi['IS_REFRESH']		=	true; //Informa que foi executado um refresh
 			
 			$('#wrsConfigGridDefault').attr('is-event','true').data('wrsConfigGridDefault',_paranKendoUi);
-			
+			$('#wrsConfigGridDefault').attr('f5_ative','true');
 			
 			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
 	});

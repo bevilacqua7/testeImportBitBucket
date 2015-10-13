@@ -291,7 +291,7 @@ class KendoUi
 	 * @param string $type
 	 * @return string
 	 */
-	public function render($_element,$getRequestWrsExceptions,$report_id)
+	public function render($_element,$getRequestWrsExceptions,$report_id,$getRequestKendoUi)
 	{
 		//Pegando os padrões das páginas
 		$this->pageScheme();
@@ -303,10 +303,12 @@ class KendoUi
 		unset($_request['file']);	// Apagando info da URL
 		unset($_request['event']);	// Apagando info da URL
 		
+
+		
 		$_jsonencode		=	NULL;
 		$PLUS_MINUS			=	fwrs_request('PLUS_MINUS');
 		
-		$this->orderByOnLoad();
+		$this->orderByOnLoad($getRequestKendoUi);
 		
 		$_jsonencode =	json_encode($this->_param,true);
 
@@ -359,6 +361,9 @@ class KendoUi
 								  		WRSHistory['{$report_id}']	=	"{$getRequestWrsExceptions['TRASH_HISTORY']}";	
 								  		
 										$(function(){
+										
+															$(window).unload(function(){});
+														
 															var jsonDecode											= 	{$_jsonencode};
 																jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
 																jsonDecode.dataBound									= 	function(arg){ return onDataBound(arg);}								
@@ -394,13 +399,25 @@ HTML;
 	
 	
 	
-	
-	
-	
-	private function orderByOnLoad()
+	public function container_error($idTag,$msg)
 	{
-		$column		=	fwrs_request('ORDER_BY_COLUMN');
-		$columnDir	=	fwrs_request('ORDER_COLUMN_TYPE');		
+		$html	=	<<<HTML
+						<div id="{$idTag}Main" class="container_panel_relatorio_rows" rel="error">
+								{$msg}
+						</div>
+HTML;
+
+		return $html;
+	}
+	
+	
+	
+	
+	private function orderByOnLoad($getRequestKendoUi)
+	{
+
+		$column		=	$getRequestKendoUi['ORDER_BY_COLUMN'];
+		$columnDir	=	$getRequestKendoUi['ORDER_COLUMN_TYPE'];		
 		
 		if(!empty($column))
 		{
@@ -779,9 +796,12 @@ HTML;
 			$field			=	$col_param['field'];
 			$model[]		=	array_merge($col_param,array('field'=>$col_param['field'],'template'=>'#='.$field.'#'));
 			$val_model		=	array('field'=>$col_param['field'],'type'=>'string');
+			
+			
 			if(array_key_exists('width', $col_param)){
 				$val_model['width']=$col_param['width'];
 			}
+			
 			$modelField[]	=	$val_model;
 		}
 		
