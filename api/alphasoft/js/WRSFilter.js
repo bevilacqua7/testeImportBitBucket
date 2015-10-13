@@ -1101,7 +1101,7 @@ function wrsFilterClickFalse()
 				 			var filter		=	 explode(',',json.FILTER);
 				 			var value		=	'';
 				 			
-				 			if(empty(filter)) filter=[];
+				 			if(empty(filter) || filter=='') filter=[];
 				 			
 				 			
 				 			
