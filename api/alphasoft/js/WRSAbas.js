@@ -1229,12 +1229,14 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				var input		=	 getJsonDecodeBase64(inputBase64);
 
-
 					if(input.length!=0)
 					{
 						__load_multiple([input[0]],true);
 						$('.wrs_run_filter').data('auto_load_data',base64_encode(json_encode(slice_top(input))));
-						$('.wrs_run_filter').attr('auto_load','true').trigger('click');
+						$('.wrs_run_filter').attr('auto_load','true');
+						if(AUTO_LOAD_RUN){
+							$('.wrs_run_filter').trigger('click');
+						}
 					}else{
 						$('.wrs_run_filter').removeAttr('auto_load');
 						$('.wrs_run_filter').data('auto_load_data','');
