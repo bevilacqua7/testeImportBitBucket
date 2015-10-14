@@ -138,32 +138,57 @@ function optionsDataConvert(gridValue,with_decode)
 					var _box_container	=	$('.container_panel_relatorio').find('.'+report_id+'BOX');
 					
 
+
 					
-						for(var lineData in _data)
-						{
-							if(_data[lineData].report_id==report_id)
-								{
-									_isLoad	=	 true;
-								}
+						if(array_length(_data)>=1){
+
+							for(var lineData in _data)
+							{
+								if(_data[lineData].report_id==report_id)
+									{
+										_isLoad	=	 true;
+									}
+							}
 						}
 						
+
 
 						
 						if(_box_container.length==0 && !_isLoad)
 							{
 								if(wrs_panel_layout)
 								{
-									
 									wrs_panel_layout.open('east');
 								}
 							}
 						
 						
+						/*
+						 * VErifica se a aba clicada estpa no proceço de JOB
+						 * caso sim 
+						 * para o o evento de click e reorna a função
+						 */
+						if(_isLoad)
+							{
+									$('.container_panel_relatorio_rows').addClass('hide');
+									$('.modal-window-wrs').removeClass('hide');
+									$('.container_panel_relatorio').show();
+									$('.wrs_panel_filter_measure').hide();
+	
+								return true;
+								
+							}
+
+						if(is_load==true) 
+						{
+//							
+							return true;
+						}
 						
-						if(is_load==true) return true;
 						
 						if(!noactive)
 						{
+							
 							event.attr('is_load','true');
 						}
 						
@@ -424,10 +449,9 @@ function optionsDataConvert(gridValue,with_decode)
 				wrsConfigGridDefaultManagerTopOptions();
 				//wrsConfigGridDefaultManagerTopOptionsLock();
 				
-				
-				
 				var aba_active		=	tagABA.find('.active');
 					aba_active.removeClass('active');
+					
 					
 				var gridValue		=	[];
 				var only_aba		=	false;
@@ -437,8 +461,6 @@ function optionsDataConvert(gridValue,with_decode)
 				var _report_id		=	$(this).attr('id-aba');
 				var IDCurrent		=	'#'+_report_id;
 				
-				
-				
 				var noactive			=	$('.wrs_run_filter').attr('noactive');
 					noactive			=	empty(noactive) ? false : true;
 				
@@ -446,11 +468,6 @@ function optionsDataConvert(gridValue,with_decode)
 					wrs_run_filter_unlocked();
 				
 				
-				
-				
-				
-				
-				 
 				
 				$('body').WRSJobModal('click_aba',{report_id:_report_id});
 				
@@ -463,7 +480,6 @@ function optionsDataConvert(gridValue,with_decode)
 						save_info_aba_current(aba_active);
 					}
 					
-
 					var wrsConfigGridDefault		=	$('#wrsConfigGridDefault').data({}); //Zera a estrutura inicial
 					$('.wrsGrid').removeClass('wrsGrid');
 					
@@ -493,31 +509,18 @@ function optionsDataConvert(gridValue,with_decode)
 				{
 						IDMain			=	'#'+idReport;
 					 	gridValue		=	getJsonDecodeBase64($(IDMain).attr('wrsparam'));
-					 	
-
-
-						
 				}
 				
 
-				
-				
-				
-				
-				
 
 				var isGrid			=	false;
 				var _paran_aba		=	$(this).attr('wrsparam');
 
-				
 					wrs_run_filter_add_history(_paran_aba);
-					
-
 									
 					$(IDMain).each(function(){
 						isGrid	=	 true;
 					});
-					
 					
 					
 					if(hasDefault==false)
