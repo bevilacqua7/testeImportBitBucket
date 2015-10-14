@@ -105,6 +105,8 @@ function setOptionRadio(event,value,_selected)
 	event.append(elements.reverse());	
 }
 
+
+
 function array_length(array)
 {
 	var cc	=	0;
@@ -115,8 +117,10 @@ function array_length(array)
 		}
 	
 	return cc;
-	
 }
+
+
+
 
 function array_join(_param,__param)
 {

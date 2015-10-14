@@ -357,6 +357,7 @@ $(document).ready(function () {
 				//Executa o Click para executar o Gráfico
 				var east__onclose	=	$('.wrs_run_filter').attr('east__onclose');
 					east__onclose	=	empty(east__onclose) ? false : true;
+
 					
 				if(!east__onclose)
 				{
@@ -386,8 +387,7 @@ $(document).ready(function () {
 
 	
 	
-	
-	
+ 
 
 	BTN_HOVER_BOX_DROP();
 
@@ -411,8 +411,10 @@ $(document).ready(function () {
 
 
 
-function layout_east_close()
+function layout_east_close(_only_show_progress)
 {
+
+	var only_show_progress	=	 _only_show_progress==undefined ? false : _only_show_progress;
 	
 	var report_id		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
 	
@@ -424,18 +426,28 @@ function layout_east_close()
 		{
 			$('#wrsConfigGridDefault').removeAttr('f5_ative');
 		}
-	
-	
-	
+
+		
+		if(only_show_progress)
+		{
+			$('.wrs_run_filter').attr('east__onclose','true');
+		}
+		
 	if(wrs_panel_layout.state.east.isClosed)
 	{
 		jqueryLayoutOptions.east__onclose();
 	}else{
 		
+		if(only_show_progress)
+		{
+			wrs_panel_layout.close('east');
+			
+		}else{
 		if($('#'+report_id).length!=0 || active_f5)
 			{
 				wrs_panel_layout.close('east');
 			}
+		}
 	}
 }
 

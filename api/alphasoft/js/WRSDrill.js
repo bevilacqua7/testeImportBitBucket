@@ -139,7 +139,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 			if(empty(column_tag[c])) continue;
 			
 			var class_tag			=	'.'+replace_attr(column_tag[c]);
-			console.log('class_tag',class_tag);
+
 			var json				=	$.parseJSON(base64_decode($(class_tag).attr('json')));
 			var json_level_drill	=	 null;
 			
