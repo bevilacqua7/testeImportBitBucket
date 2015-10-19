@@ -518,18 +518,27 @@ function tagFilterWRS(typeReturn)
 {
 	//Salvando para poder recuperar as seleções
 	var html		=	'';
+	var html_bk		=	'';// uso estas variaveis pra jogar os filtros fixos para o final de todos, sempre, e em vermelho
+	var html_fixed	=	'';
 	var structArray	=	[];
+
 	$(".WRS_DRAG_DROP_FILTER h2").each(function(){
  		
  		var json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
  		
  		var atributo	=	$(this).attr('atributo');
+ 		var filter_fixed=	$(this).hasClass('hide');
  			atributo	=	empty(atributo) ? '' : atributo;
  			
  			structArray[structArray.length]	=	[json['LEVEL_FULL'], atributo ,json['FILTER']];
  			
  				if(!empty(json['FILTER']))
  				{
+ 					if(filter_fixed){
+ 						html_bk = html;
+ 						html='';
+ 						html+='<font color="red">';
+ 					}
  					if(!empty($(this).attr('vvalue')))
  	 				{
  	 					html+='<h3>'+$(this).attr('vvalue')+'</h3> ';
@@ -546,10 +555,18 @@ function tagFilterWRS(typeReturn)
  							value	=	str_replace(']','',v_explode[v_explode.length-1]);
  							html+='<p>'+value+'</p>';
  						}
- 					
+ 					if(filter_fixed){
+ 						html+='</font>';
+ 						html_fixed+=html;
+ 						html=html_bk;
+ 					}
 			 		 	
 			 	}
  	});
+	
+	if(html_fixed!=''){
+		html+=html_fixed;
+	}
  	
  	if(empty(html))
  	{
@@ -663,46 +680,51 @@ function wrsFilterClickFalse()
 			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 					var level_full					=	$(this).attr('level-full');	
 					var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
+					var not_use						=	$(this).hasClass('hide');
 					
-						//Verificando se o Level Full exist no array passado
-						if(in_array(level_full, levelDown, true) || typeEvent=='all')
+
+						if(!not_use) 
 						{
-							var is_simples	=	 $(this).attr('atributo');
-							/*
-							 * Apenas limita quando for clicado no botão 
-							 * o all é acionado apenas no botão sentrão quando não vem pelo all 
-							 * ele foi acionado pelo request da mudança do pai
-							 */
-							var is_simples	=	typeEvent=='all' ? is_simples : ''; 
-							
-							if(is_simples!='simples' || typeEvent=='all')
-							{	
+							//Verificando se o Level Full exist no array passado
+							if(in_array(level_full, levelDown, true) || typeEvent=='all')
+							{
+								var is_simples	=	 $(this).attr('atributo');
 								/*
-								 * Se o filtro foi modificado então apaga os filhos
+								 * Apenas limita quando for clicado no botão 
+								 * o all é acionado apenas no botão sentrão quando não vem pelo all 
+								 * ele foi acionado pelo request da mudança do pai
 								 */
-								if(typeEvent=='all')
-									{
-										setJsonEncodeDecode($(this),['LIKE','FILTER_TO_CLEAN','FILTER','FILTER_TO_COMPARE','FILTER_CLICK'],['',false,'','',''],true,true);
-									}else{
-										var FILTER_TO_COMPARE	=	 [];
-										if(nameTagHeader)
+								var is_simples	=	typeEvent=='all' ? is_simples : ''; 
+								
+								if(is_simples!='simples' || typeEvent=='all')
+								{	
+									/*
+									 * Se o filtro foi modificado então apaga os filhos
+									 */
+									if(typeEvent=='all')
 										{
-											if(!empty(json['FILTER_TO_COMPARE'])){
-												FILTER_TO_COMPARE							=	explode(',',json['FILTER_TO_COMPARE']);
+											setJsonEncodeDecode($(this),['LIKE','FILTER_TO_CLEAN','FILTER','FILTER_TO_COMPARE','FILTER_CLICK'],['',false,'','',''],true,true);
+										}else{
+											var FILTER_TO_COMPARE	=	 [];
+											if(nameTagHeader)
+											{
+												if(!empty(json['FILTER_TO_COMPARE'])){
+													FILTER_TO_COMPARE							=	explode(',',json['FILTER_TO_COMPARE']);
+												}
+												
+												if(!in_array(nameTagHeader,FILTER_TO_COMPARE, true))
+												{
+													FILTER_TO_COMPARE[FILTER_TO_COMPARE.length]	= nameTagHeader;	
+												}
 											}
 											
-											if(!in_array(nameTagHeader,FILTER_TO_COMPARE, true))
-											{
-												FILTER_TO_COMPARE[FILTER_TO_COMPARE.length]	= nameTagHeader;	
-											}
+											var FILTER_TO_COMPARE		=	implode(',',FILTER_TO_COMPARE);
+	
+											setJsonEncodeDecode($(this),['LIKE','FILTER_TO_CLEAN','FILTER_TO_COMPARE'],['',true,FILTER_TO_COMPARE],true,true);
 										}
-										
-										var FILTER_TO_COMPARE		=	implode(',',FILTER_TO_COMPARE);
-
-										setJsonEncodeDecode($(this),['LIKE','FILTER_TO_CLEAN','FILTER_TO_COMPARE'],['',true,FILTER_TO_COMPARE],true,true);
-									}
+								}
+								
 							}
-							
 						}
 					
 			});
@@ -745,6 +767,12 @@ function wrsFilterClickFalse()
 						}
 					
 			});
+			
+			
+			
+			FilterOriginal	=	merge_filter_in_array(FilterOriginal);
+			
+			//filters_up.push({})
 			
 			//foreach(FilterOriginal);
 			//if(empty_filter) return '';
@@ -1301,6 +1329,7 @@ function wrsFilterClickFalse()
 							 	$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
 							 	var jsonDROP		=	[];
 							 	var jsonDROPExist	= false;
+							 	
 							 	//Salvando para poder recuperar as seleções
 							 	$(".WRS_DRAG_DROP_FILTER h2").each(function(){
 							 		jsonDROP[$(this).attr('level-full')]	=	$(this).attr('json');
@@ -1321,43 +1350,53 @@ function wrsFilterClickFalse()
 												 	var index		=	$(this).index();
 												 	var jsonDecode	=	$.parseJSON(base64_decode(json));
 												 	var atributo	=	$(this).attr('atributo');
+												 	var not_use		=	 $(this).attr('not-use');
+												 	var _hide		=	 ' hide ';
 												 	
-												 	if(atributo=='simples')	is_atributo_simples=true;
-												 	
-												 	
-												 	//Substitui o Json pelo qualk já estva selecionado
-												 	
-												 	if(jsonDROPExist)
-												 		{
-														 	if(isset(jsonDROP[jsonDecode.LEVEL_FULL]))
-														 		{
-														 			json				=	jsonDROP[jsonDecode.LEVEL_FULL];
-														 		}
-												 		}
-												 	
-												 	if(!empty(value))
+												 	if(empty(not_use))
 												 	{
-												 		var h2	=	 $('<h2/>',{	'vvalue'		:	value,
-												 									html			:	value,
-												 									'json'			:	json,
-												 									'level-full'	:	jsonDecode.LEVEL_FULL,
-												 									'index-data'	:	index,
-												 									'id'			:	'wrs_header_filter_main_'+index,
-																					'class'			:	'wrs_class_filter_header_main',
-																					'atributo'		:	atributo
-																		 		});
-												 		
-												 		var div	=	$('<div/>',
-												 								{
-												 									'id'	:	'wrs_filter_body_'+index,
-												 									'class':	'wrs_filter_body'
-												 									
-												 								}).html($('<div/>',{'class':'wrs_filter_body_container'}));
-												 		
-												 		$(".WRS_DRAG_DROP_FILTER").append(h2).append(div);
-												 		size_data++;
-												 		h2.unbind('click').click(clickHeaderFiltro);//Adicionando o Evento de click
+												 		_hide	=	'';
 												 	}
+												 	
+												 	
+														 	
+														 	if(atributo=='simples')	is_atributo_simples=true;
+														 	
+														 	
+														 	//Substitui o Json pelo qualk já estva selecionado
+														 	
+														 	if(jsonDROPExist)
+														 		{
+																 	if(isset(jsonDROP[jsonDecode.LEVEL_FULL]))
+																 		{
+																 			json				=	jsonDROP[jsonDecode.LEVEL_FULL];
+																 		}
+														 		}
+														 	
+														 	if(!empty(value))
+														 	{
+														 		var h2	=	 $('<h2/>',{	'vvalue'		:	value,
+														 									html			:	value,
+														 									'json'			:	json,
+														 									'level-full'	:	jsonDecode.LEVEL_FULL,
+														 									'index-data'	:	index,
+														 									'id'			:	'wrs_header_filter_main_'+index,
+																							'class'			:	'wrs_class_filter_header_main '+_hide,
+																							'atributo'		:	atributo
+																				 		});
+														 		
+														 		var div	=	$('<div/>',
+														 								{
+														 									'id'	:	'wrs_filter_body_'+index,
+														 									'class':	'wrs_filter_body'
+														 									
+														 								}).html($('<div/>',{'class':'wrs_filter_body_container'}));
+														 		
+														 		$(".WRS_DRAG_DROP_FILTER").append(h2).append(div);
+														 		size_data++;
+														 		h2.unbind('click').click(clickHeaderFiltro);//Adicionando o Evento de click
+														 	}
+												
 											});
 									 //Aplicando o verificado se atributo simples
 									 $(".WRS_DRAG_DROP_FILTER").attr('is_atributo_simples',is_atributo_simples);

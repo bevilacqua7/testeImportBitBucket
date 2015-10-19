@@ -219,6 +219,9 @@ class WRS_PANEL  extends WRS_USER
 		//Montando o menu Drag and DROP do Atributos
 		$ATRIBUTOS			=	WRS::GET_SSAS_RELATIONSHIPS_BY_CUBE($CUBE);
 		
+		// puxando as restricoes de filtros fixos se houver
+		$FILTER_FIXED		= 	WRS::INFO_SSAS_LOGIN_FILTER_FIXED();
+		
 		$ATRIBUTOS_JSON		=	base64_encode(json_encode($ATRIBUTOS,true));
 		$HTML_ATRIBUTOS		=	$panelHTML->MENU_DRAG_DROP_DIREITO($this->_cube_pos_session,$ATRIBUTOS,array('LEVEL_NAME','LEVEL_NAME'));
 
@@ -252,6 +255,11 @@ class WRS_PANEL  extends WRS_USER
 		
 		//Caso seja nulo ou executdo com F5 ou refresh executa o histórico
 		echo fwrs_javascript('WRSKendoGridRefresh("'.WRS::GET_REPORT_HISTORY_CURRENT($CUBE,true).'")');
+
+		if(is_array($FILTER_FIXED) && count($FILTER_FIXED)>0){
+			// alimenta as informacoes de filtros fixos do usuario
+			echo fwrs_javascript('set_userinfo_filter_fixed('.json_encode($FILTER_FIXED,1).')');
+		}
 		
 		$this->load_reports_autoload();
 		
