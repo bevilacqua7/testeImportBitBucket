@@ -337,6 +337,11 @@ function fwrs_utf8d($input)
 {
 	return utf8_decode($input);
 }
+
+function fwrs_utf8e($input)
+{
+	return utf8_encode($input);
+}
 /**
  * Faz a padronização da formatação do Cubo
  * @param string $time

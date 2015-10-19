@@ -69,7 +69,7 @@ class WRS_REPORT  extends  WRS_USER
 
 		$layouts 			= fwrs_request('layouts');
 		$grupos 			= fwrs_request('grupos');		
-		$dadosJs			= json_decode(base64_decode(fwrs_request('dadosJs')));
+		$dadosJs			= json_decode(fwrs_utf8e(base64_decode(fwrs_request('dadosJs'))));
 		$user				= WRS::INFO_SSAS_LOGIN();
 
 		$REPORT_DESC 		= fwrs_request('report_name');
