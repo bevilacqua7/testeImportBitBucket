@@ -28,8 +28,6 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
  */
 (function($){
 	
-	
-	
 	$.fn.WRSTimerLoader = function(methodOrOptions)
 	{
 			var labelData			=	'WRSTimeLoader';
@@ -41,11 +39,12 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 		
 			var __clock_time	=	 function()
 			{
+				
 				var _data			=	 that.data(DATA_NAME);
 				var _data_time		=	$('body').data(labelData);
 				var _mktime	=	'';
 				
-				
+
 					_data_time['time']	=	setTimeout(__clock_time, TIME_LOAD);
 					/*
 					
@@ -90,8 +89,14 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 				
 				if(empty(_data_time)) return false;
 				
-					clearTimeout(_data_time['time']);    		
-		    		that.data(labelData,'');
+				
+//					if(array_length(_data_time)==0)
+	//				{
+						clearTimeout(_data_time['time']);    		
+		    			that.data(labelData,'');
+		//			}
+		    		
+		    		
 			}
 			
 			
@@ -102,6 +107,19 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 				var _options			=	 options;
 					_options['time']	=	setTimeout(__clock_time, TIME_LOAD);
 					_options['mktime']	=	mktime();
+
+					var _data			=	 that.data(DATA_NAME);
+
+					for(var lineData in _data)
+					{
+						var report__id		=	_data[lineData];
+						
+						if(report__id.report_id==_options['report_id'])
+							{
+								_options['mktime']	=	report__id.mktime;
+							}
+					}
+					
 					
 					$('body').data(labelData,_options);
 					
@@ -439,7 +457,6 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 			
 			 var __aba		=	 function(options)
 			 {
-
 					var _opts			=	{report_id:'',wait:false, title_aba:''};
 					var	opts 			= 	$.extend( {}, _opts, options);
 					var _report_id		=	opts.report_id;
@@ -449,7 +466,6 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 					var _hide			=	false;
 		    		var report_id_modal	=	_modal.find('.modal-buttons-wrs-job').attr('report_id');
 		    		
-					
 						if(empty(_report_id)) 
 						{
 							console.error('É necessário passar um ID');
@@ -482,12 +498,13 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 						
 						
 						//Pegando o Title
-						if(opts.wait){
+						if(opts.wait)
+						{
 							_title	=	opts.title_aba;
-
-						}else{
+						}
+						else
+						{
 							_title	=	that.wrsAbas('aba_title',opts);
-
 						}
 						
 						_modal.find('.modal-title-wrs-job h3').html(_title);
@@ -539,20 +556,26 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 		    		var report_id_modal	=	modal.find('.modal-buttons-wrs-job').attr('report_id');
 		    		
 		    		
+		    		
 		    		/*
 			    		if(_report_id==report_id_modal)
 			    		{
 			    			modal.addClass('hide');
 			    		}*/
 			    		
+
 	    				
 	    				for(var lineJOB in jobData)
 						{
-	    					if(jobData[lineJOB].report_id	==	_report_id){
+	    					if(jobData[lineJOB].report_id	==	_report_id)
+	    					{
 	    						_hide	= false;
 	    					}
 						}
 	    				
+	    				
+	    				
+	    				//$('body').data(DATA_NAME)
 	    				var _is_error_data	=	 false;
 	    				
 	    				for(var lineError in _errorData)
@@ -846,10 +869,11 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 
     		if(!_exist){
     			data_param.push({'report_id' : report_id , 'mktime': mktime()});
+        		//Armazenando na estrutura para poder processar
+        		that.data(DATA_NAME,data_param);
     		}
     		
-    		//Armazenando na estrutura para poder processar
-    		that.data(DATA_NAME,data_param);
+
     		
     		//console.log('data_param',data_param);
 
@@ -985,7 +1009,8 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     				WrsThreadJobTimeOut();
     				that.data(MSG_JOBS,'');
     				alertify.success(LNG('JOB_COMPLETE'));
-    				
+
+    				//$('body').data('WRSTimeLoader','');
     				
     				that.WRSTimerLoader('timeout',{report_id:report_id_modal});    				
     				$('body').WRSJobModal('close',{'report_id':report_id_modal});

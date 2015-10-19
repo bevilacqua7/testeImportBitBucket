@@ -49,6 +49,7 @@ class WRS_HTML
 							</li>
 EOF;
 		
+		//Ao manipular essa função lembranbdo que tem que fazer o mesmo no WRSMultipleCube.js
 		$li			=	<<<EOF
 								<li  	class="ui-widget-content box_wrs_panel {class}" tag-class="{class}" api="wrs" type="{type}"
 										vvalue="{label}" json="{json}"><span class="btn-left glyphicon glyphicon glyphicon-{$icon}"></span>{value}</li>
