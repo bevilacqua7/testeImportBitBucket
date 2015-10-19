@@ -11,7 +11,7 @@
 
 var IS_TRACE	=	false;
 var RAND_TOKEN	=	js_rand(0,9999999999999);
-	include_js('WRSThreadJobManager');
+	include_js('ThreadJobManager');
 
 
 /*

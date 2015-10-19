@@ -144,19 +144,19 @@ if(is_array($arr_perfil_user)){
     <script src="api/kendoUi/examples/content/shared/js/console.js"></script>
 	<script src="api/kendoUi/js/messages/kendo.messages.pt-BR.min.js"></script>
 	<script src="api/kendoUi/js/jszip.min.js"></script>
-<script src="api/kendoUi/js/kendo.dataviz.themes.min.js"></script>   	
+	<script src="api/kendoUi/js/kendo.dataviz.themes.min.js"></script>   	
 
-	 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAvq_yJP8-zcJZNuwF47gmhIGPXQhjlTgE&sensor=true&v=3.exp"></script>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAvq_yJP8-zcJZNuwF47gmhIGPXQhjlTgE&sensor=true&v=3.exp"></script>
 	<script type="text/javascript" src="api/gomap/jquery.gomap-1.3.3.js"></script>
 
 
 
   
 	<!--  PLIGIN WRS -->
-	<script type="text/javascript" src="api/alphasoft/js/WRSKendoUi.js?<?php echo RAND_TOKEN;?>"></script>
-    <script type="text/javascript" src="api/alphasoft/js/WRSFilter.js?<?php echo RAND_TOKEN;?>"></script>
-    <script type="text/javascript" src="api/alphasoft/js/WRSDrill.js?<?php echo RAND_TOKEN;?>"></script>
-    <script type="text/javascript" src="api/alphasoft/js/WRSMultipleCube.js?<?php echo RAND_TOKEN;?>"></script>
+	<script type="text/javascript" src="api/alphasoft/js/KendoUi.js?<?php echo RAND_TOKEN;?>"></script>
+    <script type="text/javascript" src="api/alphasoft/js/Filter.js?<?php echo RAND_TOKEN;?>"></script>
+    <script type="text/javascript" src="api/alphasoft/js/Drill.js?<?php echo RAND_TOKEN;?>"></script>
+    <script type="text/javascript" src="api/alphasoft/js/MultipleCube.js?<?php echo RAND_TOKEN;?>"></script>
     
     
         

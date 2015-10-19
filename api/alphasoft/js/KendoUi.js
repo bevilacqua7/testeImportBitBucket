@@ -17,17 +17,17 @@ var _TRUE	=	'1',
 var WRSHistory	=	[];	
 
 
-include_js('WRSWindowGrid');
-include_js('WRSMaps');
-include_js('WRSKendoUiChart');
-include_js('WRSGridEventsTools');
-include_js('WRSHeaderIndex');
-include_js('WRSDrillLine');	//Drill Line
-include_js('WRSTopOptions');
-include_js('WRSGenericModal');
-include_js('WRSMenu');
+include_js('WindowGrid');
+include_js('Maps');
+include_js('KendoUiChart');
+include_js('GridEventsTools');
+include_js('HeaderIndex');
+include_js('DrillLine');	//Drill Line
+include_js('TopOptions');
+include_js('GenericModal');
+include_js('Menu');
 include_js('templateReport');
-include_js('WRSAbas'); 
+include_js('Abas'); 
 
 function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
 {
