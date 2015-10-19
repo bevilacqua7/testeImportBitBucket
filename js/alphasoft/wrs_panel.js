@@ -10,6 +10,7 @@ var qtde_max_linhas		=	15;
 var qtde_max_colunas	=	10;
 var qtde_max_metricas	=	30;
 var hideeast			=	in_array('DRG',PERFIL_ID_USER)?true:false;
+var LXLX				=	true;
 var userinfo_filter_fixed = null;
 
 function wrs_north_onresize()
@@ -427,15 +428,24 @@ $(document).ready(function () {
 										},
 			east__onclose: hideeast?hide_east:function () 
 			{
+				
 				//Executa o Click para executar o Gráfico
 				var east__onclose	=	$('.wrs_run_filter').attr('east__onclose');
 					east__onclose	=	empty(east__onclose) ? false : true;
 					
+					//$('.modal-window-wrs').removeClass('hide');
+					
+					$('.container_panel_relatorio').show();
+					$('.wrs_panel_filter_measure').hide();
+					
+
 				if(!east__onclose)
 				{
+
 					if($('.wrs_run_filter').attr('locked')!='locked')
 					{
 						$('.wrs_run_filter').attr('eastonclose','true').attr('flag_load','true');//Pra informar que o clique partir da opção para feixare a tela da direira 
+
 						wrsRunFilter();
 					}
 				}
@@ -459,8 +469,7 @@ $(document).ready(function () {
 
 	
 	
-	
-	
+ 
 
 	BTN_HOVER_BOX_DROP();
 
@@ -484,8 +493,10 @@ $(document).ready(function () {
 
 
 
-function layout_east_close()
+function layout_east_close(_only_show_progress,is_hide)
 {
+	
+	var only_show_progress	=	 _only_show_progress==undefined ? false : _only_show_progress;
 	
 	var report_id		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
 	
@@ -493,22 +504,50 @@ function layout_east_close()
 	var active_f5		=	$('#wrsConfigGridDefault').attr('f5_ative');
 		active_f5		=	 active_f5==null ? false :  true;
 		
+		
+		$('.container_panel_relatorio_rows').addClass('hide');
+
+		
+		
+		if(is_hide==true){
+			$('.modal-window-wrs').removeClass('hide');
+		}else{
+			$('.modal-window-wrs').addClass('hide');
+		}
+		
+		$('.container_panel_relatorio').show();
+		$('.wrs_panel_filter_measure').hide();
+		
+		
+		
 		if(active_f5)
 		{
 			$('#wrsConfigGridDefault').removeAttr('f5_ative');
 		}
-	
-	
-	
+		
+		if(only_show_progress)
+		{
+			$('.wrs_run_filter').attr('east__onclose','true');
+		}
+		
 	if(wrs_panel_layout.state.east.isClosed)
 	{
+
 		jqueryLayoutOptions.east__onclose();
+		
 	}else{
 		
-		if($('#'+report_id).length!=0 || active_f5)
-			{
-				wrs_panel_layout.close('east');
-			}
+		if(only_show_progress)
+		{
+
+			wrs_panel_layout.close('east');
+			
+		}else{
+			//if($('#'+report_id).length!=0 || active_f5)
+				//{
+					wrs_panel_layout.close('east');
+				//}
+		}
 	}
 }
 
@@ -1256,10 +1295,12 @@ function rows_by_metrica_attr_base64(object,_type)
 	var _request	=	[];
 	var _info_save	=	[];
 	
+
 	$(object).find('li').each(function(){
 		
 		//Foi incrementado a TAG  tag_class e get_object para resolver o problema de acentuação
 		var tag_class	=	$(this).attr('tag-class');
+
 		var get_object	=	$('.ui-layout-pane-east ul').find('.'+tag_class);
 		
 		
@@ -1274,6 +1315,7 @@ function rows_by_metrica_attr_base64(object,_type)
 			if(_type=='attr'){
 				_request[_request.length]	=	json.LEVEL_FULL;
 			}else{
+
 				_request[_request.length]	=	json.MEASURE_UNIQUE_NAME;
 			}
 		}
@@ -1293,6 +1335,7 @@ function rows_by_metrica_attr_base64(object,_type)
  */
 function wrs_run_filter()
 {
+
 	var manager_aba			=	$(this).attr('manager_aba');
 		manager_aba			=	empty(manager_aba) ? false : true;
 		$(this).removeAttr('manager_aba');
@@ -1312,8 +1355,6 @@ function wrs_run_filter()
 		}
 		
 	
-		
-		
 		
 	$(this).attr('locked','locked');
 		
@@ -1616,6 +1657,9 @@ function wrs_run_filter()
 		$('.wrs_panel_filter_icon').hide();
 		
 		
+		
+		
+		
 		//Libero a configuração das janelas 
 		wrsConfigGridDefaultManagerTopOptions();
 		
@@ -1646,13 +1690,13 @@ function wrs_run_filter()
 		
 		
 		
-		//TRACE_DEBUG(_param_request['REPORT_ID']);
 
+		//if(!LXLX) return true;
+		
+		
 		$('body').ThreadJobManager(_param_request['REPORT_ID']);
-
 		
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
-		
 		
 		//AUTO LOAD
 		if($(this).attr('auto_load')=='true')
@@ -1660,9 +1704,9 @@ function wrs_run_filter()
 			//$(ABA_TAG_NAME).wrsAbas('auto_load',$(this).data('auto_load_data'),true);
 		}
 		
-		
 		$('.wrs_run_filter').attr('east__onclose','true');
-		wrs_panel_layout.close('east');
+		layout_east_close(false,true);
+		//wrs_panel_layout.close('east');
 		
 		$('.wrs_panel_center_body').hide();
 		$('.wrs_panel_filter_icon').hide();
@@ -1671,8 +1715,9 @@ function wrs_run_filter()
 	}
 	else
 	{
-		
 			
+			//wrs_panel_layout.open('east');
+		
 			$('body').wrsAbas('remove_event_click');
 		
 			
@@ -1786,7 +1831,11 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	//Se não for a aba ativa então faz o hide nbo HTML 
 
-		$('.container_panel_relatorio_rows').addClass('hide');
+	find_and_hide_container(aba_ativa);
+	
+	 
+		
+		
 		$('#'+aba_ativa+'Main').removeClass('hide');
 	
 		var is_active	=	 true;
@@ -1855,6 +1904,33 @@ function CLOSE_LOAD_RELATORIO()
 
 
 
+
+function find_and_hide_container(aba_ativa)
+{
+	
+	$('.container_panel_relatorio_rows').each(function(){
+		
+		var _report_id_local		=	 str_replace('Main','',$(this).attr('id'));
+
+		if(aba_ativa!=_report_id_local){
+			$(this).addClass('hide');
+		}
+		
+	});
+	
+	
+}
+
+
+function find_and_hide_container_auto()
+{
+	
+	var aba_ativa		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
+	
+	find_and_hide_container(aba_ativa);
+	
+	
+}
 
 
 

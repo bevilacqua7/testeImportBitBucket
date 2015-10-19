@@ -1127,7 +1127,10 @@ HTML;
 		
 
 
-		$HTML	=	 $TelerikUi->render($this->param_encode($this->_param_ssas_reports),$getRequestWrsExceptions,$getRequestKendoUi['REPORT_ID']);
+		$HTML	=	 $TelerikUi->render(	$this->param_encode($this->_param_ssas_reports),
+											$getRequestWrsExceptions,
+											$getRequestKendoUi['REPORT_ID'],
+											$getRequestKendoUi);
 		
 		if($checkThreadJobManager)
 		{

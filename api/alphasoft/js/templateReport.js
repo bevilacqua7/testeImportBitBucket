@@ -181,6 +181,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	}
 	else
 	{
+
 		$(ABA_TAG_NAME).wrsAbas('load_multiple',[_param],nao_processa);
 
 		//wrsRunFilter();

@@ -345,6 +345,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 	
 	histoty_param	=	$.parseJSON(base64_decode(history));
 	
+	
 	var _compare	= ['LAYOUT_ROWS','LAYOUT_COLUMNS','LAYOUT_MEASURES','LAYOUT_FILTERS','ORDER_COLUMN','ALL_COLS','ALL_ROWS','DRILL_HIERARQUIA_LINHA_DATA_MINUS','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA'];
 
 		if(empty(param_request['ALL_COLS'])) param_request['ALL_COLS']='';
@@ -361,18 +362,30 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 			var __key				=	_compare[lineCompare];
 			var _history_compare	=	_trim(histoty_param[__key]);
 			
+
 			
 				if(__key=='LAYOUT_FILTERS')
 				{
 					_history_compare	=	convert_to_compare_filter(getJsonDecodeBase64(histoty_param['FILTER_TMP']));
 				}
 			
-				if(_history_compare!=_trim(param_request[__key]))
-				{
-					flag=false;
+				
+				
+				try{
+				//Verificando se são iguais as informações
+					if(empty_wrs_defaults(_history_compare)!=empty_wrs_defaults(_trim(param_request[__key])))
+					{
+						flag=false;
+					}
+				}catch(e){
+					console.log('A key ("'+__key+'") não existe em param_request' );
 				}
 		}
-	
+		
+
+		
+		
+		
 		
 		if(_trim(histoty_param['TOP_CONFIG'])!=_trim(param_request['TOP_CONFIG']))
 		{
@@ -416,7 +429,8 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 			if(empty($('.wrs_run_filter').attr('history')))
 			{
 				if(!manager_aba)
-				{
+				{	
+					//TRACE_DEBUG('NOT 02');
 					WRS_ALERT(LNG('RUN_GRID_CHANGE_NOT'),'warning');
 				}
 
@@ -432,6 +446,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 						{
 							if(!manager_aba)
 							{
+								//TRACE_DEBUG('NOT 01');
 								WRS_ALERT(LNG('RUN_GRID_CHANGE_NOT'),'warning');
 							}
 						}
@@ -468,8 +483,6 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 				histoty_param[lineHistoty_param]	=	param_request[lineHistoty_param];
 			}
 			
-			
-		 
 			
 			
 			histoty_param['DRILL_HIERARQUIA_LINHA_DATA_MINUS']='';

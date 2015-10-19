@@ -85,7 +85,18 @@ function setOption(event,value,_selected)
 		}	
 }
 
-
+function empty_wrs_defaults(input)
+{
+		switch(input)
+		{
+			case 'e30=' 	 :  return null; break;
+			case undefined   : return null; break;
+			case ''         :  return null; break;
+			default  : return input; break;
+		}
+		
+		return input;
+}
 
 function setOptionRadio(event,value,_selected)
 {
@@ -105,6 +116,8 @@ function setOptionRadio(event,value,_selected)
 	event.append(elements.reverse());	
 }
 
+
+
 function array_length(array)
 {
 	var cc	=	0;
@@ -115,8 +128,10 @@ function array_length(array)
 		}
 	
 	return cc;
-	
 }
+
+
+
 
 function array_join(_param,__param)
 {
@@ -180,6 +195,22 @@ function array_remove_value(_param,array_remove)
 	
 	return _array_tmp;
 }
+
+
+function sleep(milliseconds)
+{
+	  var start = new Date().getTime();
+	  
+	  for (var i = 0; i < 1e7; i++)
+	  {
+		    if ((new Date().getTime() - start) > milliseconds)
+		    {
+		      break;
+		    }
+	  }
+	  
+}
+
 
 
 

@@ -25,6 +25,8 @@
 		var CHART			=	$('#'+idName+'Elements .chart');
 		
 		
+
+		
 		$('.container_panel_relatorio_rows').height($('.container_panel_relatorio').height());
 		
 		var _height			=	BOX.parent().parent().outerHeight();
@@ -134,6 +136,7 @@
 			
 			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
 			
+
 			
 			$('body').WRSJobModal('resize',{'height':height,'width':width}),
 			MAP.hide();
@@ -361,7 +364,70 @@
 
 
 
+function resize_container_grid(report_id,_isLoad)
+{
+	//telerikGrid.resize();
+	//goMapsResize()
+	//Elements
+	
+	var telerikGrid 	= 	$('#'+report_id).data('kendoGrid');		
+	
+	$('#'+report_id).resize();
+	if(telerikGrid)
+	{
+		
+		
+		var element_id	=	report_id+'Elements';
+		var element		=	$('#'+element_id);
 
+		var _width		=	element.width();
+		var _height		=	element.height();
+		
+			element.find('div').each(function(){
+				
+				
+				/*
+				$('#ABA_56979535263963Elements .map').data('goMap').map.center.lat()
+				$('#ABA_56979535263963Elements .map').data('goMap').map.center.lng()
+				*/
+				$(this).width(_width);
+				$(this).height(_height);
+				
+				/*
+				 * @Link http://stackoverflow.com/questions/10913164/gomap-display-map-in-hidden-div
+				 */
+				if($(this).hasClass('map'))
+				{
+					//$(this).html('');
+					//WRSMaps(telerikGrid);
+					var map		=	$(this).data('goMap').map;
+						
+						google.maps.event.trigger(map, 'resize'); 
+						
+
+				}
+				
+				if($(this).hasClass('chart'))
+				{
+					$(this).attr('id','CHART'+report_id);
+					
+					var chart_id	=	$('#CHART'+report_id);
+					/*
+						chart_id.width(_width);
+						chart_id.height(_height);
+					*/
+					var chart	=	chart_id.data("kendoChart");
+					       chart.resize();  
+				}
+				
+				
+				
+			});
+			
+		
+	}
+	
+}
 
 
 function saveHistoryEvents(kendoParam,report_id)
