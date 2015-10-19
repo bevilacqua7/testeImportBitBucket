@@ -85,7 +85,18 @@ function setOption(event,value,_selected)
 		}	
 }
 
-
+function empty_wrs_defaults(input)
+{
+		switch(input)
+		{
+			case 'e30=' 	 :  return null; break;
+			case undefined   : return null; break;
+			case ''         :  return null; break;
+			default  : return input; break;
+		}
+		
+		return input;
+}
 
 function setOptionRadio(event,value,_selected)
 {
@@ -184,6 +195,22 @@ function array_remove_value(_param,array_remove)
 	
 	return _array_tmp;
 }
+
+
+function sleep(milliseconds)
+{
+	  var start = new Date().getTime();
+	  
+	  for (var i = 0; i < 1e7; i++)
+	  {
+		    if ((new Date().getTime() - start) > milliseconds)
+		    {
+		      break;
+		    }
+	  }
+	  
+}
+
 
 
 

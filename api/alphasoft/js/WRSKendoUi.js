@@ -125,8 +125,10 @@ function WRSKendoGridComplete(IDGrid)
 		var _layout			=	_history['layout'];
 		var _paranKendoUi	=	_history['kendoUi'];
 	
+
 			_paranKendoUi['MKTIME_HISTORY']	=	_mktime;
 			$(_wrs_id).attr('wrsKendoUi',base64_encode(json_encode(_paranKendoUi)));
+			
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi);
 	}
 	
@@ -706,7 +708,7 @@ function onDataBound(arg)
 
 			
 			CLOSE_LOAD_RELATORIO();
-			$('.wrs_box').show();
+			$('.'+classGrid+'BOX').show();
 			
 			 
 			resizeGridSimple();

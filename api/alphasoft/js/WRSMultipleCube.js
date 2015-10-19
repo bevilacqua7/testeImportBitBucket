@@ -8,7 +8,7 @@ var CHANGE_CUBE_ELEMENTS	=	'';
 
 function wrs_multiple_cube_event()
 {
-	MODAL_LOADING_WRS_PANEL('GERANDO_MULTI_CUBE_TITLE','GERANDO_MULTI_CUBE_BODY','hide');
+	//MODAL_LOADING_WRS_PANEL('GERANDO_MULTI_CUBE_TITLE','GERANDO_MULTI_CUBE_BODY','hide');
 	
 	var CUBE_ID			=	$(this).val();
 	var _file			=	'WRS_PANEL';
@@ -131,12 +131,15 @@ function change_cube(CUBE_ID)
 	var htmlRelationships	=	MENU_DRAG_DROP_DIREITO(	_relationships	,['LEVEL_NAME','LEVEL_NAME']);
 	
 	var measure				=	MENU_DRAG_DROP_DIREITO(	_measures		,['MEASURE_NAME','MEASURE_NAME'],'metrica');
+	
 
 	$( ".WRS_DRAG_DROP").accordion("destroy");    // Removes the accordion bits
 	$( ".WRS_DRAG_DROP").empty();                // Clears the contents
 	
 	$('.wrs_relationships_menu_direiro').html(htmlRelationships);
 	$('.wrs_measure_menu_direiro').html(measure);
+	
+
 	
 	
 	 wrs_panel_active_drag_drop();
@@ -160,6 +163,8 @@ function change_cube(CUBE_ID)
 
 	
 	CLOSE_LOAD_RELATORIO();
+	
+	acoes_multiplas_menu_painel();
 
 }
 
@@ -192,7 +197,7 @@ function MENU_DRAG_DROP_DIREITO(container,valueShow,_type)
 						'	</div>'+
 						'</li>';
 	
-	var li			=	'<li 	class="ui-widget-content box_wrs_panel {class}" api="wrs" type="{type}"'+
+	var li			=	'<li 	class="ui-widget-content box_wrs_panel {class}" tag-class="{class}" api="wrs"  type="{type}"'+
 						'			vvalue="{label}" json="{json}"><span class="btn-left glyphicon glyphicon glyphicon-'+icon+'"></span>{value}</li>';
 
 	var liSearch	=	 ['{label}','{value}','{json}','{type}','{class}'];

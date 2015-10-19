@@ -304,14 +304,16 @@ class KendoUi
 		unset($_request['event']);	// Apagando info da URL
 		
 
+		//$_element,$getRequestWrsExceptions,$report_id,$getRequestKendoUi
+		
 		
 		$_jsonencode		=	NULL;
-		$PLUS_MINUS			=	fwrs_request('PLUS_MINUS');
+		$PLUS_MINUS			=	$getRequestKendoUi['PLUS_MINUS'];
 		
 		$this->orderByOnLoad($getRequestKendoUi);
 		
 		$_jsonencode =	json_encode($this->_param,true);
-
+		
 		
 		/*
 		 * Configurações e ações para o Javascript
@@ -331,8 +333,8 @@ class KendoUi
 		
 		$element	=	base64_encode(json_encode(array_merge($_request,$_element),true));
 		
-		
-		$ORDER_COLUMN  = fwrs_request('ORDER_COLUMN');
+
+		$ORDER_COLUMN  = $getRequestKendoUi['ORDER_COLUMN'];
 		$ORDER_COLUMN  = empty($ORDER_COLUMN) ? 0 : $ORDER_COLUMN;	
 		
 		//PArametros a ser passado pela Kendo
@@ -348,7 +350,7 @@ class KendoUi
 		$html 	= <<<HTML
 		
 			
-			<div id="{$idTag}Main" class="container_panel_relatorio_rows">
+			<div id="{$idTag}Main" class="container_panel_relatorio_rows hide">
 						<div class="wrs_box {$idTag}BOX">
 									{$WRS_PANEL_HEADER_TABLE}
 								
@@ -370,7 +372,7 @@ class KendoUi
 																jsonDecode.dataBinding									=	function(arg){ return onDataBinding(arg);}
 																
 																$("#{$this->getId()}").kendoGrid(jsonDecode);
-																$('.wrs_box').hide();
+																$(".{$this->getId()}BOX").hide();
 																$("#{$this->getId()}").WrsGridKendoUiControlColumnPlusMinus({$PLUS_MINUS}).WrsDrill().WRSWindowGridEventTools();
 																$('.dropdown-menu-configuration form, .dropdown-menu-configuration li ').click(function (e) {e.stopPropagation();});
 																$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 

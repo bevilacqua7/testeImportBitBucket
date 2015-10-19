@@ -16,7 +16,7 @@ var goMapWRSGoogleMaps		=	[];
  */
 function goMapsResize(_lat,_lon)
 {
-	
+	/*
 	for(obj in goMapWRSGoogleMaps)
 	{
 		var map		=	goMapWRSGoogleMaps[obj];
@@ -29,7 +29,7 @@ function goMapsResize(_lat,_lon)
 		else{
 			map.setCenter(new google.maps.LatLng(_lat, _lon),11);
 		}
-	}
+	}*/
 }
 
 
