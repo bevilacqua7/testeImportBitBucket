@@ -27,6 +27,9 @@ class WRS_MAIN  extends WRS_BASE
 		
 		if(!empty($event))  exit();
 		
+		// ao entrar na pagina inicial do sistema, apaga os historicos existentes para nao interferir na criacao de novos relatorios
+		WRS::DEL_ALL_REPORT_HISTORY();
+		
 		
 		WRS_TRACE('Pegando as variáveis para montar o template', __LINE__, __FILE__);
 		$SELECT_THEME		=	$this->getTheme();
