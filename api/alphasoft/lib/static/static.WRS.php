@@ -519,6 +519,31 @@ class WRS
 	}
 	
 	
+	
+	
+	/**
+	 * Apagando o histórico dos cubos
+	 * 
+	 * @param string $cube_id
+	 */
+	public static function DEL_ALL_REPORT_HISTORY($cube_id=null)
+	{
+			$TAG_NAME		=	'CUBE_REPORT_HISTORY';
+			$report_history	=	array();
+
+			if(empty($cube_id)) 
+			{
+				unset($_SESSION[$TAG_NAME]);
+			}
+			else
+			{
+				unset($_SESSION[$TAG_NAME][$cube_id]);
+			}
+			
+		
+	}
+	
+	
 	/**
 	 * 
 	 * PEgabd
