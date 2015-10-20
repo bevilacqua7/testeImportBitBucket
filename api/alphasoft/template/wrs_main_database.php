@@ -1,5 +1,8 @@
 <?php 
-
+includeClass("WRS_USER");
+$arr_perfil_user 	= WRS_USER::getArrPerfUser();
+$hide_layout_button = in_array('DRG',$arr_perfil_user);
+				
 $description	=	 NULL;
 
 if(!empty($CUBE_EDITION))
@@ -27,13 +30,22 @@ if(!empty($WARNING)) $description=$WARNING;
 $LINK_HTML	=	"";
 
 if(!$flag_cube_indisponivel){
-$LINK_HTML=	<<<HTML
-	<div class="link-contianer">
-								<a href="{$LINK}" class="ui-widget-header changePage" title="{$TITLE_LINK}"><span
-									class="glyphicon glyphicon-file"></span></a>
-								<a href="{$LINK_LAYOUT}" class="ui-widget-header changePage" title="{$TITLE_LINK_LAYOUT}"><span
-									class="glyphicon glyphicon-th"></span></a>
-							</div>
+
+	$LINK_HTML=	<<<HTML
+		<div class="link-contianer">
+									<a href="{$LINK}" class="ui-widget-header changePage" title="{$TITLE_LINK}"><span
+										class="glyphicon glyphicon-file"></span></a>
+HTML;
+	
+	if(!$hide_layout_button){
+		$LINK_HTML.= <<<HTML
+									<a href="{$LINK_LAYOUT}" class="ui-widget-header changePage" title="{$TITLE_LINK_LAYOUT}"><span
+										class="glyphicon glyphicon-th"></span></a>
+HTML;
+	}
+	
+	$LINK_HTML.= <<<HTML
+								</div>
 HTML;
 
 }
