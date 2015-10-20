@@ -305,7 +305,9 @@ $(document).ready(function () {
 
 	var SizeBar = (isMobile.any() ? 16 : 8);
 
-
+	if(hideeast){
+		$('div.WRS_ABA ul.nav li.new_file').addClass('hide');
+	}
 	 
 	jqueryLayoutOptions	=	{
 			applyDefaultStyles			: true,
