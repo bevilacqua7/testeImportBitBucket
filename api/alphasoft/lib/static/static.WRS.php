@@ -177,10 +177,10 @@ class WRS
 	 * Grava o Logind ID
 	 * @param string $login
 	 */
-	public static function SET_LOGIN($login)
+	public static function SET_LOGIN($login,$perfil=null)
 	{
 		$_SESSION['LOGIN']		=	$login;
-		$_SESSION['USER_CODE']	=	$login;
+		$_SESSION['USER_CODE']	=	(trim($perfil)!='' && $perfil!=null)?$perfil:$login;
 	}
 	
 	/**

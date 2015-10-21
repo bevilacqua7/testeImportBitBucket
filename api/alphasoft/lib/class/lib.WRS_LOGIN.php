@@ -147,7 +147,7 @@ class WRS_LOGIN extends WRS_BASE
 				
 				WRS_TRACE('Gravando sessões ', __LINE__, __FILE__);				
 				//Salvando o Login
-				WRS::SET_LOGIN($USER_CODE);
+				WRS::SET_LOGIN($USER_CODE,$USER_PERFIL);
 				//Gravando o Login ID para a Sessão
 				WRS::SET_LOGIN_ID($login_id);
 				//Gravando a Sessão dos Usuários
