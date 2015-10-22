@@ -380,6 +380,9 @@ $(document).ready(function () {
 									var MODAL_JOB		=	'.modal-window-wrs';
 									var layout_center	=	$('.ui-layout-center');
 									$(MODAL_JOB).width(layout_center.outerWidth()-2).height(layout_center.outerHeight()-3);
+									
+									
+									resize_common();
 			},
 			south__onclose: function () 
 							{

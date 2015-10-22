@@ -378,8 +378,6 @@ class KendoUi
 																$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
 																		
 																WRSKendoGridComplete("#{$this->getId()}");		
-																																			
-																
 													});
 																		
 												//Adicionando nova ABA						

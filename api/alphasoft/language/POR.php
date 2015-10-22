@@ -13,6 +13,8 @@
 	$language ['MSG_ERROR_TABLE_CACHE'] 				= "Consulta não pode ser executada, favor modificar o Layout dos Atributos selecionados";
 	$language ['VALOR'] 								= "Valor";
 	
+
+	
 	/*
 	 * CUBO ERRO
 	 */
@@ -181,7 +183,7 @@
 	 * Header das GRID
 	 */
 	$language['GRID_HEADER_OPTION'] 				 	= 	"Opções";
-	$language['GRID_HEADER_OPTION_TOTAL_LINE']		 	=	"Total Linhas";
+	$language['GRID_HEADER_OPTION_TOTAL_LINE']		 	=	"Total de Linhas";
 	$language['GRID_HEADER_OPTION_TOTAL_COLUMN']	 	=	"Total Colunas";
 	$language['GRID_HEADER_OPTION_TOTAL_SUMARIZA']	 	=	"Numeros Resumidos";
 	$language['GRID_HEADER_OPTION_TOTAL_LINE_COLOR']	=	"Linhas Intercaladas";
@@ -238,7 +240,7 @@
 	
 	$language ['WARNING_TITLE_RESULT_NOT_FOUND']	= "Consulta";
 	$language ['WARNING_BODY_RESULT_NOT_FOUND']		= "A consulta não retornou resultado..";
-	
+
 		
 
 	$language ['TITLE_CONTEX_MENU'] 						= "Adicionar à";

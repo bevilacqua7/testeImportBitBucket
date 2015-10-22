@@ -512,7 +512,7 @@ border-bottom-left-radius: 3px;
 	width: 100%;
 	padding: 0; /* extra paddingTop being added by scrollpane? */
 	padding-right: 0; /* for pseudo-scrollbar on right */
-	overflow-y: auto;
+	overflow: hidden;
 	
 }
 
@@ -766,7 +766,7 @@ td{
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
-	background-color: #258BB7;
+/*	background-color: #258BB7;*/
 }
  
  .grid_button_header_menu h4{
@@ -1127,7 +1127,7 @@ color: #fff !important;
 .wrs_grid_elements
 {
 	border-top: none;
-	border-bottom: 2px solid  !important;
+	border-bottom: 1px solid  !important;
 	background: #FFF;
 	position: relative;
 	/*overflow-y:auto; */
@@ -1580,4 +1580,78 @@ border-radius: 3px;
 }
 
 
+ 
+ 
+ 
+.container_panel_relatorio_rows .navbar .k-grid-pager{
+	width:auto;
+	position:relative;
+	float:left;
+	background:transparent;
+	color:#fff;
+	border:none;
+	margin-right:30px;
+	padding:0px;
+	border-right:1px solid #1985B3 !important;
+}
+
+.container_panel_relatorio_rows .navbar .k-grid-pager a{
+	background:#e8e8e8;
+	border:1px solid #ccc;
+	height:21px !important;
+	width:20px !important;
+	padding:0px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	cursor:pointer !important;
+	opacity: 1;
+}
+
+.container_panel_relatorio_rows .navbar .k-grid-pager a:hover{
+	background:#fff;
+}
+
+
+.container_panel_relatorio_rows .navbar .k-grid-pager input{
+	border:1px solid #ccc;
+	height:21px !important;
+	padding:0px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	opacity: 1;
+}
+
+.container_panel_relatorio_rows .navbar .k-grid-pager .k-pager-info{
+	visibility:hidden;
+	display:none;
+}
+
+.container_panel_relatorio_rows .navbar .k-grid-pager .k-icon{
+	cursor:pointer !important;
+	padding:0px;
+	top:-2px;
+	position:relative;
+
+}
+
+ .container_panel_relatorio_rows .container-fluid .k-dropdown{
+ 	background:transparent;
+ 	width:70px;
+ 	
+ }
+ 
+ .container_panel_relatorio_rows .container-fluid .k-dropdown select{
+	padding:0px 5px;
+	height:21px !important;
+	position:relative;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+		background:#e8e8e8;
+	border:1px solid #ccc;
+	top:-1px;
+	cursor:pointer;
+}
  

@@ -64,7 +64,8 @@ function _trim(input)
 function include_js(file)
 {
 	var script	=	$('<script/>',{type:"text/javascript",src:"api/alphasoft/js/"+file+".js?"+RAND_TOKEN});
-	$('head').append(script);
+		$('head').append(script);
+
 }
 
 
@@ -802,12 +803,6 @@ function WRSFrozenTheme()
 	$('.wrs_control_td_jqgrid').each(function(){
 		$(this).parent().addClass($(this).attr('wrsclass'));
 	});
-	
-	/*
-	$('.container_panel_relatorio thead th:last').each(function(){
-		$(this).attr('width','199x');
-		$(this).css('width','200px');
-	});*/
 }
 			
 
@@ -851,8 +846,8 @@ function resizeGridSimple()
 		var grid			=	getElementsWrsKendoUi($('.wrsGrid'));
 		var window_grid		=	grid['WINDOW'];
 		
-		
-		$(IDName+"NAV .wrs_tools_options_window").find("a[wrs-data="+window_grid+"]").trigger('click');
+
+		//$(IDName+"NAV .wrs_tools_options_window").find("a[wrs-data="+window_grid+"]").trigger('click');
 		
 		/*
 		
@@ -863,7 +858,8 @@ function resizeGridSimple()
 		var height			=	$('.ui-layout-center').height()-((padding+(abaHeight))+paddingCenter);
 		
 		$(IDName).height(height);	*/
-		telerikGrid.resize();
+		//telerikGrid.resize();
+		resize_common();
 	}
 } 
 

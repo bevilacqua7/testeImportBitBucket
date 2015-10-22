@@ -851,7 +851,7 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     		}
     	
 
-    		if(empty(data_param))	{
+    		if(empty(data_param) || data_param==null || data_param==undefined)	{
     			data_param	=	[];
     		}
     		
@@ -868,7 +868,8 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     		
 
     		if(!_exist){
-    			data_param.push({'report_id' : report_id , 'mktime': mktime()});
+    			//o push nesse pronto da erro
+    			data_param[data_param.length]	=	{'report_id' : report_id , 'mktime': mktime()};
         		//Armazenando na estrutura para poder processar
         		that.data(DATA_NAME,data_param);
     		}

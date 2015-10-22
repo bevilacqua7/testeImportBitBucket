@@ -172,13 +172,11 @@ function WRSMaps(KendoUi)
 			ELEMENT.attr('maps','true');
 	}
 	
-	
+	/*
 	
 	var posCenter	=	maps[js_rand(1,maps.length)];
 		
-		/*
-		 * Garate que não vá informações sem latitude para o mapa
-		 */
+		// Garate que não vá informações sem latitude para o mapa
 		if(!isLatitude(posCenter,'latitude'))
 		{
 			for(oo in maps)
@@ -197,7 +195,7 @@ function WRSMaps(KendoUi)
 			goMapsResize();
 		}
 	
-	
+	*/
 		ELEMENT.attr('maps_wrs','true');
 
 

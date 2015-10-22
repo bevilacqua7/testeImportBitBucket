@@ -16,7 +16,7 @@ var _TRUE	=	'1',
 	
 var WRSHistory	=	[];	
 
-
+/*
 include_js('WindowGrid');
 include_js('Maps');
 include_js('KendoUiChart');
@@ -27,7 +27,7 @@ include_js('TopOptions');
 include_js('GenericModal');
 include_js('Menu');
 include_js('templateReport');
-include_js('Abas'); 
+include_js('Abas'); */
 
 function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
 {
@@ -37,8 +37,8 @@ function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
 	$('.wrs_swap_drag_drop').html('');
 	*/
 //	set_value_box_relatorio(_layout);
-//	$('.wrs_panel_filter_icon').attr('filter_hide','true').trigger('click');
-	
+	//$('.wrs_panel_filter_icon').attr('filter_hide','true').trigger('click');
+
 	_layout['KendoUi']	=	_paranKendoUi;
 	
 	$(ABA_TAG_NAME).wrsAbas('refresh_F5',_layout);
@@ -664,7 +664,7 @@ function onDataBound(arg)
 				/*Options To ABAS */
 				wrsparam['KendoUi']				=	_kendoUiParam;
 
-				
+
 				
 				ELEMENT.attr('chart','false');
 				ELEMENT.attr('maps_wrs','false');
@@ -711,7 +711,7 @@ function onDataBound(arg)
 			$('.'+classGrid+'BOX').show();
 			
 			 
-			resizeGridSimple();
+
 
 			addDrillOnDataBound(nameID,arg);
 			//Aplicando o Evento do CLick no DRILL LINHA
@@ -742,12 +742,32 @@ function onDataBound(arg)
 
 			$(ABA_TAG_NAME).wrsAbas('refresh',wrsKendoUi);
 			
-			TRACE('END onDataBound');
+			//resize da aba
+
+			//$(nameID).WRSWindowGridEventTools(wrsKendoUi['WINDOW'],true);
 			
+			
+			
+			//Apenas para que os controles do next and Back funcione
+			var options_resize = {
+					  id    	: nameID,
+					  'window'	: wrsKendoUi['WINDOW'],
+					  resize: function( event ) 
+					  {
+						  $(this.id).WRSWindowGridEventTools(this.window,true);
+					  }
+					};
+			
+			var time_out 	= $.proxy( options_resize.resize, options_resize );
+			
+			setTimeout(time_out,50);
+			
+			TRACE('END onDataBound');
 			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 	}
 
 	
+
 	
 	
 	

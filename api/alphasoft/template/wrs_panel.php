@@ -154,6 +154,21 @@ if(is_array($arr_perfil_user)){
   
 	<!--  PLIGIN WRS -->
 	<script type="text/javascript" src="api/alphasoft/js/KendoUi.js?<?php echo RAND_TOKEN;?>"></script>
+<?php 	
+	include_js('WindowGrid');
+	include_js('Maps');
+	include_js('KendoUiChart');
+	include_js('GridEventsTools');
+	include_js('HeaderIndex');
+	include_js('DrillLine');	//Drill Line
+	include_js('TopOptions');
+	include_js('GenericModal');
+	include_js('Menu');
+	include_js('templateReport');
+	include_js('Abas');
+?> 
+
+
     <script type="text/javascript" src="api/alphasoft/js/Filter.js?<?php echo RAND_TOKEN;?>"></script>
     <script type="text/javascript" src="api/alphasoft/js/Drill.js?<?php echo RAND_TOKEN;?>"></script>
     <script type="text/javascript" src="api/alphasoft/js/MultipleCube.js?<?php echo RAND_TOKEN;?>"></script>
