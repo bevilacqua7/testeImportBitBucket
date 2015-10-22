@@ -161,7 +161,7 @@ function optionsDataConvert(gridValue,with_decode)
 									$('.wrs_panel_filter_measure').hide();
 									
 									$(window).resize();		
-									resize_container_grid(report_id,_isLoad);
+									resize_container_grid(report_id);
 									
 								return true;
 								
@@ -230,7 +230,7 @@ function optionsDataConvert(gridValue,with_decode)
 						
 						
 						$(window).resize();		
-						resize_container_grid(report_id,_isLoad);
+						resize_container_grid(report_id);
 						
 //						$(window).resize();
 					

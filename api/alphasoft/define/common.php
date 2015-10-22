@@ -34,7 +34,10 @@ function WRS_DEBUG_QUERY($texto,$fileName='WRS_DEBUG.txt')
 	fclose($fp);
 }
 
-
+function include_js($file)
+{
+	echo '<script type="text/javascript" src="api/alphasoft/js/'.$file.'.js?'.RAND_TOKEN.'"></script>'.PHP_EOL;	
+}
 /**
  * Pegando apenas o NOme do Browser
  * @return string

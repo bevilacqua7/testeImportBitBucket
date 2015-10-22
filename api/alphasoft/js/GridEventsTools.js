@@ -1,4 +1,5 @@
 
+var HEIGHT_ABAS		=	50;
 
 /*
  * TODO: Tem que sincronizar esta função com o resizeGridSimple()open
@@ -13,8 +14,10 @@
 	}
 	
 	
-    $.fn.WRSWindowGridEventTools = function(loadByAba){
+    $.fn.WRSWindowGridEventTools = function(loadByAba,_click_auto)
+    {
     	var eventTelerik	=	this;
+    	var click_auto		=	_click_auto==undefined || _click_auto==null ? false : _click_auto;
 		var idName			=	eventTelerik.attr('id');
 		var GRID			=	$('#'+idName);
 		var telerikGrid 	= 	GRID.data('kendoGrid');		
@@ -23,11 +26,8 @@
 		var BOX				=	$('.'+idName+'BOX');
 		var MAP				=	$('#'+idName+'Elements .map');
 		var CHART			=	$('#'+idName+'Elements .chart');
-		
-		
 
-		
-		$('.container_panel_relatorio_rows').height($('.container_panel_relatorio').height());
+		$('.container_panel_relatorio_rows').outerHeight($('.ui-layout-center').innerHeight()-HEIGHT_ABAS);
 		
 		var _height			=	BOX.parent().parent().outerHeight();
 		var navHeight		=	NAV.height();
@@ -77,13 +77,12 @@
 				case "chart_map"	:
 				case "map_grid"		:
 				case "map_chart"	:{ 
-					
-					ELEMENT.attr('chart','false');
-		        	ELEMENT.attr('maps_wrs','false');
-		        	ELEMENT.attr('maps','false');
-		        	ELEMENT.html('');
-		        	
-				};				break;
+											ELEMENT.attr('chart','false');
+								        	ELEMENT.attr('maps_wrs','false');
+								        	ELEMENT.attr('maps','false');
+								        	ELEMENT.html('');
+								        	
+										};				break;
 			}
 			
 			
@@ -104,7 +103,7 @@
 					{
 						if(ELEMENT.find('.'+type_div).length==0)
 						{
-							ELEMENT.append($('<div/>').hide().addClass(type_div).addClass('block'));
+							ELEMENT.append($('<div/>').hide().addClass(type_div).addClass('block').attr('id',idName+type_div));
 						}else{							
 							ELEMENT.find('.'+type_div).show();
 						}
@@ -123,192 +122,86 @@
 		}
 		
 		
-		
+		/*
+		 * Criando os eventos da janelas e renderizando as Telas Gráfico e MAPA
+		 */
 		var WRSWindowGridEventToolsClick	=	function(e,data)
 		{
 			var wrs_data		=	"";
-			var height			=	BOX.parent().parent().outerHeight();
-			var width			=	BOX.parent().parent().outerWidth();
-			var BOX_PARENT		=	BOX.parent().parent();
-			var active_half		=	false;
-			var paddingCenter	=	((parseInt(BOX_PARENT.parent().css('padding-bottom').replace('px')))*3)-2;
-			var _heightToUse	=	'';
-			
 			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
-			
+			var height			=	$('.ui-layout-center').innerHeight()-HEIGHT_ABAS;
 
+			if(empty(data))
+			{
+				wrs_data	=	$(this).attr('wrs-data');
+			}
+			else
+			{
+				wrs_data	=	data;
+			}
 			
-			$('body').WRSJobModal('resize',{'height':height,'width':width}),
-			MAP.hide();
-			CHART.hide();
-			GRID.hide();
-			
-				NAV.find('.info_chart').hide();
-			
-
-				_height		=	height;
-				_height		=	_height-navHeight;
-				
-				
-
-					
-			var half		=	(_height-paddingCenter)/2;
-				_heightToUse=	half*2;
-				
-				if(empty(data)){
-					wrs_data	=	$(this).attr('wrs-data');
-				}else{
-					wrs_data	=	data;
-				}
-				
 
 				var isHistory	=	Boolean($(this).parent().parent().attr('isHistory'));	
 				
-				if(isHistory===TRUE){
-				//Save Historico
-
-				var saveHistory	=	[];
-		  			saveHistory['WINDOW']	=	wrs_data;
-		  			saveHistoryEvents(saveHistory,kendoUiTools['REPORT_ID']);
+				if(isHistory===TRUE)
+				{
+					//Save Historico
+					var saveHistory	=	[];
+			  			saveHistory['WINDOW']	=	wrs_data;
+			  			saveHistoryEvents(saveHistory,kendoUiTools['REPORT_ID']);
 				}
 				
+				//Removendo e inserindo o novo active
+  				$(this).parent().parent().find('.active_tools').removeClass('active_tools');
+  				$(this).addClass('active_tools');
+  				
+  				
+  				
 		  		$(this).parent().parent().attr('isHistory',TRUE);
 				
 				//Default
-				switch(wrs_data){case "grid"			:  case "chart"		: case "map"			: {GRID.removeAttr('style');ELEMENT.removeAttr('style');GRID.removeAttr('style-data');ELEMENT.removeAttr('style-data');};break;}
-				
-				ELEMENT.height((height-paddingCenter));
-				GRID.height(height-paddingCenter);
 				ELEMENT.show().removeClass('hide');
-//				GRID.show();
-				
-				var changeOrder		=	 function(flag){
-					
-					
-//Voltando para o formato com a grid para cima
-					
-					//Default
 
-					
-					var heightGrid		=	GRID.height();
-					var heightElement	=	ELEMENT.height();
-						
-					if(empty(GRID.attr('style-data')))
-					{
-						GRID.attr('style-data',GRID.attr('style'));
-					}else{
-						GRID.attr('style',GRID.attr('style-data'));
-						GRID.height(heightGrid);
-					}
-					
-					if(empty(ELEMENT.attr('style-data'))){
-						ELEMENT.attr('style-data',ELEMENT.attr('style'));
-					}else{
-						ELEMENT.attr('style',ELEMENT.attr('style-data'));
-						ELEMENT.height(heightElement);
-					}
-					
-					
-					if(empty(flag))
-					{
-						var offsetGrid 		= GRID.offset();
-						var offsetElement 	= ELEMENT.offset();
-						
-							GRID.offset({ top: offsetElement.top});
-							ELEMENT.offset({ top: offsetGrid.top});
-					}
-				};
-				
 				//Save alteration in MAP
 				wrsKendoUiChange('#'+idName,'WINDOW',wrs_data);
-				
-				
 
-				
-				
 				//CRiando a DIV do MAPA ou CHART
 				check_div_map_chart(wrs_data);
 				
 				//END criando div CHART ou MAPA
-				
-				switch(wrs_data)
-				{
-					case "grid_chart"	: GRID.show();break;
-					case "chart_grid"	: GRID.show();break;
-					case "map_grid"		: GRID.show();break;
-					case "grid_map"		: GRID.show();break;
-					case "grid"			: GRID.show();break;
-				}
-				
-				
-				switch(wrs_data)
-				{
-					case "grid"			: {GRID.show();ELEMENT.hide();};break;
-					case "chart"		: GRID.hide();					break;
-					case "map"			: GRID.hide();					break;
-					case "grid_chart"	: active_half=true;				break;
-					case "grid_map"		: active_half=true;				break;
-					case "chart_grid"	:{ active_half=true;};				break;
-					case "chart_map"	:{ active_half=true;};				break;
-					case "map_grid"		:{ active_half=true;};				break;
-					case "map_chart"	:{ active_half=true; };				break;
-				}
-				
-				
 				//Tamando para que possamos saber qual o tamano dos gráficos multiplos
-				ELEMENT.attr('chart-multiple-height',half);
+				ELEMENT.attr('chart-multiple-height',height/2);
 				
-				if(active_half)
-				{
-				//	GRID.show();
-			//		ELEMENT.show();
-					ELEMENT.height(half);
-					GRID.height(half);
-					
-					//ELEMENT.attr('height-chart',half);
-					
-				}else{
-					ELEMENT.height(_heightToUse);
-					ELEMENT.attr('height-chart',_heightToUse);
-					GRID.height(_heightToUse);
-				}				
+				/*
+				 * Criando Gráfico e Mapa
+				 */
 
-				
-
-				//Invertendo a orderm
-				if(	wrs_data=='chart_grid' ||
-					wrs_data=='map_grid'	||
-					wrs_data=='map_chart')
-				{
-					changeOrder(); 
-				}
-				
-				if(	wrs_data=='grid_chart' ||
-						wrs_data=='grid_map')	
-					{
-						changeOrder(true); 
-					}
-				
 				switch(wrs_data)
 				{
-					case "grid_chart"	: {WRSKendoUiChart(telerikGrid);}							break;
-					case "chart_grid"	: {WRSKendoUiChart(telerikGrid);};							break;
-					case "chart_map"	: { WRSKendoUiChart(telerikGrid);WRSMaps(telerikGrid);};	break;
-					case "map_grid"		: {WRSMaps(telerikGrid); WRSKendoUiChart(telerikGrid);};	break;
-					case "map_chart"	: {WRSMaps(telerikGrid);	WRSKendoUiChart(telerikGrid);};	break;
-					case "grid_map"		: {WRSMaps(telerikGrid); };									break;
-					case "chart"		: {WRSKendoUiChart(telerikGrid);};												break;
-					case "map"			: {WRSMaps(telerikGrid); goMapsResize(); };														break;
+					//case "grid"			: {GRID.show();ELEMENT.hide();}							;	break;
+					case "chart"		: WRSKendoUiChart(telerikGrid)								;	break;
+					case "map"			: WRSMaps(telerikGrid); 									;	break;
+					case "grid_chart"	: WRSKendoUiChart(telerikGrid)								;	break;
+					case "grid_map"		: WRSMaps(telerikGrid)										;	break;
+					case "chart_grid"	: WRSKendoUiChart(telerikGrid)								;	break;
+					case "chart_map"	: {WRSKendoUiChart(telerikGrid);WRSMaps(telerikGrid);}		;	break;
+					case "map_grid"		: {WRSMaps(telerikGrid); WRSKendoUiChart(telerikGrid);}		;	break;
+					case "map_chart"	: {WRSMaps(telerikGrid);	WRSKendoUiChart(telerikGrid);}	;	break;
 				}
 				
-				
-				
 
-				telerikGrid.resize();
+				resize_container_grid(idName,wrs_data);
 				
 		};
 
-		NAV.find('.wrs_tools_options_window a').unbind('click').click(WRSWindowGridEventToolsClick);
+		//Para reforçar e renovar os elementos quando for solicitado a troca de página 
+		if(click_auto==true && (loadByAba!=null && loadByAba!=undefined))
+		{
+			NAV.find('.wrs_tools_options_window a[wrs-data='+loadByAba+']').trigger('click');
+		}
+			
+			NAV.find('.wrs_tools_options_window a').unbind('click').click(WRSWindowGridEventToolsClick);
+	
 		
 		//Para o botão visão
 		var function_btn_open_type_vision		=	 function()
@@ -319,7 +212,6 @@
 	  				$(this).removeClass('active_tools');
 	  				if(wrsKendoUi.WINDOW	==	$(this).attr('wrs-data')){
 	  					$(this).addClass('active_tools');
-	  					
 	  				}
 	  		});
 	  	}
@@ -328,51 +220,531 @@
 		
 		NAV.find('.btn-open-type-vision').unbind('click').click(function_btn_open_type_vision);
 		
-		//Load event ptincipal
 		
-//		TRACE_DEBUG('empty');
-
-		//WRSWindowGridEventToolsClick('','grid_map');
-		if(!empty(loadByAba))
-			{
-					switch(loadByAba)
-					{
-						case "chart"		: 
-						case "grid_chart"	: 
-						case "chart_grid"	:
-						case "chart_map"	:
-						case "map_chart"	: WRSKendoUiChart(telerikGrid,null,true);				break;
-					}
-					
-					//only maps
-					switch(loadByAba)
-					{
-						case "map"			: 
-						case "grid_map"		:
-						case "map_grid"		:
-						case "map_chart"	:
-						case "chart_map"	: WRSMaps(telerikGrid);goMapsResize();				break;
-					}
-					
-				 
-				
-			}
     };
  
 }( jQuery ));
 
 
 
-
-function resize_container_grid(report_id,_isLoad)
+/*
+ * Nova versão de resize
+ * TODO: Depreciar a função WRSWindowGridEventToolsClick
+ * @link http://www.mandalatv.net/2013/08/redrawing-google-maps-with-a-tabs-interface/
+ * 
+ */
+function resize_container_grid(report_id,_type_grid)
 {
-	//telerikGrid.resize();
-	//goMapsResize()
-	//Elements
+	var type_grid		=	_type_grid;
+
+	/* START */
+
+	var layout_center_object	=		$('.ui-layout-center');
+	var layout_center			=	{
+										padding_left	:	parseInt(layout_center_object.css('padding-left').replace("px", "")),
+										padding_right	:	parseInt(layout_center_object.css('padding-right').replace("px", "")),
+										context			:	layout_center_object,
+										height			:	layout_center_object.innerHeight()-HEIGHT_ABAS,
+										width			:	layout_center_object.outerWidth()
+									};
 	
-	var telerikGrid 	= 	$('#'+report_id).data('kendoGrid');		
+	//Ajustando as bordas
+	layout_center.width		-=	(layout_center.padding_left+5);
+	layout_center.height	-= (layout_center.padding_left+layout_center.padding_right);
 	
-	$('#'+report_id).resize();
+	//Ajuste do tamanho do center layout removento o padding	
+	layout_center.width		=	layout_center.width-(layout_center.padding_left);
+	
+	
+	var html_class		=	
+								{
+									k_grid_page					:	'.k-grid-pager',
+									wrs_tools_options_window	:	'.wrs_tools_options_window .active_tools',
+									info_chart					:	'.info_chart',
+									grid_button_header_menu		:	'.grid_button_header_menu',
+									k_pager_sizes				:	'.k-pager-sizes',
+									k_dropdown_wrap				:	'.k-dropdown-wrap',
+									k_animation_container		:	'.k-animation-container',
+									k_grid_pager_a				:	'.k-grid-pager a',
+									k_grid_pager_input_input	:	'.k-grid-pager input',
+								}
+	
+	var options			=	{
+								'report_id'			:		report_id,
+								grid				:		$('#'+report_id),
+								map					:		$('#'+report_id+'Elements .map'),
+								chart				:		$('#'+report_id+'chart'),
+								kendoGrid			:		$('#'+report_id).data('kendoGrid'),
+								height				:		layout_center.height,
+								width				:		layout_center.width,
+								container_configure	:		$('#'+report_id+'NAV'),
+								container_elements	:		$('#'+report_id+'Elements'),
+								container_main		:		$('.'+report_id+'BOX'),
+								height_multiple		:		0,
+								width_multiple		:		0,
+								tag					:		html_class
+							};
+	
+	
+		//passando o tamanho da tela para a opções de configurações
+		options.container_configure.innerWidth(layout_center.width);
+		
+		//configurando tela de modal
+		$('body').WRSJobModal('resize',{'height':layout_center_object.outerHeight(),'width':layout_center_object.outerWidth()});
+		
+		//não deixa executa sem a GRID estar criada
+		if(options.grid==undefined || options.grid==null) return false;
+		
+		
+			//Garantindo que o campo type não seja nulo
+			if(type_grid==undefined || type_grid==null)
+			{
+				type_grid	=	options.container_configure.find(options.tag.wrs_tools_options_window).attr('wrs-data');
+				if(type_grid==undefined || type_grid==null) type_grid	=	'grid';
+			}
+		
+	
+			/*
+			 * Configure Default
+			 */
+
+			//Remove a opção de Paginação na header
+			options.container_configure.find(options.tag.k_grid_page).remove();
+			
+			//Elements
+			options.container_elements.width(options.width);
+			options.container_elements.height(options.height);
+			
+			//Hides
+			options.container_elements.hide();
+			options.grid.hide();
+			
+						
+			//CHART
+			if(options.chart) 
+			{
+				options.chart.hide();
+			}
+			
+			//MAP
+			if(options.map) 
+			{
+				options.map.hide();
+			}
+			
+			//configurando a opção para edição de gráfico
+			options.container_configure.find(options.tag.info_chart).hide();
+		
+			var change_order	=	function(options,_order)
+			{
+				
+				//Comandos para ordenação
+				var order_options	=	{
+											element	 :	{
+																map 	: 	'bottom',
+																chart	: 	'top'
+														},
+											container : {
+																element	:	'bottom',
+																grid	:	'top'
+														},
+											change 	  :	{
+																element 	: 	false,
+																container	:	true
+														}	
+										};
+				
+				var order		=	order_options;
+				
+					if(_order!=undefined && _order!=null)
+					{
+						order	=merge_objeto(order_options,_order);
+					}
+				
+				
+
+				
+					//Elementos
+					if(order.change.element)
+					{
+						if(order.element.chart=='top')
+						{
+							//0 é o z index
+							if(options.chart.index()!=0)
+								{
+									var soap		=	options.chart.detach();
+										options.map.before(soap);
+								}
+							
+							
+							 
+						}else{
+							
+							if(options.map.index()!=0)
+							{
+								var soap		=	options.map.detach();
+									options.chart.before(soap);
+							}
+							
+						}
+						
+					}
+					
+					//COntainer
+					
+					if(order.change.container)
+					{
+						if(order.container.element=='top')
+							{
+								//2 é o index que corresponde a ficar logo abaixo
+								if(options.container_elements.index()==2)
+								{
+									var soap		=	options.container_elements.detach();
+										options.grid.before(soap);
+								}
+							}else{
+								
+									var soap		=	options.container_elements.detach();
+										options.grid.after(soap);
+							}
+					}
+				
+			}
+
+			
+			
+			
+			
+			var show_map		=	 function(options,_clone)
+			{
+					var clone		=	_clone==undefined || _clone==null ? false : _clone;
+						options.map.width(options.width);
+						options.map.height(options.height);
+				
+						options.container_elements.show();
+						options.map.show();
+						
+					var _map		=	options.map.data('goMap').map;
+					
+						google.maps.event.trigger(_map, 'resize'); 
+						
+						if(clone)
+						{
+							clone_header_pagination(options);
+						}
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			var show_chart		=	 function(options,_clone)
+			{
+				var chart	=	options.chart.data("kendoChart");
+				var clone		=	_clone==undefined || _clone==null ? false : _clone;
+					
+					options.chart.width(options.width);
+					options.chart.height(options.height);
+
+					options.chart.show();
+					
+					chart.height						=	options.height;
+					chart.options.chartArea.height 		=	chart.height;
+					chart.options.chartArea.width 		=	chart.width;
+			      	chart.redraw();
+					chart.resize();
+				    
+					options.container_elements.show();
+				    options.container_configure.find(options.tag.info_chart).show();
+				    
+				    if(_clone)
+				    {
+				    	clone_header_pagination(options);
+				    }
+			}	
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			var show_grid		=	 function(options)
+			{
+				options.grid.show();
+				
+				if(options.kendoGrid) 
+				{
+					options.grid.width(options.width-1);
+					options.grid.height(options.height);
+
+					var options_resize = {
+								optionsWRS    	: options,
+							  resize: function( event ) 
+							  {
+								  	this.optionsWRS.grid.width(this.optionsWRS.width);
+								  	this.optionsWRS.kendoGrid.resize();	
+							  }
+							};
+					
+					var time_out 	= $.proxy( options_resize.resize, options_resize );
+					
+					setTimeout(time_out,50);
+					
+					options.kendoGrid.resize();	
+				}
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			//Criando a header de paginação
+			var clone_header_pagination		=	 function(options)
+			{
+				
+				
+				if(options.kendoGrid.dataSource._total<=0) return false;
+				
+					options.container_configure.find(options.tag.k_grid_page).remove();
+					options.container_configure.find(options.tag.grid_button_header_menu).prepend(options.grid.find(options.tag.k_grid_page).clone());
+					options.container_configure.find(options.tag.k_pager_sizes).append(' '+options.kendoGrid.dataSource._total);
+					
+					options.container_configure.find(options.tag.grid_button_header_menu).find(options.tag.k_dropdown_wrap).hide();
+					
+					//Select da nova header
+					options.container_configure.find(options.tag.grid_button_header_menu).find('.k-dropdown select').data('optionsWRS',options).show().change(function() {
+						var index		=	 $(this).find('option:selected').index();
+						var id			=	 '#'+$(this).parent().attr('aria-activedescendant');
+						var optionsWRS	=	$(this).data('optionsWRS');
+						
+							optionsWRS.grid.find(optionsWRS.tag.k_dropdown_wrap).trigger('click');	//ativa e clica
+							$(optionsWRS.tag.k_animation_container).hide();
+							$(id).parent().find('li:eq('+index+')').trigger('click');
+					}).find('option[value='+options.kendoGrid.dataSource._pageSize+']').prop('selected',true);
+					
+					
+					
+					//CRiando os eventos
+					options.container_configure.find(options.tag.k_grid_pager_a).data('optionsWRS',options);
+					options.container_configure.find(options.tag.k_grid_pager_a).unbind('click').click(function(){
+						var optionsWRS	=	$(this).data('optionsWRS');
+						var index		=	 $(this).index();
+							index		=	index >=3 ? index-1 :index	
+							
+							optionsWRS.grid.find(optionsWRS.tag.k_grid_pager_a+':eq('+index+')').trigger('click');
+					});
+					
+					//TODO:Usar já com o o eq(do header que será utilizado na estrutura)
+					options.container_configure.find(options.tag.k_grid_pager_input_input).data('optionsWRS',options);
+					options.container_configure.find(options.tag.k_grid_pager_input_input).unbind('keydown').keydown(function(e) {
+					   
+						if (e.keyCode == $.ui.keyCode.ENTER){
+					    	var optionsWRS	=	$(this).data('optionsWRS');
+					    	var ee = jQuery.Event("keydown");
+					    		ee.which = e.which; // # Some key code value
+					    		ee.keyCode = e.keyCode; // # Some key code value
+					    	
+					    		optionsWRS.grid.find(optionsWRS.tag.k_grid_pager_input_input).val($(this).val()).trigger(ee);
+								
+					    }
+					});
+					
+			}
+			
+			
+			
+			
+			
+			
+			
+			var container_half	=	 function(_options,_element_no_half)
+			{
+				var options			=	_options;
+				var element_no_half	=	_element_no_half==undefined || _element_no_half==null ? false : _element_no_half;
+					options.height	=	options.height/2;
+					
+					if(element_no_half==false)
+					{
+						options.container_elements.height(options.height);
+					}
+					
+					options.grid.height(options.height);
+				
+					return options;
+			}
+			
+			
+			
+			
+			var grid_chart		=	 function(_options)
+			{
+				var options		=	container_half(_options);
+					
+					change_order(options);
+					show_grid(options);
+					show_chart(options);
+			}
+			
+			
+			
+			var grid_map		=	 function(_options)
+			{
+				var options		=	container_half(_options);
+					
+					change_order(options);
+					show_grid(options);
+					show_map(options);
+					
+			}
+			
+			
+			
+			
+			
+			
+			var chart_grid		=	 function(_options)
+			{
+				var options		=	container_half(_options);
+				
+				var order_options	=	{
+						element	 :	{
+											map 	: 	'bottom',
+											chart	: 	'top'
+									},
+						container : {
+											element	:	'top',
+											grid	:	'bottom'
+									},
+						change 	  :	{
+											element 	: 	false,
+											container	:	true
+									}	
+						
+					};
+				
+
+					change_order(options,order_options);
+					
+					show_grid(options);
+					show_chart(options);
+					
+			}
+			
+			
+			
+			
+			var chart_map		=	 function(_options)
+			{
+				var options		=	container_half(_options,true);
+				var order_options	=	{
+						element	 :	{
+											map 	: 	'bottom',
+											chart	: 	'top'
+									},
+						change 	  :	{
+											element 	: 	true,
+											container	:	false
+									}	
+						
+					};
+				
+
+					change_order(options,order_options);
+					
+					show_chart(options,true);
+					show_map(options);
+			}
+			
+			
+			var map_grid		=	 function(_options)
+			{
+				var options		=	container_half(_options);
+
+				var order_options	=	{
+						container : {
+											element	:	'top',
+											grid	:	'bottom'
+									},
+						change 	  :	{
+											element 	: 	false,
+											container	:	true
+									}	
+						
+					};
+				
+
+					change_order(options,order_options);
+					
+					show_grid(options);
+					show_map(options);
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			var map_chart		=	 function(_options)
+			{
+				var options		=	container_half(_options,true);
+				var order_options	=	{
+						element	 :	{
+											map 	: 	'top',
+											chart	: 	'bottom'
+									},
+						change 	  :	{
+											element 	: 	true,
+											container	:	false
+									}	
+						
+					};
+				
+
+					change_order(options,order_options);
+					
+					show_chart(options,true);
+					show_map(options);
+			}
+			
+			switch(type_grid)
+			{
+				case "grid"			: 	show_grid(options)				;	break;
+				case "chart"		: 	show_chart(options,true)		;	break;
+				case "map"			:	show_map(options,true)			;	break;
+				case "grid_chart"	:   grid_chart(options)				; 	break;
+				case "grid_map"		: 	grid_map(options)				;	break;
+				case "chart_grid"	: 	chart_grid(options)				;	break;
+				case "chart_map"	: 	chart_map(options)				;	break;
+				case "map_grid"		: 	map_grid(options)				;	break;
+				case "map_chart"	: 	map_chart(options)				;	break;
+			}
+
+		
+	/*
+	 * TODO: IMplementar a fase final do Resize
+	 */	
+	/* END */
+/*
 	if(telerikGrid)
 	{
 		
@@ -385,17 +757,19 @@ function resize_container_grid(report_id,_isLoad)
 		
 			element.find('div').each(function(){
 				
+		
 				
-				/*
-				$('#ABA_56979535263963Elements .map').data('goMap').map.center.lat()
-				$('#ABA_56979535263963Elements .map').data('goMap').map.center.lng()
-				*/
+				$('#'+report_id).resize();
+				
+				
+				//$('#ABA_56979535263963Elements .map').data('goMap').map.center.lat()
+				//$('#ABA_56979535263963Elements .map').data('goMap').map.center.lng()
+				
 				$(this).width(_width);
 				$(this).height(_height);
 				
-				/*
-				 * @Link http://stackoverflow.com/questions/10913164/gomap-display-map-in-hidden-div
-				 */
+				// @Link http://stackoverflow.com/questions/10913164/gomap-display-map-in-hidden-div
+				 
 				if($(this).hasClass('map'))
 				{
 					//$(this).html('');
@@ -412,10 +786,10 @@ function resize_container_grid(report_id,_isLoad)
 					$(this).attr('id','CHART'+report_id);
 					
 					var chart_id	=	$('#CHART'+report_id);
-					/*
-						chart_id.width(_width);
-						chart_id.height(_height);
-					*/
+					
+					//	chart_id.width(_width);
+					//	chart_id.height(_height);
+					
 					var chart	=	chart_id.data("kendoChart");
 					       chart.resize();  
 				}
@@ -425,9 +799,17 @@ function resize_container_grid(report_id,_isLoad)
 			});
 			
 		
-	}
+	}*/
 	
 }
+
+
+function resize_common()
+{
+	var report_id		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
+		resize_container_grid(report_id);
+}
+
 
 
 function saveHistoryEvents(kendoParam,report_id)
@@ -515,7 +897,7 @@ var getRequestKendoUiDefault	=	{};
 			nav_options.attr('id','wrs_grid_options_default');	
 		
 		
-//		console.log('wrsConfigGridDefault::opts',opts);
+
 		
 
 		
@@ -551,6 +933,7 @@ var getRequestKendoUiDefault	=	{};
   		list_wrs_vision.find('li a').each(function(){
   				var _wrs_data		=	 $(this).attr('wrs-data');
   				$(this).removeClass('active_tools');
+
   				if(opts.WINDOW	==	_wrs_data){
   					$(this).addClass('active_tools');
   				}
@@ -667,7 +1050,6 @@ var getRequestKendoUiDefault	=	{};
   			$('.WRS_MEASURE_DRAG').find('li').each(function(){
   				var _json		=	 $(this).attr('json');
   				var _json_data	=	getJsonDecodeBase64(_json);
-  				//console.log($(this).attr('vvalue'),getJsonDecodeBase64(_json));  				
   				get_measures_title[_json_data.MEASURE_UNIQUE_NAME]	=	_json_data.MEASURE_NAME;
 
   			});
