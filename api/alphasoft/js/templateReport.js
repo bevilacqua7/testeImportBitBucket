@@ -98,29 +98,14 @@ function load_multiple_reports_autoload(obj){
 	}
 }
 
-function callback_load_report_generic_modal(data,return_params,nao_processa)
-{
-	
-	if(return_params==undefined) 	return_params=false;
-	
-	if(nao_processa==undefined) 	nao_processa=true;
-	//wrs_panel_layout.open('east');
-	
-	data = repair_reportname_kendoui(data);
-	
-	var _ROWS 				=	data.LAYOUT_ROWS;//.split(',');
-	var _COLUMNS 			=	data.LAYOUT_COLUMNS;//.split(',');
-	var _MEASURES 			=	data.LAYOUT_MEASURES;//.split(',');
-	var _FILTERS 			=	data.LAYOUT_FILTERS;//.split(',');
-	var _kendoui			=	$.parseJSON(base64_decode(data.REPORT_OPTIONS));
-	var _filter_selected 	=	'';
+function formata_filters_tmp(_FILTERS,_FILTERS_VALUES){
 	
 	var _FILTERS_TMP		=	(_FILTERS!='' && _FILTERS!=undefined)?report_array_to_key(_FILTERS.split(',')):'';
 	
-	if(data.FILTER_VALUES!='' && data.FILTER_VALUES!=null && data.FILTER_VALUES!=undefined && data.FILTER_VALUES.length>0)
+	if(_FILTERS_VALUES!='' && _FILTERS_VALUES!=null && _FILTERS_VALUES!=undefined && _FILTERS_VALUES.length>0)
 	{
-		var filtros_values 	= data.FILTER_VALUES.split('(_|_)');
-		var data_temp 		= "{"+data.FILTER_VALUES.replace('(_|_)','},{')+"}";
+		var filtros_values 	= _FILTERS_VALUES.split('(_|_)');
+		var data_temp 		= "{"+_FILTERS_VALUES.replace('(_|_)','},{')+"}";
 		//var full_temp 		= [];
 		
 	
@@ -132,16 +117,31 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 				var key					=	implode('.',key_full);	
 			
 					_FILTERS_TMP[key]	=	value;
-					
-				//full_temp.push({'class':class_temp,'data':data_temp2});
-				
-			}
-		
-		//_filter_selected = {'data':data_temp,'full':full_temp};
+									
+			}		
 		
 	}
 	
+	return base64_json(reoprt_convert_load(_FILTERS_TMP));
+}
 
+function callback_load_report_generic_modal(data,return_params,nao_processa)
+{
+	
+	if(return_params==undefined) 	return_params=false;
+	
+	if(nao_processa==undefined) 	nao_processa=true;
+	//wrs_panel_layout.open('east');
+	
+	data = repair_reportname_kendoui(data);
+	
+	var _ROWS 				=	data.LAYOUT_ROWS;
+	var _COLUMNS 			=	data.LAYOUT_COLUMNS;
+	var _MEASURES 			=	data.LAYOUT_MEASURES;
+	var _FILTERS 			=	data.LAYOUT_FILTERS;
+	var _FILTERS_VALUES 	=	data.FILTER_VALUES;
+	var _kendoui			=	$.parseJSON(base64_decode(data.REPORT_OPTIONS));
+	var _filter_selected 	=	'';
 	
 	var _param		=	{
 							'LAYOUT_ROWS'			:	wrs_base64encode(_ROWS),
@@ -149,31 +149,8 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 							'LAYOUT_MEASURES'		:	wrs_base64encode(_MEASURES),
 							'LAYOUT_FILTERS'		:	wrs_base64encode(_FILTERS),
 							'KendoUi'				:	base64_json(_kendoui),
-							'FILTER_TMP'			:	base64_json(reoprt_convert_load(_FILTERS_TMP))//wrs_base64encode(_filter_selected)
+							'FILTER_TMP'			:	formata_filters_tmp(_FILTERS,_FILTERS_VALUES)//wrs_base64encode(_filter_selected)
 						}
-
-/*	
-	var _param		=	{
-			'LAYOUT_ROWS'			:	ajustaTags(_ROWS),
-			'LAYOUT_COLUMNS'		:	ajustaTags(_COLUMNS),
-			'LAYOUT_MEASURES'		:	ajustaTags(_MEASURES),
-			'LAYOUT_FILTERS'		:	ajustaTags(_FILTERS),
-			'KendoUi'				:	_kendoui,
-			'filter_selected'		:	_filter_selected
-}
-
-*/
-	
-	//console.log('reportDATA: ',data,'kendoUi carregado: ',_kendoui, 'PARAM: ',_param);
-	/*
-	 * TODO: adicionar os campos abaixo para ir para as abas e voltar para a tela na hora de salvar:
-	 * - REPORT_AUTOLOAD
-	 * - REPORT_SHARE
-	 * - ver onde gravar os layouts e retorna-los
-	 * - USER_TYPE (grupos)
-	 */
-//	console.log('LAYOUT_FILTERS',ajustaTags(_FILTERS));
-	//console.log('filter_selected',_filter_selected);
 	
 	if(return_params)
 	{
@@ -247,7 +224,33 @@ function repair_reportname_kendoui(obj){
 		if (typeof attr !== typeof undefined && attr !== false) {
 			var param_options 		= 	$.parseJSON(base64_decode(obj.REPORT_OPTIONS));
 			param_options.TITLE_ABA		=	obj.REPORT_DESC;
+			
+			
+	 		// recriando variaveis redundantes dentro do objeto KendoUi (report_options)
+			param_options.REPORT_DESC			=	obj.REPORT_DESC;
+			param_options.REPORT_ID				=	obj.REPORT_ID;
+			
+			param_options.REPORT_SHARE			=	obj.REPORT_SHARE;
+			param_options.REPORT_AUTOLOAD		=	obj.REPORT_AUTOLOAD;
+			param_options.FILTER_TMP			=	formata_filters_tmp(obj.LAYOUT_FILTERS,obj.FILTER_VALUES);
+			
+			param_options.LAYOUT_ROWS			=	(obj.LAYOUT_ROWS=='' || obj.LAYOUT_ROWS==undefined || obj.LAYOUT_ROWS==null)			?'':base64_json(obj.LAYOUT_ROWS);
+			param_options.LAYOUT_COLUMNS		=	(obj.LAYOUT_COLUMNS=='' || obj.LAYOUT_COLUMNS==undefined || obj.LAYOUT_COLUMNS==null)	?'':base64_json(obj.LAYOUT_COLUMNS);
+			param_options.LAYOUT_MEASURES		=	(obj.LAYOUT_MEASURES=='' || obj.LAYOUT_MEASURES==undefined || obj.LAYOUT_MEASURES==null)?'':base64_json(obj.LAYOUT_MEASURES);
+			param_options.LAYOUT_FILTERS		=	(obj.LAYOUT_FILTERS=='' || obj.LAYOUT_FILTERS==undefined || obj.LAYOUT_FILTERS==null)	?'':base64_json(obj.LAYOUT_FILTERS);
+			
+			
+			/*
+	 		
+	 		// ainda não retornam do banco de dados portanto nao sao recriados e nem apagados na hora da gravacao mas existem separadamente no BD
+	 		unset($dadosJs->KendoUi->ALL_ROWS);
+	 		unset($dadosJs->KendoUi->ALL_COLS);
+	 		unset($dadosJs->KendoUi->ORDER_COLUMN);
+	 					
+			*/			
+			
 			obj.REPORT_OPTIONS	= base64_json(param_options);
+
 		}
 	}
 	return obj;
