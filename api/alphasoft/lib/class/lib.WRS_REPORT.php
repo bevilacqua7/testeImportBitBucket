@@ -82,11 +82,7 @@ class WRS_REPORT  extends  WRS_USER
  		$MEASURES 			= $dadosJs->LAYOUT_MEASURES->request;
  		$FILTERS 			= $dadosJs->LAYOUT_FILTERS->request;
  		$FILTERS_VALUES 	= '';
- 		
- 		
- 		
- 		
- 		
+ 		 		
  		if(trim($FILTERS)!='')
  		{
  			$arr_filtros_sel	=	array();
@@ -105,19 +101,12 @@ class WRS_REPORT  extends  WRS_USER
  				$FILTERS_VALUES = implode("(_|_)",$arr_filtros_sel);
  				
  			}
- 		}
- 		
+ 		} 		
 
- 		
- 		
- 		 		
  		$ALL_ROWS 			= ($dadosJs->KendoUi->ALL_ROWS=="1")?1:0;
  		$ALL_COLS 			= ($dadosJs->KendoUi->ALL_COLS=="1")?1:0;
- 		$COLS_ORDER 		= 0;
- 		
- 		//ajustando e garantindo que o nome do report no kendoUi seja o mesmo digitado pelo user
- 		$dadosJs->KendoUi->TITLE_ABA = $REPORT_DESC;
- 		
+ 		$COLS_ORDER 		= $dadosJs->KendoUi->ORDER_COLUMN;
+ 		 		 		
  		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi,true));
  		$REPORT_FORMULAS 	= '';
  		$REPORT_FILTER 		= '';
@@ -127,12 +116,35 @@ class WRS_REPORT  extends  WRS_USER
  		$REPORT_SHARE 		= fwrs_request('report_share')=='1'?1:0;
  		$REPORT_AUTOLOAD 	= fwrs_request('report_auto')=='1'?1:0;
 
+ 		// limpando variaveis redundantes de dentro do objeto dadosJS (report_options)
+ 		// sao recriados novamente em: templateReport.js:229 - 20151026
+ 		unset($dadosJs->filter_selected);
+ 		unset($dadosJs->LAYOUT_ROWS);
+ 		unset($dadosJs->LAYOUT_COLUMNS);
+ 		unset($dadosJs->LAYOUT_MEASURES);
+ 		unset($dadosJs->LAYOUT_FILTERS);
+ 		unset($dadosJs->KendoUi->REPORT_SHARE);
+ 		unset($dadosJs->KendoUi->REPORT_AUTOLOAD);
+ 		unset($dadosJs->KendoUi->FILTER_TMP);
+ 		unset($dadosJs->KendoUi->REPORT_DESC);
+ 		// elimina tambem NOME E ID para evitar duplicidade ao abrir relatorio
+ 		unset($dadosJs->KendoUi->TITLE_ABA);
+ 		unset($dadosJs->KendoUi->REPORT_ID);
+ 		// elimina informacoes de layouts indexadas
+ 		unset($dadosJs->KendoUi->LAYOUT_ROWS);
+ 		unset($dadosJs->KendoUi->LAYOUT_COLUMNS);
+ 		unset($dadosJs->KendoUi->LAYOUT_MEASURES);
+ 		unset($dadosJs->KendoUi->LAYOUT_FILTERS);
+ 		// posicoes que existem na tabela separadamente mas nao retornam na consulta, assim, não são retirados e nem recriados	
+ 		//unset($dadosJs->KendoUi->ALL_ROWS);
+ 		//unset($dadosJs->KendoUi->ALL_COLS);
+ 		//unset($dadosJs->KendoUi->ORDER_COLUMN);
+ 		
  		$sql = QUERY_PANEL::SAVE_SSAS_REPORT($REPORT_DESC, $SERVER_ID, $DATABASE_ID, $CUBE_ID,
                                       $ROWS, $COLUMNS, $MEASURES, $FILTERS, $FILTERS_VALUES, $ALL_ROWS, $ALL_COLS, $COLS_ORDER,
 									  $REPORT_OPTIONS, $REPORT_FORMULAS, $REPORT_FILTER, $REPORT_FLAG, 
 									  $LAYOUT_SHARE, $USER_TYPE, $REPORT_SHARE, $REPORT_AUTOLOAD);
 		
-
  		$query			=	 $this->query($sql);
  		$res			=	 $this->fetch_array($query);
  		$rep_id			=	 $res['REPORT_ID'];
