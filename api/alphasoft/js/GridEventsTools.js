@@ -103,7 +103,7 @@ var HEIGHT_ABAS		=	50;
 					{
 						if(ELEMENT.find('.'+type_div).length==0)
 						{
-							ELEMENT.append($('<div/>').hide().addClass(type_div).addClass('block').attr('id',idName+type_div));
+							ELEMENT.append($('<div/>').hide().addClass(type_div+' elements').addClass('block').attr('id',idName+type_div));
 						}else{							
 							ELEMENT.find('.'+type_div).show();
 						}
@@ -139,6 +139,11 @@ var HEIGHT_ABAS		=	50;
 			{
 				wrs_data	=	data;
 			}
+			
+			
+			
+			
+		
 			
 
 				var isHistory	=	Boolean($(this).parent().parent().attr('isHistory'));	
@@ -315,6 +320,8 @@ function resize_container_grid(report_id,_type_grid)
 			options.container_elements.width(options.width);
 			options.container_elements.height(options.height);
 			
+			options.container_elements.addClass('wrs_grid_elements_no_border');
+			
 			//Hides
 			options.container_elements.hide();
 			options.grid.hide();
@@ -375,19 +382,13 @@ function resize_container_grid(report_id,_type_grid)
 									var soap		=	options.chart.detach();
 										options.map.before(soap);
 								}
-							
-							
-							 
 						}else{
-							
 							if(options.map.index()!=0)
 							{
 								var soap		=	options.map.detach();
 									options.chart.before(soap);
 							}
-							
 						}
-						
 					}
 					
 					//COntainer
@@ -415,23 +416,36 @@ function resize_container_grid(report_id,_type_grid)
 			
 			
 			
-			var show_map		=	 function(options,_clone)
+			var show_map		=	 function(_options,_clone)
 			{
+				
 					var clone		=	_clone==undefined || _clone==null ? false : _clone;
+					var options		=	_options;
+					var height_map	=	options.height	-	1;
+					
 						options.map.width(options.width);
-						options.map.height(options.height);
+						options.map.height(height_map);
 				
 						options.container_elements.show();
 						options.map.show();
 						
-					var _map		=	options.map.data('goMap').map;
+					var _map		=	options.map.data('goMap');
 					
-						google.maps.event.trigger(_map, 'resize'); 
+						
+					
+					//resize
+					google.maps.event.trigger(_map.map, 'resize'); 
+					
+					_map.fitBounds('visible'); 
+					
+					//Mantem a visão anyerior
+					//var google_maps	=	_options.container_elements.data('google_map_last_reload');
 						
 						if(clone)
 						{
 							clone_header_pagination(options);
 						}
+						
 			}
 			
 			
@@ -441,21 +455,39 @@ function resize_container_grid(report_id,_type_grid)
 			
 			
 			
-			var show_chart		=	 function(options,_clone)
+			var show_chart		=	 function(_options,_clone)
 			{
+				var options	=	_options;
 				var chart	=	options.chart.data("kendoChart");
 				var clone		=	_clone==undefined || _clone==null ? false : _clone;
 					
-					options.chart.width(options.width);
+				var width_chart	=	options.width	-	3;
+				
+					options.chart.width(width_chart);
 					options.chart.height(options.height);
 
 					options.chart.show();
 					
-					chart.height						=	options.height;
-					chart.options.chartArea.height 		=	chart.height;
-					chart.options.chartArea.width 		=	chart.width;
-			      	chart.redraw();
-					chart.resize();
+					
+					if(chart!=undefined)
+					{
+						chart.height						=	options.height;
+						
+						chart.options.chartArea.height 		=	chart.height;
+						chart.options.chartArea.width 		=	width_chart;
+				      	chart.redraw();
+						chart.resize();
+					}else{
+						//multiple chart
+					/*	options.chart.find('.wrs_multiple_chart').each(function(){
+							var multiple	=	$(this).data("kendoChart");
+							
+								multiple.height						=	options.height;
+								multiple.redraw();
+								multiple.resize();
+							
+						});*/
+					}
 				    
 					options.container_elements.show();
 				    options.container_configure.find(options.tag.info_chart).show();
@@ -518,8 +550,23 @@ function resize_container_grid(report_id,_type_grid)
 			var clone_header_pagination		=	 function(options)
 			{
 				
-				
 				if(options.kendoGrid.dataSource._total<=0) return false;
+				
+				//salvando informações do google maps
+				var save_info_google_maps		=	 function(options)
+				{/*
+					if(options.map!=undefined )
+					{
+							var google_map_last_reload		=	options.map.data('goMap');
+							
+							if(google_map_last_reload!=undefined)
+							{
+								options.container_elements.data('google_map_last_reload',google_map_last_reload.map);
+							}
+		        	
+
+					}*/
+				}
 				
 					options.container_configure.find(options.tag.k_grid_page).remove();
 					options.container_configure.find(options.tag.grid_button_header_menu).prepend(options.grid.find(options.tag.k_grid_page).clone());
@@ -536,6 +583,10 @@ function resize_container_grid(report_id,_type_grid)
 							optionsWRS.grid.find(optionsWRS.tag.k_dropdown_wrap).trigger('click');	//ativa e clica
 							$(optionsWRS.tag.k_animation_container).hide();
 							$(id).parent().find('li:eq('+index+')').trigger('click');
+							
+							
+							save_info_google_maps(optionsWRS);
+							
 					}).find('option[value='+options.kendoGrid.dataSource._pageSize+']').prop('selected',true);
 					
 					
@@ -548,6 +599,9 @@ function resize_container_grid(report_id,_type_grid)
 							index		=	index >=3 ? index-1 :index	
 							
 							optionsWRS.grid.find(optionsWRS.tag.k_grid_pager_a+':eq('+index+')').trigger('click');
+							
+							save_info_google_maps(optionsWRS);
+							
 					});
 					
 					//TODO:Usar já com o o eq(do header que será utilizado na estrutura)
@@ -561,6 +615,7 @@ function resize_container_grid(report_id,_type_grid)
 					    		ee.keyCode = e.keyCode; // # Some key code value
 					    	
 					    		optionsWRS.grid.find(optionsWRS.tag.k_grid_pager_input_input).val($(this).val()).trigger(ee);
+					    		save_info_google_maps(optionsWRS);
 								
 					    }
 					});
@@ -664,7 +719,7 @@ function resize_container_grid(report_id,_type_grid)
 						
 					};
 				
-
+					options.container_elements.removeClass('wrs_grid_elements_no_border');
 					change_order(options,order_options);
 					
 					show_chart(options,true);
@@ -720,12 +775,14 @@ function resize_container_grid(report_id,_type_grid)
 					};
 				
 
+					options.container_elements.removeClass('wrs_grid_elements_no_border');
 					change_order(options,order_options);
 					
 					show_chart(options,true);
 					show_map(options);
 			}
 			
+
 			switch(type_grid)
 			{
 				case "grid"			: 	show_grid(options)				;	break;

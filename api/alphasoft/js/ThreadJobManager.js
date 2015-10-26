@@ -300,13 +300,15 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 			{
 				var _report_id	=	$(this).parent().attr('report_id');
 				
-				
+
 				
 				if(_exist_job_in_cancel(_report_id))
 				{
 					return true;
 				}
 				
+				//show grid
+				$('#'+_report_id+'Main').removeClass('hide');
 				
 				that.WRSTimerLoader('timeout',{report_id:_report_id});
 				
@@ -315,7 +317,9 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     			var _class			=	'WRS_PANEL';
     			var _event			=	'stopjob';
     			var param_request	=	{report_id:_report_id};
-     				
+     			
+    		
+    			
     			
     			
     				__add_mutex_job(_report_id);

@@ -260,7 +260,26 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			
 			
-			
+			var multiple_cube		=	 function()
+			{
+				
+				var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;
+				
+				//Verificando se existe multiplos cubos
+				if(_wrs_multiple_cube_event==1 || _wrs_multiple_cube_event==0)
+				{	
+					return null;
+				}
+				else
+				{
+					var jsonMukltiple			=	getJsonDecodeBase64($('.wrs_multiple_cube_event').find('option:selected').attr('json'));
+					return jsonMukltiple['CUBE_ID'];
+				}
+				
+				return null;
+				
+				
+			}
 			
 			
 			
@@ -295,6 +314,8 @@ function optionsDataConvert(gridValue,with_decode)
 											getElement['REPORT_ID']			=	generateReportId();
 											getElement['SUMARIZA']			=	1;
 											getElement['COLORS_LINE']		=	1;
+											
+//											getElement['MULTIPLE_CUBE']		=	multiple_cube();
 					
 											var optionsAba		=	{
 																		LAYOUT_ROWS			:base64_json({}),
