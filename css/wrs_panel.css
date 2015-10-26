@@ -1654,4 +1654,17 @@ border-radius: 3px;
 	top:-1px;
 	cursor:pointer;
 }
+
+
+.wrs_grid_elements .elements{
+ 	border-bottom:none;
+}
+.wrs_grid_elements .elements:first-child{
+ 	border-bottom:1px solid #58BCE7;
+}
  
+ 
+
+.wrs_grid_elements_no_border .elements:first-child{
+ 	border-bottom:none !important;
+}

@@ -6,8 +6,6 @@
  * @author Marcelo Santos
  * @date 23/03/2015 as 14:40
  * 
- * 
- * 
  * Site principal da API
  * @link www.telerik.com
  * 
@@ -23,13 +21,10 @@
  * @link http://www.telerik.com/forums/kendo-ui-integration
  * @link http://www.telerik.com/forums/kendo-ui
  * 
- * 
- * 
  * Inciar ordenação por outra coluna
  * 
  * http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#sort
  * 
- *
  */
 
 

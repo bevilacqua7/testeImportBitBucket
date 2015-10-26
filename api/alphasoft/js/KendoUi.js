@@ -658,6 +658,7 @@ function onDataBound(arg)
 			var _kendoUiParam=	$(nameID).attr('wrsKendoUi');
 			var wrsKendoUi	=	$.parseJSON(base64_decode(_kendoUiParam));
 			var wrsparam	=	$.parseJSON(base64_decode($(nameID).attr('wrsparam')));
+			
 				wrsKendoUiChange(nameID,'page_size',arg.sender.dataSource._pageSize);
 				 
 				
@@ -670,9 +671,6 @@ function onDataBound(arg)
 				ELEMENT.attr('maps_wrs','false');
 				
 				
-				
-				 
-	
 				
 						//Se o Somatório estiver ativo então faz a configuração do SUM
 						if(wrsKendoUi.ALL_ROWS)
@@ -877,14 +875,22 @@ function  themeSUM(nameID,arg,wrsParam)
 {
 		var find_last			=	'last-child';
 		
-		
+//Uncaught TypeError: Cannot read property 'field' of undefined		
 		//Garante que se for LATITUDE pega o ultimo elemento
 		$(nameID).find('.k-grid-header-locked').find('tr:last-child').find('th:'+find_last).each(function(){
-			if(arg.sender.headerIndex.field[$(this).attr('data-field')].map=="[LATITUDE]"){
-				var eq	=	$(this).index()-1;
-				find_last	=	 'eq('+eq+')';
+			
+			try{
+				if(arg.sender.headerIndex.field[$(this).attr('data-field')].map=="[LATITUDE]"){
+					var eq	=	$(this).index()-1;
+					find_last	=	 'eq('+eq+')';
+				}
+			} catch(e){
+				console.log('Falha na leitura de mapas mas pode não haver essa informação');
 			}
+			
 		});
+		
+		
 		//END
 		
 		$(nameID).find('.k-grid-content-locked').find('tr').find('td:'+find_last).each(function(){

@@ -271,6 +271,7 @@ function getFisrtChartValue(ChartDefault)
 function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal) 
 	    {	
 			
+
 			var onlyDefault		=	empty(_onlyDefault) ? false : _onlyDefault; //Apenas quando for configurações Default
 			var idName			=	KendoUi.element.attr('id');
 			var GRID			=	$('#'+idName);

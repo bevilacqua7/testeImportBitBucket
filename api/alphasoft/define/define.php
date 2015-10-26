@@ -6,6 +6,9 @@ if(!isset($_SESSION)){
 	session_start();
 }
 
+
+define('WRS_VERSION','0.0.1');
+
 /**
  * Para informar se existe debug
  * @var boolean
@@ -46,7 +49,19 @@ if(!defined('JS_PATH_API') && defined('PATH_MAIN')){
  */
 define('URL_CONNECT','ncon');
 
-define('RAND_TOKEN',rand(0,999999));
+$rand_token_version		=	WRS_VERSION;
+
+switch($_SERVER['HTTP_HOST'])
+{
+	case 'alphaweb':
+	case '179.111.208.168':	 $rand_token_version=rand(0,999999); break;
+}
+
+
+
+
+
+define('RAND_TOKEN',$rand_token_version);
 
 /**
  * Eventos para o WRS

@@ -14,22 +14,18 @@ function WRSMaps(KendoUi)
 	var MAP				=	$('#'+idName+'Elements .map');
 	var BOX				=	$('.'+idName+'BOX');
 
-
-	
-//	$('#'+idName+'Elements .map').data('WRS').setMaps('')
 	var _data		=	telerikGrid._data;
 	var maps		=	[];
-	//var tmpElParam	=	{_width:ELEMENT.width(),_height:ELEMENT.height()}
-		
+
 	MAP.height(ELEMENT.height());
 	MAP.width(ELEMENT.width());
 	 
 	MAP.show();
+	
 	if(ELEMENT.attr('maps_wrs')=='true') 
 	{
 		return true;
 	}
-	
 	
 	/*
 	 * Pesquisando o campo latitude
@@ -46,11 +42,7 @@ function WRSMaps(KendoUi)
 	/*
 	 * Processando dos Dados
 	 */
-	/*
-	if(!isLatitude(_data[0],'C003')){
-		return false;
-	}*/
-	
+
 	var headerIndex		=	telerikGrid.headerIndex;
 	var columnMap		=	[];
 	var backColumn		=	'';
@@ -86,6 +78,8 @@ function WRSMaps(KendoUi)
 			return _dataDeep['title'];
 		}
 	}
+	
+	
 	
 	for(ho in headerIndex)
 	{
@@ -144,16 +138,17 @@ function WRSMaps(KendoUi)
 						}else{
 							_title		=	titleByColumn[_cmp];
 						}
-						maps[maps.length]	=	 {
-														latitude	:	_explode[0],
-														longitude	:	_explode[1],
-														icon		: 	(data_value.indexOf('setinha_verde')>0)?'./api/gomap/map-marker-32_green.png':((data_value.indexOf('setinha_vermelha')>0)?'./api/gomap/map-marker-32_pink.png':((data_value.indexOf('yellow_square')>0)?'./api/gomap/map-marker-32_yellow.png':'./api/gomap/map-marker-32_blue.png')),
-														title		:	 _title,
-														html		: 	'<h5>'+_title+'</h5>'+data_value,
-														id			:	_data[obj].C000
-												};
 						
-						indexLatLon[_explode[0]+'_'+_explode[1]]=true;;
+							maps[maps.length]	=	 {
+															latitude	:	_explode[0],
+															longitude	:	_explode[1],
+															icon		: 	(data_value.indexOf('setinha_verde')>0)?'./api/gomap/map-marker-32_green.png':((data_value.indexOf('setinha_vermelha')>0)?'./api/gomap/map-marker-32_pink.png':((data_value.indexOf('yellow_square')>0)?'./api/gomap/map-marker-32_yellow.png':'./api/gomap/map-marker-32_blue.png')),
+															title		:	 _title,
+															html		: 	'<h5>'+_title+'</h5>'+data_value,
+															id			:	_data[obj].C000
+													};
+						
+						indexLatLon[_explode[0]+'_'+_explode[1]]	=	true;
 					}
 			}
 			
@@ -168,37 +163,16 @@ function WRSMaps(KendoUi)
 			$.goMap.createMarker(maps[m]); 
 		}
 	}else{
-			MAP.goMap({markers: maps, hideByClick: true,zoom:13,streetViewControl: true});
+			var _zoom		=	10;
+			var options		=	{markers: maps, hideByClick: true,/*zoom:_zoom,*/streetViewControl: true};
+			//var options		=	{markers: maps, hideByClick: true,zoom:_zoom,streetViewControl: true};
+			MAP.goMap(options);
+			
+			//var goMapCurrent	=	 MAP.data('goMap');
+			
 			ELEMENT.attr('maps','true');
 	}
-	
-	/*
-	
-	var posCenter	=	maps[js_rand(1,maps.length)];
 		
-		// Garate que não vá informações sem latitude para o mapa
-		if(!isLatitude(posCenter,'latitude'))
-		{
-			for(oo in maps)
-			{
-				if(maps[oo]['latitude'])
-				{
-					posCenter	=	maps[oo];
-				}
-			}
-		}
-	
-		
-		if(isLatitude(posCenter,'latitude') && maps.length){
-			goMapsResize(posCenter.latitude,posCenter.longitude);
-		}else{
-			goMapsResize();
-		}
-	
-	*/
 		ELEMENT.attr('maps_wrs','true');
-
-
-
 
 }
