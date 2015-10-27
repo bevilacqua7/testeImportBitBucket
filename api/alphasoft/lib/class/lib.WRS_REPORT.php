@@ -105,9 +105,8 @@ class WRS_REPORT  extends  WRS_USER
 
  		$ALL_ROWS 			= ($dadosJs->KendoUi->ALL_ROWS=="1")?1:0;
  		$ALL_COLS 			= ($dadosJs->KendoUi->ALL_COLS=="1")?1:0;
- 		$COLS_ORDER 		= $dadosJs->KendoUi->ORDER_COLUMN;
+ 		$COLS_ORDER 		= ($dadosJs->KendoUi->ORDER_COLUMN=="1")?1:0;
  		 		 		
- 		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi,true));
  		$REPORT_FORMULAS 	= '';
  		$REPORT_FILTER 		= '';
  		$REPORT_FLAG 		= '';
@@ -140,6 +139,9 @@ class WRS_REPORT  extends  WRS_USER
  		//unset($dadosJs->KendoUi->ALL_COLS);
  		//unset($dadosJs->KendoUi->ORDER_COLUMN);
  		
+ 		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi,true));
+ 		
+ 		
  		$sql = QUERY_PANEL::SAVE_SSAS_REPORT($REPORT_DESC, $SERVER_ID, $DATABASE_ID, $CUBE_ID,
                                       $ROWS, $COLUMNS, $MEASURES, $FILTERS, $FILTERS_VALUES, $ALL_ROWS, $ALL_COLS, $COLS_ORDER,
 									  $REPORT_OPTIONS, $REPORT_FORMULAS, $REPORT_FILTER, $REPORT_FLAG, 
@@ -153,7 +155,8 @@ class WRS_REPORT  extends  WRS_USER
  			echo $error."<hr>Query: ".$sql;
  		}else{
  			$JS=<<<HTML
- 		$('#myModalGenericConfig').modal('hide');		
+ 		$('#myModalGenericConfig').modal('hide');
+ 		atualiza_id_aba_ativa({$rep_id});
 		WRS_ALERT('Relatório salvo com sucesso','success'); 
 HTML;
 			echo fwrs_javascript($JS);
