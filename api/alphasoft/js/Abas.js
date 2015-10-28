@@ -1012,6 +1012,8 @@ function optionsDataConvert(gridValue,with_decode)
 
 					
 					//tagABA.find('.'+tag_aba_empty).each(function(){$(this).remove();});
+					// atualizacao do tratamento acima que nao funcionava
+					$('.WRS_ABA ul li').each(function(){ if($(this).attr('class')==''){ $(this).remove(); } });
 
 					var _object_open		=	[];
 					var _kenoUiWindow		=	[];
