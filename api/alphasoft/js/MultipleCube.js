@@ -11,19 +11,94 @@ function wrs_multiple_cube_event()
 	//MODAL_LOADING_WRS_PANEL('GERANDO_MULTI_CUBE_TITLE','GERANDO_MULTI_CUBE_BODY','hide');
 	
 	var CUBE_ID			=	$(this).val();
+	var wrs_multiple_cube_event_class	=	$('.wrs_multiple_cube_event');
+	var multiple_data					=	wrs_multiple_cube_event_class.data('wrsParan');
+//	TRACE_DEBUG('type_event::'+multiple_data.type_event);
+	
+	//wrs_multiple_cube_event_class.data('wrsParan',{'val':CUBE_ID,'type_event':type_event});
+	if(multiple_data.type_event!='no_change'){
+			var aba_current		=	get_aba_active();
+			
+			if(aba_current['MULTIPLE_CUBE_ID']!=CUBE_ID)
+			{
+				WRS_CONFIRM(LNG('ABA_CHANGE_CUBE_ID'),'warning',event_cube_change_confirm);
+			}
+	}
+	else
+	{
+		event_cube_change_confirm(true);		
+	}
+}
+
+
+function multiple_cube_status_change(no_change)
+{
+	var wrs_multiple_cube_event_class	=	$('.wrs_multiple_cube_event');
+	var multiple_data					=	wrs_multiple_cube_event_class.data('wrsParan');
+	
+	if(multiple_data==undefined || multiple_data==null)
+	{
+		multiple_data	=	{'val':null,type_event:false};
+	}
+	
+	
+	var val								= 	multiple_data.val; 
+	var type_event						=	'no_change';
+	
+	if(no_change==undefined)
+	{
+		type_event						=	'no_change';
+	}else{
+		type_event						=	no_change;
+	}
+	
+	wrs_multiple_cube_event_class.data('wrsParan',{'val':val,'type_event':type_event});
+}
+
+function event_cube_change_confirm(confirm)
+{
+	
+	var wrs_multiple_cube_event_class	=	$('.wrs_multiple_cube_event');
+	var that							=	wrs_multiple_cube_event_class.find('option:selected');
+	var CUBE_ID							=	that.val();
+	var multiple_data					=	wrs_multiple_cube_event_class.data('wrsParan');
+	var val								= 	multiple_data.val; 
+	var type_event						=	multiple_data.type_event;
+	 
+	
+
+	type_event	=	 null;
+	
+	
+	//Voltando a configuração
+	if(!confirm)
+	{
+		wrs_multiple_cube_event_class.selectpicker('val', val);
+		wrs_multiple_cube_event_class.data('wrsParan',{'val':val,'type_event':type_event});
+		return true;
+	}
+
+	wrs_multiple_cube_event_class.data('wrsParan',{'val':CUBE_ID,'type_event':type_event});
+	
+	
+
+
+	
+
 	var _file			=	'WRS_PANEL';
 	var _class			=	'WRS_PANEL';
 	var _event			=	'change_cube';
 	var param_request	=	[];
-	var json			=	$(this).find('option:selected').attr('json');
-//	setLoading($('.wrs_panel_measure_atribute'));
+	var json			=	that.attr('json');
 	
-	
+
 	var filter_icon		=	$('.wrs_panel_filter_icon');
 	
 	if(filter_icon.attr('filter_hide')=='true'){
 		filter_icon.trigger('click');
 	}
+	
+
 	
 	
 	param_request['CUBE_ID']				=	CUBE_ID;
@@ -33,9 +108,19 @@ function wrs_multiple_cube_event()
 	CHANGE_CUBE_ELEMENTS	=	'';
 	CHANGE_CUBE_ELEMENTS	=	getElementsWindowToChangeCube();
 	change_cube(CUBE_ID);
+	
+	//trocando as configurações da aba ativa
+	if(multiple_data.type_event!='no_change')
+	{
+		var aba_active			=	get_aba_active();
+		var aba_active_data		=	aba_active.data;
+		
+			aba_active_data['MULTIPLE_CUBE_ID']	=	aba_active.kendoUi['MULTIPLE_CUBE_ID']	=	CUBE_ID;
+			aba_active_data.KendoUi				=	base64_json(aba_active.kendoUi);
+			set_aba_param(aba_active_data);
+	}
+	
 }
-
-
 
 
 

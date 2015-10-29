@@ -379,9 +379,9 @@ class WRS_PANEL  extends WRS_USER
 			$this->setCube($SSAS_USER[$this->_cube_pos_session]);
 			
 		}
-		
+
 		//caso ainda não tenha sido inserida na sessão faz a pesquisa
-		if(empty($relationships))
+		//if(empty($relationships))
 		{	
 			$wrs_measure_relationships['relationships']	=	WRS::SET_SSAS_RELATIONSHIPS_BY_CUBE($CUBE, $attibuteMeasure->getAtributos($SERVER, $DATABASE, $CUBE));
 		}
@@ -710,6 +710,9 @@ class WRS_PANEL  extends WRS_USER
 			//Cubo simples 
 			$this->getMeasuteAttribute($SERVER, $DATABASE, $CUBE);
 		}
+		
+		
+		
 				//End processosmultiplos cubos
 		
 		//Gravando as informações na Sessão ds Metricas e Atributos
@@ -740,12 +743,9 @@ class WRS_PANEL  extends WRS_USER
 			$getRequestKendoUi['REPORT_ID']	=	WRS::GET_REPORT_HISTORY_CURRENT($CUBE);
 		}
 		
-//		WRS_DEBUG_QUERY($_REQUEST);
-//		WRS_DEBUG_QUERY($getRequestKendoUi);
-		//WRS_DEBUG_QUERY($getRequestKendoUi);
+
 		$getRequestWrsExceptions['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$getRequestWrsExceptions,$DillLayout);
 		
-
 		
 		$TelerikUi->setId($getRequestKendoUi['REPORT_ID']);		
 		$TelerikUi->setWrsKendoUi($getRequestKendoUi); //Passando para Gravar no JS as integrações recebidas
