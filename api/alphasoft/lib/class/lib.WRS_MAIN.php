@@ -24,7 +24,6 @@ class WRS_MAIN  extends WRS_BASE
 			case 'logout' 		: $this->logout(); break;
 		}
 		
-		
 		if(!empty($event))  exit();
 		
 		// ao entrar na pagina inicial do sistema, apaga os historicos existentes para nao interferir na criacao de novos relatorios
@@ -135,7 +134,7 @@ class WRS_MAIN  extends WRS_BASE
 		
 		$cubo_info	=	 WRS::GET_SSAS_USER();
 		$dashboard	=	NULL;
-		
+
 		$EDITION_TITLE		=	LNG('HTML_CUBE_EDITION');
 		$ATUALIZACAO_TITLE	=	LNG('HTML_CUBE_UPDATE');
 
@@ -143,6 +142,8 @@ class WRS_MAIN  extends WRS_BASE
 		
 		foreach($cubo_info as $label =>$value)
 		{
+			//if(empty($label)) continue;//garante que não passe lixo para o sistema o campo obrigatóriamente tem que ter ID
+			
 			$DATABASE_DESC			=	$value['DATABASE_DESC'];
 			$CUBE_EDITION			=	$value['CUBE_EDITION'];
 			$CUBE_UPDATE			=	$value['CUBE_UPDATE'];
@@ -152,12 +153,15 @@ class WRS_MAIN  extends WRS_BASE
 			$WARNING				=	NULL;
 			$flag_cube_indisponivel	=	false;
 			
+			
 			$LINK				=	'run.php?file=WRS_PANEL&class=WRS_PANEL&'.TAG_URL_CUBE_SELECTED.'='.($count)."&exec_reports=1";
 			$LINK_LAYOUT		=	'run.php?file=WRS_PANEL&class=WRS_PANEL&'.TAG_URL_CUBE_SELECTED.'='.($count)."&exec_reports=0";
 			$TITLE_LINK			=	LNG('MAIN_OPEN_REPORT');
 			$TITLE_LINK_LAYOUT	=	LNG('MAIN_OPEN_LAYOUT');
 			
 			$count++;
+			//Garantindo que não vá lixo
+			if(empty($DATABASE_IMAGE)) continue;
 			
 			if(empty($CUBE_UPDATE) && empty($value['DATABASE_LINK']) || $STATUS==0)
 			{

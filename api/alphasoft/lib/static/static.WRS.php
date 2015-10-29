@@ -476,7 +476,7 @@ class WRS
 		self::declare_REPORT_HISTORY($TAG_NAME, $cube_id, $report_id);
 		
 		if(empty($history)) return false;
-		
+
 		 $_SESSION[$TAG_NAME][$cube_id][$report_id]	=	$history;
 	}
 	
@@ -488,6 +488,8 @@ class WRS
 	 */
 	public static function GET_REPORT_HISTORY_CURRENT($cube_id,$return_data=false)
 	{
+		$multiple_cube		=	array();
+		
 		$TAG_NAME		=	'CUBE_REPORT_HISTORY';
 		$TMPMktime		=	fwrs_mktime();
 		$ReportId		=	'ABA_'.rand(0,99999999999999);
@@ -495,20 +497,28 @@ class WRS
 		
 		if(isset($_SESSION[$TAG_NAME][$cube_id]))
 		{
-			$cube_detail	=	 $_SESSION[$TAG_NAME][$cube_id];
 			
-			foreach($cube_detail as $data)
+			$multiple_cube		=	WRS::GET_SSAS_USER_MULTIPLE($cube_id);
+			
+			
+			foreach($multiple_cube as $cube_session)
 			{
-				$data				=	 json_decode(base64_decode($data),true);
-				$dataHitorico		=	$data[0];
-				//WRS_DEBUG_QUERY($dataHitorico);
+				//
+					$cube_detail	=	 $_SESSION[$TAG_NAME][$cube_session['CUBE_ID']];
 					
-					if($dataHitorico['mktime']<=$TMPMktime){
-						$TMPMktime		=	$dataHitorico['mktime'];
-						$ReportId		=	$dataHitorico['kendoUi']['REPORT_ID'];
-						$report_history	=	$dataHitorico;
+					foreach($cube_detail as $data)
+					{
+						$data				=	 json_decode(base64_decode($data),true);
+						$dataHitorico		=	$data[0];
+						//WRS_DEBUG_QUERY($dataHitorico);
+							
+							if($dataHitorico['mktime']<=$TMPMktime){
+								$TMPMktime		=	$dataHitorico['mktime'];
+								$ReportId		=	$dataHitorico['kendoUi']['REPORT_ID'];
+								$report_history	=	$dataHitorico;
+							}
+						
 					}
-				
 			}
 			
 		}
@@ -539,8 +549,6 @@ class WRS
 			{
 				unset($_SESSION[$TAG_NAME][$cube_id]);
 			}
-			
-		
 	}
 	
 	

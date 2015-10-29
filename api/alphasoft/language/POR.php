@@ -24,6 +24,7 @@
 	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executar a Consulta <b>%s</b> <br>";
 	$language ['ABA_IN_USER'] 						= "Consulta em uso";
 	$language ['ABA_LIMIT_SEE'] 					= "Não é possivel remover a Consulta <b>%s</b><br> pelo menos uma deve continuar visível.";
+	$language ['ABA_CHANGE_CUBE_ID'] 					= "As informações da ABA será apagada pois pertence á outro cubo";
 	
 	$language ['JOB_COMPLETE_LOAD'] 		= "Consulta <b>%s</b> foi concluída";
 	$language ['JOB_COMPLETE'] 				= "Não existem mais Consultas em execução";

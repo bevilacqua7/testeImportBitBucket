@@ -179,6 +179,8 @@ function wrd_grid_window_to_form()
 	var param			=	 _data.param_original;
 	var index			=	 $(this).parents('.body_grid_window').first().children().index($(this));
 	var is_exception 	= 	 ('exception' in param && typeof param['exception'] == 'object');
+	
+	
 	if(!is_exception){
 		grid_window_modal(_local_merge_array(primary,option),table);
 	}else{
@@ -205,6 +207,7 @@ function wrd_grid_window_to_form_dbl(arg)
 	}else{
 		if(param['actionDouble'])
 		{			
+
 			var toAction	=	param['actionDouble'];
 			
 			window[toAction](_data[index]);				
