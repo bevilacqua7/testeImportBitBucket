@@ -1532,7 +1532,6 @@ function wrs_run_filter()
 					 */
 				
 					
-					
 			//Verificnado se existe alterações de pesquisa 
 					
 					//foreach(param_request);
@@ -1587,19 +1586,19 @@ function wrs_run_filter()
 					
 					 _param_request	=	merge_filter_data(_param_request,_param_request_obj);
 					 
-					 
+
 	//				 TRACE_DEBUG('START::'+_param_request['REPORT_ID']);
 					 
 					 //Merge com a estrutura da aba
 					 _param_request	=	merge_filter_data(_param_request,_data_aba);
 
 				
-					 
 					
 					 //console.log('_param_request_param_request',_param_request);
 						
 					//Passando o ID do Cubo na sessão
 					var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;
+					
 					//Verificando se existe multiplos cubos
 					if(_wrs_multiple_cube_event==1 || empty(_wrs_multiple_cube_event))
 					{	
@@ -1607,9 +1606,12 @@ function wrs_run_filter()
 						_param_request[TAG_URL_CUBE_SELECTED]=CUBE_S;
 					}else{
 						var jsonMukltiple			=	$('.wrs_multiple_cube_event').find('option:selected').attr('json');
+
 						_param_request['json']		=	jsonMukltiple;
+						
 					}
 					
+
 					
 					/*
 					 * Verificnado os Filtros simples
@@ -1700,7 +1702,8 @@ function wrs_run_filter()
 		
 		
 		$('body').ThreadJobManager(_param_request['REPORT_ID']);
-		
+
+
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 		
 		//AUTO LOAD
@@ -2055,11 +2058,16 @@ function force_show_drag_on_drop(painel_origem,count){
 	 //Evento de click para gerar o relatório
 	 $('.wrs_run_filter').unbind('click').click(wrs_run_filter);
 	 
+	 var wrs_multiple_cube_event_class	=	$('.wrs_multiple_cube_event');
 	 //Api SElect para multiplos cubos
-	 $('.wrs_multiple_cube_event').selectpicker();
-	 $('.wrs_multiple_cube_event').change(wrs_multiple_cube_event);
+	 wrs_multiple_cube_event_class.selectpicker();
+	 
+	 
+	 var val	=	wrs_multiple_cube_event_class.find('option:selected').val();
 	 
 
+	 wrs_multiple_cube_event_class.data('wrsParan',{'val':val,type_event:false});
+	 wrs_multiple_cube_event_class.change(wrs_multiple_cube_event);
 	 
 	 //Escondendo o container de todos os relatório
 	 $('.container_panel_relatorio').hide();

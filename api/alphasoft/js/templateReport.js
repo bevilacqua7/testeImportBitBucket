@@ -30,6 +30,10 @@ function ajustaTags(arr){
 
 function callback_check_line_generic_modal(data){
 	var attr = data.visao_atual;
+	
+	
+
+	
 	if (typeof attr !== typeof undefined && attr !== false) {
 		if(data.obj_sel.hasClass('selecao_icon')){
 			data.obj_sel.removeClass('selecao_icon');
@@ -90,7 +94,6 @@ function reoprt_convert_load(inputArray)
 
 function load_multiple_reports_autoload(obj){
 	if(typeof obj=='object'){
-		console.log('Reports autoload:',obj);
 		for(var key in obj){
 			var report = obj[key];
 			//callback_load_report_generic_modal($.parseJSON(report));
@@ -218,12 +221,19 @@ function carrega_grid_list_reports(options){
 }
 
 
-function repair_reportname_kendoui(obj){
+function repair_reportname_kendoui(_obj){
+	
+	var obj		=	_obj;
+	
+
 	if(obj!=undefined && typeof obj == 'object'){
 		var attr = obj.REPORT_OPTIONS;
 		if (typeof attr !== typeof undefined && attr !== false) {
+			
+			
+			
 			var param_options 		= 	$.parseJSON(base64_decode(obj.REPORT_OPTIONS));
-			param_options.TITLE_ABA		=	obj.REPORT_DESC;
+				param_options.TITLE_ABA		=	obj.REPORT_DESC;
 			
 			
 	 		// recriando variaveis redundantes dentro do objeto KendoUi (report_options)
@@ -239,6 +249,9 @@ function repair_reportname_kendoui(obj){
 			param_options.LAYOUT_MEASURES		=	(obj.LAYOUT_MEASURES=='' || obj.LAYOUT_MEASURES==undefined || obj.LAYOUT_MEASURES==null)?'':base64_json(obj.LAYOUT_MEASURES);
 			param_options.LAYOUT_FILTERS		=	(obj.LAYOUT_FILTERS=='' || obj.LAYOUT_FILTERS==undefined || obj.LAYOUT_FILTERS==null)	?'':base64_json(obj.LAYOUT_FILTERS);
 			
+			
+//			obj.REPORT_ID	=	
+				param_options.REPORT_ID				=	'A'+obj.REPORT_ID;
 			
 			/*
 	 		
@@ -264,6 +277,7 @@ function btn_window_grid_event_report(data)
 	var values					=	 get_grid_window_values_form();
 
 	var _data					=	 $('#myModal, .body_grid_window').data('wrsGrid');
+	
 	var param					=	 _data.param_original;
 	var visao					=	'grid';
 	
@@ -331,6 +345,8 @@ function btn_window_grid_event_report(data)
 //		console.log('TODO: acoes multiplas nas guias',{'evento':action_type,'arrObjetos':arrObjetosSelecionados});
 		
 	}else if(qtde_linhas_selecionadas==1){
+
+		
 
 		var objDados = param_options = null;
 		if(visao=='icon'){

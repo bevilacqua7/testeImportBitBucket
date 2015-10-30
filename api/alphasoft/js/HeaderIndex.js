@@ -32,11 +32,16 @@ function WRSHeaderIndex(kendoUi)
 		var limit		=	0;
 		var category	=	[];
 		
+		
 		for(ifnm in indexFullNameMeasure)
 		{
 			var label	=	indexFullNameMeasure[ifnm];
 			 
-				measure_title[ifnm]	=	tmpComeBack.field[label[0]].title;
+				try{
+					measure_title[ifnm]	=	tmpComeBack.field[label[0]].title;
+				}catch(e){
+					console.log('pode não existir title');
+				}
 			
 				if(limit)continue;
 	

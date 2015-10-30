@@ -6,8 +6,6 @@
  * @author Marcelo Santos
  * @date 23/03/2015 as 14:40
  * 
- * 
- * 
  * Site principal da API
  * @link www.telerik.com
  * 
@@ -23,13 +21,10 @@
  * @link http://www.telerik.com/forums/kendo-ui-integration
  * @link http://www.telerik.com/forums/kendo-ui
  * 
- * 
- * 
  * Inciar ordenação por outra coluna
  * 
  * http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#sort
  * 
- *
  */
 
 
@@ -147,7 +142,8 @@ class KendoUi
 						'FILTER_TMP',		//Contem a estrutura do filtro usada para o histórico
 						'QUERY_ID',			//ID da query que foi requisitada
 						'IS_REFRESH',		//identifica se foi executado o F5 e ou o frefresh na tela
-						'TOP_CONFIG'		//COnfigurações dos tipos de TOPS e onde
+						'TOP_CONFIG',		//COnfigurações dos tipos de TOPS e onde
+						'MULTIPLE_CUBE_ID'		//Caso exista multiple cubos ele é preenchido com o ID_do CUBO
 						
 					);	
 	}

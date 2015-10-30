@@ -121,19 +121,27 @@ class WRS_LOGIN extends WRS_BASE
 				{
 					$login_id			=	$rows['LOGIN_ID'];
 					
-					//Inserindo os multiplos cubos
-					if(!isset($multiple_cube[$rows['DATABASE_ID']]))
-					{
-						$multiple_cube[$rows['DATABASE_ID']]	= array()	;
-					}
+					$key_database		=	$rows['DATABASE_ID'].$rows['SERVER_ID'];
 					
-					$multiple_cube[$rows['DATABASE_ID']][]	=	$rows;
+					
+						
+					//Inserindo os multiplos cubos
+						//if(!isset($multiple_cube[$rows['DATABASE_ID']]))
+						if(!isset($rule_database_id[$key_database]))
+						{
+							$multiple_cube[$rows['DATABASE_ID']]	= array()	;
+						}
+
+		
+						$multiple_cube[$rows['DATABASE_ID']][]	=	$rows;
+				
 					
 					//Permite apenas uma Database ID
-					if(isset($rule_database_id[$rows['DATABASE_ID']])) continue;
-					
-					$rule_database_id[$rows['DATABASE_ID']] =true;
+					if(isset($rule_database_id[$key_database])) continue;
+					$rule_database_id[$key_database] =	true;
 			
+					
+					
 					
 					$rules_session_tmp	=	$rows;
 					
