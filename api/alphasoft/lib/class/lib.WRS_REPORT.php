@@ -105,7 +105,7 @@ class WRS_REPORT  extends  WRS_USER
 
  		$ALL_ROWS 			= ($dadosJs->KendoUi->ALL_ROWS=="1")?1:0;
  		$ALL_COLS 			= ($dadosJs->KendoUi->ALL_COLS=="1")?1:0;
- 		$COLS_ORDER 		= ($dadosJs->KendoUi->ORDER_COLUMN=="1")?1:0;
+ 		$COLS_ORDER 		= $dadosJs->KendoUi->ORDER_COLUMN;
  		 		 		
  		$REPORT_FORMULAS 	= '';
  		$REPORT_FILTER 		= '';
@@ -114,7 +114,7 @@ class WRS_REPORT  extends  WRS_USER
  		$USER_TYPE 			= (is_array($grupos)?implode("(_,_)",$grupos):$grupos);
  		$REPORT_SHARE 		= fwrs_request('report_share')=='1'?1:0;
  		$REPORT_AUTOLOAD 	= fwrs_request('report_auto')=='1'?1:0;
-
+ 		
  		// limpando variaveis redundantes de dentro do objeto dadosJS (report_options)
  		// sao recriados novamente em: templateReport.js:229 - 20151026
  		unset($dadosJs->filter_selected);

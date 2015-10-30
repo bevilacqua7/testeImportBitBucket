@@ -2756,7 +2756,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 
 													
 													
-													//Value
 													$(kendoChartTAG+':after').addRule({
 													    content: kendoChartOptions.xAxis.wrs_title
 													});

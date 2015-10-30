@@ -60,6 +60,24 @@ function WRSKendoGridRefresh(history)
 			_paranKendoUi['MKTIME_HISTORY']	=	_history['mktime'];
 			getRequestKendoUiDefault		=	_paranKendoUi;
 			
+			 var wrs_multiple_cube_event_class	=	$('.wrs_multiple_cube_event');
+			 	
+			 
+			 try{
+	
+				 
+				 var cube_id		=	_paranKendoUi.MULTIPLE_CUBE_ID;
+				 if(cube_id!=null || cube_id!=undefined)
+				{
+					 multiple_cube_status_change();
+					 
+					 var index	=	$('.wrs_multiple_cube_event').find('[value="'+cube_id+'"]').index();
+					 if(index==-1) index=0;
+					 $('.wrs_multiple_cube_event li:eq('+index+') a').trigger('click');
+					 multiple_cube_status_change(false);
+				}
+				 
+			 }catch(e){}
 			//getRequestKendoUiDefault	=	merge_objeto(_paranKendoUi,_layout);
 
 			_paranKendoUi['IS_REFRESH']		=	true; //Informa que foi executado um refresh
@@ -612,6 +630,8 @@ function wrsKendoUiChange(nameID,param,value)
 	var _tmpWrsKendoUi		=	"";
 	
 	
+	if($(nameID).length==0)	return false;
+	
 	/*
 		LAYOUT_ROWS 
 		LAYOUT_COLUMNS 
@@ -640,6 +660,38 @@ function wrsKendoUiChange(nameID,param,value)
 		$(nameID).attr('wrsKendoUi',_tmpWrsKendoUi);
 }
  
+
+
+function wrsKendoUiChangeParam(nameID,param,value)
+{
+	
+	var _base				=	base64_decode($(nameID).attr('wrsparam'));
+	var wrsKendoUi			=	$.parseJSON(_base);
+	var _tmpWrsKendoUi		=	"";
+
+	if($(nameID).length==0)	return false;
+	
+	if(empty(param))
+		{
+			//Para quando for passado Array como parametro
+			if(is_array(value))
+			{
+				for(obj in value)
+				{
+					wrsKendoUi[obj]	=	value[obj];
+				}
+			}
+		}else{
+			//Quando for passado apenas parametro normal
+			wrsKendoUi[param]	=	value;
+		}
+		
+		//Adicionando na Estrutura da ABA
+		wrsABAAddValue(nameID,wrsKendoUi);
+		
+		_tmpWrsKendoUi		=	 base64_encode(json_encode(wrsKendoUi,true));
+		$(nameID).attr('wrsparam',_tmpWrsKendoUi);
+}
 
 
 
@@ -1124,7 +1176,7 @@ function  themeSUM(nameID,arg,wrsParam)
 											//Apenas mantem a última coluna ativa
 											
 											var hIndex	=	telerikGrid.headerIndex[lastKey];
-											var fiedlL	=	hIndex['field'];
+										//	var fiedlL	=	hIndex['field'];
 											
 											 
 											if(event=='hide')

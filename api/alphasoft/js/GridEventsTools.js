@@ -406,7 +406,9 @@ function resize_container_grid(report_id,_type_grid)
 							}else{
 								
 									var soap		=	options.container_elements.detach();
+//										console.log('send');
 										options.grid.after(soap);
+//										console.log('receive');
 							}
 					}
 				
