@@ -435,3 +435,23 @@ function getLoadReport(no_request)
 	return _param;
 	
 }
+
+function atualiza_id_aba_ativa(rep_id){
+	if(rep_id!='' && parseInt(rep_id)>0){
+		rep_id='REL_'+rep_id;
+		var aba_ativa = $(".WRS_ABA ul li.active");
+		
+		// atualizando o nome da aba no class da aba
+		aba_ativa.removeClass(aba_ativa.attr('id-aba')).addClass(rep_id);
+		
+		// atualizando o nome da aba no atributo id-aba da aba
+		aba_ativa.attr('id-aba',rep_id);
+		
+		// atualizando o nome da aba dentro do parametro wrsparam da aba
+		var wrstemp 		= 	$.parseJSON(base64_decode(aba_ativa.attr('wrsparam')));
+		var kendotemp		= 	$.parseJSON(base64_decode(wrstemp.KendoUi));
+		kendotemp.REPORT_ID	=	rep_id;
+		wrstemp.KendoUi = base64_json(kendotemp);
+		aba_ativa.attr('wrsparam',base64_json(wrstemp));
+	}
+}

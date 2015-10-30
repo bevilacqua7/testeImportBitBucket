@@ -359,7 +359,12 @@ function optionsDataConvert(gridValue,with_decode)
 											getElement['REPORT_ID']			=	generateReportId();
 											getElement['SUMARIZA']			=	1;
 											getElement['COLORS_LINE']		=	1;
+<<<<<<< HEAD
 											getElement['MULTIPLE_CUBE_ID']		=	multiple_cube();
+=======
+											
+//											getElement['MULTIPLE_CUBE']		=	multiple_cube();
+>>>>>>> refs/remotes/origin/felipe_branch
 					
 											var optionsAba		=	{
 																		LAYOUT_ROWS			:base64_json({}),
@@ -1096,6 +1101,8 @@ function optionsDataConvert(gridValue,with_decode)
 					var _report_id		=	'';
 					
 					//tagABA.find('.'+tag_aba_empty).each(function(){$(this).remove();});
+					// atualizacao do tratamento acima que nao funcionava
+					$('.WRS_ABA ul li').each(function(){ if($(this).attr('class')==''){ $(this).remove(); } });
 
 					var _object_open		=	[];
 					var _kenoUiWindow		=	[];

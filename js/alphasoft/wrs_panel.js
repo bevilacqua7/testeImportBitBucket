@@ -1606,7 +1606,6 @@ function wrs_run_filter()
 						_param_request[TAG_URL_CUBE_SELECTED]=CUBE_S;
 					}else{
 						var jsonMukltiple			=	$('.wrs_multiple_cube_event').find('option:selected').attr('json');
-
 						_param_request['json']		=	jsonMukltiple;
 						
 					}
@@ -1702,7 +1701,6 @@ function wrs_run_filter()
 		
 		
 		$('body').ThreadJobManager(_param_request['REPORT_ID']);
-
 
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 		

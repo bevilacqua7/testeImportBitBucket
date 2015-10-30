@@ -107,7 +107,6 @@ class WRS_REPORT  extends  WRS_USER
  		$ALL_COLS 			= ($dadosJs->KendoUi->ALL_COLS=="1")?1:0;
  		$COLS_ORDER 		= $dadosJs->KendoUi->ORDER_COLUMN;
  		 		 		
- 		
  		$REPORT_FORMULAS 	= '';
  		$REPORT_FILTER 		= '';
  		$REPORT_FLAG 		= '';
@@ -115,10 +114,6 @@ class WRS_REPORT  extends  WRS_USER
  		$USER_TYPE 			= (is_array($grupos)?implode("(_,_)",$grupos):$grupos);
  		$REPORT_SHARE 		= fwrs_request('report_share')=='1'?1:0;
  		$REPORT_AUTOLOAD 	= fwrs_request('report_auto')=='1'?1:0;
- 		
- 		
- 		$dadosJs->KendoUi->TMP_REPORT_ID		=	$dadosJs->KendoUi->REPORT_ID;
- 		
  		
  		// limpando variaveis redundantes de dentro do objeto dadosJS (report_options)
  		// sao recriados novamente em: templateReport.js:229 - 20151026
@@ -147,8 +142,6 @@ class WRS_REPORT  extends  WRS_USER
  		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi,true));
  		
  		
-
- 		
  		$sql = QUERY_PANEL::SAVE_SSAS_REPORT($REPORT_DESC, $SERVER_ID, $DATABASE_ID, $CUBE_ID,
                                       $ROWS, $COLUMNS, $MEASURES, $FILTERS, $FILTERS_VALUES, $ALL_ROWS, $ALL_COLS, $COLS_ORDER,
 									  $REPORT_OPTIONS, $REPORT_FORMULAS, $REPORT_FILTER, $REPORT_FLAG, 
@@ -162,7 +155,8 @@ class WRS_REPORT  extends  WRS_USER
  			echo $error."<hr>Query: ".$sql;
  		}else{
  			$JS=<<<HTML
- 		$('#myModalGenericConfig').modal('hide');		
+ 		$('#myModalGenericConfig').modal('hide');
+ 		atualiza_id_aba_ativa({$rep_id});
 		WRS_ALERT('Relatório salvo com sucesso','success'); 
 HTML;
 			echo fwrs_javascript($JS);
