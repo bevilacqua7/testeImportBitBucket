@@ -50,7 +50,7 @@ function wrsConfigGridDefaultManagerTopOptionsStatus()
 function DEFAULT_OPTIONS_TOPS()
  {
 	 $('.wrs_grid_options_default').wrsTopOptions();
-	 $('.DRAG_DROP_LATERAIS').find('.wrs_tops_configure').remove();
+	 $('.DRAG_DROP_LATERAIS').find('.wrs_tops_configure').hide();
 	 $('.DRAG_DROP_LATERAIS').find('.label_top_wrs').remove();
 	 
  }
@@ -237,6 +237,18 @@ function DEFAULT_OPTIONS_TOPS()
 				
 				var isROWS		=	 $(this).attr('isROWS');
 				
+				var full_name	=	'';
+		
+			 	if(isDefault==true)
+		 		{
+		 			//Opções na tela de Default
+		 			var json		=	$.parseJSON(base64_decode( btnOption.parent().attr('json')));
+		 				full_name	=	json['LEVEL_FULL'];
+		 		}else{		
+		 			var field		=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
+		 				full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
+		 		}
+				
 				 if(empty(tag)) return true;
 				  
 				 if(isDefault==true)
@@ -244,7 +256,15 @@ function DEFAULT_OPTIONS_TOPS()
 					 
 					 btnOption	=	$(IDGrid).data('wrsConfigGridDefault');
 					 
-					 	
+					 btnOption.TOP_CONFIG = $.parseJSON(base64_decode(btnOption.TOP_CONFIG));
+					 
+					 // remove o TOP apenas do atributo selecionado
+				 	 if(btnOption.TOP_CONFIG[full_name]!=null && btnOption.TOP_CONFIG[full_name]!=undefined){
+				 		 delete btnOption.TOP_CONFIG[full_name];
+				 	 }
+
+				 	 // remover todos TOPS dos objetos da linha em questão
+					 /*	
 					 try{
 						 btnOption.TOP_CONFIG	=	'';
 					 }catch(e)
@@ -252,8 +272,8 @@ function DEFAULT_OPTIONS_TOPS()
 						 btnOption					=	[];
 						 btnOption['TOP_CONFIG']	=	'';
 					 }
-				 
-					 
+					 */
+				 					 
 					 btnOption['TOP_CONFIG']	=	base64_encode(json_encode(btnOption.TOP_CONFIG));
 					 
 					 
@@ -440,7 +460,7 @@ function DEFAULT_OPTIONS_TOPS()
 					});
 					
 					that.find('.k-grid-header table:first tr:last-child').find('th').find('.wrs_tops_configure').attr('isROWS',true);				
-					that.find('.k-grid-header table:first tr:last-child').find('th:first-child').find('.wrs_tops_configure').remove();
+					that.find('.k-grid-header table:first tr:last-child').find('th:first-child').find('.wrs_tops_configure').hide();
 				}else{
 						
 					
@@ -498,6 +518,18 @@ function DEFAULT_OPTIONS_TOPS()
 							
 					});
 					
+					$('.sortable_filtro li').each(function(){
+							var wrs_tops_configure		=	$('<span/>', {
+								type	: 'button',
+								title	: LNG('TITLE_TOP'),
+								html	: $('<i/>',{'class':'fa fa-bars'}),
+								'class'	: 'wrs_tops_configure btn-link'
+							});
+							
+							$(this).find('.wrs_tops_configure').remove();
+							$(this).prepend(wrs_tops_configure);
+							wrs_tops_configure.unbind('click').click(clickOptions);
+					});
 					
 					//console.log('kendoGrid ID 0::',that.attr('id'));
 					//console.log('wrsTopOptionsDataSub 01: ',measure_data);
