@@ -1,3 +1,4 @@
+
 /**
  * 
  * Compexo de criação e eventos de abas
@@ -352,20 +353,13 @@ function optionsDataConvert(gridValue,with_decode)
 								*/
 								
 					
-					
-									
+
 										var getElement						=	{};	
 											getElement['TITLE_ABA']			=	__new_name_aba();
 											getElement['REPORT_ID']			=	generateReportId();
 											getElement['SUMARIZA']			=	1;
-											getElement['COLORS_LINE']		=	1;
-<<<<<<< HEAD
-											getElement['MULTIPLE_CUBE_ID']		=	multiple_cube();
-=======
-											
-//											getElement['MULTIPLE_CUBE']		=	multiple_cube();
->>>>>>> refs/remotes/origin/felipe_branch
-					
+ 											getElement['COLORS_LINE']		=	1;
+											getElement['MULTIPLE_CUBE_ID']		=	multiple_cube(); //Atualização
 											var optionsAba		=	{
 																		LAYOUT_ROWS			:base64_json({}),
 																		LAYOUT_COLUMNS		:base64_json({}),
@@ -373,27 +367,14 @@ function optionsDataConvert(gridValue,with_decode)
 																		LAYOUT_FILTERS		:base64_json({}),
 																		KendoUi				:base64_json(getElement),
 																		FILTER_TMP			:""
-																	};
-					
-											 
+																	};//Atualização
 											__load_multiple([optionsAba]);
-								
-								
 								btn_add_new_aba();	
 					}
-				
-				
-				 
 					tagABA.find('.'+className).remove();
 					tagABA.append(htmlABA);
 					tagABA.find('.'+className).unbind('click').click(_click_btn_new_aba);
-						 
 			}
-			
-			
-			
-			
-			
 			/**
 			 * Apenas gera o Report ID
 			 */
