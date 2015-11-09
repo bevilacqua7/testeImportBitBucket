@@ -145,10 +145,10 @@ function cleanPlaceholder()
 function changeWithDrillFilter(layout,filter_to_add)
 {
 	var 	btnRun	=	$('.wrs_run_filter');
-	var 	json	=	$.parseJSON(base64_decode(btnRun.attr('history'))) ;
+	var 	json	=	$('.WRS_ABA').find('.active').wrsAbaData('getHistory');
 	
 	
-	//btnRun.attr('history','');
+
 	//Mudando o status para que possa ser renderizado
 	var current_layout	=	getLoadReport(true);
 	
@@ -262,7 +262,8 @@ function compare_filter_change(_filters_compare)
 function WRS_clean_filter()
 {
 	var getID		=	 $('.wrsGrid').attr('id');
-		$('.wrs_run_filter').removeAttr('history').removeAttr('locked').removeAttr('flag_load');
+	
+		$('.wrs_run_filter').removeAttr('locked').removeAttr('flag_load');
 		
 		$('.wrsGrid').removeClass('wrsGrid')
 		$('#'+getID+'Main').addClass('hide');
@@ -302,7 +303,8 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 	var _status			=	 false;
 	
 	var filter			=	$('.wrs_run_filter');
-	var history			=	filter.attr('history');
+	var aba_active		=	$('.WRS_ABA').find('.active');
+	var history			=	aba_active.wrsAbaData('getHistory');
 	var histoty_param	=	{};
 	var flag			=	true;
 	var change_TOP		=	false;
@@ -336,7 +338,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 		}
 		
 
-		filter.attr('history',base64);
+		aba_active.wrsAbaData('setHistory',base64);
 		return {status:_status, val:param_request};
 	}
 	
@@ -426,7 +428,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 		}
 		else
 		{
-			if(empty($('.wrs_run_filter').attr('history')))
+			if(empty(history))
 			{
 				if(!manager_aba)
 				{	
@@ -489,7 +491,10 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 			//histoty_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']='';
 			histoty_param['DRILL_HIERARQUIA_LINHA_DATA']='';
 
-			filter.attr('history',base64_encode(json_encode(histoty_param,true)));
+			
+			aba_active.wrsAbaData('setHistory',base64_encode(json_encode(histoty_param,true)));
+			
+			
 	}
 	
 

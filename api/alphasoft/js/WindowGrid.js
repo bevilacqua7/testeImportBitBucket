@@ -10,7 +10,6 @@
  */
 (function( $ ) {
 	
-	
 	/**
 	 * Configurações das opções TOP
 	 */
@@ -24,23 +23,10 @@
 
 
 /**
- * COnstrulçao do Dado da GRid
+ * Construlçao do Dado da GRid
  */
 function onDataBindingWindowGrid(arg)
 {
-	/*
-	var _arg	=	arg;
-	var column	=	_arg.sender.columns;
-	//[field ]
-//	foreach([0]);
-	for(var i=0;i<_arg.items.length;i++)
-		{
-			for(cc in column)
-			{
-				_arg.items[i][column[cc]['field']]	=	 '<b>'+_arg.items[i][column[cc]['field']]+'</b>';
-			}
-		}
-	*/
 	return arg;
 }
 
