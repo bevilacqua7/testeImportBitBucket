@@ -282,7 +282,11 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			var kendoChartTAG	=	'#'+idName+'Elements .chart';
 			var BOX				=	$('.'+idName+'BOX');
 			var headerIndex		=	telerikGrid.headerIndex;
-			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
+			var report_aba		=	idName=='wrs_grid_options_default'  ? $('.WRS_ABA').find('.active').attr('id-aba') : idName;
+			
+
+//			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
+			var kendoUiTools	=	$('.'+report_aba).wrsAbaData('getKendoUi');			
 			
 			var ChartDefault				=	$.parseJSON(base64_decode(kendoUiTools.CHART)); 
 			var DRILL_HIERARQUIA_LINHA		=	kendoUiTools.DRILL_HIERARQUIA_LINHA;
@@ -290,6 +294,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			var DRILL_COLUMN_TITLE		=	'';
 			var DRILL_FROZEN			=	'';
 			
+			
+			
+
 			//Apenas garante que exista o drill Nullo
 			try{
 			
@@ -328,7 +335,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			var ActiveDefault	=	'line';
 			var tmpTotalLine	=	[];
 			
-			
+
 			var gaugeOptions	=	{data: [],min:0,max:0};
 			
 
@@ -365,13 +372,11 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			
 			
 			if(empty(kendoUiTools.GAUGE_COLOR)){
-				kendoUiTools.GAUGE_COLOR	=	5;
-				wrsKendoUiChange('#'+idName,'GAUGE_COLOR',kendoUiTools.GAUGE_COLOR);
+				$('.'+report_aba).wrsAbaData('setKendoUi',{GAUGE_COLOR:5});
 			}
 			
 			if(empty(kendoUiTools.GAUGE_SIZE_BY_LINE)){
-				kendoUiTools.GAUGE_SIZE_BY_LINE	=	3;
-				wrsKendoUiChange('#'+idName,'GAUGE_SIZE_BY_LINE',kendoUiTools.GAUGE_SIZE_BY_LINE);
+				$('.'+report_aba).wrsAbaData('setKendoUi',{GAUGE_SIZE_BY_LINE:3});
 			}
 			
 			
@@ -677,7 +682,12 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				
 				if(!empty(kendoUiTools.ORDER_BY_COLUMN))
 				{
-					infoFirst.value	=	kendoUiTools.ORDER_BY_COLUMN;
+					try{
+						infoFirst.value	=	kendoUiTools.ORDER_BY_COLUMN;
+					}catch(e)
+					{
+						
+					}
 				}
 			}//END 
 			
@@ -1059,8 +1069,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 								var to_add		=	measures;
 								if(!empty(ChartDefault['data']))
 									{
-									;
-//										console.log('ChartDefault',ChartDefault['data']);
 										if(array_find_data(ChartDefault['data'],lineChartTitles))
 										{//Inserindo os que já estão ativos
 											to_add	=	measures_receive
@@ -1214,7 +1222,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						  			
 									if(onlyDefault){
 										//Quando for o Default
-										var configOptions	=	$('#wrsConfigGridDefault').data('wrsConfigGridDefault');			
+										var configOptions	=	get_aba_active_kendoUi();			
 										configOptions.CHART	=	chartParam;
 										infoDefault			=	configOptions;
 									}else{

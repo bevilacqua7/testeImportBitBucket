@@ -20,6 +20,7 @@ var HEIGHT_ABAS		=	50;
     	var click_auto		=	_click_auto==undefined || _click_auto==null ? false : _click_auto;
 		var idName			=	eventTelerik.attr('id');
 		var GRID			=	$('#'+idName);
+		var report_aba		=	'.'+idName;	
 		var telerikGrid 	= 	GRID.data('kendoGrid');		
 		var NAV				=	$('#'+idName+'NAV');
 		var ELEMENT			=	$('#'+idName+'Elements');
@@ -37,9 +38,13 @@ var HEIGHT_ABAS		=	50;
 			if(firstValue==null)
 				{
 					$('body').data('navHeight',navHeight);
-				}else{
+				}
+				else
+				{
 					navHeight	=	firstValue;
 				}
+			
+			
 		
 		//Criando a DIV do MAPA o da CHART
 		var check_div_map_chart	=	 function(type)
@@ -61,8 +66,7 @@ var HEIGHT_ABAS		=	50;
 					}
 		        	
 		        	$('#'+idName+'Elements .map').removeData();//Removendo o Mapa
-		        	
-		        	
+
 		        	//GRID.removeAttr('style-data').removeAttr('style');
 		        	ELEMENT.removeAttr('style-data').removeAttr('style');
 		        	
@@ -211,7 +215,7 @@ var HEIGHT_ABAS		=	50;
 		//Para o botão visão
 		var function_btn_open_type_vision		=	 function()
 	  	{
-			var wrsKendoUi			=	$.parseJSON(base64_decode(GRID.attr('wrsKendoUi')));
+			var wrsKendoUi			=	$(report_aba).wrsAbaData('getKendoUi');
 			
 	  		$(this).parent().find('li a').each(function(){
 	  				$(this).removeClass('active_tools');
@@ -942,9 +946,10 @@ var getRequestKendoUiDefault	=	{};
   $.fn.wrsConfigGridDefault = function(options) 
   {
 	
-	  var 	data_name				=	'wrsConfigGridDefault',//WARNING:Cuidado ao alterar essa variável pois ela reflete em outros lugares melhores pesquisaqr antes de modificar - WRSKendoUiCHart -wrs_panel
+	  var aba_current				=	get_aba_active_object();
+	  var 	data_name				=	'wrsConfigGridDefault',
 			element					=	this,
-			data					=	element.data(data_name);
+			data					=	aba_current.wrsAbaData('getKendoUi');
 	  
 	  	var opts 					= 	$.extend( {}, getRequestKendoUiDefault, empty(options) ? {} : options),
 	  		nav_options				=	element.find('.wrs_grid_options'),
@@ -957,15 +962,11 @@ var getRequestKendoUiDefault	=	{};
 		
 		
 
-		
-
-		
   		//WARNING:  O nome do ID nao pode ser removido pois existe outros lugares com pendencia no nome - wrs_panel
 		element.attr('id',data_name);
   	
   		if(empty(options) && !empty(data)) opts	=	data;
   		
-  		element.data(data_name,opts);
   		
   	
   	var detect_event	=	 function(type)
@@ -1002,18 +1003,13 @@ var getRequestKendoUiDefault	=	{};
   	var function_click_list_wrs_vision			=	 function(){
   			var _wrs_data		=	$(this).attr('wrs-data');
   				opts.WINDOW		=	_wrs_data;
-  				element.data(data_name,opts);
+
   				detect_event();//Abilita Evento
   				list_wrs_vision.find('li a').removeClass('active_tools');
   				$(this).addClass('active_tools');
-  				
 
-  				//Salvando no histórico	
-  		 		var saveHistory			=	[];
-		  			saveHistory['WINDOW']	=	_wrs_data;
-		  			saveHistoryEvents(saveHistory,opts['REPORT_ID']);
-	  			
-				addWrsKendoUiChange(opts['REPORT_ID'],'WINDOW',_wrs_data);	
+  				
+		  		aba_current.wrsAbaData('setKendoUi',{WINDOW:_wrs_data});
 					
   				return false;
   	}
@@ -1036,9 +1032,7 @@ var getRequestKendoUiDefault	=	{};
 		 */
 	  		if(!empty(searchGrid.html()) && hasDefault==true)
 	  		{
-	  			opts	=	getJsonDecodeBase64(searchGrid.attr('wrskendoui'));  			
-	  			element.data(data_name,opts);
-
+	  			opts	=	$('.WRS_ABA').find('.active').wrsAbaData('getKendoUi') 			
 	  		}  		
 			  		
   	}
@@ -1076,26 +1070,19 @@ var getRequestKendoUiDefault	=	{};
   	{
   		var _checked					=	$(this).prop('checked');
 		var _key						=	$(this).attr('name');
+		var get_aba						=	get_aba_active_object();
 		
-  			opts						=	element.data(data_name);
+  			opts						=	[]; 
 	  		opts[_key]	= 	_checked ? 1 : 0;
+	  		
+	  		
 	  		detect_event();//Abilita Evento
-	  		element.data(data_name,opts).attr('is-event',true);  
+	  		element.attr('is-event',true);  
 
-		var _report_id			=	opts['REPORT_ID'];
+	  		get_aba.wrsAbaData('setKendoUi',opts);
+	  		rules_pendences_checkbox($(this),$(this).parents('ul'));
+	  			
 
-			
-	  		//Salvando no histórico
-	  		var saveHistory			=	[];
-	  			saveHistory[_key]	=	opts[$(this).attr('name')];
-	  			saveHistoryEvents(saveHistory,opts['REPORT_ID']);
-
-	  			rules_pendences_checkbox($(this),$(this).parents('ul'));
-			
-			//Salvando na estrutura original
-
-
-				addWrsKendoUiChange(_report_id,_key,opts[_key]);	
   	}
   	
   	//Abrindo o Modal de opções do CHART
@@ -1114,18 +1101,8 @@ var getRequestKendoUiDefault	=	{};
   			});
   			
   			
-  			/*
-  			 * Comando para já permitir informações selecionada no chart
-  			opts.CHART	=	{data:{
-					'[Measures].[Share Dolar]':{ type : 'column',value : 'column',title : 'Nornal',stack : false}
-				},
-				legend :{},labels:{}};
+  			 
   			
-  			
-  			opts.CHART	=	 base64_encode(json_encode(opts.CHART,true));
-  			*/
-  			
-  			element.data(data_name,opts);
   			
   			var KendoUi	=	{
   					'element'		:	nav_options,
@@ -1140,7 +1117,6 @@ var getRequestKendoUiDefault	=	{};
   			
   			//save options
   			detect_event();//Abilita Evento
-  			nav_options.attr('wrsKendoUi',base64_encode(json_encode(opts,true)));
   			
 
   			nav_options.data('kendoGrid',KendoUi);	

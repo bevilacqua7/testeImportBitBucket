@@ -39,21 +39,22 @@ function WRS_CONSOLE(){
 	
 function changeTypeRun(IDGrid,typeRun)
 {
-
-	var _base64				=	base64_decode($(IDGrid).attr('wrsKendoUi'));
+	var report_id		=	str_replace('#','.',typeRun);
 	
-	var wrsKendoUi			=	$.parseJSON(_base64);
-	
-	try{
-		if(empty(wrsKendoUi.TYPE_RUN))
-		{
-			wrsKendoUiChange(IDGrid,'TYPE_RUN',typeRun);
-		}	
-	}catch(e){
-		console.error('ERROR::changeTypeRun');
-	}
+		$(report_id).wrsAbaData('setKendoUi',{TYPE_RUN:typeRun});
 }
 
+
+function chIClass(input)
+{
+		return str_replace('#','.',input);
+}
+
+function getEIClass(inputEvent)
+{
+	return '.'+inputEvent.attr('id');
+	
+}
 
 function _trim(input)
 {
@@ -532,6 +533,8 @@ function merge_objeto(objFirst,objSecond)
 {
 	return $.extend({}, objFirst,objSecond);		
 }
+
+ 
 
 /**
  * passando apenas parametros

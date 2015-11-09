@@ -59,7 +59,7 @@ function WRSKendoGridRefresh(history)
 		var _paranKendoUi					=	_history['kendoUi'];
 			_paranKendoUi['MKTIME_HISTORY']	=	_history['mktime'];
 			getRequestKendoUiDefault		=	_paranKendoUi;
-			
+		var get_aba_active					=	get_aba_active_object();
 			 var wrs_multiple_cube_event_class	=	$('.wrs_multiple_cube_event');
 			 	
 			 
@@ -82,10 +82,10 @@ function WRSKendoGridRefresh(history)
 
 			_paranKendoUi['IS_REFRESH']		=	true; //Informa que foi executado um refresh
 			
-			$('#wrsConfigGridDefault').attr('is-event','true').data('wrsConfigGridDefault',_paranKendoUi);
+			get_aba_active.wrsAbaData('setKendoUi',{IS_REFRESH:true});
+
 			$('#wrsConfigGridDefault').attr('f5_ative','true');
 			
-			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
 	});
 	
 }
@@ -94,7 +94,8 @@ function WRSKendoGridRefresh(history)
 function WRSKendoGridComplete(IDGrid)
 {
  
-	var wrsKendoUi		=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
+	var report_aba		=	chIClass(IDGrid);
+	var wrsKendoUi		=	$(report_aba).wrsAbaData('getKendoUi');
 	var trashHistory	=	"";
 	
 		try{
@@ -143,9 +144,7 @@ function WRSKendoGridComplete(IDGrid)
 		var _layout			=	_history['layout'];
 		var _paranKendoUi	=	_history['kendoUi'];
 	
-
-			_paranKendoUi['MKTIME_HISTORY']	=	_mktime;
-			$(_wrs_id).attr('wrsKendoUi',base64_encode(json_encode(_paranKendoUi)));
+			$(report_aba).wrsAbaData('setKendoUi',{MKTIME_HISTORY:_mktime});
 			
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi);
 	}
@@ -186,23 +185,7 @@ SET_RELATIONSHIPS_FULL_NAME();
  {
  	if(!empty(_event.html()))
  	{
- 		var _base64			=	_event.attr('wrsKendoUi');
- 		var _base		=	base64_decode(_base64);
-/*
- 		if(empty(_base))
- 			{
- 				return [];
-				
- 			}
- 		
-		 eval('var obj='+_base);
-		
-		 
-		return obj;*/
-		
- 		var wrsKendoUi	=	{};
- 			wrsKendoUi	=	$.parseJSON(_base);
- 		return wrsKendoUi;
+ 			return $(getEIClass(_event)).wrsAbaData('getKendoUi');
  	} 	
  	
  	return [];
@@ -356,10 +339,13 @@ function getWrsKendoColumn(data)
  function onDataBinding(arg)
  {
 	 //TRACE_DEBUG('onDataBinding::'+date('H:i:s'));
-	var id 				=	 '#'+arg.sender.element.attr('id');
+	var report_id		=	arg.sender.element.attr('id');
+	var report_aba		=	'.'+report_id;
+	var id 				=	'#'+arg.sender.element.attr('id');
 	var kendoUi			=	arg.sender;
-	var wrsKendoUi		=	 $.parseJSON(base64_decode($(id).attr('wrsKendoUi')));
+	var wrsKendoUi		=	$(report_aba).wrsAbaData('getKendoUi');
 	var _arg			=	arg;
+	
 	//Pegando a Header e informações de formatação das colunas
 	var _param			=	getWrsKendoColumn(arg.sender.columns);
 	var _width							=	[];	//Responsável por criar o width das columnas
@@ -624,53 +610,10 @@ function getWrsKendoColumn(data)
  
 function wrsKendoUiChange(nameID,param,value)
 {
-	
-	var _base				=	base64_decode($(nameID).attr('wrsKendoUi'));
-	var wrsKendoUi			=	$.parseJSON(_base);
-	var _tmpWrsKendoUi		=	"";
-	
-	
-	if($(nameID).length==0)	return false;
-	
-	/*
-		LAYOUT_ROWS 
-		LAYOUT_COLUMNS 
-		LAYOUT_MEASURES 
-		LAYOUT_FILTERS 
-*/
-		if(empty(param))
-		{
-			//Para quando for passado Array como parametro
-			if(is_array(value))
-			{
-				for(obj in value)
-				{
-					wrsKendoUi[obj]	=	value[obj];
-				}
-			}
-		}else{
-			//Quando for passado apenas parametro normal
-			wrsKendoUi[param]	=	value;
-		}
-		
-		//Adicionando na Estrutura da ABA
-		wrsABAAddValue(nameID,wrsKendoUi);
-		
-		_tmpWrsKendoUi		=	 base64_encode(json_encode(wrsKendoUi,true));
-		$(nameID).attr('wrsKendoUi',_tmpWrsKendoUi);
-}
- 
 
-
-function wrsKendoUiChangeParam(nameID,param,value)
-{
+	var kendoUiData	=	[];
 	
-	var _base				=	base64_decode($(nameID).attr('wrsparam'));
-	var wrsKendoUi			=	$.parseJSON(_base);
-	var _tmpWrsKendoUi		=	"";
 
-	if($(nameID).length==0)	return false;
-	
 	if(empty(param))
 		{
 			//Para quando for passado Array como parametro
@@ -678,20 +621,21 @@ function wrsKendoUiChangeParam(nameID,param,value)
 			{
 				for(obj in value)
 				{
-					wrsKendoUi[obj]	=	value[obj];
+					kendoUiData[obj]	=	value[obj];
 				}
 			}
 		}else{
 			//Quando for passado apenas parametro normal
-			wrsKendoUi[param]	=	value;
+			kendoUiData[param]	=	value;
 		}
+
+
+	$(chIClass(nameID)).wrsAbaData('setKendoUi',kendoUiData);
+	
 		
-		//Adicionando na Estrutura da ABA
-		wrsABAAddValue(nameID,wrsKendoUi);
-		
-		_tmpWrsKendoUi		=	 base64_encode(json_encode(wrsKendoUi,true));
-		$(nameID).attr('wrsparam',_tmpWrsKendoUi);
 }
+ 
+
 
 
 
@@ -704,12 +648,13 @@ function onDataBound(arg)
 			resizeColumnKendoUi(arg);
 			 
 
-			var classGrid	=	arg.sender.element.attr('id');
-			var nameID		=	 '#'+classGrid;
-			var ELEMENT		=	$(nameID+'Elements');
-			var _kendoUiParam=	$(nameID).attr('wrsKendoUi');
-			var wrsKendoUi	=	$.parseJSON(base64_decode(_kendoUiParam));
-			var wrsparam	=	$.parseJSON(base64_decode($(nameID).attr('wrsparam')));
+			var classGrid		=	arg.sender.element.attr('id');
+			var nameID			=	 '#'+classGrid;
+			var report_aba		=	'.'+classGrid;
+			var ELEMENT			=	$(nameID+'Elements');
+			var _kendoUiParam	=	$(report_aba).wrsAbaData('getKendoUi');
+			var wrsKendoUi		=	_kendoUiParam;
+			var wrsparam		=	$(report_aba).wrsAbaData('getWrsData');
 			
 				wrsKendoUiChange(nameID,'page_size',arg.sender.dataSource._pageSize);
 				 
@@ -787,7 +732,6 @@ function onDataBound(arg)
 			
 			
 			wrsKendoUiChange(nameID,'IS_REFRESH',false);
-	//		 console.log('wrsKendoUi',wrsKendoUi);
 			//Aplicando e salvando a estrutura das abas
 
 			$(ABA_TAG_NAME).wrsAbas('refresh',wrsKendoUi);
@@ -1028,8 +972,11 @@ function  themeSUM(nameID,arg,wrsParam)
 			var $eventTelerik		=	 this;
 			var _openStart			=	openStart ? true : false;
 			var telerikGrid 		= 	this.data('kendoGrid');
-			var IDName				=	'#'+$eventTelerik.attr('id');
-			var wrsKendoUi			=	$.parseJSON(base64_decode($(IDName).attr('wrsKendoUi')));
+			var report_id			=	$eventTelerik.attr('id');
+			var report_aba			=	'.'+report_id;
+			var IDName				=	'#'+report_id;
+
+			var wrsKendoUi			=	$(report_aba).wrsAbaData('getKendoUi');
 			
 				telerikGrid['wrs_frozen_data']			=	[];
 				telerikGrid['wrs_frozen_data']['data']	=	[];
@@ -1281,41 +1228,6 @@ function  themeSUM(nameID,arg,wrsParam)
 			 */
 			
 			
-			 /*
-			if(!telerikGrid.columns[0].key)
-			{
-				//Apenas cria o Evento da Reodenação 
-						var columnReOrder		=	$('<span/>', {
-																type	: 'button',
-																title	: 'Reordenar Coluna',
-																rel		: IDName,
-																flag	: wrsKendoUi.ORDER_COLUMN,
-																html	: $('<i/>',{'class':'glyphicon glyphicon-resize-horizontal'}),
-																'class'	: 'wrs_reOrderButton'
-															});
-															
-						this.find('.k-grid-header table:first tr:first-child').find('th:first-child').prepend(columnReOrder);
-						//Evento ao clicar no Botão Reordena 
-						columnReOrder.click(function(){
-						
-								var ID			=	$(this).attr('rel');
-								var getParam	=	$.parseJSON(base64_decode($(IDName).attr('wrskendoui')));					
-								var flag		=	getParam.ORDER_COLUMN;
-								
-								switch(flag)
-								{
-									case 0 : flag= 1 ; break;
-									case 1 : flag= 0 ; break;
-									default: flag= 0 ; break;
-								}
-								
-								getParam['ORDER_COLUMN']		=	flag;
-								wrsKendoUiChange($(IDName),'ORDER_COLUMN',flag);
-								changeTypeRun(IDName,TYPE_RUN.reorden_column);//Informando o tipo de RUN foi solicitado
-								wrsRunFilter();//Executa o plugin nativamente 
-						});
-			}*/
-			
 			/*
 			 * Evento para Ordenação de colunas
 			 */
@@ -1396,15 +1308,6 @@ function  themeSUM(nameID,arg,wrsParam)
 															wrsKendoUiChange(IDName,'',getSelected);
 														//	wrsKendoUiChange($(IDName),'',getSelected);
 															wrsRunFilter();//Executa o plugin nativamente 
-															/*
-														var getParam	=	$.parseJSON(base64_decode($(IDName).attr('wrsParam')));	
-														var wrsKendoUi	=	$.parseJSON(base64_decode($(IDName).attr('wrsKendoUi')));
-														var request		= _local_merge_array(getParam,wrsKendoUi);
-														var all			= _local_merge_array(request,getSelected);*/
-														//foreach(all);
-														/*
-														
-														wrsRunGridButton(request);*/
 														
 													}
 			

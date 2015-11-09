@@ -1,5 +1,5 @@
 
-var CHANGE_CUBE_ELEMENTS	=	'';
+
 
 
 /**
@@ -13,8 +13,8 @@ function wrs_multiple_cube_event()
 	var CUBE_ID			=	$(this).val();
 	var wrs_multiple_cube_event_class	=	$('.wrs_multiple_cube_event');
 	var multiple_data					=	wrs_multiple_cube_event_class.data('wrsParan');
-//	TRACE_DEBUG('type_event::'+multiple_data.type_event);
 	
+
 	//wrs_multiple_cube_event_class.data('wrsParan',{'val':CUBE_ID,'type_event':type_event});
 	if(multiple_data.type_event!='no_change'){
 			var aba_current		=	get_aba_active();
@@ -29,6 +29,8 @@ function wrs_multiple_cube_event()
 		event_cube_change_confirm(true);		
 	}
 }
+
+
 
 
 function multiple_cube_status_change(no_change)
@@ -55,6 +57,9 @@ function multiple_cube_status_change(no_change)
 	wrs_multiple_cube_event_class.data('wrsParan',{'val':val,'type_event':type_event});
 }
 
+
+
+
 function event_cube_change_confirm(confirm)
 {
 	
@@ -64,8 +69,6 @@ function event_cube_change_confirm(confirm)
 	var multiple_data					=	wrs_multiple_cube_event_class.data('wrsParan');
 	var val								= 	multiple_data.val; 
 	var type_event						=	multiple_data.type_event;
-	 
-	
 
 	type_event	=	 null;
 	
@@ -78,17 +81,12 @@ function event_cube_change_confirm(confirm)
 		return true;
 	}
 
+
 	wrs_multiple_cube_event_class.data('wrsParan',{'val':CUBE_ID,'type_event':type_event});
 	
-	
-
-
-	
-
 	var _file			=	'WRS_PANEL';
 	var _class			=	'WRS_PANEL';
 	var _event			=	'change_cube';
-	var param_request	=	[];
 	var json			=	that.attr('json');
 	
 
@@ -97,89 +95,17 @@ function event_cube_change_confirm(confirm)
 	if(filter_icon.attr('filter_hide')=='true'){
 		filter_icon.trigger('click');
 	}
-	
+
 
 	
-	
-	param_request['CUBE_ID']				=	CUBE_ID;
-	param_request[TAG_URL_CUBE_SELECTED]	=	CUBE_S;
-	param_request['json']					=	json;
+	$('.WRS_ABA').find('.active').wrsAbaData('setKendoUi',{MULTIPLE_CUBE_ID:CUBE_ID});
 
-	CHANGE_CUBE_ELEMENTS	=	'';
-	CHANGE_CUBE_ELEMENTS	=	getElementsWindowToChangeCube();
 	change_cube(CUBE_ID);
 	
-	//trocando as configurações da aba ativa
-	if(multiple_data.type_event!='no_change')
-	{
-		var aba_active			=	get_aba_active();
-		var aba_active_data		=	aba_active.data;
-		
-			aba_active_data['MULTIPLE_CUBE_ID']	=	aba_active.kendoUi['MULTIPLE_CUBE_ID']	=	CUBE_ID;
-			aba_active_data.KendoUi				=	base64_json(aba_active.kendoUi);
-			set_aba_param(aba_active_data);
-	}
-	
 }
 
 
 
-function getElementsWindowToChangeCube()
-{
-	var $elements	=	[];
-	
-		$elements['LAYOUT_ROWS']		=	[];
-		$elements['LAYOUT_COLUMNS']		=	[];
-		$elements['LAYOUT_FILTERS']		=	[];
-		$elements['LAYOUT_MEASURES']	=	[];
-	
-	
-	//placeholder
-	$('.sortable_linha li').each(function(){
-		
-		if(!$(this).hasClass('placeholder'))
-		{
-			var json 			=	$.parseJSON(base64_decode($(this).attr('json')));		
-			$elements['LAYOUT_ROWS'][$elements['LAYOUT_ROWS'].length]	=	 '__'+replace_attr(json['LEVEL_FULL']);	
-		}
-	});
-	
-	
-	$('.sortable_coluna li').each(function(){
-		if(!$(this).hasClass('placeholder'))
-		{
-			var json 			=	$.parseJSON(base64_decode($(this).attr('json')));		
-			$elements['LAYOUT_COLUMNS'][$elements['LAYOUT_COLUMNS'].length]	=	 '__'+replace_attr(json['LEVEL_FULL']);	
-		}
-	});
-	
-	
-	$('.sortable_metrica li').each(function(){
-		if(!$(this).hasClass('placeholder'))
-		{
-			var json 			=	$.parseJSON(base64_decode($(this).attr('json')));	
-		 	$elements['LAYOUT_MEASURES'][$elements['LAYOUT_MEASURES'].length]	=	 '__'+replace_attr(json['MEASURE_UNIQUE_NAME']);	
-		}
-	});
-	
-	
-	
-	//WRS_DRAG_DROP_FILTER
-	$('.sortable_filtro li').each(function(){
-		if(!$(this).hasClass('placeholder'))
-		{
-			var json 	=	$.parseJSON(base64_decode($(this).attr('json')));	
-			var attr	=	$(this).attr('atributo');
-			
-				if(empty(attr)) attr='';
-				
-				//TRACE_DEBUG(getFiltersChangeCube(json['LEVEL_FULL']));
-				$elements['LAYOUT_FILTERS'][$elements['LAYOUT_FILTERS'].length]	=	[ '__'+replace_attr(json['LEVEL_FULL']),attr,getFiltersChangeCube(json['LEVEL_FULL'])];	
-		}
-	});
-	
-	return $elements;
-}
 
 
 
@@ -214,7 +140,6 @@ function change_cube(CUBE_ID)
 		METRICAS_JSON		=	 base64_encode(json_encode(_measures,true));	
 	
 	var htmlRelationships	=	MENU_DRAG_DROP_DIREITO(	_relationships	,['LEVEL_NAME','LEVEL_NAME']);
-	
 	var measure				=	MENU_DRAG_DROP_DIREITO(	_measures		,['MEASURE_NAME','MEASURE_NAME'],'metrica');
 	
 
@@ -224,15 +149,12 @@ function change_cube(CUBE_ID)
 	$('.wrs_relationships_menu_direiro').html(htmlRelationships);
 	$('.wrs_measure_menu_direiro').html(measure);
 	
-
-	
-	
 	 wrs_panel_active_drag_drop();
 	 BTN_HOVER_BOX_DROP();
 
-	set_value_box_relatorio(CHANGE_CUBE_ELEMENTS);
-	CHANGE_CUBE_ELEMENTS	=	'';
 	
+
+	set_value_box_relatorio(optionsDataConvert(get_aba_active_wrs_param()));
 	
 	var check	=	['.sortable_filtro', '.sortable_metrica','.sortable_coluna','.sortable_linha'];
 	

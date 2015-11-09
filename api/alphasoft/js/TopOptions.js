@@ -67,26 +67,24 @@ function DEFAULT_OPTIONS_TOPS()
 		 */
 		$.fn.wrsTopOptions = function() 
 		{
-			var that		=	this;
-			var IDGrid		=	'#'+this.attr('id');
-			var isDefault	=	Boolean(that.attr('isDefault'));
-			
-			
+			var that				=	this;
+			var report_id			=	this.attr('id');
+			var report_aba			=	'.'+report_id;
+			var IDGrid				=	'#'+report_id;
+			var isDefault			=	Boolean(that.attr('isDefault'));
+			var aba_curent_object	=	get_aba_active_object();
+			var telerikGrid			=	that.data('kendoGrid');
 
-			var telerikGrid		=	that.data('kendoGrid');
 			
 			if(!wrsConfigGridDefaultManagerTopOptionsStatus())
 				{
 					that.data('kendoGridWrsTopOptions',{});
 					telerikGrid		=	{};
 				}else{
-					
 					if(empty(telerikGrid)) telerikGrid	=	{};
-					
 					that.data('kendoGridWrsTopOptions',telerikGrid);
+					
 				}
-			
-
 			
 			
 			var layout			=	'';
@@ -131,26 +129,28 @@ function DEFAULT_OPTIONS_TOPS()
 						var tmp_top		=	[];
 							_this.find('.label_top_wrs').remove();
 							 
+							//TRACE_DEBUG('set');
 						try{
 							
-							
+								//console.log('_top_config',_top_config);
 								if(_top_config[field])
 								{
 									
 
-									
+							//		TRACE_DEBUG('set01');
 									
 									tag_tmp			=	str_replace(['{','}'],'',_top_config[field]);
 									tmp_top			=	explode('|',tag_tmp);
 									var key_title	=	parseInt(tmp_top[1])-1;
 									var _title		=	'';
 									
+								//	TRACE_DEBUG('set02');
 									if(isDefault==true)
 									{
 										key_title	=	parseInt(tmp_top[1]);
 									}
 									
-									
+								//	TRACE_DEBUG('set03');
 									if(empty(_measure)){
 										 _title	=	telerikGrid.headerIndex.byFrozenLevelFull[measure[key_title]].title;
 									}else{
@@ -158,15 +158,24 @@ function DEFAULT_OPTIONS_TOPS()
 									}
 									
 									
-									
+									//TRACE_DEBUG('set04');
 									var _span	=	$('<span/>',{'class':"label label-info label_top_wrs", 'data-toggle':"tooltip",'data-placement':"left",title:_title});
 										_span.html(LNG('TITLE_TOP_'+tmp_top[0]));//Save the Name
 										
+									//	TRACE_DEBUG('set05');
 										var _find	=	_this.find('a');
-										
-										if(_find.length ) _find.append(_span);
+									//	TRACE_DEBUG('set06');
+										if(_find.length ) 
+										{
+										//	TRACE_DEBUG('set07');
+											_find.append(_span);
+										}
 										else
+										{
+										//	TRACE_DEBUG('set08');
+										//	TRACE_DEBUG('end');
 											_this.append(_span);
+										}
 										
 								}
 						}catch(e){}
@@ -176,24 +185,16 @@ function DEFAULT_OPTIONS_TOPS()
 			var convertTypeTOP		=	 function(key,data)
 			{
 				
-				var wrsKendoUi		=	'';
+				var wrsKendoUi		=	aba_curent_object.wrsAbaData('getKendoUi');
 				var top_config		=	'';
 				var data_save		=	'';
 				
 				if(isDefault==true)
 					{
-							wrsKendoUi	=	$(IDGrid).data('wrsConfigGridDefault');
-							
-							if(empty(wrsKendoUi))
-							{
-								wrsKendoUi	=	{};
-							}
-							
 							that.attr('is-event',true);//Ativa a mudança para quando executar o run filrer
 							that.wrsTopOptions();
-					}else{
-							wrsKendoUi	=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
 					}
+				
 				
 				
 				
@@ -205,24 +206,24 @@ function DEFAULT_OPTIONS_TOPS()
 				}
 				 
 				var config			=	$.parseJSON(base64_decode(top_config));
-
-					if(empty(config)) config=	{};
 					
-					config[key]	=	data;
-					data_save	=	base64_encode(json_encode(config));
-					
-					
-
+				if(empty(config)) config=	{};
 				
+				config[key]	=	data;
+				data_save	=	base64_encode(json_encode(config));
+					
+					
+
+					aba_curent_object.wrsAbaData('setKendoUi',{TOP_CONFIG:data_save});
+					
 				if(isDefault==true)	
 					{
-						wrsKendoUi['TOP_CONFIG']	=	data_save;
-						$(IDGrid).data('wrsConfigGridDefault',wrsKendoUi);
+
+						
 						that.wrsTopOptions();
 					}
 					else
-					{	wrsKendoUiChange(IDGrid,'TOP_CONFIG',data_save);
-						wrsRunFilter();
+					{	wrsRunFilter();
 						return true;
 					}
 			}
@@ -232,12 +233,13 @@ function DEFAULT_OPTIONS_TOPS()
 			 */
 			var wrsTopOptionsData	=	 function()
 			{
+				TRACE_DEBUG('click');
+				var kendoUi		=	 $(IDGrid).data('kendoGridWrsTopOptions');
 				var btnOption	=	 $(this).parent().data('wrsTopOptionsDataParent');
 				var tag			=	 $(this).attr('tag');
-				
 				var isROWS		=	 $(this).attr('isROWS');
-				
 				var full_name	=	'';
+				
 		
 			 	if(isDefault==true)
 		 		{
@@ -254,37 +256,26 @@ function DEFAULT_OPTIONS_TOPS()
 				 if(isDefault==true)
 					{
 					 
-					 btnOption	=	$(IDGrid).data('wrsConfigGridDefault');
-					 
-					 btnOption.TOP_CONFIG = $.parseJSON(base64_decode(btnOption.TOP_CONFIG));
+					 	btnOption				=	aba_curent_object.wrsAbaData('getKendoUi');
+					 	btnOption.TOP_CONFIG 	= $.parseJSON(base64_decode(btnOption.TOP_CONFIG));
 					 
 					 // remove o TOP apenas do atributo selecionado
 				 	 if(btnOption.TOP_CONFIG[full_name]!=null && btnOption.TOP_CONFIG[full_name]!=undefined){
 				 		 delete btnOption.TOP_CONFIG[full_name];
 				 	 }
 
-				 	 // remover todos TOPS dos objetos da linha em questão
-					 /*	
-					 try{
-						 btnOption.TOP_CONFIG	=	'';
-					 }catch(e)
-					 {
-						 btnOption					=	[];
-						 btnOption['TOP_CONFIG']	=	'';
-					 }
-					 */
-				 					 
-					 btnOption['TOP_CONFIG']	=	base64_encode(json_encode(btnOption.TOP_CONFIG));
+
+				 	 aba_curent_object.wrsAbaData('setKendoUi',{TOP_CONFIG:base64_encode(json_encode(btnOption.TOP_CONFIG))});
 					 
-					 
-					 $(IDGrid).data('wrsConfigGridDefault',btnOption);
 					 that.attr('is-event',true);//Ativa a mudança para quando executar o run filrer
 					 
 					 
 					 that.wrsTopOptions();
 					 
 					}else{
-						 wrsKendoUiChange(IDGrid,'TOP_CONFIG',base64_encode(json_encode('')));
+
+						aba_curent_object.wrsAbaData('setKendoUi',{TOP_CONFIG:base64_encode(json_encode(''))});
+						
 						 wrsRunFilter();
 					}
 					
@@ -301,12 +292,8 @@ function DEFAULT_OPTIONS_TOPS()
 				var index		=	'';
 				var full_name	=	$(this).attr('full_name');
 				
-
-			
 				var kendoUi		=	 $(IDGrid).data('kendoGridWrsTopOptions');
 				
-				
-					
 					try{
 
 							var _kendo	=	$(IDGrid).data('kendoGrid');
@@ -316,26 +303,7 @@ function DEFAULT_OPTIONS_TOPS()
 					}
 					
 
-				
-				//IDGrid
-/*
-				var telerikGrid		=	that.data('kendoGrid');
-				
-				if(!wrsConfigGridDefaultManagerTopOptionsStatus())
-					{
-						that.data('kendoGridWrsTopOptions',{});
-						telerikGrid		=	{};
-					}else{
-						
-						if(empty(telerikGrid)) telerikGrid	=	{};
-						
-						that.data('kendoGridWrsTopOptions',telerikGrid);
-					}
-				*/
-				
-				
-				
-					 if(empty(tag)) return true;
+					if(empty(tag)) return true;
 
 					 	if(isDefault==true)
 					 		{
@@ -343,13 +311,7 @@ function DEFAULT_OPTIONS_TOPS()
 					 				index			=	tag;	
 					 			var json		=	$.parseJSON(base64_decode( btnOption.parent().attr('json')));
 					 				full_name	=	json['LEVEL_FULL'];
-//						 				key			=	(btnOption.parent().index()+1);
-					 				
-					 				
-					 					
 					 		}else{
-					 			
-
 					 								index	=	tag;//btnOption.parent().index();			
 									 			var field		=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
 									 				full_name	=	kendoUi.headerIndex[field].LEVEL_FULL;
@@ -414,7 +376,7 @@ function DEFAULT_OPTIONS_TOPS()
 				if(isDefault!=true)
 				{
 	
-					var wrsKendoUi_mount	=	$.parseJSON(base64_decode($(IDGrid).attr('wrsKendoUi')));
+					var wrsKendoUi_mount	=	$(report_aba).wrsAbaData('getKendoUi');
 					var _top_config			=	{};
 					
 
@@ -431,8 +393,6 @@ function DEFAULT_OPTIONS_TOPS()
 					
 					//Configuração normal para quando a grid já estiver montada
 					that.find('.k-grid-header table:first tr').find('th').each(function(){
-						
-//						foreach(kendoUi);
 						var wrs_tops_configure		=	$('<span/>', {
 							type	: 'button',
 							title	: LNG('TITLE_TOP'),
@@ -462,15 +422,10 @@ function DEFAULT_OPTIONS_TOPS()
 					that.find('.k-grid-header table:first tr:last-child').find('th').find('.wrs_tops_configure').attr('isROWS',true);				
 					that.find('.k-grid-header table:first tr:last-child').find('th:first-child').find('.wrs_tops_configure').hide();
 				}else{
-						
-					
-
-					wrsKendoUi	=	$(IDGrid).data('wrsConfigGridDefault');
-					
-					var _top_config	=	$.parseJSON(base64_decode(wrsKendoUi.TOP_CONFIG));
+						wrsKendoUi		=	get_aba_active_kendoUi();
+					var _top_config		=	$.parseJSON(base64_decode(wrsKendoUi.TOP_CONFIG));
 					
  
-					
 					var measure_data	=	[];
 					var measure_count	=	1;
 					that.parent().find('.sortable_metrica li').each(function(){						
@@ -484,12 +439,12 @@ function DEFAULT_OPTIONS_TOPS()
 					
 					measure	=	measure_data;
 					
-					//console.log('wrsTopOptionsDataSub 02: ',measure);
-					
 					
 					that.data('kendoGridWrsTopOptions',measure);
 					
 					//COnfigurando para as ooções default
+					
+
 					that.parent().find('.sortable_coluna li,.sortable_linha li').each(function(){		
 						
 						var json	=	$.parseJSON(base64_decode( $(this).attr('json')));
@@ -506,11 +461,11 @@ function DEFAULT_OPTIONS_TOPS()
 										
 										$(this).find('.wrs_tops_configure').remove();
 										$(this).prepend(wrs_tops_configure);
-										
-										
-									
-										TAGLabel(json.LEVEL_FULL,_top_config,$(this),measure_data);
-										
+
+										TAGLabel(	json.LEVEL_FULL,
+													_top_config,
+													$(this),
+													measure_data);
 										
 										wrs_tops_configure.unbind('click').click(clickOptions);
 							}
@@ -536,11 +491,10 @@ function DEFAULT_OPTIONS_TOPS()
 					that.data('kendoGridWrsTopOptions',measure_data);
 				}
 				
-				
-				
-				
 				that.find('.wrsTopOptionsData').remove();
 				that.prepend(TAGButton);				
+
+
 				that.find('.wrsTopOptionsData li').unbind('click').click(wrsTopOptionsData);
 				
 				//Active Toggle Tooltiple Bootstrap

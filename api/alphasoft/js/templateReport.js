@@ -399,7 +399,7 @@ function getLoadReport(no_request)
 	var sortable_linha				=	rows_by_metrica_attr_base64('.sortable_linha','attr');
 	var sortable_coluna				=	rows_by_metrica_attr_base64('.sortable_coluna','attr');
 	var sortable_filtro				=	rows_by_metrica_attr_base64('.sortable_filtro','attr');
-	var wrs_grid_options_default	=	$('#wrsConfigGridDefault').data('wrsConfigGridDefault');
+	var wrs_grid_options_default	=	get_aba_active_kendoUi();
 	
 	var _filter_hide=activeToGetAllFilters();
 	var filter_selected				=	$.WrsFilter('getAllFiltersToRun');
@@ -439,19 +439,14 @@ function getLoadReport(no_request)
 function atualiza_id_aba_ativa(rep_id){
 	if(rep_id!='' && parseInt(rep_id)>0){
 		rep_id='REL_'+rep_id;
+		
 		var aba_ativa = $(".WRS_ABA ul li.active");
 		
 		// atualizando o nome da aba no class da aba
 		aba_ativa.removeClass(aba_ativa.attr('id-aba')).addClass(rep_id);
-		
 		// atualizando o nome da aba no atributo id-aba da aba
 		aba_ativa.attr('id-aba',rep_id);
+		aba_ativa.wrsAbaData('setWrsData',{getKendoUi:rep_id});
 		
-		// atualizando o nome da aba dentro do parametro wrsparam da aba
-		var wrstemp 		= 	$.parseJSON(base64_decode(aba_ativa.attr('wrsparam')));
-		var kendotemp		= 	$.parseJSON(base64_decode(wrstemp.KendoUi));
-		kendotemp.REPORT_ID	=	rep_id;
-		wrstemp.KendoUi = base64_json(kendotemp);
-		aba_ativa.attr('wrsparam',base64_json(wrstemp));
 	}
 }
