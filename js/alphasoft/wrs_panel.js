@@ -1387,20 +1387,21 @@ function wrs_run_filter()
 		sortable_coluna		=	 sortable_coluna.flag;
 		sortable_filtro		=	 sortable_filtro.flag;
 		
-	var history				=	$(this).attr('history');
-	var history_decode		=	 getJsonDecodeBase64(history);
+	
 		
 	var run					=	 false;
 	var mensagem			=	"";
 	var flag_load			=	$(this).attr('flag_load');
 	var getAllFiltersToRun	=	"";
 	
+	var report_KendoUi			=	$('.WRS_ABA').find('.active').wrsAbaData('getKendoUi');
+	var history				=	$('.WRS_ABA').find('.active').wrsAbaData('getHistory');
 	
 	var demo_top	=	'';
 	
 	if(!empty($('.wrsGrid').html()))
 	{
-		demo_top	=	base64_decode($('.wrsGrid').attr('wrsKendoUi'));
+		demo_top	=	report_KendoUi;
 	}
  
 		//Verificando se todos tem informações
@@ -1438,7 +1439,7 @@ function wrs_run_filter()
 								if(empty(history))
 								{
 									$(this).attr('flag_load','true');
-									$('body').WRSJobModal('add_load');
+								//	$('body').WRSJobModal('add_load');
 									flag_load	=	'true';
 								}
 							}
@@ -1451,15 +1452,10 @@ function wrs_run_filter()
 					var _event	=	'load_grid_header';
 					
 					var _param_request		=	[];
-					var _param_request_obj	=	[];
 					var _base64			=	'';
 					
 					 
-						if(!empty($('.wrsGrid').html()))
-						{
-							_base64				=	base64_decode($('.wrsGrid').attr('wrsKendoUi'));
-							_param_request_obj	=	json_decode(_base64);
-						}
+						 
 						
 					
 					//Pegando as informações já pre estabelecidas pelo gráfico atuak
@@ -1539,60 +1535,17 @@ function wrs_run_filter()
 					 * Pega os elementos das Opções antes não Dashboard
 					 * 
 					 */
-					var wrsConfigGridDefault		=	$('#wrsConfigGridDefault');
-					var wrsConfigGridDefault_data	=	wrsConfigGridDefault.data('wrsConfigGridDefault');
+
+					var wrsConfigGridDefault_data	=	get_aba_active_kendoUi()
 					
 					var _data_aba				=	{};
-					/*
-					 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
-					 * WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::WARNING::
-					 * Caso exista erro de variáveis que faltam passar para a estrutura normalmente será nesse processo
-					 * 
-					 * Esse processo é onde junta os dados do Default com o original
-					 */
-					//Se existir interação então faz o merge das informações 
-					
-						if(!empty(wrsConfigGridDefault.attr('is-event')) && wrsConfigGridDefault.attr('is-event')=='true'){
-							
-							
-			//				if(!empty(wrsConfigGridDefault_data))
-							{
-								var getParamDefault = array_key_data(wrsConfigGridDefault_data);
-								
-			//					foreach(wrsConfigGridDefault_data);
-			//					foreach(getParamDefault);
-								//['PLUS_MINUS','ORDER_BY_COLUMN','ORDER_COLUMN_TYPE','SUMARIZA','COLORS_LINE','ALL_COLS','ALL_ROWS','WINDOW','CHART','GAUGE_COLOR','GAUGE_SIZE_BY_LINE','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA','SHOW_LINE_TOTAL','DRILL_HIERARQUIA_LINHA_DATA_HEADER','REPORT_ID','MKTIME_HISTORY','IS_REFRESH','TYPE_RUN','TOP_CONFIG'];
-								//param_request	=	merge_objeto(wrsConfigGridDefault_data,param_request);
-								for(var lineGetParamDefault in getParamDefault)
-								{
-									/*switch(getParamDefault[lineGetParamDefault])
-									{
-										case 'FILTER_TMP' :
-										case 'DRILL_HIERARQUIA_LINHA' :
-										case 'DRILL_HIERARQUIA_LINHA_DATA' :
-										case 'SHOW_LINE_TOTAL' :
-										case 'DRILL_HIERARQUIA_LINHA_DATA_HEADER' :
-										case 'TYPE_RUN' :
-										case 'PAGE_CURRENT' :
-										continue;
-									}*/
-									_data_aba[getParamDefault[lineGetParamDefault]]	=	wrsConfigGridDefault_data[getParamDefault[lineGetParamDefault]];
-								}
-								
-							}
-						}
-					
-//					TRACE_DEBUG('BEGIN::'+_param_request_obj['REPORT_ID']);
-					
-					 _param_request	=	merge_filter_data(_param_request,_param_request_obj);
+
+
 					 
 
-	//				 TRACE_DEBUG('START::'+_param_request['REPORT_ID']);
-					 
-					 //Merge com a estrutura da aba
-					 _param_request	=	merge_filter_data(_param_request,_data_aba);
+					//Merge com a estrutura da aba
+					 _param_request	=	merge_filter_data(_param_request,report_KendoUi);
 
-				
 					
 					 //console.log('_param_request_param_request',_param_request);
 						
@@ -1864,9 +1817,8 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 			
 			ThreadJobManagerDONEJOB(_report_id);
 			
-			var _kendoUiParam	=	$('#'+_report_id).attr('wrsKendoUi');
-			var wrsKendoUi		=	$.parseJSON(base64_decode(_kendoUiParam));
-			$(ABA_TAG_NAME).wrsAbas('refresh',wrsKendoUi);
+
+			$(ABA_TAG_NAME).wrsAbas('refresh',$('.'+_report_id).wrsAbaData('getKendoUi'));
 			
 		}
 		

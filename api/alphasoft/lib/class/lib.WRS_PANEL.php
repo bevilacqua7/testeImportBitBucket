@@ -1101,7 +1101,7 @@ HTML;
 		$url					=	'run.php?'.fwrs_array_to_url($tagToUrl);
 		
 
-		$page_size				=	 fwrs_request('page_size');
+		$page_size				=	 $getRequestKendoUi['page_size'];
 		$page_size				=	 empty($page_size) ? 25 : $page_size;
 		
 		$PAGE					=	1;

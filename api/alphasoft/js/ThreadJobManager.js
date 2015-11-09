@@ -381,6 +381,8 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 				
 					modal.find('.action_WRSJobModalCloseWindow').addClass('hide');
 					modal.find('.modal-btn-job-wrs').removeClass('hide');
+					
+					modal.find('.action_WRSJobModalCancelQuery').removeClass('hide');
 					modal.find('.modal-text-wrs-job').html(LNG('GERANDO_RELATORIO'));
 			}
 			
