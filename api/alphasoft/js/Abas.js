@@ -293,7 +293,8 @@ function optionsDataConvert(gridValue,with_decode)
 					{
 							var aba_active		=	tagABA.find('.active');
 								save_info_aba_current(aba_active);
-					
+
+								
 										var getElement						=	{};	
 											getElement['TITLE_ABA']			=	__new_name_aba();
 											getElement['REPORT_ID']			=	generateReportId();
@@ -308,6 +309,7 @@ function optionsDataConvert(gridValue,with_decode)
 																		KendoUi				:base64_json(getElement),
 																		FILTER_TMP			:""
 																	};//Atualização
+											
 											__load_multiple([optionsAba]);
 								btn_add_new_aba();	
 					}
@@ -801,7 +803,8 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					//Controle para manter as alterações nas abas
 					
-					tagABA.find('.'+tag_aba_empty).removeClass(tag_aba_empty);
+				//	tagABA.find('.'+tag_aba_empty).removeClass(tag_aba_empty);
+					
 					if(empty(_report_id) || _report_id==classIDName)
 					{
 						tagABA.find('.'+report_id).addClass(tag_aba_empty);
@@ -947,7 +950,6 @@ function optionsDataConvert(gridValue,with_decode)
 			{
 					var _noactive	= false;
 					
-
 					if(!empty(noactive)) _noactive = noactive;
 					
 					if(empty(options)) return false;
@@ -1213,13 +1215,15 @@ function optionsDataConvert(gridValue,with_decode)
 			{
 				var aba_active	=	 tagABA.find('.active');
 				
+				
 				if(empty(inputBase64)) return false;
 				
 				var input		=	 getJsonDecodeBase64(inputBase64);
 
+				
 					if(input.length!=0)
 					{
-						__load_multiple([input[0]],AUTO_LOAD_RUN);
+						__load_multiple(input,AUTO_LOAD_RUN);
 						
 						$('.wrs_run_filter').data('auto_load_data',base64_encode(json_encode(slice_top(input))));
 						$('.wrs_run_filter').attr('auto_load','true');

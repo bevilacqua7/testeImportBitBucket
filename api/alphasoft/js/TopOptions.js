@@ -479,7 +479,7 @@ function DEFAULT_OPTIONS_TOPS()
 								title	: LNG('TITLE_TOP'),
 								html	: $('<i/>',{'class':'fa fa-bars'}),
 								'class'	: 'wrs_tops_configure btn-link'
-							});
+							}).css('display','none');
 							
 							$(this).find('.wrs_tops_configure').remove();
 							$(this).prepend(wrs_tops_configure);

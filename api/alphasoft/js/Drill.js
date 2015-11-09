@@ -295,7 +295,13 @@ function addTargetDisableContext(kendoUi)
 													var indexTR			=	e.parent.parent().index();
 													var indexTD			=	parseInt(e.parent.index());
 													var proxTd			=	e.parent.next('td');
-													if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!=''){
+													
+													
+													
+													
+													//if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!='') -- esse foi o felipe || Estava equivocado
+													if(e.event.parent().attr('class')=='VER_MAPA')
+													{
 														$('a[wrs-data=grid_map]').last().trigger('click');														
 														var _explode		=	 explode('|',str_replace(' ','',proxTd.text()));
 														//centraliza o mapa no ponto em questao
@@ -303,11 +309,15 @@ function addTargetDisableContext(kendoUi)
 													        latitude: _explode[0], 
 													        longitude: _explode[1], 
 													        zoom: 15 
-													    });			
+													    });
+														
+														
 														//aciona o clique do marcador em questao
 														google.maps.event.addListenerOnce($(IDName+'Elements .map').data('goMap').map, 'tilesloaded', function(event) {
 															google.maps.event.trigger($(IDName+'Elements .map').data(''+(parseInt(indexTR)+1)), 'click');
 													    });
+														
+														
 													    
 													}else{
 														value_select	=	strip_tags(_data[indexTR][name_column[indexTD]]);

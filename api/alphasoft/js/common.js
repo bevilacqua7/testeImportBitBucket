@@ -984,7 +984,13 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 		case 'Percent' 	:
 							{
 
-									if(strpos(MEASURE_NAME,'Cresc.')!==false || strpos(MEASURE_NAME,'Evol.')!==false)
+									$controle_metricas=false;
+									try{
+										$controle_metricas=(strtolower(substr(MEASURE_NAME,0,5))=='cresc' || strtolower(substr(MEASURE_NAME,0,4))=='evol');
+									}catch(e){}
+			
+									//if(strpos(MEASURE_NAME,'Cresc.')!==false || strpos(MEASURE_NAME,'Evol.')!==false)	
+									if($controle_metricas)
 									{
 										if(valor>0){
 											seta = "<img src='imagens/setinha_verde.png' width='9' height='9'/>";
