@@ -92,7 +92,7 @@ class WRS_REPORT  extends  WRS_USER
  			{
  				foreach($filtros as $pos => $filtro)
  				{
- 					if(count($dadosJs->filter_selected->full)>0)
+ 					if(count($dadosJs->filter_selected->full)>0 && trim($dadosJs->filter_selected->full[$pos]->data)!='')
  					{
  						$arr_filtros_sel[]	=	$filtro."(_,_)".$dadosJs->filter_selected->full[$pos]->data;
  					}
@@ -247,11 +247,11 @@ HTML;
 		$dadosJs			= json_decode(base64_decode(fwrs_request('dadosJs')));
 		// injeta as variaveis de ambiente (configuracao atual) no formulario para a inclusao no banco
 		$JS	=	<<<HTML
-		
-				var input	=	 $('<input/>',{name:"dadosJs",type:'text', value:base64_encode(json_encode(getLoadReport()))}).css('display','none');
+				var reportAtual = getLoadReport();
+				WRS_CONSOLE('atual',reportAtual);
+				var input	=	 $('<input/>',{name:"dadosJs",type:'text', value:base64_encode(json_encode(reportAtual))}).css('display','none');
 				$('#insert_report').append(input);
-				var kendoUiAtual = getLoadReport();
-				$('#report_name').val(kendoUiAtual.KendoUi.TITLE_ABA); // preenche com o nome atual vindo do JS
+				$('#report_name').val(reportAtual.KendoUi.TITLE_ABA); // preenche com o nome atual vindo do JS
 
 HTML;
 		// preenche os 'grupos' do formulario com os tipos cadastrados no banco (query passada pelo facioli em 26-08-2015)
@@ -265,7 +265,6 @@ HTML;
 		$JS2='';
 		foreach($tipos as $nome){
 			$JS2.= "\n$('#select2').find('.wrs-measures').append($('<option/>').html('".$nome."').val('".$nome."'));
-					console.log(".json_encode($user).");
 					";
 		}
 		echo fwrs_javascript($JS);
