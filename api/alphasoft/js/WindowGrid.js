@@ -33,8 +33,8 @@ function onDataBindingWindowGrid(arg)
 
 function onDataBoundWindowGrid(arg)
 {	
-	
-	var IDName				=	'#'+arg.sender.element.attr('id');
+	var tabela				=	arg.sender.element.attr('id');
+	var IDName				=	'#'+tabela;
 	var loadParanGridWindow	=	$(IDName).data('loadParanGridWindow');
 	var telerikGrid 		= 	$(IDName).data('kendoGrid');
 		
@@ -109,12 +109,13 @@ function onDataBoundWindowGrid(arg)
 	{		
 		var param			=	HandleArg.sender.columns[0].window_grid
 		var index			=	$(this).parent().index();
+		var table			=	param['table'];	
 		
 		try{
-			var is_exception 	= ('exception' in param && typeof param['exception'] == 'object');
+			var is_exception 	= ('exception' in param && (typeof param['exception'] == 'object' || param['exception']==true));
 			if(is_exception && param['actionDouble']){			
 				var toAction	=	param['actionDouble'];
-				window[toAction](HandleArg.sender._data[index]);	
+				window[toAction](HandleArg.sender._data[index],table);	
 				
 			}
 		}catch(e){}
@@ -132,11 +133,11 @@ function onDataBoundWindowGrid(arg)
 			option[param['primary']]	=	value_primary;
 
 		try{	
-			var is_exception 	= ('exception' in param && typeof param['exception'] == 'object');
+			var is_exception 	= ('exception' in param && (typeof param['exception'] == 'object' || param['exception']==true));
 
 			if(is_exception && param['actionSingle']){
 				var toAction	=	param['actionSingle'];
-				window[toAction](HandleArg.sender._data[index]);	
+				window[toAction](HandleArg.sender._data[index],table);	
 			}else{
 				grid_window_modal(option,table);
 			}
@@ -151,7 +152,9 @@ function onDataBoundWindowGrid(arg)
 	
 	// se houver checkbox como parametro da tabela remove o action da coluna do checkbox	
 	if(HandleArg.sender.columns[0].field=='checkbox_linha'){
-		$(IDName).find('[data-field=checkbox_linha]').unbind('click').find('input.checkline').change(trataCheckColuna);
+		$(IDName).find('[data-field=checkbox_linha]').unbind('click').find('input.checkline').change(function(){ trataCheckColuna($(this),tabela); });
+	}else{
+		WRS_CONSOLE('nao entrou');
 	}
 
 }
@@ -164,8 +167,7 @@ function wrd_grid_window_to_form()
 	var _data			=	 $('.body_grid_window').data('wrsGrid');
 	var param			=	 _data.param_original;
 	var index			=	 $(this).parents('.body_grid_window').first().children().index($(this));
-	var is_exception 	= 	 ('exception' in param && typeof param['exception'] == 'object');
-	
+	var is_exception 	= 	 ('exception' in param && (typeof param['exception'] == 'object' || param['exception']==true));
 	
 	if(!is_exception){
 		grid_window_modal(_local_merge_array(primary,option),table);
@@ -174,7 +176,7 @@ function wrd_grid_window_to_form()
 			var toAction				=	param['actionSingle'];
 			_data[index]['visao_atual']	= 	'icon';
 			_data[index]['obj_sel']		= 	$(this).children('div.wrs_grid_'+param.visao_atual+'_custom');
-			window[toAction](_data[index]);	
+			window[toAction](_data[index],table);	
 		}
 	}
 }
@@ -187,7 +189,7 @@ function wrd_grid_window_to_form_dbl(arg)
 	var _data			=	 $('.body_grid_window').data('wrsGrid');
 	var param			=	 _data.param_original;
 	var index			=	 $(this).parents('.body_grid_window').first().children().index($(this));
-	var is_exception 	= 	 ('exception' in param && typeof param['exception'] == 'object');
+	var is_exception 	= 	 ('exception' in param && (typeof param['exception'] == 'object' || param['exception']==true));
 	if(!is_exception){
 		grid_window_modal(_local_merge_array(primary,option),table);
 	}else{
@@ -201,6 +203,17 @@ function wrd_grid_window_to_form_dbl(arg)
 	}
 }
 
+
+function callback_load_admin_generic_modal(arg,tabela)
+{
+	var _data			=	 $('#myModal').data('wrsGrid');
+	var param			=	 _data.param_original;
+	var option						=	 [];
+		option['wrs_type_grid']		=	'form';
+		option[param['primary']]	=	arg.ROW_ID;
+		option['param_request']			=	param;
+	grid_window_modal(option,tabela);
+}
 
 function wrs_grid_window_event()
 {
@@ -261,6 +274,8 @@ function wrs_window_grid_events_tools(objectClick)
 						icondbl	:	wrd_grid_window_to_form_dbl,
 						btn		:	btn_window_grid_event
 					};
+
+	WRS_CONSOLE('options windowgrid',objectClick);
 	
 	var options		=	_options;
 	
@@ -294,6 +309,8 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 		funCallBackData	=	function(data)
 		{
 				$('.modal-content-grid').html(data);
+				WRS_CONSOLE('evento',Event);
+				WRS_CONSOLE('options windowgrid modal data',data,'paramrequest',param_request);
 				wrs_window_grid_events_tools();
 		};
 	}

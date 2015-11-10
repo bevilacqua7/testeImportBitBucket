@@ -1072,5 +1072,17 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 $(document).ready(function(){
 	
 	$('body').WRSJobModal(); //Criando o BOX de CSS
+	
+	$('.menu_administrativo_itens').hide();
+	
+	$('.menuADM_link').click(function(){
+		$('.menu_administrativo_itens, #fullwidth, #fullwidth_ds').toggle();
+	});
+
+	$('.menu_cadastro').click(function(){
+		grid_window_modal({wrs_type_grid:'list',cube_s:CUBE_S},$(this).attr('tabela'));
+		$('#myModal').modal('show');
+	});
+		
 
 });

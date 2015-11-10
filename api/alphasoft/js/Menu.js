@@ -1,10 +1,5 @@
 $(document).ready(function(){
 	
-	$('.painel_administrativo_demo').click(function(){
-		grid_window_modal({wrs_type_grid:'list',cube_s:CUBE_S},'ATT_WRS_USER');
-		$('#myModal').modal('show');
-	});
-	
 	$('.wrs_open_save').unbind('click').click(function() {
 		
 		var btn_salvar_extra_action_validator = function(data){ // validacoes extra antes da acao principal do botao padrao

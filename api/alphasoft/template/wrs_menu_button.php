@@ -18,7 +18,17 @@
 													"></i></a></li>
   <li role="presentation"><a href="#" class="config"><i class="fa default_bk_button_menu_alternativo" style="
 													    background-image: url(imagens/icons/config.png);
-													"></i></a></li>
+													"></i></a>
+	  <ul class="wrs_menu_footer_sub nav nav-stacked">
+	        <li class="menu_cadastro" tabela="ATT_WRS_CUSTOMER"><i class="glyphicon glyphicon-plus"></i> Cadastro de Clientes</li>
+	        <li class="menu_cadastro" tabela="ATT_WRS_USER"><i class="glyphicon glyphicon-plus"></i> Cadastro de Usuários</li>
+	        <li class="menu_cadastro" tabela="ATT_WRS_DATABASE"><i class="glyphicon glyphicon-plus"></i> Cadastro de Databases</li>
+	        <li class="menu_cadastro" tabela="ATT_WRS_CUBE"><i class="glyphicon glyphicon-plus"></i> Cadastro de Cubos</li>
+	        <li class="menu_cadastro" tabela="ATT_WRS_PERFIL"><i class="glyphicon glyphicon-plus"></i> Cadastro de Perfis</li>
+	        <li class="menu_cadastro" tabela="REL_WRS_CUBE_USER"><i class="glyphicon glyphicon-plus"></i> Cadastro de Cubo por Usuário</li>
+	        <li class="menu_cadastro" tabela="ATT_WRS_DOWNLOAD"><i class="glyphicon glyphicon-plus"></i> Cadastro de Downloads</li>
+	        <li class="menu_cadastro" tabela="ATT_WRS_LOG"><i class="glyphicon glyphicon-plus"></i> Cadastro de LOGs</li>
+	  </ul></li>
   <li role="presentation"><a href="run.php?file=WRS_MAIN&class=WRS_MAIN&event=logout"><i class="fa default_bk_button_menu" style="
 													    background-image: url(imagens/icons/exit.png);
 													"></i></a></li> 

@@ -28,32 +28,28 @@ function ajustaTags(arr){
 	return ret;
 }
 
-function callback_check_line_generic_modal(data){
+function callback_check_line_generic_modal(data,tabela){
 	var attr = data.visao_atual;
-	
-	
-
-	
 	if (typeof attr !== typeof undefined && attr !== false) {
 		if(data.obj_sel.hasClass('selecao_icon')){
 			data.obj_sel.removeClass('selecao_icon');
 		}else{
 			data.obj_sel.addClass('selecao_icon');
 		}
-	}else{	
-		var linha=$('#GET_SSAS_REPORT .k-grid-content table').find('tr')[parseInt(data.ROW_ID)-1];
+	}else if(typeof data == 'object' && tabela!=undefined && tabela!=''){	
+		var linha=$('#'+tabela+' .k-grid-content table').find('tr')[parseInt(data.ROW_ID)-1];
 		var check = !$(linha).find('td input.checkline').prop('checked');
 		$(linha).find('td input.checkline').prop('checked',check);
-		$('#GET_SSAS_REPORT .k-grid-header table').find('input.checkline').prop('checked',false); // qualquer alteracao na linha, desmarca o checkall da coluna
+		$('#'+tabela+' .k-grid-header table').find('input.checkline').prop('checked',false); // qualquer alteracao na linha, desmarca o checkall da coluna
 		if($($(event.target).context).hasClass('checkline')){ // se o click vier do checkbox
 			$($(event.target).context).prop('checked',!check);
 		}
 	}
 }
 
-function trataCheckColuna(){
-	var checkColuna = $(this).prop('checked');
-	$('#GET_SSAS_REPORT .k-grid-content table').find('tr').each(function(){
+function trataCheckColuna(obj,tabela){
+	var checkColuna = obj.prop('checked');
+	$('#'+tabela+' .k-grid-content table').find('tr').each(function(){
 		$(this).find('td input.checkline').prop('checked',checkColuna);
 	});
 }
