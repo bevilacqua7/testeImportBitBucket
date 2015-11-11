@@ -39,7 +39,7 @@ function WRS_CONSOLE(){
 	
 function changeTypeRun(IDGrid,typeRun)
 {
-	var report_id		=	str_replace('#','.',typeRun);
+	var report_id		=	str_replace('#','.',IDGrid);
 	
 		$(report_id).wrsAbaData('setKendoUi',{TYPE_RUN:typeRun});
 }
@@ -891,6 +891,18 @@ function merge_filter_data(input,inputMerge)
 
 	return _tmp_merge;
 	
+}
+
+function array_concat(first_input,second_input)
+{
+	var call_back	=	first_input;
+	
+	for(var lineSecond in second_input)
+		{
+			call_back[lineSecond]=	second_input[lineSecond];
+		}
+
+	return call_back;
 }
 
 /**

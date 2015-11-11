@@ -155,9 +155,6 @@ function optionsDataConvert(gridValue,with_decode)
 							_report_id_h	=	 base64_decode(history.REPORT_ID);
 						}
 						
-				
-							
-
 						
 						if(_box_container.length==0 && !_isLoad)
 							{
@@ -220,7 +217,6 @@ function optionsDataConvert(gridValue,with_decode)
 											layout_east_close(false, _isLoad);
 										//	wrs_panel_layout.close('east');
 										}
-										//wrsRunFilter();
 									}
 								}else{
 									__remove_event_click();
@@ -411,6 +407,9 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					aba_active.wrsAbaData('setWrsData',_param_request);
 					
+					//Ativa para não executar a grid se existir alterações
+					aba_active.wrsAbaData('setKendoUi',{STOP_RUN:true});
+					
 					//Desabilita a janela
 					activeToGetAllFiltersRecover(_filter_hide);
 				
@@ -492,7 +491,9 @@ function optionsDataConvert(gridValue,with_decode)
 						}
 							
 
-						
+				/*
+				 * Verificar essa linha pois é onde está executando novamente o load
+				 */		
 				$('body').WRSJobModal('click_aba',{report_id:_report_id});
 				
 				save_info_aba_current(aba_active);
@@ -956,6 +957,8 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					var _report_id		=	'';
 					
+					
+			 
 
 					
 					//tagABA.find('.'+tag_aba_empty).each(function(){$(this).remove();});
@@ -1221,6 +1224,7 @@ function optionsDataConvert(gridValue,with_decode)
 				var input		=	 getJsonDecodeBase64(inputBase64);
 
 				
+				
 					if(input.length!=0)
 					{
 						__load_multiple(input,AUTO_LOAD_RUN);
@@ -1233,6 +1237,13 @@ function optionsDataConvert(gridValue,with_decode)
 						$('.wrs_run_filter').removeAttr('auto_load');
 						$('.wrs_run_filter').data('auto_load_data','');
 					}
+					
+					
+					//Remove a aba em branco ou aque não tiver linhas
+					if(aba_active.wrsAbaData('getWrsData').LAYOUT_ROWS=='e30=')
+						{
+							aba_active.find('.icon-remove-aba').trigger('click');
+						}
 					
 					
 			}
@@ -1382,6 +1393,8 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			var  __getWrsData	=	 function()
 			{
+				if(data_global==undefined) return undefined;
+				
 				return data_global.data
 			}
 			

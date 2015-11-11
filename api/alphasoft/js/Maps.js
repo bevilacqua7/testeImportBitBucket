@@ -94,7 +94,14 @@ function WRSMaps(KendoUi)
 
 	
 	if(!columnMap.length){
-		MAP.goMap();
+		MAP.goMap(/*{markers: [{			latitude:					-15.794145,  
+			longitude:					-47.882379,
+			icon		: 	'./api/gomap/none.png',
+			zoom: 11
+}],hideByClick: true,zoom:15,streetViewControl: 15}*/);
+		
+		
+
 		return true;
 	}
 	
@@ -133,7 +140,9 @@ function WRSMaps(KendoUi)
 							_title		=	_data[obj][backColumn];
 							if(is_sort)
 							{
-								data_value		=	headerIndex['field'][is_sort]['title']+' : '+_data[obj][is_sort];
+								try{
+									data_value		=	headerIndex['field'][is_sort]['title']+' : '+_data[obj][is_sort];
+								}catch(e){}
 							}
 						}else{
 							_title		=	titleByColumn[_cmp];
@@ -154,6 +163,8 @@ function WRSMaps(KendoUi)
 			
 		
 	}
+
+
 
 	if(ELEMENT.attr('maps')=='true')
 	{
