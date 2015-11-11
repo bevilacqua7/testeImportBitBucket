@@ -442,7 +442,9 @@ function resize_container_grid(report_id,_type_grid)
 					//resize
 					google.maps.event.trigger(_map.map, 'resize'); 
 					
-					_map.fitBounds('visible'); 
+					if(google.getMarkers().length>=1){
+						_map.fitBounds('visible'); 
+					}
 					
 					//Mantem a visão anyerior
 					//var google_maps	=	_options.container_elements.data('google_map_last_reload');

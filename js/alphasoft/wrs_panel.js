@@ -1358,6 +1358,8 @@ function wrs_run_filter()
 			$(this).removeAttr('noactive');
 			return true;
 		}
+	
+		
 		
 	
 		
@@ -1393,9 +1395,30 @@ function wrs_run_filter()
 	var mensagem			=	"";
 	var flag_load			=	$(this).attr('flag_load');
 	var getAllFiltersToRun	=	"";
+	var aba_active			=	$('.WRS_ABA').find('.active');
+	var report_KendoUi		=	aba_active.wrsAbaData('getKendoUi');
+	var history				=	aba_active.wrsAbaData('getHistory');
 	
-	var report_KendoUi			=	$('.WRS_ABA').find('.active').wrsAbaData('getKendoUi');
-	var history				=	$('.WRS_ABA').find('.active').wrsAbaData('getHistory');
+	
+	//Se existir o job em execução desse mesmo report id então faz o cancelamento
+	if(job_exist(report_KendoUi.REPORT_ID))
+	{
+		click_stop_job();
+	}
+	
+	
+	
+	
+	//Ao navegar pelas abas essa função impede que seja executada mesmo se tiver aoteração a alteração só será efetivada ao mandar executar
+	try{
+		if(report_KendoUi.STOP_RUN==true)
+		{
+			aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
+			configure_options_show_grid($(this));
+			return true;
+		}
+	}catch(e){}
+	
 	
 	var demo_top	=	'';
 	
@@ -1451,7 +1474,8 @@ function wrs_run_filter()
 					var _class	=	'WRS_PANEL';
 					var _event	=	'load_grid_header';
 					
-					var _param_request		=	[];
+					var _param_request	=	{};
+					var wrs_data_param	=	{FILTER_TMP:null,LAYOUT_FILTERS:null,LAYOUT_MEASURES:null,LAYOUT_COLUMNS:null,LAYOUT_ROWS:null};
 					var _base64			=	'';
 					
 					 
@@ -1475,25 +1499,16 @@ function wrs_run_filter()
 							
 							
 						try{
-							if(empty(_param_request.TYPE_RUN))
+							if(empty(report_KendoUi.TYPE_RUN))
 							{
-								_param_request['TYPE_RUN']=TYPE_RUN.direct;
+								report_KendoUi['TYPE_RUN']=TYPE_RUN.direct;
 							}
 						}catch(e){}
-						
-							//changeTypeRun( __id,TYPE_RUN.direct,_rand);
-							
 							is_param		=	true;
-						 	
 					}
 			
 			
 					
-					/*if(!is_param)
-					{
-							changeTypeRun('#'+$(this).attr('id'),TYPE_RUN.direct);
-					}
-					*/
 			
 					
 					
@@ -1501,11 +1516,9 @@ function wrs_run_filter()
 					
 					
 					
-					_param_request['LAYOUT_ROWS']		=	base64_encode(implode(',',request_linha));
-					_param_request['LAYOUT_COLUMNS']	=	base64_encode(implode(',',request_coluna));
-					_param_request['LAYOUT_MEASURES']	=	base64_encode(implode(',',request_metrica));
-					
-			
+					wrs_data_param.LAYOUT_ROWS		=	base64_encode(implode(',',request_linha));
+					wrs_data_param.LAYOUT_COLUMNS	=	base64_encode(implode(',',request_coluna));
+					wrs_data_param.LAYOUT_MEASURES	=	base64_encode(implode(',',request_metrica));
 					
 					
 					//Força a conversão do Menu 
@@ -1516,39 +1529,18 @@ function wrs_run_filter()
 					getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
 					
 					//foreach(getAllFiltersToRun);
-					_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
-					_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
+					wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
+					wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));
 					
 					
-			
-			//		console.log('getAllFiltersToRun.full',getAllFiltersToRun.full);
-					
-					/*
-					 * TODO:Revisando
-					 */
-				
-					
-			//Verificnado se existe alterações de pesquisa 
-					
-					//foreach(param_request);
-					/*
-					 * Pega os elementos das Opções antes não Dashboard
-					 * 
-					 */
-
+					//Verificnado se existe alterações de pesquisa 
 					var wrsConfigGridDefault_data	=	get_aba_active_kendoUi()
 					
-					var _data_aba				=	{};
-
-
-					 
-
-					//Merge com a estrutura da aba
-					 _param_request	=	merge_filter_data(_param_request,report_KendoUi);
-
 					
-					 //console.log('_param_request_param_request',_param_request);
-						
+					//Merge com a estrutura da aba
+					 _param_request		=	array_concat(wrs_data_param,report_KendoUi);
+					
+					 
 					//Passando o ID do Cubo na sessão
 					var _wrs_multiple_cube_event	=	$('.wrs_multiple_cube_event').find('option').length;
 					
@@ -1569,37 +1561,20 @@ function wrs_run_filter()
 					 * Verificnado os Filtros simples
 					 * nesse caso inpede o fluxo completo
 					 */
-					
 					if(!$.WrsFilter('wrs_check_filter_simples')) {
 						TRACE('EXISTE FILTRO SIMPLES');
 						$('body').wrsAbas('remove_event_click');
-
 						return false;
 					}
 
-					
 					var is_wrs_change_to	=	is_wrs_change_to_run(_param_request,manager_aba,_param_request['REPORT_ID']);
+						_param_request		=	{};
 						_param_request		=	is_wrs_change_to.val;
 						
 						
-						
-
-						
 					if(is_wrs_change_to.status)
 					{
-						
-						if($(this).attr('is_atributo_simples')=='true')
-						{
-							$(this).attr('is_atributo_simples','false');
-						}
-						
-						$(this).attr('locked',false);//Libera o filtro
-						$(this).attr('flag_load','false');
-						
-						$('body').wrsAbas('show_grid');
-						
-						$('body').wrsAbas('remove_event_click');
-
+						configure_options_show_grid($(this));
 						return true;
 		}else{
 			if(flag_load!='true')
@@ -1610,17 +1585,13 @@ function wrs_run_filter()
 			}
 		}
 		
-		//Ajustando ABAS HTML	
-		$('.WRS_DRAG_DROP_RECEIVER_FILTER').hide();
-		$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
-		$('.wrs_panel_filter_icon').hide();
-		
-		
-		
-		
-		
-		//Libero a configuração das janelas 
-		wrsConfigGridDefaultManagerTopOptions();
+					//Ajustando ABAS HTML	
+					$('.WRS_DRAG_DROP_RECEIVER_FILTER').hide();
+					$('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
+					$('.wrs_panel_filter_icon').hide();
+					
+					//Libero a configuração das janelas 
+					wrsConfigGridDefaultManagerTopOptions();
 		
 		
 		
@@ -1647,15 +1618,17 @@ function wrs_run_filter()
 			return true;
 		}
 		
-		
-		
 
-		//if(!LXLX) return true;
-		
-		
 		$('body').ThreadJobManager(_param_request['REPORT_ID']);
-
+		
+		
+		//É necessário zerar essas funções para que não mande recriar novamente a estrutura de deill
+		$('.WRS_ABA').find('.active').wrsAbaData('setKendoUi',{DRILL_HIERARQUIA_LINHA_DATA_MINUS:null, DRILL_HIERARQUIA_LINHA_DATA:null});
+		
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
+
+		
+		
 		
 		//AUTO LOAD
 		if($(this).attr('auto_load')=='true')
@@ -1692,6 +1665,24 @@ function wrs_run_filter()
 	TRACE('END wrs_run_filter()');
 	
 }
+
+
+function configure_options_show_grid(that)
+{
+	if(that.attr('is_atributo_simples')=='true')
+	{
+		that.attr('is_atributo_simples','false');
+	}
+	
+	that.attr('locked',false);//Libera o filtro
+	that.attr('flag_load','false');
+	
+	$('body').wrsAbas('show_grid');
+	
+	$('body').wrsAbas('remove_event_click');
+}
+
+
 
 function wrsRunGridButton(param_request)
 {
@@ -1757,13 +1748,9 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		}
 	}
 	
-//	$('.wrsGrid').removeClass('wrsGrid');
-	
+
 	TRACE('START MOUNT_LAYOUT_GRID_HEADER'); 
-	
-	
-	
-//container_panel_relatorio_rows
+
 	
 	/*
 	 * WARNING: é essa variável que impede de repetir os conteiners
@@ -1812,7 +1799,6 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 			
 			$('body').WRSJobModal('error',{report_id:_report_id,msg:body_html_error, active:is_active});
 			
-			//$('body').WRSJobModal('request_consulta_cancelada',{status:0, report_id:_report_id, html:body_html_error});
 		}else{
 			
 			ThreadJobManagerDONEJOB(_report_id);
@@ -1824,7 +1810,6 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		
 	
 	
-	//CLOSE_LOAD_RELATORIO();
 	//Apenas éexecutando quando existe atributo simples
 	if($('.wrs_run_filter').attr('is_atributo_simples')=='true')
 	{
@@ -1836,7 +1821,6 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	
 	$(window).resize();
-	//$('body').WRSJobModal('close',{'report_id':_report_id});
 	
 	TRACE('END MOUNT_LAYOUT_GRID_HEADER'); 
 }

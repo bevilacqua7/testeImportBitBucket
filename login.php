@@ -263,7 +263,7 @@ $(function(){
 		enviaEmailSenha($('#user').val());
 	})
 	
-	$( "#user,#password" ).keypress(function( event ) {
+	$( "#user,#password,#user_remote" ).keypress(function( event ) {
 		  if ( event.which == 13 ) {			  
 			  valida_usuario();
 		  }

@@ -4,45 +4,50 @@ class WRS_INI
 {
 
 
-	private static $ini_var	=	NULL;
+	private static $ini_var		=	NULL;
+	private static $ini_load	=	NULL;
+	private static $full_ini	=	NULL;
 	
 	/**
 	 * Carrega ini para a sessão
 	 */
-	public static function LOAD_INI(){
-	
-	
+	public static function LOAD_INI()
+	{
 		if(!file_exists(PATH_INI))
 		{
 			echo '<br>ERROR não foi encontrado o arquivo ini '.PATH_INI.'<br>';
 		}
 	
-	
 		// Interpreta com as seções
-		$ini_array = parse_ini_file(PATH_INI, true);
-		self::$ini_var	=	$ini_array;
-	
+		self::$full_ini = parse_ini_file(PATH_INI, true);
+		
+		if(in_array(self::$full_ini, $_SERVER['SERVER_NAME'])){
+			self::$ini_var	=	self::$full_ini[$_SERVER['SERVER_NAME']];
+		}else{
+			//Assume olphaweb_como default
+			self::$ini_var	=	self::$full_ini['alphaweb'];
+		}
+		
+		 
 	}
-	
-	
 	
 	/**
-	 * Retorna o string do INI
-	 * @param string $paran
+	 * var $input 
 	 */
-	public static function get_var_ini($paran)
+	public static function WRS_SERVER($input=NULL)
 	{
-		return  self::$ini_var[$paran];
+		if(empty($input)) return self::$ini_var;
+		
+		return self::$ini_var[$input];
 	}
 	
-	
-	/**
-	 * Retorna array dos arquivos ini
-	 */
-	public static function get_full_var()
+	public static function WRS_DEFINE()
 	{
-		return self::$ini_var;
+		return self::$full_ini['WRS_DEFINE'];
 	}
+	
+
+	
 	
 	
 }

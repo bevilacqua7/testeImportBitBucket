@@ -73,6 +73,9 @@ function DRILL_HIERARQUIA_LINHA_setButtonExpandALL(IDGRid,columnSelected,lastCol
 		
 		if(column!='C000' && lastColumn!=column)
 		{
+			/*
+			 * Esses ficam na Header da GRid
+			 */
 			var btn_plus		=	'<button grid-id="'+IDGRid+'" class="DRILL_HIERARQUIA_LINHA_HEADER" column="'+column+'" type="button"  wrs-type="plus"><i class="fa fa-plus-square"></i></button>';
 			var btn_minus		=	'<button grid-id="'+IDGRid+'" class="DRILL_HIERARQUIA_LINHA_HEADER" column="'+column+'" type="button"  wrs-type="minus"><i class="fa  fa-minus-square"></i></button>';
 			var btn_use			=	btn_plus;
@@ -106,7 +109,9 @@ function DRILL_HIERARQUIA_LINHA_setButton(_data,C000, line,column,DRILL_HIERARQU
 	 * OPENCOLS
 	 */
 	
-	
+	/*
+	 * Fica nos dados da grid
+	 */
 	var data			=	_data;
 	var btn_plus		=	'<button class="DRILL_HIERARQUIA_LINHA" column="'+column+'" grid-id="'+IDGrid+'" rows="'+LAYOUT_ROWS_B64+'" line="'+line+'"  data="'+_data+'" type="button"  wrs-type="plus"><i class="fa fa-plus-square"></i></button>';
 	var btn_minus		=	'<button class="DRILL_HIERARQUIA_LINHA" column="'+column+'" grid-id="'+IDGrid+'" rows="'+LAYOUT_ROWS_B64+'" line="'+line+'"  data="'+_data+'" type="button"  wrs-type="minus"><i class="fa  fa-minus-square"></i></button>';
@@ -259,18 +264,22 @@ function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 		}
 	}
 
-	wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA',base64_encode(implode('(_,_)',DrillData)));
+	
+	var options_change		=		
+	{
+			'PAGE_CURRENT'					:	kendoGrid.dataSource._page,
+			'TYPE_RUN'						:	TYPE_RUN.coluna_header,
+			'DRILL_HIERARQUIA_LINHA_DATA'	:	base64_encode(implode('(_,_)',DrillData)),
+			'DRILL_LINE_STOP'				:	true
+	}
 	
 	
 	if(wrs_type=='minus')
 	{
-			wrsKendoUiChange(grid_id,'DRILL_HIERARQUIA_LINHA_DATA_MINUS','remove_line');
+		options_change['DRILL_HIERARQUIA_LINHA_DATA_MINUS']	=	'remove_line';
 	}
 	
-	changeTypeRun(grid_id,TYPE_RUN.coluna_header);//Informando o tipo de RUN foi solicitado
-	//Salvando a página corrente
-	wrsKendoUiChange(grid_id,'PAGE_CURRENT',kendoGrid.dataSource._page);
-	
+	$(chIClass(grid_id)).wrsAbaData('setKendoUi',options_change);
 	
 	wrsRunFilter();
 }
