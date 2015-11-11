@@ -113,6 +113,9 @@ class WRS_PANEL  extends WRS_USER
 	 */
 	public function run()
 	{
+		
+		
+		
 		WRS_TRACE('run()', __LINE__, __FILE__);
 		//Pegando os parametros do cubo selecionado
 		$SSAS_USER		=	WRS::GET_SSAS_USER();
@@ -565,8 +568,6 @@ class WRS_PANEL  extends WRS_USER
 		
 		if(empty($history)) return false;
 		
-
-
 		
 		if(!$saveHistory){
 
@@ -648,14 +649,12 @@ class WRS_PANEL  extends WRS_USER
 		$MEASURE_RELATIONSSHIPS		=	 array();
 
 		$cube		=	'';
+	
 
 		//Pegando as integrações com o KendoUi
 		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi();		
 		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
-		//print_r($getRequestKendoUi);
-		//WRS_DEBUG_QUERY($getRequestKendoUi);
 		
-		//WRS_DEBUG_QUERY(print_r($getRequestKendoUi,true));
 		
 		/*
 		 * Exceptions variáveis utilizadas exporadicamente
@@ -750,6 +749,8 @@ class WRS_PANEL  extends WRS_USER
 		$TelerikUi->setId($getRequestKendoUi['REPORT_ID']);		
 		$TelerikUi->setWrsKendoUi($getRequestKendoUi); //Passando para Gravar no JS as integrações recebidas
 				
+		
+		
 		$ROWSFrozen		=	array();
 		/*
 		 * Validando se as metricas principais estão nulas
@@ -815,14 +816,13 @@ class WRS_PANEL  extends WRS_USER
 		}
 		//END
 		
-		/*
-		 * Verificando o cache 
-		 * 
-		 * TODO: esse processo tem que refazer devido as diversas modificações
-		 * 
-		 */
+		
 				$queryGrid			=	 $this->_query->CREATE_SSAS_JOB($SERVER, $DATABASE, $CUBE, $ROWSL, $COLUMNS, $MEASURES, $FILTERS, $ALL_ROWS, $ALL_COLS, $COLS_ORDER, 0, '');
+				
+				
 				$queryGrid_exec		=	 $this->query($queryGrid);
+				
+				
 				
 				if($this->num_rows($queryGrid_exec))
 				{
@@ -840,7 +840,7 @@ class WRS_PANEL  extends WRS_USER
 					
 					$getRequestKendoUi	=	 array_merge($getRequestKendoUi,$this->ssas_request);
 					
-						
+			
 					
 					$thread_job_manager	=	array(		'ROWSL'						=>	$ROWSL,
 														'getRequestKendoUi'			=>	$getRequestKendoUi,
@@ -972,12 +972,16 @@ class WRS_PANEL  extends WRS_USER
 	 * @paran boolean $checkThreadJobManager
 	 * @return boolean
 	 */
-	private function mountGrid($ROWSL,$getRequestKendoUi,$getRequestWrsExceptions,$cube,$getRequestKendoUi_TAG,$DillLayout,$TelerikUi,$CUBE,$checkThreadJobManager)
+	private function mountGrid($ROWSL,$_getRequestKendoUi,$getRequestWrsExceptions,$cube,$getRequestKendoUi_TAG,$DillLayout,$TelerikUi,$CUBE,$checkThreadJobManager)
 	{
 		WRS_TRACE('Start mountGrid', __LINE__, __FILE__);
 		
-		$LAYOUT_ROWS_SIZE			=	count(explode(',',$ROWSL));
-		$msg						=	''; //mensagens do sistema ela muda a cada conjunto de regras
+		$getRequestKendoUi			=	$_getRequestKendoUi;
+
+	//WRS_DEBUG_QUERY($getRequestKendoUi);
+	
+		$LAYOUT_ROWS_SIZE							=	count(explode(',',$ROWSL));
+		$msg										=	''; //mensagens do sistema ela muda a cada conjunto de regras
 		
 		//Processando o Drill Linha
 		if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
@@ -1098,7 +1102,8 @@ HTML;
 		$tagToUrl['numRows']	=	$num_rows;
 		$tagToUrl['LRS']		=	$LAYOUT_ROWS_SIZE;
 		$tagToUrl['rand']		=	RAND_TOKEN;
-		$url					=	'run.php?'.fwrs_array_to_url($tagToUrl);
+
+		
 		
 
 		$page_size				=	 $getRequestKendoUi['page_size'];
@@ -1118,15 +1123,13 @@ HTML;
 		
 		
 		$TelerikUi->setPageSize($page_size);
-		$TelerikUi->setRequestJson($url,$PAGE);
-//		$TelerikUi->setRequestComplement($url.'header');
-		
 		$TelerikUi->setHeaderColumnWRS($param);
-//		$TelerikUi->setToolbarExcel('excel', 'ExportarExcel', $urlToExport);
-	//	$TelerikUi->setToolbarPDF('pdf', 'pdf', $urlToExport);
+		$tagToUrl['TOTAL_COLUMN']	=	$TelerikUi->get_total_column();
+		$url						=	'run.php?'.fwrs_array_to_url($tagToUrl);
+		$TelerikUi->setRequestJson($url,$PAGE);
 		
-
-
+		
+		
 		$HTML	=	 $TelerikUi->render(	$this->param_encode($this->_param_ssas_reports),
 											$getRequestWrsExceptions,
 											$getRequestKendoUi['REPORT_ID'],
@@ -1185,9 +1188,9 @@ HTML;
 		$TelerikUi					= new KendoUi();
 		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi();
 		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
-		$CUBE_ID					=	 fwrs_request('CUBE_ID');
-		//
-		//WRS_DEBUG_QUERY(print_r($getRequestKendoUi,true));
+		$CUBE_ID					=	fwrs_request('CUBE_ID');
+		$TOTAL_COLUMN				=	fwrs_request('TOTAL_COLUMN');
+		$total_column_detect		= 	false;
 		/*
 		 * Pegando os Eventos do Telerik
 		 */
@@ -1213,7 +1216,15 @@ HTML;
 		 */
 		if(isset($sort[0]['field']))
 		{
+			
 			$field	=	(int)substr($sort[0]['field'], 1);
+			
+			if($field>$TOTAL_COLUMN)
+			{
+				$field					=	$TOTAL_COLUMN;
+				$total_column_detect	=	true;
+			}
+			
 			$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$LAYOUT_ROWS_SIZE,$field,strtoupper($sort[0]['dir'])));
 			
 			
@@ -1257,8 +1268,10 @@ HTML;
 		
 			$order_field	=	isset($sort[0]['field']) ? $sort[0]['field'] : '';
 			$order_dir		=	isset($sort[0]['dir']) ? $sort[0]['dir'] : '';
-
-			 
+			
+			
+			if($total_column_detect)	$order_field	=	'';
+			
 			$this->managerHistotyChangeColOrder($CUBE_ID, 
 												$getRequestKendoUi,
 												$order_field,

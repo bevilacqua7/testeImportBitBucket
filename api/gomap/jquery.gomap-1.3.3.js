@@ -83,9 +83,9 @@ function goMapsWindowResize()
 	$.goMapBase = {
 		defaults: {
 			address:					'', // Street, City, Country
-			latitude:					-15.800128, 
-			longitude:					-47.862797,
-			zoom:						11,
+			latitude:					-15.794145,  
+			longitude:					-47.882379,
+			zoom:						14,
 			delay:						200,
 			hideByClick:				true,
 			oneInfoWindow:				true,

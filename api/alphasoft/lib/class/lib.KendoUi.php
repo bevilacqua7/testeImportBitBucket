@@ -45,8 +45,19 @@ class KendoUi
 	private $Drilllayout		=	 array();
 	
 	private $param_wrs			=	 array();
+	
+	private $total_column		=	0;
 
 	
+	public function set_total_column($input)
+	{
+		$this->total_column	=	 $input;
+	}
+	
+	public function get_total_column()
+	{
+		return $this->total_column-1;
+	}
 	public function setParamWRS($input)
 	{
 		$this->param_wrs		=	$input;	
@@ -144,8 +155,8 @@ class KendoUi
 						'IS_REFRESH',		//identifica se foi executado o F5 e ou o frefresh na tela
 						'TOP_CONFIG',		//COnfigurações dos tipos de TOPS e onde
 						'MULTIPLE_CUBE_ID'		//Caso exista multiple cubos ele é preenchido com o ID_do CUBO
-						
 					);	
+			
 	}
 	
 	
@@ -158,7 +169,10 @@ class KendoUi
 		return array(
 							'DRILL_HIERARQUIA_LINHA_DATA_MINUS',
 							'TRASH_HISTORY',		// Contem as informações hos HISTORICOS
-							'MKTIME_HISTORY'		//Mktime do Histori
+							'MKTIME_HISTORY',		//Mktime do Histori
+							'STOP_RUN',		//A Flag irá aparecer quando se navega entre as abas | true:false
+							'STOP_QUERY',	//Caso esteja true executa novamente mesmo com o histórico igual|true:false
+							'DRILL_LINE_STOP'	//quando ele estiver ativo não permite cancelar a consulta e iomite a string |  true:false
 		);
 	}
 
@@ -298,11 +312,7 @@ class KendoUi
 		unset($_request['class']); // Apagando info da URL
 		unset($_request['file']);	// Apagando info da URL
 		unset($_request['event']);	// Apagando info da URL
-		
-
-		//$_element,$getRequestWrsExceptions,$report_id,$getRequestKendoUi
-		
-		
+			
 		$_jsonencode		=	NULL;
 		$PLUS_MINUS			=	$getRequestKendoUi['PLUS_MINUS'];
 		
@@ -658,8 +668,9 @@ HTML;
 			$wrs_column		=	 array_values($wrs_column);
 		}
 		
+		$this->set_total_column(count($columns_table));
+		
 		$this->setColumn($wrs_column);
-				
 		return true;
 		
 	}

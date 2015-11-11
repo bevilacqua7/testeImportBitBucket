@@ -32,17 +32,27 @@ include_js('Abas'); */
 function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
 {
 	var _layout	=	layout;
-	/*
-	$('.WRS_DRAG_DROP_FILTER').html('');
-	$('.wrs_swap_drag_drop').html('');
-	*/
-//	set_value_box_relatorio(_layout);
-	//$('.wrs_panel_filter_icon').attr('filter_hide','true').trigger('click');
 
-	_layout['KendoUi']	=	_paranKendoUi;
 	
-	$(ABA_TAG_NAME).wrsAbas('refresh_F5',_layout);
-	//wrsRunFilter();
+	var tagABA			=	$('.WRS_ABA ul');
+	var aba_active		=	 tagABA.find('.active');
+		_layout['KendoUi']	=	_paranKendoUi;
+	
+		$(ABA_TAG_NAME).wrsAbas('refresh_F5',_layout);
+	
+		
+		var wrs_data		=	aba_active.wrsAbaData('getWrsData');
+	
+		
+
+		//Remove a aba em branco ou aque não tiver linhas
+		if(wrs_data!=undefined)
+		{
+			if(wrs_data.LAYOUT_ROWS=='e30=')
+				{
+					aba_active.find('.icon-remove-aba').trigger('click');
+				}
+		}
 }
 
 
@@ -78,13 +88,16 @@ function WRSKendoGridRefresh(history)
 				}
 				 
 			 }catch(e){}
-			//getRequestKendoUiDefault	=	merge_objeto(_paranKendoUi,_layout);
+			 
+		//	getRequestKendoUiDefault	=	merge_objeto(_paranKendoUi,_layout);
 
 			_paranKendoUi['IS_REFRESH']		=	true; //Informa que foi executado um refresh
 			
 			get_aba_active.wrsAbaData('setKendoUi',{IS_REFRESH:true});
 
 			$('#wrsConfigGridDefault').attr('f5_ative','true');
+			
+			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
 			
 	});
 	
@@ -647,6 +660,7 @@ function onDataBound(arg)
 			
 			resizeColumnKendoUi(arg);
 			 
+			
 
 			var classGrid		=	arg.sender.element.attr('id');
 			var nameID			=	 '#'+classGrid;
@@ -656,8 +670,9 @@ function onDataBound(arg)
 			var wrsKendoUi		=	_kendoUiParam;
 			var wrsparam		=	$(report_aba).wrsAbaData('getWrsData');
 			
-				wrsKendoUiChange(nameID,'page_size',arg.sender.dataSource._pageSize);
-				 
+
+			$(report_aba).wrsAbaData('setKendoUi',{page_size:arg.sender.dataSource._pageSize, STOP_QUERY:false});
+			
 				
 				/*Options To ABAS */
 				wrsparam['KendoUi']				=	_kendoUiParam;

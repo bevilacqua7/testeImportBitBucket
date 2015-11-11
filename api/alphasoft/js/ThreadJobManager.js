@@ -26,69 +26,103 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
  * 
  * Sempre chamar o evento no body
  */
-(function($){
+
+function click_stop_job()
+{
+	$('.action_WRSJobModalCancelQuery').trigger('click');
+}
+
+function job_exist(report_id)
+{
+	var jobs	=	 $('body').data('WrsThreadJobManager');
 	
+	for(var lineJob in jobs)
+		{
+				if(jobs[lineJob].report_id==report_id) return true;
+		}
+	
+	return false;
+}
+
+
+function _exist_job_in_cancel(report_id)
+{
+	var CANCEL_JOB	=	'WrsThreadJobManagerCancelJOB';
+	var that		=	 $('body');
+	var _data		=	 that.data(CANCEL_JOB);
+	var _exec		=	 false;
+
+		try{
+			if(_data[report_id]==true){
+				_exec	=	 true;
+			}else{
+				_exec	=	 false;
+			}
+		}catch(e){
+			_exec	=	 false;
+		}
+		
+		return _exec;
+}
+
+
+(function($){
+
 	$.fn.WRSTimerLoader = function(methodOrOptions)
 	{
 			var labelData			=	'WRSTimeLoader';
 			var _data				=	$('body').data(labelData); 
 			var that				=	this;
 			var DATA_NAME			=	'WrsThreadJobManager';
-			
 			var TIME_LOAD			=	300;
-		
+
+			
 			var __clock_time	=	 function()
 			{
 				
-				var _data			=	 that.data(DATA_NAME);
+				var _data			=	that.data(DATA_NAME);
 				var _data_time		=	$('body').data(labelData);
-				var _mktime	=	'';
+				var _mktime			=	'';
+				var aba_data		=	$('.'+_data_time['report_id']).wrsAbaData('getKendoUi');
 				
 
+				if(aba_data!=undefined)
+				{
+					if(aba_data['DRILL_LINE_STOP'])
+					{
+						$('.action_WRSJobModalCancelQuery .title').hide();
+					}else{
+						$('.action_WRSJobModalCancelQuery .title').show();
+					}
+				}
+					
 					_data_time['time']	=	setTimeout(__clock_time, TIME_LOAD);
-					/*
-					
-					for(var lineReportID in _data)
-						{
-							try{
-								if(_data[lineReportID].report_id==_data_time.report_id)
-								{									
 
-										_mktime	=	_data[lineReportID].mktime;
-										 
-								}
-							}catch(e){
-								//_mktime	=	 mktime();
-							}
-						}
-					
 
-				if(empty(_mktime))
-				{*/
+
 					_mktime	=	 _data_time.mktime;
 					
-				//}
-//				console.log('_mktime00',_mktime);
 				
 				var _mktime_current	=	mktime();
 					_mktime			=	_mktime_current-_mktime;
 				var _date			=	 date('i:s',_mktime);
 				
-				
-				//console.log('_date',_date);
-					
+
 				$('.wrs-modal-time').html(_date);
-				
+
 			}
 			
 			
 			var __stop_time_out		=	 function()
 			{
+				//$('.modal-window-wrs').addClass('hide');
 				
 				var _data_time		=	$('body').data(labelData);
 				
+
 				if(empty(_data_time)) return false;
-				
+
+			
 				
 //					if(array_length(_data_time)==0)
 	//				{
@@ -243,30 +277,13 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 					}else{
 						_data[report_id]			=	 true;
 					}
-					
-					
-					
-					that.data(CANCEL_JOB,_data);
-			}
-			
-			
-			var _exist_job_in_cancel		=	 function(report_id)
-			{
-				var _data		=	 that.data(CANCEL_JOB);
-				var _exec		=	 false;
 
-					try{
-						if(_data[report_id]==true){
-							_exec	=	 true;
-						}else{
-							_exec	=	 false;
-						}
-					}catch(e){
-						_exec	=	 false;
-					}
+					that.data(CANCEL_JOB,_data);
 					
-					return _exec;
 			}
+			
+			
+			
 			
 			
 			
@@ -287,7 +304,10 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 					}
 					else
 					{
-						console.log('Error no JOB'+data.report_id,data.html);
+						/*
+						 * Este erro é irrelevante pois o usuário não precisa tomar ciencia caso ele ocorra
+						 */
+						console.error('Error no JOB '+data.report_id,data.html);
 						//alertify.error(data.html,0);
 					}
 			}
@@ -299,14 +319,23 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 			var __click__action_WRSJobModalCancelQuery	=	 function()
 			{
 				var _report_id	=	$(this).parent().attr('report_id');
-				
+				var aba_active	=	$('.'+_report_id);
 
+
+				var aba_data		=	aba_active.wrsAbaData('getKendoUi');
+				
+				if(aba_data['DRILL_LINE_STOP']==true)
+				{
+					return true;
+				}
+				
+				
 				
 				if(_exist_job_in_cancel(_report_id))
 				{
 					return true;
 				}
-				
+
 				//show grid
 				$('#'+_report_id+'Main').removeClass('hide');
 				
@@ -321,6 +350,7 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     		
     			
     			
+    			aba_active.wrsAbaData('setKendoUi',{STOP_QUERY:true});
     			
     				__add_mutex_job(_report_id);
     				$(MODAL_JOB).addClass('hide');
@@ -355,7 +385,7 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 									'							<!--A simple primary message! -->'+
 									'						</div>'+
 									'						<div class="modal-buttons-wrs-job" report_id="">'+
-									'							<button class="btn btn-warning modal-btn-padding modal-btn-job-wrs   action_WRSJobModalCancelQuery"><i class="fa fa-hand-paper-o"></i> '+LNG('BTN_CANCEL_CONSULTA')+' <span class="wrs-modal-time">00:00</span></button>'+
+									'							<button class="btn btn-warning modal-btn-padding modal-btn-job-wrs   action_WRSJobModalCancelQuery"> <span class="title"> <i class="fa fa-hand-paper-o"></i> '+LNG('BTN_CANCEL_CONSULTA')+' </span> <span class="wrs-modal-time">00:00</span></button>'+
 									'							<button class="btn btn-default  modal-btn-padding action_WRSJobModalCloseWindow"><i class="fa fa-times"></i> '+LNG('JOB_CLOSE_ALERT')+'</button>'+
 									'						</div>'+
 									'				</div>'+
@@ -921,6 +951,14 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     		that.data(THREAD_TIMEOUT,'');
     	} 
 
+
+    	/*
+    	 * Desabilita a estrutura de drill
+    	 */
+    	var remove_DRILL_LINE_STOP	=	 function(report_id)
+    	{
+    		$('.'+report_id).wrsAbaData('setKendoUi',{DRILL_LINE_STOP:false});
+    	}
     	
     	/*
     	 * Recebe dados do run call
@@ -945,6 +983,8 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     					
     					var _data_json	=	typeof(data[lineData]) == 'string' ? $.parseJSON(data[lineData]) : data[lineData];
     					
+    					remove_DRILL_LINE_STOP(_data_json['REPORT_ID']);
+    					
     						
     					if(report_id_modal==lineData)
     						{
@@ -964,6 +1004,7 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     									var _title		=	that.wrsAbas('aba_title',{report_id:_data_json['REPORT_ID']});
     									
     									alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+_data_json['error'], 0);
+    									
     									
     									removeThread(_data_json['REPORT_ID']);
     									
@@ -1021,12 +1062,10 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
     				
     				that.WRSTimerLoader('timeout',{report_id:report_id_modal});    				
     				$('body').WRSJobModal('close',{'report_id':report_id_modal});
-    				 
-    				
     			}
-    			
-    			
     	}
+    	
+    	
     	
     	var get_report_ids		=	 function(input)
     	{

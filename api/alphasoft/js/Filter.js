@@ -193,6 +193,7 @@ function changeWithDrillFilter(layout,filter_to_add)
 		changeLayout['LAYOUT_FILTERS'] =  filterMergeLoad(filtersCurrent,filter_to_add);	
 	}
 	
+	
 
 	
 //	changeLayout	=	getLoadReport()
@@ -285,6 +286,7 @@ function convert_to_compare_filter(inputHistory)
 	
 	for(var lineInput in inputHistory)
 		{
+				if(inputHistory[lineInput].data=='' || inputHistory[lineInput].data==null) continue;
 				tmp.push('{'+inputHistory[lineInput].data+'}');
 		}
 	
@@ -297,8 +299,8 @@ function convert_to_compare_filter(inputHistory)
  */
 function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 {
-	
-	var param_request	=	 _param_request;
+	var param_request	=	{};
+		param_request	=	 _param_request;
 
 	var _status			=	 false;
 	
@@ -312,11 +314,11 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 	var loadStart		=	 true;
 
 
-	//foreach(param_request);
+
 	if(empty(history))
 	{
 		
-		for(lineHistoty_param in param_request)
+		for(var lineHistoty_param in param_request)
 			{
 				histoty_param[lineHistoty_param]	=	param_request[lineHistoty_param];
 			}
@@ -345,21 +347,20 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 	
 	
 	
+	
 	histoty_param	=	$.parseJSON(base64_decode(history));
 	
 	
 	var _compare	= ['LAYOUT_ROWS','LAYOUT_COLUMNS','LAYOUT_MEASURES','LAYOUT_FILTERS','ORDER_COLUMN','ALL_COLS','ALL_ROWS','DRILL_HIERARQUIA_LINHA_DATA_MINUS','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA'];
 
-		if(empty(param_request['ALL_COLS'])) param_request['ALL_COLS']='';
+		if(empty(param_request.ALL_COLS)) param_request.ALL_COLS='';
 		
-		if(empty(param_request['ALL_ROWS'])) param_request['ALL_ROWS']='';
+		if(empty(param_request.ALL_ROWS)) param_request.ALL_ROWS='';
 	
-		if(empty(param_request['ORDER_COLUMN'])) param_request['ORDER_COLUMN']=0;
+		if(empty(param_request.ORDER_COLUMN)) param_request.ORDER_COLUMN=0;
 	
 
-
-		
-		for(lineCompare in _compare)
+		for(var lineCompare in _compare)
 		{
 			var __key				=	_compare[lineCompare];
 			var _history_compare	=	_trim(histoty_param[__key]);
@@ -375,8 +376,12 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 				
 				try{
 				//Verificando se são iguais as informações
+					
+					//console.log('_history_compare:',empty_wrs_defaults(_history_compare),'__key:',empty_wrs_defaults(_trim(param_request[__key])));
+					
 					if(empty_wrs_defaults(_history_compare)!=empty_wrs_defaults(_trim(param_request[__key])))
 					{
+						
 						flag=false;
 					}
 				}catch(e){
@@ -385,34 +390,43 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 		}
 		
 
+		//Se for solicitado o cancelamento então deixa o usuário executar novamente a consulta
+		try{
+			if(aba_active.wrsAbaData('getKendoUi').STOP_QUERY==true)
+			{
+				aba_active.wrsAbaData('setKendoUi',{STOP_QUERY:false});
+				flag	=	 false;
+			}
+		}catch(e){}
 		
 		
 		
 		
-		if(_trim(histoty_param['TOP_CONFIG'])!=_trim(param_request['TOP_CONFIG']))
+		if(_trim(histoty_param['TOP_CONFIG'])!=_trim(param_request.TOP_CONFIG))
 		{
 			flag=false;
-			
+			/*
 			if(!empty(histoty_param['TOP_CONFIG']))
 			{
 				//Exceção para limpar os TOPs
-				param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
-				param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
-			}
+				param_request.DRILL_HIERARQUIA_LINHA_DATA_HEADER	=	"";
+				TRACE_DEBUG('apagar');
+				param_request.DRILL_HIERARQUIA_LINHA_DATA		=	"";
+			}*/
 		}
 
 	
 	if(!flag)
 	{
-
 		//Garante que ao clicar na linha de drill na primeira vez seja executada
-		if(	(!empty(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']) && !empty(histoty_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']))  || 
-			param_request['TYPE_RUN']=='DrillLinha' || 
-			param_request['TYPE_RUN']=='DrillHeaderData')
+/*		if(	(!empty(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']) && !empty(histoty_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']))  || 
+			param_request.TYPE_RUN=='DrillLinha' || 
+			param_request.TYPE_RUN=='DrillHeaderData')
 		{
-			param_request['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	"";
-			param_request['DRILL_HIERARQUIA_LINHA_DATA']		=	"";
-		}
+			param_request.DRILL_HIERARQUIA_LINHA_DATA_HEADER	=	"";
+			TRACE_DEBUG('APAGR_2');
+			param_request.DRILL_HIERARQUIA_LINHA_DATA		=	"";
+		}*/
 	}
 	
 	
@@ -462,7 +476,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 			
 			
 		}
-		
+
 		return {status:true, val:param_request};
 		
 	}
@@ -480,16 +494,16 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 			}
 		
 			 			
-			for(lineHistoty_param in param_request)
+			for(var lineHistoty_param in param_request)
 			{
 				histoty_param[lineHistoty_param]	=	param_request[lineHistoty_param];
 			}
 			
+			//mantendo os dados
+			param_request  = histoty_param;
 			
 			
-			histoty_param['DRILL_HIERARQUIA_LINHA_DATA_MINUS']='';
-			//histoty_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']='';
-			histoty_param['DRILL_HIERARQUIA_LINHA_DATA']='';
+			
 
 			
 			aba_active.wrsAbaData('setHistory',base64_encode(json_encode(histoty_param,true)));
@@ -502,9 +516,20 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 	
 	
 	
-	
 	return {status:_status, val:param_request};
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /** 

@@ -19,7 +19,6 @@ define('PATH_MAIN',dirname(__DIR__).DS);
  */
 define('PATH_INI',PATH_MAIN.'WRS.ini');
 
-
 include_once(dirname(__DIR__).DS.'api'.DS.'alphasoft'.DS.'config.php');
 
 includeSTATIC('WRS');
@@ -32,8 +31,8 @@ include_once(PATH_DEFINE.DS.'common.php');
 	$conn_wrs	=	 NULL;
 	if(!isset($_REQUEST['URL_CONNECT']))
 	{
-		WRS_INI::LOAD_INI();
-		$ini	=	 WRS_INI::get_full_var();
+		
+		$ini	=	 WRS_INI::WRS_SERVER();
 		$connectionInfo_wrs = array(	"Database"					=>$ini['DATABASE_ID'],
 										'UID'						=>$ini['DATABASE_USER'],
 										'PWD'						=>$ini['DATABASE_PWD'],
