@@ -517,7 +517,7 @@ function getWrsKendoColumn(data)
 						if(isset(_arg.items[i]['bold'+obj]))
 						{
 							//Aplica o BOLD
-							word		=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word, wrsKendoUi.SUMARIZA);
+							word		=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word, wrsKendoUi.SUMARIZA,false,(('LEVEL_NAME' in _param[obj]['wrsParam'])?_param[obj]['wrsParam']['LEVEL_NAME']:''));
 								//Pois quando for Percente no Cresce vem Imagem junto
 								if(is_array(word))
 									{
@@ -526,7 +526,7 @@ function getWrsKendoColumn(data)
 									}
 							_arg.items[i][obj]	= '<b class="color-black">'+word+img+'</b>';
 						}else{
-							word	=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word,wrsKendoUi.SUMARIZA);
+							word	=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word,wrsKendoUi.SUMARIZA,false,(('LEVEL_NAME' in _param[obj]['wrsParam'])?_param[obj]['wrsParam']['LEVEL_NAME']:''));
 							
 							//Pois quando for Percente no Cresce vem Imagem junto
 							if(is_array(word))
