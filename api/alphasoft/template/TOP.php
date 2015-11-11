@@ -15,9 +15,35 @@
 		</table>
 		<table width="100%" height="30" border="0" class="ui-widget-header pws-style-select">
 		  <tr>
-			<td align="left" width="50%" style="padding-left: 10px">
+			<td align="left" width="300" style="padding-left: 10px;padding-right: 10px;">
 				<span style="font-size:11px;vertical-align:middle"><?php echo LNG('TITLE_TEMA')?>: </span><?php echo $SELECT_THEME;?>
 				<span style="font-size:11px;vertical-align:middle"><?php echo LNG('TITLE_LINGUA')?>: </span><?php echo $SELECT_IDOMA;?>
+			</td>
+			<td align="left" style="padding-left: 10px">
+			<div class="menu_administrativo_itens">
+				<?php 
+				$bts_adm = array(
+					"ATT_WRS_CUSTOMER"=>"Clientes",
+					"ATT_WRS_USER"=>"Usuários",
+					"ATT_WRS_DATABASE"=>"Databases",
+					"ATT_WRS_CUBE"=>"Cubos",
+					"ATT_WRS_PERFIL"=>"Perfis",
+					"REL_WRS_CUBE_USER"=>"Cubo por Usuário",
+					"ATT_WRS_DOWNLOAD"=>"Downloads",
+					"ATT_WRS_LOG"=>"LOG"						
+				);
+				foreach($bts_adm as $tabela=>$label)
+				{					
+					$html = <<<HTML
+						<button type="button" class="menu_cadastro btn btn-default btn-xs" tabela="{$tabela}">
+						  <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span> {$label}
+						</button>
+HTML;
+					echo $html;
+				}
+				
+				?>
+			</div>	
 			</td>
 			<td align="right">
 				<span class="ui_color_user ui-state-active" style="font-size:12px;cursor:pointer;vertical-align:middle; background: none; border: none;" title="<?php echo LNG('TITLE_ALTER_SENHA')?>" >
@@ -27,7 +53,7 @@
 				$perfil_type	=	 WRS::INFO_SSAS_LOGIN('PERFIL_ID');
 				
 				if($perfil_type=='MST' || $perfil_type=='ADM'){?>
-					<span  style="font-size:12px;cursor:pointer;vertical-align:middle;" onClick="window.location='index_adm.php"> <?php echo LNG('TITLE_ADMINISTRATIVO')?> </span>&nbsp;
+					<span  style="font-size:12px;cursor:pointer;vertical-align:middle;" class="menuADM_link"> <?php echo LNG('TITLE_ADMINISTRATIVO')?> </span>&nbsp;
 				<?php }?>
 				<a href="run.php?file=WRS_MAIN&class=WRS_MAIN&event=logout"> <img src="imagens/exit.png" height="22" style="cursor:pointer;vertical-align:middle;" title="<?php echo LNG('BTN_SAIR')?>" /></a>
 			</td>

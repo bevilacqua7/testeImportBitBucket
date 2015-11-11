@@ -17,7 +17,7 @@
 		
 	if(!empty($WRS_MAIN_DATABASES_DASHBOARD))
 	{
-		echo '<div id="fullwidth" class="util-carousel fullwidth"  >'.$WRS_MAIN_DATABASES_DASHBOARD.'</div><!-- "fullwidth" -->';
+		echo '<div id="fullwidth_ds" class="util-carousel fullwidth"  >'.$WRS_MAIN_DATABASES_DASHBOARD.'</div><!-- "fullwidth" -->';
 		
 	}
 	

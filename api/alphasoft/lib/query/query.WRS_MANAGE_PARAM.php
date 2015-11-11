@@ -121,7 +121,20 @@ class WRS_MANAGE_PARAM
 	//Classe de Usuário ADMINISTRATIVO
 	public function ATT_WRS_USER()
 	{
-		$button	=	array('new'=>'');
+		$button		=	$button_icon	=	array();
+		
+		$button['new']			=	'Novo';
+		$button['update']		=	'Salvar';
+		
+		
+		if(!WRS_USER::getArrPerfUser('DRG')){
+			$button['remove']	=	'Apagar';
+		}
+		
+		$button['teste']		='ok';
+		$button_icon['new']		=	'fa fa-pencil-square-o';
+		$button_icon['update']	=	'fa fa-floppy-o';
+		
 		$table	=	'ATT_WRS_USER';
 		
 		//return $this-> ATT_WRS_CUSTOMER();
@@ -159,7 +172,16 @@ class WRS_MANAGE_PARAM
 						'table'		=>	$table,
 						'order'		=>	$order,
 						'icon'		=>	'user.png',
-						'primary'	=>	'USER_ID'
+						'primary'	=>	'USER_ID',
+						'checkbox'				=>	true, 												// NEW
+						'button_icon'			=>	$button_icon,										// NEW
+						'button_force_label'	=>	true, 			  									// NEW
+		 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
+						'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
+						'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
+						'exception'				=>	true, 												// NEW
+						'aplicaClassLinhas'		=>	true,												// NEW
+						'aplicaClassHeaders'	=>	'text-center'										// NEW
 					);
 		
 	}

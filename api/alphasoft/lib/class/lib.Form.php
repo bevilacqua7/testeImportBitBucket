@@ -30,7 +30,9 @@ class FORM  extends WRS_USER
 		$param				=	$_param;
 		$html				=	NULL;
 		
-		$param['button']	=	array('new'=>'','remove'=>'');
+		if(!array_key_exists('button', $param) || !is_array($param['button']) || count($param['button'])<=0){
+			$param['button']	=	array('new'=>'','remove'=>'');
+		}
 		
 		$event_form			=	fwrs_request('form_event');
 		$exec_action		=	'';

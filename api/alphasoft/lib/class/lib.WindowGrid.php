@@ -35,7 +35,7 @@ class WindowGrid extends FORM
 		 *
 		 */
 
-		if(array_key_exists('exception', $param))
+		if(array_key_exists('exception', $param) && is_array($param['exception']))
 		{
 			$this->exception	=	 $param['exception'];
 			includeCLASS($this->exception['file']);
@@ -97,6 +97,10 @@ class WindowGrid extends FORM
 				
 				//CHamando o Eventos
 				$param			=	$this->manage_param->$event();
+				$p_request		=	fwrs_request('param_request');
+				if(is_array($p_request) && count($p_request)>0)
+					foreach($p_request as $k=>$v)
+						$param[$k]=$v;
 				$param			=	$this->build_grid_form($param);				
 				
 				$this->extendException($param,$wrs_type_grid);
@@ -119,6 +123,12 @@ class WindowGrid extends FORM
 		$TPL_COMPLEMENT_TITLE	=		$param['title_menu'];
 		
 		
+		if($wrs_type_grid=='form'){
+			unset($param['button']['new']); 	// se o usuario estiver no formulario para alteracao, ele so pode salvar ou apagar algo (sem botao de novo)
+		}else{
+			unset($param['button']['update']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
+		}
+	
 		$this->setButton($param['button'],$param['table'],((array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false),((array_key_exists('button_icon',$param) && is_array($param['button_icon']) && count($param['button_icon'])>0)?$param['button_icon']:false));
 		
 		

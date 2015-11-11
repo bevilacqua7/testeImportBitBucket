@@ -965,11 +965,11 @@ function sumarizaValor(valor)
  * @param sumariza
  * @returns
  */
-function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
+function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG,label)
 {
 	var _casa_decimal 	= '.';
 	var _milhar 		= ',';
-	
+	var _label			= (label!=undefined && label.trim()!='')?label:'';
 
 	if(LNG('IDIOMA')== 'POR')
 	{
@@ -996,13 +996,14 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 		case 'Percent' 	:
 							{
 
-									$controle_metricas=false;
+									var controle_metricas=false;
+
 									try{
-										$controle_metricas=(strtolower(substr(MEASURE_NAME,0,5))=='cresc' || strtolower(substr(MEASURE_NAME,0,4))=='evol');
+										controle_metricas=(_label.trim().toLowerCase().substr(0,5)=='cresc' || _label.trim().toLowerCase().substr(0,4)=='evol');
 									}catch(e){}
-			
+
 									//if(strpos(MEASURE_NAME,'Cresc.')!==false || strpos(MEASURE_NAME,'Evol.')!==false)	
-									if($controle_metricas)
+									if(controle_metricas)
 									{
 										if(valor>0){
 											seta = "<img src='imagens/setinha_verde.png' width='9' height='9'/>";
@@ -1084,5 +1085,17 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG)
 $(document).ready(function(){
 	
 	$('body').WRSJobModal(); //Criando o BOX de CSS
+	
+	$('.menu_administrativo_itens').hide();
+	
+	$('.menuADM_link').click(function(){
+		$('.menu_administrativo_itens, #fullwidth, #fullwidth_ds').toggle();
+	});
+
+	$('.menu_cadastro').click(function(){
+		grid_window_modal({wrs_type_grid:'list',cube_s:CUBE_S},$(this).attr('tabela'));
+		$('#myModal').modal('show');
+	});
+		
 
 });
