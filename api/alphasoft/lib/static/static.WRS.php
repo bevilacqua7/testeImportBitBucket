@@ -172,6 +172,13 @@ class WRS
 		$_SESSION['LOGIN_ID']	=	$login_id;
 	}
 	
+	/*
+	 * Devolve o login ID
+	 */
+	public static function GET_LOGIN_ID()
+	{
+		return $_SESSION['LOGIN_ID'];
+	}
 	
 	/**
 	 * Grava o Logind ID

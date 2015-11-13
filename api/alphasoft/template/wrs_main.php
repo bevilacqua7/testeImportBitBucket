@@ -9,6 +9,15 @@
 		<link rel="stylesheet" href="api/fonte/stylesheet.css" />
 		<link rel="stylesheet" href="api/assets/utilcarousel-files/utilcarousel/util.carousel.skins.css" />
 
+		
+<!-- CSS Gerenciador de JOBS para utilizar o mesmo padrao das MODAIS pro logoff -->
+<link href="api/jquery.modal-1.2/css/jquery.modal.wrs.job.css" type="text/css" rel="stylesheet" />
+<link href="api/font-awesome-4.3.0/css/font-awesome.min.css?v=0.0.1" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="api/bootstrap-3.3.0/dist/css/bootstrap.css" />
+
+
+
+
 	<div id="fullwidth" class="util-carousel fullwidth"  >
 			<?php echo $WRS_MAIN_DATABASES;?>
 	</div><!-- "fullwidth" -->
