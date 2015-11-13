@@ -99,6 +99,9 @@
 	/*
 	 * BOTAO
 	 */
+
+	$language ['BTN_CLOSE'] 					= "Fechar";
+	$language ['MSG_FORCE_LOGOFF'] 				= "Você foi desconectado do sistema";
 	
 	$language ['DRAG_DROP_FILE_IN_USER'] 		= "O elemento <b>%s</b> já está em uso";
 	$language ['DRAG_DROP_FILE_IN_USER_REMOVE'] = "O elemento <b>%s</b> já estava em uso e por isso foi removido da seleção";

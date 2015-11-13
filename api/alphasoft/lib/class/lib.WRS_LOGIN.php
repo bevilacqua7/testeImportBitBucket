@@ -23,6 +23,7 @@ class WRS_LOGIN extends WRS_BASE
 		{
 			case 'login' :{echo $this->setLogin($login, $pwd, $perfil);};break;
 			case 'remove':{ $this->remove($login);}; break;
+			case 'userIsLogged':{ $this->userIsLogged((fwrs_request('exit')?fwrs_request('exit'):0));}; break;
 		}
 		
 		WRS_TRACE('END run()', __LINE__, __FILE__);
@@ -195,6 +196,22 @@ class WRS_LOGIN extends WRS_BASE
 		WRS_TRACE('END setLogin()', __LINE__, __FILE__);
 		return fwrs_error('Usuário ou senha inválida ');
 	}
+	
+	
+	/*
+	 * Verifica se o usuario permanece logado - true or false
+	 * felipeb 20151112
+	 */
+	public function userIsLogged($exit=false){
+		$ret=((trim(WRS::GET_LOGIN_ID())!='' && $this->num_rows($this->query(QUERY_LOGIN::GET_SSAS_LOGIN(WRS::GET_LOGIN_ID())))>0)?'S':'N');
+		if($exit){
+			exit($ret);
+		}else{
+			return $ret;
+		}
+	}
+	
+	
 
 
 	/**

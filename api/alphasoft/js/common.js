@@ -36,7 +36,70 @@ function WRS_CONSOLE(){
 		console.log(arguments);
 	}
 }
+
+function WRS_IS_LOGGED_IN(){
+	var loggedin	=	false;
+	$.ajax({
+		  type: 'POST',
+		  url: 'run.php',
+		  data: {'exit':1,'file':'WRS_LOGIN','class':'WRS_LOGIN','event':'userIsLogged'},
+		  success: function(data){
+						loggedin	=	data.trim()=='S'?true:false;	
+						WRS_CONSOLE('LOGGED IN?',data,loggedin);	
+					},
+		  async:false  // este é o segredo de aguardar o retorno do ajax antes de retornar a funcao
+		});
+	return loggedin;
+}
 	
+function verifica_loggedin_periodico(){
+	
+	var periodicidade = 30;//em segundos
+
+	if(!WRS_IS_LOGGED_IN()){
+		if(window.location.href.substr(-9,9)!='login.php'){
+			var logoff = function(){ 
+					window.location	= "run.php?file=WRS_MAIN&class=WRS_MAIN&event=logout";
+			}
+
+			var MODAL_JOB			=	'.modal-window-wrs';
+			var MODAL_LOGOFF		=	'.modal-window-wrs-logoff';
+			var _html	=	'<!--  Modal LOGOFF -->'+
+							'		<div class="modal-window-wrs-logoff modal-window-wrs hide" >'+
+							'			<div class="modal-box-wrs  modal-type-primary modal-size-normal" style="position: absolute; top: 50%; margin-top: -72px; ">'+
+							'				<div class="modal-inner-wrs">'+
+							'						<div class="modal-title-wrs-job">'+
+							'							<h3><!-- Primary -->&nbsp;</h3> '+
+							'						</div>'+
+							'						<div class="modal-text-wrs-job">'+
+							'							'+LNG('MSG_FORCE_LOGOFF')+
+							'						</div>'+
+							'						<div class="modal-buttons-wrs-job" report_id="">'+
+							'							<button class="btn btn-warning modal-btn-padding modal-btn-job-wrs   action_logoff"> <span class="title"> <i class="glyphicon glyphicon-off color_white"></i> '+LNG('BTN_CLOSE')+' </span> </button>'+
+							'						</div>'+
+							'				</div>'+
+							'			</div>'+
+							'		</div>'+
+							'<!--  END Modal LOGOFF -->';
+
+			//Garante que não exista outra janela
+			$('body').find(MODAL_JOB).each(function(){$(this).remove()});
+			
+			//Adiciona a estrutura da JANELA
+			$('body').append(_html);
+
+			$(MODAL_LOGOFF).width($(window).width()).height($(window).height()).removeClass('hide');				
+			$('.action_logoff').unbind('click').click(logoff);				
+		}
+	}else{
+		setTimeout(function(){
+			verifica_loggedin_periodico();
+		},periodicidade*1000);
+	}
+
+}
+verifica_loggedin_periodico();
+
 function changeTypeRun(IDGrid,typeRun)
 {
 	var report_id		=	str_replace('#','.',IDGrid);
