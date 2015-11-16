@@ -1129,6 +1129,7 @@ HTML;
 		$TelerikUi->setRequestJson($url,$PAGE);
 		
 		
+		$getRequestKendoUi['TOTAL_COLUMN']		=	$tagToUrl['TOTAL_COLUMN'];//Recalcula o total de colunas
 		
 		$HTML	=	 $TelerikUi->render(	$this->param_encode($this->_param_ssas_reports),
 											$getRequestWrsExceptions,

@@ -409,7 +409,7 @@ function getWrsKendoColumn(data)
 	//Apenas realimenta as colunas que deve ser preenchida caso existe totais
 	if(wrsKendoUi.ALL_ROWS)
 	{
-		for(o__param in  _param)
+		for(var o__param in  _param)
 		{
 			if(tmpFZ>sizeFrozen) continue;
 			tmpFZ++;
@@ -554,6 +554,10 @@ function getWrsKendoColumn(data)
 				}
 
 
+				
+				
+				
+				
 					
 				if(!isset(_width[idx]))
 				{
@@ -578,6 +582,17 @@ function getWrsKendoColumn(data)
 				 
 				idx++;
 			}
+			
+			if(i==0 && wrsKendoUi['ALL_ROWS']==true)
+			{
+				
+					if(_arg.sender._wrs_data[0]['C000']==1)
+					{
+						$(report_aba).wrsAbaData('setFirstLineTotal',_arg.sender._wrs_data[0]);
+					}
+				
+			}
+				
 
 			
 	}
@@ -670,7 +685,7 @@ function onDataBound(arg)
 			var wrsKendoUi		=	_kendoUiParam;
 			var wrsparam		=	$(report_aba).wrsAbaData('getWrsData');
 			
-
+			
 			$(report_aba).wrsAbaData('setKendoUi',{page_size:arg.sender.dataSource._pageSize, STOP_QUERY:false});
 			
 				
@@ -770,6 +785,8 @@ function onDataBound(arg)
 			var time_out 	= $.proxy( options_resize.resize, options_resize );
 			
 			setTimeout(time_out,50);
+			
+			
 			
 			TRACE('END onDataBound');
 			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));

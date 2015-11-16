@@ -172,7 +172,8 @@ class KendoUi
 							'MKTIME_HISTORY',		//Mktime do Histori
 							'STOP_RUN',		//A Flag irá aparecer quando se navega entre as abas | true:false
 							'STOP_QUERY',	//Caso esteja true executa novamente mesmo com o histórico igual|true:false
-							'DRILL_LINE_STOP'	//quando ele estiver ativo não permite cancelar a consulta e iomite a string |  true:false
+							'DRILL_LINE_STOP',	//quando ele estiver ativo não permite cancelar a consulta e iomite a string |  true:false
+							'TOTAL_COLUMN'		//Muito usado quando existir coluna ordenadas
 		);
 	}
 
@@ -360,7 +361,7 @@ class KendoUi
 						<div class="wrs_box {$idTag}BOX">
 									{$WRS_PANEL_HEADER_TABLE}
 								
-									<div id="{$idTag}" class="wrsGrid table_border border_bottom"  ></div>
+									<div id="{$idTag}" class="wrsGrid table_border border_bottom hide"  ></div>
 									
 									<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
 							
@@ -384,7 +385,18 @@ class KendoUi
 																$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
 																		
 																WRSKendoGridComplete("#{$this->getId()}");		
+																
+																
+																
+																
 													});
+													
+													
+													$(".{$this->getId()}").wrsAbaData('setKendoUi',
+																{
+																	TOTAL_COLUMN	:	{$getRequestKendoUi['TOTAL_COLUMN']}
+																}
+																);
 																		
 												//Adicionando nova ABA						
 												var _options_aba	=	{

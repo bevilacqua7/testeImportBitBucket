@@ -450,7 +450,6 @@ $(document).ready(function () {
 					if($('.wrs_run_filter').attr('locked')!='locked')
 					{
 						$('.wrs_run_filter').attr('eastonclose','true').attr('flag_load','true');//Pra informar que o clique partir da opção para feixare a tela da direira 
-
 						wrsRunFilter();
 					}
 				}
@@ -502,15 +501,13 @@ function layout_east_close(_only_show_progress,is_hide)
 {
 	
 	var only_show_progress	=	 _only_show_progress==undefined ? false : _only_show_progress;
+	var report_id			=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
 	
-	var report_id		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
-	
-	
-	var active_f5		=	$('#wrsConfigGridDefault').attr('f5_ative');
-		active_f5		=	 active_f5==null ? false :  true;
+	var active_f5			=	$('#wrsConfigGridDefault').attr('f5_ative');
+		active_f5			=	 active_f5==null ? false :  true;
 		
 		
-		$('.container_panel_relatorio_rows').addClass('hide');
+		//$('.container_panel_relatorio_rows').addClass('hide');
 
 		
 		
@@ -541,18 +538,7 @@ function layout_east_close(_only_show_progress,is_hide)
 		jqueryLayoutOptions.east__onclose();
 		
 	}else{
-		
-		if(only_show_progress)
-		{
-
-			wrs_panel_layout.close('east');
-			
-		}else{
-			//if($('#'+report_id).length!=0 || active_f5)
-				//{
-					wrs_panel_layout.close('east');
-				//}
-		}
+		wrs_panel_layout.close('east');
 	}
 }
 
@@ -1331,7 +1317,11 @@ function rows_by_metrica_attr_base64(object,_type)
 	return {flag:_flag,request:implode(',',_request)};
 }
 
+function stop_job_timeout(report_id)
+{
 
+	$('body').WRSTimerLoader('timeout',{'report_id':report_id});    	
+}
 /**
  * 
  * Evento do click do Botão para executar o Relatório
@@ -1340,7 +1330,6 @@ function rows_by_metrica_attr_base64(object,_type)
  */
 function wrs_run_filter()
 {
-
 	var manager_aba			=	$(this).attr('manager_aba');
 		manager_aba			=	empty(manager_aba) ? false : true;
 		$(this).removeAttr('manager_aba');
@@ -1351,17 +1340,22 @@ function wrs_run_filter()
 		
 	var noactive			=	$(this).attr('noactive');
 		noactive			=	empty(noactive) ? false : true;
-		
+	
+	var aba_active			=	$('.WRS_ABA').find('.active');
+	var report_KendoUi		=	aba_active.wrsAbaData('getKendoUi');
+	var history				=	aba_active.wrsAbaData('getHistory');
+	var _report_id			=	report_KendoUi['REPORT_ID'];
 
+	
 		if(noactive)
 		{
 			$(this).removeAttr('noactive');
+			
+			stop_job_timeout(_report_id);
 			return true;
 		}
 	
 		
-		
-	
 		
 	$(this).attr('locked','locked');
 		
@@ -1395,9 +1389,6 @@ function wrs_run_filter()
 	var mensagem			=	"";
 	var flag_load			=	$(this).attr('flag_load');
 	var getAllFiltersToRun	=	"";
-	var aba_active			=	$('.WRS_ABA').find('.active');
-	var report_KendoUi		=	aba_active.wrsAbaData('getKendoUi');
-	var history				=	aba_active.wrsAbaData('getHistory');
 	
 	
 	//Se existir o job em execução desse mesmo report id então faz o cancelamento
@@ -1415,6 +1406,7 @@ function wrs_run_filter()
 		{
 			aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
 			configure_options_show_grid($(this));
+			stop_job_timeout(_report_id);
 			return true;
 		}
 	}catch(e){}
@@ -1564,6 +1556,7 @@ function wrs_run_filter()
 					if(!$.WrsFilter('wrs_check_filter_simples')) {
 						TRACE('EXISTE FILTRO SIMPLES');
 						$('body').wrsAbas('remove_event_click');
+						stop_job_timeout(_report_id);
 						return false;
 					}
 
@@ -1575,6 +1568,7 @@ function wrs_run_filter()
 					if(is_wrs_change_to.status)
 					{
 						configure_options_show_grid($(this));
+						stop_job_timeout(_report_id);
 						return true;
 		}else{
 			if(flag_load!='true')
@@ -1615,6 +1609,7 @@ function wrs_run_filter()
 		{
 
 			$('.wrs_run_filter').removeAttr('status_load');
+			stop_job_timeout(_report_id);
 			return true;
 		}
 		
@@ -1651,14 +1646,15 @@ function wrs_run_filter()
 			//wrs_panel_layout.open('east');
 		
 			$('body').wrsAbas('remove_event_click');
-		
 			
 			//Falta informações para executar o relatório
+			stop_job_timeout(_report_id);
 			
-			if(!manager_aba){
-
+			if(!manager_aba)
+			{
 				WRS_ALERT(sprintf(LNG('RUN_RELATORIO_FALTA_INFORMACAO'),mensagem),'error');
 			}
+			
 			
 	}
 	

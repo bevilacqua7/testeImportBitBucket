@@ -85,7 +85,7 @@ function goMapsWindowResize()
 			address:					'', // Street, City, Country
 			latitude:					-15.794145,  
 			longitude:					-47.882379,
-			zoom:						14,
+			zoom:						7,
 			delay:						200,
 			hideByClick:				true,
 			oneInfoWindow:				true,

@@ -79,7 +79,7 @@
 	
 	
 	$language['ERROR_LOAD_ABA'] 		= "ERRO:ABA01 - Ocorreu um erro ao abrir a aba..";
-
+	$language['ABA_BE_LOADED']			=	"A aba <b>%s</b> já se encontra carregada";
 
 	
 	/*

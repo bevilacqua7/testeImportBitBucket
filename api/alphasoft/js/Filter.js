@@ -351,7 +351,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 	histoty_param	=	$.parseJSON(base64_decode(history));
 	
 	
-	var _compare	= ['LAYOUT_ROWS','LAYOUT_COLUMNS','LAYOUT_MEASURES','LAYOUT_FILTERS','ORDER_COLUMN','ALL_COLS','ALL_ROWS','DRILL_HIERARQUIA_LINHA_DATA_MINUS','DRILL_HIERARQUIA_LINHA','DRILL_HIERARQUIA_LINHA_DATA'];
+	var _compare	= ['LAYOUT_ROWS','LAYOUT_COLUMNS','LAYOUT_MEASURES','LAYOUT_FILTERS','ORDER_COLUMN','ALL_COLS','ALL_ROWS','DRILL_HIERARQUIA_LINHA'];
 
 		if(empty(param_request.ALL_COLS)) param_request.ALL_COLS='';
 		
@@ -365,31 +365,21 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 			var __key				=	_compare[lineCompare];
 			var _history_compare	=	_trim(histoty_param[__key]);
 			
-
-			
 				if(__key=='LAYOUT_FILTERS')
 				{
 					_history_compare	=	convert_to_compare_filter(getJsonDecodeBase64(histoty_param['FILTER_TMP']));
 				}
-			
 				
-				
-				try{
-				//Verificando se são iguais as informações
-					
-					//console.log('_history_compare:',empty_wrs_defaults(_history_compare),'__key:',empty_wrs_defaults(_trim(param_request[__key])));
-					
-					if(empty_wrs_defaults(_history_compare)!=empty_wrs_defaults(_trim(param_request[__key])))
-					{
-						
-						flag=false;
-					}
-				}catch(e){
-					console.log('A key ("'+__key+'") não existe em param_request' );
-				}
+				if(empty_wrs_defaults(_history_compare)!=empty_wrs_defaults(_trim(param_request[__key]))) flag=false;
 		}
 		
-
+		
+		//Apenas para quando for o Drill Lile				
+		if(param_request['DRILL_HIERARQUIA_LINHA_DATA_MINUS']!=null || param_request['DRILL_HIERARQUIA_LINHA_DATA']!=null)
+		{
+			flag	=	 false;
+		}
+		
 		//Se for solicitado o cancelamento então deixa o usuário executar novamente a consulta
 		try{
 			if(aba_active.wrsAbaData('getKendoUi').STOP_QUERY==true)
@@ -621,9 +611,9 @@ function tagFilterWRS(typeReturn)
  	return html;
  	
 }
-function wrsFilterClickFalse()
+function wrsFilterClickFalse(filter_hide)
 {
-			$('.wrs_panel_filter_icon').attr('filter_hide', false); 
+			$('.wrs_panel_filter_icon').attr('filter_hide', filter_hide==undefined ? false : filter_hide); 
 }
 	 
 (function ( $ ) {

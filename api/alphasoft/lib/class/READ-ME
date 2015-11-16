@@ -1,3 +1,6 @@
+Exec Clear_SSAS_Caches
+
+
 /*
  * PROCRSSO DE EXECUÇÃO DO BANCO DE DADOS
  */

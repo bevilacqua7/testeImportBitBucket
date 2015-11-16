@@ -428,6 +428,7 @@ function resize_container_grid(report_id,_type_grid)
 					var clone		=	_clone==undefined || _clone==null ? false : _clone;
 					var options		=	_options;
 					var height_map	=	options.height	-	1;
+					var report_id	=	_options.report_id;
 					
 						options.map.width(options.width);
 						options.map.height(height_map);
@@ -442,10 +443,11 @@ function resize_container_grid(report_id,_type_grid)
 					//resize
 					google.maps.event.trigger(_map.map, 'resize'); 
 					
-					if(google.getMarkers().length>=1){
+					
+					if($('#'+report_id+'map').data('goMap').getMarkers().length>=1)
+					{
 						_map.fitBounds('visible'); 
 					}
-					
 					//Mantem a visão anyerior
 					//var google_maps	=	_options.container_elements.data('google_map_last_reload');
 						
@@ -525,6 +527,8 @@ function resize_container_grid(report_id,_type_grid)
 					options.grid.width(options.width-1);
 					options.grid.height(options.height);
 
+					$('#'+options.report_id).removeClass('hide');
+					
 					var options_resize = {
 								optionsWRS    	: options,
 							  resize: function( event ) 
