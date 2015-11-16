@@ -203,7 +203,8 @@ class WRS_LOGIN extends WRS_BASE
 	 * felipeb 20151112
 	 */
 	public function userIsLogged($exit=false){
-		$ret=((trim(WRS::GET_LOGIN_ID())!='' && $this->num_rows($this->query(QUERY_LOGIN::GET_SSAS_LOGIN(WRS::GET_LOGIN_ID())))>0)?'S':'N');
+		$login_id = WRS::GET_LOGIN_ID();
+		$ret=((trim($login_id)!='' && $this->num_rows($this->query(QUERY_LOGIN::GET_SSAS_LOGIN($login_id)))>0)?$login_id:'N');
 		if($exit){
 			exit($ret);
 		}else{
