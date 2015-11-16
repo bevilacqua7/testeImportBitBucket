@@ -31,17 +31,20 @@ function get_aba_active_kendoUi(get_id)
 
 function get_aba_active()
 {
-	return $('.WRS_ABA').find('.active').wrsAbaData('getData');
-	
+	return get_aba_active_object().wrsAbaData('getData');
 }
 
 
 function get_aba_active_wrs_param()
 {
-	return $('.WRS_ABA').find('.active').wrsAbaData('getWrsData');
+	return get_aba_active_object().wrsAbaData('getWrsData');
 	
 }
 
+function get_aba_active_kendoUi()
+{
+	return get_aba_active_object().wrsAbaData('getKendoUi');	
+}
 
 function get_aba_active_object()
 {
@@ -53,7 +56,6 @@ function get_aba_active_object()
 
 function trace_change_kendo(kendoUi)
 {
-	TRACE_DEBUG('CHANGE');
 	console.log('trace_change_kendo',kendoUi);
 }
 
@@ -174,7 +176,7 @@ function optionsDataConvert(gridValue,with_decode)
 						
 						if(_isLoad)
 							{
-									$('.container_panel_relatorio_rows').addClass('hide');
+									//$('.container_panel_relatorio_rows').addClass('hide'); //remove-by Santos
 									$('.modal-window-wrs').removeClass('hide');
 									$('.container_panel_relatorio').show();
 									$('.wrs_panel_filter_measure').hide();
@@ -212,7 +214,10 @@ function optionsDataConvert(gridValue,with_decode)
 									if(!noactive){
 										if(wrs_panel_layout) {
 											//wrs_panel_layout		=	 $('body').data('wrs_panel_layout');
-
+											/*
+											 * Verificar essa linha pois é onde está executando novamente o load
+											 */		
+											$('body').WRSJobModal('click_aba',{'report_id':report_id});
 											//Faz o evento do click quando não existir relatório ainda
 											layout_east_close(false, _isLoad);
 										//	wrs_panel_layout.close('east');
@@ -464,6 +469,10 @@ function optionsDataConvert(gridValue,with_decode)
 				var _report_id		=	$(this).attr('id-aba');
 				var IDCurrent		=	'#'+_report_id;
 				
+
+				//GArante que se a Aba estiver ativa não permita o clicque
+				if($('.'+_report_id+'BOX').length && $('.'+_report_id+'BOX').is(':hidden')==false) return true;
+					
 				var noactive		=	$('.wrs_run_filter').attr('noactive');
 					noactive		=	empty(noactive) ? false : true;''
 				
@@ -494,7 +503,7 @@ function optionsDataConvert(gridValue,with_decode)
 				/*
 				 * Verificar essa linha pois é onde está executando novamente o load
 				 */		
-				$('body').WRSJobModal('click_aba',{report_id:_report_id});
+				//$('body').WRSJobModal('click_aba',{report_id:_report_id});
 				
 				save_info_aba_current(aba_active);
 				
@@ -579,7 +588,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					$(IDCurrent).addClass('wrsGrid');
 					
-					$('.container_panel_relatorio_rows').addClass('hide');
+					//$('.container_panel_relatorio_rows').addClass('hide'); //Remove-by Santos
 					
 					if(hasDefault==true && isGrid==true)
 					{
@@ -991,6 +1000,15 @@ function optionsDataConvert(gridValue,with_decode)
 									
 									if(empty(_report_id))	_report_id	=	kendoUi['REPORT_ID'];
 									
+									if($('.'+kendoUi['REPORT_ID']).length>=1)
+									{
+								    	alertify.custom = alertify.extend("custom");
+										alertify.custom(sprintf(LNG('ABA_BE_LOADED'),kendoUi['TITLE_ABA']));
+										_report_id	=	'';
+										continue;
+									}
+									 
+									
 									_kenoUiWindow[kendoUi['REPORT_ID']]	=	kendoUi;
 									_kendoUiLast						=	kendoUi;
 									
@@ -1026,13 +1044,15 @@ function optionsDataConvert(gridValue,with_decode)
 					}
 					
 					
+					
+					
 					tagABA.find('.'+_report_id).trigger('click');
 					
 
 					
 					if(_noactive)
 					{
-						wrsRunFilter();
+						//wrsRunFilter();
 					}else{//Opção apenas para quando for para abrir layout
 						$('.wrs_run_filter').removeAttr('noactive');
 					}
@@ -1186,7 +1206,7 @@ function optionsDataConvert(gridValue,with_decode)
 				var _main		=	report_id+'Main';
 				
 
-			//	$('.container_panel_relatorio_rows').addClass('hide');
+			//	$('.container_panel_relatorio_rows').addClass('hide'); //Remove -By Santos
 				
 				find_and_hide_container(report_id);
 				
@@ -1315,7 +1335,7 @@ function optionsDataConvert(gridValue,with_decode)
 			 */
 			var __init		=	 function(options)
 			{
-				var base		=	{kendoUi:{}, data:{},kendoGrid:{},reportDetails:{},history:null};
+				var base		=	{kendoUi:{}, data:{},kendoGrid:{},reportDetails:{},history:null,first_line_total:{}};
 				var data_option	=	merge_objeto(base,options);
 				
 					that.data(wrsDataName,data_option);
@@ -1432,21 +1452,36 @@ function optionsDataConvert(gridValue,with_decode)
 				return data_global.history;
 			}
 			
+			var __getFirstLineTotal		=	 function()
+			{
+				return data_global.first_line_total;
+			}
+			
+			var __setFirstLineTotal		=	 function(input)
+			{
+				data_global.first_line_total		=	input;
+				
+				that.data(wrsDataName,data_global);
+			}
+			
+			
 			var methods = 
 			{
-			        init 			: 	__init,
-			        change			: 	__change,
-			        setKendoUi		:	__setKendoUi,
-			        setWrsData		:	__setWrsData,
-			        setKendoUiGrid	:	__setKendoUiGrid,
-			        setReportDetails:  	__setReportDetails,
-			        setHistory		:	__setHistory,
-				    getKendoUi		:	__getKendoUi,
-			        getWrsData		:	__getWrsData,
-			        getData			:	__getData,
-			        getReportDetails:  	__getReportDetails,
-			        getKendoGrid	:	__getKendoGrid,
-			        getHistory		:	__getHistory
+			        init 				: 	__init,
+			        change				: 	__change,
+			        setKendoUi			:	__setKendoUi,
+			        setWrsData			:	__setWrsData,
+			        setKendoUiGrid		:	__setKendoUiGrid,
+			        setReportDetails	:  	__setReportDetails,
+			        setHistory			:	__setHistory,
+			        setFirstLineTotal	:	__setFirstLineTotal,
+				    getKendoUi			:	__getKendoUi,
+			        getWrsData			:	__getWrsData,
+			        getData				:	__getData,
+			        getReportDetails	:  	__getReportDetails,
+			        getKendoGrid		:	__getKendoGrid,
+			        getHistory		 	:	__getHistory,
+			        getFirstLineTotal	:	__getFirstLineTotal
 			};
 			
 				/*

@@ -85,7 +85,6 @@ function _exist_job_in_cancel(report_id)
 				var _mktime			=	'';
 				var aba_data		=	$('.'+_data_time['report_id']).wrsAbaData('getKendoUi');
 				
-
 				if(aba_data!=undefined)
 				{
 					if(aba_data['DRILL_LINE_STOP'])
@@ -1003,22 +1002,34 @@ function _exist_job_in_cancel(report_id)
     								{
     									var _title		=	that.wrsAbas('aba_title',{report_id:_data_json['REPORT_ID']});
     									
-    									alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+_data_json['error'], 0);
+    										alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+_data_json['error'], 0);
+
+    									var aba_active	=	 get_aba_active_kendoUi();
     									
-    									
-    									removeThread(_data_json['REPORT_ID']);
-    									
-    									_errorData[_data_json['REPORT_ID']]	= _data_json['error'];	 //Atualiza mensagens de erros
-    									
-    									that.WRSTimerLoader('stop',{report_id:_data_json['REPORT_ID']});
+	    									removeThread(_data_json['REPORT_ID']);
+	    									
+	    									_errorData[_data_json['REPORT_ID']]	= _data_json['error'];	 //Atualiza mensagens de erros
+	    									
+	    									that.WRSTimerLoader('stop',{report_id:_data_json['REPORT_ID']});
+	    									
+	    									
+	   									
+	    								if(aba_active['REPORT_ID']==_data_json['REPORT_ID'])
+	    									{
+	    										$('#'+aba_active['REPORT_ID']+'Main').removeClass('hide');
+	    									}
     									
     								}
     					}catch(e){}
     					
     					
     					try{
+    						
+    						
+    						
 							if(_data_json['html'])
 								{
+								
 									alertify.success(sprintf(LNG('JOB_COMPLETE_LOAD'),that.wrsAbas('aba_title',{report_id:_data_json['REPORT_ID']})));
 									
 									removeThread(_data_json['REPORT_ID']);
@@ -1043,7 +1054,6 @@ function _exist_job_in_cancel(report_id)
     		var is_data			=	false;
     		
     			try{
-    				
     					if(array_length(_data_param)) is_data= true;
     				
     			}catch(e){}
@@ -1060,7 +1070,7 @@ function _exist_job_in_cancel(report_id)
 
     				//$('body').data('WRSTimeLoader','');
     				
-    				that.WRSTimerLoader('timeout',{report_id:report_id_modal});    				
+    				//that.WRSTimerLoader('timeout',{report_id:report_id_modal});    				
     				$('body').WRSJobModal('close',{'report_id':report_id_modal});
     			}
     	}
@@ -1100,7 +1110,6 @@ function _exist_job_in_cancel(report_id)
 
      				param_request	=	base64_encode(json_encode(get_report_ids(_data_param)));
 
-     				
     				runCall(
     							{'jobs_manager':param_request},
     							_file,

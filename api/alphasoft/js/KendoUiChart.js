@@ -275,6 +275,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			var onlyDefault		=	empty(_onlyDefault) ? false : _onlyDefault; //Apenas quando for configurações Default
 			var idName			=	KendoUi.element.attr('id');
 			var GRID			=	$('#'+idName);
+			
 			var telerikGrid 	= 	GRID.data('kendoGrid');		
 			var NAV				=	$('#'+idName+'NAV');
 			var ELEMENT			=	$('#'+idName+'Elements');
@@ -284,6 +285,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			var headerIndex		=	telerikGrid.headerIndex;
 			var report_aba		=	idName=='wrs_grid_options_default'  ? $('.WRS_ABA').find('.active').attr('id-aba') : idName;
 			
+			var GRID_ABAS			=	$('.'+report_aba);
 
 //			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
 			var kendoUiTools	=	$('.'+report_aba).wrsAbaData('getKendoUi');			
@@ -542,16 +544,20 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			var setInfoTotalColumn	=	 function(column,value,arrayDirecty)
 			{
 					var totalBubble	=		[];
+					
 						if(empty(arrayDirecty))
 						{
-							totalBubble			=		$.parseJSON(base64_decode(GRID.attr('total-bubble')));
+							totalBubble			=		GRID_ABAS.wrsAbaData('getFirstLineTotal') 
+							
 							totalBubble[column]	=	value;
 						}else{
 							totalBubble			=	{};
 							totalBubble			=	column;
 						}
-						GRID.attr('total-bubble',base64_encode(json_encode(totalBubble,true)));
+						
+						GRID_ABAS.wrsAbaData('setFirstLineTotal',totalBubble);
 			};
+			
 			
 			var _convertNumber		=	 function(data){
 				
@@ -564,12 +570,12 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			
 			var getInfoTotalColumn	=	 function(column,check)
 			{
-					var totalGrid			=		GRID.attr('total-bubble');
-					var totalBubble			=		$.parseJSON(base64_decode(totalGrid));
+					
+					var totalBubble			=		GRID_ABAS.wrsAbaData('getFirstLineTotal');
 						
-					if(!empty(check))
+					if(check==true)
 						{
-							if(empty(totalGrid)) return false;
+							if(isEmpty(totalBubble)) return false;
 							
 							return true;
 						}
@@ -577,7 +583,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					
 					if(column=='All') return totalBubble;
 					
-					try {
+					try{
 						return totalBubble[column];
 					}catch(e) {
 						return '';
@@ -657,22 +663,50 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			
 			
 			
-			
+			var getFirstValueArray_get		=	 function(param)
+			{
+				for(var line in param)
+				{
+				
+					return {value : param[line][0], name:line};
+				}	
+			}
 			
 			/*
 			 * Pegando apenas os primeiros valores do array 
 			 */
 			var getFirstValueArray	=	 function(param)
 			{
-				for(line in param)
+				
+				var _value	=	getFirstValueArray_get(param)	;
+				
+				if(_value.value!=undefined)
+				{
+					var _n_value	=	parseInt(substr(_value.value,1));
+					var label		=	null;
+					
+					if(_n_value>kendoUiTools['TOTAL_COLUMN'])
 					{
-						return {value : param[line][0], name:line};
+						if(kendoUiTools['TOTAL_COLUMN']>99){
+							label	=	'C'+kendoUiTools['TOTAL_COLUMN'];
+						}else{
+							label	=	'C0'+kendoUiTools['TOTAL_COLUMN'];
+						}
+						
+						_n_value.value	=	label;
+						_n_value.name	=	headerIndex.field[label].LEVEL_FULL;
+						
 					}
+					
+					
+				}
+				return _value;
 			}
 			
 
 				
 			var infoFirst	=	getFirstValueArray(chartData);
+			
 			
 			/*
 			 * COnfiguração para quando for apenas grafico do tipo Donut 
@@ -1681,12 +1715,12 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 										{
 											var _data	=	Number(data);
 											return _data;
-											//return  ((_data*15)/100)+_data;
 										}
 									
 										/*
 										 * Preparando para gerar o Gráfico Bubble
 										 */
+									
 										if(!empty(json_receive)){
 												type_chart	=	json_receive.type;
 												
@@ -1695,7 +1729,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 													type_chart='bubble';
 													
 														var count_buble	=	0;
-														measures_receive.find('option').each(function(){
+															measures_receive.find('option').each(function(){
 															
 															var _json_receive	=	$.parseJSON(base64_decode($(this).attr('json')));
 															var _type			=	'';
@@ -1745,6 +1779,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 													/*
 													 * Verificando se é GAUGE
 													 */
+													
+													
 													var _label 		= 	headerIndex.field[infoFirst.value].c_parent;
 													/*
 													 * PROBLEMAS NESSA LINHA
@@ -1817,7 +1853,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 										/*
 										 * Lendo todos os dados que contem na GRID
 										 */
-
 										for(lineData in _data)
 											{
 
@@ -1832,12 +1867,12 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 													
 													//Evitando linhas de totais
 													if(empty(_data[lineData]['C001'])){
+														
 														/*
 														 * Salvando informações penas se for a primeira linha e se for TOTAL
 														 */
 														if(_data[lineData]['C000']==1)
 														{
-															//if(!getInfoTotalColumn(true,true)){
 																var tmpTotalLabel		=	 headerIndex.field;
 																var createTotalInfoCol	=	{};	
 																//precisamos apenas da lineTmpTotalLabel
@@ -2088,20 +2123,20 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 																//renderizando gráficos convêncionais
 																if(!pie_donut && !bubble)
 																{	
+
 																	series[series.length]	=	$.extend( {}, mergeChartConfigLegend(typeChart[lineDataMeasure]), options_series );
 																}
 														}
 													
-													
+
 													//cofigurações do Gráfivo bubble
 													if(bubble)
 													{
 														var valueEmpty	=	{'cxField'	:0,'cyField'	:0,'csizeField':0,'title':'', 'color':palletCol[lineData]};
 														
+														
 															for(lineDataBubble in getData)
 															{
-																
-																	
 																	valueEmpty[typesBubble[lineDataBubble]]	=	 getData[lineDataBubble].value;
 																	valueEmpty.title						=	getData[lineDataBubble].name;	
 																	
@@ -2110,6 +2145,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 																		/*
 																		 * Preenchendo os valores dos minimo e máximo com os 10%
 																		 */
+
+																		//typesBubble[lineDataBubble]
 																		switch(typesBubble[lineDataBubble])
 																		{
 																			case 'csizeField' : {colNameBubble.csizeField=getData[lineDataBubble].wrs_field;} ;break;
@@ -2117,7 +2154,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 																				
 																				colNameBubble.cxField		=	getData[lineDataBubble].wrs_field;
 																				
-
+																				
 																				if(!optionBubble.xAxis.flag){
 																					optionBubble.xAxis.min	=	_calc;
 																					optionBubble.xAxis.flag	=	true;
@@ -2210,13 +2247,13 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 										if(bubble)
 											{
 											//TRACE_DEBUG(optionBubble.xAxis.max);
-								  		
 													if(getInfoTotalColumn(true,true))
 														{
 																var getAllTotal	=	getInfoTotalColumn('All');
 																 
 																if(!empty(getAllTotal))
 																	{
+																	
 																		var _color		=	{
 													                        from: -5000,
 													                        to: 2000,
@@ -2434,8 +2471,19 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 												}
 											
 											var _div_legenda	=	$('<p/>',{'class':'col-md-12 text-center'});
-											var info_legend		=	_data_gauge[_data_gauge.length-1].pointer;
-											_div_legenda.append('<h3>'+title+'</h3>');
+											
+											
+											var info_legend		=	'';
+											
+											
+
+												info_legend	=		_data_gauge[_data_gauge.length-1].pointer;
+
+											
+											
+												_div_legenda.append('<h3>'+title+'</h3>');
+												
+												
 											for(info_legend_line in info_legend)
 												{
 													var __color	=	 info_legend[info_legend_line].color;

@@ -71,10 +71,10 @@ class SQL_SERVER
 		}
 		
 		$_query	= sqlsrv_query($this->get_conn(),$query);		
-		/*if(IS_WRS_DEBUG){
+	/*	if(IS_WRS_DEBUG){
 			$this->query_debug('DONE::'.$query);
-		}*/
-
+		}
+*/
 		//session_regenerate_id(); //Retoma a escrita da sessão
 		if(!$_query) { $this->query_debug('ERROR:::: '.$query.PHP_EOL.'result::'.print_r($_query,true).PHP_EOL.'typeError::'.print_r(sqlsrv_errors(),true)); return false; }
 		

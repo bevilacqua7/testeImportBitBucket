@@ -21,7 +21,7 @@ class WRS_INI
 		// Interpreta com as seções
 		self::$full_ini = parse_ini_file(PATH_INI, true);
 		
-		if(in_array(self::$full_ini, $_SERVER['SERVER_NAME'])){
+		if(isset(self::$full_ini[$_SERVER['SERVER_NAME']])){
 			self::$ini_var	=	self::$full_ini[$_SERVER['SERVER_NAME']];
 		}else{
 			//Assume olphaweb_como default

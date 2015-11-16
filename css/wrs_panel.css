@@ -207,9 +207,9 @@ h4{
 }
 
 .WRS_DRAG_DROP li,.WRS_DRAG_DROP_RECEIVER li{
-	-webkit-border-radius: 3x;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
+	-webkit-border-radius: 2x;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
 /*	font-weight: bold !important;*/
 	
 }
@@ -1565,7 +1565,9 @@ div.k-grid-header thead tr th[data-field=checkbox_linha]
 }
 .alertify-log-custom
 {
-			background: blue;
+			text-shadow: 0px 0px 0px rgba(150, 150, 150, 1);
+			color:#333;
+			background: #FFAD33;
 }
 
 .wrs-modal-time{

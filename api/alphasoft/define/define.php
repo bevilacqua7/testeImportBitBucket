@@ -20,6 +20,8 @@ define('WRS_VERSION',$WRS_DEFINE['WRS_VERSION']);
 define('IS_WRS_DEBUG',$WRS_DEFINE['IS_WRS_DEBUG']);
 
 
+
+
 /**
  * Para informar se existe debug
  * @var boolean
