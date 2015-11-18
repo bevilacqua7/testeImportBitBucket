@@ -2,7 +2,9 @@
 (function ($) {
 
     window.addRule = function (selector, styles, sheet) {
-
+		
+		_START('addRule');
+	
         styles = (function (styles) {
             if (typeof styles === "string") return styles;
             var clone = "";
@@ -20,6 +22,7 @@
         if (sheet.insertRule) sheet.insertRule(selector + " {" + styles + "}", sheet.cssRules.length);
         else if (sheet.addRule) sheet.addRule(selector, styles);
 
+		_END('addRule');
         return this;
 
     };
@@ -150,10 +153,12 @@ function sliderOnChange(e) {
 
 function getMeasuteChartUse(telerikGrid,frozenSize)
 {
+	_START('getMeasuteChartUse');
 	var _columns		=	[];
 	for(var i=(frozenSize+1) ; i<telerikGrid.columns.length;i++){
 		_columns[telerikGrid.columns[i].LEVEL_FULL]	=	telerikGrid.columns[i].field
 	}
+	_END('getMeasuteChartUse');
 	return _columns;
 }
 
@@ -170,6 +175,7 @@ function getMeasuteChartUse(telerikGrid,frozenSize)
 
 function WrsGougeConfigureLineShow(_GRID,kendoUiTools)
 {
+	_START('WrsGougeConfigureLineShow');
 	GRID_TMP	=	_GRID;
 
 	//Segue o modelo do Bootstrap col-md-4
@@ -199,7 +205,7 @@ function WrsGougeConfigureLineShow(_GRID,kendoUiTools)
 		var _value	=	$('input:checked', '.input-slide-md-line-radio').val();
 		wrsKendoUiChange('#'+GRID_TMP,'GAUGE_SIZE_BY_LINE',_value);
 	});
-	
+	_END('WrsGougeConfigureLineShow');
 }
 
 /*
@@ -207,6 +213,7 @@ function WrsGougeConfigureLineShow(_GRID,kendoUiTools)
  */
 function showLineTOTAL(_GRID,kendoUiTools,_start)
 {
+	_START('showLineTOTAL');
 	GRID_TMP	=	_GRID;
 	
 	var _flag	=	kendoUiTools.SHOW_LINE_TOTAL;
@@ -219,12 +226,13 @@ function showLineTOTAL(_GRID,kendoUiTools,_start)
 			kendoUiTools.SHOW_LINE_TOTAL	=	 $(this).val();
 			wrsKendoUiChange('#'+GRID_TMP,'SHOW_LINE_TOTAL',$(this).val());
 		});
-		
+	_END('showLineTOTAL');	
 }
 
 
 function WrsGougeConfigure(_GRID,kendoUiTools,typeGauge)
 {
+	_START('WrsGougeConfigure');
 	
 	var _slide		=	$(".gauge_configure .layout-slider");
 		_slide.html('<input class="input_slide" type="slider" name="price" value="1" />');
@@ -248,12 +256,13 @@ function WrsGougeConfigure(_GRID,kendoUiTools,typeGauge)
          theme:'office365',
          value : kendoUiTools.GAUGE_COLOR
      }).data("kendoSlider");
-	
+	_END('WrsGougeConfigure');
 }
 
 
 function getFisrtChartValue(ChartDefault)
 {
+	_START('getFisrtChartValue');
 		if(empty(ChartDefault) || !ChartDefault) return '';
 		if(empty(ChartDefault.data)) return '';
 
@@ -262,6 +271,7 @@ function getFisrtChartValue(ChartDefault)
 	
 		for(lineData in _data)	_line_name=lineData;
 		
+	_END('getFisrtChartValue');
 	return _data[_line_name].value;
 }
 /*
@@ -270,7 +280,7 @@ function getFisrtChartValue(ChartDefault)
 
 function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal) 
 	    {	
-			
+			_START('WRSKendoUiChart');
 
 			var onlyDefault		=	empty(_onlyDefault) ? false : _onlyDefault; //Apenas quando for configurações Default
 			var idName			=	KendoUi.element.attr('id');
@@ -387,6 +397,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			 */
 			var measure_option_check_family		=	 function(measures_receive,value,event)
 			{
+					_START('WRSKendoUiChart::measure_option_check_family');
 					var	inputs		=	[];
 					var select_all	=	false;
 				
@@ -431,7 +442,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 								measures_receive.find('option').prop('selected',true);
 								measures_receive.attr('selected-all',true);
 							}
-				
+				_END('WRSKendoUiChart::measure_option_check_family');
 			}
 			
 			
@@ -441,7 +452,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			 */
 			var checkGaugeData	=	 function(data)
 			{
-				
+				_START('WRSKendoUiChart::checkGaugeData');
 				var _data		=	[];
 				var _tmp_data	=	data;
 				var _level_full	=	 [];
@@ -470,10 +481,10 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 									}
 								_data[_line_data_g]=_column_line;
 						}
-					
+					_END('WRSKendoUiChart::checkGaugeData');
 					return _data;
 				}
-				
+				_END('WRSKendoUiChart::checkGaugeData');
 				return data;
 			}
 			/*
@@ -481,7 +492,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			 */
 			var calcMaxMin		=	 function(axis)
 			{
-					
+					_START('WRSKendoUiChart::calcMaxMin');
 						var _axis 	= axis;
 						var _min 	= axis.min - axis.min * 0.25;
 						var _max 	= axis.max + axis.max * 0.25;
@@ -512,7 +523,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					    }
 					    
 					    
-
+						_END('WRSKendoUiChart::calcMaxMin');
 						return _axis;
 					
 			}
@@ -520,6 +531,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			
 			var getColumnsTochart	=	 function(columns)
 			{
+				_START('WRSKendoUiChart::getColumnsTochart');
 				var tmpVal		=	[];
 				var levelFull	=	'';
 				var back		=	[];
@@ -531,6 +543,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				
 				back[levelFull]=tmpVal;
 				
+				_END('WRSKendoUiChart::getColumnsTochart');
 				return back;
 			}
 			
@@ -543,6 +556,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			
 			var setInfoTotalColumn	=	 function(column,value,arrayDirecty)
 			{
+					_START('WRSKendoUiChart::setInfoTotalColumn');
+				
 					var totalBubble	=		[];
 					
 						if(empty(arrayDirecty))
@@ -556,6 +571,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						}
 						
 						GRID_ABAS.wrsAbaData('setFirstLineTotal',totalBubble);
+					_END('WRSKendoUiChart::setInfoTotalColumn');	
 			};
 			
 			
@@ -896,6 +912,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				 */
 				var createTypeForms	=	 function()
 				{
+							
+						_START('WRSKendoUiChart::createTypeForms');	
 						var NORMAL		=	LNG('NORMAL');	//"Nornal";
 						var STACKED		=	LNG('STACKED');	//	"Empilhado";
 						var WAVY		=	LNG('WAVY');	//"Ondulado";
@@ -1068,7 +1086,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							
 							$('.modal_chart_body_table').html(html);
 							 
-							
+						_END('WRSKendoUiChart::createTypeForms');		
 							
 				};
 				//END Configure Chart
@@ -1082,7 +1100,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				 */
 				var loadTypesMeasuresAction	=	 function()
 					{
-					
+						_START('WRSKendoUiChart::loadTypesMeasuresAction');	
 					
 						var bodyConfigChart			=	$('.chart-config-body');
 						var measures				=	bodyConfigChart.find('.wrs-measures');
@@ -1118,7 +1136,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							}
 							
 							var disableInputBySize	=	 function(_event){
-								
+								_START('WRSKendoUiChart::loadTypesMeasuresAction::disableInputBySize');
 									var	sizeOption	=	_event.find('option').length;
 									
 									
@@ -1150,7 +1168,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 												}
 										});
 								
-								
+								_END('WRSKendoUiChart::loadTypesMeasuresAction::disableInputBySize');
 							}
 							/*
 							 * Evento CLick
@@ -1158,6 +1176,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							
 							var runOptions		=	 function(who,to,where,select)
 							{
+								_START('WRSKendoUiChart::loadTypesMeasuresAction::runOptions');	
 								var sizeOption	=	0;
 								who.find(where).each(function() {		
 									
@@ -1184,7 +1203,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 								}else{
 									bodyConfigChart.find('.wrs_chart_config_kynds').find('input').attr('disabled','disabled');
 								}
-								
+								_END('WRSKendoUiChart::loadTypesMeasuresAction::runOptions');
 							}
 							
 							var toActive			=	 function(){runOptions(measures,measures_receive,"option:selected",true);};
@@ -1217,7 +1236,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							 * legend-types
 							 */
 							var toRunConfigChartWrs	=	function(){
-								
+								_START('WRSKendoUiChart::loadTypesMeasuresAction::toRunConfigChartWrs');	
 								var cCHART				=	{};
 
 								var chart_configLegend 	=	bodyConfigChart.find('.legend-types-config').is(':checked');
@@ -1272,11 +1291,11 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							  			saveHistoryEvents(saveHistory,infoDefault['REPORT_ID']);
 
 							  			
-								
+								_END('WRSKendoUiChart::loadTypesMeasuresAction::toRunConfigChartWrs');	
 							};
 							
 							var measures_receive_click	=	 function(){
-								
+								_START('WRSKendoUiChart::loadTypesMeasuresAction::measures_receive_click');	
 								var see	=	false;
 									
 								$(this).find('option:selected').each(function() {
@@ -1297,7 +1316,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 								}
 								
 								disableInputBySize($(this));
-								
+								_END('WRSKendoUiChart::loadTypesMeasuresAction::measures_receive_click');	
 							};
 							
 							
@@ -1305,7 +1324,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							 * Evento ao clicar no input do radio
 							 */
 							var wrs_chart_types_click	=	 function(){
-
+								_START('WRSKendoUiChart::loadTypesMeasuresAction::wrs_chart_types_click');	
 								var _pie		=	false;
 								var _radar		=	false;
 								var _clean		=	false;
@@ -1454,7 +1473,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 											
 									}
 								
-									
+								_END('WRSKendoUiChart::loadTypesMeasuresAction::wrs_chart_types_click');		
 							};
 							//End Salvar as informações
 							
@@ -1500,7 +1519,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							$('.toRunConfigChartWrs').unbind('click').click(toRunConfigChartWrs);
 							
 							GRID.attr('chart-wrs','true');//Controler
-							
+							_END('WRSKendoUiChart::loadTypesMeasuresAction');	
 					};
 					
 					loadTypesMeasuresAction();
@@ -1564,6 +1583,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				 */
 				var createExportButtonWrsCHart	=	 function()
 				{
+					
+					_START('WRSKendoUiChart::createExportButtonWrsCHart');
 					var svg		=	NAV.find('.wrs_chart_export_svg');
 					var pdf		=	NAV.find('.wrs_chart_export_pdf');
 					var image	=	NAV.find('.wrs_chart_export_image');
@@ -1605,7 +1626,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					                });
 					            });
 					        });
-				        
+				   _END('WRSKendoUiChart::createExportButtonWrsCHart');     
 				        
 				};//END CONVERTER
 				
@@ -1616,6 +1637,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				 */
 				var donutDataChartLoad	=	 function()
 					{
+						_START('WRSKendoUiChart::donutDataChartLoad');
 						var _param		=	[];
 						var tmp_param	=	[];
 						
@@ -1628,7 +1650,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 												_param[tmp_param[lineTmpParam]]=	 [];
 											}
 								}
-						
+						_END('WRSKendoUiChart::donutDataChartLoad');
 						return _param;
 					}
 				
@@ -2348,6 +2370,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							 */
 							var createChartCommon		=	 function() 
 		 						{
+									_START('WRSKendoUiChart::createChartCommon');
+									
 									var pathChart			=	kendoChart;
 									var chartSeries			=	[];
 									var tmpSeries			=	paramChart['series'];
@@ -2478,9 +2502,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 											
 
 												info_legend	=		_data_gauge[_data_gauge.length-1].pointer;
-
-											
-											
+																							
 												_div_legenda.append('<h3>'+title+'</h3>');
 												
 												
@@ -2536,6 +2558,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 									 */
 									var reorderColumn		=	 function(column,indexActive)
 									{
+										_START('WRSKendoUiChart::createChartCommon::reorderColumn');
 										var tmp_Column	=	[];
 											measures_receive.find('option').each(function(){
 												if(empty(indexActive)){
@@ -2548,6 +2571,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 													tmp_Column[$(this).val()]	=	column[$(this).val()];
 												}
 											});
+											
+											_END('WRSKendoUiChart::createChartCommon::reorderColumn');
 										return tmp_Column;
 									}
 									
@@ -2832,7 +2857,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 										
 										createExportButtonWrsCHart();
 
-										 
+										 _END('WRSKendoUiChart::createChartCommon');
 						        };
 								//END createChartCommon
 							
@@ -2843,4 +2868,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						        $(document).bind("kendo:skinChange", createChartCommon);
 						        $(window).on("resize", function(){kendo.resize(ELEMENT);});					        
 						        ELEMENT.attr('chart','true');
+								
+		_END('WRSKendoUiChart');						
 	};

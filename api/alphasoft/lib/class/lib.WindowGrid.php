@@ -289,7 +289,6 @@ class WindowGrid extends FORM
 		$page_size		=  	empty($page_size) ? 25 : $page_size;
 		//$page_size		=	10;
 		
-
 		if(!empty($this->exception))
 		{
 			

@@ -5,6 +5,7 @@
  <meta charset="ISO_8859-1">
 <?PHP
 	$request_exec_report		=	fwrs_request('exec_reports');
+	$idTag	=	NULL;
 ?>
 <script>
 
@@ -278,7 +279,7 @@ if(is_array($arr_perfil_user)){
 	*/
 ?>
  <script>
-// set_value_box_relatorio(<?php echo json_encode($result_box,true);?>);
+// set_value_box_relatorio(<?php /*echo json_encode($result_box,true);*/?>);
  </script>
  
  

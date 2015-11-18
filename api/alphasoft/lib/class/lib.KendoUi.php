@@ -123,40 +123,58 @@ class KendoUi
 	 * variáveis que podem cirtular pela WrsKendoUi
 	 * @return multitype:string
 	 */
-	public function getRequestWrsKendoUi()
+	public function getRequestWrsKendoUi($_param=NULL)
 	{
 		/*
 		 * WARNING:O Comando 'TYPE_RUN' é apenas para saber qual o tipo de Execução está sendo solicitado e por esse motivo ele deve ser sempre empty quando finalizado o processo
 		 */
-		return array(	'page_size',
-						'PLUS_MINUS',
-						'ORDER_BY_COLUMN',
-						'ORDER_COLUMN_TYPE',
-						'ORDER_COLUMN',
-						'frozen',
-						'SUMARIZA',
-						'COLORS_LINE',
-						'ALL_COLS',
-						'ALL_ROWS',
-						'WINDOW',
-						'CHART',
-						'GAUGE_COLOR',
-						'GAUGE_SIZE_BY_LINE',
-						'DRILL_HIERARQUIA_LINHA',
-						'DRILL_HIERARQUIA_LINHA_DATA',
-						'SHOW_LINE_TOTAL',
-						'DRILL_HIERARQUIA_LINHA_DATA_HEADER',
-						'TYPE_RUN',
-						'PAGE_CURRENT',		// Pagina corrente
-						'TITLE_ABA',		//Titulo da ABA
-						'REPORT_ID',//IDentificador da ABA
-						'FILTER_TMP',		//Contem a estrutura do filtro usada para o histórico
-						'QUERY_ID',			//ID da query que foi requisitada
-						'IS_REFRESH',		//identifica se foi executado o F5 e ou o frefresh na tela
-						'TOP_CONFIG',		//COnfigurações dos tipos de TOPS e onde
-						'MULTIPLE_CUBE_ID'		//Caso exista multiple cubos ele é preenchido com o ID_do CUBO
+
+		$data	=	 array(	'page_size'								=> 	25,
+						'PLUS_MINUS'							=> 	true,
+						'ORDER_BY_COLUMN'						=>	'C001',
+						'ORDER_COLUMN_TYPE'					 	=>	NULL,
+						'ORDER_COLUMN'							=> 	NULL,
+						'frozen'								=> 	0,
+						'SUMARIZA'								=>	NULL,
+						'COLORS_LINE' 							=>	1,
+						'ALL_COLS'								=> 	NULL,
+						'ALL_ROWS'								=> 	NULL,
+						'WINDOW'								=>	'grid',
+						'CHART'									=> 	NULL,
+						'GAUGE_COLOR'							=> 	NULL,
+						'GAUGE_SIZE_BY_LINE'					=> 	NULL,
+						'DRILL_HIERARQUIA_LINHA'				=> 	NULL,
+						'DRILL_HIERARQUIA_LINHA_DATA'			=>	NULL,
+						'SHOW_LINE_TOTAL'						=> 	NULL,
+						'DRILL_HIERARQUIA_LINHA_DATA_HEADER'	=>	NULL,
+						'TYPE_RUN'								=>	NULL,
+						'PAGE_CURRENT'							=>	NULL,		// Pagina corrente
+						'TITLE_ABA'								=>	NULL,		//Titulo da ABA
+						'REPORT_ID'								=>	NULL,//IDentificador da ABA
+						'FILTER_TMP'							=>	'IiI=',		//Contem a estrutura do filtro usada para o histórico
+						'QUERY_ID'								=> 	NULL,	//ID da query que foi requisitada
+						'IS_REFRESH'							=>	NULL,		//identifica se foi executado o F5 e ou o frefresh na tela
+						'TOP_CONFIG'							=>	NULL,		//COnfigurações dos tipos de TOPS e onde
+						'MULTIPLE_CUBE_ID'						=>	NULL		//Caso exista multiple cubos ele é preenchido com o ID_do CUBO
 					);	
+
+		
+		if($_param==NULL)	return array_keys($data);
+		
+		if($_param=='default')	return $data;
+		
+		foreach($data as $label =>$value)
+		{
+			if(isset($_param[$label]))
+			{
+					if(!empty($_param[$label]))
+					{
+						$data[$label]	=	$_param[$label];
+					}
+			}
 			
+		}
+		return $data;
 	}
 	
 	
@@ -183,9 +201,11 @@ class KendoUi
 	public function jsRequestWrsKendoUiParam()
 	{
 		$_param 	=	 $this->getRequestWrsKendoUi();
-		$_param_tmp	=	array();
-		foreach($_param as $label => $value){$_param_tmp[$value]	=	'';}
-		return $_param_tmp;
+
+		//$_param_tmp	=	array();
+		//foreach($_param as $label => $value){$_param_tmp[$value]	=	'';}
+		
+		return $_param;
 	}
 	
 	

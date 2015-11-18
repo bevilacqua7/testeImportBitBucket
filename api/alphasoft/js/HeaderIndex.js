@@ -8,7 +8,7 @@
 //Executa depois que a grid está renderizada
 function WRSHeaderIndex(kendoUi)
 {
-	
+	_START('WRSHeaderIndex');
 	var kendoUiColumns		=	kendoUi.columns;
 	var indexByField		=	[];
 	var countColumn			=	[];
@@ -29,6 +29,7 @@ function WRSHeaderIndex(kendoUi)
 	
 	var index_category_chart	=	 function(tmpComeBack)
 	{
+		_START('WRSHeaderIndex::index_category_chart');
 		var limit		=	0;
 		var category	=	[];
 		
@@ -58,12 +59,13 @@ function WRSHeaderIndex(kendoUi)
 				}
 				limit++;
 		}
-		
+		_END('WRSHeaderIndex::index_category_chart');
 		return category;
 	}
 	
 	var directDrillRecursive	=	 function(data,_index_TR,_index_TD,key_parent,_isTOTAL)
 	{
+		_START('WRSHeaderIndex::directDrillRecursive');
 		var tmp			=	[];
 		var index_TR	=	_index_TR;
 		var index_TD	=	_index_TD;
@@ -132,13 +134,14 @@ function WRSHeaderIndex(kendoUi)
 					index_TD[index_TR]++;
 				}
 			}	
-		
+		_END('WRSHeaderIndex::directDrillRecursive');
 		return {'data':tmpComeBack,'td':index_TD};
 	}
 	
 	
 	var directDrillRecursiveStart	=	 function (column)
 	{
+		_START('WRSHeaderIndex::directDrillRecursiveStart');
 		var tmp			=	[];
 		var tmpComeBack	=	[];
 		var index_TR	=	0;
@@ -175,12 +178,12 @@ function WRSHeaderIndex(kendoUi)
 			tmpComeBack['chart']['data']			=	indexFullNameMeasure;
 			tmpComeBack['chart']['category']		=	index_category_chart(tmpComeBack);
 			tmpComeBack['chart']['measure_title']	=	measure_title;
-			
+			_END('WRSHeaderIndex::directDrillRecursiveStart');
 			return tmpComeBack;		
 	}
 
 	
-	
+	_END('WRSHeaderIndex');	
 	return directDrillRecursiveStart(kendoUiColumns);
 
 	//kendoUi.sender.hideColumn(columnsStructureWrs['APRESENTACAO']);

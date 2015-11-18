@@ -1,8 +1,10 @@
 $(document).ready(function(){
 	
+	_START('Menu.js');
 	$('.wrs_open_save').unbind('click').click(function() {
 		
 		var btn_salvar_extra_action_validator = function(data){ // validacoes extra antes da acao principal do botao padrao
+		_START('btn_salvar_extra_action_validator');
 			var retorno_padrao = true;
 			if(typeof data=='object' && data.event=='save'){ 
 				if(data.report_name.trim()==''){
@@ -10,6 +12,7 @@ $(document).ready(function(){
 					WRS_ALERT('Escolha um nome para o relatório','warning'); 
 				}
 			}
+			_END('btn_salvar_extra_action_validator');
 			return retorno_padrao;
 		}
 		
@@ -32,4 +35,6 @@ $(document).ready(function(){
 		carrega_grid_list_reports();
 		$('#myModal').modal('show');
 	});
+	
+	_END('Menu.js');
 });

@@ -13,6 +13,7 @@
 
 function addDrillOnDataBound(nameID,kendoUI)
 {
+	_START('addDrillOnDataBound');
 	var kendo			=	wrsKendoUiContextMenu(kendoUI.sender,true);
 	var layout			=	kendo.layout_full;
 	var rows_tag		=	explode(',',layout['LAYOUT_ROWS']);
@@ -35,7 +36,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 	 */
 	
 	var clickDrillDown	=	 function(){
-		
+		_START('addDrillOnDataBound::clickDrillDown');
 					var LEVEL_DRILL	=	 $(this).attr('LEVEL_DRILL');
 					var LEVEL_FULL	=	 $(this).attr('LEVEL_FULL');
 					var rel			=	 $(this).attr('rel');
@@ -64,11 +65,13 @@ function addDrillOnDataBound(nameID,kendoUI)
 						changeTypeRun(nameID,TYPE_RUN.drildown);//Informando o tipo de RUN foi solicitado
 						
 						changeWithDrillFilter(_layout,filter_add);
+						
+		_END('addDrillOnDataBound::clickDrillDown');				
 		
 	};
 	
 	var is_in_array			=	 function(value){
-	
+	_START('addDrillOnDataBound::is_in_array');
 			if(in_array(value,rows_tag))
 				{
 					return false;
@@ -79,6 +82,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 				return false;
 			}
 			
+			_END('addDrillOnDataBound::is_in_array');
 			return true;
 	
 	}
@@ -188,12 +192,14 @@ function addDrillOnDataBound(nameID,kendoUI)
 	
 	
 	
-
+	_END('addDrillOnDataBound');
 	
 }
 
 function getFirstValueArray(kendoUi)
 {
+	
+	_START('getFirstValueArray');
 	for(key in kendoUi)
 		{
 			if(key)
@@ -201,9 +207,12 @@ function getFirstValueArray(kendoUi)
 				return key;
 			}
 		}
+	
+	_END('getFirstValueArray');
 }
 function addTargetDisableContext(kendoUi)
 {
+	_START('addTargetDisableContext');
 	var keyName		=	getFirstValueArray(kendoUi);
 	var columnTotal	=	kendoUi[keyName]['flag_total_column'];
 	var tr		=	0;
@@ -220,10 +229,14 @@ function addTargetDisableContext(kendoUi)
 		
 		tr++;
 	}
+	
+	_END('addTargetDisableContext');
 }
+
 (function ( $ ) {
     $.fn.WrsDrill		= function()
     {
+		_START('WrsDrill');
     	$event		=	 this;
     
     	
@@ -253,6 +266,8 @@ function addTargetDisableContext(kendoUi)
 		 */
     	function drill_click_option(e)
     	{
+			
+			_START('WrsDrill::drill_click_option');
     		var IDName			=	'#'+e.kendoId;
     		var kendoUi			=	$(IDName).data('kendoGrid');
     		var _data			=	kendoUi._data;
@@ -473,6 +488,8 @@ function addTargetDisableContext(kendoUi)
 					
     			};break;
     		}
+			
+			_END('WrsDrill::drill_click_option');
     	}// EDN drill_click_option(e)
     	
     	//Start context Menu
@@ -486,6 +503,7 @@ function addTargetDisableContext(kendoUi)
     	 */
     	var menu_context_relation_ship_measure	=	 function (_jsonMenu)
     	{
+			_START('WrsDrill::menu_context_relation_ship_measure');
     		var menuMain				=	[];
     		menuMain[menuMain.length]	=	{header	: 'Options ', action:drill_click_option};
 
@@ -538,6 +556,7 @@ function addTargetDisableContext(kendoUi)
         				//menuMain[menuMain.length]=	 {divider: true};
         		}
     		
+			_END('WrsDrill::menu_context_relation_ship_measure');
         	return menuMain;
     	}
 
@@ -621,7 +640,7 @@ function addTargetDisableContext(kendoUi)
     	}
   
 
-
+_END('WrsDrill');
         return $event;
     };
 }( jQuery ));

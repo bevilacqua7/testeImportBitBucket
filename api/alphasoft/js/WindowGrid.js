@@ -33,6 +33,7 @@ function onDataBindingWindowGrid(arg)
 
 function onDataBoundWindowGrid(arg)
 {	
+	_START('onDataBoundWindowGrid');
 	var tabela				=	arg.sender.element.attr('id');
 	var IDName				=	'#'+tabela;
 	var loadParanGridWindow	=	$(IDName).data('loadParanGridWindow');
@@ -107,6 +108,7 @@ function onDataBoundWindowGrid(arg)
 	var HandleArg			=	arg;
 	var KendoGridWindowTools	=	 function ()
 	{		
+			_START('onDataBoundWindowGrid::KendoGridWindowTools');
 		var param			=	HandleArg.sender.columns[0].window_grid
 		var index			=	$(this).parent().index();
 		var table			=	param['table'];	
@@ -119,10 +121,13 @@ function onDataBoundWindowGrid(arg)
 				
 			}
 		}catch(e){}
-		
+			_END('onDataBoundWindowGrid::KendoGridWindowTools');
 	}
 	
-	var KendoGridWindowToolsAuxSingleClick	=	 function(){	
+	var KendoGridWindowToolsAuxSingleClick	=	 function(){
+
+		_START('onDataBoundWindowGrid::KendoGridWindowToolsAuxSingleClick');
+		
 		var param			=	HandleArg.sender.columns[0].window_grid
 		var parent			=	$(this).parent();
 		var index			=	$(this).parent().index();
@@ -144,6 +149,7 @@ function onDataBoundWindowGrid(arg)
 		}catch(e){
 			grid_window_modal(option,table);
 		}
+			_END('onDataBoundWindowGrid::KendoGridWindowToolsAuxSingleClick');
 	}
 
 	$(IDName).find('.k-grid-content').find('td').unbind('dblclick').dblclick(KendoGridWindowTools);		
@@ -154,13 +160,14 @@ function onDataBoundWindowGrid(arg)
 	if(HandleArg.sender.columns[0].field=='checkbox_linha'){
 		$(IDName).find('[data-field=checkbox_linha]').unbind('click').find('input.checkline').change(function(){ trataCheckColuna($(this),tabela); });
 	}else{
-		WRS_CONSOLE('nao entrou');
+		
 	}
-
+_END('onDataBoundWindowGrid');
 }
 
 function wrd_grid_window_to_form()
 {
+	_START('wrd_grid_window_to_form');
 	var primary			=	 $.parseJSON(base64_decode($(this).attr('primary')));
 	var table			=	 $(this).attr('table');
 	var option			=	 {wrs_type_grid:'form'};
@@ -179,10 +186,12 @@ function wrd_grid_window_to_form()
 			window[toAction](_data[index],table);	
 		}
 	}
+	_END('wrd_grid_window_to_form');
 }
 
 function wrd_grid_window_to_form_dbl(arg)
 {
+	_START('wrd_grid_window_to_form_dbl');
 	var primary			=	 $.parseJSON(base64_decode($(this).attr('primary')));
 	var table			=	 $(this).attr('table');
 	var option			=	 {wrs_type_grid:'form'};
@@ -201,11 +210,13 @@ function wrd_grid_window_to_form_dbl(arg)
 			window[toAction](_data[index]);				
 		}
 	}
+	_END('wrd_grid_window_to_form_dbl');
 }
 
 
 function callback_load_admin_generic_modal(arg,tabela)
 {
+	_START('callback_load_admin_generic_modal');
 	var _data			=	 $('#myModal').data('wrsGrid');
 	var param			=	 _data.param_original;
 	var option						=	 [];
@@ -213,19 +224,23 @@ function callback_load_admin_generic_modal(arg,tabela)
 		option[param['primary']]	=	arg.ROW_ID;
 		option['param_request']			=	param;
 	grid_window_modal(option,tabela);
+	_END('callback_load_admin_generic_modal');
 }
 
 function wrs_grid_window_event()
 {
+	_START('wrs_grid_window_event');
 	var rel		=	 $(this).attr('rel');
 	var table	=	 $(this).attr('table');
 	var option	=	 {wrs_type_grid:rel,cube_s:CUBE_S};
 	grid_window_modal(option,table);
+	_END('wrs_grid_window_event');
 }
 
 
 function get_grid_window_values_form(_event)
 {
+	_START('get_grid_window_values_form');
 	var form	=	$('form.grid_window_values_form');
 	
 	if(!empty(_event))	form	=	_event;
@@ -241,7 +256,7 @@ function get_grid_window_values_form(_event)
 		param[$(this).attr('name')]	=	$(this).val();
 	});
 	
-	
+	_END('get_grid_window_values_form');
 	return param;
 	
 }
@@ -249,6 +264,7 @@ function get_grid_window_values_form(_event)
 
 function btn_window_grid_event()
 {
+	_START('btn_window_grid_event');
 	var action_type				=	 $(this).attr('action_type');
 	var table					=	 $(this).attr('table');
 	var values					=	 get_grid_window_values_form();
@@ -263,11 +279,12 @@ function btn_window_grid_event()
 		}
 		
 		grid_window_modal(values,table);
-		
+	_END('btn_window_grid_event');	
 }
 
 function wrs_window_grid_events_tools(objectClick)
 {
+	_START('wrs_window_grid_events_tools');
 	var _options	=	{
 						visao	:	wrs_grid_window_event,
 						icon	:	wrd_grid_window_to_form,
@@ -275,7 +292,6 @@ function wrs_window_grid_events_tools(objectClick)
 						btn		:	btn_window_grid_event
 					};
 
-	WRS_CONSOLE('options windowgrid',objectClick);
 	
 	var options		=	_options;
 	
@@ -294,10 +310,12 @@ function wrs_window_grid_events_tools(objectClick)
 		$('.margin_fix_grid_window').unbind('click').click(options.icon).unbind('dblclick').dblclick(options.icondbl); //evento para quamdp for 	visão tipo icones
 		$('.btn_window_grid_event').unbind('click').click(options.btn);
 	
+	_END('wrs_window_grid_events_tools');
 }
 
 function grid_window_modal(param_request,Event,_funCallBackData)
 {
+	_START('grid_window_modal');
 	//var param_request	=	 {wrs_type_grid:type};
 	var Ofile			=	'WindowGrid';
 	var Oclass			=	'WindowGrid';
@@ -309,8 +327,6 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 		funCallBackData	=	function(data)
 		{
 				$('.modal-content-grid').html(data);
-				WRS_CONSOLE('evento',Event);
-				WRS_CONSOLE('options windowgrid modal data',data,'paramrequest',param_request);
 				wrs_window_grid_events_tools();
 		};
 	}
@@ -319,6 +335,7 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 	$('.modal-content-grid').html(header);
 	setLoading($('.body_grid_window_center_Load'));	
 	runCall(param_request,Ofile,Oclass,Oevent,funCallBackData,'modal');
+	_END('grid_window_modal');
 }
 
 $(function(){
@@ -335,6 +352,7 @@ $(function(){
  	$.fn.WrsGridWindowPagination = function() 
     {
 
+		_START('WrsGridWindowPagination');
  		var event	=	 this;
  		var json	=	event.attr('json');
  			json	=	$.parseJSON(base64_decode(json));	
@@ -356,6 +374,7 @@ $(function(){
  			
  		
  		var buttonEvent	=	 function(){
+			_START('WrsGridWindowPagination::buttonEvent');
  				var rel	=	$(this).attr('rel');
  				
  				switch(rel)
@@ -374,7 +393,7 @@ $(function(){
  				
  				
  				grid_window_modal(option,table);
- 				
+ 			_END('WrsGridWindowPagination::buttonEvent');	
  				//page_current
  				//page_size
  		}
@@ -404,6 +423,8 @@ $(function(){
   				grid_window_modal(option,table);
   				
  		  });
+		  
+		 _END('WrsGridWindowPagination'); 
     }
     }( jQuery ));
 

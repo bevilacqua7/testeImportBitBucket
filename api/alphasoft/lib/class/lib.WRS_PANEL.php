@@ -569,9 +569,8 @@ class WRS_PANEL  extends WRS_USER
 		if(empty($history)) return false;
 		
 		
-		if(!$saveHistory){
-
-			
+		if(!$saveHistory)
+		{
 			$history[0]['kendoUi']['ORDER_BY_COLUMN']	=	$column;
 			$history[0]['kendoUi']['ORDER_COLUMN_TYPE']	=	$order;
 			
@@ -652,10 +651,12 @@ class WRS_PANEL  extends WRS_USER
 	
 
 		//Pegando as integrações com o KendoUi
-		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi();		
-		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
-		
-		
+		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi($_REQUEST);		
+//		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
+		/*
+		echo '<pre>';
+		print_r($getRequestKendoUi);
+		echo '</pre>';*/
 		/*
 		 * Exceptions variáveis utilizadas exporadicamente
 		 */
@@ -830,6 +831,20 @@ class WRS_PANEL  extends WRS_USER
 					$rows_CREATE_SSAS_JOB 				=	$this->fetch_array($queryGrid_exec);
 					$rows_GET_SSAS_JOB					=	NULL;
 					$getRequestKendoUi['QUERY_ID']		=	$rows_CREATE_SSAS_JOB['QUERY_ID'];
+					
+					
+					//Pegando o total de Colunas da query para ser renderizada na tela
+/*					$_total_FAT_SSAS_QUERYS		=	 $this->_query->FAT_SSAS_QUERYS($rows_CREATE_SSAS_JOB['QUERY_ID']);
+					$_query_FAT_SSAS_QUERYS		=	 $this->query($_total_FAT_SSAS_QUERYS);
+					
+					if($_query_FAT_SSAS_QUERYS)
+					{
+							$rows_FAT_SSAS_QUERY	= $this->fetch_array($_query_FAT_SSAS_QUERYS);	
+							
+							WRS::SET_TOTAL_COLUMN($rows_CREATE_SSAS_JOB['QUERY_TABLE'], $rows_FAT_SSAS_QUERY['TOTAL_COLUMNS']);//Gravando
+					}
+					*/
+					
 					$cube 								=	$this->getCube();
 					//$this->SAVE_CACHE_SSAS_USER('QUERY_CACHE',$rows_CREATE_SSAS_JOB['QUERY_ID'],$this->_cube_pos_session);
 					//Salvando na estrutura do quendo ui o ID da query
@@ -870,8 +885,12 @@ class WRS_PANEL  extends WRS_USER
 				else
 				{
 					WRS_TRACE('ERROR::CREATE_SSAS_JOB não retornou informações QUERY:::'.$queryGrid, __LINE__, __FILE__);
-					echo fwrs_warning(LNG('ERROR_NOT_ROWS'),$getRequestKendoUi_TAG);
-					return false;
+					//echo fwrs_warning(LNG('ERROR_NOT_ROWS'),$getRequestKendoUi_TAG);
+					
+					return array('error'=>LNG('ERROR_NOT_ROWS'),'REPORT_ID'=>$getRequestKendoUi['REPORT_ID']);
+					
+					
+					//return false;
 				}
 		
 		
@@ -972,10 +991,11 @@ class WRS_PANEL  extends WRS_USER
 	 * @paran boolean $checkThreadJobManager
 	 * @return boolean
 	 */
-	private function mountGrid($ROWSL,$_getRequestKendoUi,$getRequestWrsExceptions,$cube,$getRequestKendoUi_TAG,$DillLayout,$TelerikUi,$CUBE,$checkThreadJobManager)
+	private function mountGrid($ROWSL,$_getRequestKendoUi,$getRequestWrsExceptions,$_cube,$getRequestKendoUi_TAG,$DillLayout,$TelerikUi,$CUBE,$checkThreadJobManager)
 	{
 		WRS_TRACE('Start mountGrid', __LINE__, __FILE__);
 		
+		$cube						=	$_cube;
 		$getRequestKendoUi			=	$_getRequestKendoUi;
 
 	//WRS_DEBUG_QUERY($getRequestKendoUi);
@@ -1013,12 +1033,24 @@ class WRS_PANEL  extends WRS_USER
 		{
 			$rows 		= $this->fetch_array($query_table);
 			$num_rows 	= (int) $rows['TOTAL_ROWS'];
+			WRS::SET_TOTAL_COLUMN($cube['TABLE_CACHE'], $rows['TOTAL_COLUMNS']);//Gravando
 		}
 		
 		
 		
 		//$LAYOUT_ROWS_SIZE			=	$LAYOUT_ROWS_SIZE > $rows['COLUMNS']  ?  1 : $LAYOUT_ROWS_SIZE ;
-		$SORT_SSAS_TABLE	=	$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$LAYOUT_ROWS_SIZE,'1'));
+		
+		$_sort_current		=	(int)substr($getRequestKendoUi['ORDER_BY_COLUMN'], 1);
+		$_sort_column		=	WRS::GET_TOTAL_COLUMN($_cube['TABLE_CACHE']);
+		
+		$_sort_order		=	$_sort_current > $_sort_column ? $_sort_column : $_sort_current;
+		
+
+		/*
+		echo $_sort_current.'--';
+		echo $_sort_order;*/
+		
+		$SORT_SSAS_TABLE	=	$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$LAYOUT_ROWS_SIZE,$_sort_order));
 		
 		if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
 		{
@@ -1042,16 +1074,16 @@ class WRS_PANEL  extends WRS_USER
 		$queryHeader_exec	=	 $this->query($queryHeader);
 		if(!$this->num_rows($queryHeader_exec))
 		{
-			$msg	=	 fwrs_error(LNG('ERROR_TABLE_CACHE_NO_HEADER'),$getRequestKendoUi_TAG);
+			$msg	=	 LNG('ERROR_TABLE_CACHE_NO_HEADER');
 			WRS_TRACE('Não existe Header '.$queryHeader, __LINE__, __FILE__);
 			WRS_DEBUG_QUERY('Não existe Header '.$queryHeader);
 
-			if($checkThreadJobManager)
-			{
+		//	if($checkThreadJobManager)
+			//{
 				return array('error'=>$msg,'REPORT_ID'=>$getRequestKendoUi['REPORT_ID']);
-			}else{
+			/*}else{
 				echo $msg;
-			}
+			}*/
 			
 			return false;
 		}
@@ -1125,6 +1157,8 @@ HTML;
 		$TelerikUi->setPageSize($page_size);
 		$TelerikUi->setHeaderColumnWRS($param);
 		$tagToUrl['TOTAL_COLUMN']	=	$TelerikUi->get_total_column();
+		
+		
 		$url						=	'run.php?'.fwrs_array_to_url($tagToUrl);
 		$TelerikUi->setRequestJson($url,$PAGE);
 		
@@ -1187,22 +1221,22 @@ HTML;
 		
 		includeCLASS('KendoUi');
 		$TelerikUi					= new KendoUi();
-		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi();
-		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
+		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi($_REQUEST);
+//		$getRequestKendoUi			=	fwrs_request($getRequestKendoUi);
 		$CUBE_ID					=	fwrs_request('CUBE_ID');
 		$TOTAL_COLUMN				=	fwrs_request('TOTAL_COLUMN');
 		$total_column_detect		= 	false;
 		/*
 		 * Pegando os Eventos do Telerik
 		 */
-		$request 			=	json_decode(file_get_contents('php://input'),true);
-		$page				=	$request['page'];
-		$take				=	$request['take'];
-		$skip				=	$request['skip'];
-		$sort				=	isset($request['sort']) ? $request['sort'] : array();
-		$pageSize			=	$request['pageSize'];
-		$resultGridDrill	=	NULL;
-
+		$request 				=	json_decode(file_get_contents('php://input'),true);
+		$page					=	$request['page'];
+		$take					=	$request['take'];
+		$skip					=	$request['skip'];
+		$sort					=	isset($request['sort']) ? $request['sort'] : array();
+		$pageSize				=	$request['pageSize'];
+		$resultGridDrill		=	NULL;
+	
 		/*
 		 * Pegando os eventos do WRS_PAnel
 		 */
@@ -1214,28 +1248,38 @@ HTML;
 		
 		/*
 		 * Efetuando a contagem recursiva para fazer a reordenação
+		 * WARNING:Esse é o trecho do código que está se repetindo
 		 */
+		
+		
 		if(isset($sort[0]['field']))
 		{
 			
 			$field	=	(int)substr($sort[0]['field'], 1);
 			
-			if($field>$TOTAL_COLUMN)
-			{
-				$field					=	$TOTAL_COLUMN;
-				$total_column_detect	=	true;
+			$total_atual	=	 WRS::GET_TOTAL_COLUMN($TABLE_NAME);
+			
+			if($total_atual!=$field)
+			{	
+				
+				WRS::SET_TOTAL_COLUMN($TABLE_NAME,$field);
+				
+				if($field>$TOTAL_COLUMN)
+				{
+					$field					=	$TOTAL_COLUMN;
+					$total_column_detect	=	true;
+				}
+				
+				$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$LAYOUT_ROWS_SIZE,$field,strtoupper($sort[0]['dir'])));
+				
+				
+				if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
+				{
+					// Obtem a Tabela Contendo Registros Abertos (Drill)
+					$query_DRILL_SSAS_TABLE_INFO = $this->_query->INFO_SSAS_TABLE( $TABLE_NAME.'S', $LAYOUT_ROWS_SIZE );
+					$this->query($query_DRILL_SSAS_TABLE_INFO);
+				}
 			}
-			
-			$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$LAYOUT_ROWS_SIZE,$field,strtoupper($sort[0]['dir'])));
-			
-			
-			if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
-			{
-				// Obtem a Tabela Contendo Registros Abertos (Drill)
-				$query_DRILL_SSAS_TABLE_INFO = $this->_query->INFO_SSAS_TABLE( $TABLE_NAME.'S', $LAYOUT_ROWS_SIZE );
-				$this->query($query_DRILL_SSAS_TABLE_INFO);
-			}
-			
 			
 		}
 		

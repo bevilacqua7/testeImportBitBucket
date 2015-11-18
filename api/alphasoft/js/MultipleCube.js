@@ -8,6 +8,7 @@
 
 function wrs_multiple_cube_event()
 {
+	_START('wrs_multiple_cube_event');
 	//MODAL_LOADING_WRS_PANEL('GERANDO_MULTI_CUBE_TITLE','GERANDO_MULTI_CUBE_BODY','hide');
 	
 	var CUBE_ID			=	$(this).val();
@@ -28,6 +29,7 @@ function wrs_multiple_cube_event()
 	{
 		event_cube_change_confirm(true);		
 	}
+	_END('wrs_multiple_cube_event');
 }
 
 
@@ -35,6 +37,7 @@ function wrs_multiple_cube_event()
 
 function multiple_cube_status_change(no_change)
 {
+	_START('multiple_cube_status_change');
 	var wrs_multiple_cube_event_class	=	$('.wrs_multiple_cube_event');
 	var multiple_data					=	wrs_multiple_cube_event_class.data('wrsParan');
 	
@@ -55,6 +58,8 @@ function multiple_cube_status_change(no_change)
 	}
 	
 	wrs_multiple_cube_event_class.data('wrsParan',{'val':val,'type_event':type_event});
+	
+	_END('multiple_cube_status_change');
 }
 
 
@@ -62,7 +67,7 @@ function multiple_cube_status_change(no_change)
 
 function event_cube_change_confirm(confirm)
 {
-	
+	_START('event_cube_change_confirm');
 	var wrs_multiple_cube_event_class	=	$('.wrs_multiple_cube_event');
 	var that							=	wrs_multiple_cube_event_class.find('option:selected');
 	var CUBE_ID							=	that.val();
@@ -101,7 +106,7 @@ function event_cube_change_confirm(confirm)
 	$('.WRS_ABA').find('.active').wrsAbaData('setKendoUi',{MULTIPLE_CUBE_ID:CUBE_ID});
 
 	change_cube(CUBE_ID);
-	
+	_END('event_cube_change_confirm');
 }
 
 
@@ -111,6 +116,7 @@ function event_cube_change_confirm(confirm)
 
 function getFiltersChangeCube(levelFULL)
 {
+	_START('getFiltersChangeCube');
 	var filter		=	'';
 	$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 		var json 	=	$.parseJSON(base64_decode($(this).attr('json')));	
@@ -120,7 +126,7 @@ function getFiltersChangeCube(levelFULL)
 			filter 	=	json['FILTER'];
 		}
 	})
-	
+	_END('getFiltersChangeCube');
 	return filter;
 }
 
@@ -132,6 +138,7 @@ function getFiltersChangeCube(levelFULL)
  */
 function change_cube(CUBE_ID)
 {
+	_START('change_cube');
 	var measure_relation	=	$.parseJSON(base64_decode(MEASURE_RELATIONSSHIPS));
 	var _relationships		=	measure_relation[CUBE_ID]['relationships'];
 	var _measures			=	measure_relation[CUBE_ID]['measure'];	
@@ -172,7 +179,7 @@ function change_cube(CUBE_ID)
 	CLOSE_LOAD_RELATORIO();
 	
 	acoes_multiplas_menu_painel();
-
+_END('change_cube');
 }
 
 
@@ -183,6 +190,7 @@ function change_cube(CUBE_ID)
 
 function MENU_DRAG_DROP_DIREITO(container,valueShow,_type)
 {
+	_START('MENU_DRAG_DROP_DIREITO');
 	var icon	=	'font';
 	var type	=	_type;
 	var NULL	=	'';
@@ -219,8 +227,10 @@ function MENU_DRAG_DROP_DIREITO(container,valueShow,_type)
 	var dragDropSearch		=	 ['{title}','{liBody}','{rel}'];
 	
 	
-	if(!is_array(container)) return  html;
-	
+	if(!is_array(container)) {
+		_END('MENU_DRAG_DROP_DIREITO');
+		return  html;
+	}
 	
 	for(var label in  container  )
 	{
@@ -240,7 +250,7 @@ function MENU_DRAG_DROP_DIREITO(container,valueShow,_type)
 			var dragDropReplace	=	[label,liFindGroup+liTemp,rel];
 				html			+=	str_replace(dragDropSearch, dragDropReplace, dragDrop);
 	}
-	
+	_END('MENU_DRAG_DROP_DIREITO');
 	return html;
 }
 

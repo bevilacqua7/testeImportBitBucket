@@ -29,6 +29,7 @@ var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';
 
 function click_stop_job()
 {
+	_ONLY('click_stop_job');
 	$('.action_WRSJobModalCancelQuery').trigger('click');
 }
 
@@ -47,6 +48,7 @@ function job_exist(report_id)
 
 function _exist_job_in_cancel(report_id)
 {
+	_START('_exist_job_in_cancel');
 	var CANCEL_JOB	=	'WrsThreadJobManagerCancelJOB';
 	var that		=	 $('body');
 	var _data		=	 that.data(CANCEL_JOB);
@@ -61,7 +63,7 @@ function _exist_job_in_cancel(report_id)
 		}catch(e){
 			_exec	=	 false;
 		}
-		
+	_END('_exist_job_in_cancel');	
 		return _exec;
 }
 
@@ -70,6 +72,7 @@ function _exist_job_in_cancel(report_id)
 
 	$.fn.WRSTimerLoader = function(methodOrOptions)
 	{
+		 
 			var labelData			=	'WRSTimeLoader';
 			var _data				=	$('body').data(labelData); 
 			var that				=	this;
@@ -115,7 +118,7 @@ function _exist_job_in_cancel(report_id)
 			var __stop_time_out		=	 function()
 			{
 				//$('.modal-window-wrs').addClass('hide');
-				
+				_START('WRSTimerLoader::__stop_time_out');
 				var _data_time		=	$('body').data(labelData);
 				
 
@@ -129,12 +132,13 @@ function _exist_job_in_cancel(report_id)
 		    			that.data(labelData,'');
 		//			}
 		    		
-		    		
+		    	_END('WRSTimerLoader::__stop_time_out');	
 			}
 			
 			
 			var __init		=	 function(options)
 			{
+				_START('WRSTimerLoader::__init');
 				__stop_time_out();
 				
 				var _options			=	 options;
@@ -155,12 +159,13 @@ function _exist_job_in_cancel(report_id)
 					
 					
 					$('body').data(labelData,_options);
-					
+				_END('WRSTimerLoader::__init');	
 			}
 			
 			
 			var __stop		=	 function(options)
 			{
+				_START('WRSTimerLoader::__stop');
 				var _data_time		=	$('body').data(labelData);
 				
 				if(empty(_data_time)) return false;
@@ -169,7 +174,7 @@ function _exist_job_in_cancel(report_id)
 				{
 					__stop_time_out();
 				}
-		    		
+		    	_END('WRSTimerLoader::__stop');
 			}
 			
 			
@@ -203,7 +208,7 @@ function _exist_job_in_cancel(report_id)
 			
 			
 			
-			
+		 
 			
 	}
 	/*
@@ -222,6 +227,7 @@ function _exist_job_in_cancel(report_id)
 	 */
 	$.fn.WRSJobModal = function(methodOrOptions) 
 	{
+		
 			var that			=	 this;
 			var DATA_NAME		=	'WrsThreadJobManager';
 			var MODAL_JOB		=	'.modal-window-wrs';
@@ -236,6 +242,7 @@ function _exist_job_in_cancel(report_id)
 			 */
 			var removeThread	=	 function(report_id)
 	    	{
+				_START('WRSJobModal::removeThread');
 	    		var _data_param		=		that.data(DATA_NAME);
 	    		var tmp_param		=		[];
 	    		
@@ -248,6 +255,8 @@ function _exist_job_in_cancel(report_id)
 		    			}
 	    		
 	    		that.data(DATA_NAME,tmp_param);
+				
+				_END('WRSJobModal::removeThread');
 	    	}
 			
 			
@@ -256,6 +265,7 @@ function _exist_job_in_cancel(report_id)
 			
 			var __add_mutex_job		=	 function(report_id,clean)
 			{
+				_START('WRSJobModal::__add_mutex_job');
 				var _data		=	 that.data(CANCEL_JOB);
 				var _tmp_data	=	{};
 					if(empty(_data))	_data	=	{};
@@ -278,7 +288,7 @@ function _exist_job_in_cancel(report_id)
 					}
 
 					that.data(CANCEL_JOB,_data);
-					
+					_END('WRSJobModal::__add_mutex_job');
 			}
 			
 			
@@ -291,7 +301,7 @@ function _exist_job_in_cancel(report_id)
 			
 			var __request_consulta_cancelada	=	 function(data)
 			{
-
+					_START('WRSJobModal::__request_consulta_cancelada');
 				//Removendo da opção de insert
 				__add_mutex_job(data.report_id,true);
 				
@@ -309,6 +319,7 @@ function _exist_job_in_cancel(report_id)
 						console.error('Error no JOB '+data.report_id,data.html);
 						//alertify.error(data.html,0);
 					}
+				_END('WRSJobModal::__request_consulta_cancelada');	
 			}
 			
 			
@@ -317,6 +328,7 @@ function _exist_job_in_cancel(report_id)
 
 			var __click__action_WRSJobModalCancelQuery	=	 function()
 			{
+				_START('WRSJobModal::__click__action_WRSJobModalCancelQuery');
 				var _report_id	=	$(this).parent().attr('report_id');
 				var aba_active	=	$('.'+_report_id);
 
@@ -325,6 +337,7 @@ function _exist_job_in_cancel(report_id)
 				
 				if(aba_data['DRILL_LINE_STOP']==true)
 				{
+					_END('WRSJobModal::__click__action_WRSJobModalCancelQuery');
 					return true;
 				}
 				
@@ -332,6 +345,7 @@ function _exist_job_in_cancel(report_id)
 				
 				if(_exist_job_in_cancel(_report_id))
 				{
+					_END('WRSJobModal::__click__action_WRSJobModalCancelQuery');
 					return true;
 				}
 
@@ -362,17 +376,19 @@ function _exist_job_in_cancel(report_id)
     							__request_consulta_cancelada,
     							'modal','json'
     						);	
-				
+				_END('WRSJobModal::__click__action_WRSJobModalCancelQuery');
 			}
 			
 			var __click__action_WRSJobModalCloseWindow	=	 function()
 			{
+				_ONLY('WRSJobModal::__click__action_WRSJobModalCloseWindow');
 				$(MODAL_JOB).addClass('hide');
 			}
 			
 			
 			var __init	=	 function(options)
 			{
+				_START('WRSJobModal::__init');
 					var _html	=	'<!--  Modal JOB -->'+
 									'		<div class="modal-window-wrs hide" >'+
 									'			<div class="modal-box-wrs  modal-type-primary modal-size-normal" style="position: absolute; top: 50%; margin-top: -72px; ">'+
@@ -401,11 +417,13 @@ function _exist_job_in_cancel(report_id)
 					
 					$('.action_WRSJobModalCancelQuery').unbind('click').click(__click__action_WRSJobModalCancelQuery);
 					$('.action_WRSJobModalCloseWindow').unbind('click').click(__click__action_WRSJobModalCloseWindow);
+				_END('WRSJobModal::__init');	
 			}
 			
 			
 			var __clean		=	 function()
 			{
+				_START('WRSJobModal::__clean');
 				var modal		=	 $(MODAL_JOB);
 				
 					modal.find('.action_WRSJobModalCloseWindow').addClass('hide');
@@ -413,17 +431,21 @@ function _exist_job_in_cancel(report_id)
 					
 					modal.find('.action_WRSJobModalCancelQuery').removeClass('hide');
 					modal.find('.modal-text-wrs-job').html(LNG('GERANDO_RELATORIO'));
+				_END('WRSJobModal::__clean');	
 			}
 			
 			
 			var __resize		=	 function(options)
 			{
+				_START('WRSJobModal::__resize');
 				$(MODAL_JOB).height(options.height);
 				$(MODAL_JOB).width(options.width);
+				_END('WRSJobModal::__resize');
 			}
 			
 			var __get_data		=	 function()
 			{
+					
 					return $('body').data(DATA_NAME);
 			}
 			
@@ -461,6 +483,7 @@ function _exist_job_in_cancel(report_id)
 				
 					if(!_report_active) return false;
 				
+				
 				return _report_active;
 				
 			}
@@ -492,6 +515,7 @@ function _exist_job_in_cancel(report_id)
 			
 			 var __aba		=	 function(options)
 			 {
+				 _START('WRSJobModal::__aba');
 					var _opts			=	{report_id:'',wait:false, title_aba:''};
 					var	opts 			= 	$.extend( {}, _opts, options);
 					var _report_id		=	opts.report_id;
@@ -566,7 +590,7 @@ function _exist_job_in_cancel(report_id)
 						
 						//Gravendo o ID para um possível cancelamento
 						_modal.find('.modal-buttons-wrs-job').attr('report_id',opts.report_id);
-						
+				 _END('WRSJobModal::__aba');		
 						
 			 }
 			 
@@ -575,7 +599,7 @@ function _exist_job_in_cancel(report_id)
 			 var __close		=	 function(options)
 			 {
 				 
-				 
+				  _START('WRSJobModal::__close');
 				 	var _opts			=	{report_id:'',wait:false, title_aba:''};
 					var	opts 			= 	$.extend( {}, _opts, options);
 					var _report_id		=	opts.report_id;
@@ -645,7 +669,7 @@ function _exist_job_in_cancel(report_id)
 	    					modal.removeClass('hide');
 	    				}
 	    				
-	    				
+	    				_END('WRSJobModal::__close');
 			 }
 			 
 			
@@ -653,7 +677,7 @@ function _exist_job_in_cancel(report_id)
 
 			var __click_aba		=	 function(options)
 			 {
-							
+				_START('WRSJobModal::__click_aba');			
 			 	var _opts			=	{report_id:'',wait:false, title_aba:''};
 				var	opts 			= 	$.extend( {}, _opts, options);
 				var _report_id		=	opts.report_id;
@@ -703,12 +727,13 @@ function _exist_job_in_cancel(report_id)
     					__time(opts);
     					modal.removeClass('hide');
     				}
-    				
+    		_END('WRSJobModal::__click_aba');		
 		 }
 		
 	 
 		var __error			=	 function(options)
 		{
+			_START('WRSJobModal::__error');	
 			var _report_id		=	options.report_id;
 			var msg				=	options.msg;
 			
@@ -757,12 +782,13 @@ function _exist_job_in_cancel(report_id)
 				alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+msg, 0);
 				
 			that.data(DATA_NAME,tmp_data);
-			
+			_END('WRSJobModal::__error');	
 		}
 		
 		
 		var __time			=	 function(options)
 		{
+			_ONLY('WRSJobModal::__time');	
 				that.WRSTimerLoader('init',options);
 			//$('.wrs-modal-time')
 		}
@@ -855,6 +881,8 @@ function _exist_job_in_cancel(report_id)
 	
     $.fn.ThreadJobManager = function(report_id) 
     {
+		
+		_START('ThreadJobManager');	
     	var that			=	this;
     	var DATA_NAME		=	'WrsThreadJobManager';
     	var WHO_CALL		=	'body'; // o evento principal é sempre em cima da body
@@ -917,6 +945,7 @@ function _exist_job_in_cancel(report_id)
     		
     	var removeThread	=	 function(report_id)
     	{
+			_START('removeThread');	
     		var _data_param		=		that.data(DATA_NAME);
     		var tmp_param		=		[];
     		
@@ -929,6 +958,7 @@ function _exist_job_in_cancel(report_id)
     			}
     		
     		that.data(DATA_NAME,tmp_param);
+			_STOP('removeThread');	
     	}
     		
     	/*
@@ -936,6 +966,7 @@ function _exist_job_in_cancel(report_id)
     	 */
     	var WrsThreadJobManagerTHREADClear	=	 function()
     	{
+			_ONLY('WrsThreadJobManagerTHREADClear');	
     		clearTimeout(that.data(THREAD_MAIN));    		
     		that.data(THREAD_MAIN,'');
     	}    	
@@ -946,6 +977,7 @@ function _exist_job_in_cancel(report_id)
     	 */
     	var WrsThreadJobTimeOut	=	 function()
     	{
+			_ONLY('WrsThreadJobTimeOut');	
     		clearTimeout(that.data(THREAD_TIMEOUT));    		
     		that.data(THREAD_TIMEOUT,'');
     	} 
@@ -956,6 +988,7 @@ function _exist_job_in_cancel(report_id)
     	 */
     	var remove_DRILL_LINE_STOP	=	 function(report_id)
     	{
+			_ONLY('remove_DRILL_LINE_STOP');
     		$('.'+report_id).wrsAbaData('setKendoUi',{DRILL_LINE_STOP:false});
     	}
     	
@@ -964,6 +997,7 @@ function _exist_job_in_cancel(report_id)
     	 */
     	var ThreadMainLoadData	=	 function(data)
     	{
+			_START('ThreadMainLoadData');
 
     		that.data(MSG_JOBS,data);
     		
@@ -998,6 +1032,7 @@ function _exist_job_in_cancel(report_id)
     						}
     			
     					try{
+    							
     							if(_data_json['error'])
     								{
     									var _title		=	that.wrsAbas('aba_title',{report_id:_data_json['REPORT_ID']});
@@ -1073,6 +1108,8 @@ function _exist_job_in_cancel(report_id)
     				//that.WRSTimerLoader('timeout',{report_id:report_id_modal});    				
     				$('body').WRSJobModal('close',{'report_id':report_id_modal});
     			}
+				
+			_END('ThreadMainLoadData');	
     	}
     	
     	
@@ -1096,6 +1133,7 @@ function _exist_job_in_cancel(report_id)
     	 */
     	var ThreadMain	=	 function()
     	{
+			_START('ThreadMain');
     		var _data_param		=		that.data(DATA_NAME);
     			time			=		mktime(date('H'),date('i'),parseInt(date('s'))+WRS_TIME_OUT_THREAD,date('m'),date('d'),date('Y'));
     		var _mktime			=		mktime();
@@ -1123,7 +1161,7 @@ function _exist_job_in_cancel(report_id)
      				
     		}
     		
-    		
+    		_END('ThreadMain');
     	}
     	
     	
@@ -1136,6 +1174,7 @@ function _exist_job_in_cancel(report_id)
     	 */
     	var ThreadMainManagerTimeOut	=	 function()
     	{
+			_START('ThreadMainManagerTimeOut');
     		var _data_param		=	that.data(DATA_NAME);
     		var _mktime			=	mktime();
     		
@@ -1149,6 +1188,7 @@ function _exist_job_in_cancel(report_id)
 	    			alertify.success(LNG('JOB_COMPLETE'));
 	    			WrsThreadJobTimeOut();
 	    		}
+			_END('ThreadMainManagerTimeOut');	
     	}    	
     	
     	//Se existir alguma thread em execução para ela
@@ -1169,6 +1209,7 @@ function _exist_job_in_cancel(report_id)
 	    	return false;
     	}
     	
+		_END('ThreadJobManager');
     	return true;
     };
     

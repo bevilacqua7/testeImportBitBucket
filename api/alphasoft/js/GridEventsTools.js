@@ -10,12 +10,15 @@ var HEIGHT_ABAS		=	50;
 	
 	$.fn.NavConfigure = function()
 	{
+		_ONLY('NavConfigure');
 		var navConfigure=	this;
 	}
 	
 	
     $.fn.WRSWindowGridEventTools = function(loadByAba,_click_auto)
     {
+		_START('WRSWindowGridEventTools');
+		
     	var eventTelerik	=	this;
     	var click_auto		=	_click_auto==undefined || _click_auto==null ? false : _click_auto;
 		var idName			=	eventTelerik.attr('id');
@@ -49,6 +52,7 @@ var HEIGHT_ABAS		=	50;
 		//Criando a DIV do MAPA o da CHART
 		var check_div_map_chart	=	 function(type)
 		{
+			_START('WRSWindowGridEventTools::check_div_map_chart');
 			var flag_c_m	=	false;
 			var type_div	=	'';
 			var _explode	=	'';
@@ -123,6 +127,7 @@ var HEIGHT_ABAS		=	50;
 							ELEMENT.find('.'+toU).hide();
 						}
 				}
+			_END('WRSWindowGridEventTools::check_div_map_chart');
 		}
 		
 		
@@ -131,6 +136,7 @@ var HEIGHT_ABAS		=	50;
 		 */
 		var WRSWindowGridEventToolsClick	=	function(e,data)
 		{
+			_START('WRSWindowGridEventTools::WRSWindowGridEventToolsClick');
 			var wrs_data		=	"";
 			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
 			var height			=	$('.ui-layout-center').innerHeight()-HEIGHT_ABAS;
@@ -200,7 +206,7 @@ var HEIGHT_ABAS		=	50;
 				
 
 				resize_container_grid(idName,wrs_data);
-				
+			_END('WRSWindowGridEventTools::WRSWindowGridEventToolsClick');
 		};
 
 		//Para reforçar e renovar os elementos quando for solicitado a troca de página 
@@ -215,6 +221,7 @@ var HEIGHT_ABAS		=	50;
 		//Para o botão visão
 		var function_btn_open_type_vision		=	 function()
 	  	{
+			_START('WRSWindowGridEventTools::function_btn_open_type_vision');
 			var wrsKendoUi			=	$(report_aba).wrsAbaData('getKendoUi');
 			
 	  		$(this).parent().find('li a').each(function(){
@@ -223,13 +230,15 @@ var HEIGHT_ABAS		=	50;
 	  					$(this).addClass('active_tools');
 	  				}
 	  		});
+			
+			_END('WRSWindowGridEventTools::function_btn_open_type_vision');
 	  	}
 
 		
 		
 		NAV.find('.btn-open-type-vision').unbind('click').click(function_btn_open_type_vision);
 		
-		
+			_END('WRSWindowGridEventTools');
     };
  
 }( jQuery ));
@@ -244,6 +253,8 @@ var HEIGHT_ABAS		=	50;
  */
 function resize_container_grid(report_id,_type_grid)
 {
+	
+	_START('resize_container_grid');
 	var type_grid		=	_type_grid;
 
 	/* START */
@@ -348,7 +359,7 @@ function resize_container_grid(report_id,_type_grid)
 		
 			var change_order	=	function(options,_order)
 			{
-				
+				_START('resize_container_grid::change_order');
 				//Comandos para ordenação
 				var order_options	=	{
 											element	 :	{
@@ -415,7 +426,7 @@ function resize_container_grid(report_id,_type_grid)
 //										console.log('receive');
 							}
 					}
-				
+				_END('resize_container_grid::change_order');
 			}
 
 			
@@ -424,7 +435,7 @@ function resize_container_grid(report_id,_type_grid)
 			
 			var show_map		=	 function(_options,_clone)
 			{
-				
+				_START('resize_container_grid::show_map');
 					var clone		=	_clone==undefined || _clone==null ? false : _clone;
 					var options		=	_options;
 					var height_map	=	options.height	-	1;
@@ -455,7 +466,7 @@ function resize_container_grid(report_id,_type_grid)
 						{
 							clone_header_pagination(options);
 						}
-						
+				_END('resize_container_grid::show_map');		
 			}
 			
 			
@@ -467,6 +478,7 @@ function resize_container_grid(report_id,_type_grid)
 			
 			var show_chart		=	 function(_options,_clone)
 			{
+				_START('resize_container_grid::show_chart');
 				var options	=	_options;
 				var chart	=	options.chart.data("kendoChart");
 				var clone		=	_clone==undefined || _clone==null ? false : _clone;
@@ -506,6 +518,8 @@ function resize_container_grid(report_id,_type_grid)
 				    {
 				    	clone_header_pagination(options);
 				    }
+					
+				_END('resize_container_grid::show_chart');	
 			}	
 			
 			
@@ -520,6 +534,7 @@ function resize_container_grid(report_id,_type_grid)
 			
 			var show_grid		=	 function(options)
 			{
+				_START('resize_container_grid::show_grid');
 				options.grid.show();
 				
 				if(options.kendoGrid) 
@@ -544,6 +559,7 @@ function resize_container_grid(report_id,_type_grid)
 					
 					options.kendoGrid.resize();	
 				}
+				_END('resize_container_grid::show_grid');
 			}
 			
 			
@@ -561,9 +577,11 @@ function resize_container_grid(report_id,_type_grid)
 			//Criando a header de paginação
 			var clone_header_pagination		=	 function(options)
 			{
-				
-				if(options.kendoGrid.dataSource._total<=0) return false;
-				
+				_START('resize_container_grid::clone_header_pagination');
+				if(options.kendoGrid.dataSource._total<=0) {
+					_END('resize_container_grid::clone_header_pagination');
+					return false;
+				}
 				//salvando informações do google maps
 				var save_info_google_maps		=	 function(options)
 				{/*
@@ -631,7 +649,7 @@ function resize_container_grid(report_id,_type_grid)
 								
 					    }
 					});
-					
+				_END('resize_container_grid::clone_header_pagination');	
 			}
 			
 			
@@ -642,6 +660,7 @@ function resize_container_grid(report_id,_type_grid)
 			
 			var container_half	=	 function(_options,_element_no_half)
 			{
+				_END('resize_container_grid::container_half');
 				var options			=	_options;
 				var element_no_half	=	_element_no_half==undefined || _element_no_half==null ? false : _element_no_half;
 					options.height	=	options.height/2;
@@ -652,7 +671,7 @@ function resize_container_grid(report_id,_type_grid)
 					}
 					
 					options.grid.height(options.height);
-				
+				_END('resize_container_grid::container_half');
 					return options;
 			}
 			
@@ -661,23 +680,26 @@ function resize_container_grid(report_id,_type_grid)
 			
 			var grid_chart		=	 function(_options)
 			{
+				_START('resize_container_grid::grid_chart');
 				var options		=	container_half(_options);
 					
 					change_order(options);
 					show_grid(options);
 					show_chart(options);
+				_END('resize_container_grid::grid_chart');	
 			}
 			
 			
 			
 			var grid_map		=	 function(_options)
 			{
+				_START('resize_container_grid::grid_map');
 				var options		=	container_half(_options);
 					
 					change_order(options);
 					show_grid(options);
 					show_map(options);
-					
+				_END('resize_container_grid::grid_map');	
 			}
 			
 			
@@ -687,6 +709,7 @@ function resize_container_grid(report_id,_type_grid)
 			
 			var chart_grid		=	 function(_options)
 			{
+				_START('resize_container_grid::chart_grid');
 				var options		=	container_half(_options);
 				
 				var order_options	=	{
@@ -710,7 +733,7 @@ function resize_container_grid(report_id,_type_grid)
 					
 					show_grid(options);
 					show_chart(options);
-					
+				_END('resize_container_grid::chart_grid');	
 			}
 			
 			
@@ -718,6 +741,7 @@ function resize_container_grid(report_id,_type_grid)
 			
 			var chart_map		=	 function(_options)
 			{
+				_START('resize_container_grid::chart_map');
 				var options		=	container_half(_options,true);
 				var order_options	=	{
 						element	 :	{
@@ -736,11 +760,14 @@ function resize_container_grid(report_id,_type_grid)
 					
 					show_chart(options,true);
 					show_map(options);
+				_END('resize_container_grid::chart_map');	
 			}
 			
 			
 			var map_grid		=	 function(_options)
 			{
+				_START('resize_container_grid::map_grid');
+				
 				var options		=	container_half(_options);
 
 				var order_options	=	{
@@ -760,6 +787,7 @@ function resize_container_grid(report_id,_type_grid)
 					
 					show_grid(options);
 					show_map(options);
+				_END('resize_container_grid::map_grid');	
 			}
 			
 			
@@ -773,6 +801,7 @@ function resize_container_grid(report_id,_type_grid)
 			
 			var map_chart		=	 function(_options)
 			{
+				_START('resize_container_grid::map_chart');
 				var options		=	container_half(_options,true);
 				var order_options	=	{
 						element	 :	{
@@ -792,6 +821,7 @@ function resize_container_grid(report_id,_type_grid)
 					
 					show_chart(options,true);
 					show_map(options);
+				_END('resize_container_grid::map_chart');	
 			}
 			
 
@@ -870,19 +900,24 @@ function resize_container_grid(report_id,_type_grid)
 		
 	}*/
 	
+	_END('resize_container_grid');
+	
 }
 
 
 function resize_common()
 {
+	_START('resize_common');
 	var report_id		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
 		resize_container_grid(report_id);
+	_END('resize_common');
 }
 
 
 
 function saveHistoryEvents(kendoParam,report_id)
 {
+	_START('saveHistoryEvents');
 	if(empty(report_id)) return false;
 	
 	var param 	=	{};
@@ -899,6 +934,8 @@ function saveHistoryEvents(kendoParam,report_id)
 		param			=	 base64_encode(json_encode(param));
 	var param_request	=	{'report_id':report_id,'history_options':param,'cube_s':CUBE_S};
 		runCall(param_request, 'WRS_PANEL', 'WRS_PANEL', 'save_history', null, 'modal');
+		
+	_END('saveHistoryEvents');	
 }
 
 
@@ -915,6 +952,7 @@ function saveHistoryEvents(kendoParam,report_id)
  */
 function rules_pendences_checkbox(element,fullEvent)
 {
+	_START('rules_pendences_checkbox');
 	var dependence	=	element.attr('dependence');
 	var checked		=	element.prop('checked');
 	var _input		=	'';
@@ -932,7 +970,7 @@ function rules_pendences_checkbox(element,fullEvent)
 
 		}
 	}
-	
+_END('rules_pendences_checkbox');	
 }
 
 //Variável default é preenchida pelo lib.WRS_PANEL
@@ -951,6 +989,7 @@ var getRequestKendoUiDefault	=	{};
 	  */
   $.fn.wrsConfigGridDefault = function(options) 
   {
+	  _START('wrsConfigGridDefault');
 	
 	  var aba_current				=	get_aba_active_object();
 	  var 	data_name				=	'wrsConfigGridDefault',
@@ -977,6 +1016,7 @@ var getRequestKendoUiDefault	=	{};
   	
   	var detect_event	=	 function(type)
   	{
+		_START('wrsConfigGridDefault::detect_event');
   			if(type=='clean') {
   				
   				if(element.attr('is-event')==_TRUE)
@@ -985,6 +1025,8 @@ var getRequestKendoUiDefault	=	{};
   				}
   			}else
   				element.attr('is-event',true);
+		
+		_END('wrsConfigGridDefault::detect_event');
   	}
   	
   	//Limpando evento
@@ -995,6 +1037,8 @@ var getRequestKendoUiDefault	=	{};
   	//
   	var function_btn_open_type_vision		=	 function()
   	{
+		_START('wrsConfigGridDefault::function_btn_open_type_vision');
+		
   		check_exist_grid();
   		list_wrs_vision.find('li a').each(function(){
   				var _wrs_data		=	 $(this).attr('wrs-data');
@@ -1004,9 +1048,11 @@ var getRequestKendoUiDefault	=	{};
   					$(this).addClass('active_tools');
   				}
   		});
+		_END('wrsConfigGridDefault::function_btn_open_type_vision');
   	}
   	
   	var function_click_list_wrs_vision			=	 function(){
+		_START('wrsConfigGridDefault::function_click_list_wrs_vision');
   			var _wrs_data		=	$(this).attr('wrs-data');
   				opts.WINDOW		=	_wrs_data;
 
@@ -1016,7 +1062,8 @@ var getRequestKendoUiDefault	=	{};
 
   				
 		  		aba_current.wrsAbaData('setKendoUi',{WINDOW:_wrs_data});
-					
+				
+		_END('wrsConfigGridDefault::function_click_list_wrs_vision');				
   				return false;
   	}
   	
@@ -1026,7 +1073,7 @@ var getRequestKendoUiDefault	=	{};
   	 */
   	var check_exist_grid	=	 function()
   	{  	
-
+		_START('wrsConfigGridDefault::check_exist_grid');
   		if(isClick) return true;
 
   		var searchGrid		=	$(document).find('.wrsGrid');
@@ -1040,12 +1087,13 @@ var getRequestKendoUiDefault	=	{};
 	  		{
 	  			opts	=	$('.WRS_ABA').find('.active').wrsAbaData('getKendoUi') 			
 	  		}  		
-			  		
+		_END('wrsConfigGridDefault::check_exist_grid');	  		
   	}
   	
   	
   	//Click do Botão - nav_options
   	var event_click_btn_options	=	 function(){
+		_START('wrsConfigGridDefault::event_click_btn_options');
   		check_exist_grid(); 
   		nav_options.find('input').each(function(){
   				$(this).prop('checked',false);
@@ -1056,10 +1104,12 @@ var getRequestKendoUiDefault	=	{};
   				}  				
   				rules_pendences_checkbox($(this),$(this).parents('ul'));
   		});
+		_END('wrsConfigGridDefault::event_click_btn_options');
   	}
   	
 	var addWrsKendoUiChange	=	 function(report_id,_key,value)
 	{
+		_START('wrsConfigGridDefault::addWrsKendoUiChange');
 		var _report_id_exist	=	false;
 		var	_report_id			=	'#'+report_id;
 		
@@ -1069,11 +1119,13 @@ var getRequestKendoUiDefault	=	{};
 			{
 				wrsKendoUiChange(_report_id,_key,value);	
 			}
+		_END('wrsConfigGridDefault::addWrsKendoUiChange');	
 	}
   	
   	//Evento de click nos INPUT do Options
   	var event_find_nav_options_input	=	 function()
   	{
+		_START('wrsConfigGridDefault::event_find_nav_options_input');
   		var _checked					=	$(this).prop('checked');
 		var _key						=	$(this).attr('name');
 		var get_aba						=	get_aba_active_object();
@@ -1088,14 +1140,14 @@ var getRequestKendoUiDefault	=	{};
 	  		get_aba.wrsAbaData('setKendoUi',opts);
 	  		rules_pendences_checkbox($(this),$(this).parents('ul'));
 	  			
-
+		_END('wrsConfigGridDefault::event_find_nav_options_input');
   	}
   	
   	//Abrindo o Modal de opções do CHART
   	var event_btn_configute_chart	=	 function(){
   		
 
-
+		_START('wrsConfigGridDefault::event_btn_configute_chart');
   			var get_measures_title	=	 [];
 
   			
@@ -1139,7 +1191,9 @@ var getRequestKendoUiDefault	=	{};
   		
  // 		TRACE_DEBUG(nav_options.html());
   		
-  		$($(this).attr('data-target')).modal('show');  		
+  		$($(this).attr('data-target')).modal('show');  	
+
+		_END('wrsConfigGridDefault::event_btn_configute_chart');		
   	}
   	
   	//EVENTS
@@ -1166,6 +1220,7 @@ var getRequestKendoUiDefault	=	{};
   	
 
   	element.attr('isDefault',true).wrsTopOptions();
+	_END('wrsConfigGridDefault');
   		
       return element;
 
