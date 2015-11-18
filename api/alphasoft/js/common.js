@@ -38,6 +38,47 @@ var TYPE_RUN	=	{
 
 var ABA_TAG_NAME		=	'.WRSAbas ul';
 
+var wrsCookies = {
+	  getItem: function (sKey) {
+	    if (!sKey) { return null; }
+	    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+	  },
+	  setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+	    if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+	    var sExpires = "";
+	    if (vEnd) {
+	      switch (vEnd.constructor) {
+	        case Number:
+	          sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
+	          break;
+	        case String:
+	          sExpires = "; expires=" + vEnd;
+	          break;
+	        case Date:
+	          sExpires = "; expires=" + vEnd.toUTCString();
+	          break;
+	      }
+	    }
+	    document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+	    return true;
+	  },
+	  removeItem: function (sKey, sPath, sDomain) {
+	    if (!this.hasItem(sKey)) { return false; }
+	    document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
+	    return true;
+	  },
+	  hasItem: function (sKey) {
+	    if (!sKey) { return false; }
+	    return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+	  },
+	  keys: function () {
+	    var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
+	    for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
+	    return aKeys;
+	  }
+	};
+
+
 function WRS_CONSOLE(){
 	if(IS_TRACE){
 		//console.log(arguments);
@@ -51,7 +92,7 @@ function WRS_IS_LOGGED_IN(){
 		  url: 'run.php',
 		  data: {'exit':1,'file':'WRS_LOGIN','class':'WRS_LOGIN','event':'userIsLogged'},
 		  success: function(data){
-						loggedin	=	data.trim()=='S'?true:false;	
+						loggedin	=	data.trim()!='N'?data.trim():false;	
 						//WRS_CONSOLE('LOGGED IN?',data,loggedin);	
 					},
 		  async:false  // este é o segredo de aguardar o retorno do ajax antes de retornar a funcao
@@ -61,9 +102,21 @@ function WRS_IS_LOGGED_IN(){
 	
 function verifica_loggedin_periodico(){
 	
-	var periodicidade = 30;//em segundos
+	var periodicidade 	= 30;//em segundos
+	var logado = WRS_IS_LOGGED_IN(); // retorna o loginsessionID ou false caso nao esteja logado
+/*
+	var confCookie		= 'WRS_session_cookie';
+	
+	if(wrsCookies.hasItem(confCookie) && wrsCookies.getItem(confCookie)){
+		
+	}	
+	
+	wrsCookies.setItem('name',admin);
 
-	if(!WRS_IS_LOGGED_IN()){
+	if (wrsCookies.getItem('name')=='admin'){alert('Welcome Admin.')}else{alert('You are Not User')}
+
+*/
+	if(logado===false){
 		if(window.location.href.substr(-9,9)!='login.php'){
 			var logoff = function(){ 
 					window.location	= "run.php?file=WRS_MAIN&class=WRS_MAIN&event=logout";
@@ -106,6 +159,7 @@ function verifica_loggedin_periodico(){
 
 }
 verifica_loggedin_periodico();
+
 
 function changeTypeRun(IDGrid,typeRun)
 {
