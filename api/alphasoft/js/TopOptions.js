@@ -16,28 +16,34 @@
  */
 function wrsConfigGridDefaultManagerTopOptions()
 {
+	_START('wrsConfigGridDefaultManagerTopOptions');
 	$('#wrsConfigGridDefault').each(function(){
 		$(this).attr('wrsConfigGridDefaultManagerTopOptions',false);
 	});	
+	_END('wrsConfigGridDefaultManagerTopOptions');
 }
 
 function wrsConfigGridDefaultManagerTopOptionsLock()
 {
+	_START('wrsConfigGridDefaultManagerTopOptionsLock');
 	$('#wrsConfigGridDefault').each(function(){
 		$(this).attr('wrsConfigGridDefaultManagerTopOptions',true);
 	});	
+	
+	_END('END::wrsConfigGridDefaultManagerTopOptionsLock')
 }
 
 function wrsConfigGridDefaultManagerTopOptionsStatus()
 {
 	var status	=	 false;
-	
+	_START('wrsConfigGridDefaultManagerTopOptionsStatus');
 		$('#wrsConfigGridDefault').each(function(){
 			status	=	$(this).attr('wrsConfigGridDefaultManagerTopOptions');
 			
 			if(empty(status)) status=false;
 		});	
 	
+		_END('wrsConfigGridDefaultManagerTopOptionsStatus');
 	return status;
 }
 
@@ -67,6 +73,8 @@ function DEFAULT_OPTIONS_TOPS()
 		 */
 		$.fn.wrsTopOptions = function() 
 		{
+			_START('wrsTopOptions');
+			
 			var that				=	this;
 			var report_id			=	this.attr('id');
 			var report_aba			=	'.'+report_id;
@@ -124,6 +132,7 @@ function DEFAULT_OPTIONS_TOPS()
 			
 			var TAGLabel			=	 function(field,_top_config,_this,_measure)
 			{
+				//_START('wrsTopOptions::TAGLabel');
 						var html_tag	=	'';
 						var tag_tmp		=	'';
 						var tmp_top		=	[];
@@ -179,12 +188,12 @@ function DEFAULT_OPTIONS_TOPS()
 										
 								}
 						}catch(e){}
-						
+				//_END('wrsTopOptions::TAGLabel');		
 			}
 			
 			var convertTypeTOP		=	 function(key,data)
 			{
-				
+				_START('wrsTopOptions::convertTypeTOP');
 				var wrsKendoUi		=	aba_curent_object.wrsAbaData('getKendoUi');
 				var top_config		=	'';
 				var data_save		=	'';
@@ -226,6 +235,7 @@ function DEFAULT_OPTIONS_TOPS()
 					{	wrsRunFilter();
 						return true;
 					}
+				_END('wrsTopOptions::convertTypeTOP');	
 			}
 			
 			/*
@@ -233,7 +243,8 @@ function DEFAULT_OPTIONS_TOPS()
 			 */
 			var wrsTopOptionsData	=	 function()
 			{
-				TRACE_DEBUG('click');
+				
+				_START('wrsTopOptions::wrsTopOptionsData');	
 				var kendoUi		=	 $(IDGrid).data('kendoGridWrsTopOptions');
 				var btnOption	=	 $(this).parent().data('wrsTopOptionsDataParent');
 				var tag			=	 $(this).attr('tag');
@@ -278,12 +289,13 @@ function DEFAULT_OPTIONS_TOPS()
 						
 						 wrsRunFilter();
 					}
-					
+				_END('wrsTopOptions::wrsTopOptionsData');	
 			};
 			
 			
 			var wrsTopOptionsDataSub	=	 function()
 			{
+				_START('wrsTopOptions::wrsTopOptionsDataSub');
 				var btnOption	=	 that.find('.wrsTopOptionsData').data('wrsTopOptionsDataParent');
 				var tag			=	 $(this).attr('tag');
 				var isROWS		=	 $(this).attr('isROWS');
@@ -303,7 +315,10 @@ function DEFAULT_OPTIONS_TOPS()
 					}
 					
 
-					if(empty(tag)) return true;
+					if(empty(tag)) {
+						_END('wrsTopOptions::wrsTopOptionsDataSub');
+						return true;
+					}
 
 					 	if(isDefault==true)
 					 		{
@@ -319,12 +334,14 @@ function DEFAULT_OPTIONS_TOPS()
 					 	
 					 	val =	'{'+key+'|'+index+'}';
 					 	convertTypeTOP(full_name,val);
+				
+				_END('wrsTopOptions::wrsTopOptionsDataSub');				
 			}
 			
 			
 			var clickOptions		=	 function(event)
 			{
-				
+				_START('wrsTopOptions::clickOptions');
 				var p 					= 	$(this);
 				var offset 				= 	p.offset();
 				var optionsData			=	that.find('.wrsTopOptionsData');
@@ -369,6 +386,7 @@ function DEFAULT_OPTIONS_TOPS()
 					that.find('.wrsTopOptionsData').find('.wrsTopOptionsDataSubLi').unbind('click').click(wrsTopOptionsDataSub);
 
 					event.stopPropagation();
+				_END('wrsTopOptions::clickOptions');
 					return false;
 			}
 
@@ -501,7 +519,7 @@ function DEFAULT_OPTIONS_TOPS()
 				$(function () {
 					  $('[data-toggle="tooltip"]').tooltip()
 					})
-						
+			_END('wrsTopOptions');		
 		}
 		
 		

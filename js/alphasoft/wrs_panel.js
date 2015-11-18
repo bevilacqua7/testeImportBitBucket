@@ -58,6 +58,7 @@ function merge_filter_in_array(_input_merge)
 // esconder os filtros fixos do usuario para que o mesmo nao possa ser manipulado
 function hide_fixed_filter()
 {
+	_START('hide_fixed_filter');
 	for(var lineFixed in userinfo_filter_fixed)
 	{
 		$('.wrs_panel_esquerdo_drag_drop').find('.'+replace_attr(lineFixed)).addClass('hide').attr('not-use',true);
@@ -69,11 +70,15 @@ function hide_fixed_filter()
 			esconde_pais_drag_drop(json_bt_painel_dd);
 		}
 	}
+	
+	_END('hide_fixed_filter');
 }
 
 // funcao recursiva para verificar e apagar todos os pais de um atributo
 function esconde_pais_drag_drop(json_bt_painel_dd)
 {
+	_START('esconde_pais_drag_drop');
+	
 	if(typeof json_bt_painel_dd == 'object' && json_bt_painel_dd.LEVEL_UP != null && json_bt_painel_dd.LEVEL_UP != '' && json_bt_painel_dd.LEVEL_UP != undefined)
 	{
 		var pais_bt_painel_dd = json_bt_painel_dd.LEVEL_UP.split(',');
@@ -91,6 +96,7 @@ function esconde_pais_drag_drop(json_bt_painel_dd)
 			}
 		}
 	}
+	_END('esconde_pais_drag_drop');
 }
 
 function wrs_run_filter_unlocked()
@@ -106,7 +112,7 @@ function wrs_run_filter_add_history(inputHistory)
 
 
 function WRS_MENU_FOOTER(){
-	
+	_START('WRS_MENU_FOOTER');
 		
 		$('.wrs_menu_footer_sub').each(function(){
 			$(this).css('top', $(this).outerHeight()*-1);
@@ -126,13 +132,14 @@ function WRS_MENU_FOOTER(){
 			  event.stopPropagation();
 			  
 		});
-	 
+	_END('WRS_MENU_FOOTER');	
 }
 
 function wrs_center_onresize()
 {
+	_START('wrs_center_onresize');
 	//BODY
-	TRACE('wrs_center_onresize()');
+	
 	
 	var paddinLayoutCenter	=	parseInt($('.ui-layout-center').css('padding-top').replace('px'));
 	var heightCenter		=	($('.ui-layout-center').outerHeight()-(paddinLayoutCenter));
@@ -179,7 +186,7 @@ function wrs_center_onresize()
 
 		 
 		 resizeGridSimple();
-		TRACE('END wrs_center_onresize()');
+		_END('wrs_center_onresize');
 }
 
 
@@ -189,7 +196,7 @@ function wrs_center_onresize()
 
 function wrs_west_onresize(pane, $Pane)
 {
-
+	_START('wrs_west_onresize');
 	/*
 	 * 	lado esquerdo
 	 */
@@ -207,6 +214,7 @@ function wrs_west_onresize(pane, $Pane)
 	
 	$('.wrs_panel_esquerdo_drag_drop ol').height(heightBox);
 	formata_texto_resultado_filtros();
+	_END('wrs_west_onresize');
 	
 }
 
@@ -229,6 +237,7 @@ function formata_texto_resultado_filtros(){
 
 // cria o qtip para o objeto em questão (fazer pra cada um, outra alternativa a mandar atualizar o DOM (varrendo um por um))
 function bindQtip(obj){
+	_START('bindQtip');
 	obj.qtip({
          style: {                                                     
         	 	width: $("<span/>").text(obj.attr('text_original')).textWidth()+80,
@@ -241,7 +250,7 @@ function bindQtip(obj){
 	             adjust: { x: -5, y: -2 }
          }
      });		
-	
+	_END('bindQtip');
 }
 
 //Calculate width of text from DOM element or string. By Phil Freo <http://philfreo.com>
@@ -253,6 +262,7 @@ $.fn.textWidth = function(text, font) {
 
 function wrs_east_onresize()
 {
+	_ONLY('wrs_east_onresize');
 	//lado direito
 	var height	=	$('.ui-layout-east').outerHeight();
 	$('.direito_container').height(height-2);
@@ -268,12 +278,14 @@ function wrs_south_onresize()
 
 function BTN_HOVER_BOX_DROP()
 {
+	_ONLY('BTN_HOVER_BOX_DROP');
 	$('.box_wrs_panel').unbind('hover');
 	//Quanho hover o botão para hover do Drag and Drop
 	$('.box_wrs_panel').hover(function() {$( this ).addClass( "ui-state-hover" );}, function() {$( this ).removeClass( "ui-state-hover" );});
 }
 
 function hide_east(){
+	_ONLY('hide_east');
 	wrs_panel_layout.east.pane.css('visibility','hidden');
 	wrs_panel_layout.east.pane.hide();
 	wrs_panel_layout.hide('east',true);
@@ -378,13 +390,14 @@ $(document).ready(function () {
 			
 			onresize_end	:	function()
 			{//http://layout.jquery-dev.com/demos/complex.html
-				
+				_START('onresize_end');
 									var MODAL_JOB		=	'.modal-window-wrs';
 									var layout_center	=	$('.ui-layout-center');
-									$(MODAL_JOB).width(layout_center.outerWidth()-2).height(layout_center.outerHeight()-3);
+									$(MODAL_JOB).width(layout_center.outerWidth()-2).height(layout_center.outerHeight()-15);
 									
 									
 									resize_common();
+								_END('onresize_end');	
 			},
 			south__onclose: function () 
 							{
@@ -423,17 +436,18 @@ $(document).ready(function () {
 			east__togglerContent_closed		: "<span class='ui-icon ui-icon-triangle-1-w' style='margin-left:-4px'></span>",
 			east__onresize 	: hideeast?hide_east: wrs_east_onresize,
 			east__onopen: hideeast?hide_east:function () {
+				_START('east__onopen');
 											WRS_PANEL_DRAG();
 											$('.WRS_DRAG_DROP_RECEIVER_FILTER').show();
 											$('.WRS_DRAG_DROP_FILTER_CONTAINER').hide();
 											$('.wrs_panel_filter_icon').show();
 											wrsFilterClickFalse();
 											
-											
+											_END('east__onopen');
 										},
 			east__onclose: hideeast?hide_east:function () 
 			{
-				
+				_START('east__onclose');
 				//Executa o Click para executar o Gráfico
 				var east__onclose	=	$('.wrs_run_filter').attr('east__onclose');
 					east__onclose	=	empty(east__onclose) ? false : true;
@@ -459,7 +473,7 @@ $(document).ready(function () {
 				$('.wrs_run_filter').removeAttr('east__onclose');
 				
 				
-				
+				_END('east__onclose');
 				//Muda visão
 			},
 			
@@ -499,7 +513,7 @@ $(document).ready(function () {
 
 function layout_east_close(_only_show_progress,is_hide)
 {
-	
+	_START('layout_east_close');
 	var only_show_progress	=	 _only_show_progress==undefined ? false : _only_show_progress;
 	var report_id			=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
 	
@@ -540,10 +554,13 @@ function layout_east_close(_only_show_progress,is_hide)
 	}else{
 		wrs_panel_layout.close('east');
 	}
+	
+	_END('layout_east_close');
 }
 
 function wrs_clean_box_drag_drop()
 {
+	_START('wrs_clean_box_drag_drop');
 	var $this			=	 $(this);
 	var type			=	 $this.attr('parent');
 	var who_receive		= $this.parent().parent().find('.wrs_panel_receive').attr('who_receive');
@@ -648,6 +665,8 @@ function wrs_clean_box_drag_drop()
 													WRS_ALERT(mensagem_sucess,'success');
 												}
 									});
+									
+									_END('wrs_clean_box_drag_drop');
 }
 
 
@@ -659,6 +678,7 @@ function wrs_clean_box_drag_drop()
  */
 function btn_right_remove()
 {
+	_START('btn_right_remove');
 	$('.btn-right').unbind('click');
 	$('.btn-right').click(function(){
 
@@ -685,11 +705,14 @@ function btn_right_remove()
 			DEFAULT_OPTIONS_TOPS();
 		
 	});
+	
+	_END('btn_right_remove');
 }
 
 
 function cloneDragDrop(whoClone,toClone,cloneTAGWrsFlag,who_receive)
 {
+	_START('cloneDragDrop');
 	var buttonRemove		=	'<button type="button" class="btn btn-link btn-xs  btn-right"><span class=" glyphicon glyphicon-remove "></span></button>';
 
 	if(cloneTAGWrsFlag=='true')
@@ -723,13 +746,14 @@ function cloneDragDrop(whoClone,toClone,cloneTAGWrsFlag,who_receive)
 	}
 	
 	BTN_HOVER_BOX_DROP(); //Removendo e inserindo o Hover
-	
+	_END('cloneDragDrop');
 }
 
  
 
 function insetDragDropEmpry()
 {
+	_START('insetDragDropEmpry');
 	var DragValues	=	DragValues_LF	=	[]; // LF=level_full
 
 	$('.wrs_swap_drag_drop').each(function(){
@@ -814,7 +838,7 @@ function insetDragDropEmpry()
 		
 	});
 	
-	
+	_END('insetDragDropEmpry');
 }
 
 
@@ -838,6 +862,7 @@ function wrs_search_drad_drop_direita()
 
 function wrs_search_drad_drop_direita_h2()
 {
+	_START('wrs_search_drad_drop_direita_h2');
 	var type_click	=	$(this).attr('isClick');
 	
 	if(type_click!='true')
@@ -850,11 +875,13 @@ function wrs_search_drad_drop_direita_h2()
 		$(relClass).find('.wrs_search_drag_drop_direita_eventos').focus();
 		
 	$(this).attr('isClick','');
+	
+	_END('wrs_search_drad_drop_direita_h2');
 }
 
 function wrs_search_drag_drop_direita_eventos()
 {
-	
+	_START('wrs_search_drag_drop_direita_eventos');
 	$('.wrs_remove_searcg_drag .fa-eraser').hide();
 		
 	
@@ -924,7 +951,7 @@ function wrs_search_drag_drop_direita_eventos()
 		//$(this).parent().parent().remove();
 		$(this).parent().find('input').val('');
 	});
-	
+	_END('wrs_search_drag_drop_direita_eventos');
 }
 
 
@@ -943,8 +970,9 @@ var droppableOptionsOl			=	{};
  * @param ui
  * @returns {Boolean}
  */
-function DROP_EVENT( event, ui ,eventReceive){
-	
+function DROP_EVENT( event, ui ,eventReceive)
+{
+		_START('DROP_EVENT');
 		var toEvent;
 		var receiveEvent	=	$(this);
 		
@@ -1048,6 +1076,7 @@ function DROP_EVENT( event, ui ,eventReceive){
 	json['FILTER']	=	'';
 	toEvent.attr('json',base64_encode(json_encode(json,true)));
 
+	_END('DROP_EVENT');
 }
 
 
@@ -1060,6 +1089,7 @@ function DROP_EVENT( event, ui ,eventReceive){
 
 function setDraggable(name,use,who_receive)
 {
+	_START('setDraggable');
 	 if(use)
 	 {
 		 var sortableComplement		=	'attr';
@@ -1101,13 +1131,14 @@ function setDraggable(name,use,who_receive)
 	$( name ).draggable(draggableOptionsLi).sortable({placeholder	: "ui-state-highlight"});
 	$( name).disableSelection();
 	wrs_panel_layout.allowOverflow($(name));
-	
+
+_END('setDraggable');	
 }
 
 
 function find_relatorio_attributo_metrica(where_find,_values,_clone)
 {
-	
+	_START('find_relatorio_attributo_metrica');
 
 	$(_clone).html('');
 	/*
@@ -1216,6 +1247,8 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 	});
 	
 	*/
+	
+	_END('find_relatorio_attributo_metrica');
 }
 
 // extensao para comparar valores case insensitive com as classes de um objeto
@@ -1237,7 +1270,7 @@ jQuery.expr[':'].containClass = function(a, i, m) {
  */
 function set_value_box_relatorio(object)
 {
-	
+	_START('set_value_box_relatorio');
 	
 	$('.wrs_panel_receive').find('li').remove();
 	$('.WRS_DRAG_DROP_FILTER').html('');
@@ -1267,6 +1300,7 @@ function set_value_box_relatorio(object)
 	
 	
 	hide_fixed_filter();
+	_END('set_value_box_relatorio');
 }
 
 
@@ -1282,6 +1316,7 @@ function set_value_box_relatorio(object)
  */
 function rows_by_metrica_attr_base64(object,_type)
 {
+	_START('rows_by_metrica_attr_base64');
 	var _flag		=	false;
 	var _request	=	[];
 	var _info_save	=	[];
@@ -1313,13 +1348,13 @@ function rows_by_metrica_attr_base64(object,_type)
 		
 	});
 	
-	
+	_END('rows_by_metrica_attr_base64');
 	return {flag:_flag,request:implode(',',_request)};
 }
 
 function stop_job_timeout(report_id)
 {
-
+	
 	$('body').WRSTimerLoader('timeout',{'report_id':report_id});    	
 }
 /**
@@ -1330,6 +1365,8 @@ function stop_job_timeout(report_id)
  */
 function wrs_run_filter()
 {
+	_START('wrs_run_filter');
+	
 	var manager_aba			=	$(this).attr('manager_aba');
 		manager_aba			=	empty(manager_aba) ? false : true;
 		$(this).removeAttr('manager_aba');
@@ -1352,6 +1389,7 @@ function wrs_run_filter()
 			$(this).removeAttr('noactive');
 			
 			stop_job_timeout(_report_id);
+			_END('wrs_run_filter');
 			return true;
 		}
 	
@@ -1362,7 +1400,6 @@ function wrs_run_filter()
 	//Para poder saber se oculta as mensagems ou não
 	$('.wrs_panel_center_body').attr('index-visible',$('.wrs_panel_center_body').css('display'));
 	
-	TRACE('START wrs_run_filter()');
 	
 	$.WrsFilter('wrs_filter_check_change_filter');
 	
@@ -1407,6 +1444,7 @@ function wrs_run_filter()
 			aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
 			configure_options_show_grid($(this));
 			stop_job_timeout(_report_id);
+			_END('wrs_run_filter');
 			return true;
 		}
 	}catch(e){}
@@ -1554,9 +1592,10 @@ function wrs_run_filter()
 					 * nesse caso inpede o fluxo completo
 					 */
 					if(!$.WrsFilter('wrs_check_filter_simples')) {
-						TRACE('EXISTE FILTRO SIMPLES');
+						
 						$('body').wrsAbas('remove_event_click');
 						stop_job_timeout(_report_id);
+						_END('wrs_run_filter');
 						return false;
 					}
 
@@ -1569,6 +1608,7 @@ function wrs_run_filter()
 					{
 						configure_options_show_grid($(this));
 						stop_job_timeout(_report_id);
+						_END('wrs_run_filter');
 						return true;
 		}else{
 			if(flag_load!='true')
@@ -1610,6 +1650,7 @@ function wrs_run_filter()
 
 			$('.wrs_run_filter').removeAttr('status_load');
 			stop_job_timeout(_report_id);
+			_END('wrs_run_filter');
 			return true;
 		}
 		
@@ -1658,13 +1699,14 @@ function wrs_run_filter()
 			
 	}
 	
-	TRACE('END wrs_run_filter()');
+	_END('wrs_run_filter');
 	
 }
 
 
 function configure_options_show_grid(that)
 {
+	_START('configure_options_show_grid');
 	if(that.attr('is_atributo_simples')=='true')
 	{
 		that.attr('is_atributo_simples','false');
@@ -1676,6 +1718,7 @@ function configure_options_show_grid(that)
 	$('body').wrsAbas('show_grid');
 	
 	$('body').wrsAbas('remove_event_click');
+	_END('configure_options_show_grid');
 }
 
 
@@ -1696,7 +1739,7 @@ function wrsRunGridButton(param_request)
 
 function ThreadJobManagerDONEJOB(report_id)
 {
-	
+	_START('ThreadJobManagerDONEJOB');
 	var DATA_NAME		=	'WrsThreadJobManager';
 	var data_param		=	$('body').data(DATA_NAME);
 	var tmp_data_param	=	{};
@@ -1714,7 +1757,7 @@ function ThreadJobManagerDONEJOB(report_id)
 	
 		$('body').data(DATA_NAME,tmp_data_param);
 	
-	
+	_END('ThreadJobManagerDONEJOB');
 }
 
 
@@ -1725,7 +1768,7 @@ function ThreadJobManagerDONEJOB(report_id)
 function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 {
 	
-	
+	_START('MOUNT_LAYOUT_GRID_HEADER');
 	if(is_job_call!='ThreadMainLoadData')
 	{
 		
@@ -1733,6 +1776,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		{
 			if(!$('body').ThreadJobManager(data.REPORT_ID),true)
 			{
+				_END('MOUNT_LAYOUT_GRID_HEADER');
 				return true;
 			}
 			
@@ -1745,7 +1789,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	}
 	
 
-	TRACE('START MOUNT_LAYOUT_GRID_HEADER'); 
+ 
 
 	
 	/*
@@ -1818,7 +1862,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	$(window).resize();
 	
-	TRACE('END MOUNT_LAYOUT_GRID_HEADER'); 
+	_END('MOUNT_LAYOUT_GRID_HEADER');
 }
 
 
@@ -1845,7 +1889,7 @@ function CLOSE_LOAD_RELATORIO()
 
 function find_and_hide_container(aba_ativa)
 {
-	
+	_START('find_and_hide_container');
 	$('.container_panel_relatorio_rows').each(function(){
 		
 		var _report_id_local		=	 str_replace('Main','',$(this).attr('id'));
@@ -1856,17 +1900,18 @@ function find_and_hide_container(aba_ativa)
 		
 	});
 	
-	
+	_END('find_and_hide_container');
 }
 
 
 function find_and_hide_container_auto()
 {
-	
+	_START('find_and_hide_container_auto');
 	var aba_ativa		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
 	
 	find_and_hide_container(aba_ativa);
 	
+	_END('find_and_hide_container_auto');
 	
 }
 
@@ -1874,6 +1919,7 @@ function find_and_hide_container_auto()
 
 function wrs_panel_active_drag_drop()
 {
+	_START('wrs_panel_active_drag_drop');
 	 //Ativando o click do Pesquisar dentro do DREAG
 	// $('.wrs_search_drad_drop_direita').click(wrs_search_drad_drop_direita);
 	 wrs_search_drag_drop_direita_eventos();
@@ -1964,11 +2010,13 @@ function wrs_panel_active_drag_drop()
 		sortable_attr_simples_composto();
 		
 		insetDragDropEmpry();
+		_END('wrs_panel_active_drag_drop');
 }
 
 // funcao para identificar qual é o painel pai de origem e destino do drag em seleção, para efetuar o mouseover/mouseout correspondente e
 // exibir corretamente o botao em drag enquanto está sendo reposicionado entre os paineis na tela
 function force_show_drag_on_drop(painel_origem,count){
+	_START('force_show_drag_on_drop');
 	_count = (count==undefined)?0:count;
 	if(_count>=0 && _count<5){ // tentativas necessarias para que o browser acabe de processar o mouseout e reconheca que deva reajustar os focos dos paineis envolvidos no drag
 		window.setTimeout(function(){ 
@@ -1978,12 +2026,14 @@ function force_show_drag_on_drop(painel_origem,count){
 			force_show_drag_on_drop(painel_origem,__count);
 		},20); 
 	}
+	_END('force_show_drag_on_drop');
 }
 
 /**
  * Processo principal
  */
  $(function(){
+	 _START('wrs_panel.js Enable CLick');
 	  
 	 //Evento de click para gerar o relatório
 	 $('.wrs_run_filter').unbind('click').click(wrs_run_filter);
@@ -2012,7 +2062,7 @@ function force_show_drag_on_drop(painel_origem,count){
 	    */
 		wrs_contex_menu_options_panel_metrica();
 		wrs_contex_menu_options_panel_atributos();
-		
+		_END('wrs_panel.js  Enable CLick');
  });
  
  
@@ -2031,6 +2081,7 @@ function force_show_drag_on_drop(painel_origem,count){
  
 function wrs_modal_filter_run()
 {
+	_START('wrs_modal_filter_run');
 	 var div_center = 	$('.ui-layout-center');
 	 var offset 	= 	div_center.offset();
 	 var WRS_ABA	=	$('.WRS_ABA');
@@ -2043,6 +2094,8 @@ function wrs_modal_filter_run()
 	 					};
 	 
 	 	$('.wrs-modal-filter-run').css(_css);
+		
+	_END('wrs_modal_filter_run');	
 }
  
 var tecla_shift_press=false;
@@ -2059,7 +2112,9 @@ $(function(){
 	});
 });
 
-function acoes_multiplas_menu_painel(){
+function acoes_multiplas_menu_painel()
+{
+	_START('acoes_multiplas_menu_painel');
 	$('.wrs_panel_options li.ui-draggable.ui-widget-content').each(function(){
 		$(this).click(function(){
 			if($(this).hasClass('ui-state-focus')){
@@ -2091,10 +2146,13 @@ function acoes_multiplas_menu_painel(){
 			confere_se_existe_menu_panel_selecionado($(this).parents('div.wrs_panel_options'));
 		});
 	}); 
+	
+	_END('acoes_multiplas_menu_painel');
 }
 
 function confere_se_existe_menu_panel_selecionado(painel){
 
+	_START('confere_se_existe_menu_panel_selecionado');
 	var qtde_selecionados 			= painel.find('li.ui-draggable.ui-state-focus').length;
 	var _s							= qtde_selecionados>1?'s':'';
 	var _ns							= qtde_selecionados>1?'ns':'m';
@@ -2207,9 +2265,11 @@ function confere_se_existe_menu_panel_selecionado(painel){
 	}else{
 		limpa_botoes_selecionados_filtros(painel);
 	}
+	_END('confere_se_existe_menu_panel_selecionado');
 }
 
 function action_button_ver_itens_selecionados_nos_filtros(e){
+	_START('action_button_ver_itens_selecionados_nos_filtros');
 	var painel	= $(e.currentTarget).parents('div.wrs_panel_options');
 	if(painel.find('li.botoes_nao_selecionados').length<=0){
 		var itens_nao_selecionados = painel.find('li.ui-draggable.ui-widget-content:not(.ui-state-focus)').addClass('botoes_nao_selecionados');
@@ -2219,13 +2279,16 @@ function action_button_ver_itens_selecionados_nos_filtros(e){
 	}else{
 		mostrar_botoes_nao_selecionados_ocultos(painel);
 	}
+	_END('action_button_ver_itens_selecionados_nos_filtros');
 }
 
 function mostrar_botoes_nao_selecionados_ocultos(painel){
+	_ONLY('mostrar_botoes_nao_selecionados_ocultos');
 	painel.find('li.botoes_nao_selecionados').show(0,function(){ $(this).removeClass('botoes_nao_selecionados'); });		
 }
 
 function limpa_botoes_selecionados_filtros(painel){
+	_START('limpa_botoes_selecionados_filtros');
 	var _painel='';
 	if(painel.type=='click'){ // quando for evento vindo de click ao inves de uma funcao, gerar o painel manualmente
 		_painel	= $(painel.currentTarget).parents('div.wrs_panel_options');		
@@ -2235,4 +2298,6 @@ function limpa_botoes_selecionados_filtros(painel){
 	_painel.find('.menu_selecionados_painel_filtros').slideUp(100,function(){ $(this).remove(); });
 	mostrar_botoes_nao_selecionados_ocultos(_painel);
 	_painel.find('li.ui-draggable.ui-state-focus').removeClass('ui-state-focus');
+	
+	_END('limpa_botoes_selecionados_filtros');
 }

@@ -146,11 +146,13 @@ EOF;
 	public function RECORDS_SSAS_TABLES( $_QUERY_TABLE, $DRILL_LINE=0 )
 	{
 		$FAT_SSAS_TABLES	=	<<<EOF
-		select TOTAL_ROWS from FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}'
+		select TOTAL_ROWS,TOTAL_COLUMNS from FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}'
 EOF;
 		
 		$SQL_DRILL_LINE			=	<<<EOF
-			SELECT COUNT(*) AS TOTAL_ROWS FROM {$_QUERY_TABLE}
+		    select TOTAL_ROWS,TOTAL_COLS 
+		    from (SELECT TOTAL_COLUMNS FROM FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}') A,
+			     (SELECT COUNT(*) AS TOTAL_ROWS FROM {$_QUERY_TABLE}) B
 EOF;
 		/*
 		 * TODO: Temporário
@@ -402,6 +404,22 @@ EOF;
 EOF;
 		return $query;
 	}
+	
+	/**
+	 * Pegando o total de colunas
+	 * 
+	 * @param unknown $QUERY_ID
+	 * 
+	 */
+	/*
+	public function FAT_SSAS_QUERYS($QUERY_ID)
+	{
+		$query  = <<<EOF
+							select TOTAL_COLUMNS from FAT_SSAS_QUERYS WHERE QUERY_ID ='{$QUERY_ID}'
+EOF;
+		return $query;
+		
+	}*/
 
 	/**
 	 * Copia Relatorios da Base de Dados

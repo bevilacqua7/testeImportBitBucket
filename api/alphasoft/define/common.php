@@ -20,7 +20,7 @@ define('WRS_TEMP_RAND',rand(0,99999999999999));
  * @param string $texto
  * @param string $fileName
  */
-function WRS_DEBUG_QUERY($texto,$fileName='WRS_DEBUG.txt')
+function WRS_DEBUG_QUERY($texto,$fileName='wrs_debug_query.log')
 {
 	if(is_array($texto)) $texto = print_r($texto,true);
 	

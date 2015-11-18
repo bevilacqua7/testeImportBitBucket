@@ -18,6 +18,8 @@
  */
 function DRILL_FCC(index,columns)
 {
+	
+	_START('DRILL_FCC');
 	var columnTMP	=	[];
 	
 	for(lineColumn in columns)
@@ -36,7 +38,7 @@ function DRILL_FCC(index,columns)
 		
 		columnTMP[columnTMP.length]	=	field;
 	}
-	
+	_END('DRILL_FCC');
 	return columnTMP;
 }
 
@@ -45,6 +47,8 @@ function DRILL_FCC(index,columns)
 
 function DRILL_HIERARQUIA_LINHA_hideColumn(	IDGRid,KendoUi,rows,drill)
 {
+	
+	_START('DRILL_HIERARQUIA_LINHA_hideColumn');
 	var startCol	=	0;
 
 	if(drill!='')	startCol	=	drill.OPENCOLS;
@@ -59,12 +63,12 @@ function DRILL_HIERARQUIA_LINHA_hideColumn(	IDGRid,KendoUi,rows,drill)
 					KendoUi.hideColumn(column);
 			}
 	}
-
+	_END('DRILL_HIERARQUIA_LINHA_hideColumn');
 }
 
 function DRILL_HIERARQUIA_LINHA_setButtonExpandALL(IDGRid,columnSelected,lastColumn)
 {
-
+	_START('DRILL_HIERARQUIA_LINHA_setButtonExpandALL');
 	//DRILL_HIERARQUIA_LINHA_DATA_HEADER
 	$(IDGRid).find('.k-grid-header .k-grid-header-locked').find('tr:last-child').find('th').each(function(){
 	
@@ -93,11 +97,13 @@ function DRILL_HIERARQUIA_LINHA_setButtonExpandALL(IDGRid,columnSelected,lastCol
 	
 	$(IDGRid).find('.DRILL_HIERARQUIA_LINHA_HEADER').unbind('click').click(DRILL_HIERARQUIA_LINHA_HEADER_CLICK);
 	
+	_END('DRILL_HIERARQUIA_LINHA_setButtonExpandALL');
+	
 }
 
 function DRILL_HIERARQUIA_LINHA_setButton(_data,C000, line,column,DRILL_HIERARQUIA_REQUEST,LAYOUT_ROWS_B64,IDGrid,DRILL_FCC,DRILL_LINE_LAST_COLUMN,arg,next_column,data_line)
 {
-	
+	_START('DRILL_HIERARQUIA_LINHA_setButton');
 	
 	
 	if(empty(_data) || column=='C000') 	return _data;
@@ -150,12 +156,15 @@ function DRILL_HIERARQUIA_LINHA_setButton(_data,C000, line,column,DRILL_HIERARQU
 	}
 	
 	arg.drill_line_total_data[line]=	true;
+	
+	_END('DRILL_HIERARQUIA_LINHA_setButton');
 	return btn_plus+data;
 }
 
 		 
 function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 {
+	_START('DRILL_HIERARQUIA_LINHA_HEADER_CLICK');
 	var column		=	$(this).attr('column');
 	var grid_id		=	$(this).attr('grid-id');
 	var kendoGrid	=	$(grid_id).data('kendoGrid');
@@ -218,7 +227,7 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 		
 
 		wrsRunFilter();
-	
+	_END('DRILL_HIERARQUIA_LINHA_HEADER_CLICK');
 	return false; //Obriga a não reordenar a coluna
 
 }
@@ -238,6 +247,8 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 
 function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 {
+	
+	_START('DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS');
 	var column		=	 $(this).attr('column');
 	var line		=	 $(this).attr('line');
 	var data		=	 $(this).attr('data');
@@ -282,12 +293,15 @@ function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 	$(chIClass(grid_id)).wrsAbaData('setKendoUi',options_change);
 	
 	wrsRunFilter();
+	
+	_END('DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS');
 }
 
 
 
 function DRILL_HIERARQUIA_LINHA_createEventClick(IDGrid)
 {
+	_ONLY('DRILL_HIERARQUIA_LINHA_createEventClick');
 	$(IDGrid).find('.DRILL_HIERARQUIA_LINHA').unbind('click').click(DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS);
 }
 
@@ -314,9 +328,12 @@ function DRILL_HIERARQUIA_LINHA_onDataBindingHideColumn()
 
 function dirname_VIR(name)
 {
+	_START('dirname_VIR');
 	var _explode	=	explode('{VIR}',name);
 	var data		=	[];
 		for(var i=0 ; i<_explode.length-1;i++)	data[data.length]=	_explode[i];
+		
+	_END('dirname_VIR');	
 	return implode('{VIR}',data);
 }
 

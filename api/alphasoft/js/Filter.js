@@ -13,6 +13,8 @@
 	  * Configurações para aplicar a visualização das Titles do qTipe
 	  */
         $(document).ready(function() {
+			
+			_START('Filter.js Loader qtip');
         	   $('.tooltip_info_wrs_panel').qtip({
         	         content: {
 								text: function(event, api) 
@@ -37,25 +39,29 @@
         	     });
         	   
       	     
-            
+            _END('Filter.js Loader qtip');
         });
         
 
 function convert_to_class(array)
 {
+	 _START('convert_to_class');
 	var tmp		=	[];
 	
 	for(x in array)
 		{
 			tmp[x]	=	'__'+replace_attr(array[x]);
 		}
-	
+	_END('convert_to_class');
 	return tmp;
 }
 
 
 function findFilterMergeLoad(filterMerge,levelFull)
 {
+	
+	_START('findFilterMergeLoad');
+	
 	for(d in filterMerge)
 		{
 			if(filterMerge[d][0]==levelFull)
@@ -64,10 +70,13 @@ function findFilterMergeLoad(filterMerge,levelFull)
 			}
 		}
 	
+	_END('findFilterMergeLoad');
 	return '';
 }
 function filterMergeLoad(filter_current,filterMerge)
 {
+	
+	_START('filterMergeLoad');
 	var array_user		=	[];
 	var filters_add		=	[];//INforma quais atributos já foram utilizados para não repetir
 
@@ -114,6 +123,8 @@ function filterMergeLoad(filter_current,filterMerge)
 			}
 	
 	if(array_user.length==0) return '';
+	
+	_END('filterMergeLoad');
 	return array_user;
 }
 
@@ -121,7 +132,7 @@ function filterMergeLoad(filter_current,filterMerge)
 function changeWithDrillColumnRows(column,columnName)
 {
 	
-	
+	_START('changeWithDrillColumnRows');
 	var current_layout		=	getLoadReport(true);
 	
 	var _column				=	optionsDataConvert(current_layout,true);
@@ -135,15 +146,19 @@ function changeWithDrillColumnRows(column,columnName)
 		cleanPlaceholder();
 		$('.wrs_panel_filter_icon').attr('filter_hide','false').trigger('click');
 		wrsRunFilter();
+		
+	_END('changeWithDrillColumnRows');	
 }
 //Removendo qualquer informação de placeholder que é a mensagem de que não há valores na tela 
 function cleanPlaceholder()
 {
+	_ONLY('cleanPlaceholder');
 	$(".WRS_DRAG_DROP_FILTER").find('.placeholder').remove();
 }
 
 function changeWithDrillFilter(layout,filter_to_add)
 {
+	_START('changeWithDrillFilter');
 	var 	btnRun	=	$('.wrs_run_filter');
 	var 	json	=	$('.WRS_ABA').find('.active').wrsAbaData('getHistory');
 	
@@ -207,6 +222,8 @@ function changeWithDrillFilter(layout,filter_to_add)
 	
 	$('.wrs_panel_filter_icon').attr('filter_hide','false').trigger('click');
 	btnRun.trigger('click');
+	
+	_END('changeWithDrillFilter');
 }
 
 
@@ -215,6 +232,7 @@ function changeWithDrillFilter(layout,filter_to_add)
 function compare_filter_change(_filters_compare)
 {
 	
+	_START('compare_filter_change');
 	if(empty(_filters_compare)) return false;
 	
 	 var filters_compare 	=	 explode(',',_filters_compare);
@@ -252,6 +270,8 @@ function compare_filter_change(_filters_compare)
 	  			}
 	  			
 	  }
+	  
+	  _END('compare_filter_change');
 		  return false;
 	
 }
@@ -262,6 +282,7 @@ function compare_filter_change(_filters_compare)
  */
 function WRS_clean_filter()
 {
+	_START('WRS_clean_filter');
 	var getID		=	 $('.wrsGrid').attr('id');
 	
 		$('.wrs_run_filter').removeAttr('locked').removeAttr('flag_load');
@@ -269,20 +290,23 @@ function WRS_clean_filter()
 		$('.wrsGrid').removeClass('wrsGrid')
 		$('#'+getID+'Main').addClass('hide');
 		//$('.wrsGrid').removeAttr('wrsparam').removeAttr('wrskendoui');
+	_END('WRS_clean_filter');	
 }
 
 function WRS_filter_hide()
 {
+	_START('WRS_filter_hide');
 	var getID		=	 $('.wrsGrid').attr('id');
 		$('.wrsGrid').removeClass('wrsGrid')
 		$('#'+getID+'Main').addClass('hide');
 		//$('.wrsGrid').removeAttr('wrsparam').removeAttr('wrskendoui');
+	_END('WRS_filter_hide');	
 }
 
 function convert_to_compare_filter(inputHistory)
 {
 	var tmp	=	[];
-	
+	_START('convert_to_compare_filter');
 	
 	for(var lineInput in inputHistory)
 		{
@@ -290,6 +314,7 @@ function convert_to_compare_filter(inputHistory)
 				tmp.push('{'+inputHistory[lineInput].data+'}');
 		}
 	
+	_END('convert_to_compare_filter');
 	return base64_encode(tmp.join(','));
 	
 }
@@ -299,6 +324,8 @@ function convert_to_compare_filter(inputHistory)
  */
 function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 {
+	
+	_START('is_wrs_change_to_run');
 	var param_request	=	{};
 		param_request	=	 _param_request;
 
@@ -341,6 +368,8 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 		
 
 		aba_active.wrsAbaData('setHistory',base64);
+		
+		_END('is_wrs_change_to_run');
 		return {status:_status, val:param_request};
 	}
 	
@@ -466,7 +495,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 			
 			
 		}
-
+_END('is_wrs_change_to_run');
 		return {status:true, val:param_request};
 		
 	}
@@ -505,7 +534,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 
 	
 	
-	
+	_END('is_wrs_change_to_run');
 	return {status:_status, val:param_request};
 }
 
@@ -527,11 +556,13 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
  */
 function wrsRunFilter()
 {
+		_ONLY('wrsRunFilter');
 		$('.wrs_run_filter').trigger('click');
 }
 
 function wrsFilterShow()
 {
+		_START('wrsFilterShow');
 //	$('.WRS_DRAG_DROP_RECEIVER_FILTER').hide(); // Ativando o Drag And Drop 
 	//$('.WRS_DRAG_DROP_FILTER_CONTAINER').show(); //Escondendo a estrutura de pesquisa de filtro
 	var filter	=	$('.wrs_panel_filter_icon');
@@ -545,10 +576,13 @@ function wrsFilterShow()
 		{
 			filter.trigger('click');
 		}
+	
+	_END('wrsFilterShow');	
 }
 
 function tagFilterWRS(typeReturn)
 {
+	_START('tagFilterWRS');
 	//Salvando para poder recuperar as seleções
 	var html		=	'';
 	var html_bk		=	'';// uso estas variaveis pra jogar os filtros fixos para o final de todos, sempre, e em vermelho
@@ -608,17 +642,20 @@ function tagFilterWRS(typeReturn)
  	
  	if(typeReturn) return structArray;
  	
+	_END('tagFilterWRS');
  	return html;
  	
 }
 function wrsFilterClickFalse(filter_hide)
 {
-			$('.wrs_panel_filter_icon').attr('filter_hide', filter_hide==undefined ? false : filter_hide); 
+		_ONLY('wrsFilterClickFalse');
+		$('.wrs_panel_filter_icon').attr('filter_hide', filter_hide==undefined ? false : filter_hide); 
 }
 	 
 (function ( $ ) {
     $.WrsFilter= function(typeEvent,typeValue) {
-
+	
+		_START('WrsFilter');	
     	
     	
     	$event		=	 this;
@@ -637,6 +674,7 @@ function wrsFilterClickFalse(filter_hide)
     	
     	var wrs_filter_check_change_filter = function()
     	{
+			_START('WrsFilter::wrs_filter_check_change_filter');	
     		var flag_back		=	false;
     		$(".WRS_DRAG_DROP_FILTER").find('h2').each(function(){
     			var json				=	$.parseJSON(base64_decode($(this).attr('json')));	   
@@ -651,13 +689,14 @@ function wrsFilterClickFalse(filter_hide)
     			       }
     			
     		});
-    		
+    		_END('WrsFilter::wrs_filter_check_change_filter');	
     		return flag_back;
     	}
 
     	
     	var setJsonEncodeDecode	=	 function(localEvent,label,value,pageCurrentHome,noLoad)
     	{
+			_START('WrsFilter::setJsonEncodeDecode');	
     		var index_data			=	 localEvent.attr('index-data');
     		var main				=	$('#wrs_header_filter_main_'+index_data);
     		var json				=	$.parseJSON(base64_decode(main.attr('json')));	
@@ -697,6 +736,8 @@ function wrsFilterClickFalse(filter_hide)
     		{
     			clickHeaderFiltro(main,'loadWrs');
     		}
+			
+			_END('WrsFilter::setJsonEncodeDecode');	
     		
     	}
 
@@ -704,11 +745,14 @@ function wrsFilterClickFalse(filter_hide)
     	
     	var cleanFiltersDown  = function(level_down,typeEvent,nameTagHeader)
     	{
-    			
+    		_START('WrsFilter::cleanFiltersDown');	
     		var levelDown			=	[];
 				levelDown			=	 explode(',',level_down);			
 			
-			if(empty(level_down) && empty(typeEvent)) return '';
+			if(empty(level_down) && empty(typeEvent)) {
+				_END('WrsFilter::cleanFiltersDown');	
+				return '';
+			}
 				
 			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 					var level_full					=	$(this).attr('level-full');	
@@ -761,7 +805,7 @@ function wrsFilterClickFalse(filter_hide)
 						}
 					
 			});
-
+			_END('WrsFilter::cleanFiltersDown');	
     	}
     	
 
@@ -771,6 +815,7 @@ function wrsFilterClickFalse(filter_hide)
 		 */
 		var getFiltersLevelUP =	function(level_up,typeEvent)
 		{
+			_START('WrsFilter::getFiltersLevelUP');	
 			var levelUP			=	[];
 			var filters_up		=	[];
 			var empty_filter	=	false;
@@ -779,8 +824,10 @@ function wrsFilterClickFalse(filter_hide)
 			
 				levelUP			=	 explode(',',level_up);			
 			
-			if(empty(level_up) && empty(typeEvent)) return '';
-
+			if(empty(level_up) && empty(typeEvent)) {
+				_END('WrsFilter::getFiltersLevelUP');	
+				return '';
+			}
 				
 			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 					var level_full					=	$(this).attr('level-full');	
@@ -818,8 +865,11 @@ function wrsFilterClickFalse(filter_hide)
 				}
 			
 			
-			if(typeEvent=='all') return {data:tagQuery,full:FilterOriginal};
-			
+			if(typeEvent=='all') {
+				_END('WrsFilter::getFiltersLevelUP');
+				return {data:tagQuery,full:FilterOriginal};
+			}
+			_END('WrsFilter::getFiltersLevelUP');
  			return tagQuery; 			
 		}
 		
@@ -829,19 +879,20 @@ function wrsFilterClickFalse(filter_hide)
 		  */
 		 var setSizeDataFilterClean = function(size_data)
 		 {
+			 _START('WrsFilter::setSizeDataFilterClean');
 		     $('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
 		     
 		     if($('.wrs_panel_filter_icon').attr('filter_hide') || size_data=='all')
 		     {		
 		    	 cleanFiltersDown('','all'); //Apagando todos os Selects
 		     }
-		     
+		      _END('WrsFilter::setSizeDataFilterClean');
 		 }
 		 
 		 
 		var getAllFiltersToRun	=	 function()
 			{
-
+					_ONLY('WrsFilter::getAllFiltersToRun');
 					return getFiltersLevelUP('','all');
 //					return getFiltersUP(size,true);
 			}
@@ -851,7 +902,13 @@ function wrsFilterClickFalse(filter_hide)
 		//Force Result Clean
 		switch(typeEvent)
 		{
-			case 'getAllFiltersToRun' 		: return getAllFiltersToRun()				; break;
+			case 'getAllFiltersToRun' 		: {
+				
+				var _getAllFiltersToRun	=	 getAllFiltersToRun()	;			
+				
+				_END('WrsFilter');
+				return _getAllFiltersToRun;
+			}; break;
 		}
 		
 	 
@@ -861,6 +918,8 @@ function wrsFilterClickFalse(filter_hide)
 		
 		var menuFilter	=	 function(index_data,nameID,type,_searchText)
 		{
+			_START('WrsFilter::menuFilter');
+			
 			var searchText					=	 _searchText ? _searchText : '' ;
 			var header_main					=	$('#wrs_header_filter_main_'+index_data);
 			var atributo_simples_composto	=	header_main.attr('atributo');
@@ -997,7 +1056,7 @@ function wrsFilterClickFalse(filter_hide)
 		 	
 		 	
 		 	
-		 	
+		 	_END('WrsFilter::menuFilter');
 			
 		}
 		
@@ -1007,6 +1066,7 @@ function wrsFilterClickFalse(filter_hide)
     	 */	
          var  clickHeaderFiltro	 = function (_event,type)
          {
+			 _START('WrsFilter::clickHeaderFiltro');
         	 var event				=	 _event;
         	 var pageHome			=	false;
         	 if(type!='loadWrs')
@@ -1069,6 +1129,8 @@ function wrsFilterClickFalse(filter_hide)
 			 menuFilter(index_data,wrs_filter_body,'before',json['LIKE']);
 			 
         	 runCall(json,'WRS_FILTER','WRS_FILTER','filter_select_info',funCallBackRun,'modal','json');
+			 
+			  _END('WrsFilter::clickHeaderFiltro');
          }
          
          
@@ -1077,6 +1139,7 @@ function wrsFilterClickFalse(filter_hide)
      */
 	 var funCallBackRun	=	 function(data)
 	 	{
+			 _START('WrsFilter::funCallBackRun');
 		 	$(data.data.id).find('.wrs_filter_body_container').html(data.html);
 
 	 		var index_data			=	 data.data.index_data;
@@ -1104,7 +1167,7 @@ function wrsFilterClickFalse(filter_hide)
 		 	var btn_event_filtro_next_back		=	 function(){
 		 		
 		 			//setJsonEncodeDecode($(this),'next',10);
-		 		
+		 		 _START('WrsFilter::funCallBackRun::btn_event_filtro_next_back');
 		 			var type	= $(this).attr('type');
 		 			
 		 			var index_data			=	 $(this).attr('index-data');
@@ -1120,19 +1183,25 @@ function wrsFilterClickFalse(filter_hide)
 		 			}
 		 				
 		 			setJsonEncodeDecode($(this),'PG_CURRENT',page_current);
-		 			
+		 			 _END('WrsFilter::funCallBackRun::btn_event_filtro_next_back');
 		 		}
 
 		 	
 		 	var wrsFilteValuerControl		=	 function(arrayFilter,value,remove)
 		 	{
+				
+				_START('WrsFilter::funCallBackRun::wrsFilteValuerControl');
 		 		var tmp		=	[];
 		 		
 		 		for(obj in arrayFilter)
 		 			{
 		 				if(!remove)
 		 				{
-		 					if(arrayFilter[obj]==value)return false;
+		 					if(arrayFilter[obj]==value)
+		 					{
+		 						_END('WrsFilter::funCallBackRun::wrsFilteValuerControl');
+		 						return false;
+		 					}
 		 				}
 		 				else
 		 				{
@@ -1144,14 +1213,19 @@ function wrsFilterClickFalse(filter_hide)
 		 			}
 		 		
 		 		//Retorna apenas o que foi removido
-		 		if(remove) return tmp;
-		 		
+		 		if(remove) {
+		 			_END('WrsFilter::funCallBackRun::wrsFilteValuerControl');
+					return tmp;
+		 		}
+				 _END('WrsFilter::funCallBackRun::wrsFilteValuerControl');
 		 		return true;
 		 	}
 		 	
 		 	
 		 	var btn_event_filtro_checkbox	=	 function()
 				 	{
+						
+						_START('WrsFilter::funCallBackRun::btn_event_filtro_checkbox');
 					 		var index_data	=	$(this).attr('index-data');
 					 		var nameTag		=	'wrs_filter_body_'+index_data;
 				 			var main		=	$('#'+nameTag);
@@ -1202,11 +1276,14 @@ function wrsFilterClickFalse(filter_hide)
 				 			//Gravando no JSON
 				 			mainFilter.attr('json',base64_encode(json_encode(json,true)));
 				 			cleanFiltersDown(json['LEVEL_DOWN'],'',nameTagMain);
+							
+							_END('WrsFilter::funCallBackRun::btn_event_filtro_checkbox');
 				 	}
 		 	
 		 	
 		 	var wrs_input_filter_single	=	 function()
 		 	{
+				_START('WrsFilter::funCallBackRun::wrs_input_filter_single');
 				var index_data	=	$(this).attr('index-data');
 				var nameTag		=	'wrs_header_filter_main_'+index_data;
 	 			var main		=	$('#'+nameTag);
@@ -1257,6 +1334,8 @@ function wrsFilterClickFalse(filter_hide)
 	 			//Gravando no JSON
 	 			main.attr('json',base64_encode(json_encode(json,true)));
 	 			cleanFiltersDown(json['LEVEL_DOWN'],'',nameTag);
+				
+				_END('WrsFilter::funCallBackRun::wrs_input_filter_single');
 		 	}
 		 	
 		 	/*
@@ -1265,6 +1344,7 @@ function wrsFilterClickFalse(filter_hide)
 		 	 */
 		 	var pws_click_triger_single =  function()
 		 	{
+				_START('WrsFilter::funCallBackRun::pws_click_triger_single');
 		 		var index	=	 $(this).index();
 		 		
 		 		if(index==1)
@@ -1274,6 +1354,7 @@ function wrsFilterClickFalse(filter_hide)
 		 			$(this).parent().find('input').prop('checked',!checked);
 		 			$(this).parent().find('input').triggerHandler('click');
 		 		}
+				_END('WrsFilter::funCallBackRun::pws_click_triger_single');
 		 	}
 		 	
 		 	
@@ -1348,6 +1429,8 @@ function wrsFilterClickFalse(filter_hide)
 		 		}
 		 	
 		 	formata_texto_resultado_filtros();
+			
+			_END('WrsFilter::funCallBackRun');
 		}
     	 
 	
@@ -1355,6 +1438,8 @@ function wrsFilterClickFalse(filter_hide)
      
    	 var  setWRSFilterCommon = function()
 							 {
+								 
+								 _START('WrsFilter::setWRSFilterCommon');
    		 						//Esconde todo o conteiner de Drag and Drop
 								$('.WRS_DRAG_DROP_RECEIVER_FILTER').hide();
 								 
@@ -1443,6 +1528,7 @@ function wrsFilterClickFalse(filter_hide)
 									//http://api.jqueryui.com/accordion/#method-destroy
 									$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
 									 
+									_END('WrsFilter::setWRSFilterCommon'); 
 							 } //End setWRSFilterCommon
    	 
    	 
@@ -1452,7 +1538,7 @@ function wrsFilterClickFalse(filter_hide)
 		
 				   	var wrs_panel_filter_icon	=	 function()
 					{
-				   		
+				   		_START('WrsFilter::wrs_panel_filter_icon');
 				   		var event	=	 $(this);
 
 				   		var filter_hide		=	event.attr('filter_hide'); //Flag armazenada no botão para saber se já foi pressionado
@@ -1470,6 +1556,7 @@ function wrsFilterClickFalse(filter_hide)
 						}
 				
 						event.attr('filter_hide', filter_hide); //Atualiza a Flag
+						_END('WrsFilter::wrs_panel_filter_icon');
 				 }
 				
 				/**
@@ -1486,12 +1573,15 @@ function wrsFilterClickFalse(filter_hide)
 				 */
 				var wrs_check_filter_simples = function()
 				{
+					_START('WrsFilter::wrs_check_filter_simples');
 					
 					var filter					=	$(".WRS_DRAG_DROP_FILTER");
 					var is_atributo_simples		=	filter.attr('is_atributo_simples');
 					var no_simple				=	true;
 
-					if(is_atributo_simples=='false') return true;
+					if(is_atributo_simples=='false') {
+						_END('WrsFilter::wrs_check_filter_simples');
+						return true;}
 					
 					filter.find("h2").each(function(){
 						var atributo	=	$(this).attr('atributo');		
@@ -1546,7 +1636,7 @@ function wrsFilterClickFalse(filter_hide)
 							$('.wrs_run_filter').attr('is_atributo_simples',true);
 							$('.wrs_run_filter').trigger('click');
 						}
-					
+					_END('WrsFilter::wrs_check_filter_simples');
 					return false;
 				}
 				
@@ -1555,13 +1645,24 @@ function wrsFilterClickFalse(filter_hide)
 				/**
 				 * Eventos por requisição
 				 */
+				var  _return	=	undefined;
 				switch(typeEvent)
 				{
-					case 'getAllFiltersToRun' 		: return getAllFiltersToRun()				; break;
-					case 'setSizeDataFilterClean'	: return setSizeDataFilterClean(typeValue)	; break;
-					case 'wrs_check_filter_simples'	: return wrs_check_filter_simples()			; break;
-					case 'wrs_filter_check_change_filter' :  return wrs_filter_check_change_filter(); break;
+					case 'getAllFiltersToRun' 		: _return= getAllFiltersToRun()				; break;
+					case 'setSizeDataFilterClean'	: _return= setSizeDataFilterClean(typeValue)	; break;
+					case 'wrs_check_filter_simples'	: _return= wrs_check_filter_simples()			; break;
+					case 'wrs_filter_check_change_filter' :  _return= wrs_filter_check_change_filter(); break;
 				}
+				
+				_END('WrsFilter');
+				
+				if(_return!=undefined){
+					
+					return _return;
+				}
+			
+				
+				
 				
         return $event;
     };

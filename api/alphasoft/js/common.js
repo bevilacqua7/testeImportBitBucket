@@ -13,6 +13,13 @@ var IS_TRACE	=	false;
 var RAND_TOKEN	=	js_rand(0,9999999999999);
 	include_js('ThreadJobManager');
 
+	
+if(IS_TRACE)
+	{
+			$('body').append('<div class="WRS_TRACE"></div>');
+			$('.WRS_TRACE').dblclick(function() {$(this).html('');});
+	}
+	
 
 /*
  * Tipos de Execuções que o sistema opera para gerar uma novo Report
@@ -33,7 +40,7 @@ var ABA_TAG_NAME		=	'.WRSAbas ul';
 
 function WRS_CONSOLE(){
 	if(IS_TRACE){
-		console.log(arguments);
+		//console.log(arguments);
 	}
 }
 
@@ -45,7 +52,7 @@ function WRS_IS_LOGGED_IN(){
 		  data: {'exit':1,'file':'WRS_LOGIN','class':'WRS_LOGIN','event':'userIsLogged'},
 		  success: function(data){
 						loggedin	=	data.trim()=='S'?true:false;	
-						WRS_CONSOLE('LOGGED IN?',data,loggedin);	
+						//WRS_CONSOLE('LOGGED IN?',data,loggedin);	
 					},
 		  async:false  // este é o segredo de aguardar o retorno do ajax antes de retornar a funcao
 		});
@@ -72,10 +79,10 @@ function verifica_loggedin_periodico(){
 							'							<h3><!-- Primary -->&nbsp;</h3> '+
 							'						</div>'+
 							'						<div class="modal-text-wrs-job">'+
-							'							'+LNG('MSG_FORCE_LOGOFF')+
+							'							<i class="fa fa-exclamation-triangle"></i> '+LNG('MSG_FORCE_LOGOFF')+
 							'						</div>'+
 							'						<div class="modal-buttons-wrs-job" report_id="">'+
-							'							<button class="btn btn-warning modal-btn-padding modal-btn-job-wrs   action_logoff"> <span class="title"> <i class="glyphicon glyphicon-off color_white"></i> '+LNG('BTN_CLOSE')+' </span> </button>'+
+							'							<button class="btn btn-warning modal-btn-padding modal-btn-job-wrs   action_logoff modal-btn-job-wrs_btn"> <span class="title"> <i class="glyphicon glyphicon-off color_white"></i> '+LNG('BTN_CLOSE')+' </span> </button>'+
 							'						</div>'+
 							'				</div>'+
 							'			</div>'+
@@ -444,6 +451,7 @@ function filter_TMP_to_array(input)
 
 function filter_configure_window()
 {
+	TRACE('START:filter_configure_window');
 	var filter_h	=	$('.wrs_panel_filter_icon').attr('filter_hide'); 
 	var label		=	'false';
 		$('.WRS_DRAG_DROP_RECEIVER_FILTER').show();
@@ -457,6 +465,7 @@ function filter_configure_window()
 		
 		$('.wrs_panel_filter_icon').attr('filter_hide',label).trigger('click'); 
 	
+		TRACE('END::filter_configure_window');
 }
 
 /**
@@ -549,15 +558,40 @@ function TRACE_DEBUG(value)
 	TRACE(value);
 	IS_TRACE=	false;
 }
+
+function _START(input)
+{
+	TRACE('_START::'+input);
+}
+
+function _ONLY(input)
+{
+	TRACE('_ONLY::'+input);
+}
+
+function _END(input)
+{
+	TRACE('_END::'+input);
+}
+
+/**
+ * @Link http://stackoverflow.com/questions/10535782/how-can-i-convert-a-date-in-epoch-to-y-m-d-his-in-javascript
+ * @param value
+ * @returns {Boolean}
+ */
 function TRACE(value)
 {
 	if(!IS_TRACE) return false;
-	if(empty($('.WRS_TRACE').html()))
-	{
-		$('body').append('<div class="WRS_TRACE"></div>');
-		$('.WRS_TRACE').dblclick(function() {$(this).html('');});
-	}
-	$('.WRS_TRACE').append('<div>'+value+'</div>');
+	
+
+	var date 		= new Date();
+	var hours 		= date.getHours();
+	var minutes 	= date.getMinutes();
+	var seconds 	= date.getSeconds();
+
+	var prefix		=	hours+':'+minutes+':'+seconds+' | ';
+	console.log(prefix+value);
+	//$('.WRS_TRACE').append('<div>'+value+'</div>');
 }
 
 

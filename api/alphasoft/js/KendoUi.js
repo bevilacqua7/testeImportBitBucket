@@ -31,6 +31,7 @@ include_js('Abas'); */
 
 function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
 {
+	_START('WRSKendoGridCompleteRun');
 	var _layout	=	layout;
 
 	
@@ -53,11 +54,13 @@ function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
 					aba_active.find('.icon-remove-aba').trigger('click');
 				}
 		}
+	_END('WRSKendoGridCompleteRun');	
 }
 
 
 function WRSKendoGridRefresh(history)
 {
+	_START('WRSKendoGridRefresh');
 	var _history		=	$.parseJSON(base64_decode(history));
 
 	if(empty(_history)) return true;
@@ -100,13 +103,13 @@ function WRSKendoGridRefresh(history)
 			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
 			
 	});
-	
+	_END('WRSKendoGridRefresh');
 }
 
 
 function WRSKendoGridComplete(IDGrid)
 {
- 
+	_START('WRSKendoGridComplete');
 	var report_aba		=	chIClass(IDGrid);
 	var wrsKendoUi		=	$(report_aba).wrsAbaData('getKendoUi');
 	var trashHistory	=	"";
@@ -151,6 +154,7 @@ function WRSKendoGridComplete(IDGrid)
 	
 	var historyClick	=	 function()
 	{
+		_START('WRSKendoGridComplete::historyClick');
 		var _wrs_id			=	$(this).attr('wrs-id');
 		var _mktime			=	$(this).attr('mktime');
 		var _history		=	$.parseJSON(base64_decode($(this).attr('json')));
@@ -160,9 +164,12 @@ function WRSKendoGridComplete(IDGrid)
 			$(report_aba).wrsAbaData('setKendoUi',{MKTIME_HISTORY:_mktime});
 			
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi);
+		_END('WRSKendoGridComplete::historyClick');
 	}
 	
 	$(IDNav+' a').unbind('click').click(historyClick);
+
+		_END('WRSKendoGridComplete');
 }
 
 /**
@@ -171,6 +178,7 @@ function WRSKendoGridComplete(IDGrid)
  */
 function  SET_RELATIONSHIPS_FULL_NAME()
 {
+	_START('SET_RELATIONSHIPS_FULL_NAME');
 	if(RELATIONSHIPS_FULL.length) return true;
 	
 	for(_obj_fn in RELATIONSHIPS_FULL_NAME)
@@ -182,7 +190,7 @@ function  SET_RELATIONSHIPS_FULL_NAME()
 				RELATIONSHIPS_FULL[_full[_f_obj_fn]['LEVEL_FULL']]=	_full[_f_obj_fn];
 			}
 	}	
-	
+	_END('SET_RELATIONSHIPS_FULL_NAME');
 //	TRACE_DEBUG();
 }
 
@@ -190,12 +198,15 @@ SET_RELATIONSHIPS_FULL_NAME();
 
  function wrs_format_line(data)
  {
+	 
 	return data;
  }
  
 
  function getElementsWrsKendoUi(_event)
  {
+	 _ONLY('getElementsWrsKendoUi');
+	 
  	if(!empty(_event.html()))
  	{
  			return $(getEIClass(_event)).wrsAbaData('getKendoUi');
@@ -216,6 +227,7 @@ SET_RELATIONSHIPS_FULL_NAME();
   */
  function wrsKendoUiContextMenu(whoEvent,kendoActive)
  {
+	 _START('wrsKendoUiContextMenu');
 	 var kendoUi		=	kendoActive  ? whoEvent : whoEvent.data('kendoGrid');
 	 var layout			=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
 	 var layout_tmp		=	[];
@@ -226,7 +238,9 @@ SET_RELATIONSHIPS_FULL_NAME();
 		 {
 		 	layout_tmp[types[obj]]	=	wrsKendoUiContextMenuChangeArray(layout[types[obj]]);
 		 }
-	 
+	
+	_END('wrsKendoUiContextMenu');	
+	
 	 return {'layout_full':layout, 'layout_clean' : layout_tmp};
 	 
  }
@@ -234,8 +248,12 @@ SET_RELATIONSHIPS_FULL_NAME();
  
  function wrsKendoUiContextMenuChangeArray(param)
  {
-	 if(empty(param)) return '';
+	 _START('wrsKendoUiContextMenuChangeArray');
 	 
+	 if(empty(param)) {
+		 _END('wrsKendoUiContextMenuChangeArray');
+		 return '';
+	 }
 	 var currentParam	= 	explode(',',param);
 	 var tmpParam		=	[];
 	 
@@ -244,14 +262,19 @@ SET_RELATIONSHIPS_FULL_NAME();
 		 	tmpParam[obj]	=	replace_attr(currentParam[obj]);
 		 }
 	 
+	 _END('wrsKendoUiContextMenuChangeArray');
+	 
 	 return tmpParam;
 	 
  }
  
 function  wrsKendoUiContextMenuGetLayoutInfo(kendoUi)
 {
+		_START('wrsKendoUiContextMenuGetLayoutInfo');
 		var keyName		=	getFirstValueArray(kendoUi.columns);
 		var layout		=	 kendoUi.columns[keyName]['layout'];
+		
+		_END('wrsKendoUiContextMenuGetLayoutInfo');
 		return layout;
 }
  
@@ -261,6 +284,7 @@ function  wrsKendoUiContextMenuGetLayoutInfo(kendoUi)
   */
  function addKendoUiColorJQueryGrid()
  {
+	 _START('addKendoUiColorJQueryGrid');
  	var color		=	$('.ui-state-default').css('border-color');
 	var colorFont	=	$('.ui-state-default').css('color');
 	var ui_state_active =	$('.ui-state-active').css('color');
@@ -272,10 +296,13 @@ function  wrsKendoUiContextMenuGetLayoutInfo(kendoUi)
 		style	+=	".colorSelect{color:"+ui_state_active+" !important;}";
 		style	+='</style>';
 	$(style).appendTo( "head" );
+	
+	 _END('addKendoUiColorJQueryGrid');
  }
  
 function getWrsKendoColumn(data)
 {
+	// _START('getWrsKendoColumn _recursivo');
 		var tmp		=	[];
 		var _tmp	=	[];
 		
@@ -299,7 +326,7 @@ function getWrsKendoColumn(data)
 			}
 			
 		}
-		
+		 //_END('getWrsKendoColumn');
 		return tmp;
 		
 }// END getWrsKendoColumn
@@ -331,6 +358,8 @@ function getWrsKendoColumn(data)
    */
  function _local_merge_array(f_array,s_array)
  {
+	  
+	  
 	var _tmpArray	=	[];
 	
 		for(obj in f_array)
@@ -351,6 +380,7 @@ function getWrsKendoColumn(data)
   */
  function onDataBinding(arg)
  {
+	 _START('onDataBinding');
 	 //TRACE_DEBUG('onDataBinding::'+date('H:i:s'));
 	var report_id		=	arg.sender.element.attr('id');
 	var report_aba		=	'.'+report_id;
@@ -624,6 +654,8 @@ function getWrsKendoColumn(data)
 				WRSSresize(id,idx, r_width,frozen-1); 
 		}
 	
+	_END('onDataBinding');
+	
 	//TRACE_DEBUG('onDataBinding::'+date('H:i:s'));
 	return _arg;
  }
@@ -638,7 +670,8 @@ function getWrsKendoColumn(data)
  
 function wrsKendoUiChange(nameID,param,value)
 {
-
+	_START('wrsKendoUiChange');
+	
 	var kendoUiData	=	[];
 	
 
@@ -659,7 +692,7 @@ function wrsKendoUiChange(nameID,param,value)
 
 
 	$(chIClass(nameID)).wrsAbaData('setKendoUi',kendoUiData);
-	
+	_END('wrsKendoUiChange');
 		
 }
  
@@ -669,9 +702,9 @@ function wrsKendoUiChange(nameID,param,value)
 
 function onDataBound(arg)
 	{
+		_START('onDataBound');
 		
 		//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
-			TRACE('START onDataBound');
 			
 			resizeColumnKendoUi(arg);
 			 
@@ -685,7 +718,7 @@ function onDataBound(arg)
 			var wrsKendoUi		=	_kendoUiParam;
 			var wrsparam		=	$(report_aba).wrsAbaData('getWrsData');
 			
-			
+
 			$(report_aba).wrsAbaData('setKendoUi',{page_size:arg.sender.dataSource._pageSize, STOP_QUERY:false});
 			
 				
@@ -788,7 +821,8 @@ function onDataBound(arg)
 			
 			
 			
-			TRACE('END onDataBound');
+			_END('onDataBound');
+			
 			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 	}
 
@@ -803,6 +837,8 @@ function onDataBound(arg)
 	 * @link http://www.telerik.com/forums/change-column-widths-after-grid-created
 	 */
 	 function WRSSresize(gridId,idx, width,sizeFrozen) {
+		 
+		 _START('WRSSresize');
 		var _idx		=	idx;
 		var _idxHeader	=	_idx;
 
@@ -834,7 +870,7 @@ function onDataBound(arg)
               .css({width: width}).attr('DOQN','DOQN');
 		}
 		
-		
+		_END('WRSSresize');
 		//TRACE(_idx+' | '+_idxHeader+' || '+sizeFrozen+' || '+width);
       }
 		
@@ -846,6 +882,7 @@ function onDataBound(arg)
 		
 function resizeColumnKendoUi(arg)
 {
+	_START('resizeColumnKendoUi');
 	var _arg				=	arg.sender.element;
 	var id					=	"#"+_arg.attr('id');
 
@@ -858,7 +895,7 @@ function resizeColumnKendoUi(arg)
 			});
 		
 	
-			
+		_END('resizeColumnKendoUi');	
 }
 
  /*
@@ -866,6 +903,8 @@ function resizeColumnKendoUi(arg)
   */
 function  buttonPlusMinus(nameID,hideShow,sizeFrozen)
 													{
+														
+														_START('buttonPlusMinus');
 
 														if(!hideShow){
 																$(nameID).find('.k-grid-content-locked').find('tr').find('td:last-child').each(function(){
@@ -895,12 +934,15 @@ function  buttonPlusMinus(nameID,hideShow,sizeFrozen)
 														}else{
 															$(nameID).find('.k-grid-content-locked').find('.wrsNull').html('');
 														}
+														
+														_END('buttonPlusMinus');
 													}
 
 
 
 function  themeSUM(nameID,arg,wrsParam)
 {
+	_START('themeSUM');
 		var find_last			=	'last-child';
 		
 //Uncaught TypeError: Cannot read property 'field' of undefined		
@@ -978,7 +1020,7 @@ function  themeSUM(nameID,arg,wrsParam)
 				});
 			}
 			
-
+_END('themeSUM');
 }													
 													
 /**
@@ -998,7 +1040,7 @@ function  themeSUM(nameID,arg,wrsParam)
 
 	 	
 	    $.fn.WrsGridKendoUiControlColumnPlusMinus = function(openStart) 
-	    {	
+	    {	_START('WrsGridKendoUiControlColumnPlusMinus');
 			addKendoUiColorJQueryGrid();
 			
 			var $eventTelerik		=	 this;
@@ -1026,11 +1068,13 @@ function  themeSUM(nameID,arg,wrsParam)
 			$eventTelerik.find('.k-header:first a').attr('style','min-height:0px; height:0px;overflow:auto').hide();
 			
 			var wrs_export_event	=	 function(){
+														_START('WrsGridKendoUiControlColumnPlusMinus::wrs_export_event');
 														var getClass	=	 $(this).attr('rel');
 														if(!empty(getClass))
 															{
 																$('.'+getClass).trigger('click');
 															}
+														_END('WrsGridKendoUiControlColumnPlusMinus::wrs_export_event');
 													}
 			
 			$('.wrs_event_export').click(wrs_export_event);
@@ -1038,6 +1082,7 @@ function  themeSUM(nameID,arg,wrsParam)
 			
 			var countFrozen	=	 function(data)
 												{
+													_START('WrsGridKendoUiControlColumnPlusMinus::countFrozen');
 												var length		=	0;	
 													for(obj in data)
 													{
@@ -1050,7 +1095,7 @@ function  themeSUM(nameID,arg,wrsParam)
 															}
 														}
 													}
-													
+													_END('WrsGridKendoUiControlColumnPlusMinus::countFrozen');
 												return length;
 												}; //END countFrozen
 			/*
@@ -1058,6 +1103,8 @@ function  themeSUM(nameID,arg,wrsParam)
 			 */
 			var getRecursiveColumnFrozen	=	 function(data)
 												{
+													_START('WrsGridKendoUiControlColumnPlusMinus::getRecursiveColumnFrozen');
+													
 														for(obj in data)
 														{
 															if(obj!=0) continue;
@@ -1079,6 +1126,7 @@ function  themeSUM(nameID,arg,wrsParam)
 																	}
 															}
 														}
+													_END('WrsGridKendoUiControlColumnPlusMinus::getRecursiveColumnFrozen');	
 														return data;
 												}// END getRecursiveColumnFrozen
 			
@@ -1090,6 +1138,7 @@ function  themeSUM(nameID,arg,wrsParam)
 			 */
 			var buttonHideShow	= function()
 									{
+										_START('WrsGridKendoUiControlColumnPlusMinus::buttonHideShow');
 											var type			=	$(this).attr('rel');
 											var event			=	'hide';
 											var IDName			=	'#'+$eventTelerik.attr('id');
@@ -1193,7 +1242,7 @@ function  themeSUM(nameID,arg,wrsParam)
 											
 											
 											
-											
+											_END('WrsGridKendoUiControlColumnPlusMinus::buttonHideShow');
 											return false;
 									};
 									
@@ -1264,7 +1313,9 @@ function  themeSUM(nameID,arg,wrsParam)
 			 * Evento para Ordenação de colunas
 			 */
 			var orderByColumnEvent	=	 function()
-													{	
+													{
+
+														_START('WrsGridKendoUiControlColumnPlusMinus::orderByColumnEvent');													
 														var $e		=	$(this).parent();
 														var field	=	$e.attr('data-field');
 														var dir		=	$e.attr('data-dir');
@@ -1311,6 +1362,7 @@ function  themeSUM(nameID,arg,wrsParam)
 															
 															telerikGrid.dataSource._sort	= [];
 															telerikGrid.dataSource._sort[0]	=	{'field':field,'dir':dir};
+														_END('WrsGridKendoUiControlColumnPlusMinus::orderByColumnEvent');	
 													}
 													
 													
@@ -1325,6 +1377,7 @@ function  themeSUM(nameID,arg,wrsParam)
 			 */
 			var addOptionsHeader	=	 function(e)
 													{
+														_START('WrsGridKendoUiControlColumnPlusMinus::addOptionsHeader');
 															e.stopPropagation();//Para não fexar a Janela
 															//Array para armazenar as informações das opções
 															var getSelected		=	 [];
@@ -1340,12 +1393,13 @@ function  themeSUM(nameID,arg,wrsParam)
 															wrsKendoUiChange(IDName,'',getSelected);
 														//	wrsKendoUiChange($(IDName),'',getSelected);
 															wrsRunFilter();//Executa o plugin nativamente 
-														
+														_END('WrsGridKendoUiControlColumnPlusMinus::addOptionsHeader');
 													}
 			
 			
 			var input_btn_add_opcoes	=	 function()
 			{
+					_START('WrsGridKendoUiControlColumnPlusMinus::input_btn_add_opcoes');
 								var getSelected=[];
 									getSelected[$(this).attr('name')] = $(this).prop('checked') ? 1 : 0;
 								
@@ -1359,6 +1413,7 @@ function  themeSUM(nameID,arg,wrsParam)
 									
 									changeTypeRun(IDName,TYPE_RUN.options);//Informando o tipo de RUN foi solicitado
 									rules_pendences_checkbox($(this),$(this).parents('ul'));
+					_END('WrsGridKendoUiControlColumnPlusMinus::input_btn_add_opcoes');
 			}
 			
 			/**
@@ -1393,7 +1448,7 @@ function  themeSUM(nameID,arg,wrsParam)
 			
 			var hideLatitudeColumn		=	 function(kendoUi,column)
 												{
-										
+														_START('WrsGridKendoUiControlColumnPlusMinus::hideLatitudeColumn');
 													
 													 for(cc in column)
 														 {
@@ -1408,15 +1463,18 @@ function  themeSUM(nameID,arg,wrsParam)
 																hideLatitudeColumn(kendoUi,column[cc]['columns']);
 															}
 														 }
+														 _END('WrsGridKendoUiControlColumnPlusMinus::hideLatitudeColumn');
 												};
 			
 			var hideLatitude	=	 function(kendo)
 										{
+											_START('WrsGridKendoUiControlColumnPlusMinus::hideLatitude');
 												
 												var idName	=	 kendo.element.attr('id');
 												var kendoUi	=	$('#'+idName).data('kendoGrid');
 												
 												hideLatitudeColumn(kendoUi,kendoUi.columns);
+												_END('WrsGridKendoUiControlColumnPlusMinus::hideLatitude');
 																};
 			
 			
@@ -1443,6 +1501,7 @@ function  themeSUM(nameID,arg,wrsParam)
 			});
 			/* END THEME */
 			
+			_END('WrsGridKendoUiControlColumnPlusMinus');
 	        return this;
 	    };
 	 
@@ -1453,6 +1512,7 @@ function  themeSUM(nameID,arg,wrsParam)
 		 */
 		$.fn.minMaxWidth = function(_param) 
 		{
+			_ONLY('minMaxWidth');
 				var telerikGrid 	= 	this.data('kendoGrid');
 				var minWidth		=	_param.minWidth;
 				var maxWidth		=	_param.maxWidth;

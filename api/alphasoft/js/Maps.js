@@ -5,6 +5,7 @@
 
 function WRSMaps(KendoUi)
 {
+	_START('WRSMaps');
 	
 	var idName			=	KendoUi.element.attr('id');
 	var GRID			=	$('#'+idName);
@@ -57,10 +58,13 @@ function WRSMaps(KendoUi)
 	 */
 	var searchMainLatitudeRecursive	=	 function(column,LEVEL_FULL,FIELD)
 	{
+		_START('WRSMaps::searchMainLatitudeRecursive');
 		var _dataDeep	=	'';
 
-		if(empty(column)) return '';
-		
+		if(empty(column)) {
+			_END('WRSMaps::searchMainLatitudeRecursive');
+			return '';
+		}
 		if(empty(column.c_parent))
 		{
 			_dataDeep	=	column;
@@ -71,12 +75,16 @@ function WRSMaps(KendoUi)
 		}
 		
 		var field		=	_dataDeep['LEVEL_FULL'];
+		
+		_END('WRSMaps::searchMainLatitudeRecursive');
+		
 		if(empty(RELATIONSHIPS_FULL[field]['LATITUDE']))
 		{
 			return searchMainLatitudeRecursive(headerIndex[column.c_parent],LEVEL_FULL,FIELD);
 		}else{
 			return _dataDeep['title'];
 		}
+		
 	}
 	
 	
@@ -186,4 +194,5 @@ function WRSMaps(KendoUi)
 		
 		ELEMENT.attr('maps_wrs','true');
 
+	_END('WRSMaps');
 }

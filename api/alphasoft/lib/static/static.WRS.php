@@ -3,7 +3,7 @@
 class WRS
 {
 
-	private static $_version	=	"1.0.0";
+	private static $_version	=	WRS_VERSION;
 	
 	public static function VERSION()
 	{
@@ -28,6 +28,35 @@ class WRS
 			$_SESSION['SSAS_USER'][$rulesPosArray][$label]	=	$value;
 		}
 	}
+	
+	
+	
+	/**
+	 * Graca a quantidade de coluinas de uma query
+	 * @param string $query_table
+	 * @param int $columns
+	 */
+	public static function SET_TOTAL_COLUMN($query_table,$columns)
+	{
+		if(!isset($_SESSION['QTD_QUERY_TABLE']))
+		{
+			$_SESSION['QTD_QUERY_TABLE']	=	array();
+		}
+		
+		$_SESSION['QTD_QUERY_TABLE'][$query_table]	=	$columns;
+	}
+	
+	/**
+	 * Verifica a quantidade de Columnas de um QUery
+	 * @param int $query_table
+	 */
+	public static function GET_TOTAL_COLUMN($query_table)
+	{
+		if(!isset($_SESSION['QTD_QUERY_TABLE'][$query_table])) return 1;
+		
+		return $_SESSION['QTD_QUERY_TABLE'][$query_table];
+	}
+	
 	
 	/*
 	 * Contem aso MUltiplos cubos
@@ -572,7 +601,7 @@ class WRS
 	
 		self::declare_REPORT_HISTORY($TAG_NAME, $cube_id, $report_id);
 	
-		return $_SESSION[$TAG_NAME][$cube_id][$report_id];
+		return isset($_SESSION[$TAG_NAME][$cube_id][$report_id]) ? $_SESSION[$TAG_NAME][$cube_id][$report_id] : NULL;
 	}
 	
 	/**
@@ -584,8 +613,12 @@ class WRS
 	 */
 	private static function declare_REPORT_HISTORY($TAG_NAME,$cube_id,$report_id)
 	{
+		if(!isset($_SESSION[$TAG_NAME])) $_SESSION[$TAG_NAME]=array();
 		
-		if(empty($cube_id)) return false;
+		if(empty($cube_id)) 
+		{
+			return false;
+		}
 		
 		if(!isset($_SESSION[$TAG_NAME][$cube_id]))
 		{
