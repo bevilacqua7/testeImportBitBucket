@@ -385,3 +385,32 @@
         -webkit-transform: translateY(-20px);
       }
     }
+    
+    
+    
+   .modal-window-wrs-logoff .modal-title-wrs-job{
+	height:10px !Important;
+}
+
+.modal-window-wrs-logoff
+{
+	background-color: rgba(0,0,0,0.8) !important;
+}
+
+.modal-window-wrs-logoff .modal-text-wrs-job, 
+.modal-window-wrs-logoff .modal-buttons-wrs-job,
+.modal-window-wrs-logoff .modal-title-wrs-job{
+	background: #F0AD4E !important;
+	color:#83510B !important;
+	font-weight:bold
+}
+
+.modal-window-wrs-logoff .modal-buttons-wrs-job .color_white,
+.modal-window-wrs-logoff .modal-buttons-wrs-job button{
+	color:#F8DCB4 !important;
+}
+
+.modal-window-wrs-logoff .modal-buttons-wrs-job{
+	border-top:#BC7410 1px solid !important;
+}
+    

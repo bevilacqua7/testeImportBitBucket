@@ -1,8 +1,6 @@
 <?php
-$wrs_cookie = json_decode ( $_COOKIE ['WRS_LOGIN'], true );
+	$wrs_cookie = json_decode ( $_COOKIE ['WRS_LOGIN'], true );
 
-// var_dump($wrs_cookie);
-// exit();
 ?>
 <!DOCTYPE html>
 <HTML xmlns="http://www.w3.org/1999/xhtml" class="full" xml:lang="pt-br" lang="pt-br">
@@ -11,17 +9,18 @@ $wrs_cookie = json_decode ( $_COOKIE ['WRS_LOGIN'], true );
 <meta http-equiv="content-type" content="text/html;charset=utf-8;" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>WRS - Web Report System</title>
-
-
-
 <script type="text/javascript" src="js/jquery/jquery-1.8.2.min.js"></script>
-<script type="text/javascript"
-	src="./api/alphasoft/js/php_js.js?<?php echo rand(0,99999);?>"></script>
+<script type="text/javascript" src="./api/alphasoft/js/php_js.js?<?php echo rand(0,99999);?>"></script>
+	
 <script type="text/javascript" src="language_javascript.php"></script>
-<script type="text/javascript"
-	src="./api/alphasoft/js/common.js?<?php echo rand(0,99999);?>"></script>
+<script>
+var SERVER_REQUEST_URI	=	'login';
+
+</script>
+<script type="text/javascript" src="./api/alphasoft/js/common.js?<?php echo rand(0,99999);?>"></script>
+
+
 <!-- Bootstrap core CSS -->
 <link href="api/bootstrap-3.3.0/dist/css/bootstrap.min.css?v=1.0 "
 	rel="stylesheet">

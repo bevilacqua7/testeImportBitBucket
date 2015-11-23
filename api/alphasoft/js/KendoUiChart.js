@@ -2501,20 +2501,23 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 											
 											
 
+											try{
 												info_legend	=		_data_gauge[_data_gauge.length-1].pointer;
 																							
 												_div_legenda.append('<h3>'+title+'</h3>');
 												
 												
-											for(info_legend_line in info_legend)
-												{
-													var __color	=	 info_legend[info_legend_line].color;
-													var __field	=	 info_legend[info_legend_line].field;
-													_div_legenda.append('<i class="fa " style="width:10px; height:10px; background: '+__color+';"> </i> <strong>'+headerIndex.field[__field].title+'</strong>   ');
-												
+												for(info_legend_line in info_legend)
+													{
+														var __color	=	 info_legend[info_legend_line].color;
+														var __field	=	 info_legend[info_legend_line].field;
+														_div_legenda.append('<i class="fa " style="width:10px; height:10px; background: '+__color+';"> </i> <strong>'+headerIndex.field[__field].title+'</strong>   ');
 													
-												}
-											
+														
+													}
+											}catch(e){
+													console.log('Error de pointer, mas pode ser um erro devido a falta de valor a ser plotado');
+											};
 											pathChart.find('.row').append(_div_legenda);
 											
 											for(lineDataGauge in _data_gauge)

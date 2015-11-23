@@ -63,16 +63,17 @@ class SQL_SERVER
 	 * @param string $query
 	 * @return sqlsrv_query;
 	 */
-	public function query($query)
+	public function query($query,$make_login=true)
 	{
 		//session_write_close();//Para a escrita da Sessão
-		if(IS_WRS_DEBUG){
-			$this->query_debug($query);
+		if(IS_WRS_DEBUG)
+		{
+			if($make_login) $this->query_debug($query);
 		}
 		
 		$_query	= sqlsrv_query($this->get_conn(),$query);		
 	/*	if(IS_WRS_DEBUG){
-			$this->query_debug('DONE::'.$query);
+			if($make_login) $this->query_debug('DONE::'.$query);
 		}
 */
 		//session_regenerate_id(); //Retoma a escrita da sessão

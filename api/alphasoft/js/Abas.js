@@ -90,7 +90,7 @@ function optionsDataConvert(gridValue,with_decode)
 			};
 	}
 	
-	_START('END');
+	_END('optionsDataConvert');
 	return optionsAba;
 }
 
@@ -129,6 +129,7 @@ function optionsDataConvert(gridValue,with_decode)
 			var open_configure_default		=	 function(options)
 			{
 				_START('wrsAbas::open_configure_default');
+				
 				var optionsAba		=	{
 											LAYOUT_ROWS			:[],
 											LAYOUT_COLUMNS		:[],
@@ -499,21 +500,48 @@ function optionsDataConvert(gridValue,with_decode)
 			var dblclick_open_aba		=	 function()
 			{
 				_START('wrsAbas::dblclick_open_aba');
-				
-				wrsConfigGridDefaultManagerTopOptions();
-				
-				var aba_active		=	tagABA.find('.active');
-					aba_active.removeClass('active');
-				
+					
 				var only_aba		=	false;
 				var IDMain			=	"";
 				var hasDefault		=	$('.wrs_panel_filter_measure').is(':hidden');
 				var _report_id		=	$(this).attr('id-aba');
 				var IDCurrent		=	'#'+_report_id;
 				
+				
+				
+				var current		=	 $(IDCurrent+'Main');
+				
+			
 
-				//GArante que se a Aba estiver ativa não permita o clicque
-				if($('.'+_report_id+'BOX').length && $('.'+_report_id+'BOX').is(':hidden')==false) return true;
+				/*
+				 * Garante que se a Aba estiver ativa não permita o clicque
+				 */
+				if(current.length) 
+				{
+					if(!current.hasClass('hide'))
+					{
+						_END('wrsAbas::dblclick_open_aba');
+						return true;
+					}
+				}
+				
+				
+				wrsConfigGridDefaultManagerTopOptions();
+				
+				var aba_active		=	tagABA.find('.active');
+					aba_active.removeClass('active');
+					aba_active.wrsAbaData('set_change_aba',true);
+				
+					
+					aba_active.wrs
+				//Tultimo carregado
+				var last_active		=	$('#'+aba_active.attr('id-aba')+'Main')	;				
+				
+				if(last_active.length>0)
+				{
+					last_active.addClass('hide');
+				}
+				
 					
 				var noactive		=	$('.wrs_run_filter').attr('noactive');
 					noactive		=	empty(noactive) ? false : true;''
@@ -545,9 +573,9 @@ function optionsDataConvert(gridValue,with_decode)
 				/*
 				 * Verificar essa linha pois é onde está executando novamente o load
 				 */		
-				//$('body').WRSJobModal('click_aba',{report_id:_report_id});
+				$('body').WRSJobModal('click_aba',{report_id:_report_id});
 				
-				save_info_aba_current(aba_active);
+					save_info_aba_current(aba_active);
 				
 					$(this).addClass('active');
 					
@@ -631,7 +659,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					$(IDCurrent).addClass('wrsGrid');
 					
-					//$('.container_panel_relatorio_rows').addClass('hide'); //Remove-by Santos
+					$('.container_panel_relatorio_rows').addClass('hide'); //Remove-by Santos
 					
 					if(hasDefault==true && isGrid==true)
 					{
@@ -805,12 +833,19 @@ function optionsDataConvert(gridValue,with_decode)
 				var title			=	empty(_title) ? __new_name_aba() : _title;
 				var active			=	_active ? 'active' : '';
 				var full_data		=	_full_data;
+				var is_direct		=	 false;
 				
 				var getElement				=	[];	
 					getElement['TITLE_ABA']	=	title;
 					getElement['REPORT_ID']	=	report_id;
 				
 				
+				try{
+					if(_full_data['load_direct']==true) is_direct=false;
+				}catch(e){
+					is_direct	=	 false;
+				}
+					
 					//se o report vier nulo então é criado um novo report
 					if(empty($.trim(_report_id)) || _report_id==classIDName)
 					{
@@ -855,10 +890,13 @@ function optionsDataConvert(gridValue,with_decode)
 					get_aba_current.remove();
 					
 					
-					if(empty(before_insert.attr('class'))){
-						tagABA.append(html);
-					}else{
-						before_insert.before(html);
+					if(is_direct==false)
+					{
+							if(empty(before_insert.attr('class'))){
+								tagABA.append(html);
+							}else{
+								before_insert.before(html);
+							}
 					}
 					
 					//Controle para manter as alterações nas abas
@@ -1022,10 +1060,9 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					if(empty(options)) return false;
 					
+					
 					var _report_id		=	'';
-					
-					
-			 
+					var is_load_direct	=	false;
 
 					
 					//tagABA.find('.'+tag_aba_empty).each(function(){$(this).remove();});
@@ -1051,14 +1088,22 @@ function optionsDataConvert(gridValue,with_decode)
 
 								var	opts 			= 	options[lineOptions];
 								var _active			=	true;
-
 								var kendoUi			=	json_decode(base64_decode(opts.KendoUi));
 								
 									if(empty(kendoUi)) continue;
 									
 									if(empty(_report_id))	_report_id	=	kendoUi['REPORT_ID'];
+
 									
-									if($('.'+kendoUi['REPORT_ID']).length>=1)
+									try{
+										if(opts['load_direct']==true) is_load_direct= true;
+									}catch(e){
+										is_load_direct	= false;
+									}
+									
+
+									
+									if($('.'+kendoUi['REPORT_ID']).length>=1 && is_load_direct==false)
 									{
 								    	alertify.custom = alertify.extend("custom");
 										alertify.custom(sprintf(LNG('ABA_BE_LOADED'),kendoUi['TITLE_ABA']));
@@ -1105,11 +1150,17 @@ function optionsDataConvert(gridValue,with_decode)
 					}
 					
 					
-					
-					
-					tagABA.find('.'+_report_id).trigger('click');
-					
+					var get_last_active	=	$('.WRS_ABA ul .active');
 
+					if(is_load_direct==false)
+					{
+						tagABA.find('.'+_report_id).trigger('click');
+					}else{
+						wrsRunFilter();
+					}
+						
+						
+						get_last_active.wrsAbaData('set_change_aba',false);
 					
 					if(_noactive)
 					{
@@ -1117,6 +1168,8 @@ function optionsDataConvert(gridValue,with_decode)
 					}else{//Opção apenas para quando for para abrir layout
 						$('.wrs_run_filter').removeAttr('noactive');
 					}
+					
+				 
 					
 					
 				_END('wrsAbas::__load_multiple');	
@@ -1228,6 +1281,7 @@ function optionsDataConvert(gridValue,with_decode)
 			{
 				
 				_START('wrsAbas::__refresh_F5');
+				
 						if(empty(options)) return false;
 				
 				
@@ -1242,6 +1296,12 @@ function optionsDataConvert(gridValue,with_decode)
 				
 						var	opts 				= 	$.extend( {}, optionsAba, options);
 						var	opts_encode			=	encode_to_aba_create(opts,optionsAba);
+						
+						try{
+							opts_encode['load_direct']	=	options['load_direct'];
+						}catch(e){
+							_ONLY('load_direct history');
+						}
 						
 						__load_multiple([opts_encode],true);
 						
@@ -1408,7 +1468,7 @@ function optionsDataConvert(gridValue,with_decode)
 			var __init		=	 function(options)
 			{
 				_START('wrsAbaData::__init');
-				var base		=	{kendoUi:{}, data:{},kendoGrid:{},reportDetails:{},history:null,first_line_total:{}};
+				var base		=	{kendoUi:{}, data:{},kendoGrid:{},reportDetails:{},history:null,first_line_total:{}, change_aba:false};
 				var data_option	=	merge_objeto(base,options);
 				
 					that.data(wrsDataName,data_option);
@@ -1568,6 +1628,19 @@ function optionsDataConvert(gridValue,with_decode)
 			}
 			
 			
+			var __get_change_aba		=	 function()
+			{
+				_ONLY('wrsAbaData::__get_change_aba');
+				return data_global.change_aba;	
+			}
+			
+			var __set_change_aba		=	 function(input)
+			{
+				_ONLY('wrsAbaData::__set_change_aba');
+				data_global.change_aba	=	input;	
+			}
+			
+			
 			var methods = 
 			{
 			        init 				: 	__init,
@@ -1578,13 +1651,16 @@ function optionsDataConvert(gridValue,with_decode)
 			        setReportDetails	:  	__setReportDetails,
 			        setHistory			:	__setHistory,
 			        setFirstLineTotal	:	__setFirstLineTotal,
+			        set_change_aba		:	__set_change_aba,
 				    getKendoUi			:	__getKendoUi,
 			        getWrsData			:	__getWrsData,
 			        getData				:	__getData,
 			        getReportDetails	:  	__getReportDetails,
 			        getKendoGrid		:	__getKendoGrid,
 			        getHistory		 	:	__getHistory,
-			        getFirstLineTotal	:	__getFirstLineTotal
+			        getFirstLineTotal	:	__getFirstLineTotal,
+			        get_change_aba		:	__get_change_aba
+			        
 			};
 			
 				/*

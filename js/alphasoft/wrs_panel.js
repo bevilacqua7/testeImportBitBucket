@@ -1187,7 +1187,8 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 					object.attr('sc_load','');
 				}
 				
-				if(!empty(is_filter))
+
+  			if(!empty(is_filter))
 				{
 					var json 			=	$.parseJSON(base64_decode(object.attr('json')));
 					
@@ -1326,14 +1327,10 @@ function rows_by_metrica_attr_base64(object,_type)
 		
 		//Foi incrementado a TAG  tag_class e get_object para resolver o problema de acentuação
 		var tag_class	=	$(this).attr('tag-class');
-
 		var get_object	=	$('.ui-layout-pane-east ul').find('.'+tag_class);
-		
-		
+		var json		=	$.parseJSON(base64_decode(get_object.attr('json')));
 
-		var json		=	 $.parseJSON(base64_decode(get_object.attr('json')));
-//		var json		=	 $.parseJSON(base64_decode($(this).attr('json'))); //- Chamada original mas com problema de acentuação
-
+		
 		if(!$(this).hasClass('placeholder'))
 		{
 			_flag	=	true;
@@ -1346,6 +1343,8 @@ function rows_by_metrica_attr_base64(object,_type)
 			}
 		}
 		
+		
+		
 	});
 	
 	_END('rows_by_metrica_attr_base64');
@@ -1354,7 +1353,6 @@ function rows_by_metrica_attr_base64(object,_type)
 
 function stop_job_timeout(report_id)
 {
-	
 	$('body').WRSTimerLoader('timeout',{'report_id':report_id});    	
 }
 /**
@@ -1365,6 +1363,7 @@ function stop_job_timeout(report_id)
  */
 function wrs_run_filter()
 {
+
 	_START('wrs_run_filter');
 	
 	var manager_aba			=	$(this).attr('manager_aba');
@@ -1383,13 +1382,25 @@ function wrs_run_filter()
 	var history				=	aba_active.wrsAbaData('getHistory');
 	var _report_id			=	report_KendoUi['REPORT_ID'];
 
+
 	
+		if(aba_active.wrsAbaData('get_change_aba')==true)
+			{
+				aba_active.wrsAbaData('set_change_aba',false);	
+				configure_options_show_grid($(this));
+				_END('wrs_run_filter');
+				aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
+				return true;
+			}
+	
+		
 		if(noactive)
 		{
 			$(this).removeAttr('noactive');
 			
 			stop_job_timeout(_report_id);
 			_END('wrs_run_filter');
+			
 			return true;
 		}
 	
@@ -1431,10 +1442,10 @@ function wrs_run_filter()
 	//Se existir o job em execução desse mesmo report id então faz o cancelamento
 	if(job_exist(report_KendoUi.REPORT_ID))
 	{
-		click_stop_job();
+		//click_stop_job();
+		console.log('já existe no JOB então não processa');
+		return true;
 	}
-	
-	
 	
 	
 	//Ao navegar pelas abas essa função impede que seja executada mesmo se tiver aoteração a alteração só será efetivada ao mandar executar
@@ -1508,10 +1519,6 @@ function wrs_run_filter()
 					var wrs_data_param	=	{FILTER_TMP:null,LAYOUT_FILTERS:null,LAYOUT_MEASURES:null,LAYOUT_COLUMNS:null,LAYOUT_ROWS:null};
 					var _base64			=	'';
 					
-					 
-						 
-						
-					
 					//Pegando as informações já pre estabelecidas pelo gráfico atuak
 					var is_param		=	false;
 					
@@ -1536,15 +1543,6 @@ function wrs_run_filter()
 						}catch(e){}
 							is_param		=	true;
 					}
-			
-			
-					
-			
-					
-					
-			
-					
-					
 					
 					wrs_data_param.LAYOUT_ROWS		=	base64_encode(implode(',',request_linha));
 					wrs_data_param.LAYOUT_COLUMNS	=	base64_encode(implode(',',request_coluna));
@@ -1636,7 +1634,6 @@ function wrs_run_filter()
 		//$('body').WRSJobModal('is_active',{report_id : _param_request['REPORT_ID']});
 		
 		
-//		console.log('_param_request',_param_request);
 
 		$('body').WRSJobModal('aba',{report_id:_param_request['REPORT_ID'],wait:true,title_aba:_param_request['TITLE_ABA']});
 		
@@ -1659,7 +1656,40 @@ function wrs_run_filter()
 		
 		
 		//É necessário zerar essas funções para que não mande recriar novamente a estrutura de deill
-		$('.WRS_ABA').find('.active').wrsAbaData('setKendoUi',{DRILL_HIERARQUIA_LINHA_DATA_MINUS:null, DRILL_HIERARQUIA_LINHA_DATA:null});
+		
+	
+		var data_header_drill_column	=	report_KendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER;
+
+		
+		if(report_KendoUi.TYPE_RUN!='DrillColuna')
+		{
+			data_header_drill_column							=	'';
+			_param_request.DRILL_HIERARQUIA_LINHA_DATA_HEADER	=	'';
+		}
+		
+		
+		$('.WRS_ABA').find('.active').wrsAbaData('setKendoUi',
+																{
+																	DRILL_HIERARQUIA_LINHA_DATA_MINUS	:	null, 
+																	DRILL_HIERARQUIA_LINHA_DATA			:	null,
+																	DRILL_HIERARQUIA_LINHA_DATA_HEADER	: 	data_header_drill_column,
+																	TYPE_RUN							:	null,
+																	MKTIME_HISTORY						:	null
+																}
+												);
+		
+
+		
+		try{
+			if(report_KendoUi['MKTIME_HISTORY']!=null)
+			{
+				_param_request['MKTIME_HISTORY']	=	report_KendoUi['MKTIME_HISTORY'];
+			}
+		}catch(e){
+			_param_request['MKTIME_HISTORY']	=	null;
+		}
+		
+		
 		
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
@@ -1789,7 +1819,6 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	}
 	
 
- 
 
 	
 	/*
@@ -1804,6 +1833,9 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	
 	
+	
+	
+	$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
 	
 	$('.container_panel_relatorio_rows').each(function(){var id_remove	=	 $(this).attr('id'); if(id_remove==remove_report)	$(this).remove();});
 	

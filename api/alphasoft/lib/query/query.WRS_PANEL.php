@@ -145,13 +145,17 @@ EOF;
 	 */
 	public function RECORDS_SSAS_TABLES( $_QUERY_TABLE, $DRILL_LINE=0 )
 	{
+		$data_unless	=	substr($_QUERY_TABLE,0,count($_QUERY_TABLE)-2);
+		
+		
 		$FAT_SSAS_TABLES	=	<<<EOF
 		select TOTAL_ROWS,TOTAL_COLUMNS from FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}'
 EOF;
 		
+		
 		$SQL_DRILL_LINE			=	<<<EOF
-		    select TOTAL_ROWS,TOTAL_COLS 
-		    from (SELECT TOTAL_COLUMNS FROM FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}') A,
+		    select TOTAL_ROWS,TOTAL_COLUMNS
+		    from (SELECT TOTAL_COLUMNS FROM FAT_SSAS_TABLES where QUERY_TABLE = '{$data_unless}') A,
 			     (SELECT COUNT(*) AS TOTAL_ROWS FROM {$_QUERY_TABLE}) B
 EOF;
 		/*

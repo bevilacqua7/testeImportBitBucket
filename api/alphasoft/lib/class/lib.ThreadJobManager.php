@@ -154,16 +154,14 @@ class ThreadJobManager extends WRS_USER
 		{
 			$job_status 		= $this->_query->GET_SSAS_JOB($rows_CREATE_SSAS_JOB['QUERY_ID']);
 			$job_status_exec	= $this->query($job_status);
-			$rows_GET_SSAS_JOB 		= $this->fetch_array($job_status_exec);
-		
-			/*
-			 * TODO: Remover
-			 */
+			$rows_GET_SSAS_JOB 	= $this->fetch_array($job_status_exec);
 			
 			//$rows_GET_SSAS_JOB['JOB_STATUS']		=	3;	
 			
+
 			if(($rows_GET_SSAS_JOB['JOB_STATUS'] == 1) || ($rows_GET_SSAS_JOB['JOB_STATUS'] == 2) || ($rows_GET_SSAS_JOB['JOB_STATUS'] == 3))
 			{
+				
 				return array('cube'=>$cube, 'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'_param'=>$this->_param,'wait_thread'=>true,'data'=>$rows_GET_SSAS_JOB);
 			}
 			
@@ -213,7 +211,11 @@ class ThreadJobManager extends WRS_USER
 			return false;
 			
 		}
-		else
+		else if($rows_GET_SSAS_JOB['JOB_STATUS'] == 5)
+		{
+		
+			return array('error'=>'true','cancel'=>true,'REPORT_ID'=>$report_id,'data'=>$rows_GET_SSAS_JOB);
+		}else
 		{
 			WRS_TRACE('ERROR::CREATE_SSAS_JOB não retornou informações QUERY:::'.$queryGrid, __LINE__, __FILE__);
 			$msg	=	fwrs_warning(LNG('ERROR_NOT_ROWS'),$getRequestKendoUi_TAG);

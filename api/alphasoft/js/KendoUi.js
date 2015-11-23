@@ -29,7 +29,7 @@ include_js('Menu');
 include_js('templateReport');
 include_js('Abas'); */
 
-function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
+function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi,load_direct)
 {
 	_START('WRSKendoGridCompleteRun');
 	var _layout	=	layout;
@@ -39,11 +39,14 @@ function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
 	var aba_active		=	 tagABA.find('.active');
 		_layout['KendoUi']	=	_paranKendoUi;
 	
+		if(load_direct!=undefined) {
+			_layout['load_direct']	=	true;
+		}
+		
+
 		$(ABA_TAG_NAME).wrsAbas('refresh_F5',_layout);
-	
 		
 		var wrs_data		=	aba_active.wrsAbaData('getWrsData');
-	
 		
 
 		//Remove a aba em branco ou aque não tiver linhas
@@ -155,15 +158,16 @@ function WRSKendoGridComplete(IDGrid)
 	var historyClick	=	 function()
 	{
 		_START('WRSKendoGridComplete::historyClick');
+		
 		var _wrs_id			=	$(this).attr('wrs-id');
 		var _mktime			=	$(this).attr('mktime');
 		var _history		=	$.parseJSON(base64_decode($(this).attr('json')));
 		var _layout			=	_history['layout'];
 		var _paranKendoUi	=	_history['kendoUi'];
 	
-			$(report_aba).wrsAbaData('setKendoUi',{MKTIME_HISTORY:_mktime});
+			_paranKendoUi['MKTIME_HISTORY']	=	_mktime;
+			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi,true);
 			
-			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi);
 		_END('WRSKendoGridComplete::historyClick');
 	}
 	
@@ -402,12 +406,6 @@ function getWrsKendoColumn(data)
 	var DRILL_HIERARQUIA_LINHA_DATA		=	base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA);
 	var DRILL_HIERARQUIA_REQUEST		=	arg.sender.dataSource._wrs_request_data.drill;
 	var typeColumnFrozen				=	false;
-	
-	
-
-
-
-		
 	
 	var layout							=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
 	var byFrozenLevelFull				=	[];

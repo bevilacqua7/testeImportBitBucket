@@ -243,6 +243,7 @@ function _exist_job_in_cancel(report_id)
 			var removeThread	=	 function(report_id)
 	    	{
 				_START('WRSJobModal::removeThread');
+				
 	    		var _data_param		=		that.data(DATA_NAME);
 	    		var tmp_param		=		[];
 	    		
@@ -266,6 +267,7 @@ function _exist_job_in_cancel(report_id)
 			var __add_mutex_job		=	 function(report_id,clean)
 			{
 				_START('WRSJobModal::__add_mutex_job');
+				
 				var _data		=	 that.data(CANCEL_JOB);
 				var _tmp_data	=	{};
 					if(empty(_data))	_data	=	{};
@@ -305,20 +307,28 @@ function _exist_job_in_cancel(report_id)
 				//Removendo da opção de insert
 				__add_mutex_job(data.report_id,true);
 				
-				if(data.status>0)
-					{
-						alertify.success(data.html,0);
+
+						var title		=	$('.'+data.report_id).find('.title').html();
+					
+						//TRACE_DEBUG(data.status);
+						if(data.status!=-2)
+						{
+							alertify.success(sprintf(LNG('JOB_CANCEL'),title));
+						}
+
+						if(data.status < 0)
+						{
+							/*
+							 * Este erro é irrelevante pois o usuário não precisa tomar ciencia caso ele ocorra
+							 */
+							console.error('Error no JOB '+data.report_id,data.html);
+						}
+						
 						removeThread(data.report_id);
+						
 						$(MODAL_JOB).addClass('hide');
-					}
-					else
-					{
-						/*
-						 * Este erro é irrelevante pois o usuário não precisa tomar ciencia caso ele ocorra
-						 */
-						console.error('Error no JOB '+data.report_id,data.html);
-						//alertify.error(data.html,0);
-					}
+
+					
 				_END('WRSJobModal::__request_consulta_cancelada');	
 			}
 			
@@ -329,6 +339,8 @@ function _exist_job_in_cancel(report_id)
 			var __click__action_WRSJobModalCancelQuery	=	 function()
 			{
 				_START('WRSJobModal::__click__action_WRSJobModalCancelQuery');
+				
+				console.log('__click__action_WRSJobModalCancelQuery');
 				var _report_id	=	$(this).parent().attr('report_id');
 				var aba_active	=	$('.'+_report_id);
 
@@ -361,6 +373,7 @@ function _exist_job_in_cancel(report_id)
     			var param_request	=	{report_id:_report_id};
      			
     		
+    			removeThread(_report_id);
     			
     			
     			aba_active.wrsAbaData('setKendoUi',{STOP_QUERY:true});
@@ -368,6 +381,7 @@ function _exist_job_in_cancel(report_id)
     				__add_mutex_job(_report_id);
     				$(MODAL_JOB).addClass('hide');
     			
+    				console.log('runCall');
     				runCall(
     							param_request,
     							_file,
@@ -653,8 +667,6 @@ function _exist_job_in_cancel(report_id)
 	    					modal.find('.action_WRSJobModalCancelQuery').removeClass('hide');
 	    					
 	    					modal.find('.action_WRSJobModalCloseWindow').addClass('hide');
-	    					
-	    					
 	    				}
 					
 
@@ -958,7 +970,7 @@ function _exist_job_in_cancel(report_id)
     			}
     		
     		that.data(DATA_NAME,tmp_param);
-			_STOP('removeThread');	
+			_END('removeThread');	
     	}
     		
     	/*
@@ -1000,7 +1012,6 @@ function _exist_job_in_cancel(report_id)
 			_START('ThreadMainLoadData');
 
     		that.data(MSG_JOBS,data);
-    		
         	var data_param		=	that.data(DATA_NAME);
         	
 
@@ -1011,71 +1022,84 @@ function _exist_job_in_cancel(report_id)
     		if(empty(_errorData))	_errorData	=	{};
     		
 
+    		
     		for(var lineData in data)
     			{
-    					
     					var _data_json	=	typeof(data[lineData]) == 'string' ? $.parseJSON(data[lineData]) : data[lineData];
-    					
+    					var is_Cancel	=	 false;
+    						
     					remove_DRILL_LINE_STOP(_data_json['REPORT_ID']);
     					
+    					try{
     						
-    					if(report_id_modal==lineData)
+    						if(_data_json['cancel']==true)
     						{
-    							
-    							try{
-    								
+    							is_Cancel			=		true;	
+    						}
+    					}catch(e){
+    						is_Cancel	=	 false;
+    					}
+
+    					if(report_id_modal==lineData)
+						{
+							
+							try{
+								if(is_Cancel==false)
+								{
 	    							var msg_job		=	_data_json['data']['QUERY_MESSAGE'];
 	    								modal.find('.modal-text-wrs-job').html(msg_job);
-    							}catch(e){
-    								
-    							}
-    						}
-    			
+								}
+								
+							}catch(e){
+								
+							}
+						}
+    					
+    				
     					try{
     							
     							if(_data_json['error'])
     								{
     									var _title		=	that.wrsAbas('aba_title',{report_id:_data_json['REPORT_ID']});
     									
-    										alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+_data_json['error'], 0);
-
+    										
     									var aba_active	=	 get_aba_active_kendoUi();
-    									
-	    									removeThread(_data_json['REPORT_ID']);
-	    									
 	    									_errorData[_data_json['REPORT_ID']]	= _data_json['error'];	 //Atualiza mensagens de erros
 	    									
 	    									that.WRSTimerLoader('stop',{report_id:_data_json['REPORT_ID']});
 	    									
+	    									$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
 	    									
-	   									
-	    								if(aba_active['REPORT_ID']==_data_json['REPORT_ID'])
-	    									{
-	    										$('#'+aba_active['REPORT_ID']+'Main').removeClass('hide');
-	    									}
+	    									if(!is_Cancel)
+    										{
+    											alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+_data_json['error'], 0);
+    										
+			    								if(aba_active['REPORT_ID']==_data_json['REPORT_ID'])
+			    									{
+			    										$('#'+aba_active['REPORT_ID']+'Main').removeClass('hide');
+			    									}
+    										}
     									
     								}
     					}catch(e){}
-    					
-    					
+			
+	    					
     					try{
-    						
-    						
-    						
-							if(_data_json['html'])
-								{
-								
-									alertify.success(sprintf(LNG('JOB_COMPLETE_LOAD'),that.wrsAbas('aba_title',{report_id:_data_json['REPORT_ID']})));
-									
-									removeThread(_data_json['REPORT_ID']);
-									
-									MOUNT_LAYOUT_GRID_HEADER(_data_json['warning']+_data_json['html'],'ThreadMainLoadData');
-									
-									_errorData	=	removeKey(_errorData,_data_json['REPORT_ID']);
-									
-									that.WRSTimerLoader('stop',{report_id:_data_json['REPORT_ID']});
-								}
-					}catch(e){}
+								if(_data_json['html'])
+									{
+										
+										alertify.success(sprintf(LNG('JOB_COMPLETE_LOAD'),that.wrsAbas('aba_title',{report_id:_data_json['REPORT_ID']})));
+										
+										removeThread(_data_json['REPORT_ID']);
+										
+										MOUNT_LAYOUT_GRID_HEADER(_data_json['warning']+_data_json['html'],'ThreadMainLoadData');
+										
+										_errorData	=	removeKey(_errorData,_data_json['REPORT_ID']);
+										
+										that.WRSTimerLoader('stop',{report_id:_data_json['REPORT_ID']});
+									}
+    						}catch(e){}
+    					
     			}
     		
     		

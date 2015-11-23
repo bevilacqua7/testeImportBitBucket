@@ -55,6 +55,9 @@ function wrsConfigGridDefaultManagerTopOptionsStatus()
 
 function DEFAULT_OPTIONS_TOPS()
  {
+	
+	_ONLY('DEFAULT_OPTIONS_TOPS');
+	
 	 $('.wrs_grid_options_default').wrsTopOptions();
 	 $('.DRAG_DROP_LATERAIS').find('.wrs_tops_configure').hide();
 	 $('.DRAG_DROP_LATERAIS').find('.label_top_wrs').remove();

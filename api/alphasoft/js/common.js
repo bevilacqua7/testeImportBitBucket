@@ -87,23 +87,29 @@ function WRS_CONSOLE(){
 
 function WRS_IS_LOGGED_IN(){
 	var loggedin	=	false;
+	
 	$.ajax({
-		  type: 'POST',
-		  url: 'run.php',
-		  data: {'exit':1,'file':'WRS_LOGIN','class':'WRS_LOGIN','event':'userIsLogged'},
-		  success: function(data){
-						loggedin	=	data.trim()!='N'?data.trim():false;	
-						//WRS_CONSOLE('LOGGED IN?',data,loggedin);	
-					},
-		  async:false  // este é o segredo de aguardar o retorno do ajax antes de retornar a funcao
+			  type		: 'POST',
+			  url		: 'run.php',
+			  data		: {'file':'WRS_LOGIN','class':'WRS_LOGIN','event':'userIsLogged','is_js':true},
+			  success	: 	function(data){
+				  
+				  						loggedin	=	data.is_loged;
+								//WRS_CONSOLE('LOGGED IN?',data,loggedin);	
+							},
+			dataType	:	'json',
+			async		:false  // este é o segredo de aguardar o retorno do ajax antes de retornar a funcao
 		});
+	
+	
+//	alert(loggedin);
+	
 	return loggedin;
 }
 	
 function verifica_loggedin_periodico(){
-	
-	var periodicidade 	= 30;//em segundos
-	var logado = WRS_IS_LOGGED_IN(); // retorna o loginsessionID ou false caso nao esteja logado
+	var periodicidade 	= 	60;//em segundos
+	var logado 			= 	WRS_IS_LOGGED_IN(); // retorna o loginsessionID ou false caso nao esteja logado
 /*
 	var confCookie		= 'WRS_session_cookie';
 	
@@ -158,7 +164,11 @@ function verifica_loggedin_periodico(){
 	}
 
 }
-verifica_loggedin_periodico();
+
+
+if(SERVER_REQUEST_URI!='login'){
+	//verifica_loggedin_periodico();
+}
 
 
 function changeTypeRun(IDGrid,typeRun)
@@ -608,9 +618,16 @@ function WRS_ALERT(_text,_type)
  */
 function TRACE_DEBUG(value)
 {
-	IS_TRACE=	true;
-	TRACE(value);
-	IS_TRACE=	false;
+
+	
+	if(empty($('.WRS_TRACE').html()))
+	{
+		$('body').append('<div class="WRS_TRACE"></div>');
+		$('.WRS_TRACE').dblclick(function() {$(this).html('');});
+	}
+	
+	$('.WRS_TRACE').append('<div>'+value+'</div>');
+	
 }
 
 function _START(input)

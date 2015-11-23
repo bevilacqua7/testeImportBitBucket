@@ -9,6 +9,7 @@ class WRS_LOGIN extends WRS_BASE
 	public function run()
 	{
 		WRS_TRACE('run()', __LINE__, __FILE__);
+		
 		$login		=	 fwrs_request('login');
 		$pwd		=	 fwrs_request('pwd');
 		$perfil		=	 fwrs_request('perfil');
@@ -21,13 +22,19 @@ class WRS_LOGIN extends WRS_BASE
 		
 		switch($event)
 		{
-			case 'login' :{echo $this->setLogin($login, $pwd, $perfil);};break;
-			case 'remove':{ $this->remove($login);}; break;
-			case 'userIsLogged':{ $this->userIsLogged((fwrs_request('exit')?fwrs_request('exit'):0));}; break;
+			case 'login' 		:{echo $this->setLogin($login, $pwd, $perfil);};break;
+			case 'remove'		:{ $this->remove($login);	}; break;
+			case 'userIsLogged'	:{ $this->userIsLogged() ;	}; break;
 		}
+
 		
 		WRS_TRACE('END run()', __LINE__, __FILE__);
+		
 	}
+	
+	
+	
+	
 	
 	private function remove($login)
 	{
@@ -202,14 +209,43 @@ class WRS_LOGIN extends WRS_BASE
 	 * Verifica se o usuario permanece logado - true or false
 	 * felipeb 20151112
 	 */
-	public function userIsLogged($exit=false){
-		$login_id = WRS::GET_LOGIN_ID();
-		$ret=((trim($login_id)!='' && $this->num_rows($this->query(QUERY_LOGIN::GET_SSAS_LOGIN($login_id)))>0)?$login_id:'N');
-		if($exit){
-			exit($ret);
-		}else{
-			return $ret;
+	public function userIsLogged()
+	{
+		$login_id 	= 	WRS::GET_LOGIN_ID();
+		$is_js		=	fwrs_request('is_js');
+		
+		
+		if($is_js==true) header('Content-Type: application/json');
+		
+		$var	=		array('is_loged'=>false);
+		
+		if(trim($login_id)!='')
+		{
+			if($this->num_rows($this->query(QUERY_LOGIN::GET_SSAS_LOGIN($login_id)))>0)
+			{
+				$var['is_loged']	=  	true;
+			}
 		}
+		
+		
+		if($var['is_loged']==false)
+		{
+			session_destroy();
+		}
+		
+		
+		if($is_js==true)
+		{
+			echo json_encode($var,true);
+			exit();
+		}
+		else
+		{
+			return $var;
+		}
+		
+		
+		
 	}
 	
 	

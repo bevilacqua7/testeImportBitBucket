@@ -13,7 +13,7 @@
 <!-- CSS Gerenciador de JOBS para utilizar o mesmo padrao das MODAIS pro logoff -->
 <link href="api/jquery.modal-1.2/css/jquery.modal.wrs.job.css" type="text/css" rel="stylesheet" />
 <link href="api/font-awesome-4.3.0/css/font-awesome.min.css?v=0.0.1" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="api/bootstrap-3.3.0/dist/css/bootstrap.css" />
+
 
 
 

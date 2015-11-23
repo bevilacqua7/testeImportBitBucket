@@ -41,7 +41,7 @@ if(!empty($_r)){
 	echo '<hr/>';
 	foreach($array as $label =>$value)
 	{
-		echo '<b>'.$label.'</b> : '.(is_array($value) ? print_r($value,true) : $value).'<br><hr/>';
+		echo '<b>'.$label.'</b> : <pre>'.(is_array($value) ? print_r($value,true) : $value).'</pre><br><hr/>';
 	}
 }
 

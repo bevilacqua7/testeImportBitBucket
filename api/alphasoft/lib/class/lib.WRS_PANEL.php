@@ -933,8 +933,6 @@ class WRS_PANEL  extends WRS_USER
 		
 		$threadJobManager	=	$this->threadJobManager->runThreadJobManager($thread_job_manager,$getRequestKendoUi['REPORT_ID'],$this->_query,$checkThreadJobManager);
 
-
-		
 		if(is_array($threadJobManager))
 		{
 			//O correu um erro  no processo da runThreadJobManager 
@@ -949,8 +947,10 @@ class WRS_PANEL  extends WRS_USER
 					header('Content-Type: application/json');
 					$_tmp_threadJobManager	=	json_encode($threadJobManager,true);
 					//Quando a solicitação dor pelo processo de checagem do JOB
-					if(!$checkThreadJobManager){
+					if(!$checkThreadJobManager)
+					{
 							echo $_tmp_threadJobManager;
+							
 							exit();
 					}else{
 						return $_tmp_threadJobManager;
@@ -970,6 +970,8 @@ class WRS_PANEL  extends WRS_USER
 			
 			
 			if($checkThreadJobManager) return $HTML;
+			
+			
 		}
 		else
 		{
@@ -1085,7 +1087,6 @@ class WRS_PANEL  extends WRS_USER
 				echo $msg;
 			}*/
 			
-			return false;
 		}
 		
 		//Contem as colunas e as quebras que serão passadas
@@ -1395,7 +1396,7 @@ HTML;
 	
 	private function threadJobManagerStop()
 	{
-		
+		WRS_TRACE('threadJobManagerStop()', __LINE__, __FILE__);
 		$report_id				=	 fwrs_request('report_id');
 		$html_data				=	array();
 		$html_data['report_id']	=	$report_id;
@@ -1433,12 +1434,14 @@ HTML;
 
 		
 		$html_data['html'] 		=	LNG('JOB_NOTFOUND');
-		$html_data['status']	=	-1;	
+		$html_data['status']	=	-2;	
 		$this->threadJobManager->removeJOB($report_id);
 		
 		
 		echo json_encode($html_data,true);
 		//STOP_SSAS_JOB
+		
+		WRS_TRACE('END threadJobManagerStop()', __LINE__, __FILE__);
 		
 	}
 	

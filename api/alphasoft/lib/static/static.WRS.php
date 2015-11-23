@@ -9,6 +9,7 @@ class WRS
 	{
 		return self::$_version;
 	}
+		
 	/**
 	 * 
 	 * Grava todas as regras do usuário regras que são informadas ao se conectar
