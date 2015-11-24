@@ -29,8 +29,6 @@ function addDrillOnDataBound(nameID,kendoUI)
 		columns_fixed	=	columns_fixed.length+1;
 
 
-
-
 	/*
 	 * Adicionando o DrilDown
 	 */
@@ -125,8 +123,6 @@ function addDrillOnDataBound(nameID,kendoUI)
 										$(this).remove();
 									})
 								}
-								
-								//
 							}
 						})
 					}

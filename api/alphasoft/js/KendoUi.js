@@ -730,29 +730,7 @@ function onDataBound(arg)
 				
 				
 				
-						//Se o Somatório estiver ativo então faz a configuração do SUM
-						if(wrsKendoUi.ALL_ROWS)
-						{
-							
-							if(wrsKendoUi.DRILL_HIERARQUIA_LINHA!=_TRUE)
-							{
-								$(nameID).find('.wrstelerikButtonHeader').each(function(){					
-									
-									var _rel	=	$(this).attr('rel');
-										_rel	= 	_rel=='plus' ? true : false;
-										
-									if(wrsKendoUi['PLUS_MINUS']==_rel)
-									{
-										$(this).trigger('click');
-									}
-									
-								});
-							}
-							
-
-							themeSUM(nameID,arg,wrsKendoUi);
-			
-						}
+			//theSum is here before
 			
 						 
 			//Removendo as cores entre as linhas
@@ -802,6 +780,29 @@ function onDataBound(arg)
 			//$(nameID).WRSWindowGridEventTools(wrsKendoUi['WINDOW'],true);
 			
 			
+			
+			//Se o Somatório estiver ativo então faz a configuração do SUM
+			if(wrsKendoUi.ALL_ROWS)
+			{
+				
+				if(wrsKendoUi.DRILL_HIERARQUIA_LINHA!=_TRUE)
+				{
+					$(nameID).find('.wrstelerikButtonHeader').each(function(){					
+						
+						var _rel	=	$(this).attr('rel');
+							_rel	= 	_rel=='plus' ? true : false;
+							
+						if(wrsKendoUi['PLUS_MINUS']==_rel)
+						{
+							$(this).trigger('click');
+						}
+						
+					});
+				}
+				
+				themeSUM(nameID,arg,wrsKendoUi);
+
+			}
 			
 			//Apenas para que os controles do next and Back funcione
 			var options_resize = {
@@ -941,25 +942,52 @@ function  buttonPlusMinus(nameID,hideShow,sizeFrozen)
 function  themeSUM(nameID,arg,wrsParam)
 {
 	_START('themeSUM');
-		var find_last			=	'last-child';
+		var find_last				=	'last-child';
 		
-//Uncaught TypeError: Cannot read property 'field' of undefined		
+		var drill_hierarquia_line		=	false;
+		var find_last_child_loacked		=	$(nameID).find('.k-grid-header-locked').find('tr:last-child').find('th:'+find_last);
+		//Uncaught TypeError: Cannot read property 'field' of undefined		
 		//Garante que se for LATITUDE pega o ultimo elemento
-		$(nameID).find('.k-grid-header-locked').find('tr:last-child').find('th:'+find_last).each(function(){
+		
+		if(wrsParam.DRILL_HIERARQUIA_LINHA	==_TRUE)
+		{
+			find_last_child_loacked		=	$(nameID).find('.k-grid-header-locked').find('tr:last-child').find('th');
+			drill_hierarquia_line		=	true;
+		}
+		
+		
+		find_last_child_loacked.each(function()
+				{
+				
 			
-			try{
-				if(arg.sender.headerIndex.field[$(this).attr('data-field')].map=="[LATITUDE]"){
-					var eq	=	$(this).index()-1;
-					find_last	=	 'eq('+eq+')';
-				}
-			} catch(e){
-				console.log('Falha na leitura de mapas mas pode não haver essa informação');
-			}
+							try{
+								if(arg.sender.headerIndex.field[$(this).attr('data-field')].map=="[LATITUDE]")
+								{
+									var eq		=	$(this).index()-1;
+										find_last	=	 'eq('+eq+')';
+										console.log('add');
+								}
+							} catch(e){
+								console.log('Falha na leitura de mapas mas pode não haver essa informação');
+							}
+							
+							
+						if(drill_hierarquia_line==true)
+						{
+							
+							if(arg.sender.headerIndex.field[$(this).attr('data-field')].hidden!=true)
+							{
+								var eq		=	$(this).index();
+									find_last	=	 'eq('+eq+')';
+							}									
+						} 		
+					
 			
 		});
 		
 		
-		//END
+		
+		
 		
 		$(nameID).find('.k-grid-content-locked').find('tr').find('td:'+find_last).each(function(){
 			var index				=	$(this).parent().index();
@@ -969,30 +997,45 @@ function  themeSUM(nameID,arg,wrsParam)
 
 			
 			//QUando for o caso se linha de DRILL habilita os totais apenas nas linhas corretas
-			if(arg.sender.wrsKendoUi.DRILL_HIERARQUIA_LINHA	==_TRUE){
 				
-				try{
-					if(arg.sender['drill_line_total_data'][index])
+				if(isTotal)
+				{
+					var html	=	 false;
+					var _a		=	$(this).find('a');
+					
+					if($.trim($(this).html())=='')
 					{
-						isTotal	=	 false;
+						html	=	 true;
 					}
-				} catch(e){}
-			}
-			
-			
-			if(isTotal)
-			{
-				if(empty($(this).html()) || $(this).attr('wrsNull')=='true')
+					
+					if(_a.length>=1)
 					{
-						$(nameID).find('.k-grid-content').find('tbody tr').eq(index).addClass('ui-state-default tag_total');
-						//Caso seja nula a linha de Total pesquisa e insere a ultima encontrada
-						for(var i=parent_index_data; (i>=1 && empty(html_data_index)); i--){
-							html_data_index	=	 strip_tags($(this).parent().find('td:eq('+i+')').html());
-						}
-						$(this).parent().attr('wrs-html-data',html_data_index);
+						if($.trim(_a.html())=='')
+							{
+								html	=	 true;
+							}else{
+								html	=	false;
+							}
 						
 					}
-			}
+					
+					
+					
+					
+					
+					if(html==true	|| $(this).attr('wrsNull')=='true')
+						{
+							$(nameID).find('.k-grid-content').find('tbody tr').eq(index).addClass('ui-state-default  tag_total');
+							$(this).parent().addClass('ui-state-default ');
+							//Caso seja nula a linha de Total pesquisa e insere a ultima encontrada
+							for(var i=parent_index_data; (i>=1 && empty(html_data_index)); i--){
+								html_data_index	=	 strip_tags($(this).parent().find('td:eq('+i+')').html());
+							}
+							
+							$(this).parent().attr('wrs-html-data',html_data_index);
+							
+						}
+				}
 			
 				
 			});
@@ -1018,7 +1061,8 @@ function  themeSUM(nameID,arg,wrsParam)
 				});
 			}
 			
-_END('themeSUM');
+		_END('themeSUM');
+			
 }													
 													
 /**
@@ -1052,8 +1096,6 @@ _END('themeSUM');
 			
 				telerikGrid['wrs_frozen_data']			=	[];
 				telerikGrid['wrs_frozen_data']['data']	=	[];
-				
-			
 			/*
 			 * Column Header Index criado por Marcelo Santos
 			 */

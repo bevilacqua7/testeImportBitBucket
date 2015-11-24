@@ -340,7 +340,7 @@ function _exist_job_in_cancel(report_id)
 			{
 				_START('WRSJobModal::__click__action_WRSJobModalCancelQuery');
 				
-				console.log('__click__action_WRSJobModalCancelQuery');
+
 				var _report_id	=	$(this).parent().attr('report_id');
 				var aba_active	=	$('.'+_report_id);
 
@@ -381,7 +381,6 @@ function _exist_job_in_cancel(report_id)
     				__add_mutex_job(_report_id);
     				$(MODAL_JOB).addClass('hide');
     			
-    				console.log('runCall');
     				runCall(
     							param_request,
     							_file,

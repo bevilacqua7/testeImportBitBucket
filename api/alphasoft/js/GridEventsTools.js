@@ -136,6 +136,7 @@ var HEIGHT_ABAS		=	50;
 		 */
 		var WRSWindowGridEventToolsClick	=	function(e,data)
 		{
+
 			_START('WRSWindowGridEventTools::WRSWindowGridEventToolsClick');
 			var wrs_data		=	"";
 			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
@@ -149,11 +150,6 @@ var HEIGHT_ABAS		=	50;
 			{
 				wrs_data	=	data;
 			}
-			
-			
-			
-			
-		
 			
 
 				var isHistory	=	Boolean($(this).parent().parent().attr('isHistory'));	
@@ -238,12 +234,67 @@ var HEIGHT_ABAS		=	50;
 		
 		NAV.find('.btn-open-type-vision').unbind('click').click(function_btn_open_type_vision);
 		
-			_END('WRSWindowGridEventTools');
+		_END('WRSWindowGridEventTools');
+		
+		
     };
  
 }( jQuery ));
 
 
+function generate_hight_models(report_id)
+{
+	
+	var half		=	 false;
+	var ELEMENT		=	$('#'+report_id+'Elements');
+	var kendoUi		=	$('.'+report_id).wrsAbaData('getKendoUi');
+	var height		=	0;
+	
+		switch(kendoUi.WINDOW)
+		{
+			case "grid_chart"	:   
+			case "grid_map"		: 	
+			case "chart_grid"	: 	
+			case "chart_map"	: 	
+			case "map_grid"		: 	
+			case "map_chart"	: 	half=true				;	break;
+		}
+	
+	
+	
+	var layout_center_object	=		$('.ui-layout-center');
+	
+	var layout_center			=	{
+										padding_left	:	parseInt(layout_center_object.css('padding-left').replace("px", "")),
+										padding_right	:	parseInt(layout_center_object.css('padding-right').replace("px", "")),
+										context			:	layout_center_object,
+										height			:	layout_center_object.innerHeight()-HEIGHT_ABAS,
+										width			:	layout_center_object.outerWidth()
+									};
+	
+	//Ajustando as bordas
+	layout_center.width		-=	(layout_center.padding_left+5);
+	layout_center.height	-= (layout_center.padding_left+layout_center.padding_right);
+	
+	//Ajuste do tamanho do center layout removento o padding	
+	layout_center.width		=	layout_center.width-(layout_center.padding_left);
+	
+
+	if(half){
+		height= layout_center.height/2;
+	}else{
+		height	= layout_center.height;
+	}
+	
+	
+	
+	ELEMENT.height(height);
+	$('#'+report_id).height(height);
+	
+	
+	
+	
+}
 
 /*
  * Nova versão de resize
@@ -260,6 +311,7 @@ function resize_container_grid(report_id,_type_grid)
 	/* START */
 
 	var layout_center_object	=		$('.ui-layout-center');
+	
 	var layout_center			=	{
 										padding_left	:	parseInt(layout_center_object.css('padding-left').replace("px", "")),
 										padding_right	:	parseInt(layout_center_object.css('padding-right').replace("px", "")),
@@ -1053,17 +1105,25 @@ var getRequestKendoUiDefault	=	{};
   	
   	var function_click_list_wrs_vision			=	 function(){
 		_START('wrsConfigGridDefault::function_click_list_wrs_vision');
-  			var _wrs_data		=	$(this).attr('wrs-data');
-  				opts.WINDOW		=	_wrs_data;
 
-  				detect_event();//Abilita Evento
-  				list_wrs_vision.find('li a').removeClass('active_tools');
-  				$(this).addClass('active_tools');
-
-  				
-		  		aba_current.wrsAbaData('setKendoUi',{WINDOW:_wrs_data});
+				var _wrs_data		=	$(this).attr('wrs-data');
+				var _report_id_box		=	aba_current.attr('id-aba')+'BOX';
 				
-		_END('wrsConfigGridDefault::function_click_list_wrs_vision');				
+				
+				
+				$('.'+_report_id_box).find('.wrs_tools_options_window').find('a[wrs-data="'+_wrs_data+'"]').trigger('click');
+  	/*				opts.WINDOW		=	_wrs_data;
+
+  					detect_event();//Abilita Evento
+  					*/
+  					list_wrs_vision.find('li a').removeClass('active_tools');
+  					$(this).addClass('active_tools');
+  					
+  					//aba_current.wrsAbaData('setKendoUi',{WINDOW:_wrs_data});
+  					
+				
+  				_END('wrsConfigGridDefault::function_click_list_wrs_vision');				
+		
   				return false;
   	}
   	

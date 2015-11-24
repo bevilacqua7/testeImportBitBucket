@@ -292,6 +292,41 @@ function hide_east(){
 	return true;
 }
 
+
+var resize_load	=	 function()
+{
+	var MODAL_JOB		=	'.modal-window-wrs';
+	
+	var layout_center_object	=		$('.ui-layout-center');
+	var offset					= 		layout_center_object.offset();
+	//offset.top
+	
+	var layout_center			=	{
+										padding_left	:	parseInt(layout_center_object.css('padding-left').replace("px", "")),
+										padding_right	:	parseInt(layout_center_object.css('padding-right').replace("px", "")),
+										context			:	layout_center_object,
+										height			:	layout_center_object.outerHeight(),
+										width			:	layout_center_object.outerWidth()
+									};
+
+
+	
+	//Ajustando as bordas
+	//layout_center.width		-=	(layout_center.padding_left+5);
+	//layout_center.height	-= (layout_center.padding_left+layout_center.padding_right);
+	
+	//Ajuste do tamanho do center layout removento o padding	
+	//layout_center.width		=	layout_center.width-(layout_center.padding_left);
+	
+	
+	$(MODAL_JOB).width(	layout_center.width	).height(layout_center.height-25);
+	
+}
+
+
+
+$( window ).resize(resize_load);
+
 //Controlando o Evento do Layout
 $(document).ready(function () {
 
@@ -390,10 +425,10 @@ $(document).ready(function () {
 			
 			onresize_end	:	function()
 			{//http://layout.jquery-dev.com/demos/complex.html
-				_START('onresize_end');
-									var MODAL_JOB		=	'.modal-window-wrs';
-									var layout_center	=	$('.ui-layout-center');
-									$(MODAL_JOB).width(layout_center.outerWidth()-2).height(layout_center.outerHeight()-15);
+									_START('onresize_end');
+									
+									
+									resize_load();
 									
 									
 									resize_common();
@@ -522,8 +557,6 @@ function layout_east_close(_only_show_progress,is_hide)
 		
 		
 		//$('.container_panel_relatorio_rows').addClass('hide');
-
-		
 		
 		if(is_hide==true){
 			$('.modal-window-wrs').removeClass('hide');
@@ -545,10 +578,10 @@ function layout_east_close(_only_show_progress,is_hide)
 		{
 			$('.wrs_run_filter').attr('east__onclose','true');
 		}
+	
 		
 	if(wrs_panel_layout.state.east.isClosed)
 	{
-
 		jqueryLayoutOptions.east__onclose();
 		
 	}else{
@@ -1383,13 +1416,15 @@ function wrs_run_filter()
 	var _report_id			=	report_KendoUi['REPORT_ID'];
 
 
-	
+
 		if(aba_active.wrsAbaData('get_change_aba')==true)
 			{
 				aba_active.wrsAbaData('set_change_aba',false);	
 				configure_options_show_grid($(this));
 				_END('wrs_run_filter');
 				aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
+				
+				panel_open_by_time_out(_report_id);
 				return true;
 			}
 	
@@ -1400,7 +1435,6 @@ function wrs_run_filter()
 			
 			stop_job_timeout(_report_id);
 			_END('wrs_run_filter');
-			
 			return true;
 		}
 	
@@ -1726,6 +1760,12 @@ function wrs_run_filter()
 				WRS_ALERT(sprintf(LNG('RUN_RELATORIO_FALTA_INFORMACAO'),mensagem),'error');
 			}
 			
+			console.log('send');
+			panel_open_by_time_out(_report_id);
+			
+		
+		
+			//END
 			
 	}
 	
@@ -1733,6 +1773,34 @@ function wrs_run_filter()
 	
 }
 
+function panel_open_by_time_out(_report_id)
+{
+	
+	//SEt Time OUt
+/*	var options_resize = {
+			'_report_id'    	: _report_id,
+		  resize: function( event ) 
+		  {
+*/
+				//FAzendo com que se não tiver contedúdo reabra a janela
+				if($('#'+_report_id+'Main').length==0)
+				{
+					if(wrs_panel_layout)
+					{
+						wrs_panel_layout.open('east');
+					}
+				}
+			/*	
+		  }
+		};
+
+var time_out 	= $.proxy( options_resize.resize, options_resize );
+
+
+	setTimeout(time_out,50);
+*/	
+	
+}
 
 function configure_options_show_grid(that)
 {
@@ -1832,10 +1900,10 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	
 	
-	
-	
-	
-	$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
+	if(_report_id!=undefined)
+	{
+		$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
+	}
 	
 	$('.container_panel_relatorio_rows').each(function(){var id_remove	=	 $(this).attr('id'); if(id_remove==remove_report)	$(this).remove();});
 	

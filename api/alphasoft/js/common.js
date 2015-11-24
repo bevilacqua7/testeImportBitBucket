@@ -150,7 +150,7 @@ function verifica_loggedin_periodico(){
 
 			//Garante que não exista outra janela
 			$('body').find(MODAL_JOB).each(function(){$(this).remove()});
-			
+
 			//Adiciona a estrutura da JANELA
 			$('body').append(_html);
 

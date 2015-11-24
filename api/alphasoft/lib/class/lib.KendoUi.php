@@ -411,6 +411,7 @@ class KendoUi
 																
 													});
 													
+													generate_hight_models('{$this->getId()}');
 													
 													$(".{$this->getId()}").wrsAbaData('setKendoUi',
 																{

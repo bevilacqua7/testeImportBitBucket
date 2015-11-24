@@ -190,8 +190,6 @@ function optionsDataConvert(gridValue,with_decode)
 						 * caso sim 
 						 * para o o evento de click e reorna a função
 						 */
-						
-						
 						if(_isLoad)
 							{
 									//$('.container_panel_relatorio_rows').addClass('hide'); //remove-by Santos
@@ -251,6 +249,8 @@ function optionsDataConvert(gridValue,with_decode)
 
 							$('.wrs_run_filter').attr('status_load','true');
 						}
+						
+					
 						
 						$(window).resize();		
 						resize_container_grid(report_id);
@@ -507,11 +507,7 @@ function optionsDataConvert(gridValue,with_decode)
 				var _report_id		=	$(this).attr('id-aba');
 				var IDCurrent		=	'#'+_report_id;
 				
-				
-				
 				var current		=	 $(IDCurrent+'Main');
-				
-			
 
 				/*
 				 * Garante que se a Aba estiver ativa não permita o clicque
@@ -670,7 +666,10 @@ function optionsDataConvert(gridValue,with_decode)
 
 					__manager_vision_grid_edit($(this),_report_id,noactive,_isLoad);
 					
-				
+					
+					
+					
+					
 					_END('wrsAbas::dblclick_open_aba');
 			}
 			
@@ -773,25 +772,50 @@ function optionsDataConvert(gridValue,with_decode)
 			var event_remove_btn_close	=	 function()
 			{
 				_START('wrsAbas::event_remove_btn_close');
+				
 				var _report_id	=	 $(this).parent().parent().attr('id-aba');
 				var size_li		=	tagABA.find('li').length;
 				
+				var next_id		=	$('.'+_report_id).next();
 				
+				
+				
+				if($('.'+_report_id).next().attr('class')=='new_file')
+				{
+					next_id	=	$('.WRS_ABA li').eq($('.'+_report_id).index()-1);
+				}
+				
+				
+			
+					
 					if(size_li==2)
 						{
 							WRS_ALERT(sprintf(LNG('ABA_LIMIT_SEE'),__aba_title({report_id:_report_id})),'warning');
 							return true;
 						}
 				
-					var outra_aba = $('li.'+_report_id).parent().children('li:not(.new_file)').first();
-					var _aba_e_ativa = $('li.'+_report_id).hasClass('active');
+					//Cancelando a consulta caso exista
+					var action_WRSJobModalCancelQuery			=	$('.action_WRSJobModalCancelQuery');
+					var _parent_action_WRSJobModalCancelQuery	=	action_WRSJobModalCancelQuery.parent();
+					var report_id_cencel_old					=	_parent_action_WRSJobModalCancelQuery.attr('report_id'); 
 					
+						_parent_action_WRSJobModalCancelQuery.attr('report_id',_report_id);
+						
+						action_WRSJobModalCancelQuery.trigger('click');
+						
+						_parent_action_WRSJobModalCancelQuery.attr('report_id',report_id_cencel_old);
+						
 					__remove({'report_id':_report_id});
 					
-					if(_aba_e_ativa){
-						outra_aba.trigger('click');
+					
+					if($('.WRS_ABA .active').length==0)
+					{
+						$('.'+next_id.attr('id-aba')).addClass('active').trigger('click');
 					}
-
+					
+					
+				
+						
 			}
 			
 			var __new_name_aba		=	 function()
@@ -995,10 +1019,10 @@ function optionsDataConvert(gridValue,with_decode)
 			var __remove	=	 function(options)
 			{
 				_START('wrsAbas::__remove');
-				var optionsAba		=	{report_id:''};
-				var	opts 			= 	$.extend( {}, optionsAba, options );
-					tagABA.find('.'+opts.report_id).remove();
-				
+					
+					tagABA.find('.'+options.report_id).remove();
+					$('#'+options.report_id+'Main').remove();
+					
 				_END('wrsAbas::__remove');
 			}
 			
@@ -1063,7 +1087,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					var _report_id		=	'';
 					var is_load_direct	=	false;
-
+					var be_loaded		=	false;
 					
 					//tagABA.find('.'+tag_aba_empty).each(function(){$(this).remove();});
 					// atualizacao do tratamento acima que nao funcionava
@@ -1084,12 +1108,13 @@ function optionsDataConvert(gridValue,with_decode)
 															KendoUi				:[],
 															FILTER_TMP			:null
 														};
-						
-
+								
+								
 								var	opts 			= 	options[lineOptions];
 								var _active			=	true;
 								var kendoUi			=	json_decode(base64_decode(opts.KendoUi));
-								
+									be_loaded			=	false;
+									
 									if(empty(kendoUi)) continue;
 									
 									if(empty(_report_id))	_report_id	=	kendoUi['REPORT_ID'];
@@ -1108,6 +1133,7 @@ function optionsDataConvert(gridValue,with_decode)
 								    	alertify.custom = alertify.extend("custom");
 										alertify.custom(sprintf(LNG('ABA_BE_LOADED'),kendoUi['TITLE_ABA']));
 										_report_id	=	'';
+										be_loaded	=	 true;
 										continue;
 									}
 									 
@@ -1126,6 +1152,8 @@ function optionsDataConvert(gridValue,with_decode)
 						}
 					
 					
+					
+					if(be_loaded) return true;
 					
 					btn_add_new_aba();
 					
