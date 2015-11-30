@@ -158,6 +158,7 @@ var AUTO_LOAD_RUN			= <?php echo (($request_exec_report && $request_exec_report=
 	<!--  PLIGIN WRS -->
 	<script type="text/javascript" src="api/alphasoft/js/KendoUi.js?<?php echo RAND_TOKEN;?>"></script>
 <?php 	
+	//include_js('ThreadJobManager');
 	include_js('WindowGrid');
 	include_js('Maps');
 	include_js('KendoUiChart');
@@ -169,6 +170,7 @@ var AUTO_LOAD_RUN			= <?php echo (($request_exec_report && $request_exec_report=
 	include_js('Menu');
 	include_js('templateReport');
 	include_js('Abas');
+	
 ?> 
 
 

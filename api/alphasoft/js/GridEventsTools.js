@@ -362,7 +362,7 @@ function resize_container_grid(report_id,_type_grid)
 		options.container_configure.innerWidth(layout_center.width);
 		
 		//configurando tela de modal
-		$('body').WRSJobModal('resize',{'height':layout_center_object.outerHeight(),'width':layout_center_object.outerWidth()});
+		$('body').managerJOB('resize',{'height':layout_center_object.outerHeight(),'width':layout_center_object.outerWidth()});
 		
 		//não deixa executa sem a GRID estar criada
 		if(options.grid==undefined || options.grid==null) return false;

@@ -701,12 +701,11 @@ function wrsKendoUiChange(nameID,param,value)
 function onDataBound(arg)
 	{
 		_START('onDataBound');
+		console.log('onDataBound');
 		
 		//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 			
 			resizeColumnKendoUi(arg);
-			 
-			
 
 			var classGrid		=	arg.sender.element.attr('id');
 			var nameID			=	 '#'+classGrid;
@@ -717,6 +716,8 @@ function onDataBound(arg)
 			var wrsparam		=	$(report_aba).wrsAbaData('getWrsData');
 			
 
+			
+			
 			$(report_aba).wrsAbaData('setKendoUi',{page_size:arg.sender.dataSource._pageSize, STOP_QUERY:false});
 			
 				
@@ -767,7 +768,7 @@ function onDataBound(arg)
 
 			$('.WRS_ABA').find('.'+classGrid).data('kendoUiDataAba',arg.sender);
 			
-			$('body').WRSJobModal('close',{'report_id':classGrid});
+			$('body').managerJOB('load_complete',{'report_id':classGrid});
 			
 			
 			wrsKendoUiChange(nameID,'IS_REFRESH',false);
@@ -815,6 +816,7 @@ function onDataBound(arg)
 					};
 			
 			var time_out 	= $.proxy( options_resize.resize, options_resize );
+			
 			
 			setTimeout(time_out,50);
 			
@@ -965,7 +967,6 @@ function  themeSUM(nameID,arg,wrsParam)
 								{
 									var eq		=	$(this).index()-1;
 										find_last	=	 'eq('+eq+')';
-										console.log('add');
 								}
 							} catch(e){
 								console.log('Falha na leitura de mapas mas pode não haver essa informação');

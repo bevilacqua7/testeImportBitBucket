@@ -1000,6 +1000,8 @@ class WRS_PANEL  extends WRS_USER
 		$cube						=	$_cube;
 		$getRequestKendoUi			=	$_getRequestKendoUi;
 
+		
+//		$getRequestKendoUi['ALL_ROWS']
 	//WRS_DEBUG_QUERY($getRequestKendoUi);
 	
 		$LAYOUT_ROWS_SIZE							=	count(explode(',',$ROWSL));
@@ -1171,6 +1173,8 @@ HTML;
 											$getRequestKendoUi['REPORT_ID'],
 											$getRequestKendoUi);
 		
+		
+		
 		if($checkThreadJobManager)
 		{
 			return array('html'=>$HTML,'warning'=>$msg,'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'data'=>$getRequestKendoUi);
@@ -1219,7 +1223,6 @@ HTML;
 		//remote-data-binding.php
 		header('Content-Type: application/json');
 
-		
 		includeCLASS('KendoUi');
 		$TelerikUi					= new KendoUi();
 		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi($_REQUEST);
@@ -1386,6 +1389,7 @@ HTML;
 		echo json_encode($result);
 		//echo json_encode($array_info,true);
 		WRS_TRACE('END SELECT_CACHE_GRID', __LINE__, __FILE__);
+		
 	}
 	
 	
@@ -1396,6 +1400,7 @@ HTML;
 	
 	private function threadJobManagerStop()
 	{
+		
 		WRS_TRACE('threadJobManagerStop()', __LINE__, __FILE__);
 		$report_id				=	 fwrs_request('report_id');
 		$html_data				=	array();
@@ -1473,8 +1478,6 @@ HTML;
 				{
 						$TelerikUi			= 	new KendoUi();
 						$getRequestKendoUi	=	$job['getRequestKendoUi'];
-						
-
 						
 						$TelerikUi->setId($getRequestKendoUi['REPORT_ID']);		
 						$TelerikUi->setWrsKendoUi($getRequestKendoUi); //Passando para Gravar no JS as integrações recebidas

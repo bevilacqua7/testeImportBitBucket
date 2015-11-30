@@ -1679,3 +1679,11 @@ border-radius: 3px;
 .wrs_grid_elements_no_border .elements:first-child{
  	border-bottom:none !important;
 }
+
+.wrs_grid_elements{
+	z-index: 199;
+}
+
+.wrs_grid_options_default{
+	z-index:200;	
+}

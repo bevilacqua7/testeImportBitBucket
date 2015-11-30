@@ -1280,7 +1280,7 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG,label)
 
 $(document).ready(function(){
 	
-	$('body').WRSJobModal(); //Criando o BOX de CSS
+	$('body').managerJOB('create_modal'); //Criando o BOX de CSS
 	
 	$('.menu_administrativo_itens').hide();
 	

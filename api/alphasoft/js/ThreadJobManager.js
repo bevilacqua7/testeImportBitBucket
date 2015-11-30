@@ -10,7 +10,8 @@
  */
 
 /*
- * Apresentação em Segundos para o setTimeOut
+ * Apresentação em Segundos para o setTimeOutst
+ * 
  */
 
 
@@ -18,302 +19,349 @@
 var WRS_TIME_THREAD			=	1000*2; 
 //Segundos para administração para verificar se a ação morreu
 var WRS_TIME_OUT_THREAD		=	10;	
-//Variável para cancelamento do JOB nela é inserida o array das sessões a serem canceladas
-var WRS_THREAD_CANCEL		=	'WrsThreadCancelJob';	
 
-/*
- * Gerenciamento de JOB
- * 
- * Sempre chamar o evento no body
- */
+//Contagem em mile Segundos
+var TIME_LOAD				=	300;
 
-function click_stop_job()
-{
-	_ONLY('click_stop_job');
-	$('.action_WRSJobModalCancelQuery').trigger('click');
-}
+
+
+
 
 function job_exist(report_id)
 {
-	var jobs	=	 $('body').data('WrsThreadJobManager');
-	
-	for(var lineJob in jobs)
-		{
-				if(jobs[lineJob].report_id==report_id) return true;
-		}
-	
-	return false;
-}
-
-
-function _exist_job_in_cancel(report_id)
-{
-	_START('_exist_job_in_cancel');
-	var CANCEL_JOB	=	'WrsThreadJobManagerCancelJOB';
-	var that		=	 $('body');
-	var _data		=	 that.data(CANCEL_JOB);
-	var _exec		=	 false;
-
-		try{
-			if(_data[report_id]==true){
-				_exec	=	 true;
-			}else{
-				_exec	=	 false;
-			}
-		}catch(e){
-			_exec	=	 false;
-		}
-	_END('_exist_job_in_cancel');	
-		return _exec;
+	return $('body').managerJOB('exist_job_render',{'report_id':report_id});
 }
 
 
 (function($){
 
-	$.fn.WRSTimerLoader = function(methodOrOptions)
+	$.fn.managerJOB = function(methodOrOptions)
 	{
-		 
-			var labelData			=	'WRSTimeLoader';
-			var _data				=	$('body').data(labelData); 
-			var that				=	this;
-			var DATA_NAME			=	'WrsThreadJobManager';
-			var TIME_LOAD			=	300;
-
-			
-			var __clock_time	=	 function()
-			{
-				
-				var _data			=	that.data(DATA_NAME);
-				var _data_time		=	$('body').data(labelData);
-				var _mktime			=	'';
-				var aba_data		=	$('.'+_data_time['report_id']).wrsAbaData('getKendoUi');
-				
-				if(aba_data!=undefined)
-				{
-					if(aba_data['DRILL_LINE_STOP'])
-					{
-						$('.action_WRSJobModalCancelQuery .title').hide();
-					}else{
-						$('.action_WRSJobModalCancelQuery .title').show();
-					}
-				}
-					
-					_data_time['time']	=	setTimeout(__clock_time, TIME_LOAD);
-
-
-
-					_mktime	=	 _data_time.mktime;
-					
-				
-				var _mktime_current	=	mktime();
-					_mktime			=	_mktime_current-_mktime;
-				var _date			=	 date('i:s',_mktime);
-				
-
-				$('.wrs-modal-time').html(_date);
-
-			}
-			
-			
-			var __stop_time_out		=	 function()
-			{
-				//$('.modal-window-wrs').addClass('hide');
-				_START('WRSTimerLoader::__stop_time_out');
-				var _data_time		=	$('body').data(labelData);
-				
-
-				if(empty(_data_time)) return false;
-
-			
-				
-//					if(array_length(_data_time)==0)
-	//				{
-						clearTimeout(_data_time['time']);    		
-		    			that.data(labelData,'');
-		//			}
-		    		
-		    	_END('WRSTimerLoader::__stop_time_out');	
-			}
-			
-			
-			var __init		=	 function(options)
-			{
-				_START('WRSTimerLoader::__init');
-				__stop_time_out();
-				
-				var _options			=	 options;
-					_options['time']	=	setTimeout(__clock_time, TIME_LOAD);
-					_options['mktime']	=	mktime();
-
-					var _data			=	 that.data(DATA_NAME);
-
-					for(var lineData in _data)
-					{
-						var report__id		=	_data[lineData];
-						
-						if(report__id.report_id==_options['report_id'])
-							{
-								_options['mktime']	=	report__id.mktime;
-							}
-					}
-					
-					
-					$('body').data(labelData,_options);
-				_END('WRSTimerLoader::__init');	
-			}
-			
-			
-			var __stop		=	 function(options)
-			{
-				_START('WRSTimerLoader::__stop');
-				var _data_time		=	$('body').data(labelData);
-				
-				if(empty(_data_time)) return false;
-				
-				if(_data_time.report_id==options.report_id)
-				{
-					__stop_time_out();
-				}
-		    	_END('WRSTimerLoader::__stop');
-			}
-			
-			
-			
-			var methods = 
-			{
-			        init 			: 	__init,
-			        stop			:	__stop,
-			        timeout			:	__stop_time_out
-			};
-		
-		 
-			/*
-			 * 
-			 * Inicia a construção dos metodos
-			 * 
+		var DataManagerJob		=	'managerWrsJOB';
+			/**
+			 * Pegando todos os registros do ManagerJOB
 			 */
-			if ( methods[methodOrOptions] )
-			{
-		            return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
-		    }
-			else if ( typeof methodOrOptions === 'object' || ! methodOrOptions )
-			{
-		            // Default to "init"
-		            return methods.init.apply( this, arguments );
-		    }
-		    else
-		    {
-		            $.error( 'Method ' +  methodOrOptions + ' does not exist on jQuery.tooltip' );
-		    }   
-			
-			
-			
-		 
-			
-	}
-	/*
-	 * 
-	 * Gerenciamento par a janela de abas em carregamento 
-	 * 
-	 * 
-	 * Executando 
-	 * 
-	 * 
-	 *	Verificando se o ID está ativo
-	 * 	$('body').WRSJobModal('is_active',{report_id:'ABA_34072189172729'})
-	 * 
-	 * Adicionando o DEMO
-	 * $('body').WRSJobModal('demo')
-	 */
-	$.fn.WRSJobModal = function(methodOrOptions) 
-	{
-		
-			var that			=	 this;
-			var DATA_NAME		=	'WrsThreadJobManager';
-			var MODAL_JOB		=	'.modal-window-wrs';
-			var MSG_JOBS		=	'WrsThreadJobManagerMessager';
-			var ERROR			=	'WrsThreadJobManagerERROR';
-			var CANCEL_JOB		=	'WrsThreadJobManagerCancelJOB';	
-
-			var layout_center	=	$('.ui-layout-center');
-			$(MODAL_JOB).width(layout_center.outerWidth()-2).height(layout_center.outerHeight()-3);
-			/*
-			 * Removendo
-			 */
-			var removeThread	=	 function(report_id)
-	    	{
-				_START('WRSJobModal::removeThread');
-				
-	    		var _data_param		=		that.data(DATA_NAME);
-	    		var tmp_param		=		[];
-	    		
-		    		for(var lineParan in _data_param)
-		    			{
-			    			if(_data_param[lineParan].report_id!=report_id)
-			    			{
-			    				tmp_param[tmp_param.length]=	_data_param[lineParan];
-			    			}
-		    			}
-	    		
-	    		that.data(DATA_NAME,tmp_param);
-				
-				_END('WRSJobModal::removeThread');
-	    	}
-			
-			
-			
-			
-			
-			var __add_mutex_job		=	 function(report_id,clean)
-			{
-				_START('WRSJobModal::__add_mutex_job');
-				
-				var _data		=	 that.data(CANCEL_JOB);
-				var _tmp_data	=	{};
-					if(empty(_data))	_data	=	{};
-					
-					
-					if(clean==true)
-					{
-						for(var lineDataReportID in _data)
-							{
-									if(lineDataReportID!=report_id)
-									{
-										_tmp_data[lineDataReportID]	=	_data[lineDataReportID];
-									}
-									
-									_data	=	_tmp_data;
-							}
+			var GetData		=	function()
+				{
+						var data_body		=	$('body').data(DataManagerJob);
+							data_body		=	data_body==undefined || data_body==null || data_body=='' ? {} : data_body;
+							
+						var defaultData		=	{
+													job					:	{},	//Processos que ainda estão em execução pelo JOB do Banco de dados
+													job_render			:	{}, //Processos de load que ainda está em execução mesmo que o job já tenha finalizado  é a copia de dados do JOB mas apenas para que a Grid finaliza de carregar
+													cancel				:	{}, //Solicitação de cancelamento
+													mensagens			:	{},	//Contem as mensagens de erro que foram geradas apenas se limpa quando solicita uma nova
+													mktime				:	{}, //contem todos os mktime da criação do event 
+													_time				:	null, // 
+													report_id_active	:	null,
+													not_title			:	false,  // Flag informa se pode ou não executar a ação do cancelar e mostrar o title
+													modal				:	'.modal-window-wrs',
+													close_modal			:	'.manager-job-modal-close',
+													cancel_job			:	'.manager-job-modal-cancel',
+													aba_close_report_id :  false
+												}
 						
-					}else{
-						_data[report_id]			=	 true;
+						return $.extend({}, defaultData,data_body);
+				}
+			
+			var setNotTitle		=	 function(not_title)
+			{
+				var _data				=		GetData();
+					_data.not_title		=		not_title;
+					setData(_data);
+					
+			}
+			
+			
+			var setAbaClose		=	 function(report_id)
+			{
+				var _data							=		GetData();
+					_data.aba_close_report_id		=		report_id;
+					setData(_data);
+			}
+			
+			
+			var setData	=	function(data)
+			{
+				//console.error('__setData',data);
+				
+				$('body').data(DataManagerJob,data);
+			}
+		
+			
+			var setReportActive	=	 function(data)
+			{
+				var _data						=		GetData();
+					_data.report_id_active		=		data;
+					setData(_data);
+			}			
+			
+			var setTime	=	 function(data)
+			{
+				var _data			=		GetData();
+					_data._time		=		data;
+					
+					setData(_data);
+			}			
+			
+			var setMktime	=	 function(key,data)
+			{
+				var _data					=	GetData();
+				
+				if(data==undefined || data=='undefined' || data==null || data=='')
+					{
+						if(key==undefined || key=='undefined' || key==null || key=='')
+						{
+							_data.mktime	=	{};
+						}else
+						{
+							delete _data.mktime[key];
+						}
 					}
-
-					that.data(CANCEL_JOB,_data);
-					_END('WRSJobModal::__add_mutex_job');
+					else
+					{
+						_data.mktime[key]	=	data;
+					}
+					
+					setData(_data);
+			}
+						
+			var setMensagens	=	 function(key,data)
+			{
+				var _data					=	GetData();
+				
+				if(data==undefined || data=='undefined' || data==null || data=='')
+					{
+						if(key==undefined || key=='undefined' || key==null || key=='')
+						{
+							_data.mensagens	=	{};
+						}else
+						{
+							delete _data.mensagens[key];
+						}
+					}
+					else
+					{
+						_data.mensagens[key]	=	data;
+					}
+					
+					setData(_data);
+			}			
+			
+			
+			
+			var setCancel	=	 function(key,data)
+			{
+				var _data					=	GetData();
+				
+				if(data==undefined || data=='undefined' || data==null || data=='')
+					{
+						if(key==undefined || key=='undefined' || key==null || key=='')
+						{
+							_data.cancel	=	{};
+						}else
+						{
+							delete _data.cancel[key];
+						}
+					}
+					else
+					{
+						_data.cancel[key]	=	data;
+					}
+					
+					setData(_data);
+			}
+			
+			var setJobRender	=	 function(key,data)
+			{
+				var _data					=	GetData();
+				
+				if(data==undefined || data=='undefined' || data==null || data=='')
+					{
+						if(key==undefined || key=='undefined' || key==null || key=='')
+						{
+							_data.job_render	=	{};
+						}else
+						{
+							delete _data.job_render[key];
+						}
+					}
+					else
+					{
+						_data.job_render[key]	=	data;
+					}
+					
+					setData(_data);
+			}			 
+			
+			/*
+			var setJob	=	 function(key,data)
+			{
+				var _data			=	GetData();
+					_data.job		=	data;
+					setData(_data);
+			}*/
+			
+			var setJobData	=	 function(data)
+			{
+				var _data			=	GetData();
+					_data.job		=	data;
+					setData(_data);
+			}
+			
+			var __init		=	function()
+			{
+				console.error('É Necessário especificar qual ação deve ser tomada');
+			}			
+			
+			
+			
+			
+			
+			
+			/**
+			 * Finalizou de carregar a Grid ou remove de vez o load
+			 */
+			var __load_complete	=	 function(options)
+			{
+				_START('managerJOB::__load_complete');
+				var _report_id	=	 options.report_id;
+				var _data		= 	GetData();
+				
+					setMensagens(_report_id,undefined);
+					setJobRender(_report_id,undefined);
+					//setJob(_report_id,undefined);
+					setMktime(_report_id,undefined);
+					setNotTitle(false);
+					
+					if(_data.report_id_active==_report_id)
+					{
+						$(_data.modal).addClass('hide');
+					}
+					
+				_END('managerJOB::__load_complete');
+			}
+			
+			
+	
+			
+			
+			/*
+			 * Errro no processo de renderização do HTML
+			 */
+			var __error_html	=	 function(options)
+			{
+				_START('managerJOB::__error_html');
+				
+				var _report_id		=	options.report_id;
+				var _msg			=	 options.msg;
+				var _title			=	$('.'+_report_id).wrsAbas('aba_title',{report_id:_report_id});
+				
+					alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+_msg, 0);
+				
+					setMensagens(_report_id,_msg);
+					setCancel(_report_id,undefined);
+					
+					setJobRender(_report_id,undefined);
+					//setJob(_report_id,undefined);
+					setMktime(_report_id,undefined);
+					setNotTitle(false);
+					
+				_END('managerJOB::__error_html');
+				
 			}
 			
 			
 			
 			
 			
-			
-			
-			
-			
-			var __request_consulta_cancelada	=	 function(data)
+			/*
+			 * Iniciando o processo de renderização não starta o processo de gerenciamento de JOB
+			 * options = {report_id,title_aba,mktime}
+			 */
+			var __start_job	=	 function(options)
 			{
-					_START('WRSJobModal::__request_consulta_cancelada');
-				//Removendo da opção de insert
-				__add_mutex_job(data.report_id,true);
+				_START('managerJOB::__start_job');
 				
-
-						var title		=	$('.'+data.report_id).find('.title').html();
+					var _data		=	 GetData();
+					var _report_id	=	options.report_id;
 					
-						//TRACE_DEBUG(data.status);
+						$(_data.modal).find('.modal-text-wrs-job').html(LNG('GERANDO_RELATORIO'));
+					
+						setJobRender(_report_id,options);		
+						setMktime(_report_id,options);
+						time_loop_control();
+						
+						$(_data.modal).removeClass('hide');
+						$(_data.close_modal).addClass('hide');
+						
+						
+						
+							if(ExistRealJob(_report_id,_data.mensagens))
+							{
+								$(_data.close_modal).removeClass('hide');
+								$(_data.modal).addClass('hide');
+							}
+						
+					_END('managerJOB::__start_job');	
+			}
+			
+			
+			
+			
+			
+			/**
+			 * Create HTML modal
+			 */
+			var __create_modal	=	 function()
+			{
+				_START('managerJOB::__create_modal');
+				
+				var _html	=	'<!--  Modal JOB -->'+
+								'		<div class="modal-window-wrs hide modal-manager-job" >'+
+								'			<div class="modal-box-wrs  modal-type-primary modal-size-normal" style="position: absolute; top: 50%; margin-top: -72px; ">'+
+								'				<div class="modal-inner-wrs">'+
+								'						<div class="modal-title-wrs-job">'+
+								'							<h3><!-- Primary --></h3> '+
+								'						</div>'+
+								'						<div class="modal-text-wrs-job">'+
+								'							<!--A simple primary message! -->'+
+								'						</div>'+
+								'						<div class="modal-buttons-wrs-job" report_id="">'+
+								'							<button class="btn btn-warning modal-btn-padding modal-btn-job-wrs   manager-job-modal-cancel"> <span class="title"> <i class="fa fa-hand-paper-o"></i> '+LNG('BTN_CANCEL_CONSULTA')+' </span> <span class="wrs-modal-time">00:00</span></button>'+
+								'							<button class="btn btn-default  modal-btn-padding manager-job-modal-close"><i class="fa fa-times"></i> '+LNG('JOB_CLOSE_ALERT')+'</button>'+
+								'						</div>'+
+								'				</div>'+
+								'			</div>'+
+								'		</div>'+
+								'<!--  END MODAL JOB -->';
+				
+				//Gatante que não exista outra janela
+				$('.container_panel_relatorio').find('.modal-manager-job').each(function(){$(this).remove()});
+				
+				//Adiciona a estrutura da JANELA
+				$('.container_panel_relatorio').append(_html);
+				
+				$('.manager-job-modal-cancel').unbind('click').click(EventClickJobModalCancel);
+				
+				$('.manager-job-modal-close').unbind('click').click(EventClickJobModalClose);
+				
+				_END('managerJOB::__create_modal');	
+				
+			}
+			
+			
+			
+			var RequestProccessCancelJOB	=	 function(data)
+			{
+					_START('managerJOB::RequestProccessCancelJOB');
+					
+						var _title		=	$('.'+data.report_id).find('.title').html();
+						var _data		=	 GetData();		
+						
 						if(data.status!=-2)
 						{
-							alertify.success(sprintf(LNG('JOB_CANCEL'),title));
+							alertify.success(sprintf(LNG('JOB_CANCEL'),_title));
 						}
 
 						if(data.status < 0)
@@ -323,678 +371,293 @@ function _exist_job_in_cancel(report_id)
 							 */
 							console.error('Error no JOB '+data.report_id,data.html);
 						}
-						
-						removeThread(data.report_id);
-						
-						$(MODAL_JOB).addClass('hide');
-
 					
-				_END('WRSJobModal::__request_consulta_cancelada');	
-			}
-			
-			
-			 
-			
-
-			var __click__action_WRSJobModalCancelQuery	=	 function()
-			{
-				_START('WRSJobModal::__click__action_WRSJobModalCancelQuery');
-				
-
-				var _report_id	=	$(this).parent().attr('report_id');
-				var aba_active	=	$('.'+_report_id);
-
-
-				var aba_data		=	aba_active.wrsAbaData('getKendoUi');
-				
-				if(aba_data['DRILL_LINE_STOP']==true)
-				{
-					_END('WRSJobModal::__click__action_WRSJobModalCancelQuery');
-					return true;
-				}
-				
-				
-				
-				if(_exist_job_in_cancel(_report_id))
-				{
-					_END('WRSJobModal::__click__action_WRSJobModalCancelQuery');
-					return true;
-				}
-
-				//show grid
-				$('#'+_report_id+'Main').removeClass('hide');
-				
-				that.WRSTimerLoader('timeout',{report_id:_report_id});
-				
-				
-				var _file			=	'WRS_PANEL';
-    			var _class			=	'WRS_PANEL';
-    			var _event			=	'stopjob';
-    			var param_request	=	{report_id:_report_id};
-     			
-    		
-    			removeThread(_report_id);
-    			
-    			
-    			aba_active.wrsAbaData('setKendoUi',{STOP_QUERY:true});
-    			
-    				__add_mutex_job(_report_id);
-    				$(MODAL_JOB).addClass('hide');
-    			
-    				runCall(
-    							param_request,
-    							_file,
-    							_class,
-    							_event,
-    							__request_consulta_cancelada,
-    							'modal','json'
-    						);	
-				_END('WRSJobModal::__click__action_WRSJobModalCancelQuery');
-			}
-			
-			var __click__action_WRSJobModalCloseWindow	=	 function()
-			{
-				_ONLY('WRSJobModal::__click__action_WRSJobModalCloseWindow');
-				$(MODAL_JOB).addClass('hide');
-			}
-			
-			
-			var __init	=	 function(options)
-			{
-				_START('WRSJobModal::__init');
-					var _html	=	'<!--  Modal JOB -->'+
-									'		<div class="modal-window-wrs hide" >'+
-									'			<div class="modal-box-wrs  modal-type-primary modal-size-normal" style="position: absolute; top: 50%; margin-top: -72px; ">'+
-									'				<div class="modal-inner-wrs">'+
-									'						<div class="modal-title-wrs-job">'+
-									'							<h3><!-- Primary --></h3> '+
-									'						</div>'+
-									'						<div class="modal-text-wrs-job">'+
-									'							<!--A simple primary message! -->'+
-									'						</div>'+
-									'						<div class="modal-buttons-wrs-job" report_id="">'+
-									'							<button class="btn btn-warning modal-btn-padding modal-btn-job-wrs   action_WRSJobModalCancelQuery"> <span class="title"> <i class="fa fa-hand-paper-o"></i> '+LNG('BTN_CANCEL_CONSULTA')+' </span> <span class="wrs-modal-time">00:00</span></button>'+
-									'							<button class="btn btn-default  modal-btn-padding action_WRSJobModalCloseWindow"><i class="fa fa-times"></i> '+LNG('JOB_CLOSE_ALERT')+'</button>'+
-									'						</div>'+
-									'				</div>'+
-									'			</div>'+
-									'		</div>'+
-									'<!--  END MODAL JOB -->';
-					
-					//Gatante que não exista outra janela
-					$('.container_panel_relatorio').find(MODAL_JOB).each(function(){$(this).remove()});
-					
-					//Adiciona a estrutura da JANELA
-					$('.container_panel_relatorio').append(_html);
-					
-					
-					$('.action_WRSJobModalCancelQuery').unbind('click').click(__click__action_WRSJobModalCancelQuery);
-					$('.action_WRSJobModalCloseWindow').unbind('click').click(__click__action_WRSJobModalCloseWindow);
-				_END('WRSJobModal::__init');	
-			}
-			
-			
-			var __clean		=	 function()
-			{
-				_START('WRSJobModal::__clean');
-				var modal		=	 $(MODAL_JOB);
-				
-					modal.find('.action_WRSJobModalCloseWindow').addClass('hide');
-					modal.find('.modal-btn-job-wrs').removeClass('hide');
-					
-					modal.find('.action_WRSJobModalCancelQuery').removeClass('hide');
-					modal.find('.modal-text-wrs-job').html(LNG('GERANDO_RELATORIO'));
-				_END('WRSJobModal::__clean');	
-			}
-			
-			
-			var __resize		=	 function(options)
-			{
-				_START('WRSJobModal::__resize');
-				$(MODAL_JOB).height(options.height);
-				$(MODAL_JOB).width(options.width);
-				_END('WRSJobModal::__resize');
-			}
-			
-			var __get_data		=	 function()
-			{
-					
-					return $('body').data(DATA_NAME);
-			}
-			
-			/**
-			 * Pesquisa o report ID e devolve a estrutura salva 
-			 * @return Boolean|Array
-			 */
-			var getReportId			=	 function(report_id)
-			{
-					var _data		=	 __get_data();
-					
-						for(var lineData in _data)
-						{
-							if(_data[lineData].report_id	==	report_id) return _data[lineData];
-						}
-						
-					return false;
+				_END('managerJOB::RequestProccessCancelJOB');	
 			}
 			
 			
 			
-			/**
-			 * Verifica se o ID está em execução
-			 */
-			var __is_active		=	 function(options)
-			{
-				var _opts			=	{report_id:''};
-				var	opts 			= 	$.extend( {}, _opts, options);
-				var _report_id		=	opts.report_id;
-				var _active_jobs	=	__get_data();
-				
-					if(empty(_report_id)) return false;
-				
-				var _report_active	=	getReportId(_report_id);
-				
-					if(!_report_active) return false;
-				
-				
-				return _report_active;
-				
-			}
-			
-			
-			
-			
-			
-			var __demo_trahs	=	 function()
-			{
-				var _tmp		=	 [];
-				
-					_tmp.push({report_id:'ABA_23273072694428' , 'mktime': mktime()});
-				
-					for(var i=0;i<5;i++)
-						{
-							_tmp.push({report_id:'ABA_'+js_rand(0,99999999999999) , 'mktime': mktime()});
-						}
-					
-					$('body').data(DATA_NAME,_tmp);
-					
-					console.log(DATA_NAME,$('body').data(DATA_NAME));
-			}
-			
-			
-			
-			
-			
-			
-			 var __aba		=	 function(options)
-			 {
-				 _START('WRSJobModal::__aba');
-					var _opts			=	{report_id:'',wait:false, title_aba:''};
-					var	opts 			= 	$.extend( {}, _opts, options);
-					var _report_id		=	opts.report_id;
-					var _active_jobs	=	__get_data();
-					var _modal			=	$(MODAL_JOB);
-					var _error			=	that.data(ERROR);
-					var _hide			=	false;
-		    		var report_id_modal	=	_modal.find('.modal-buttons-wrs-job').attr('report_id');
-		    		
-						if(empty(_report_id)) 
-						{
-							console.error('É necessário passar um ID');
-							return false;
-						}
-						
-					var _report_active	=	getReportId(_report_id);
-					
-					var _title			=	'';
-					var objs_msg		=	that.data(MSG_JOBS);
-					var msg_job			=	{};
-					
-					var _is_error		=	'';
-					
-						
-					try{
-						_is_error	=	_error[_report_id];
-					}catch(e){
-						_is_error	=	'';
-					}
-					
-					__time(opts);
-					/*
-					if(!_report_active && !opts.wait) 
-					{
-						return false;
-					}*/
-
-					_modal.removeClass('hide');
-						
-						
-						//Pegando o Title
-						if(opts.wait)
-						{
-							_title	=	opts.title_aba;
-						}
-						else
-						{
-							_title	=	that.wrsAbas('aba_title',opts);
-						}
-						
-						_modal.find('.modal-title-wrs-job h3').html(_title);
-						
-						if(!empty(objs_msg))
-						{
-							try{
-								msg_job	=	msg_job[opts.report_id]['QUERY_MESSAGE'];
-							}catch(e)
-							{
-								msg_job	=	LNG('GERANDO_RELATORIO');
-							}
-						}else{
-							msg_job	=	LNG('GERANDO_RELATORIO');
-						}
-						
-						
-						if(!empty(_is_error))
-							{
-									msg_job	=	_is_error;
-							}
-						
-						_modal.find('.modal-text-wrs-job').html(msg_job);
-						
-						//Gravendo o ID para um possível cancelamento
-						_modal.find('.modal-buttons-wrs-job').attr('report_id',opts.report_id);
-				 _END('WRSJobModal::__aba');		
-						
-			 }
-			 
-			 
-			 
-			 var __close		=	 function(options)
-			 {
-				 
-				  _START('WRSJobModal::__close');
-				 	var _opts			=	{report_id:'',wait:false, title_aba:''};
-					var	opts 			= 	$.extend( {}, _opts, options);
-					var _report_id		=	opts.report_id;
-					
-					var _errorData			=	that.data(ERROR);
-		    		var _hide				=	true;
-		    		var jobData				=	$('body').data(DATA_NAME);
-		    		var aba_ativa		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
-		    		
-		    			that.WRSTimerLoader('timeout',opts);   
-		    		
-					var modal			=	$('.modal-window-wrs');
-		    		var report_id_modal	=	modal.find('.modal-buttons-wrs-job').attr('report_id');
-		    		
-		    		
-		    		
-		    		/*
-			    		if(_report_id==report_id_modal)
-			    		{
-			    			modal.addClass('hide');
-			    		}*/
-			    		
-
-	    				
-	    				for(var lineJOB in jobData)
-						{
-	    					if(jobData[lineJOB].report_id	==	_report_id)
-	    					{
-	    						_hide	= false;
-	    					}
-						}
-	    				
-	    				
-	    				
-	    				//$('body').data(DATA_NAME)
-	    				var _is_error_data	=	 false;
-	    				
-	    				for(var lineError in _errorData)
-						{
-							if(_report_id==lineError)  {
-								_hide= false;
-								_is_error_data	=	 true;
-							}
-						}
-	    				
-	    				
-	    				if(_is_error_data){
-	    					modal.find('.action_WRSJobModalCancelQuery').addClass('hide');
-	    					modal.find('.action_WRSJobModalCloseWindow').removeClass('hide');
-	    				}else{
-	    					modal.find('.action_WRSJobModalCancelQuery').removeClass('hide');
-	    					
-	    					modal.find('.action_WRSJobModalCloseWindow').addClass('hide');
-	    				}
-					
-
-	    				if(_hide)
-	    				{
-	    					if(aba_ativa==_report_id)
-	    					{
-	    						modal.addClass('hide');
-	    					}
-	    					
-	    				}else{
-	    					modal.removeClass('hide');
-	    				}
-	    				
-	    				_END('WRSJobModal::__close');
-			 }
-			 
-			
-			 
-
-			var __click_aba		=	 function(options)
-			 {
-				_START('WRSJobModal::__click_aba');			
-			 	var _opts			=	{report_id:'',wait:false, title_aba:''};
-				var	opts 			= 	$.extend( {}, _opts, options);
-				var _report_id		=	opts.report_id;
-				
-				var modal			=	$('.modal-window-wrs');
-	    		var report_id_modal	=	modal.find('.modal-buttons-wrs-job').attr('report_id');
-	    		
-	    		var _errorData			=	that.data(ERROR);
-	    		var _hide				=	true;
-	    		var jobData				=	$('body').data(DATA_NAME);
-	    		
-	    			__aba(opts);
-	    		
-    				for(var lineJOB in jobData)
-					{
-    					if(jobData[lineJOB].report_id	==	_report_id){
-    						_hide	= false;
-    					}
-					}
-    				
-    				var _is_error_data	=	 false;
-    				
-    				for(var lineError in _errorData)
-					{
-						if(_report_id==lineError)  
-						{
-							_hide= false;
-							_is_error_data	=	true;
-						}
-					}
-    				
-    				
-    				if(_is_error_data){
-    					modal.find('.action_WRSJobModalCancelQuery').addClass('hide');
-    					modal.find('.action_WRSJobModalCloseWindow').removeClass('hide');
-    				}else{
-    					modal.find('.action_WRSJobModalCancelQuery').removeClass('hide');
-    					modal.find('.action_WRSJobModalCloseWindow').addClass('hide');
-    				}
-				
-    				
-    				if(_hide)
-    				{
-    					modal.addClass('hide');
-    				}else{
-    					
-    					__time(opts);
-    					modal.removeClass('hide');
-    				}
-    		_END('WRSJobModal::__click_aba');		
-		 }
-		
-	 
-		var __error			=	 function(options)
-		{
-			_START('WRSJobModal::__error');	
-			var _report_id		=	options.report_id;
-			var msg				=	options.msg;
-			
-			var _data			=	that.data(DATA_NAME);
-			var _error			=	that.data(ERROR);
-			
-			
-		
-			
-			if(empty(_data)) 	_data	=	{};
-			
-			var tmp_data			=	{};
-			
-			
-			if(empty(_error))	_error	=	{};
-			
-				_error[_report_id]	= msg;
-				that.data(ERROR,_error);
-	
-				
-			__close({report_id:_report_id,wait:false});
-			
-			
-			for(var lineData in _data)
-				{
-						if(_data[lineData].report_id==_report_id)
-							{
-							
-							}else{
-									tmp_data[lineData]	=	_data[lineData];
-							}
-				}
-			
-			
-			
-			
-			if(options.active)
-			{
-				var _modal			=	$(MODAL_JOB);
-					_modal.find('.modal-text-wrs-job').html(msg);
-			}
-			
-			
-			var _title		=	that.wrsAbas('aba_title',{report_id:_report_id});
-			
-				alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+msg, 0);
-				
-			that.data(DATA_NAME,tmp_data);
-			_END('WRSJobModal::__error');	
-		}
-		
-		
-		var __time			=	 function(options)
-		{
-			_ONLY('WRSJobModal::__time');	
-				that.WRSTimerLoader('init',options);
-			//$('.wrs-modal-time')
-		}
-		
-			var methods = 
-			{
-			        init 			: 	__init,	//Criando o HTML e Start da estrutura
-			        is_active		:	__is_active,	//Verificando se a aba está ativa
-			        demo			:	__demo_trahs,	//Demonstração
-			        aba				:	__aba,
-			        close			:	__close,
-			        click_aba		:	__click_aba,
-			        resize			:	__resize,
-			        error			:	__error,
-			        clean			:	__clean
-			      //  time			:	__time
-			};
-		
-		 
 			/*
-			 * 
-			 * Inicia a construção dos metodos
-			 * 
+			 * Click Cancel JOB
 			 */
-			if ( methods[methodOrOptions] )
+			var EventClickJobModalCancel	=	 function()
 			{
-		            return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
-		    }
-			else if ( typeof methodOrOptions === 'object' || ! methodOrOptions )
-			{
-		            // Default to "init"
-		            return methods.init.apply( this, arguments );
-		    }
-		    else
-		    {
-		            $.error( 'Method ' +  methodOrOptions + ' does not exist on jQuery.tooltip' );
-		    }   
+				_START('managerJOB::EventClickJobModalCancel');
+				
+					var _data		=	 GetData();
+					var _report_id	=	_data.report_id_active;
+					
+					
+					var setElementsLocal	=	 function(_report_id,_data)
+					{
+						//Alimentando as flags do sistema
+						setCancel(_report_id,_report_id);
+						setMensagens(_report_id,undefined);
+						setJobRender(_report_id,undefined);
+						setMktime(_report_id,undefined);
+						
+						if(_data.aba_close_report_id!=false)
+						{
+							setAbaClose(false);
+						}
+					}
+					
+					
+						// Foi solicitado a opção de cancelar a ABA
+						if(_data.aba_close_report_id!=false)
+						{
+							_report_id	=	_data.aba_close_report_id;
+						}
+						
+					
+						//Não permite a parace se o title do botão tiver desabilitado
+						if(_data.not_title==true)
+						{
+							_END('managerJOB::EventClickJobModalCancel');
+							setElementsLocal(_report_id,_data);
+							return true;
+						}
+						
+						
+						//Se não existir job então não permite o cancelamento
+						if(ExistRealJob(_report_id,_data.job)==false)
+						{
+							_END('managerJOB::EventClickJobModalCancel o Job pode já estar em processo de renderização ou não foi criado');
+							//alertify.error('O job ainda não foi criado');
+							//setElementsLocal(_report_id,_data)
+							return true;
+						}
+
+						//show grid
+						$('#'+_report_id+'Main').removeClass('hide');
+						
+					
+					var _file			=	'WRS_PANEL';
+					var _class			=	'WRS_PANEL';
+					var _event			=	'stopjob';
+					var param_request	=	{report_id:_report_id};
+						
+						$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_QUERY:true});
+						$(_data.modal).addClass('hide');
+
+							runCall(
+										param_request,
+										_file,
+										_class,
+										_event,
+										RequestProccessCancelJOB,
+										'modal','json'
+									);	
+
+
+						setElementsLocal(_report_id,_data);				
+							
+				_END('managerJOB::EventClickJobModalCancel');
+			}
 			
 			
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    $.fn.ThreadJobManager = function(report_id) 
-    {
+			
 		
-		_START('ThreadJobManager');	
-    	var that			=	this;
-    	var DATA_NAME		=	'WrsThreadJobManager';
-    	var WHO_CALL		=	'body'; // o evento principal é sempre em cima da body
-    	var time			=	0;
-    	
-    	
-    	
-    	//Valor da Thread Principal
-    	var THREAD_MAIN		=	'WrsThreadJobManagerTHREAD';
+			
+			
+			
+			/*
+			 * CLick para fechar a janela de modal
+			 */
+			var EventClickJobModalClose		=	 function()
+			{
+				_ONLY('managerJOB::EventClickJobModalClose');
+				var _data	=	 GetData();
+					$(_data.modal).addClass('hide');
+					
+					setMensagens(_data.report_id_active,undefined);//remove a mensagel
+			}
+			
+			
+			
+			
+			
+			var __setActiveAba	=	 function(options)
+			{
+				_START('managerJOB::__setActiveAba');
+				
+				var _report_id		=	options.report_id;
+				var _data			=	GetData();
+				
+					setReportActive(_report_id);
 
-    	var MSG_JOBS		=	'WrsThreadJobManagerMessager';
-    	//Gerenciamento para saber se a thread está inativa
-    	//Valor da threade
-    	//se ela estive inativa então força a reativar
-    	var THREAD_TIMEOUT	=	'WrsThreadJobManagerTHREADTimeOut';
-    	
-    	var ERROR			=	'WrsThreadJobManagerERROR';
-    	
-    	//TRACE_DEBUG('receive::'+report_id);
-    	var data_param		=	that.data(DATA_NAME);
-    	
-    		that.WRSJobModal('clean');
-    	
-    	
-    		if(empty(report_id))
-    		{
-    			console.error('Não foi declarado um report_id',0);
-    			return true;
-    		}
-    	
+					//Não existe informações para rendetizar
+					if(ExistRealJob(_report_id,_data.job_render)==false)
+					{
+						$(_data.modal).addClass('hide');
+						return true;
+					}
+					
+					
+					time_loop_control();
+					
+					$(_data.modal).removeClass('hide');
+					
+				_END('managerJOB::__setActiveAba');
+			}
+			
+			
+			
+			
+			
+			var __resize			=	 function(options)
+			{
+				_START('managerJOB::__resize');
+				$('.ui-layout-center').css({overflow: 'visible'})
+					var _data		=	 GetData();
+					var _options	=	options;
+					
+					//Pegando o Tamando padrão da Tela para repassar para a tela do modal
+					//if(options==undefined || options=='undefined')
+					//	{
+							var layout_center_object	=		$('.ui-layout-center');
+							var offset					= 		layout_center_object.offset();
+							//offset.top
+							
+							var layout_center			=	{
+																padding_left	:	parseInt(layout_center_object.css('padding-left').replace("px", "")),
+																padding_right	:	parseInt(layout_center_object.css('padding-right').replace("px", "")),
+																context			:	layout_center_object,
+																height			:	layout_center_object.outerHeight(),
+																width			:	layout_center_object.outerWidth()
+															};
+	
+							
+							_options	=	{height:layout_center.height-25,width:layout_center.width	}
+					//	}
+					
+	
+					$(_data.modal).width(	_options.width	).height(_options.height);
 
-    		if(empty(data_param) || data_param==null || data_param==undefined)	{
-    			data_param	=	[];
-    		}
-    		
-    		
-    		var _exist		=	 false;
-    		for(var lineDataParan in data_param)
-    			{
-    					if(data_param[lineDataParan].report_id==report_id) 
-    					{
-    						_exist	=	 true;
-    						//tmp_data_param.push(data_param[lineDataParan]);
-    					}
-    			}
-    		
-
-    		if(!_exist){
-    			//o push nesse pronto da erro
-    			data_param[data_param.length]	=	{'report_id' : report_id , 'mktime': mktime()};
-        		//Armazenando na estrutura para poder processar
-        		that.data(DATA_NAME,data_param);
-    		}
-    		
-
-    		
-    		//console.log('data_param',data_param);
-
-
-    		
-    	var removeThread	=	 function(report_id)
+				_END('managerJOB::__resize');
+			}
+			
+			
+			/**
+			 * Verifica se existe um job Real em Processo
+			 */
+			var ExistRealJob	=	 function (report_id,data)
+			{
+				
+				if(jQuery.isEmptyObject(data)==true) {
+					return false;
+				}
+				
+				for(var lineData in data)
+				{
+					if(lineData==report_id) return true;
+				}
+				
+				return false;
+			}
+			
+			/**
+			 * Existe in JOB
+			 * Nesse processo pe que detectamos que o JOB foi criado e é necessário iniciar o processo de LOOP
+			 * Caso exista então faz a criação do processo de JOB
+			 */
+			var __exist_job_render			=	 function(options)
+			{
+				_START('managerJOB::__exist_job_render');
+				
+				var _data				=	 GetData();
+				var _report_id			=	options.report_id;
+				var _is_force			=	 false;
+				var _data_job_render	=	_data.job_render
+				
+				//Verificando se veio com o comando de inicialização do Loop do JOB
+				try
+				{
+					_is_force	=	options.force_loop_job;
+					
+				}catch(e){
+					_is_force	=	 false;
+				}
+				
+				if(ExistRealJob(_report_id,_data)==true) return true;
+				
+				for(var lineData in _data_job_render)
+					{
+						if(lineData==_report_id)
+						{
+							if(_is_force) 
+							{
+								//setJob(lineData,lineData);
+								setTimeout(ThreaLoopJobManager, WRS_TIME_THREAD);
+							}
+								
+							return true;
+						}
+					}
+				
+				_END('managerJOB::__exist_job_render');
+				
+				return false;
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			//Cancelamento do JOB Automatico pelo script
+			var __remove_aba_cancel_job	=	 function(options)
+			{
+				_START('managerJOB::__remove_aba_cancel_job');
+					var _data		=	 GetData();
+					
+					var _report_id		=	 options.report_id;
+						setAbaClose(_report_id);	
+						EventClickJobModalCancel();
+						setAbaClose(false);
+						
+				_END('managerJOB::__remove_aba_cancel_job');
+			}
+			
+			
+			
+			
+			
+		 
+		 /*
+    	 * Thread por requisição do JOB
+    	 * Quando oprocesso é finalizado chama-o novamente até que não exista mais JOBS a serem processados
+    	 */
+    	var ThreaLoopJobManager	=	 function()
     	{
-			_START('removeThread');	
-    		var _data_param		=		that.data(DATA_NAME);
-    		var tmp_param		=		[];
-    		
+			_START('ThreaLoopJob');
+			var _data	=	 GetData();
+				if(jQuery.isEmptyObject(_data.job_render)==false)
+				{
+					var _file			=	'WRS_PANEL';
+					var _class			=	'WRS_PANEL';
+					var _event			=	'threadJobManager';
 
-    		for(var lineParan in _data_param)
-    			{
-	    			if(_data_param[lineParan].report_id!=report_id){
-	    				tmp_param[tmp_param.length]=	_data_param[lineParan];
-	    			}
-    			}
-    		
-    		that.data(DATA_NAME,tmp_param);
-			_END('removeThread');	
+						param_request	=	base64_encode(json_encode(array_keys(_data.job_render)));
+						runCall(	
+									{'jobs_manager':param_request},
+									_file,
+									_class,
+									_event,
+									ThreaLoopJobManagerData,
+									'modal',
+									'json'
+								);	
+				}
+    		_END('ThreaLoopJob');
     	}
-    		
-    	/*
-    	 * Limpra o time out da thread 
-    	 */
-    	var WrsThreadJobManagerTHREADClear	=	 function()
-    	{
-			_ONLY('WrsThreadJobManagerTHREADClear');	
-    		clearTimeout(that.data(THREAD_MAIN));    		
-    		that.data(THREAD_MAIN,'');
-    	}    	
-    
 		
-    	/*
-    	 * Limpra o time out da thread manager
-    	 */
-    	var WrsThreadJobTimeOut	=	 function()
-    	{
-			_ONLY('WrsThreadJobTimeOut');	
-    		clearTimeout(that.data(THREAD_TIMEOUT));    		
-    		that.data(THREAD_TIMEOUT,'');
-    	} 
-
-
-    	/*
+		
+		/*
     	 * Desabilita a estrutura de drill
     	 */
     	var remove_DRILL_LINE_STOP	=	 function(report_id)
@@ -1002,246 +665,247 @@ function _exist_job_in_cancel(report_id)
 			_ONLY('remove_DRILL_LINE_STOP');
     		$('.'+report_id).wrsAbaData('setKendoUi',{DRILL_LINE_STOP:false});
     	}
-    	
-    	/*
+		
+		
+		/*
     	 * Recebe dados do run call
     	 */
-    	var ThreadMainLoadData	=	 function(data)
+    	var ThreaLoopJobManagerData	=	 function(data)
     	{
-			_START('ThreadMainLoadData');
+			_START('ThreaLoopJobManagerData');
+			var _data_local			=	GetData();
+    		var modal				=	$(_data_local.modal);
+    		var report_id_modal		=	modal.find('.modal-buttons-wrs-job').attr('report_id');
 
-    		that.data(MSG_JOBS,data);
-        	var data_param		=	that.data(DATA_NAME);
-        	
-
-    		var modal			=	$('.modal-window-wrs');
-    		var report_id_modal	=	modal.find('.modal-buttons-wrs-job').attr('report_id');
-    		var _errorData		=	$('body').data(ERROR);
+    			setJobData(data);
+    	
+    			
     		
-    		if(empty(_errorData))	_errorData	=	{};
-    		
-
-    		
-    		for(var lineData in data)
+    		for(var _report_id in data)
     			{
-    					var _data_json	=	typeof(data[lineData]) == 'string' ? $.parseJSON(data[lineData]) : data[lineData];
+    					var _data_json	=	typeof(data[_report_id]) == 'string' ? $.parseJSON(data[_report_id]) : data[_report_id];
     					var is_Cancel	=	 false;
-    						
-    					remove_DRILL_LINE_STOP(_data_json['REPORT_ID']);
+    					var is_current	=	false;	
+    					 
     					
-    					try{
-    						
-    						if(_data_json['cancel']==true)
-    						{
-    							is_Cancel			=		true;	
-    						}
-    					}catch(e){
-    						is_Cancel	=	 false;
-    					}
-
-    					if(report_id_modal==lineData)
-						{
+							remove_DRILL_LINE_STOP(_data_json['REPORT_ID']);
+							
 							
 							try{
-								if(is_Cancel==false)
+								if(_data_json['cancel']==true)
 								{
-	    							var msg_job		=	_data_json['data']['QUERY_MESSAGE'];
-	    								modal.find('.modal-text-wrs-job').html(msg_job);
+									is_Cancel			=		true;	
 								}
-								
 							}catch(e){
-								
+								is_Cancel	=	 false;
 							}
-						}
-    					
-    				
-    					try{
-    							
-    							if(_data_json['error'])
-    								{
-    									var _title		=	that.wrsAbas('aba_title',{report_id:_data_json['REPORT_ID']});
-    									
-    										
-    									var aba_active	=	 get_aba_active_kendoUi();
-	    									_errorData[_data_json['REPORT_ID']]	= _data_json['error'];	 //Atualiza mensagens de erros
-	    									
-	    									that.WRSTimerLoader('stop',{report_id:_data_json['REPORT_ID']});
-	    									
-	    									$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
-	    									
-	    									if(!is_Cancel)
-    										{
-    											alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+_data_json['error'], 0);
-    										
-			    								if(aba_active['REPORT_ID']==_data_json['REPORT_ID'])
-			    									{
-			    										$('#'+aba_active['REPORT_ID']+'Main').removeClass('hide');
-			    									}
-    										}
-    									
-    								}
-    					}catch(e){}
-			
-	    					
-    					try{
-								if(_data_json['html'])
+							
+
+							
+							
+							
+							if(_data_local.report_id_active==_report_id)
+							{
+								is_current	=	 true;
+								try{
+									if(is_Cancel==false)
 									{
+										var msg_job		=	_data_json['data']['QUERY_MESSAGE'];
 										
-										alertify.success(sprintf(LNG('JOB_COMPLETE_LOAD'),that.wrsAbas('aba_title',{report_id:_data_json['REPORT_ID']})));
-										
-										removeThread(_data_json['REPORT_ID']);
-										
-										MOUNT_LAYOUT_GRID_HEADER(_data_json['warning']+_data_json['html'],'ThreadMainLoadData');
-										
-										_errorData	=	removeKey(_errorData,_data_json['REPORT_ID']);
-										
-										that.WRSTimerLoader('stop',{report_id:_data_json['REPORT_ID']});
-									}
-    						}catch(e){}
-    					
+											modal.find('.modal-text-wrs-job').html(msg_job);
+									}									
+								}catch(e){}
+							}
+							
+							
+							
+						
+							try{
+									
+									if(_data_json['error'])
+										{
+											var _title		=	$('.'+_report_id).wrsAbas('aba_title',{report_id:_report_id});
+											var aba_active	=	 get_aba_active_kendoUi();
+
+											setMensagens(_data_json['REPORT_ID'],_data_json['error']);//Adicionando a mensagem de erro ao processo de JOB
+
+												//setJob(_data_json['REPORT_ID'],undefined)//Removendo a estrutura do JOB
+
+												setJobRender(_data_json['REPORT_ID'],undefined)//Removendo a estrutura do JOB
+											
+												$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
+												
+												
+												if(!is_Cancel)
+												{
+
+													alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+_data_json['error'], 0);
+
+
+													if(aba_active['REPORT_ID']==_data_json['REPORT_ID'])
+														{
+														
+															$('#'+aba_active['REPORT_ID']+'Main').removeClass('hide');
+														}
+												}
+
+												if(is_current==true)
+												{
+													$(_data_local.cancel_job).addClass('hide');
+													$(_data_local.close_modal).removeClass('hide');
+												}
+										}
+							}catch(e){}
+							
+							
+							
+				
+						
+							try{
+									
+									if(_data_json['html'])
+										{
+											
+											var _title		=	$('.'+_report_id).wrsAbas('aba_title',{report_id:_report_id});
+											
+											alertify.success(sprintf(LNG('JOB_COMPLETE_LOAD'),_title));
+											
+											
+											MOUNT_LAYOUT_GRID_HEADER(_data_json['warning']+_data_json['html'],'ThreadMainLoadData');
+											
+											setMensagens(_data_json['REPORT_ID']);//removendo mensagem desse key
+											
+											//setJob(_data_json['REPORT_ID'],undefined)//Removendo a estrutura do JOB
+										}
+								}catch(e){}
+								
     			}
     		
-    		
-    		//Atualiza mensagem de erros
-    		$('body').data(ERROR,_errorData);
-    		
-    		//END FOR
-    		
-    		var _data_param		=	that.data(DATA_NAME);
 
-    		var is_data			=	false;
-    		
-    			try{
-    					if(array_length(_data_param)) is_data= true;
-    				
-    			}catch(e){}
-    		
-    		
-    			if(is_data)
+			if(jQuery.isEmptyObject(data)==false)
     			{
-    					that.data(THREAD_MAIN,setTimeout(ThreadMain, WRS_TIME_THREAD));	
-    			}else{
-    				WrsThreadJobManagerTHREADClear();
-    				WrsThreadJobTimeOut();
-    				that.data(MSG_JOBS,'');
+						setTimeout(ThreaLoopJobManager, WRS_TIME_THREAD);
+    			}
+				else
+				{
+					//setJob(undefined);//Zerando a estrutura de job
     				alertify.success(LNG('JOB_COMPLETE'));
-
-    				//$('body').data('WRSTimeLoader','');
-    				
-    				//that.WRSTimerLoader('timeout',{report_id:report_id_modal});    				
-    				$('body').WRSJobModal('close',{'report_id':report_id_modal});
     			}
 				
-			_END('ThreadMainLoadData');	
+			_END('ThreaLoopJobManagerData');	
+			
     	}
-    	
-    	
-    	
-    	var get_report_ids		=	 function(input)
-    	{
-    		var _reports		=	[];
-    		
-    		for(var lineInput in input)
-    			{
-    				_reports.push(input[lineInput].report_id);
-    			}
-    		
-    		return _reports;
-    	}
-    	
-    	
-    	/*
-    	 * Thread por requisição do JOB
-    	 * Quando oprocesso é finalizado chama-o novamente até que não exista mais JOBS a serem processados
-    	 */
-    	var ThreadMain	=	 function()
-    	{
-			_START('ThreadMain');
-    		var _data_param		=		that.data(DATA_NAME);
-    			time			=		mktime(date('H'),date('i'),parseInt(date('s'))+WRS_TIME_OUT_THREAD,date('m'),date('d'),date('Y'));
-    		var _mktime			=		mktime();
-    		var param_request	=	 	[];
-    		
+		
+		
+		
+		
+		/**
+		 * GErenciamento do Loop do TIMER
+		 */
+		var time_loop_control	=	 function()
+			{
+				var _data			=	GetData();
+				
+				
+					if(_data.report_id_active==null)
+					{
+						console.error('Não há aba ativa para o time_loop_control processar');
+						return false;
+					}
+					
+					if(jQuery.isEmptyObject(_data.job_render)==true)
+					{
+						_ONLY('time_loop_control:: Não existe mais objetos a serem renderizados');
+						return true;
+					}
+					
+				
+				
+				var _mktime			=	null;
+				
+				
+				try{
+					_mktime			=	_data.mktime[_data.report_id_active].mktime;
+				}catch(e){
+					_mktime= null;
+				}
+				
+				if(_mktime==null) return false;
+				
+				
+				var kendoUi			=		$('.'+_data.report_id_active).wrsAbaData('getKendoUi');
+				
+				if(kendoUi!=undefined)
+				{
+					if(kendoUi['DRILL_LINE_STOP'])
+					{
+						$(_data.cancel_job+' .title').hide();
+						setNotTitle(true);
+					}else{
+						$(_data.cancel_job+' .title').show();
+						setNotTitle(false);
+					}
+				}
 
-    		if(array_length(_data_param)>=1)
-    		{
-    			var _file			=	'WRS_PANEL';
-    			var _class			=	'WRS_PANEL';
-    			var _event			=	'threadJobManager';
-
-     				param_request	=	base64_encode(json_encode(get_report_ids(_data_param)));
-
-    				runCall(
-    							{'jobs_manager':param_request},
-    							_file,
-    							_class,
-    							_event,
-    							ThreadMainLoadData,
-    							'modal',
-    							'json'
-    						);	
-     				
-     				
-    		}
-    		
-    		_END('ThreadMain');
-    	}
-    	
-    	
-    	/*
-    	alertify.custom = alertify.extend("custom");
-		alertify.custom("Iniciando");
-    	*/
-    	/*
-    	 * Thread gerencial do processo 
-    	 */
-    	var ThreadMainManagerTimeOut	=	 function()
-    	{
-			_START('ThreadMainManagerTimeOut');
-    		var _data_param		=	that.data(DATA_NAME);
-    		var _mktime			=	mktime();
-    		
-    		
-	    		if(array_length(_data_param)>=1)
-	    		{
-	    			that.data(THREAD_TIMEOUT,setTimeout(ThreadMainManagerTimeOut, WRS_TIME_OUT_THREAD*1000));	
-	    		}
-	    		else
-	    		{
-	    			alertify.success(LNG('JOB_COMPLETE'));
-	    			WrsThreadJobTimeOut();
-	    		}
-			_END('ThreadMainManagerTimeOut');	
-    	}    	
-    	
-    	//Se existir alguma thread em execução para ela
-    	WrsThreadJobManagerTHREADClear();
-    	
-    	//limpa o thread manager
-    	WrsThreadJobTimeOut();
-    	
-//    	console.log('data_param',data_param);
-    	//Garante que seja executado apenas se houver dados para serem processados no thread
-    	if(array_length(data_param)>=1)
-    	{
-	    	//Iniciando a Thread MAIN
-	    	that.data(THREAD_MAIN,setTimeout(ThreadMain, WRS_TIME_THREAD));	
-	    	//Thread Manager para gerenciar as thread via requisição
-	    	that.data(THREAD_TIMEOUT,setTimeout(ThreadMainManagerTimeOut, WRS_TIME_OUT_THREAD*1000));	
-	    	
-	    	return false;
-    	}
-    	
-		_END('ThreadJobManager');
-    	return true;
-    };
-    
-    
-    
-    
-    
+				
+				
+				
+				$(_data.modal).find('.modal-title-wrs-job h3').html(_data.mktime[_data.report_id_active].title_aba);
+				
+				
+				var _mktime_current	=	mktime();
+					_mktime			=	_mktime_current-_mktime;
+				var _date			=	 date('i:s',_mktime);
+				
+					if(_data.not_title==true)
+					{
+						$(_data.cancel_job+' .title').hide();
+					}else{
+						$(_data.cancel_job+' .title').show();
+					}
+					
+					$('.wrs-modal-time').html(_date);
+					
+					setTimeout(time_loop_control, TIME_LOAD);
+			}
+			
+			
+		var methods = 
+		{
+				init 					: 	__init,
+				load_complete			:	__load_complete	,
+				start_job				:	__start_job,
+				error_html				:	__error_html,
+				create_modal			:	__create_modal,
+				setActiveAba			:	__setActiveAba,
+				resize					:	__resize,
+				exist_job_render		:	__exist_job_render,
+				data					:	GetData,
+				remove_aba_cancel_job	:	__remove_aba_cancel_job
+		};
+		
+		 
+		/*
+		 * 
+		 * Inicia a construção dos metodos
+		 * 
+		 */
+		if ( methods[methodOrOptions] )
+		{
+				return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+		}
+		else if ( typeof methodOrOptions === 'object' || ! methodOrOptions )
+		{
+				// Default to "init"
+				return methods.init.apply( this, arguments );
+		}
+		else
+		{
+				$.error( 'Method ' +  methodOrOptions + ' does not exist on jQuery.tooltip' );
+		}   
+	
+	}
+ 
  
 }( jQuery ));
-
- 
 

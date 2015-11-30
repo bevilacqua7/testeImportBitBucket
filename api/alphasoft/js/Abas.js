@@ -186,14 +186,13 @@ function optionsDataConvert(gridValue,with_decode)
 						
 						
 						/*
-						 * VErifica se a aba clicada estpa no proceço de JOB
+						 * Verifica se a aba clicada esta no proceço de JOB
 						 * caso sim 
 						 * para o o evento de click e reorna a função
 						 */
 						if(_isLoad)
 							{
 									//$('.container_panel_relatorio_rows').addClass('hide'); //remove-by Santos
-									$('.modal-window-wrs').removeClass('hide');
 									$('.container_panel_relatorio').show();
 									$('.wrs_panel_filter_measure').hide();
 									
@@ -219,9 +218,7 @@ function optionsDataConvert(gridValue,with_decode)
 							event.attr('is_load','true');
 						}
 						
-						if(!_isLoad){
-							$('.modal-window-wrs').addClass('hide');
-						}
+						
 
 						if(!_isLoad)
 						{
@@ -229,11 +226,6 @@ function optionsDataConvert(gridValue,with_decode)
 								{
 									if(!noactive){
 										if(wrs_panel_layout) {
-											//wrs_panel_layout		=	 $('body').data('wrs_panel_layout');
-											/*
-											 * Verificar essa linha pois é onde está executando novamente o load
-											 */		
-											$('body').WRSJobModal('click_aba',{'report_id':report_id});
 											//Faz o evento do click quando não existir relatório ainda
 											layout_east_close(false, _isLoad);
 										//	wrs_panel_layout.close('east');
@@ -544,32 +536,14 @@ function optionsDataConvert(gridValue,with_decode)
 				
 					wrs_run_filter_unlocked();
 				
-					var DATA_NAME		=	'WrsThreadJobManager';
-					var _data			=	 $('body').data(DATA_NAME);
-					var _isLoad			=	 false;
-				
-				var data_array_aba	=	$(this).wrsAbaData('getData');
-				
-				var gridValue		=	$(this).wrsAbaData('getKendoUi');
-					
-					//Verificando se a aba corrente está em processo de JOB
-						if(array_length(_data)>=1)
-						{
 
-							for(var lineData in _data)
-							{
-								if(_data[lineData].report_id==_report_id)
-									{
-										_isLoad	=	 true;
-									}
-							}
-						}
+				var _isLoad			=	 job_exist(_report_id);				
+				var data_array_aba	=	$(this).wrsAbaData('getData');				
+				var gridValue		=	$(this).wrsAbaData('getKendoUi');
 							
 
-				/*
-				 * Verificar essa linha pois é onde está executando novamente o load
-				 */		
-				$('body').WRSJobModal('click_aba',{report_id:_report_id});
+				//Informa qual sera a Ativa no momento	
+				$('body').managerJOB('setActiveAba',{report_id:_report_id});
 				
 					save_info_aba_current(aba_active);
 				
@@ -723,7 +697,6 @@ function optionsDataConvert(gridValue,with_decode)
 							if(empty(getID))
 							{
 								getID	=	_report_id_new	=	generateReportId();
-								console.log('gerando um novo ID');
 								$(this).attr('id-tag',_report_id_new);												
 								$('.wrsAbaNew').attr('id-aba',_report_id_new).addClass(_report_id_new).removeClass('wrsAbaNew');
 							}else{
@@ -794,16 +767,10 @@ function optionsDataConvert(gridValue,with_decode)
 							return true;
 						}
 				
-					//Cancelando a consulta caso exista
-					var action_WRSJobModalCancelQuery			=	$('.action_WRSJobModalCancelQuery');
-					var _parent_action_WRSJobModalCancelQuery	=	action_WRSJobModalCancelQuery.parent();
-					var report_id_cencel_old					=	_parent_action_WRSJobModalCancelQuery.attr('report_id'); 
 					
-						_parent_action_WRSJobModalCancelQuery.attr('report_id',_report_id);
-						
-						action_WRSJobModalCancelQuery.trigger('click');
-						
-						_parent_action_WRSJobModalCancelQuery.attr('report_id',report_id_cencel_old);
+					$('body').managerJOB('remove_aba_cancel_job',{'report_id':_report_id});
+
+					
 						
 					__remove({'report_id':_report_id});
 					
@@ -1541,6 +1508,12 @@ function optionsDataConvert(gridValue,with_decode)
 			 */
 			var __setKendoUi	=	 function(input)
 			{
+				
+				if(data_global==undefined || data_global==null)
+					{
+						console.error('data_global nãoi foi definido ainda data_Error:',input);
+						return false;
+					}
 				_ONLY('wrsAbaData::__setKendoUi');
 				set_input_poolin(input,'kendoUi');
 			}

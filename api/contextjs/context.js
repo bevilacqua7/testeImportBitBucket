@@ -399,7 +399,6 @@ var context = context || (function () {
 		
 		var divMainEvent		=	$wrsEventMain.parent().parent().parent().parent();
 		var type				=	divMainEvent.attr('type');
-		 
 		
 	 	/*
 		  *  LAYOUT_ROWS

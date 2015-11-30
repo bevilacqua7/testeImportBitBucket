@@ -17,7 +17,7 @@
 
 
 
-
+<link rel="stylesheet" type="text/css" href="api/bootstrap-3.3.0/dist/css/bootstrap.css" />
 	<div id="fullwidth" class="util-carousel fullwidth"  >
 			<?php echo $WRS_MAIN_DATABASES;?>
 	</div><!-- "fullwidth" -->
@@ -34,18 +34,10 @@
 
 
 
-	   <div style="position:fixed;bottom:0;margin-top:30px;height:40px;width:99%">
-		<div style="-webkit-box-shadow: 3px 3px 5px 0px rgba(50, 50, 50, 0.75);
--moz-box-shadow:    3px 3px 5px 0px rgba(50, 50, 50, 0.75);
-box-shadow:         3px 3px 5px 0px rgba(50, 50, 50, 0.75);">
-			<table width="100%" border="0" class="ui-widget-header">
-			  <tr>
-				<td align="right" style="padding: 5px" class="ui-state-active no-border">
-					<span id="data_sistema" class="WRS_TIME" style="font-weight:bold;font-size:12px;"></span></td>
-			  </tr>
-			</table>
+	   <div class="rodape-main ui-widget-header ui-state-active no-border">
+					<span id="data_sistema" class="WRS_TIME" style="font-weight:bold;font-size:12px;"></span>
 		</div>
-	</div>
+	 
 	
 <script src="api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2?9371"></script>
 
