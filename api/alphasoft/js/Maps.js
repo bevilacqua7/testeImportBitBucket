@@ -156,6 +156,8 @@ function WRSMaps(KendoUi)
 							_title		=	titleByColumn[_cmp];
 						}
 						
+						_title			=	strip_tags(_title);
+						
 							maps[maps.length]	=	 {
 															latitude	:	_explode[0],
 															longitude	:	_explode[1],

@@ -13,11 +13,10 @@
 <!-- CSS Gerenciador de JOBS para utilizar o mesmo padrao das MODAIS pro logoff -->
 <link href="api/jquery.modal-1.2/css/jquery.modal.wrs.job.css" type="text/css" rel="stylesheet" />
 <link href="api/font-awesome-4.3.0/css/font-awesome.min.css?v=0.0.1" rel="stylesheet" type="text/css" />
-
-
-
-
 <link rel="stylesheet" type="text/css" href="api/bootstrap-3.3.0/dist/css/bootstrap.css" />
+
+<div class="container_main">
+
 	<div id="fullwidth" class="util-carousel fullwidth"  >
 			<?php echo $WRS_MAIN_DATABASES;?>
 	</div><!-- "fullwidth" -->
@@ -34,21 +33,22 @@
 
 
 
+</div>
 	   <div class="rodape-main ui-widget-header ui-state-active no-border">
 					<span id="data_sistema" class="WRS_TIME" style="font-weight:bold;font-size:12px;"></span>
 		</div>
 	 
 	
-<script src="api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2?9371"></script>
+<script src="api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2"></script>
 
 <script>
 
-/*
+
 $(function(){
 	$('#fullwidth a').click(function(){
 		$("#fakeloader").show().fakeLoader({closeLoad:true});
 	});
-});*/
+});
 //Animação do BOX
 function WRS_RESIZE(){
 				//var height	=	$(window).height()-120;
@@ -60,14 +60,25 @@ function WRS_RESIZE(){
 				$('.fullwidth:first,.fullwidth:last').css('margin-bottom',(complete/4));
 				$('.fullwidth:first,.fullwidth:last').css('margin-top',(complete/4));
 
-				//first-child
-				//fullwidth
+
+
+				
+				  var _height		=	 ($(window).outerHeight()-$('.wrs_header_main').outerHeight()-$('.rodape-main').outerHeight())-40;
+				  $('.container_main').height(_height);				
+ 
 }
 
 		  $( window ).resize(function(){
+
+
+			  location.reload();
+			  
+				
+				/*
 				setTimeout(function(){
-					WRS_RESIZE();
-					},500);
+					WRS_RESIZE;
+					},1000);
+					*/
 			  });
 
 		  
@@ -77,42 +88,21 @@ function WRS_RESIZE(){
 					  function() {
 
 						$(this).attr('hover','hover');
-					/*
-						$('.fullwidth').each(function(){
-
-							if($(this).attr('hover')!='hover'){
-								 $( this ).animate({
-									    opacity: 0.25
-									  }, {
-										    duration: 100,
-										    specialEasing: {
-										    	opacity: "easeInOutCirc"
-										    }
-										  });
-							}
-							
-						});
-					*/
 					  }, function() {
 						  $(this).attr('hover','');
-						  /*
-						  $( '.fullwidth' ).animate({
-							    opacity: 1
-							  }, {
-								    duration: 100,
-								    specialEasing: {
-								    	opacity: "easeInOutCirc"
-								    }
-								  });
-						  */
+						   
 					  }
 					);
+
+			  var _height		=	 ($(window).outerHeight()-$('.wrs_header_main').outerHeight()-$('.rodape-main').outerHeight())-40;
+				
+				$('.container_main').height(_height);
+				
 				
 				$('.fullwidth').utilCarousel({
 					breakPoints: [[600, 2], [900, 3], [1200, 4], [1500, 5], [1800, 5]],
 					mouseWheel: true,
-					rewind: false,
-				/*	itemLess:'',*/
+					rewind: false
 				});
 
 
@@ -138,7 +128,13 @@ function WRS_RESIZE(){
 					$(this).height(height+16);
 					
 					});
-				 
+
+	 			WRS_RESIZE();
+
+	 			setTimeout(function(){
+					WRS_RESIZE;
+					},1000);
+	 			 
 			});
 	 
 

@@ -1381,25 +1381,59 @@ function wrs_run_filter()
 	var report_KendoUi		=	aba_active.wrsAbaData('getKendoUi');
 	var history				=	aba_active.wrsAbaData('getHistory');
 	var _report_id			=	report_KendoUi['REPORT_ID'];
-
-
-			if(aba_active.wrsAbaData('get_change_aba')==true)
-			{
-				aba_active.wrsAbaData('set_change_aba',false);	
-				configure_options_show_grid($(this));
-				_END('wrs_run_filter');
-				aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
-				
-				panel_open_by_time_out(_report_id);
-				return true;
-			}
 	
+	
+	var _filtro_size		=	$('.sortable_filtro').find('li');
+	
+	
+	if(_filtro_size.length==1)
+	{
+		_filtro_size = _filtro_size.hasClass('placeholder')==true ? false : true;
+	}else if(_filtro_size.length==0)
+	{
+		_filtro_size	=	 false;
+	}else{
+		_filtro_size	=	 true;
+	}
+	
+	
+	
+	//Se não existir filtro então fecha a aba de filtros
+	if(_filtro_size==false)
+	{
+		wrs_panel_layout.close('west');
+	}else{
+		wrs_panel_layout.open('west');
+	}
+		
+	
+	
+	
+		if(aba_active.wrsAbaData('get_change_aba')==true)
+		{
+			aba_active.wrsAbaData('set_change_aba',false);	
+			configure_options_show_grid($(this));
+			_END('wrs_run_filter');
+			aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
+			
+			panel_open_by_time_out(_report_id);
+			
+			
+			return true;
+		}
+	
+		
+		
+		
+		
 		
 		if(noactive)
 		{
 			$(this).removeAttr('noactive');
 			//stop_job_timeout(_report_id);
 			_END('wrs_run_filter');
+			
+			
 			return true;
 		}
 	
@@ -1419,7 +1453,6 @@ function wrs_run_filter()
 	var sortable_coluna		=	 rows_by_metrica_attr_base64('.sortable_coluna','attr');
 	var sortable_filtro		=	 rows_by_metrica_attr_base64('.sortable_filtro','attr');
 	
-
 	var request_metrica		=	 sortable_metrica.request;
 	var request_linha		=	 sortable_linha.request;
 	var request_coluna		=	 sortable_coluna.request;
@@ -1430,19 +1463,20 @@ function wrs_run_filter()
 		sortable_coluna		=	 sortable_coluna.flag;
 		sortable_filtro		=	 sortable_filtro.flag;
 		
-	
-		
 	var run					=	 false;
 	var mensagem			=	"";
 	var flag_load			=	$(this).attr('flag_load');
 	var getAllFiltersToRun	=	"";
 	
 	
+		
+	
 	//Se existir o job em execução desse mesmo report id então faz o cancelamento
 	if(job_exist(report_KendoUi.REPORT_ID))
 	{
 		//click_stop_job();
-		console.log('já existe no JOB então não processa');
+		//console.log('já existe no JOB então não processa');
+		WRS_ALERT(LNG('CONSULTA_ATIVA_CANCELAR'),'warning');
 		return true;
 	}
 	
@@ -1529,9 +1563,6 @@ function wrs_run_filter()
 						var _wrsGrid	=	$('.wrsGrid');
 						var __id		=	'#'+_wrsGrid.attr('id');
 						var _rand		=	 js_rand(0,99999);
-						
-						
-							
 							
 						try{
 							if(empty(report_KendoUi.TYPE_RUN))
@@ -1541,6 +1572,7 @@ function wrs_run_filter()
 						}catch(e){}
 							is_param		=	true;
 					}
+					
 					
 					wrs_data_param.LAYOUT_ROWS		=	base64_encode(implode(',',request_linha));
 					wrs_data_param.LAYOUT_COLUMNS	=	base64_encode(implode(',',request_coluna));
@@ -1559,7 +1591,7 @@ function wrs_run_filter()
 					wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));
 					
 					
-					//Verificnado se existe alterações de pesquisa 
+					
 					var wrsConfigGridDefault_data	=	get_aba_active_kendoUi()
 					
 					
@@ -1578,7 +1610,6 @@ function wrs_run_filter()
 					}else{
 						var jsonMukltiple			=	$('.wrs_multiple_cube_event').find('option:selected').attr('json');
 						_param_request['json']		=	jsonMukltiple;
-						
 					}
 					
 					
@@ -1638,11 +1669,12 @@ function wrs_run_filter()
 		}
 		
 
-		$('body').managerJOB('start_job',{report_id:_param_request['REPORT_ID'],title_aba:_param_request['TITLE_ABA'], 'mktime':mktime()});
+		
+		$('body').managerJOB('start_job',{report_id:_param_request['REPORT_ID'],title_aba:_param_request['TITLE_ABA'], 'mktime':mktime(), type_run: _param_request['TYPE_RUN']});
 		
 		//É necessário zerar essas funções para que não mande recriar novamente a estrutura de deill
 		
-	
+
 		var data_header_drill_column	=	report_KendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER;
 
 		
@@ -1663,8 +1695,6 @@ function wrs_run_filter()
 																}
 												);
 		
-
-		
 		try{
 			if(report_KendoUi['MKTIME_HISTORY']!=null)
 			{
@@ -1675,7 +1705,14 @@ function wrs_run_filter()
 		}
 		
 		
+	
+		console.log(_param_request['TYPE_RUN']);
+		if( _param_request['TYPE_RUN']!='DrillColuna')
+		{
+			aba_active.wrsAbaData('aba_detect_change');
+		}
 		
+
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
 		
@@ -1711,11 +1748,7 @@ function wrs_run_filter()
 				WRS_ALERT(sprintf(LNG('RUN_RELATORIO_FALTA_INFORMACAO'),mensagem),'error');
 			}
 			
-			console.log('send');
 			panel_open_by_time_out(_report_id);
-			
-		
-		
 			//END
 			
 	}
@@ -1805,7 +1838,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 			if($('body').managerJOB('exist_job_render',{report_id:data.REPORT_ID,force_loop_job:true}))
 			{
 				_END('MOUNT_LAYOUT_GRID_HEADER not in JOB');
-				console.log('não libeta o MOUNT_LAYOUT_GRID_HEADER');
+			//	console.log('não libera o MOUNT_LAYOUT_GRID_HEADER');
 				return true;
 			}
 			
@@ -1819,7 +1852,6 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 
 
-	console.log('render::MOUNT_LAYOUT_GRID_HEADER');
 	
 	/*
 	 * WARNING: é essa variável que impede de repetir os conteiners
@@ -1950,7 +1982,15 @@ function wrs_panel_active_drag_drop()
 	 //Iniciando o Evento de Arrastar
 	 setDraggable(".WRS_DRAG_DROP li",false,'');
 	 
-
+	 
+	 /*
+	  * Detectando quando há modificações
+	  * @Link http://stackoverflow.com/questions/15657686/jquery-event-detect-changes-to-the-html-text-of-a-div
+	  */	 
+/*	 $('.sortable_metrica,.sortable_linha,.sortable_coluna,.sortable_filtro').bind("DOMNodeInserted DOMNodeRemoved",function(){
+		 aba_detect_change();
+	 });*/
+	 
 	 wrs_panel_layout.allowOverflow($("li.ui-widget-content.box_wrs_panel"));
 	 
 	 
@@ -2079,7 +2119,8 @@ function force_show_drag_on_drop(painel_origem,count){
 	   var receiveActive		=	false;
 	   
 		   
-	   wrs_panel_active_drag_drop();
+
+		   wrs_panel_active_drag_drop();
 	   
 	   /*
 	    * COnfigurando o Contex Menu

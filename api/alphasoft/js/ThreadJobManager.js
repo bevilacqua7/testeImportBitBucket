@@ -194,13 +194,34 @@ function job_exist(report_id)
 					setData(_data);
 			}			 
 			
-			/*
+			
+			
+			
 			var setJob	=	 function(key,data)
 			{
-				var _data			=	GetData();
-					_data.job		=	data;
+				var _data					=	GetData();
+				
+				if(data==undefined || data=='undefined' || data==null || data=='')
+					{
+						if(key==undefined || key=='undefined' || key==null || key=='')
+						{
+							_data.job	=	{};
+						}
+						else
+						{
+							delete _data.job[key];
+						}
+					}
+					else
+					{
+						_data.job[key]	=	data;
+					}
+					
 					setData(_data);
-			}*/
+			}
+			
+			
+			
 			
 			var setJobData	=	 function(data)
 			{
@@ -290,6 +311,7 @@ function job_exist(report_id)
 					
 						setJobRender(_report_id,options);		
 						setMktime(_report_id,options);
+						
 						time_loop_control();
 						
 						$(_data.modal).removeClass('hide');
@@ -657,15 +679,6 @@ function job_exist(report_id)
     	}
 		
 		
-		/*
-    	 * Desabilita a estrutura de drill
-    	 */
-    	var remove_DRILL_LINE_STOP	=	 function(report_id)
-    	{
-			_ONLY('remove_DRILL_LINE_STOP');
-    		$('.'+report_id).wrsAbaData('setKendoUi',{DRILL_LINE_STOP:false});
-    	}
-		
 		
 		/*
     	 * Recebe dados do run call
@@ -673,6 +686,7 @@ function job_exist(report_id)
     	var ThreaLoopJobManagerData	=	 function(data)
     	{
 			_START('ThreaLoopJobManagerData');
+			
 			var _data_local			=	GetData();
     		var modal				=	$(_data_local.modal);
     		var report_id_modal		=	modal.find('.modal-buttons-wrs-job').attr('report_id');
@@ -688,7 +702,7 @@ function job_exist(report_id)
     					var is_current	=	false;	
     					 
     					
-							remove_DRILL_LINE_STOP(_data_json['REPORT_ID']);
+							 
 							
 							
 							try{
@@ -732,7 +746,7 @@ function job_exist(report_id)
 												//setJob(_data_json['REPORT_ID'],undefined)//Removendo a estrutura do JOB
 
 												setJobRender(_data_json['REPORT_ID'],undefined)//Removendo a estrutura do JOB
-											
+												setJob(_report_id,undefined);
 												$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
 												
 												
@@ -769,9 +783,9 @@ function job_exist(report_id)
 											var _title		=	$('.'+_report_id).wrsAbas('aba_title',{report_id:_report_id});
 											
 											alertify.success(sprintf(LNG('JOB_COMPLETE_LOAD'),_title));
-											
-											
 											MOUNT_LAYOUT_GRID_HEADER(_data_json['warning']+_data_json['html'],'ThreadMainLoadData');
+											
+											setJob(_report_id,undefined);
 											
 											setMensagens(_data_json['REPORT_ID']);//removendo mensagem desse key
 											
@@ -790,6 +804,7 @@ function job_exist(report_id)
 				{
 					//setJob(undefined);//Zerando a estrutura de job
     				alertify.success(LNG('JOB_COMPLETE'));
+    				setJob(undefined);
     			}
 				
 			_END('ThreaLoopJobManagerData');	
@@ -805,6 +820,7 @@ function job_exist(report_id)
 		var time_loop_control	=	 function()
 			{
 				var _data			=	GetData();
+		
 				
 				
 					if(_data.report_id_active==null)
@@ -822,10 +838,11 @@ function job_exist(report_id)
 				
 				
 				var _mktime			=	null;
-				
+				var _type_run	=	null;
 				
 				try{
 					_mktime			=	_data.mktime[_data.report_id_active].mktime;
+					_type_run		=	_data.mktime[_data.report_id_active].type_run
 				}catch(e){
 					_mktime= null;
 				}
@@ -833,11 +850,7 @@ function job_exist(report_id)
 				if(_mktime==null) return false;
 				
 				
-				var kendoUi			=		$('.'+_data.report_id_active).wrsAbaData('getKendoUi');
-				
-				if(kendoUi!=undefined)
-				{
-					if(kendoUi['DRILL_LINE_STOP'])
+					if(_type_run=='DrillColuna')
 					{
 						$(_data.cancel_job+' .title').hide();
 						setNotTitle(true);
@@ -845,7 +858,6 @@ function job_exist(report_id)
 						$(_data.cancel_job+' .title').show();
 						setNotTitle(false);
 					}
-				}
 
 				
 				

@@ -220,6 +220,10 @@ var AUTO_LOAD_RUN			= <?php echo (($request_exec_report && $request_exec_report=
 	<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+	
+<script>
+	not_close_save_info();
+</script>	
 </head>
 <body>
 <div id="fakeloader"></div><script type="text/javascript">$("#fakeloader").fakeLoader();</script>

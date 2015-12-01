@@ -240,9 +240,10 @@ function compare_filter_change(_filters_compare)
 	  for(obj in filters_compare)
 	  {
 	  		var headerFilter	=	'#'+filters_compare[obj];
-	  		var header			=	$(headerFilter).attr('json');
-        	var json			=	$.parseJSON(base64_decode(header));	   
-
+//	  		var header			=	$(headerFilter).attr('json');
+	  		var header			=	$(headerFilter).data('filter');
+        	//var json			=	$.parseJSON(base64_decode(header));	   
+	  		var json			=	header;	   
         	var filter			=	 [];
 	  		var filter_click	=	 [];
 	  		
@@ -424,29 +425,10 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 		if(_trim(histoty_param['TOP_CONFIG'])!=_trim(param_request.TOP_CONFIG))
 		{
 			flag=false;
-			/*
-			if(!empty(histoty_param['TOP_CONFIG']))
-			{
-				//Exceção para limpar os TOPs
-				param_request.DRILL_HIERARQUIA_LINHA_DATA_HEADER	=	"";
-				TRACE_DEBUG('apagar');
-				param_request.DRILL_HIERARQUIA_LINHA_DATA		=	"";
-			}*/
+		
 		}
 
 	
-	if(!flag)
-	{
-		//Garante que ao clicar na linha de drill na primeira vez seja executada
-/*		if(	(!empty(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']) && !empty(histoty_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']))  || 
-			param_request.TYPE_RUN=='DrillLinha' || 
-			param_request.TYPE_RUN=='DrillHeaderData')
-		{
-			param_request.DRILL_HIERARQUIA_LINHA_DATA_HEADER	=	"";
-			TRACE_DEBUG('APAGR_2');
-			param_request.DRILL_HIERARQUIA_LINHA_DATA		=	"";
-		}*/
-	}
 	
 	
 	
@@ -465,7 +447,6 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 			{
 				if(!manager_aba)
 				{	
-					//TRACE_DEBUG('NOT 02');
 					WRS_ALERT(LNG('RUN_GRID_CHANGE_NOT'),'warning');
 				}
 
@@ -501,18 +482,6 @@ _END('is_wrs_change_to_run');
 	}
 	else
 	{
-	
-		
-		if(eastonclose=='true')
-			{
-				if(loadStart)
-				{	
-					//MODAL_LOADING_WRS_PANEL();
-				}
-				//$('.wrs_run_filter').attr('eastonclose','false');
-			}
-		
-			 			
 			for(var lineHistoty_param in param_request)
 			{
 				histoty_param[lineHistoty_param]	=	param_request[lineHistoty_param];
@@ -591,8 +560,9 @@ function tagFilterWRS(typeReturn)
 
 	$(".WRS_DRAG_DROP_FILTER h2").each(function(){
  		
- 		var json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
- 		
+ 		//var json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
+		var json	=	 	$(this).data('filter');
+		
  		var atributo	=	$(this).attr('atributo');
  		var filter_fixed=	$(this).hasClass('hide');
  			atributo	=	empty(atributo) ? '' : atributo;
@@ -677,8 +647,8 @@ function wrsFilterClickFalse(filter_hide)
 			_START('WrsFilter::wrs_filter_check_change_filter');	
     		var flag_back		=	false;
     		$(".WRS_DRAG_DROP_FILTER").find('h2').each(function(){
-    			var json				=	$.parseJSON(base64_decode($(this).attr('json')));	   
-
+    			//var json				=	$.parseJSON(base64_decode($(this).attr('json')));	   
+    			var json				=	$(this).data('filter');	   
     			if(json['FILTER_TO_CLEAN']==true)
     			  	{
     			        if(compare_filter_change(json['FILTER_TO_COMPARE']))
@@ -699,8 +669,8 @@ function wrsFilterClickFalse(filter_hide)
 			_START('WrsFilter::setJsonEncodeDecode');	
     		var index_data			=	 localEvent.attr('index-data');
     		var main				=	$('#wrs_header_filter_main_'+index_data);
-    		var json				=	$.parseJSON(base64_decode(main.attr('json')));	
-    		
+    		//var json				=	$.parseJSON(base64_decode(main.attr('json')));	
+    		var json				=	main.data('filter');	
     		
     		if(is_array(label))
     			{
@@ -730,7 +700,8 @@ function wrsFilterClickFalse(filter_hide)
     			json['PG_CURRENT']				=	0;
     		}
     		
-    		main.attr('json',base64_encode(json_encode(json,true)));
+ //   		main.attr('json',base64_encode(json_encode(json,true)));
+    		main.data('filter',json);
     		
     		if(!noLoad)
     		{
@@ -756,7 +727,8 @@ function wrsFilterClickFalse(filter_hide)
 				
 			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 					var level_full					=	$(this).attr('level-full');	
-					var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
+					//var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
+					var json						=	$(this).data('filter');	
 					var not_use						=	$(this).hasClass('hide');
 					
 
@@ -831,7 +803,8 @@ function wrsFilterClickFalse(filter_hide)
 				
 			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 					var level_full					=	$(this).attr('level-full');	
-					var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
+					//var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
+					var json						=	$(this).data('filter');	
 					var _json_filter				=	'';
 						//Verificando se o Level Full exist no array passado
 						if(in_array(level_full, levelUP, true) || typeEvent=='all')
@@ -1076,7 +1049,8 @@ function wrsFilterClickFalse(filter_hide)
         	 }
 
         	 
-        	 var json				=	$.parseJSON(base64_decode(event.attr('json')));	        	 
+        	 //var json				=	$.parseJSON(base64_decode(event.attr('json')));	        	 
+        	 var json				=	event.data('filter');	        	 
         	 var index_data			=	event.attr('index-data');
         	 var wrs_filter_body	=	'#wrs_filter_body_'+index_data;
         	 var body				=	$(wrs_filter_body);
@@ -1144,7 +1118,9 @@ function wrsFilterClickFalse(filter_hide)
 
 	 		var index_data			=	 data.data.index_data;
  			var _main				=	$('#wrs_header_filter_main_'+index_data);
-		 		_main.attr('json',base64_encode(json_encode(data.data,true)));
+		 		//_main.attr('json',base64_encode(json_encode(data.data,true)));
+		 		
+		 		_main.data('filter',data.data);
 
 				
 		 
@@ -1172,7 +1148,8 @@ function wrsFilterClickFalse(filter_hide)
 		 			
 		 			var index_data			=	 $(this).attr('index-data');
 		 			var main				=	$('#wrs_header_filter_main_'+index_data);
-		 			var json				=	$.parseJSON(base64_decode(main.attr('json')));	
+		 			//var json				=	$.parseJSON(base64_decode(main.attr('json')));	
+		 			var json				=	main.data('filter');	
 		 			
 		 			var page_current		=	json.PG_CURRENT;
 		 			
@@ -1232,12 +1209,15 @@ function wrsFilterClickFalse(filter_hide)
 				 			var checked		=	$(this).prop('checked');
 				 			var nameTagMain	=	'wrs_header_filter_main_'+index_data;
 				 			var mainFilter	=	$('#'+nameTagMain);
-				 			var json		=	$.parseJSON(base64_decode(mainFilter.attr('json')));	
+				 			//var json		=	$.parseJSON(base64_decode(mainFilter.attr('json')));	
+				 			var json		=	mainFilter.data('filter');	
 				 			var filter		=	 explode(',',json.FILTER);
 				 			var value		=	'';
 				 			
 				 			if(empty(filter) || filter=='') filter=[];
 				 			
+				 			
+				 			//aba_detect_change();
 				 			
 				 			
 				 			main.find('input[type=checkbox]').each(function(){
@@ -1274,7 +1254,8 @@ function wrsFilterClickFalse(filter_hide)
 				 			}
 				 				
 				 			//Gravando no JSON
-				 			mainFilter.attr('json',base64_encode(json_encode(json,true)));
+//				 			mainFilter.attr('json',base64_encode(json_encode(json,true)));
+				 			mainFilter.data('filter',json);
 				 			cleanFiltersDown(json['LEVEL_DOWN'],'',nameTagMain);
 							
 							_END('WrsFilter::funCallBackRun::btn_event_filtro_checkbox');
@@ -1287,11 +1268,14 @@ function wrsFilterClickFalse(filter_hide)
 				var index_data	=	$(this).attr('index-data');
 				var nameTag		=	'wrs_header_filter_main_'+index_data;
 	 			var main		=	$('#'+nameTag);
-	 			var json		=	$.parseJSON(base64_decode(main.attr('json')));	
+	 			//var json		=	$.parseJSON(base64_decode(main.attr('json')));	
+	 			var json		=	main.data('filter');	
 	 			var filter		=	'';
 	 			var type_input	=	$(this).attr('type');
 	 			var checked		=	$(this).prop('checked');
 	 			var value 		=	$(this).val();
+	 			
+	 			//aba_detect_change();
 	 			
 	 			if(type_input=='radio' && checked)
 		 			{
@@ -1332,7 +1316,9 @@ function wrsFilterClickFalse(filter_hide)
 		 			}
 	 			
 	 			//Gravando no JSON
-	 			main.attr('json',base64_encode(json_encode(json,true)));
+//	 			main.attr('json',base64_encode(json_encode(json,true)));
+	 			main.data('filter',json);
+	 			
 	 			cleanFiltersDown(json['LEVEL_DOWN'],'',nameTag);
 				
 				_END('WrsFilter::funCallBackRun::wrs_input_filter_single');
@@ -1354,6 +1340,8 @@ function wrsFilterClickFalse(filter_hide)
 		 			$(this).parent().find('input').prop('checked',!checked);
 		 			$(this).parent().find('input').triggerHandler('click');
 		 		}
+		 		
+		 		
 				_END('WrsFilter::funCallBackRun::pws_click_triger_single');
 		 	}
 		 	
@@ -1495,13 +1483,13 @@ function wrsFilterClickFalse(filter_hide)
 														 	{
 														 		var h2	=	 $('<h2/>',{	'vvalue'		:	value,
 														 									html			:	value,
-														 									'json'			:	json,
+//														 									'json'			:	json,
 														 									'level-full'	:	jsonDecode.LEVEL_FULL,
 														 									'index-data'	:	index,
 														 									'id'			:	'wrs_header_filter_main_'+index,
 																							'class'			:	'wrs_class_filter_header_main '+_hide,
 																							'atributo'		:	atributo
-																				 		});
+																				 		}).data('filter',getJsonDecodeBase64(json));
 														 		
 														 		var div	=	$('<div/>',
 														 								{
@@ -1589,7 +1577,8 @@ function wrsFilterClickFalse(filter_hide)
 						
 						if(atributo=='simples')
 							{
-					 				json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
+//					 				json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
+					 				json	=	 	$(this).data('filter');
 
 					 				if(empty(json.FILTER))
 					 					{
@@ -1620,7 +1609,8 @@ function wrsFilterClickFalse(filter_hide)
 											}
 					 						filter.attr('check-simples',implode(',',check_simple));
 					 						
-					 						$(this).attr('json',base64_encode(json_encode(json,true)));
+//					 						$(this).attr('json',base64_encode(json_encode(json,true)));
+					 						$(this).data('filter',json);
 					 						
 					 						clickHeaderFiltro($(this),'loadWrs');
 					 					} 

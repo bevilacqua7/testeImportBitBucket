@@ -20,7 +20,10 @@ body {
 /*	font-weight: 400;*/
 }
 
-
+.wrs_is_change_aba{
+	color: red;
+	margin-right: 5px;
+}
 
 /*
  * Controle do jquery Layout
@@ -100,7 +103,7 @@ body {
 
 
 .box_wrs_panel {
-	z-index: 1000;
+	z-index: 100;
 	padding: 5px;
 	text-align: center;
 	-webkit-border-radius: 1px;
@@ -1532,6 +1535,8 @@ border-radius: 0px;
 	padding-left: 3px;
 	padding-right: 3px;
 	color: #A3A3A3;
+	text-align: center;
+	width: 20px;
 }
 .WRS_ABA .new_file a:hover{
 	color: #666;
@@ -1665,9 +1670,12 @@ border-radius: 3px;
 .wrs_grid_elements .elements{
  	border-bottom:none;
 }
-.wrs_grid_elements .elements:first-child{
+
+.wrs_grid_elements .elements:first-child
+{
  	border-bottom:1px solid #58BCE7;
 }
+ 
  
  
  .modal-btn-job-wrs_btn{

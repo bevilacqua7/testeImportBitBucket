@@ -194,7 +194,8 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 
 
 
-function carrega_grid_list_reports(options){
+function carrega_grid_list_reports(options)
+{
 _START('carrega_grid_list_reports');
 	
 	var funCallBackVision = function()
@@ -391,8 +392,10 @@ function btn_window_grid_event_report(data)
 	_END('btn_window_grid_event_report');
 }
 
-function removeReport(arrRepIds){
+function removeReport(arrRepIds)
+{
 	_START('removeReport');
+	
 	var _callbackDelete = function (confirm) {
 		   if(confirm){
 				var param_request	=	 {'report_id':JSON.stringify(arrRepIds)};
@@ -405,6 +408,7 @@ function removeReport(arrRepIds){
 
 	WRS_CONFIRM("Deseja apagar este(s) relatório(s)?",'warning',_callbackDelete);
 	_END('removeReport');
+	
 }
 
 
@@ -454,8 +458,10 @@ function getLoadReport(no_request)
 	
 }
 
-function atualiza_id_aba_ativa(rep_id){
+function atualiza_id_aba_ativa(rep_id)
+{
 	_START('atualiza_id_aba_ativa');
+	
 	if(rep_id!='' && parseInt(rep_id)>0){
 
 		rep_id='REL_'+rep_id;
@@ -466,8 +472,13 @@ function atualiza_id_aba_ativa(rep_id){
 		aba_ativa.removeClass(aba_ativa.attr('id-aba')).addClass(rep_id);
 		// atualizando o nome da aba no atributo id-aba da aba
 		aba_ativa.attr('id-aba',rep_id);
+		aba_ativa.wrsAbaData('remove_asterisk');
 		aba_ativa.wrsAbaData('setWrsData',{getKendoUi:rep_id});
 		
+		
 	}
+	
+	
+	
 	_END('atualiza_id_aba_ativa');
 }

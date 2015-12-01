@@ -280,8 +280,7 @@ function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 	{
 			'PAGE_CURRENT'					:	kendoGrid.dataSource._page,
 			'TYPE_RUN'						:	TYPE_RUN.coluna_header,
-			'DRILL_HIERARQUIA_LINHA_DATA'	:	base64_encode(implode('(_,_)',DrillData)),
-			'DRILL_LINE_STOP'				:	true
+			'DRILL_HIERARQUIA_LINHA_DATA'	:	base64_encode(implode('(_,_)',DrillData))
 	}
 	
 	

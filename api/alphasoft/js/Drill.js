@@ -14,6 +14,7 @@
 function addDrillOnDataBound(nameID,kendoUI)
 {
 	_START('addDrillOnDataBound');
+	
 	var kendo			=	wrsKendoUiContextMenu(kendoUI.sender,true);
 	var layout			=	kendo.layout_full;
 	var rows_tag		=	explode(',',layout['LAYOUT_ROWS']);
@@ -27,6 +28,8 @@ function addDrillOnDataBound(nameID,kendoUI)
 	var sizeColumns		=	__kendoUI.columns[keyName].flag_total_column
 	var columns_fixed	=	explode(',',__kendoUI.columns[keyName].layout['LAYOUT_ROWS']);
 		columns_fixed	=	columns_fixed.length+1;
+		
+	
 
 
 	/*
@@ -106,7 +109,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 			if(!empty(json_level_drill) && !in_array('DRD',PERFIL_ID_USER)){
 					if(is_in_array(json.LEVEL_DRILL)){
 						$(nameID).find('.k-grid-content-locked tr').each(function(){
-							if(!$('.k-grid-content tr:eq('+$(this).index()+')').hasClass('tag_total'))
+							if(!$(nameID+' .k-grid-content tr:eq('+$(this).index()+')').hasClass('tag_total'))
 							{
 								var event	=	$(this).find('td:eq('+(parseInt(x)+1)+')');
 								var aLink	=	$('<a/>',{href:'#','class':'underline','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
@@ -206,7 +209,8 @@ function getFirstValueArray(kendoUi)
 	
 	_END('getFirstValueArray');
 }
-function addTargetDisableContext(kendoUi)
+
+function addTargetDisableContext(kendoUi,report_id)
 {
 	_START('addTargetDisableContext');
 	var keyName		=	getFirstValueArray(kendoUi);
@@ -219,7 +223,7 @@ function addTargetDisableContext(kendoUi)
 		{
 				if(line[th]=='S')
 					{
-						$('.k-grid-header-wrap tr:eq('+tr+') th:eq('+th+') ').addClass('tag_total');
+						$(report_id+' .k-grid-header-wrap tr:eq('+tr+') th:eq('+th+') ').addClass('tag_total');
 					}
 		}
 		
@@ -233,14 +237,17 @@ function addTargetDisableContext(kendoUi)
     $.fn.WrsDrill		= function()
     {
 		_START('WrsDrill');
-    	$event		=	 this;
+		
+    	$event					=	 this;
+    	var TAG_REPORT_ID		=	'#'+$event.attr('id');
     
     	
     	//var kendoUi		=	$('#'+$event.attr('id')).data('kendoGrid');
 		
     //	wrsKendoUiFindColumnsDeep(kendoUi,1);
     	
-    	$('.dropdown-menu-drill').remove();
+    	$(TAG_REPORT_ID+' .dropdown-menu-drill').remove();
+    	
 		/*
 		 * Eventos principais recebidps
 		 * construido por Marcelo Santos
@@ -264,6 +271,7 @@ function addTargetDisableContext(kendoUi)
     	{
 			
 			_START('WrsDrill::drill_click_option');
+			
     		var IDName			=	'#'+e.kendoId;
     		var kendoUi			=	$(IDName).data('kendoGrid');
     		var _data			=	kendoUi._data;
@@ -301,14 +309,9 @@ function addTargetDisableContext(kendoUi)
     		switch(e.type)
     		{
 				case 'linha' 				:  {
-					
-													
 													var indexTR			=	e.parent.parent().index();
 													var indexTD			=	parseInt(e.parent.index());
 													var proxTd			=	e.parent.next('td');
-													
-													
-													
 													
 													//if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!='') -- esse foi o felipe || Estava equivocado
 													if(e.event.parent().attr('class')=='VER_MAPA')
@@ -574,24 +577,25 @@ function addTargetDisableContext(kendoUi)
     		
     	if(!in_array('DRT',PERFIL_ID_USER)){
 	    	// cabecalho de cada linha	
-	    	$(".k-grid-content-locked").attr('rel','noContext').attr('type','linha');
-	    	context.attachWRS('.k-grid-content-locked td'				, data_line_row, $event);
+	    	$(TAG_REPORT_ID+" .k-grid-content-locked").attr('rel','noContext').attr('type','linha');
+	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-content-locked td'				, data_line_row, $event);
 	    	    	
 	    	// cabecalho inicial (canto superior esquerdo) da coluna e da linha apenas
-	    	$(".k-grid-header .k-grid-header-locked").attr('type','linha_header');
-	    	context.attachWRS('.k-grid-header .k-grid-header-locked th'	, data_line_header,$event);    	  	
+	    	$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked").attr('type','linha_header');
+	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-locked th'	, data_line_header,$event);    	  	
     	}
     	
     	//Dados
-    	if(!in_array('DRV',PERFIL_ID_USER)){
-    		$(".k-grid-content").attr('type','data');
-    		context.attachWRS('.k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event);    		
+    	if(!in_array('DRV',PERFIL_ID_USER))
+    	{
+    		$(TAG_REPORT_ID+" .k-grid-content").attr('type','data');
+    		context.attachWRS(TAG_REPORT_ID+' .k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event);    		
     	}
 
     	
     	
     	//ContextMenu das Heardes mas das Colunas
-    	var length	=	$('.k-grid-header .k-grid-header-wrap tr').length;
+    	var length	=	$(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap tr').length;
     	
     	/*
     	 * Aplicando a header com linhas e colunas na header de resultados
@@ -599,26 +603,26 @@ function addTargetDisableContext(kendoUi)
     	
     	
     		
-    	addTargetDisableContext(kendoUi.columns)
+    	addTargetDisableContext(kendoUi.columns,TAG_REPORT_ID);
     	
     	if(length==1)
     	{
-    		$(".k-grid-header .k-grid-header-wrap").attr('type','coluna_header');
-			var data_line_header2							=	 menu_context_relation_ship_measure(jsonMeasure);
-    		data_line_header2[data_line_header2.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
+    		$(TAG_REPORT_ID+" .k-grid-header .k-grid-header-wrap").attr('type','coluna_header');
+    		
+			var data_line_header2							=	menu_context_relation_ship_measure(jsonMeasure);
+    			data_line_header2[data_line_header2.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
     		// header de cada coluna
         	if(!in_array('DRT',PERFIL_ID_USER)){
-        		context.attachWRS('.k-grid-header .k-grid-header-wrap tr:eq(0) th '	, data_line_header2,$event);
+        		context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap tr:eq(0) th '	, data_line_header2,$event);
         	}
     	}else{
     		
-    		$('.k-grid-header .k-grid-header-wrap').attr('type','coluna_header_line');
-    		
+    		$(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap').attr('type','coluna_header_line');
     		 
     		var tag					=	'';
     		for(var i=0;i<length;i++)
     			{    			
-    					tag		=	'.k-grid-header .k-grid-header-wrap tr:eq('+i+') th ';
+    					tag		=	TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap tr:eq('+i+') th ';
     					if(i!=(length-1))
     					{	// header de cada coluna
     				    	if(!in_array('DRT',PERFIL_ID_USER)){

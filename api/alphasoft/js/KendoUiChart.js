@@ -696,6 +696,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				
 				var _value	=	getFirstValueArray_get(param)	;
 				
+				if(_value==undefined) return null;
+				
+				
 				if(_value.value!=undefined)
 				{
 					var _n_value	=	parseInt(substr(_value.value,1));

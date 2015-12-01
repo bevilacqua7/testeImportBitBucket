@@ -115,7 +115,6 @@ class WRS_PANEL  extends WRS_USER
 	{
 		
 		
-		
 		WRS_TRACE('run()', __LINE__, __FILE__);
 		//Pegando os parametros do cubo selecionado
 		$SSAS_USER		=	WRS::GET_SSAS_USER();
@@ -159,9 +158,17 @@ class WRS_PANEL  extends WRS_USER
 			case 'gridRowsCache'	:	$this->SELECT_CACHE_GRID()		;	break;
 			case 'change_cube'		:	$this->CHANGE_CUBE()			;	break;
 			case 'save_history'		:	$this->saveHistory()			;	break;
-			case 'threadJobManager'	: 	$this->threadJobManagerVoid()	;		break;	
-			case 'stopjob'			:	$this->threadJobManagerStop()	;		break;
+			case 'remove_history'	: 
+				{
+					$_cube			=	$this->getCube();
+					WRS::DELETE_REPORT_HISTORY($_cube['CUBE_ID'], fwrs_request('report_id'));
+					exit();
+				}
+				; break;	
+			case 'threadJobManager'	: 	$this->threadJobManagerVoid()	;	break;	
+			case 'stopjob'			:	$this->threadJobManagerStop()	;	break;
 			default 				: 	$this->eventDefault()			; 	break;
+			
 		}		
 		
 		WRS_TRACE('END run()', __LINE__, __FILE__);

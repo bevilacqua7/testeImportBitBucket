@@ -567,6 +567,27 @@ class WRS
 	
 	
 	
+	/**
+	 * 
+	 * Deletando um cubo ID do Histórico
+	 * 
+	 * @param string $cube_id
+	 * @param string $report_id
+	 */
+	public static function DELETE_REPORT_HISTORY($cube_id,$report_id)
+	{
+		$TAG_NAME		=	'CUBE_REPORT_HISTORY';
+	
+		self::declare_REPORT_HISTORY($TAG_NAME, $cube_id, $report_id);
+		
+		if(isset($_SESSION[$TAG_NAME][$cube_id][$report_id])){
+			unset($_SESSION[$TAG_NAME][$cube_id][$report_id]);
+		}
+		
+	}
+	
+	
+	
 	
 	/**
 	 * Apagando o histórico dos cubos

@@ -190,7 +190,6 @@ class KendoUi
 							'MKTIME_HISTORY',		//Mktime do Histori
 							'STOP_RUN',		//A Flag irá aparecer quando se navega entre as abas | true:false
 							'STOP_QUERY',	//Caso esteja true executa novamente mesmo com o histórico igual|true:false
-							'DRILL_LINE_STOP',	//quando ele estiver ativo não permite cancelar a consulta e iomite a string |  true:false
 							'TOTAL_COLUMN'		//Muito usado quando existir coluna ordenadas
 		);
 	}

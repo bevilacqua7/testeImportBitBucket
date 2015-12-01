@@ -38,6 +38,48 @@ var TYPE_RUN	=	{
 
 var ABA_TAG_NAME		=	'.WRSAbas ul';
 
+
+function not_close_save_info()
+{
+
+	
+	
+	//http://www.codigosnaweb.com/forum/viewtopic.php?t=5465
+	//http://stackoverflow.com/questions/1889404/jquery-ui-dialog-onbeforeunload
+	$(window).bind('beforeunload', function() {
+			
+		
+		var aba_data		=	 undefined;
+		var report_id		=	0;
+		var kendoUi			=	get_aba_active_kendoUi();
+	
+		$('.WRS_ABA').find('a').each(function(){
+			if($(this).find('.wrs_is_change_aba').length>=1)
+			{
+				aba_data		+=	"\n"+$(this).find('.title').html();
+				report_id		=	$(this).attr('id-aba');
+			}
+			
+		});
+		
+
+		if(aba_data==undefined) return null;
+		
+		//Ativa a aba
+		if(kendoUi['REPORT_ID']!=report_id)
+		{
+			$('.'+report_id).trigger('click'); //Active Aba
+		}
+		
+	  var message = LNG('NOT_CLOSE_WINDOW')+aba_data;
+	  
+
+	  
+	  return message;
+	});
+	
+}
+
 var wrsCookies = {
 	  getItem: function (sKey) {
 	    if (!sKey) { return null; }

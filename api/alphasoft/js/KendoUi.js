@@ -701,7 +701,6 @@ function wrsKendoUiChange(nameID,param,value)
 function onDataBound(arg)
 	{
 		_START('onDataBound');
-		console.log('onDataBound');
 		
 		//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 			
