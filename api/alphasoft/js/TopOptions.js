@@ -77,7 +77,6 @@ function DEFAULT_OPTIONS_TOPS()
 		$.fn.wrsTopOptions = function() 
 		{
 			_START('wrsTopOptions');
-			
 			var that				=	this;
 			var report_id			=	this.attr('id');
 			var report_aba			=	'.'+report_id;
@@ -114,10 +113,10 @@ function DEFAULT_OPTIONS_TOPS()
 			
 
 				
-					if(!$(IDGrid).hasClass('wrs_grid_options_default'))
-					{
-						$(IDGrid).addClass('wrs_grid_options_default');
-					}
+				if(!$(IDGrid).hasClass('wrs_grid_options_default'))
+				{
+					$(IDGrid).addClass('wrs_grid_options_default');
+				}
 
 			var TAGButton		=	'	  <ul class="dropdown-menu wrsTopOptionsData ">'+
 									'	    <li tag="total"><a href="#"><i class="fa fa-arrow-right"></i>'+LNG('TITLE_TOP_TOTAL')+'</a></li>'+
@@ -230,8 +229,6 @@ function DEFAULT_OPTIONS_TOPS()
 					
 				if(isDefault==true)	
 					{
-
-						
 						that.wrsTopOptions();
 					}
 					else
@@ -258,7 +255,14 @@ function DEFAULT_OPTIONS_TOPS()
 			 	if(isDefault==true)
 		 		{
 		 			//Opções na tela de Default
-		 			var json		=	$.parseJSON(base64_decode( btnOption.parent().attr('json')));
+			 		
+					var tag_class	=	 btnOption.parent().attr('tag-class');
+					
+					var json	=	$('.wrs_options_select li.'+tag_class).data('wrs-data');
+
+					
+		 			//var json		=	$.parseJSON(base64_decode( btnOption.parent().attr('json')));
+		 			
 		 				full_name	=	json['LEVEL_FULL'];
 		 		}else{		
 		 			var field		=	btnOption.parent().parent().index()+'_'+btnOption.parent().index();
@@ -327,7 +331,9 @@ function DEFAULT_OPTIONS_TOPS()
 					 		{
 					 			//Opções na tela de Default
 					 				index			=	tag;	
-					 			var json		=	$.parseJSON(base64_decode( btnOption.parent().attr('json')));
+					 			var tag_class	=	 btnOption.parent().attr('tag-class');
+								var json	=	$('.wrs_options_select li.'+tag_class).data('wrs-data');
+								
 					 				full_name	=	json['LEVEL_FULL'];
 					 		}else{
 					 								index	=	tag;//btnOption.parent().index();			
@@ -445,12 +451,17 @@ function DEFAULT_OPTIONS_TOPS()
 				}else{
 						wrsKendoUi		=	get_aba_active_kendoUi();
 					var _top_config		=	$.parseJSON(base64_decode(wrsKendoUi.TOP_CONFIG));
-					
+					 
  
 					var measure_data	=	[];
 					var measure_count	=	1;
-					that.parent().find('.sortable_metrica li').each(function(){						
-						var json	=	$.parseJSON(base64_decode( $(this).attr('json')));
+					that.parent().find('.sortable_metrica li').each(function(){			
+						
+			 			var tag_class	=	 $(this).attr('tag-class');
+						var json	=	$('.wrs_options_select li.'+tag_class).data('wrs-data');
+
+						
+						
 						
 						if(!empty(json)){
 							measure_data[measure_count]	=	{'level_full':json['MEASURE_UNIQUE_NAME'],'name':json['MEASURE_CAPTION']};
@@ -467,10 +478,10 @@ function DEFAULT_OPTIONS_TOPS()
 					
 
 					that.parent().find('.sortable_coluna li,.sortable_linha li').each(function(){		
-						
-						var json	=	$.parseJSON(base64_decode( $(this).attr('json')));
-						
-
+					var tag_class	=	 $(this).attr('tag-class');
+					
+						var json	=	$('.wrs_options_select li.'+tag_class).data('wrs-data');
+	
 							if(!empty(json)){
 			
 										var wrs_tops_configure		=	$('<span/>', {

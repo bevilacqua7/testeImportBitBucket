@@ -17,7 +17,7 @@ var HEIGHT_ABAS		=	50;
 	
     $.fn.WRSWindowGridEventTools = function(loadByAba,_click_auto)
     {
-		_START('WRSWindowGridEventTools');
+		_START('WRSWindowGridEventTools');''
 		
     	var eventTelerik	=	this;
     	var click_auto		=	_click_auto==undefined || _click_auto==null ? false : _click_auto;

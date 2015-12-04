@@ -276,13 +276,6 @@ function wrs_south_onresize()
 
  
 
-function BTN_HOVER_BOX_DROP()
-{
-	_ONLY('BTN_HOVER_BOX_DROP');
-	$('.box_wrs_panel').unbind('hover');
-	//Quanho hover o botão para hover do Drag and Drop
-	$('.box_wrs_panel').hover(function() {$( this ).addClass( "ui-state-hover" );}, function() {$( this ).removeClass( "ui-state-hover" );});
-}
 
 function hide_east(){
 	_ONLY('hide_east');
@@ -499,7 +492,6 @@ $(document).ready(function () {
 	
  
 
-	BTN_HOVER_BOX_DROP();
 
 	 wrs_panel_layout	 = 	$('body').layout(jqueryLayoutOptions);
 	
@@ -745,7 +737,6 @@ function cloneDragDrop(whoClone,toClone,cloneTAGWrsFlag,who_receive)
 		sortable_attr_simples_composto();
 	}
 	
-	BTN_HOVER_BOX_DROP(); //Removendo e inserindo o Hover
 	_END('cloneDragDrop');
 }
 
@@ -970,6 +961,9 @@ var droppableOptionsOl			=	{};
  * @param ui
  * @returns {Boolean}
  */
+
+
+var TMP_DEFAULT_OPTIONS_TOPS	=	null;
 function DROP_EVENT( event, ui ,eventReceive)
 {
 		_START('DROP_EVENT');
@@ -984,7 +978,12 @@ function DROP_EVENT( event, ui ,eventReceive)
 			toEvent			=	ui.draggable;
 		}
 		
-		setTimeout(DEFAULT_OPTIONS_TOPS,500);
+		if(TMP_DEFAULT_OPTIONS_TOPS!=null)
+			{
+				clearTimeout(TMP_DEFAULT_OPTIONS_TOPS);
+			}
+		
+		TMP_DEFAULT_OPTIONS_TOPS	=	setTimeout(DEFAULT_OPTIONS_TOPS,500);
 		
 		var filters			=	receiveEvent.parent().attr('type');
 		var who_receive 	=	receiveEvent.parent().attr('who_receive');
@@ -1071,10 +1070,15 @@ function DROP_EVENT( event, ui ,eventReceive)
 	
 	
 	
+	var json 			=	toEvent.data('wrs-data');
+	json['FILTER']	=	'';
+	toEvent.data('wrs-data',json);
 	
+	/*
 	var json 			=	$.parseJSON(base64_decode(toEvent.attr('json')));
 	json['FILTER']	=	'';
 	toEvent.attr('json',base64_encode(json_encode(json,true)));
+	*/
 
 	_END('DROP_EVENT');
 }
@@ -1328,7 +1332,9 @@ function rows_by_metrica_attr_base64(object,_type)
 		//Foi incrementado a TAG  tag_class e get_object para resolver o problema de acentuação
 		var tag_class	=	$(this).attr('tag-class');
 		var get_object	=	$('.ui-layout-pane-east ul').find('.'+tag_class);
-		var json		=	$.parseJSON(base64_decode(get_object.attr('json')));
+		
+		//console.log(get_object.data('wrs-data'));
+		var json		=	get_object.data('wrs-data');//$.parseJSON(base64_decode(get_object.attr('json')));
 
 		
 		if(!$(this).hasClass('placeholder'))
@@ -1583,14 +1589,29 @@ function wrs_run_filter()
 					wrsFilterShow();
 					
 					
-					
-					getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
-					
-					//foreach(getAllFiltersToRun);
-					wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
-					wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));
-					
-					
+					//Se for drill então não insere os filtros
+					if(isEmpty(report_KendoUi['DRILL_HIERARQUIA_LINHA_DATA'])) 
+					{
+						
+						getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
+
+						wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
+						wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));
+						
+						
+						wrs_data_param.ALL_ROWS					=	1
+						wrs_data_param.DRILL_HIERARQUIA_LINHA	=	1;
+						
+						//Salva na aba a nova estrutura
+						aba_active.wrsAbaData('setWrsData',{
+																	LAYOUT_FILTERS			:	wrs_data_param.LAYOUT_FILTERS	, 
+																	FILTER_TMP				:	wrs_data_param.FILTER_TMP		, 
+																	index_filtro			:	getAllFiltersToRun.index		,
+																	ALL_ROWS				:	1,
+																	DRILL_HIERARQUIA_LINHA	:	1
+															}
+											);
+					}
 					
 					var wrsConfigGridDefault_data	=	get_aba_active_kendoUi()
 					
@@ -1681,7 +1702,7 @@ function wrs_run_filter()
 		if(report_KendoUi.TYPE_RUN!='DrillColuna')
 		{
 			data_header_drill_column							=	'';
-			_param_request.DRILL_HIERARQUIA_LINHA_DATA_HEADER	=	'';
+			_param_request.DRILL_HIERARQUIA_LINHA_DATA_HEADER	=	null;
 		}
 		
 		
@@ -1706,17 +1727,16 @@ function wrs_run_filter()
 		
 		
 	
-		console.log(_param_request['TYPE_RUN']);
+		
 		if( _param_request['TYPE_RUN']!='DrillColuna')
 		{
 			aba_active.wrsAbaData('aba_detect_change');
+			aba_active.wrsAbas('resize_aba');
 		}
 		
 
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
-		
-		
 		
 		//AUTO LOAD
 		if($(this).attr('auto_load')=='true')

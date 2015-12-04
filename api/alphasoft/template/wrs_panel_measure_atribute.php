@@ -34,5 +34,9 @@
 			?>
 		</div>
 	</div>
+	
+	<script>
+		SetElementDataWrs('.wrs_options_select');
+	</script>
 
 

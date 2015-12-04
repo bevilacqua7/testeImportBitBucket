@@ -401,10 +401,27 @@ EOF;
         //              1,1,0,'','','','','-123(_,_)-234(_,_)-345','ABC(_,_)CDE(_,_)XPTO',0,0
 		$USER_CODE = WRS::USER_CODE();
 		$query = <<<EOF
-					EXEC Save_SSAS_Report '{$REPORT_DESC}', '{$USER_CODE}', '{$SERVER_ID}', '{$DATABASE_ID}', '{$CUBE_ID}',
-										  '{$ROWS}', '{$COLUMNS}', '{$MEASURES}', '{$FILTERS}', '{$FILTERS_VALUES}', {$ALL_ROWS}, {$ALL_COLS}, {$COLS_ORDER},
-										  '{$REPORT_OPTIONS}', '{$REPORT_FORMULAS}', '{$REPORT_FILTER}', '{$REPORT_FLAG}', 
-										  '{$LAYOUT_SHARE}', '{$USER_TYPE}',{$REPORT_SHARE}, {$REPORT_AUTOLOAD}
+					EXEC Save_SSAS_Report 	'{$REPORT_DESC}', 
+											'{$USER_CODE}', 
+											'{$SERVER_ID}', 
+											'{$DATABASE_ID}', 
+											'{$CUBE_ID}',
+											'{$ROWS}', 
+											'{$COLUMNS}', 
+											'{$MEASURES}', 
+											'{$FILTERS}', 
+											'{$FILTERS_VALUES}', 
+											{$ALL_ROWS}, 
+											{$ALL_COLS}, 
+											'{$COLS_ORDER}',
+										  	'{$REPORT_OPTIONS}', 
+										  	'{$REPORT_FORMULAS}', 
+										  	'{$REPORT_FILTER}', 
+										  	'{$REPORT_FLAG}', 
+										  	'{$LAYOUT_SHARE}', 
+											'{$USER_TYPE}',
+											{$REPORT_SHARE}, 
+											{$REPORT_AUTOLOAD}
 EOF;
 		return $query;
 	}

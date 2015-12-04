@@ -161,12 +161,11 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				$('.WRS_ABA').find('li').each(function()
 				{
-					_width+=$(this).outerWidth()+2;
+					_width+=$(this).outerWidth()+5;
 					
 				});
 				
-				$('.WRS_ABA ul').width(_width+20);
-				
+				$('.WRS_ABA ul').width(_width+50);
 			}
 			
 			
@@ -732,6 +731,7 @@ function optionsDataConvert(gridValue,with_decode)
 												  	this.title.html(_title);
 												  	this.element.wrsAbaData('setKendoUi',{TITLE_ABA:_title});
 												  	WRS_ALERT(LNG('ABA_TITLE_EMPTY'),'warning');
+												  	ResizeABA();
 												  }
 											  
 											  		clearTimeout(title_is_time);
@@ -742,6 +742,8 @@ function optionsDataConvert(gridValue,with_decode)
 								
 								
 								title_is_time		=	setTimeout(time_out,1000*2);
+								
+								
 								
 							}
 							 
@@ -758,6 +760,7 @@ function optionsDataConvert(gridValue,with_decode)
 							}
 
 							abaJquery.find('.title').html(title);
+							ResizeABA();
 							
 
 
@@ -1491,7 +1494,8 @@ function optionsDataConvert(gridValue,with_decode)
 			        show_grid				:	__show_grid,
 			        remove_event_click		:	__remove_event_click,
 			        refresh_F5				:	__refresh_F5,
-			        auto_load				:	__auto_load
+			        auto_load				:	__auto_load,
+			        resize_aba			:	ResizeABA
 			};
 			
 			 
@@ -1865,6 +1869,6 @@ function optionsDataConvert(gridValue,with_decode)
 
 
 $(function(){
-	$(ABA_TAG_NAME).wrsAbas({});
+		$(ABA_TAG_NAME).wrsAbas({});
 	//$(ABA_TAG_NAME).wrsAbas('auto_load', AUTO_LOAD);
 });

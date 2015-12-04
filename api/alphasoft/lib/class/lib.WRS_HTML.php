@@ -41,10 +41,10 @@ class WRS_HTML
 		$liFindGroup		=	<<<EOF
 							<li class="wrs_drag_direita_find" vvalue="wrs_search" >
 								<div class="form-group">
-								<div class="input-group ">
-									<input type="text" class="form-control wrs_search_drag_drop_direita_eventos"  placeholder="{$WHAT_SEARCH}">
-									<span class="input-group-addon span_sub wrs_remove_searcg_drag cursor"><i class="fa fa-search"></i><i class="fa fa-eraser"></i></span>
-								</div>
+									<div class="input-group ">
+										<input type="text" class="form-control wrs_search_drag_drop_direita_eventos"  placeholder="{$WHAT_SEARCH}">
+										<span class="input-group-addon span_sub wrs_remove_searcg_drag cursor"><i class="fa fa-search"></i><i class="fa fa-eraser"></i></span>
+									</div>
 								</div>
 							</li>
 EOF;
@@ -52,10 +52,10 @@ EOF;
 		//Ao manipular essa função lembranbdo que tem que fazer o mesmo no WRSMultipleCube.js
 		$li			=	<<<EOF
 								<li  	class="ui-widget-content box_wrs_panel {class}" tag-class="{class}" api="wrs" type="{type}"
-										vvalue="{label}" json="{json}"><span class="btn-left glyphicon glyphicon glyphicon-{$icon}"></span>{value}</li>
+										vvalue="{label}" json="{json}" wrs-data='{wrs-data}' ><span class="btn-left glyphicon glyphicon glyphicon-{$icon}"></span>{value}</li>
 EOF;
 
-		$liSearch	=	 array('{label}','{value}','{json}','{type}','{class}');
+		$liSearch	=	 array('{label}','{value}','{json}','{type}','{class}','{wrs-data}');
 		
 		$dragDrop	=	<<<EOF
 			<h2 rel="{rel}">
@@ -79,7 +79,9 @@ EOF;
 					$param_json['CUBE_POS_SESSION']	=	$pos_cube_session;
 					
 					$class		=	fwrs_replace_attr(empty($param_json['LEVEL_FULL']) ? $param_json['MEASURE_UNIQUE_NAME'] : $param_json['LEVEL_FULL']);
-					$lReplace	=	 array($_ivalue[$valueShow[0]],$_ivalue[$valueShow[1]],base64_encode(json_encode($param_json,true)),$type,$class);
+					$lReplace	=	 array($_ivalue[$valueShow[0]],$_ivalue[$valueShow[1]],'',$type,$class,json_encode($param_json,true));
+					//$lReplace	=	 array($_ivalue[$valueShow[0]],$_ivalue[$valueShow[1]],base64_encode(json_encode($param_json,true)),$type,$class,json_encode($param_json,true));
+					
 					$liTemp		.=str_replace($liSearch, $lReplace, $li);
 				}		
 				//WRS_DEBUG_QUERY(print_r($param_json,true));

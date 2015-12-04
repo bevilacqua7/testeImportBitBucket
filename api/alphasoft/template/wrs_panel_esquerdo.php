@@ -8,7 +8,7 @@
 					  <button type="button" class="btn btn-warning btn-xs glyphicon glyphicon-trash wrs_clean_box_drag_drop"></button>
 					  <button type="button"  class="btn btn-default btn-xs glyphicon glyphicon-filter wrs_panel_filter_icon"></button>
 					  <button type="button" class="btn btn-default btn-xs glyphicon glyphicon-info-sign tooltip_info_wrs_panel"></button>
-					  <button type="button" class="btn btn-default btn-xs glyphicon glyphicon-check wrs_run_filter"></button>
+					  <button type="button" class="btn btn-default btn-xs glyphicon glyphicon-check  wrs_run_filter"></button>
 				</div>
 </div>
  

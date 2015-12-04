@@ -225,9 +225,14 @@ function changeTypeRun(IDGrid,typeRun)
 function isEmpty(obj) {
 
     // null and undefined are "empty"
-    if (obj == null) return true;
+    if(obj == null) return true;
 
-    if (obj == undefined) return true;
+    if(obj == undefined) return true;
+    
+    if(obj=='') return true;
+    
+    if(obj=='undefined') return true;
+    
     
     // Assume if it has a length property with a non-zero value
     // that that property is correct.
@@ -235,7 +240,9 @@ function isEmpty(obj) {
     if(typeof obj!='object')
     {
 	    if (obj.length > 0)    return false;
-	    if (obj.length === 0)  return true;
+	    if (obj.length === 0)  return false;
+	    
+	    return false;
     }
     
     // Otherwise, does it have any properties of its own?
@@ -245,7 +252,7 @@ function isEmpty(obj) {
         if (hasOwnProperty.call(obj, key)) return false;
     }
 
-    return true;
+    return false;
 }
 
 
@@ -701,14 +708,30 @@ function TRACE(value)
 	var hours 		= date.getHours();
 	var minutes 	= date.getMinutes();
 	var seconds 	= date.getSeconds();
-
-	var prefix		=	hours+':'+minutes+':'+seconds+' | ';
+	var milliSecond	=	date.getMilliseconds();
+	
+	var prefix		=	hours+':'+minutes+':'+seconds+':'+milliSecond+' | ';
 	console.log(prefix+value);
 	//$('.WRS_TRACE').append('<div>'+value+'</div>');
 }
 
 
-
+function SetElementDataWrs(element)
+{
+	_START('SetElementDataWrs');
+	$(element).find('li').each(function()
+			{
+				var _wrs_data	=	$(this).attr('wrs-data');
+				
+					if(_wrs_data!=undefined && _wrs_data!='undefined')
+					{
+						_wrs_data	=	 jQuery.parseJSON(_wrs_data);
+						$(this).removeAttr('wrs-data').data('wrs-data',_wrs_data);
+					}
+			});
+	
+	_END('SetElementDataWrs');
+}
 
 function fwrs_error(msg)
 {
@@ -769,6 +792,7 @@ function wrsCheckLogin(login,pwd,event,perfil)
  */
 function merge_objeto(objFirst,objSecond)
 {
+
 	return $.extend({}, objFirst,objSecond);		
 }
 

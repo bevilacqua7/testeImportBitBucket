@@ -1695,3 +1695,38 @@ border-radius: 3px;
 .wrs_grid_options_default{
 	z-index:200;	
 }
+
+
+
+
+
+
+
+
+
+
+.filter-exec-slash{
+	color:#A94442;
+}
+
+.filter-exec{
+	color:#3C763D;
+	font-weight:bold;
+}
+
+
+.qtip-default{
+	max-height:500px;
+	overflow:auto;	
+}
+
+
+
+
+
+
+/* ESTILOS DE CORES*/
+
+.box_wrs_panel:hover{ border: 1px solid #58BCE7; background: #2191C0 url("theme-azul/images/ui-bg_diagonals-small_50_2191C0_40x40.png") 50% 50% repeat ; font-weight: bold; color: #ffffff;  color: #ffffff; text-decoration: none; }
+
+

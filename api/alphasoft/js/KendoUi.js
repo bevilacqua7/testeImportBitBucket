@@ -8,7 +8,7 @@
 
 var RELATIONSHIPS_FULL_NAME	=	$.parseJSON(base64_decode( ATRIBUTOS_JSON));
 var RELATIONSHIPS_FULL		=	[];
-var _TRUE	=	'1',
+var _TRUE		=	'1',
 	TRUE		=	true,
 	NULL		=	null,
 	FALSE		=	false,
@@ -105,9 +105,13 @@ function WRSKendoGridRefresh(history)
 			
 			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
 			
+			
 	});
 	_END('WRSKendoGridRefresh');
 }
+
+
+
 
 
 function WRSKendoGridComplete(IDGrid)
@@ -699,10 +703,10 @@ function wrsKendoUiChange(nameID,param,value)
 
 
 function onDataBound(arg)
-	{
+{
 		_START('onDataBound');
 		
-		//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
+			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 			
 			resizeColumnKendoUi(arg);
 
@@ -714,21 +718,14 @@ function onDataBound(arg)
 			var wrsKendoUi		=	_kendoUiParam;
 			var wrsparam		=	$(report_aba).wrsAbaData('getWrsData');
 			
-
-			
 			
 			$(report_aba).wrsAbaData('setKendoUi',{page_size:arg.sender.dataSource._pageSize, STOP_QUERY:false});
-			
 				
 				/*Options To ABAS */
 				wrsparam['KendoUi']				=	_kendoUiParam;
-
-
 				
 				ELEMENT.attr('chart','false');
 				ELEMENT.attr('maps_wrs','false');
-				
-				
 				
 			//theSum is here before
 			
@@ -744,8 +741,6 @@ function onDataBound(arg)
 			CLOSE_LOAD_RELATORIO();
 			$('.'+classGrid+'BOX').show();
 			
-			 
-
 
 			addDrillOnDataBound(nameID,arg);
 			//Aplicando o Evento do CLick no DRILL LINHA
@@ -800,28 +795,34 @@ function onDataBound(arg)
 					});
 				}
 				
+				
 				themeSUM(nameID,arg,wrsKendoUi);
 
 			}
 			
+			
 			//Apenas para que os controles do next and Back funcione
 			var options_resize = {
-					  id    	: nameID,
-					  'window'	: wrsKendoUi['WINDOW'],
-					  resize: function( event ) 
-					  {
-						  $(this.id).WRSWindowGridEventTools(this.window,true);
-					  }
-					};
+									  id    	: nameID,
+									  'window'	: wrsKendoUi['WINDOW'],
+									  resize	: function( event ) 
+									  {
+										  $(this.id).WRSWindowGridEventTools(this.window,true);
+										  
+										  resize_container_grid(str_replace('#','',this.id),this.window);
+									  }
+								};
+
 			
 			var time_out 	= $.proxy( options_resize.resize, options_resize );
-			
 			
 			setTimeout(time_out,50);
 			
 			
 			
 			_END('onDataBound');
+			
+			
 			
 			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 	}
@@ -943,8 +944,7 @@ function  buttonPlusMinus(nameID,hideShow,sizeFrozen)
 function  themeSUM(nameID,arg,wrsParam)
 {
 	_START('themeSUM');
-		var find_last				=	'last-child';
-		
+		var find_last					=	'last-child';
 		var drill_hierarquia_line		=	false;
 		var find_last_child_loacked		=	$(nameID).find('.k-grid-header-locked').find('tr:last-child').find('th:'+find_last);
 		//Uncaught TypeError: Cannot read property 'field' of undefined		
@@ -960,33 +960,31 @@ function  themeSUM(nameID,arg,wrsParam)
 		find_last_child_loacked.each(function()
 				{
 				
+						
+						if(drill_hierarquia_line==true)
+						{
+							if(arg.sender.headerIndex.field[$(this).attr('data-field')].hidden!=true)
+							{
+								var eq		=	$(this).index();
+									find_last	=	 'eq('+eq+')';
+							}									
+						}else{ 	
 			
 							try{
 								if(arg.sender.headerIndex.field[$(this).attr('data-field')].map=="[LATITUDE]")
 								{
-									var eq		=	$(this).index()-1;
+									var eq			=	$(this).index()-1;
 										find_last	=	 'eq('+eq+')';
 								}
 							} catch(e){
 								console.log('Falha na leitura de mapas mas pode não haver essa informação');
 							}
 							
+						}
 							
-						if(drill_hierarquia_line==true)
-						{
-							
-							if(arg.sender.headerIndex.field[$(this).attr('data-field')].hidden!=true)
-							{
-								var eq		=	$(this).index();
-									find_last	=	 'eq('+eq+')';
-							}									
-						} 		
 					
 			
 		});
-		
-		
-		
 		
 		
 		$(nameID).find('.k-grid-content-locked').find('tr').find('td:'+find_last).each(function(){
@@ -1023,7 +1021,7 @@ function  themeSUM(nameID,arg,wrsParam)
 					
 					
 					
-					if(html==true	|| $(this).attr('wrsNull')=='true')
+					if(html==true	|| $(this).attr('data-original')=='true')
 						{
 							$(nameID).find('.k-grid-content').find('tbody tr').eq(index).addClass('ui-state-default  tag_total');
 							$(this).parent().addClass('ui-state-default ');
@@ -1034,6 +1032,8 @@ function  themeSUM(nameID,arg,wrsParam)
 							
 							$(this).parent().attr('wrs-html-data',html_data_index);
 							
+						}else{
+							$(nameID).find('.k-grid-content').find('tbody tr').eq(index).removeClass('ui-state-default ');
 						}
 				}
 			
@@ -1281,6 +1281,8 @@ function  themeSUM(nameID,arg,wrsParam)
 											}
 											
 											
+											
+												themeSUM(IDName,{sender:localKendoUI},wrsKendoUi);
 											
 											_END('WrsGridKendoUiControlColumnPlusMinus::buttonHideShow');
 											return false;

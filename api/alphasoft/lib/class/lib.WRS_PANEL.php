@@ -391,7 +391,7 @@ class WRS_PANEL  extends WRS_USER
 		}
 
 		//caso ainda não tenha sido inserida na sessão faz a pesquisa
-		//if(empty($relationships))
+		if(empty($relationships))
 		{	
 			$wrs_measure_relationships['relationships']	=	WRS::SET_SSAS_RELATIONSHIPS_BY_CUBE($CUBE, $attibuteMeasure->getAtributos($SERVER, $DATABASE, $CUBE));
 		}
@@ -400,7 +400,7 @@ class WRS_PANEL  extends WRS_USER
 		$metricas			=	 WRS::GET_SSAS_MEASURES_BY_CUBE($CUBE);		
 		
 		//Se não existir metricas na sessão então grava 
-		//if(empty($metricas))
+		if(empty($metricas))
 		{
 				$wrs_measure_relationships['measure']	=	WRS::SET_SSAS_MEASURES_BY_CUBE($CUBE, $attibuteMeasure->getMetricas($SERVER, $DATABASE, $CUBE));
 		}
@@ -824,36 +824,53 @@ class WRS_PANEL  extends WRS_USER
 		}
 		//END
 		
+				
+				$cube 								=	$this->getCube();
 		
-				$queryGrid			=	 $this->_query->CREATE_SSAS_JOB($SERVER, $DATABASE, $CUBE, $ROWSL, $COLUMNS, $MEASURES, $FILTERS, $ALL_ROWS, $ALL_COLS, $COLS_ORDER, 0, '');
+				$job_num_rows						=	 false;
+				
+				/*
+				QUERY_ID
+				QUERY_TABLE
+				USER_CODE
+				JOB_STATUS*/
+		
+				if(!empty($getRequestKendoUi['DRILL_HIERARQUIA_LINHA_DATA']))
+				{
+					//Simula o retorno do JOB para caso seja o drill linha
+					$rows_CREATE_SSAS_JOB			=	 array(
+																'QUERY_ID'		=>	$getRequestKendoUi['QUERY_ID']	,
+																'QUERY_TABLE'	=>	$cube['TABLE_CACHE'],
+																'USER_CODE'		=>	WRS::USER_CODE(),
+																'JOB_STATUS'	=>	4	
+																);
+					
+					$job_num_rows	=	 true;
+				}else{
+		
+						$queryGrid			=	 $this->_query->CREATE_SSAS_JOB($SERVER, $DATABASE, $CUBE, $ROWSL, $COLUMNS, $MEASURES, $FILTERS, $ALL_ROWS, $ALL_COLS, $COLS_ORDER, 0, '');
 				
 				
-				$queryGrid_exec		=	 $this->query($queryGrid);
+						$queryGrid_exec		=	 $this->query($queryGrid);
+						$job_num_rows		=	$this->num_rows($queryGrid_exec);
+						
+						if($job_num_rows)
+						{
+							$rows_CREATE_SSAS_JOB 				=	$this->fetch_array($queryGrid_exec);
+						}
 				
+				}
 				
-				
-				if($this->num_rows($queryGrid_exec))
+				if($job_num_rows)
 				{
 					// Verifica o Status do Job
-					$rows_CREATE_SSAS_JOB 				=	$this->fetch_array($queryGrid_exec);
+					
 					$rows_GET_SSAS_JOB					=	NULL;
 					$getRequestKendoUi['QUERY_ID']		=	$rows_CREATE_SSAS_JOB['QUERY_ID'];
 					
 					
-					//Pegando o total de Colunas da query para ser renderizada na tela
-/*					$_total_FAT_SSAS_QUERYS		=	 $this->_query->FAT_SSAS_QUERYS($rows_CREATE_SSAS_JOB['QUERY_ID']);
-					$_query_FAT_SSAS_QUERYS		=	 $this->query($_total_FAT_SSAS_QUERYS);
 					
-					if($_query_FAT_SSAS_QUERYS)
-					{
-							$rows_FAT_SSAS_QUERY	= $this->fetch_array($_query_FAT_SSAS_QUERYS);	
-							
-							WRS::SET_TOTAL_COLUMN($rows_CREATE_SSAS_JOB['QUERY_TABLE'], $rows_FAT_SSAS_QUERY['TOTAL_COLUMNS']);//Gravando
-					}
-					*/
 					
-					$cube 								=	$this->getCube();
-					//$this->SAVE_CACHE_SSAS_USER('QUERY_CACHE',$rows_CREATE_SSAS_JOB['QUERY_ID'],$this->_cube_pos_session);
 					//Salvando na estrutura do quendo ui o ID da query
 
 					/*
