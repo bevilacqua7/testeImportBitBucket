@@ -232,6 +232,9 @@ class KendoUi
 		
 		//Declate start param
 		$this->_param	=	 $_param;
+		
+		
+		
 	}
 	
 	

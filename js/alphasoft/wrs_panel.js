@@ -1194,12 +1194,13 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 
   			if(!empty(is_filter))
 				{
-					var json 			=	$.parseJSON(base64_decode(object.attr('json')));
-					
+					//var json 			=	$.parseJSON(base64_decode(object.attr('json')));
+					var json 			=	object.data('wrs-data');
 					if(json!=null)
 						json['FILTER']	=	is_array(is_filter) ? implode(',',is_filter) : is_filter;
-						
-						object.attr('json',base64_encode(json_encode(json,true)));
+
+						//object.attr('json',base64_encode(json_encode(json,true)));
+						object.data('wrs-data',json);
 				}
 				
 				DROP_EVENT( 'DIRECT', object,$(_clone));

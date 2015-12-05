@@ -404,18 +404,12 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				_START('wrsAbas::save_info_aba_current');
 				
-				if(_aba_active.length==0) return true;
-				
+				if(_aba_active.length==0) {
+					return true;
+				}
 				var aba_active			=	 _aba_active;
 				
 				 
-				try{
-						if(_aba_active.wrsAbaData('getKendoUi').new_aba==true)
-							{
-								_aba_active.wrsAbaData('setKendoUi',{new_aba:false});
-								return true;
-							}
-				}catch(e){}
 				
 				
 				//habilita a janela
@@ -462,6 +456,17 @@ function optionsDataConvert(gridValue,with_decode)
 					_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
 					_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
 					
+					
+					try{
+						if(_aba_active.wrsAbaData('getKendoUi').new_aba==true)
+							{
+								_aba_active.wrsAbaData('setKendoUi',{new_aba:false});
+								return true;
+							}
+				}catch(e){ }
+				
+				
+				
 					aba_active.wrsAbaData('setWrsData',_param_request);
 					
 					//Ativa para não executar a grid se existir alterações
@@ -537,7 +542,6 @@ function optionsDataConvert(gridValue,with_decode)
 					}
 				}
 				
-				
 				wrsConfigGridDefaultManagerTopOptions();
 				
 				var aba_active		=	tagABA.find('.active');
@@ -566,6 +570,8 @@ function optionsDataConvert(gridValue,with_decode)
 				var _isLoad			=	 job_exist(_report_id);				
 				var data_array_aba	=	$(this).wrsAbaData('getData');				
 				var gridValue		=	$(this).wrsAbaData('getKendoUi');
+				
+				
 							
 
 				//Informa qual sera a Ativa no momento	
@@ -1466,9 +1472,8 @@ function optionsDataConvert(gridValue,with_decode)
 						$('.wrs_run_filter').data('auto_load_data','');
 					}
 					
-					
 					//Remove a aba em branco ou aque não tiver linhas
-					if(aba_active.wrsAbaData('getWrsData').LAYOUT_ROWS=='e30=')
+					if(aba_active.wrsAbaData('getWrsData').LAYOUT_ROWS=='e30='|| isEmpty(aba_active.wrsAbaData('getWrsData').LAYOUT_ROWS))
 						{
 							aba_active.find('.icon-remove-aba').trigger('click');
 						}

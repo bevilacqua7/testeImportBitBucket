@@ -174,6 +174,7 @@ function changeWithDrillFilter(layout,filter_to_add)
 	
 	
 
+	
 	//Mudando o status para que possa ser renderizado
 	var current_layout	=	getLoadReport(true);
 	
@@ -951,7 +952,6 @@ function wrsFilterClickFalse(filter_hide)
 									_json_filter						=	json.FILTER;
 									_index.push(json.FILTER);		
 									filters_up[filters_up.length]	=	'{'+json.FILTER+'}';								
-							
 							}
 							
 							FilterOriginal[FilterOriginal.length]	=	{'class':'__'+replace_attr(level_full),data:_json_filter};
@@ -962,12 +962,7 @@ function wrsFilterClickFalse(filter_hide)
 			
 			
 			FilterOriginal	=	merge_filter_in_array(FilterOriginal);
-			
-			//filters_up.push({})
-			
-			//foreach(FilterOriginal);
-			//if(empty_filter) return '';
-			
+
 			if(is_array(filters_up)) 
 				{
  					tagQuery	=	 implode(',',filters_up);
@@ -1549,6 +1544,27 @@ function wrsFilterClickFalse(filter_hide)
 	
      
      
+	 var filter_current_selected	=	 function()
+     {
+     	var _tmp	=	get_aba_active_wrs_param();
+     	var _filter	=	getJsonDecodeBase64(_tmp.FILTER_TMP);
+		var _obj	=	{};
+		
+
+		if(isEmpty(_filter)) return null;
+
+		for(var lineFilter in _filter)
+		{
+			var _sub				=	_filter[lineFilter];
+				_obj[_sub.class]	=	_sub.data;
+		}
+//FILTER
+//FILTER_CLICK
+
+		return _obj;
+
+     }
+	 
    	 var  setWRSFilterCommon = function()
 							 {
 								 
@@ -1579,8 +1595,9 @@ function wrsFilterClickFalse(filter_hide)
 							 	
 							 	var size_data			=	 0;
 							 	var is_atributo_simples	=	false;
+							 	var filter_selectd		=	filter_current_selected();
 							 	
-							 	
+								
 									 $('.sortable_filtro li').each(function()
 											{
 										 			var value		=	$(this).attr('vvalue');
@@ -1592,7 +1609,8 @@ function wrsFilterClickFalse(filter_hide)
 												 	var json		=	$('.wrs_panel_options ul .'+tag_class).data('wrs-data');
 												 	var jsonDecode	=	json;
 												 	
-												 	
+												 	////FILTER
+//FILTER_CLICK
 												 	
 												 	if(empty(not_use))
 												 	{
@@ -1605,15 +1623,26 @@ function wrsFilterClickFalse(filter_hide)
 														 	
 														 	
 														 	//Substitui o Json pelo qualk já estva selecionado
-														 	
+														 	/*
 														 	if(jsonDROPExist)
 														 		{
 																 	if(isset(jsonDROP[jsonDecode.LEVEL_FULL]))
 																 		{
 																 			json				=	jsonDROP[jsonDecode.LEVEL_FULL];
 																 		}
-														 		}
+														 		}*/
 														 	
+															
+															try{
+														 				json['FILTER']	=	json['FILTER_CLICK']=		filter_selectd['__'+tag_class];
+																		
+														 		}catch(e){
+
+														 		}
+																
+																
+
+															
 														 	if(!empty(value))
 														 	{
 														 		var h2	=	 $('<h2/>',{	'vvalue'		:	value,

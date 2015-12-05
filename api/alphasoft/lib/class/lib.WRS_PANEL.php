@@ -1183,11 +1183,21 @@ HTML;
 		
 		$TelerikUi->setPageSize($page_size);
 		$TelerikUi->setHeaderColumnWRS($param);
+		
+		
+	
+		
+		
 		$tagToUrl['TOTAL_COLUMN']	=	$TelerikUi->get_total_column();
 		
 		
 		$url						=	'run.php?'.fwrs_array_to_url($tagToUrl);
 		$TelerikUi->setRequestJson($url,$PAGE);
+		
+		
+		$TelerikUi->setToolbarExcel('excel', 'ExportarExcel', $url);
+		$TelerikUi->setToolbarPDF('pdf', 'pdf', $url);
+		
 		
 		
 		$getRequestKendoUi['TOTAL_COLUMN']		=	$tagToUrl['TOTAL_COLUMN'];//Recalcula o total de colunas
