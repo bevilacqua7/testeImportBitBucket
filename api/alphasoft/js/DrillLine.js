@@ -175,7 +175,8 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 	var wrs_type	=	$(this).attr('wrs-type');
 	var DrillDataTMP=	"";
 	
-
+	
+console.log('grid_id',grid_id);
 	for(lineData in rows)
 	{
 		if(flag_load)

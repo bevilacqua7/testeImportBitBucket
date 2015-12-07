@@ -139,7 +139,6 @@ function filterMergeLoad(filter_current,filterMerge)
 
 function changeWithDrillColumnRows(column,columnName)
 {
-	
 	_START('changeWithDrillColumnRows');
 	var current_layout		=	getLoadReport(true);
 	
@@ -1547,7 +1546,9 @@ function wrsFilterClickFalse(filter_hide)
 	 var filter_current_selected	=	 function()
      {
      	var _tmp	=	get_aba_active_wrs_param();
+     	
      	var _filter	=	getJsonDecodeBase64(_tmp.FILTER_TMP);
+     	
 		var _obj	=	{};
 		
 
@@ -1689,9 +1690,11 @@ function wrsFilterClickFalse(filter_hide)
 		
 				   	var __click_wrs_panel_filter_icon	=	 function()
 					{
-				   		_START('WrsFilter::wrs_panel_filter_icon');
-				   		var event	=	 $(this);
+				   		_START('WrsFilter::__click_wrs_panel_filter_icon');
+				   		
+				   		var event	=	 $('.wrs_panel_filter_icon');
 
+				   		
 				   		var filter_hide		=	event.attr('filter_hide'); //Flag armazenada no botão para saber se já foi pressionado
 				
 						if(filter_hide!='true' && filter_hide!='false') filter_hide='false';
@@ -1707,7 +1710,7 @@ function wrsFilterClickFalse(filter_hide)
 						}
 				
 						event.attr('filter_hide', filter_hide); //Atualiza a Flag
-						_END('WrsFilter::wrs_panel_filter_icon');
+						_END('WrsFilter::__click_wrs_panel_filter_icon');
 				 }
 				
 		

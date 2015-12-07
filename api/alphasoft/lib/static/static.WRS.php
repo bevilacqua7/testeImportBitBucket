@@ -284,6 +284,23 @@ class WRS
 		return self::INFO_SSAS_LOGIN('CUSTOMER_DESC');
 	}
 	
+	public static function SET_CACHE_JOB_RESULT($report_id,$data)
+	{
+		
+		$key	=	'CACHE_JOB_RESULT';
+		
+		if(!isset($_SESSION[$key])) $_SESSION[$key]	=	 array();
+		$_SESSION[$key][$report_id]	=	$data;
+		
+	}
+	
+	public static function GET_CACHE_JOB_RESULT($report_id)
+	{
+		$key	=	'CACHE_JOB_RESULT';
+		return $_SESSION[$key][$report_id];
+	}
+	
+	
 	/**
 	 * Retorna o Idioma
 	 * @return session

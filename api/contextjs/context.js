@@ -25,11 +25,13 @@ var context = context || (function () {
 				$('.dropdown-context').css({display:''}).find('.drop-left').removeClass('drop-left');
 			});
 		});
+		
 		if(options.preventDoubleContext){
 			$(document).on('contextmenu', '.dropdown-context', function (e) {
 				e.preventDefault();
 			});
 		}
+		
 		$(document).on('mouseenter', '.dropdown-submenu', function(e){
 			
 			var $sub = $(this).find('.dropdown-context-sub:first'),

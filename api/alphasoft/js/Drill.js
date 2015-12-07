@@ -93,9 +93,13 @@ function addDrillOnDataBound(nameID,kendoUI)
 	for(x in rows_tag)
 		{
 			
-			var class_tag_for		=	 '.'+replace_attr(rows_tag[x]);
+			var class_tag_for		=	 '.wrs_panel_options .'+replace_attr(rows_tag[x]);
 
-			var json				=	$.parseJSON(base64_decode($(class_tag_for).attr('json')));
+			//$('.wrs_panel_options .PRODUTOLABORATORIO').data('wrs-data')
+			//var json				=	$.parseJSON(base64_decode($(class_tag_for).attr('json')));
+			var json				=	$(class_tag_for).data('wrs-data');
+			
+
 			var json_level_drill	=	 null;
 			
 			try{
@@ -141,9 +145,12 @@ function addDrillOnDataBound(nameID,kendoUI)
 			
 			if(empty(column_tag[c])) continue;
 			
-			var class_tag			=	'.'+replace_attr(column_tag[c]);
+			//$('.wrs_panel_options .PRODUTOLABORATORIO').data('wrs-data')
+			var class_tag			=	'.wrs_panel_options .'+replace_attr(column_tag[c]);
 
-			var json				=	$.parseJSON(base64_decode($(class_tag).attr('json')));
+
+			//var json				=	$.parseJSON(base64_decode($(class_tag).attr('json')));
+			var json				=	$(class_tag).data('wrs-data');
 			var json_level_drill	=	 null;
 			
 			try{
@@ -156,7 +163,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 			
 			
 		
-		var json	=	$.parseJSON(base64_decode($(class_tag).attr('json')));
+		//var json	=	$.parseJSON(base64_decode($(class_tag).attr('json')));
 		
 
 

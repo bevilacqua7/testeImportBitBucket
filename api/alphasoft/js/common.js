@@ -21,6 +21,20 @@ if(IS_TRACE)
 	}
 	
 
+
+/*
+ * TODO:Não utilizado apenas para clone de exemplos modo debug apenas
+ * ele é executado pelo console
+ */
+function clone_jj(report)
+{
+	var _jj				=	getJsonDecodeBase64(jj);
+	var _report			=	_jj.kendoUi.REPORT_ID;
+	var _Report_atual	=	$('.WRS_ABA .'+report).attr('id-aba');
+	console.log('_jj',_jj);
+	$('.WRS_ABA .'+report).data('wrs_aba_data',_jj).attr('id-aba',_report).addClass(_report);
+}
+
 /*
  * Tipos de Execuções que o sistema opera para gerar uma novo Report
  */

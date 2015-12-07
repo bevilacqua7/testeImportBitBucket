@@ -829,6 +829,7 @@ class WRS_PANEL  extends WRS_USER
 		
 				$job_num_rows						=	 false;
 				
+				
 				/*
 				QUERY_ID
 				QUERY_TABLE
@@ -837,14 +838,16 @@ class WRS_PANEL  extends WRS_USER
 		
 				if(!empty($getRequestKendoUi['DRILL_HIERARQUIA_LINHA_DATA']))
 				{
+					$rows_CREATE_SSAS_JOB		=	WRS::GET_CACHE_JOB_RESULT($getRequestKendoUi['REPORT_ID']);
+					
 					//Simula o retorno do JOB para caso seja o drill linha
-					$rows_CREATE_SSAS_JOB			=	 array(
-																'QUERY_ID'		=>	$getRequestKendoUi['QUERY_ID']	,
-																'QUERY_TABLE'	=>	$cube['TABLE_CACHE'],
+					/*array(
+																'QUERY_ID'		=>	$get_cache['QUERY_ID']	,
+																'QUERY_TABLE'	=>	$get_cache['TABLE_CACHE'],
 																'USER_CODE'		=>	WRS::USER_CODE(),
 																'JOB_STATUS'	=>	4	
 																);
-					
+					*/
 					$job_num_rows	=	 true;
 				}else{
 		
@@ -857,6 +860,8 @@ class WRS_PANEL  extends WRS_USER
 						if($job_num_rows)
 						{
 							$rows_CREATE_SSAS_JOB 				=	$this->fetch_array($queryGrid_exec);
+							
+							WRS::SET_CACHE_JOB_RESULT($getRequestKendoUi['REPORT_ID'],$rows_CREATE_SSAS_JOB);
 						}
 				
 				}
