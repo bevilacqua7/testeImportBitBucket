@@ -326,7 +326,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						
 						
 						}
-			}catch(e){}
+			}catch(e){console.warn(' exception');}
 			
 			
 			
@@ -380,7 +380,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					}
 					
 				}
-			}catch(e){}
+			}catch(e){console.warn(' exception');}
 			
 			
 			if(empty(kendoUiTools.GAUGE_COLOR)){
@@ -602,6 +602,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					try{
 						return totalBubble[column];
 					}catch(e) {
+						console.warn(' exception');
 						return '';
 					}
 						return '';
@@ -739,7 +740,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						infoFirst.value	=	kendoUiTools.ORDER_BY_COLUMN;
 					}catch(e)
 					{
-						
+						console.warn(' exception');
 					}
 				}
 			}//END 
@@ -2115,6 +2116,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 																			try {
 																					_getDataParam		=	getData[lineDataMeasure][_line];
 																				}catch(e) {
+																					console.warn(' exception');
 																					getData[lineDataMeasure][_line]	=	{name:'',data:[]};
 																				}
 																		
@@ -2519,7 +2521,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 														
 													}
 											}catch(e){
-													console.log('Error de pointer, mas pode ser um erro devido a falta de valor a ser plotado');
+												console.warn(' exception - Error de pointer, mas pode ser um erro devido a falta de valor a ser plotado');
 											};
 											pathChart.find('.row').append(_div_legenda);
 											
@@ -2644,6 +2646,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 															_mergeChartConfigLegend	=	typeChart[getVals[0].level_full];
 														}catch(e){
 															_mergeChartConfigLegend='';
+															console.warn(' exception');
 														}
 														
 														//Apenas para não dar erro 

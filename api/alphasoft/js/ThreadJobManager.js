@@ -489,8 +489,24 @@ function job_exist(report_id)
 			var EventClickJobModalClose		=	 function()
 			{
 				_ONLY('managerJOB::EventClickJobModalClose');
-				var _data	=	 GetData();
+				
+				var _data			=	 GetData();
+				
+				var _active_aba		=	get_aba_active_kendoUi();
+				
 					$(_data.modal).addClass('hide');
+					$(_data.cancel_job).removeClass('hide');
+					$(_data.close_modal).addClass('hide');
+					
+					
+					//Removendo a menagem do alertify de erro
+					$('.alertify-logs .'+_active_aba.REPORT_ID).trigger('click');
+					
+					wrs_panel_layout.open('east');
+					wrs_panel_layout.open('west');
+					
+					
+					$('.wrs_run_filter').removeAttr('locked');
 					
 					setMensagens(_data.report_id_active,undefined);//remove a mensagel
 			}
@@ -512,6 +528,17 @@ function job_exist(report_id)
 					if(ExistRealJob(_report_id,_data.job_render)==false)
 					{
 						$(_data.modal).addClass('hide');
+						
+						var is_messenger	=	__getMessenger({report_id:_report_id});
+						
+						if(!isEmpty(is_messenger))
+						{
+							__setMessengerWindow({kendoUi:options.kendoUi,messenger:is_messenger});
+							return  false;
+						}
+
+						
+						
 						return true;
 					}
 					
@@ -520,10 +547,32 @@ function job_exist(report_id)
 					
 					$(_data.modal).removeClass('hide');
 					
+					return true;
 				_END('managerJOB::__setActiveAba');
 			}
 			
 			
+			
+			
+			
+			var __setMessengerWindow		=	 function(options)
+			{
+				_START('managerJOB::__setMessengerWindow');
+				
+				var _report_id		=	options.kendoUi.REPORT_ID;
+				var _data			=	GetData();
+				
+					$(_data.modal).removeClass('hide');
+					
+					$(_data.cancel_job).addClass('hide');
+					$(_data.close_modal).removeClass('hide');
+					
+					$(_data.modal).find('.modal-title-wrs-job').html(options.kendoUi.TITLE_ABA);
+					$(_data.modal).find('.modal-text-wrs-job').html(options.messenger);
+					
+					
+				_END('managerJOB::__setMessengerWindow');
+			}
 			
 			
 			
@@ -599,6 +648,7 @@ function job_exist(report_id)
 					
 				}catch(e){
 					_is_force	=	 false;
+					console.warn(' exception');
 				}
 				
 				if(ExistRealJob(_report_id,_data)==true) return true;
@@ -702,9 +752,6 @@ function job_exist(report_id)
     					var is_current	=	false;	
     					 
     					
-							 
-							
-							
 							try{
 								if(_data_json['cancel']==true)
 								{
@@ -712,6 +759,7 @@ function job_exist(report_id)
 								}
 							}catch(e){
 								is_Cancel	=	 false;
+								console.warn(' exception');
 							}
 							
 
@@ -728,7 +776,7 @@ function job_exist(report_id)
 										
 											modal.find('.modal-text-wrs-job').html(msg_job);
 									}									
-								}catch(e){}
+								}catch(e){console.warn(' exception');}
 							}
 							
 							
@@ -741,20 +789,33 @@ function job_exist(report_id)
 											var _title		=	$('.'+_report_id).wrsAbas('aba_title',{report_id:_report_id});
 											var aba_active	=	 get_aba_active_kendoUi();
 
-											setMensagens(_data_json['REPORT_ID'],_data_json['error']);//Adicionando a mensagem de erro ao processo de JOB
+											
+											
 
 												//setJob(_data_json['REPORT_ID'],undefined)//Removendo a estrutura do JOB
 
 												setJobRender(_data_json['REPORT_ID'],undefined)//Removendo a estrutura do JOB
 												setJob(_report_id,undefined);
+												
 												$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
 												
 												
 												if(!is_Cancel)
 												{
 
-													alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+_data_json['error'], 0);
+													var mensagem_alert		=	_data_json['error'];
+													
+													
+													try{
+														mensagem_alert	=	_data_json.data.QUERY_MESSAGE
+													}catch(e){
+														mensagem_alert		=	_data_json['error'];
+													}
+													
+													
+													alertify.error(sprintf(LNG('ERRO_EXECUTE_ABA'),_title)+'<span class="'+_report_id+'">'+mensagem_alert+'</span>', 0);
 
+													setMensagens(_data_json['REPORT_ID'],mensagem_alert);//Adicionando a mensagem de erro ao processo de JOB
 
 													if(aba_active['REPORT_ID']==_data_json['REPORT_ID'])
 														{
@@ -769,7 +830,7 @@ function job_exist(report_id)
 													$(_data_local.close_modal).removeClass('hide');
 												}
 										}
-							}catch(e){}
+							}catch(e){console.warn(' exception');}
 							
 							
 							
@@ -786,12 +847,12 @@ function job_exist(report_id)
 											MOUNT_LAYOUT_GRID_HEADER(_data_json['warning']+_data_json['html'],'ThreadMainLoadData');
 											
 											setJob(_report_id,undefined);
-											
+
 											setMensagens(_data_json['REPORT_ID']);//removendo mensagem desse key
 											
 											//setJob(_data_json['REPORT_ID'],undefined)//Removendo a estrutura do JOB
 										}
-								}catch(e){}
+								}catch(e){console.warn(' exception');}
 								
     			}
     		
@@ -812,6 +873,24 @@ function job_exist(report_id)
     	}
 		
 		
+    	var __getMessenger		=	 function (options)
+    	{
+    		
+    		var _options		=	options;
+    		var _data			=	 GetData();
+    		var _messenger		=	null;
+    		
+    		try{
+    			_messenger	=	_data.mensagens[_options.report_id];
+    			
+    		}catch(e){
+    			console.warn('exception');
+    			_messenger	=	 null;
+    		}
+    		
+    		return _messenger;
+    		//_options.report_id
+    	}
 		
 		
 		/**
@@ -845,6 +924,7 @@ function job_exist(report_id)
 					_type_run		=	_data.mktime[_data.report_id_active].type_run
 				}catch(e){
 					_mktime= null;
+					console.warn(' exception');
 				}
 				
 				if(_mktime==null) return false;
@@ -892,6 +972,8 @@ function job_exist(report_id)
 				setActiveAba			:	__setActiveAba,
 				resize					:	__resize,
 				exist_job_render		:	__exist_job_render,
+				getMessenger			:	__getMessenger,
+				setMessengerWindow		:	__setMessengerWindow,
 				data					:	GetData,
 				remove_aba_cancel_job	:	__remove_aba_cancel_job
 		};

@@ -133,30 +133,27 @@ EOF;
 EOF;
 		return $query;
 	}
-
 	
 	/**
 	 * Obtem a Quantidade de Registros da Consulta 
 	 * 
-	 * o $DRILL_LINE é para um execução temporária para a consulta do dril
+	 * o $DRILL_LINE é para um execução temporária para a consulta do drill
 	 * @param string $_QUERY_TABLE
 	 * @param int $DRILL_LINE
 	 * @return string
 	 */
-	public function RECORDS_SSAS_TABLES( $_QUERY_TABLE, $DRILL_LINE=0 )
+	 
+	 // ************* RECORDS_SSAS_TABLES = COUNT_SSAS_TABLE
+	 
+	 public function COUNT_SSAS_TABLE( $_QUERY_TABLE, $DRILL_LINE=0 )
 	{
-		$data_unless	=	substr($_QUERY_TABLE,0,count($_QUERY_TABLE)-2);
-		
-		
 		$FAT_SSAS_TABLES	=	<<<EOF
 		select TOTAL_ROWS,TOTAL_COLUMNS from FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}'
 EOF;
-		
-		
 		$SQL_DRILL_LINE			=	<<<EOF
 		    select TOTAL_ROWS,TOTAL_COLUMNS
-		    from (SELECT TOTAL_COLUMNS FROM FAT_SSAS_TABLES where QUERY_TABLE = '{$data_unless}') A,
-			     (SELECT COUNT(*) AS TOTAL_ROWS FROM {$_QUERY_TABLE}) B
+		    from (SELECT TOTAL_COLUMNS FROM FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}') A,
+			     (SELECT COUNT(*) AS TOTAL_ROWS FROM {$_QUERY_TABLE}D) B
 EOF;
 		/*
 		 * TODO: Temporário
@@ -171,22 +168,28 @@ EOF;
 	 * WARNING: Quando passa por essa função acrescenta-se o S no final do nome da tabela temporária
 	 * 
 	 * @param string $TABLE_NAME
-	 * @param int $LINE
-	 * @param int $MEASURE
+	 * @param int $COLUMN
+	 * @param int $ALL_ROWS
 	 * @param string $ORDER
-	 * @param string $FILTERS
 	 *
 	 * @return <string>
 	 */
-	public function SORT_SSAS_TABLE( $TABLE_NAME, $LINE, $MEASURE, $ORDER='ASC', $FILTERS='' )
+	 
+	 // ************* REMOVEU O PARAMETRO DE LINHAS, INCLUIU O PARAMETRO DE TOTAL LINHAS E A TABELA RETORNADA NÃO É MAS UMA COPIA DA TABELA ORIGINAL (NÃO DEVE SE UTILIZADA DIRETAMENTE)
+	
+	public function SORT_SSAS_TABLE( $TABLE_NAME, $COLUMN, $ALL_ROWS, $ORDER='ASC' )
 	{
-		// Exemplo: EXEC Sort_SSAS_Table '_MDX_18BDBC3648FE450D91BE799CE5758D32_F',5,'6','DESC',''
+		
+		$_ALL_ROWS		=	$ALL_ROWS;
+		
+		if(empty($_ALL_ROWS)) $_ALL_ROWS = 0;
+		
+		// Exemplo: EXEC Sort_SSAS_Table '_MDX_18BDBC3648FE450D91BE799CE5758D32_F','C007',1,'DESC'
 		$query = <<<EOF
 					EXEC Sort_SSAS_Table 	'{$TABLE_NAME}',
-											{$LINE},
-											'{$MEASURE}',
-											'{$ORDER}',
-											'{$FILTERS}'
+											'{$COLUMN}',
+											{$_ALL_ROWS},
+											'{$ORDER}'
 EOF;
 		return $query;
 	}
@@ -229,7 +232,10 @@ EOF;
 	 *
 	 * @return <string>
 	 */
-	public function DRILL_SSAS_TABLE( $TABLE_NAME, $LINE, $FILTER, $OPENROWS )
+	 
+	 // ************* REMOVEU O PARAMETRO DE LINHAS
+	
+	public function DRILL_SSAS_TABLE( $TABLE_NAME, $FILTER, $OPENROWS )
 	{
 		$_FILTER	=	$FILTER;
 		
@@ -239,13 +245,12 @@ EOF;
 			$_FILTER	=	"";
 		}
 		
-		// Exemplos: Exec Drill_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F',5,'30 - MARCAS CLASSICAS E SIMILARES(_,_)110000 - JOSE RICARDO DOREA CARVALHO(_,_)112200 - OSVALDO LUIS CARDOZO DE ANDRADE',1
-		//           Exec Drill_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F',5,'{_*_}(_,_){_*_}',1
+		// Exemplos: Exec Drill_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F','30 - MARCAS CLASSICAS E SIMILARES(_,_)110000 - JOSE RICARDO DOREA CARVALHO(_,_)112200 - OSVALDO LUIS CARDOZO DE ANDRADE',1
+		//           Exec Drill_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F','{_*_}(_,_){_*_}',1
 		//(_,_) Separador de Campos
 		// OPENROWS = 1 (Abre) / 0 (Fecha)
 		$query = <<<EOF
 					EXEC Drill_SSAS_Table 	'{$TABLE_NAME}',
-											{$LINE},
 											'{$_FILTER}',
 											{$OPENROWS}
 EOF;
@@ -262,16 +267,49 @@ EOF;
 	 *
 	 * @return <string>
 	 */
-	public function INFO_SSAS_TABLE( $TABLE_NAME, $LINE )
+	 
+	 // ************* INFO_SSAS_TABLE = Get_SSAS_Drill
+	
+	public function GET_SSAS_DRILL( $TABLE_NAME )
 	{
-		// Exemplo: Exec Info_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_FS',5
+		// Exemplo: Exec Get_SSAS_Drill '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_FD'
 		$query = <<<EOF
-					EXEC Info_SSAS_Table 	'{$TABLE_NAME}',
-											{$LINE}
+					EXEC Get_SSAS_Drill '{$TABLE_NAME}'
 EOF;
 		return $query;
 	}
 
+	/**
+	 * Obtem Registros no Formato utilizado para GRID, 
+	 *
+	 * WARNING: Retorno dos campos são definidos como CNNN (onde NNNN = posição do campo na Tabela)
+	 * 
+	 * @param string $TABLE_NAME
+	 * @param int $ROW_NUMBER_START
+	 * @param int $ROW_NUMBER_END
+	 * @param int $FORMAT
+	 * @param int $RESUME
+	 * @param string $LANGUAGE
+	 *
+	 * @return <recordset>
+	 */	
+	 
+	 // ************* INSERIDO PARAMETROS DE FORMATACAO / NUMEROS RESUMIDOS / LINGUAGEM
+	
+	public function SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END, $FORMAT, $RESUME, $LANGUAGE )
+	{
+		// Exemplo: Exec Select_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F' OUTPUT,11,20,0,0,'POR'
+		$query = <<<EOF
+					EXEC Select_SSAS_Table '{$TABLE_NAME}',
+											{$ROW_NUMBER_START},
+											{$ROW_NUMBER_END},
+											{$FORMAT},
+											{$RESUME},
+											'{$LANGUAGE}'
+EOF;
+		return $query;
+	}
+	
 	/**
 	 * Obtem Registros Abertos (Drill) juntamente com as Colunas Abertas
 	 *
@@ -281,33 +319,14 @@ EOF;
 	 *
 	 * @return <recordset>
 	 */	
-	public function SELECT_SSAS_INFO( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END )
-	{
-		// Exemplo: Exec Select_SSAS_Info '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_FDSI' OUTPUT,51,100
-		$query = <<<EOF
-					EXEC Select_SSAS_Info '{$TABLE_NAME}',
-											{$ROW_NUMBER_START},
-											{$ROW_NUMBER_END}
-EOF;
-		return $query;
-	}
+	 
+	 // ************* SELECT_SSAS_INFO = SELECT_SSAS_DRILL
 	
-	/**
-	 * Obtem Registros no Formato utilizado para GRID, 
-	 *
-	 * WARNING: Retorno dos campos são definidos como CNNN (onde NNNN = posição do campo na Tabela)
-	 * 
-	 * @param string $TABLE_NAME
-	 * @param int $ROW_NUMBER_START
-	 * @param int $ROW_NUMBER_END
-	 *
-	 * @return <recordset>
-	 */	
-	public function SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END )
+	public function SELECT_SSAS_DRILL( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END )
 	{
-		// Exemplo: Exec Select_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F' OUTPUT,50,99
+		// Exemplo: Exec Select_SSAS_Drill '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_FDI' OUTPUT,50,99
 		$query = <<<EOF
-					EXEC Select_SSAS_Table '{$TABLE_NAME}',
+					EXEC Select_SSAS_Drill '{$TABLE_NAME}',
 											{$ROW_NUMBER_START},
 											{$ROW_NUMBER_END}
 EOF;
@@ -320,16 +339,17 @@ EOF;
 	 * WARNING: Cada linha chama um novo comando e obedece a regra de ordenação
 	 * 
 	 * @param string $TABLE_NAME
-	 * @param string $ATTRIBUTE
 	 * @param string $LANGUAGE
 	 * @return string
 	 */
-	public function GET_SSAS_HEADER( $TABLE_NAME, $ATTRIBUTE, $LANGUAGE )
+
+	 // ************* GET_SSAS_HEADER = GET_SSAS_TABLE / REMOVIDO O PARAMETRO DE ATRIBUTO
+
+	 public function GET_SSAS_TABLE( $TABLE_NAME, $LANGUAGE )
 	{
-		// Exemplo: EXEC Get_SSAS_Table '_MDX_57EBC8E1A2C64670985B79FB9A234DF2_FS','[*]','ENG'
+		// Exemplo: EXEC Get_SSAS_Table '_MDX_57EBC8E1A2C64670985B79FB9A234DF2_F','ENG'
 		$query = <<<EOF
 					EXEC Get_SSAS_Table '{$TABLE_NAME}',
-										'{$ATTRIBUTE}',
 										'{$LANGUAGE}'
 EOF;
 		return $query;
@@ -406,41 +426,25 @@ EOF;
 											'{$SERVER_ID}', 
 											'{$DATABASE_ID}', 
 											'{$CUBE_ID}',
-											'{$ROWS}', 
-											'{$COLUMNS}', 
-											'{$MEASURES}', 
-											'{$FILTERS}', 
-											'{$FILTERS_VALUES}', 
-											{$ALL_ROWS}, 
-											{$ALL_COLS}, 
-											'{$COLS_ORDER}',
-										  	'{$REPORT_OPTIONS}', 
-										  	'{$REPORT_FORMULAS}', 
-										  	'{$REPORT_FILTER}', 
-										  	'{$REPORT_FLAG}', 
-										  	'{$LAYOUT_SHARE}', 
-											'{$USER_TYPE}',
-											{$REPORT_SHARE}, 
-											{$REPORT_AUTOLOAD}
+										  	'{$ROWS}', 
+										  	'{$COLUMNS}', 
+										  	'{$MEASURES}', 
+										  	'{$FILTERS}', 
+										  	'{$FILTERS_VALUES}', 
+										  	{$ALL_ROWS}, 
+										  	{$ALL_COLS}, 
+										  	'{$COLS_ORDER}',
+										  '{$REPORT_OPTIONS}', 
+										  '{$REPORT_FORMULAS}', 
+										  '{$REPORT_FILTER}', 
+										  '{$REPORT_FLAG}', 
+										  '{$LAYOUT_SHARE}', 
+										  '{$USER_TYPE}',
+										  	{$REPORT_SHARE}, 
+										  	{$REPORT_AUTOLOAD}
 EOF;
 		return $query;
 	}
-	
-	/**
-	 * Pegando o total de colunas
-	 * 
-	 * @param unknown $QUERY_ID
-	 * 
-	 */
-	/*
-	public function FAT_SSAS_QUERYS($QUERY_ID)
-	{
-		$query  = <<<EOF
-							select TOTAL_COLUMNS from FAT_SSAS_QUERYS WHERE QUERY_ID ='{$QUERY_ID}'
-EOF;
-		return $query;
-		
-	}*/
 
 	/**
 	 * Copia Relatorios da Base de Dados
@@ -456,10 +460,10 @@ EOF;
 	 */
 	public function COPY_SSAS_REPORT( $REPORT_ID, $CUSTOMER_ID, $SERVER_ID, $DATABASE_ID, $CUBE_ID, $IGNORE_FLAG )
 	{
-		// Exemplo: EXEC Copy_SSAS_Report 'TESTE DE RELATORIO',1,'mfacioli','192.168.1.3','GSK - DDD',1,'GSK - DDD',0
+		// Exemplo: EXEC Copy_SSAS_Reports 'TESTE DE RELATORIO',1,'mfacioli','192.168.1.3','GSK - DDD',1,'GSK - DDD',0
 		$USER_CODE = WRS::USER_CODE();
 		$query = <<<EOF
-					EXEC Copy_SSAS_Report {$REPORT_ID}, {$CUSTOMER_ID}, '{$USER_CODE}', '{$SERVER_ID}', '{$DATABASE_ID}', '{$CUBE_ID}', {$IGNORE_FLAG}
+					EXEC Copy_SSAS_Reports {$REPORT_ID}, {$CUSTOMER_ID}, '{$USER_CODE}', '{$SERVER_ID}', '{$DATABASE_ID}', '{$CUBE_ID}', {$IGNORE_FLAG}
 EOF;
 		return $query;
 	}

@@ -530,6 +530,13 @@ function getJsonEncodeToElement(element)
 	return $.parseJSON(base64_decode(element.attr('json')));
 }
 
+function getDataMetricas(element)
+{
+	return element.data('wrs-data');
+}
+
+
+
 /*
  * Decodifica base 64 para json e para array
  */
@@ -1276,7 +1283,7 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG,label)
 
 									try{
 										controle_metricas=(_label.trim().toLowerCase().substr(0,5)=='cresc' || _label.trim().toLowerCase().substr(0,4)=='evol');
-									}catch(e){}
+									}catch(e){console.warn(' exception');}
 
 									//if(strpos(MEASURE_NAME,'Cresc.')!==false || strpos(MEASURE_NAME,'Evol.')!==false)	
 									if(controle_metricas)

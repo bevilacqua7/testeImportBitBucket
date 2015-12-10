@@ -6,8 +6,8 @@
 	 * class: Name class
 	 * event: INterno para cada processo
 	 */
-/*	ini_set("log_errors", 1);
-	ini_set("error_log", dirname(__FILE__).DIRECTORY_SEPARATOR."wrs-php-error.log");*/
+//	ini_set("log_errors", 1);
+//	ini_set("error_log", dirname(__FILE__).DIRECTORY_SEPARATOR."api".DIRECTORY_SEPARATOR."alphasoft".DIRECTORY_SEPARATOR."var".DIRECTORY_SEPARATOR."php-error.log");
 
 //	header("Content-Type: text/html; charset=ISO-8859-1",true);
 //	header("Content-Type: text/html; charset=ISO-8859-1",true);
@@ -16,6 +16,9 @@
 	$data		=	array('file', 'event', 'class');
 	$data		=	fwrs_request($data);
 
+	
+	
+	//WRS_TRACE('start run.php  \n'.print_r($_REQUEST,true) , __LINE__, __FILE__);
 	
 	
 	$is_js		=	 fwrs_request('is_js');

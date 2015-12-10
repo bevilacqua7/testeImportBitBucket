@@ -137,6 +137,9 @@ function filterMergeLoad(filter_current,filterMerge)
 }
 
 
+
+
+
 function changeWithDrillColumnRows(column,columnName)
 {
 	_START('changeWithDrillColumnRows');
@@ -158,6 +161,11 @@ function changeWithDrillColumnRows(column,columnName)
 		
 	_END('changeWithDrillColumnRows');	
 }
+
+
+
+
+
 //Removendo qualquer informação de placeholder que é a mensagem de que não há valores na tela 
 function cleanPlaceholder()
 {
@@ -429,7 +437,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 				aba_active.wrsAbaData('setKendoUi',{STOP_QUERY:false});
 				flag	=	 false;
 			}
-		}catch(e){}
+		}catch(e){console.warn(' exception');}
 		
 		
 		
@@ -576,7 +584,7 @@ function get_exec_filter()
 		try{
 			_filter	=	get_aba_active_wrs_param().index_filtro;
 		}catch(e){
-			
+			console.warn(' exception');
 			_filter	=	 null;
 			
 		}
@@ -664,6 +672,7 @@ function tagFilterWRS(typeReturn)
  								}
  							}catch(e){
  								div			=	 {'_class_i':'fa-eye-slash','_class':'filter-exec-slash'};
+ 								console.warn(' exception');
  							}
  							
  							//_value
@@ -912,6 +921,10 @@ function wrsFilterClickFalse(filter_hide)
 						}
 					
 			});
+			
+			
+			$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
+			
 			_END('WrsFilter::cleanFiltersDown');	
     	}
     	
@@ -1161,6 +1174,7 @@ function wrsFilterClickFalse(filter_hide)
 			 _START('WrsFilter::clickHeaderFiltro');
         	 var event				=	 _event;
         	 var pageHome			=	false;
+        	 
         	 if(type!='loadWrs')
         	 {
         		 event				=	 $(this);
@@ -1547,7 +1561,15 @@ function wrsFilterClickFalse(filter_hide)
      {
      	var _tmp	=	get_aba_active_wrs_param();
      	
-     	var _filter	=	getJsonDecodeBase64(_tmp.FILTER_TMP);
+     	var _filter_tmp	=	'';
+     	
+     		try{
+     			_filter_tmp	=	_tmp.FILTER_TMP;
+     		}catch(e){
+     			console.warn('exception');
+     			_filter_tmp	=	'';
+     		}
+     	var _filter	=	getJsonDecodeBase64(_filter_tmp);
      	
 		var _obj	=	{};
 		
@@ -1638,7 +1660,7 @@ function wrsFilterClickFalse(filter_hide)
 														 				json['FILTER']	=	json['FILTER_CLICK']=		filter_selectd['__'+tag_class];
 																		
 														 		}catch(e){
-
+														 			console.warn(' exception');
 														 		}
 																
 																

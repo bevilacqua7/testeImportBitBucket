@@ -107,6 +107,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 				
 			}catch(e){
 				json_level_drill	=	 null;
+				console.warn(' exception');
 			}
 
 			
@@ -158,6 +159,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 				
 			}catch(e){
 				json_level_drill	=	 null;
+				console.warn(' exception');
 			}
 			
 			

@@ -32,6 +32,7 @@ function DRILL_FCC(index,columns)
 			field	=	index[columns[lineColumn]].field;
 		}catch(e){
 			field	=	'';
+			console.warn(' exception');
 		}
 		
 		if(empty(field)) continue;
@@ -137,7 +138,7 @@ function DRILL_HIERARQUIA_LINHA_setButton(_data,C000, line,column,DRILL_HIERARQU
 						return btn_minus+data;
 					}
 				}
-			}catch(e){}		
+			}catch(e){console.warn(' exception');}		
 		
 		
 		try{
@@ -150,7 +151,7 @@ function DRILL_HIERARQUIA_LINHA_setButton(_data,C000, line,column,DRILL_HIERARQU
 					
 					return  data;
 				}
-			}catch(e){}	
+			}catch(e){console.warn(' exception');}	
 	
 	
 	}
@@ -176,7 +177,7 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 	var DrillDataTMP=	"";
 	
 	
-console.log('grid_id',grid_id);
+
 	for(lineData in rows)
 	{
 		if(flag_load)

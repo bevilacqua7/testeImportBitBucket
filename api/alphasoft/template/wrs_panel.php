@@ -216,7 +216,6 @@ var AUTO_LOAD_RUN			= <?php echo (($request_exec_report && $request_exec_report=
 <link rel="stylesheet" type="text/css" href="css/wrs_panel.css?<?php echo RAND_TOKEN;?>" />
 <link rel="stylesheet" type="text/css" href="css/wrs_common.css?<?php echo RAND_TOKEN;?>" />
 
-
 	<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->

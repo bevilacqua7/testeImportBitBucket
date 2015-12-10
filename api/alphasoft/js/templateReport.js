@@ -198,6 +198,11 @@ function carrega_grid_list_reports(options)
 {
 _START('carrega_grid_list_reports');
 	
+	var active_aba	=	get_aba_active_object();
+	
+		active_aba.wrsAbas('save_info_aba_current',active_aba);
+
+
 	var funCallBackVision = function()
 	{
 		_START('carrega_grid_list_reports::funCallBackVision');
@@ -415,6 +420,14 @@ function removeReport(arrRepIds)
 function getLoadReport(no_request)
 {
 	_START('getLoadReport');
+	
+	
+	var active_aba	=	get_aba_active_object();
+	
+		active_aba.wrsAbas('save_info_aba_current',active_aba);
+		
+		
+
 	var _param						=	{};
 	var sortable_metrica			=	rows_by_metrica_attr_base64('.sortable_metrica','metrica');
 	var sortable_linha				=	rows_by_metrica_attr_base64('.sortable_linha','attr');

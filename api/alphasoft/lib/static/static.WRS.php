@@ -59,6 +59,12 @@ class WRS
 	}
 	
 	
+	public static function CLEAN_TOTAL_COLUMN()
+	{
+		return $_SESSION['QTD_QUERY_TABLE']	=	 array();
+	}
+	
+	
 	/*
 	 * Contem aso MUltiplos cubos
 	 */
@@ -624,6 +630,8 @@ class WRS
 			{
 				unset($_SESSION[$TAG_NAME][$cube_id]);
 			}
+			
+			WRS::CLEAN_TOTAL_COLUMN();
 	}
 	
 	

@@ -142,7 +142,7 @@ EOF;
 	 * @param array $container
 	 * @return string
 	 */
-	public function MENU_AUTO_LAOD($container)
+	public function CREATE_ABAS()
 	{
 		$aba	=<<<EOF
 							 <div class="WRS_ABA">
@@ -155,26 +155,12 @@ EOF;
 		$abaSearch	=	'{li}';
 		$html		=	NULL;
 		
-		
-		if(!is_array($container)) return $html;
 
 		$li		=	<<<EOF
 							<li class="{active}"><a href="#">{li}<span class="icon-remove-aba glyphicon glyphicon-remove"></span></a></li>
 EOF;
 		$liSearch	= array('{li}','{active}');
 		
-		foreach($container as $label =>$value)
-		{
-			
-			$replace	=	array($value['REPORT_DESC']);	
-			$html		.=	str_replace($liSearch, $replace, $li);
-		}
-
-		/*
-		if(empty($html)){
-			$replace	=	array(LNG('LABEL_NOVO'),'active');
-			$html		.=	str_replace($liSearch, $replace, $li);
-		}*/
 		
 		
 		return str_replace($abaSearch, $html, $aba);

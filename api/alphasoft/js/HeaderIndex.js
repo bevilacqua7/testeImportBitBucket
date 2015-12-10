@@ -41,7 +41,8 @@ function WRSHeaderIndex(kendoUi)
 				try{
 					measure_title[ifnm]	=	tmpComeBack.field[label[0]].title;
 				}catch(e){
-					console.log('pode não existir title');
+					console.warn(' exception -- pode não existir title');
+					
 				}
 			
 				if(limit)continue;

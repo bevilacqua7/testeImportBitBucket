@@ -19,6 +19,12 @@ function wrs_north_onresize()
 	//alert('wrs_north_onresize');
 }
 
+
+
+
+ 
+
+
 function set_userinfo_filter_fixed(obj){
 	if(typeof obj == 'object'){
 		userinfo_filter_fixed = obj;
@@ -149,7 +155,6 @@ function wrs_center_onresize()
 	//Redimencionadno a tela do center body
 	$('.wrs_panel_center_body').height((heightCenter)-abaHeight);
 
-//	$('.WRS_ABA').width($('.ui-layout-center').outerWidth());
 	
 	var divMain					=	 (heightCenter-abaHeight)-45;
 	var paddingContainerCenter	=	parseInt($('.container_center').css('padding-bottom').replace('px'));
@@ -1393,6 +1398,8 @@ function wrs_run_filter()
 	var _filtro_size		=	$('.sortable_filtro').find('li');
 	
 	
+	find_and_hide_container(_report_id);
+	
 	if(_filtro_size.length==1)
 	{
 		_filtro_size = _filtro_size.hasClass('placeholder')==true ? false : true;
@@ -1498,7 +1505,7 @@ function wrs_run_filter()
 			_END('wrs_run_filter');
 			return true;
 		}
-	}catch(e){}
+	}catch(e){console.warn(' exception');}
 	
 	
 	var demo_top	=	'';
@@ -1534,8 +1541,10 @@ function wrs_run_filter()
 		
 		if(run)
 			{
-						//manda executar o Relatório
+						
+						$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
 			
+						//manda executar o Relatório
 						if($(this).attr('is_atributo_simples')!='true')
 						{//Apenas abre o load se for diferente de informações simples no select
 							if($(this).attr('eastonclose')!='true')
@@ -1576,7 +1585,7 @@ function wrs_run_filter()
 							{
 								report_KendoUi['TYPE_RUN']=TYPE_RUN.direct;
 							}
-						}catch(e){}
+						}catch(e){console.warn(' exception');}
 							is_param		=	true;
 					}
 					
@@ -1590,29 +1599,34 @@ function wrs_run_filter()
 					wrsFilterShow();
 					
 					
-					//Se for drill então não insere os filtros
-					if(isEmpty(report_KendoUi['DRILL_HIERARQUIA_LINHA_DATA'])) 
-					{
-						
-						getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
+					
 
-						wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
-						wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));
-						
-						
-						wrs_data_param.ALL_ROWS					=	1
-						wrs_data_param.DRILL_HIERARQUIA_LINHA	=	1;
-						
-						//Salva na aba a nova estrutura
-						aba_active.wrsAbaData('setWrsData',{
-																	LAYOUT_FILTERS			:	wrs_data_param.LAYOUT_FILTERS	, 
-																	FILTER_TMP				:	wrs_data_param.FILTER_TMP		, 
-																	index_filtro			:	getAllFiltersToRun.index		,
-																	ALL_ROWS				:	1,
-																	DRILL_HIERARQUIA_LINHA	:	1
-															}
-											);
-					}
+							//Se for drill então não insere os filtros
+							if(isEmpty(report_KendoUi['DRILL_HIERARQUIA_LINHA_DATA'])) 
+							{
+								
+								getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
+		
+								wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
+								wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));
+								
+								if(report_KendoUi['TYPE_RUN']==TYPE_RUN.coluna_header)//Apenas executa quando for clique por DILLColuna
+								{
+									wrs_data_param.ALL_ROWS					=	1;
+									wrs_data_param.DRILL_HIERARQUIA_LINHA	=	1;
+								}
+								
+								//Salva na aba a nova estrutura
+								aba_active.wrsAbaData('setWrsData',{
+																			LAYOUT_FILTERS			:	wrs_data_param.LAYOUT_FILTERS	, 
+																			FILTER_TMP				:	wrs_data_param.FILTER_TMP		, 
+																			index_filtro			:	getAllFiltersToRun.index		,
+																			ALL_ROWS				:	1,
+																			DRILL_HIERARQUIA_LINHA	:	1
+																	}
+													);
+							}
+					
 					
 					var wrsConfigGridDefault_data	=	get_aba_active_kendoUi()
 					
@@ -1654,10 +1668,13 @@ function wrs_run_filter()
 						
 					if(is_wrs_change_to.status)
 					{
-						configure_options_show_grid($(this));
-						//stop_job_timeout(_report_id);
-						_END('wrs_run_filter');
-						return true;
+						if($('#'+_report_id).length!=0)
+						{
+							configure_options_show_grid($(this));
+							//stop_job_timeout(_report_id);
+							_END('wrs_run_filter');
+							return true;
+						}
 		}else{
 			if(flag_load!='true')
 			{
@@ -1713,7 +1730,8 @@ function wrs_run_filter()
 																	DRILL_HIERARQUIA_LINHA_DATA			:	null,
 																	DRILL_HIERARQUIA_LINHA_DATA_HEADER	: 	data_header_drill_column,
 																	TYPE_RUN							:	null,
-																	MKTIME_HISTORY						:	null
+																	MKTIME_HISTORY						:	null,
+																	JOB_RESULT							:	null 	//Apagando a estrutura de JOB Result caso seja selecionando,
 																}
 												);
 		
@@ -1723,6 +1741,7 @@ function wrs_run_filter()
 				_param_request['MKTIME_HISTORY']	=	report_KendoUi['MKTIME_HISTORY'];
 			}
 		}catch(e){
+			console.warn(' exception');
 			_param_request['MKTIME_HISTORY']	=	null;
 		}
 		
@@ -1967,10 +1986,11 @@ function CLOSE_LOAD_RELATORIO()
 function find_and_hide_container(aba_ativa)
 {
 	_START('find_and_hide_container');
+	
 	$('.container_panel_relatorio_rows').each(function(){
 		
 		var _report_id_local		=	 str_replace('Main','',$(this).attr('id'));
-
+		
 		if(aba_ativa!=_report_id_local){
 			$(this).addClass('hide');
 		}

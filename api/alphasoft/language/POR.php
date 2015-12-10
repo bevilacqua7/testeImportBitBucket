@@ -13,6 +13,8 @@
 	$language ['MSG_ERROR_TABLE_CACHE'] 				= "Consulta não pode ser executada, favor modificar o Layout dos Atributos selecionados";
 	$language ['VALOR'] 								= "Valor";
 	
+	
+	$language['NO_RESULTS_QUERY']	=	'sem resultados para a consulta: ';
 
 	
 	/*

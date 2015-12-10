@@ -189,7 +189,7 @@ function DEFAULT_OPTIONS_TOPS()
 										}
 										
 								}
-						}catch(e){}
+						}catch(e){console.warn(' exception');}
 				//_END('wrsTopOptions::TAGLabel');		
 			}
 			
@@ -213,6 +213,7 @@ function DEFAULT_OPTIONS_TOPS()
 					top_config	=	wrsKendoUi.TOP_CONFIG;
 				}catch(e)
 				{
+					console.warn(' exception');
 					top_config	=	'';
 				}
 				 
@@ -319,6 +320,7 @@ function DEFAULT_OPTIONS_TOPS()
 								if(!empty(_kendo))	kendoUi=_kendo;
 					}catch(e){
 							//Continua com a origem
+						console.warn(' exception');
 					}
 					
 
@@ -412,6 +414,7 @@ function DEFAULT_OPTIONS_TOPS()
 							_top_config	=	$.parseJSON(base64_decode(wrsKendoUi_mount.TOP_CONFIG));
 						}catch(e){
 							_top_config	=	{};
+							console.warn(' exception');
 						}
 					}
 					
@@ -441,6 +444,7 @@ function DEFAULT_OPTIONS_TOPS()
 							var field	=	telerikGrid.headerIndex[key_name].LEVEL_FULL;
 								TAGLabel(field,_top_config,$(this));
 						}catch(e){
+							console.warn(' exception');
 						}
 						//END
 						

@@ -43,7 +43,12 @@ class WRS_INI
 	
 	public static function WRS_DEFINE()
 	{
-		return self::$full_ini['WRS_DEFINE'];
+		
+		$data_define	=	self::$full_ini['WRS_DEFINE'];
+		$default_url	=	self::WRS_SERVER();
+		
+		return array_merge($data_define,$default_url);
+		
 	}
 	
 

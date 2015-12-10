@@ -93,7 +93,7 @@ function WRSKendoGridRefresh(history)
 					 multiple_cube_status_change(false);
 				}
 				 
-			 }catch(e){}
+			 }catch(e){console.warn(' exception');}
 			 
 		//	getRequestKendoUiDefault	=	merge_objeto(_paranKendoUi,_layout);
 
@@ -123,12 +123,11 @@ function WRSKendoGridComplete(IDGrid)
 	
 		try{
 			trashHistory	=	WRSHistory[wrsKendoUi['REPORT_ID']];
-		}catch(e){}
+		}catch(e){console.warn(' exception');}
 		
-	//console.log('WRSHistory',WRSHistory);
 		
 	var history			=	$.parseJSON(base64_decode(trashHistory));
-	//var IDNav			=	IDGrid+'NAV .wrs_history_report';
+
 	var IDNav			=	IDGrid+'Main .wrs_history_report';
 	
 
@@ -170,6 +169,7 @@ function WRSKendoGridComplete(IDGrid)
 		var _paranKendoUi	=	_history['kendoUi'];
 	
 			_paranKendoUi['MKTIME_HISTORY']	=	_mktime;
+			
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi,true);
 			
 		_END('WRSKendoGridComplete::historyClick');
@@ -419,6 +419,7 @@ function getWrsKendoColumn(data)
 		byFrozenLevelFull	=	arg.sender.headerIndex.byFrozenLevelFull;
 	}catch(e){
 		byFrozenLevelFull	=	[];
+		console.warn(' exception');
 	}
 	
 	var _DRILL_FCC						=	DRILL_FCC(byFrozenLevelFull,explode(',',layout.LAYOUT_ROWS));
@@ -482,6 +483,7 @@ function getWrsKendoColumn(data)
 					next_column	=	kendoUi.headerIndex.column_count[next_column_count];
 				}catch(e){
 					next_column	=	null;
+					console.warn(' exception');
 				}
 				
 				
@@ -633,9 +635,12 @@ function getWrsKendoColumn(data)
 	
 
 	/*
+	 * 
+	 * TODO: Apresenta lentidão devido a formatação do do HTML
 	 * Aplica a real formatação do resize
+	 * 
 	 */
-	for(idx in _width)
+	for(var idx in _width)
 		{
 			var padding	=	25;
 			
@@ -646,13 +651,12 @@ function getWrsKendoColumn(data)
 							if(_rows_frozen[_width[idx].column]){
 								padding	=	40;
 							}
-						}catch(e){}
+						}catch(e){console.warn(' exception');}
 				}
 			
 			var r_width								=	$("<div/>").text(_width[idx].data).textWidth()+padding;
 				_param[_width[idx].column]['width']	=	r_width;
 				
-				//arg.sender.headerIndex.byFrozenLevelFull
 				WRSSresize(id,idx, r_width,frozen-1); 
 		}
 	
@@ -719,6 +723,8 @@ function onDataBound(arg)
 			var wrsparam		=	$(report_aba).wrsAbaData('getWrsData');
 			
 			
+			
+						
 			$(report_aba).wrsAbaData('setKendoUi',{page_size:arg.sender.dataSource._pageSize, STOP_QUERY:false});
 				
 				/*Options To ABAS */
@@ -837,8 +843,8 @@ function onDataBound(arg)
 	 * @link http://jsbin.com/ikoley/2/edit?html,output
 	 * @link http://www.telerik.com/forums/change-column-widths-after-grid-created
 	 */
-	 function WRSSresize(gridId,idx, width,sizeFrozen) {
-		 
+	 function WRSSresize(gridId,idx, width,sizeFrozen) 
+	 {
 		 _START('WRSSresize');
 		var _idx		=	idx;
 		var _idxHeader	=	_idx;
@@ -872,7 +878,7 @@ function onDataBound(arg)
 		}
 		
 		_END('WRSSresize');
-		//TRACE(_idx+' | '+_idxHeader+' || '+sizeFrozen+' || '+width);
+
       }
 		
 		
@@ -977,7 +983,7 @@ function  themeSUM(nameID,arg,wrsParam)
 										find_last	=	 'eq('+eq+')';
 								}
 							} catch(e){
-								console.log('Falha na leitura de mapas mas pode não haver essa informação');
+								console.warn('Falha na leitura de mapas mas pode não haver essa informação');
 							}
 							
 						}
@@ -1082,7 +1088,8 @@ function  themeSUM(nameID,arg,wrsParam)
 
 	 	
 	    $.fn.WrsGridKendoUiControlColumnPlusMinus = function(openStart) 
-	    {	_START('WrsGridKendoUiControlColumnPlusMinus');
+	    {	
+	    	_START('WrsGridKendoUiControlColumnPlusMinus');
 			addKendoUiColorJQueryGrid();
 			
 			var $eventTelerik		=	 this;
@@ -1107,17 +1114,43 @@ function  themeSUM(nameID,arg,wrsParam)
 			$eventTelerik.find('.k-header:first').attr('style','min-height:0px; height:0px;overflow:auto');
 			$eventTelerik.find('.k-header:first a').attr('style','min-height:0px; height:0px;overflow:auto').hide();
 			
+			
+			
+			
+			
 			var wrs_export_event	=	 function(){
 														_START('WrsGridKendoUiControlColumnPlusMinus::wrs_export_event');
 														var getClass	=	 $(this).attr('rel');
-														if(!empty(getClass))
+														var report_id	=	 $(this).attr('id-tag');
+														
+														
+															//Faz com que o sistema não execute opções nativas quando for export
+															$('.'+report_id).wrsAbaData('setKendoUi',{EXPORT:true});
+														
+															if(getClass=='k-grid-pdf')
 															{
-																$('.'+getClass).trigger('click');
+																//Renderiza a tela para que possa ser manipupada quando for o PDF
+																var _width	=	$(IDName).find('.k-grid-header-wrap').find('table').width()+$(IDName).find('.k-grid-header-locked').find('table').width();
+																
+																	$(IDName).width(_width);
+																	
+																	$(IDName).find('.k-grid-content').css({height:'auto'});
+																	$(IDName).find('.k-grid-content-locked').css({height:'auto'});
+																	$(IDName).css({height:'auto'});
+																//Finaliza
 															}
-														_END('WrsGridKendoUiControlColumnPlusMinus::wrs_export_event');
+															
+															if(!empty(getClass))
+																{
+																	$('.'+getClass).trigger('click');
+																}
+															
+															_END('WrsGridKendoUiControlColumnPlusMinus::wrs_export_event');
 													}
 			
-			$('.wrs_event_export').click(wrs_export_event);
+			
+			
+			$('.wrs_event_export').unbind('click').click(wrs_export_event);
 			
 			
 			var countFrozen	=	 function(data)

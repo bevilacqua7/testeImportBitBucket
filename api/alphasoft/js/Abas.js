@@ -179,7 +179,7 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			
 			//Contem o evento do filtro a ser manipulado
-			var __manager_vision_grid_edit		=	 function(event,report_id,noactive,_isLoad)
+			var __manager_vision_grid_edit		=	 function(event,report_id,noactive,_isLoad,mensagem_window)
 			{
 
 				_START('wrsAbas::__manager_vision_grid_edit');
@@ -203,7 +203,10 @@ function optionsDataConvert(gridValue,with_decode)
 							{
 								if(wrs_panel_layout)
 								{
-									wrs_panel_layout.open('east');
+										if(mensagem_window!=false)
+										{
+											wrs_panel_layout.open('east');
+										}
 								}
 							}
 						
@@ -248,7 +251,12 @@ function optionsDataConvert(gridValue,with_decode)
 									if(!noactive){
 										if(wrs_panel_layout) {
 											//Faz o evento do click quando não existir relatório ainda
-											layout_east_close(false, _isLoad);
+											
+											if(mensagem_window!=false)
+											{
+												layout_east_close(false, _isLoad);
+											}
+											
 										//	wrs_panel_layout.close('east');
 										}
 									}
@@ -334,7 +342,7 @@ function optionsDataConvert(gridValue,with_decode)
 				var _click_btn_new_aba		=	 function()
 					{
 							var aba_active		=	tagABA.find('.active');
-								save_info_aba_current(aba_active);
+								__save_info_aba_current(aba_active);
 
 								
 										var getElement						=	{};	
@@ -353,6 +361,9 @@ function optionsDataConvert(gridValue,with_decode)
 																	};//Atualização
 											
 											__load_multiple([optionsAba]);
+											
+											
+											$('.container_panel_relatorio_rows').addClass('hide');
 								btn_add_new_aba();	
 					}
 					tagABA.find('.'+className).remove();
@@ -399,10 +410,10 @@ function optionsDataConvert(gridValue,with_decode)
 			/*
 			 * Salvando alterações na aba corrente
 			 */
-			var save_info_aba_current		=	 function(_aba_active)
+			var __save_info_aba_current		=	 function(_aba_active)
 			{
 				
-				_START('wrsAbas::save_info_aba_current');
+				_START('wrsAbas::__save_info_aba_current');
 				
 				if(_aba_active.length==0) {
 					return true;
@@ -463,7 +474,9 @@ function optionsDataConvert(gridValue,with_decode)
 								_aba_active.wrsAbaData('setKendoUi',{new_aba:false});
 								return true;
 							}
-				}catch(e){ }
+				}catch(e){ 
+					console.warn(' exception');
+				}
 				
 				
 				
@@ -475,7 +488,7 @@ function optionsDataConvert(gridValue,with_decode)
 					//Desabilita a janela
 					activeToGetAllFiltersRecover(_filter_hide);
 					
-					_END('wrsAbas::save_info_aba_current');
+					_END('wrsAbas::__save_info_aba_current');
 				
 			}
 			
@@ -508,6 +521,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 				}catch(e){
 					multiple_cube_id	=			null;	
+					console.warn(' exception');
 				}
 				
 				_END('wrsAbas::multiple_cube_active');
@@ -528,8 +542,8 @@ function optionsDataConvert(gridValue,with_decode)
 				var _report_id		=	$(this).attr('id-aba');
 				var IDCurrent		=	'#'+_report_id;
 				
-				var current		=	 $(IDCurrent+'Main');
-
+				var current			=	 $(IDCurrent+'Main');
+				
 				/*
 				 * Garante que se a Aba estiver ativa não permita o clicque
 				 */
@@ -575,9 +589,9 @@ function optionsDataConvert(gridValue,with_decode)
 							
 
 				//Informa qual sera a Ativa no momento	
-				$('body').managerJOB('setActiveAba',{report_id:_report_id});
+				var mensagem_window	=	$('body').managerJOB('setActiveAba',{report_id:_report_id,kendoUi:gridValue});
 				
-					save_info_aba_current(aba_active);
+					__save_info_aba_current(aba_active);
 				
 					$(this).addClass('active');
 					
@@ -596,7 +610,7 @@ function optionsDataConvert(gridValue,with_decode)
 						if(hasDefault==true)
 						{
 							open_configure_default();
-							__manager_vision_grid_edit($(this),_report_id,noactive,_isLoad);
+							__manager_vision_grid_edit($(this),_report_id,noactive,_isLoad,mensagem_window);
 							//$(window).resize();
 							_END('wrsAbas::dblclick_open_aba');
 							return true;
@@ -629,8 +643,13 @@ function optionsDataConvert(gridValue,with_decode)
 						
 						if(!isGrid)
 						{
-							if(!_isLoad){
-								wrs_panel_layout.open('east');
+							if(!_isLoad)
+							{
+								if(mensagem_window!=false)
+								{
+									wrs_panel_layout.open('east');
+								}
+								
 							}
 						}
 						
@@ -666,7 +685,7 @@ function optionsDataConvert(gridValue,with_decode)
 
 					$('.NAV_CONFIG_WRS').attr('is-event',true).attr('aba-change',true);
 
-					__manager_vision_grid_edit($(this),_report_id,noactive,_isLoad);
+					__manager_vision_grid_edit($(this),_report_id,noactive,_isLoad,mensagem_window);
 					
 					_END('wrsAbas::dblclick_open_aba');
 			}
@@ -917,6 +936,7 @@ function optionsDataConvert(gridValue,with_decode)
 					if(_full_data['load_direct']==true) is_direct=false;
 				}catch(e){
 					is_direct	=	 false;
+					console.warn(' exception');
 				}
 					
 					//se o report vier nulo então é criado um novo report
@@ -1005,6 +1025,7 @@ function optionsDataConvert(gridValue,with_decode)
 						catch(e)
 						{
 							_reportDetails	=	{};
+							console.warn(' exception');
 						}
 						
 
@@ -1052,8 +1073,10 @@ function optionsDataConvert(gridValue,with_decode)
 			var __init		=	 function(options)
 			{
 				_START('wrsAbas::__init');
+
 					btn_add_new_aba();
 					tagABA.find('.new_file').trigger('click');
+					
 				_END('wrsAbas::__init');
 				
 			}
@@ -1175,6 +1198,7 @@ function optionsDataConvert(gridValue,with_decode)
 										if(opts['load_direct']==true) is_load_direct= true;
 									}catch(e){
 										is_load_direct	= false;
+										console.warn(' exception');
 									}
 									
 
@@ -1309,7 +1333,7 @@ function optionsDataConvert(gridValue,with_decode)
 										if(empty(_class)) continue;
 										
 										var object_param	=	$('.'+object_class).find('.wrs_panel_options').find('.'+_class);
-										var _json			=	getJsonEncodeToElement(object_param);
+										var _json			=	getDataMetricas(object_param);
 
 										if(_json!=null)
 										{
@@ -1385,6 +1409,7 @@ function optionsDataConvert(gridValue,with_decode)
 							opts_encode['load_direct']	=	options['load_direct'];
 						}catch(e){
 							_ONLY('load_direct history');
+							console.warn(' exception');
 						}
 						
 						__load_multiple([opts_encode],true);
@@ -1500,6 +1525,7 @@ function optionsDataConvert(gridValue,with_decode)
 			        remove_event_click		:	__remove_event_click,
 			        refresh_F5				:	__refresh_F5,
 			        auto_load				:	__auto_load,
+			        save_info_aba_current	:	__save_info_aba_current,
 			        resize_aba			:	ResizeABA
 			};
 			
@@ -1713,16 +1739,17 @@ function optionsDataConvert(gridValue,with_decode)
 //				_START('wrsAbaData::__getKendoUi');
 				try{
 					
-					try{delete data_global.kendoUi.LAYOUT_COLUMNS; 	} catch(e){}
-					try{delete data_global.kendoUi.LAYOUT_FILTERS;	} catch(e){}
-					try{delete data_global.kendoUi.LAYOUT_MEASURES;	} catch(e){}
-					try{delete data_global.kendoUi.LAYOUT_ROWS;		} catch(e){}
-					try{delete data_global.kendoUi.FILTER_TMP;		} catch(e){}
+					try{delete data_global.kendoUi.LAYOUT_COLUMNS; 	} catch(e){console.warn(' exception');}
+					try{delete data_global.kendoUi.LAYOUT_FILTERS;	} catch(e){console.warn(' exception');}
+					try{delete data_global.kendoUi.LAYOUT_MEASURES;	} catch(e){console.warn(' exception');}
+					try{delete data_global.kendoUi.LAYOUT_ROWS;		} catch(e){console.warn(' exception');}
+					try{delete data_global.kendoUi.FILTER_TMP;		} catch(e){console.warn(' exception');}
 					
 					//_END('wrsAbaData::__getKendoUi');
 					return data_global.kendoUi;
 				}catch(e){
 					//_END('wrsAbaData::__getKendoUi');
+					console.warn(' exception');
 					return {SUMARIZA:1,COLORS_LINE:1};
 				}
 				
