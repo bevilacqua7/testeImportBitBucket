@@ -326,7 +326,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						
 						
 						}
-			}catch(e){}
+			}catch(e){console.warn(' exception');}
 			
 			
 			
@@ -380,7 +380,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					}
 					
 				}
-			}catch(e){}
+			}catch(e){console.warn(' exception');}
 			
 			
 			if(empty(kendoUiTools.GAUGE_COLOR)){
@@ -602,6 +602,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					try{
 						return totalBubble[column];
 					}catch(e) {
+						console.warn(' exception');
 						return '';
 					}
 						return '';
@@ -696,6 +697,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				
 				var _value	=	getFirstValueArray_get(param)	;
 				
+				if(_value==undefined) return null;
+				
+				
 				if(_value.value!=undefined)
 				{
 					var _n_value	=	parseInt(substr(_value.value,1));
@@ -736,7 +740,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						infoFirst.value	=	kendoUiTools.ORDER_BY_COLUMN;
 					}catch(e)
 					{
-						
+						console.warn(' exception');
 					}
 				}
 			}//END 
@@ -2112,6 +2116,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 																			try {
 																					_getDataParam		=	getData[lineDataMeasure][_line];
 																				}catch(e) {
+																					console.warn(' exception');
 																					getData[lineDataMeasure][_line]	=	{name:'',data:[]};
 																				}
 																		
@@ -2501,20 +2506,23 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 											
 											
 
+											try{
 												info_legend	=		_data_gauge[_data_gauge.length-1].pointer;
 																							
 												_div_legenda.append('<h3>'+title+'</h3>');
 												
 												
-											for(info_legend_line in info_legend)
-												{
-													var __color	=	 info_legend[info_legend_line].color;
-													var __field	=	 info_legend[info_legend_line].field;
-													_div_legenda.append('<i class="fa " style="width:10px; height:10px; background: '+__color+';"> </i> <strong>'+headerIndex.field[__field].title+'</strong>   ');
-												
+												for(info_legend_line in info_legend)
+													{
+														var __color	=	 info_legend[info_legend_line].color;
+														var __field	=	 info_legend[info_legend_line].field;
+														_div_legenda.append('<i class="fa " style="width:10px; height:10px; background: '+__color+';"> </i> <strong>'+headerIndex.field[__field].title+'</strong>   ');
 													
-												}
-											
+														
+													}
+											}catch(e){
+												console.warn(' exception - Error de pointer, mas pode ser um erro devido a falta de valor a ser plotado');
+											};
 											pathChart.find('.row').append(_div_legenda);
 											
 											for(lineDataGauge in _data_gauge)
@@ -2638,6 +2646,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 															_mergeChartConfigLegend	=	typeChart[getVals[0].level_full];
 														}catch(e){
 															_mergeChartConfigLegend='';
+															console.warn(' exception');
 														}
 														
 														//Apenas para não dar erro 

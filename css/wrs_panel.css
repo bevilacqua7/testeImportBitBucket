@@ -11,6 +11,8 @@ body {
 	
 }
 
+
+
 .wrs_options_select h2 {
 	margin-bottom: 0px;
 	padding: 1px;
@@ -18,7 +20,10 @@ body {
 /*	font-weight: 400;*/
 }
 
-
+.wrs_is_change_aba{
+	color: red;
+	margin-right: 5px;
+}
 
 /*
  * Controle do jquery Layout
@@ -98,7 +103,7 @@ body {
 
 
 .box_wrs_panel {
-	z-index: 1000;
+	z-index: 100;
 	padding: 5px;
 	text-align: center;
 	-webkit-border-radius: 1px;
@@ -1530,6 +1535,8 @@ border-radius: 0px;
 	padding-left: 3px;
 	padding-right: 3px;
 	color: #A3A3A3;
+	text-align: center;
+	width: 20px;
 }
 .WRS_ABA .new_file a:hover{
 	color: #666;
@@ -1663,9 +1670,12 @@ border-radius: 3px;
 .wrs_grid_elements .elements{
  	border-bottom:none;
 }
-.wrs_grid_elements .elements:first-child{
+
+.wrs_grid_elements .elements:first-child
+{
  	border-bottom:1px solid #58BCE7;
 }
+ 
  
  
  .modal-btn-job-wrs_btn{
@@ -1673,32 +1683,50 @@ border-radius: 3px;
 	padding-right:15px;	
 }
 
-.modal-window-wrs-logoff .modal-title-wrs-job{
-	height:10px !Important;
-}
-
-.modal-window-wrs-logoff
-{
-	background-color: rgba(0,0,0,0.8) !important;
-}
-
-.modal-window-wrs-logoff .modal-text-wrs-job, 
-.modal-window-wrs-logoff .modal-buttons-wrs-job,
-.modal-window-wrs-logoff .modal-title-wrs-job{
-	background: #F0AD4E !important;
-	color:#83510B !important;
-	font-weight:bold
-}
-
-.modal-window-wrs-logoff .modal-buttons-wrs-job .color_white,
-.modal-window-wrs-logoff .modal-buttons-wrs-job button{
-	color:#F8DCB4 !important;
-}
-
-.modal-window-wrs-logoff .modal-buttons-wrs-job{
-	border-top:#BC7410 1px solid !important;
-}
 
 .wrs_grid_elements_no_border .elements:first-child{
  	border-bottom:none !important;
 }
+
+.wrs_grid_elements{
+	z-index: 199;
+}
+
+.wrs_grid_options_default{
+	z-index:200;	
+}
+
+
+
+
+
+
+
+
+
+
+.filter-exec-slash{
+	color:#A94442;
+}
+
+.filter-exec{
+	color:#3C763D;
+	font-weight:bold;
+}
+
+
+.qtip-default{
+	max-height:500px;
+	overflow:auto;	
+}
+
+
+
+
+
+
+/* ESTILOS DE CORES*/
+
+.box_wrs_panel:hover{ border: 1px solid #58BCE7; background: #2191C0 url("theme-azul/images/ui-bg_diagonals-small_50_2191C0_40x40.png") 50% 50% repeat ; font-weight: bold; color: #ffffff;  color: #ffffff; text-decoration: none; }
+
+

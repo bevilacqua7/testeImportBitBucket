@@ -9,6 +9,7 @@ class WRS
 	{
 		return self::$_version;
 	}
+		
 	/**
 	 * 
 	 * Grava todas as regras do usuário regras que são informadas ao se conectar
@@ -55,6 +56,12 @@ class WRS
 		if(!isset($_SESSION['QTD_QUERY_TABLE'][$query_table])) return 1;
 		
 		return $_SESSION['QTD_QUERY_TABLE'][$query_table];
+	}
+	
+	
+	public static function CLEAN_TOTAL_COLUMN()
+	{
+		return $_SESSION['QTD_QUERY_TABLE']	=	 array();
 	}
 	
 	
@@ -282,6 +289,23 @@ class WRS
 	{
 		return self::INFO_SSAS_LOGIN('CUSTOMER_DESC');
 	}
+	
+	public static function SET_CACHE_JOB_RESULT($report_id,$data)
+	{
+		
+		$key	=	'CACHE_JOB_RESULT';
+		
+		if(!isset($_SESSION[$key])) $_SESSION[$key]	=	 array();
+		$_SESSION[$key][$report_id]	=	$data;
+		
+	}
+	
+	public static function GET_CACHE_JOB_RESULT($report_id)
+	{
+		$key	=	'CACHE_JOB_RESULT';
+		return $_SESSION[$key][$report_id];
+	}
+	
 	
 	/**
 	 * Retorna o Idioma
@@ -566,6 +590,27 @@ class WRS
 	
 	
 	
+	/**
+	 * 
+	 * Deletando um cubo ID do Histórico
+	 * 
+	 * @param string $cube_id
+	 * @param string $report_id
+	 */
+	public static function DELETE_REPORT_HISTORY($cube_id,$report_id)
+	{
+		$TAG_NAME		=	'CUBE_REPORT_HISTORY';
+	
+		self::declare_REPORT_HISTORY($TAG_NAME, $cube_id, $report_id);
+		
+		if(isset($_SESSION[$TAG_NAME][$cube_id][$report_id])){
+			unset($_SESSION[$TAG_NAME][$cube_id][$report_id]);
+		}
+		
+	}
+	
+	
+	
 	
 	/**
 	 * Apagando o histórico dos cubos
@@ -585,6 +630,8 @@ class WRS
 			{
 				unset($_SESSION[$TAG_NAME][$cube_id]);
 			}
+			
+			WRS::CLEAN_TOTAL_COLUMN();
 	}
 	
 	

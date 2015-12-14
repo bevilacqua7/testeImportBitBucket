@@ -150,11 +150,15 @@ function WRSMaps(KendoUi)
 							{
 								try{
 									data_value		=	headerIndex['field'][is_sort]['title']+' : '+_data[obj][is_sort];
-								}catch(e){}
+								}catch(e){
+									console.warn(' exception');
+								}
 							}
 						}else{
 							_title		=	titleByColumn[_cmp];
 						}
+						
+						_title			=	strip_tags(_title);
 						
 							maps[maps.length]	=	 {
 															latitude	:	_explode[0],

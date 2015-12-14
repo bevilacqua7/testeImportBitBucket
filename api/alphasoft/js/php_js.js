@@ -4,6 +4,9 @@
  */
 
 
+var SERVER_REQUEST_URI	=	'';
+
+
 function strtolower(str) {
   //  discuss at: http://phpjs.org/functions/strtolower/
   // original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)

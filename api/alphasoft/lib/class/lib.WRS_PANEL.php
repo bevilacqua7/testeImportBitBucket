@@ -115,7 +115,6 @@ class WRS_PANEL  extends WRS_USER
 	{
 		
 		
-		
 		WRS_TRACE('run()', __LINE__, __FILE__);
 		//Pegando os parametros do cubo selecionado
 		$SSAS_USER		=	WRS::GET_SSAS_USER();
@@ -159,9 +158,17 @@ class WRS_PANEL  extends WRS_USER
 			case 'gridRowsCache'	:	$this->SELECT_CACHE_GRID()		;	break;
 			case 'change_cube'		:	$this->CHANGE_CUBE()			;	break;
 			case 'save_history'		:	$this->saveHistory()			;	break;
-			case 'threadJobManager'	: 	$this->threadJobManagerVoid()	;		break;	
-			case 'stopjob'			:	$this->threadJobManagerStop()	;		break;
+			case 'remove_history'	: 
+				{
+					$_cube			=	$this->getCube();
+					WRS::DELETE_REPORT_HISTORY($_cube['CUBE_ID'], fwrs_request('report_id'));
+					exit();
+				}
+				; break;	
+			case 'threadJobManager'	: 	$this->threadJobManagerVoid()	;	break;	
+			case 'stopjob'			:	$this->threadJobManagerStop()	;	break;
 			default 				: 	$this->eventDefault()			; 	break;
+			
 		}		
 		
 		WRS_TRACE('END run()', __LINE__, __FILE__);
@@ -216,7 +223,8 @@ class WRS_PANEL  extends WRS_USER
 		$HTML_USER_NAME		=	WRS::USER_DESC();
 		$HTML_USER_TYPE		=	WRS::USER_TYPE();
 		$HTML_CUSTOMER_NAME	=	WRS::CUSTOMER_DESC();
-		$HTML_ABAS_AUTO_LOAD=	$panelHTML->MENU_AUTO_LAOD($this->getLoadFilter());
+		//$HTML_ABAS_AUTO_LOAD=	$panelHTML->MENU_AUTO_LAOD($this->getLoadFilter());
+		$HTML_ABAS_AUTO_LOAD=	$panelHTML->CREATE_ABAS();
 		
 		
 		//Montando o menu Drag and DROP do Atributos
@@ -279,21 +287,29 @@ class WRS_PANEL  extends WRS_USER
 		$sql			= 	QUERY_PANEL::GET_SSAS_REPORT($DATABASE, $CUBE);
 		$queryGrid_exec	=	$this->query($sql);
 		$rows_REPORTS	=	array();
+		
+		
 		if($this->num_rows($queryGrid_exec))
 		{
 			$table_temp				=	$this->fetch_array($queryGrid_exec);
-			$sql2					=	'select * from '.reset($table_temp); // pega o primeiro resultado do array
-			$queryGrid_table_temp	=	$this->query($sql2);
-
-			if($this->num_rows($queryGrid_table_temp))
+			
+			if(!empty($table_temp['TABLE_NAME']))
 			{
-				while($report	=	$this->fetch_array($queryGrid_table_temp)){
-					if(trim($report['REPORT_AUTOLOAD'])=='1'){
-						$rows_REPORTS[] 	=	'AUTO_LOAD.push(callback_load_report_generic_modal('.json_encode($report,1).',true))';
-					}			
-				}
+					$sql2					=	'select * from '.reset($table_temp); // pega o primeiro resultado do array
+					$queryGrid_table_temp	=	$this->query($sql2);
+		
+					if($this->num_rows($queryGrid_table_temp))
+					{
+						while($report	=	$this->fetch_array($queryGrid_table_temp))
+						{
+							if(trim($report['REPORT_AUTOLOAD'])=='1'){
+								$rows_REPORTS[] 	=	'AUTO_LOAD.push(callback_load_report_generic_modal('.json_encode($report,1).',true))';
+							}			
+						}
+					}
 			}
 		}
+		
 		if(count($rows_REPORTS)>0 && fwrs_request('exec_reports')=='1'){ // exec_reports!=1 para nao carregar relatorios quando é somente layout
 			echo fwrs_javascript('AUTO_LOAD = [];'.implode(';',$rows_REPORTS).';AUTO_LOAD=base64_json(AUTO_LOAD);');
 		}
@@ -384,7 +400,7 @@ class WRS_PANEL  extends WRS_USER
 		}
 
 		//caso ainda não tenha sido inserida na sessão faz a pesquisa
-		//if(empty($relationships))
+		if(empty($relationships))
 		{	
 			$wrs_measure_relationships['relationships']	=	WRS::SET_SSAS_RELATIONSHIPS_BY_CUBE($CUBE, $attibuteMeasure->getAtributos($SERVER, $DATABASE, $CUBE));
 		}
@@ -393,7 +409,7 @@ class WRS_PANEL  extends WRS_USER
 		$metricas			=	 WRS::GET_SSAS_MEASURES_BY_CUBE($CUBE);		
 		
 		//Se não existir metricas na sessão então grava 
-		//if(empty($metricas))
+		if(empty($metricas))
 		{
 				$wrs_measure_relationships['measure']	=	WRS::SET_SSAS_MEASURES_BY_CUBE($CUBE, $attibuteMeasure->getMetricas($SERVER, $DATABASE, $CUBE));
 		}
@@ -438,7 +454,7 @@ class WRS_PANEL  extends WRS_USER
 	 * 
 	 * @return string
 	 */
-	private function managerHistoty($cube_id,$getRequestKendoUi,$getRequestWrsExceptions,$layout)
+	private function managerHistoty($cube_id,$getRequestKendoUi,$getRequestWrsExceptions,$layout,$data_job_exec)
 	{
 	
 		$flagEmpty				=	true;
@@ -457,6 +473,9 @@ class WRS_PANEL  extends WRS_USER
 //		WRS_DEBUG_QUERY($getRequestKendoUi);
 		
 
+		
+			
+		$_getRequestKendoUi['JOB_RESULT']	=	$data_job_exec;
 		
 		if($getRequestKendoUi['IS_REFRESH']=='_false' || $flagEmpty)
 		{
@@ -744,7 +763,10 @@ class WRS_PANEL  extends WRS_USER
 		}
 		
 
-		$getRequestWrsExceptions['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$getRequestWrsExceptions,$DillLayout);
+		/*
+		 * TODO:REmovido estrutura do histórico
+		 */
+		//$getRequestWrsExceptions['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$getRequestWrsExceptions,$DillLayout);
 		
 		
 		$TelerikUi->setId($getRequestKendoUi['REPORT_ID']);		
@@ -817,36 +839,61 @@ class WRS_PANEL  extends WRS_USER
 		}
 		//END
 		
+				
+				$cube 								=	$this->getCube();
 		
-				$queryGrid			=	 $this->_query->CREATE_SSAS_JOB($SERVER, $DATABASE, $CUBE, $ROWSL, $COLUMNS, $MEASURES, $FILTERS, $ALL_ROWS, $ALL_COLS, $COLS_ORDER, 0, '');
-				
-				
-				$queryGrid_exec		=	 $this->query($queryGrid);
+				$job_num_rows						=	 false;
 				
 				
 				
-				if($this->num_rows($queryGrid_exec))
+
+		
+				if(!empty($getRequestKendoUi['DRILL_HIERARQUIA_LINHA_DATA']) || !empty($getRequestWrsExceptions['JOB_RESULT']))
+				{
+					
+						$rows_CREATE_SSAS_JOB		=	WRS::GET_CACHE_JOB_RESULT($getRequestKendoUi['REPORT_ID']);
+						
+						
+						//Pegando as opções apenas do Histórico para não precisar executar o JOB
+						if(!empty($getRequestWrsExceptions['JOB_RESULT']))
+						{
+							$rows_CREATE_SSAS_JOB	=	$getRequestWrsExceptions['JOB_RESULT'];
+						}
+					
+						$getRequestWrsExceptions['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$getRequestWrsExceptions,$DillLayout,$rows_CREATE_SSAS_JOB);
+					
+					$job_num_rows	=	 true;
+				}else{
+		
+						$queryGrid			=	 $this->_query->CREATE_SSAS_JOB($SERVER, $DATABASE, $CUBE, $ROWSL, $COLUMNS, $MEASURES, $FILTERS, $ALL_ROWS, $ALL_COLS, $COLS_ORDER, 0, '');
+				
+						$queryGrid_exec		=	 $this->query($queryGrid);
+						$job_num_rows		=	$this->num_rows($queryGrid_exec);
+						
+						if($job_num_rows)
+						{
+							$rows_CREATE_SSAS_JOB 				=	$this->fetch_array($queryGrid_exec);
+							
+							
+							//Salvando dados para a estrutura de histórico
+							$getRequestWrsExceptions['TRASH_HISTORY']	=	$this->managerHistoty($CUBE,$getRequestKendoUi,$getRequestWrsExceptions,$DillLayout,$rows_CREATE_SSAS_JOB);
+							
+							
+							WRS::SET_CACHE_JOB_RESULT($getRequestKendoUi['REPORT_ID'],$rows_CREATE_SSAS_JOB);
+						}
+				
+				}
+				
+				if($job_num_rows)
 				{
 					// Verifica o Status do Job
-					$rows_CREATE_SSAS_JOB 				=	$this->fetch_array($queryGrid_exec);
+					
 					$rows_GET_SSAS_JOB					=	NULL;
 					$getRequestKendoUi['QUERY_ID']		=	$rows_CREATE_SSAS_JOB['QUERY_ID'];
 					
 					
-					//Pegando o total de Colunas da query para ser renderizada na tela
-/*					$_total_FAT_SSAS_QUERYS		=	 $this->_query->FAT_SSAS_QUERYS($rows_CREATE_SSAS_JOB['QUERY_ID']);
-					$_query_FAT_SSAS_QUERYS		=	 $this->query($_total_FAT_SSAS_QUERYS);
 					
-					if($_query_FAT_SSAS_QUERYS)
-					{
-							$rows_FAT_SSAS_QUERY	= $this->fetch_array($_query_FAT_SSAS_QUERYS);	
-							
-							WRS::SET_TOTAL_COLUMN($rows_CREATE_SSAS_JOB['QUERY_TABLE'], $rows_FAT_SSAS_QUERY['TOTAL_COLUMNS']);//Gravando
-					}
-					*/
 					
-					$cube 								=	$this->getCube();
-					//$this->SAVE_CACHE_SSAS_USER('QUERY_CACHE',$rows_CREATE_SSAS_JOB['QUERY_ID'],$this->_cube_pos_session);
 					//Salvando na estrutura do quendo ui o ID da query
 
 					/*
@@ -933,8 +980,6 @@ class WRS_PANEL  extends WRS_USER
 		
 		$threadJobManager	=	$this->threadJobManager->runThreadJobManager($thread_job_manager,$getRequestKendoUi['REPORT_ID'],$this->_query,$checkThreadJobManager);
 
-
-		
 		if(is_array($threadJobManager))
 		{
 			//O correu um erro  no processo da runThreadJobManager 
@@ -949,8 +994,10 @@ class WRS_PANEL  extends WRS_USER
 					header('Content-Type: application/json');
 					$_tmp_threadJobManager	=	json_encode($threadJobManager,true);
 					//Quando a solicitação dor pelo processo de checagem do JOB
-					if(!$checkThreadJobManager){
+					if(!$checkThreadJobManager)
+					{
 							echo $_tmp_threadJobManager;
+							
 							exit();
 					}else{
 						return $_tmp_threadJobManager;
@@ -970,6 +1017,8 @@ class WRS_PANEL  extends WRS_USER
 			
 			
 			if($checkThreadJobManager) return $HTML;
+			
+			
 		}
 		else
 		{
@@ -998,7 +1047,9 @@ class WRS_PANEL  extends WRS_USER
 		$cube						=	$_cube;
 		$getRequestKendoUi			=	$_getRequestKendoUi;
 
-	//WRS_DEBUG_QUERY($getRequestKendoUi);
+		
+//		$getRequestKendoUi['ALL_ROWS']
+
 	
 		$LAYOUT_ROWS_SIZE							=	count(explode(',',$ROWSL));
 		$msg										=	''; //mensagens do sistema ela muda a cada conjunto de regras
@@ -1011,7 +1062,7 @@ class WRS_PANEL  extends WRS_USER
 			
 			$DRILL_HIERARQUIA_LINHA_DATA	=	 base64_decode($getRequestKendoUi['DRILL_HIERARQUIA_LINHA_DATA']);
 			$DRILL_HIERARQUIA_LINHA_DATA	=	empty($DRILL_HIERARQUIA_LINHA_DATA) ? '' : $DRILL_HIERARQUIA_LINHA_DATA;
-			$query_DRILL_SSAS_TABLE			=	$this->_query->DRILL_SSAS_TABLE( $cube['TABLE_CACHE'], $LAYOUT_ROWS_SIZE, $DRILL_HIERARQUIA_LINHA_DATA, $OPENROWS );
+			$query_DRILL_SSAS_TABLE			=	$this->_query->DRILL_SSAS_TABLE( $cube['TABLE_CACHE'], $DRILL_HIERARQUIA_LINHA_DATA, $OPENROWS );
 			
 			if($this->query($query_DRILL_SSAS_TABLE)){
 				//Concatena apenas para inserir o D na frente
@@ -1025,52 +1076,51 @@ class WRS_PANEL  extends WRS_USER
 				}
 			}			
 		}//END
-		
-		
-		// Obtem a Quantidade de Registros da Consulta		
-		$query_table = $this->query($this->_query->RECORDS_SSAS_TABLES($cube['TABLE_CACHE'],((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
-		if($this->num_rows($query_table))
-		{
-			$rows 		= $this->fetch_array($query_table);
-			$num_rows 	= (int) $rows['TOTAL_ROWS'];
-			WRS::SET_TOTAL_COLUMN($cube['TABLE_CACHE'], $rows['TOTAL_COLUMNS']);//Gravando
-		}
-		
-		
+
 		
 		//$LAYOUT_ROWS_SIZE			=	$LAYOUT_ROWS_SIZE > $rows['COLUMNS']  ?  1 : $LAYOUT_ROWS_SIZE ;
+		
 		
 		$_sort_current		=	(int)substr($getRequestKendoUi['ORDER_BY_COLUMN'], 1);
 		$_sort_column		=	WRS::GET_TOTAL_COLUMN($_cube['TABLE_CACHE']);
 		
 		$_sort_order		=	$_sort_current > $_sort_column ? $_sort_column : $_sort_current;
-		
-
 		/*
-		echo $_sort_current.'--';
-		echo $_sort_order;*/
+		$SORT_SSAS_TABLE	=	$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$_sort_order,$getRequestKendoUi['ALL_ROWS']));
+		//$SORT_SSAS_TABLE	=	$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$LAYOUT_ROWS_SIZE,$_sort_order));
 		
-		$SORT_SSAS_TABLE	=	$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$LAYOUT_ROWS_SIZE,$_sort_order));
-		
-		if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
+		if(!$SORT_SSAS_TABLE)
+		{
+			return array('error'=>LNG('SORT_SSAS_TABLE_ERROR'),'REPORT_ID'=>$getRequestKendoUi['REPORT_ID']);
+		}
+		*/
+/*		if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
 		{
 			// Obtem a Tabela Contendo Registros Abertos (Drill)
-			$query_DRILL_SSAS_TABLE_INFO = $this->_query->INFO_SSAS_TABLE( $cube['TABLE_CACHE'].'S', $LAYOUT_ROWS_SIZE );
+			$query_DRILL_SSAS_TABLE_INFO = $this->_query->GET_SSAS_DRILL( $cube['TABLE_CACHE'] );
 			$this->query($query_DRILL_SSAS_TABLE_INFO);
+		}*/
+		
+		// Obtem a Quantidade de Registros da Consulta		
+		$query_table = $this->query($this->_query->COUNT_SSAS_TABLE($_cube['TABLE_CACHE'],((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+		if($this->num_rows($query_table))
+		{
+			$rows 		= $this->fetch_array($query_table);
+			$num_rows 	= (int) $rows['TOTAL_ROWS'];
+			
+//			WRS::SET_TOTAL_COLUMN($cube['TABLE_CACHE'], array('TOTAL_COLUMNS'=> $rows['TOTAL_COLUMNS'],'ORDER_BY_COLUMN'=>$_sort_order ));//Gravando
+			
+			WRS::SET_TOTAL_COLUMN($cube['TABLE_CACHE'],$_sort_order > $rows['TOTAL_COLUMNS'] ? $rows['TOTAL_COLUMNS'] : $_sort_order  );//Gravando
 		}
 		
 		/*
 		 * Pegando a Header
 		 */
 		
-		if(!$SORT_SSAS_TABLE)
-		{
-				return array('error'=>LNG('SORT_SSAS_TABLE_ERROR'),'REPORT_ID'=>$getRequestKendoUi['REPORT_ID']);
-		}
+	
 		
-		//ACRESCENTA-SE O (S) PARA	AS DEMAIS CONSULTAS 
-		$TABLE_NAME_CACHE	=	 $cube['TABLE_CACHE'].'S';		
-		$queryHeader		=	 $this->_query->GET_SSAS_HEADER( $TABLE_NAME_CACHE, '[*]', $this->getUserLanguage());
+		// Obtem os Campos / Estruruta da Tabela 
+		$queryHeader		=	 $this->_query->GET_SSAS_TABLE( $cube['TABLE_CACHE'], $this->getUserLanguage());
 		$queryHeader_exec	=	 $this->query($queryHeader);
 		if(!$this->num_rows($queryHeader_exec))
 		{
@@ -1085,7 +1135,6 @@ class WRS_PANEL  extends WRS_USER
 				echo $msg;
 			}*/
 			
-			return false;
 		}
 		
 		//Contem as colunas e as quebras que serão passadas
@@ -1098,7 +1147,11 @@ class WRS_PANEL  extends WRS_USER
 			/*
 			 * Apenas informa qual o nome das columns 
 			 */
-			$param[] 	= 	array( 'POS'=>$rows['POS'],'FIELD'=>$rows['FIELD'], 'SPAM'=>$rows['SPAM'],'TOTAL'=>$rows['TOTAL'] 	,  'LEVEL_TYPE'=>$rows['LEVEL_TYPE'] 	, 'LEVEL_FULL'=>$rows['LEVEL_FULL']	,  'LEVEL_NAME'=>$rows['LEVEL_NAME'] 		, 'LEVEL_VALUE'=>$rows['LEVEL_VALUE'] , 'LEVEL_POS'=>$rows['LEVEL_POS'] , 'FORMAT_STRING'=>$rows['FORMAT_STRING'] , 'KEYS'=>$rows['KEYS'], 'KEYS_UP'=>$rows['KEYS_UP']);
+			$param[] 	= 	array( 'FIELD'=>$rows['FIELD'], 'TOTAL'=>$rows['TOTAL'],
+				 	               'LEVEL_TYPE'=>$rows['LEVEL_TYPE'], 'LEVEL_FULL'=>$rows['LEVEL_FULL'], 'LEVEL_NAME'=>$rows['LEVEL_NAME'], 'LEVEL_VALUE'=>$rows['LEVEL_VALUE'], 'LEVEL_POS'=>$rows['LEVEL_POS'],
+					               'FORMAT_STRING'=>$rows['FORMAT_VALUE'], 'KEYS'=>$rows['KEYS'], 'KEYS_UP'=>$rows['KEYS_UP'] );
+				
+//			$param[] 	= 	array( 'POS'=>$rows['POS'],'FIELD'=>$rows['FIELD'], 'SPAM'=>$rows['SPAM'],'TOTAL'=>$rows['TOTAL'] 	,  'LEVEL_TYPE'=>$rows['LEVEL_TYPE'] 	, 'LEVEL_FULL'=>$rows['LEVEL_FULL']	,  'LEVEL_NAME'=>$rows['LEVEL_NAME'] 		, 'LEVEL_VALUE'=>$rows['LEVEL_VALUE'] , 'LEVEL_POS'=>$rows['LEVEL_POS'] , 'FORMAT_STRING'=>$rows['FORMAT_STRING'] , 'KEYS'=>$rows['KEYS'], 'KEYS_UP'=>$rows['KEYS_UP']);
 			
 			//Pegando apenas as colunas de dados
 			if(!empty($rows['POS']) && $rows['LEVEL_TYPE']=='MEASURE')
@@ -1127,6 +1180,7 @@ HTML;
 		//Repassando informações para drill
 		$tagToUrl['DRILL_HIERARQUIA_LINHA']		=	$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'];
 		$tagToUrl['REPORT_ID']					=	$getRequestKendoUi['REPORT_ID'];
+		$tagToUrl['ALL_ROWS']					=	$getRequestKendoUi['ALL_ROWS'];
 		$tagToUrl['CUBE_ID']					=	$CUBE;
 		
 		
@@ -1156,12 +1210,23 @@ HTML;
 		
 		$TelerikUi->setPageSize($page_size);
 		$TelerikUi->setHeaderColumnWRS($param);
+		
+		
+	
+		
+		
 		$tagToUrl['TOTAL_COLUMN']	=	$TelerikUi->get_total_column();
 		
 		
 		$url						=	'run.php?'.fwrs_array_to_url($tagToUrl);
 		$TelerikUi->setRequestJson($url,$PAGE);
 		
+
+		$nameNotSpace	=	 str_replace(' ', '_', $_getRequestKendoUi['REPORT_DESC']);
+		$TelerikUi->setToolbarExcel('excel', $nameNotSpace, $url);
+		$TelerikUi->setToolbarPDF('pdf', $nameNotSpace, $url);
+		
+
 		
 		$getRequestKendoUi['TOTAL_COLUMN']		=	$tagToUrl['TOTAL_COLUMN'];//Recalcula o total de colunas
 		
@@ -1169,6 +1234,8 @@ HTML;
 											$getRequestWrsExceptions,
 											$getRequestKendoUi['REPORT_ID'],
 											$getRequestKendoUi);
+		
+		
 		
 		if($checkThreadJobManager)
 		{
@@ -1218,7 +1285,6 @@ HTML;
 		//remote-data-binding.php
 		header('Content-Type: application/json');
 
-		
 		includeCLASS('KendoUi');
 		$TelerikUi					= new KendoUi();
 		$getRequestKendoUi			=	$TelerikUi->getRequestWrsKendoUi($_REQUEST);
@@ -1252,14 +1318,15 @@ HTML;
 		 */
 		
 		
+
 		if(isset($sort[0]['field']))
 		{
 			
-			$field	=	(int)substr($sort[0]['field'], 1);
-			
+			$field			=	(int)substr($sort[0]['field'], 1);
 			$total_atual	=	 WRS::GET_TOTAL_COLUMN($TABLE_NAME);
 			
-			if($total_atual!=$field)
+
+			if($total_atual!=$field )
 			{	
 				
 				WRS::SET_TOTAL_COLUMN($TABLE_NAME,$field);
@@ -1270,15 +1337,19 @@ HTML;
 					$total_column_detect	=	true;
 				}
 				
-				$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$LAYOUT_ROWS_SIZE,$field,strtoupper($sort[0]['dir'])));
+				
+				$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$field,$getRequestKendoUi['ALL_ROWS'],strtoupper($sort[0]['dir'])));
+				//$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$LAYOUT_ROWS_SIZE,$field,strtoupper($sort[0]['dir'])));
 				
 				
 				if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
 				{
 					// Obtem a Tabela Contendo Registros Abertos (Drill)
-					$query_DRILL_SSAS_TABLE_INFO = $this->_query->INFO_SSAS_TABLE( $TABLE_NAME.'S', $LAYOUT_ROWS_SIZE );
+					$query_DRILL_SSAS_TABLE_INFO = $this->_query->GET_SSAS_DRILL( $TABLE_NAME );
 					$this->query($query_DRILL_SSAS_TABLE_INFO);
-				}
+				}	
+				
+				
 			}
 			
 		}
@@ -1292,7 +1363,8 @@ HTML;
 		$ROW_NUMBER_START		=	$skip==0 ? 1 : ($skip+1);
 		$ROW_NUMBER_END			=	$take+$skip;
 		
-		$sqlGrid			=	 $this->_query->SELECT_SSAS_TABLE($TABLE_NAME.'S', $ROW_NUMBER_START, $ROW_NUMBER_END);
+		$sqlGrid			=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,0,0,$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		//$sqlGrid			=	 $this->_query->SELECT_SSAS_TABLE($TABLE_NAME.'S', $ROW_NUMBER_START, $ROW_NUMBER_END);
 		$sqlGrid_exec		=	 $this->query($sqlGrid);
 		if(!$this->num_rows($sqlGrid_exec))
 		{
@@ -1345,7 +1417,7 @@ HTML;
 		if($getRequestKendoUi['DRILL_HIERARQUIA_LINHA']==1)
 		{
 			$resultGridDrill	=	 array();
-			$sqlGridInfo		=	 $this->_query->SELECT_SSAS_INFO($TABLE_NAME.'SI', $ROW_NUMBER_START, $ROW_NUMBER_END);
+			$sqlGridInfo		=	 $this->_query->SELECT_SSAS_DRILL($TABLE_NAME.'I', $ROW_NUMBER_START, $ROW_NUMBER_END);
 			$sqlGrid_Drill		=	 $this->query($sqlGridInfo);
 			
 			//Verifica se existe resultado se existir então aplica 
@@ -1385,6 +1457,7 @@ HTML;
 		echo json_encode($result);
 		//echo json_encode($array_info,true);
 		WRS_TRACE('END SELECT_CACHE_GRID', __LINE__, __FILE__);
+		
 	}
 	
 	
@@ -1396,6 +1469,7 @@ HTML;
 	private function threadJobManagerStop()
 	{
 		
+		WRS_TRACE('threadJobManagerStop()', __LINE__, __FILE__);
 		$report_id				=	 fwrs_request('report_id');
 		$html_data				=	array();
 		$html_data['report_id']	=	$report_id;
@@ -1433,12 +1507,14 @@ HTML;
 
 		
 		$html_data['html'] 		=	LNG('JOB_NOTFOUND');
-		$html_data['status']	=	-1;	
+		$html_data['status']	=	-2;	
 		$this->threadJobManager->removeJOB($report_id);
 		
 		
 		echo json_encode($html_data,true);
 		//STOP_SSAS_JOB
+		
+		WRS_TRACE('END threadJobManagerStop()', __LINE__, __FILE__);
 		
 	}
 	
@@ -1470,8 +1546,6 @@ HTML;
 				{
 						$TelerikUi			= 	new KendoUi();
 						$getRequestKendoUi	=	$job['getRequestKendoUi'];
-						
-
 						
 						$TelerikUi->setId($getRequestKendoUi['REPORT_ID']);		
 						$TelerikUi->setWrsKendoUi($getRequestKendoUi); //Passando para Gravar no JS as integrações recebidas

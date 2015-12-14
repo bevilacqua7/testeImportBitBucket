@@ -15,8 +15,7 @@
 <link href="api/font-awesome-4.3.0/css/font-awesome.min.css?v=0.0.1" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="api/bootstrap-3.3.0/dist/css/bootstrap.css" />
 
-
-
+<div class="container_main">
 
 	<div id="fullwidth" class="util-carousel fullwidth"  >
 			<?php echo $WRS_MAIN_DATABASES;?>
@@ -34,29 +33,22 @@
 
 
 
-	   <div style="position:fixed;bottom:0;margin-top:30px;height:40px;width:99%">
-		<div style="-webkit-box-shadow: 3px 3px 5px 0px rgba(50, 50, 50, 0.75);
--moz-box-shadow:    3px 3px 5px 0px rgba(50, 50, 50, 0.75);
-box-shadow:         3px 3px 5px 0px rgba(50, 50, 50, 0.75);">
-			<table width="100%" border="0" class="ui-widget-header">
-			  <tr>
-				<td align="right" style="padding: 5px" class="ui-state-active no-border">
-					<span id="data_sistema" class="WRS_TIME" style="font-weight:bold;font-size:12px;"></span></td>
-			  </tr>
-			</table>
+</div>
+	   <div class="rodape-main ui-widget-header ui-state-active no-border">
+					<span id="data_sistema" class="WRS_TIME" style="font-weight:bold;font-size:12px;"></span>
 		</div>
-	</div>
+	 
 	
-<script src="api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2?9371"></script>
+<script src="api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2"></script>
 
 <script>
 
-/*
+
 $(function(){
 	$('#fullwidth a').click(function(){
 		$("#fakeloader").show().fakeLoader({closeLoad:true});
 	});
-});*/
+});
 //Animação do BOX
 function WRS_RESIZE(){
 				//var height	=	$(window).height()-120;
@@ -68,14 +60,25 @@ function WRS_RESIZE(){
 				$('.fullwidth:first,.fullwidth:last').css('margin-bottom',(complete/4));
 				$('.fullwidth:first,.fullwidth:last').css('margin-top',(complete/4));
 
-				//first-child
-				//fullwidth
+
+
+				
+				  var _height		=	 ($(window).outerHeight()-$('.wrs_header_main').outerHeight()-$('.rodape-main').outerHeight())-40;
+				  $('.container_main').height(_height);				
+ 
 }
 
 		  $( window ).resize(function(){
+
+
+			  location.reload();
+			  
+				
+				/*
 				setTimeout(function(){
-					WRS_RESIZE();
-					},500);
+					WRS_RESIZE;
+					},1000);
+					*/
 			  });
 
 		  
@@ -85,42 +88,21 @@ function WRS_RESIZE(){
 					  function() {
 
 						$(this).attr('hover','hover');
-					/*
-						$('.fullwidth').each(function(){
-
-							if($(this).attr('hover')!='hover'){
-								 $( this ).animate({
-									    opacity: 0.25
-									  }, {
-										    duration: 100,
-										    specialEasing: {
-										    	opacity: "easeInOutCirc"
-										    }
-										  });
-							}
-							
-						});
-					*/
 					  }, function() {
 						  $(this).attr('hover','');
-						  /*
-						  $( '.fullwidth' ).animate({
-							    opacity: 1
-							  }, {
-								    duration: 100,
-								    specialEasing: {
-								    	opacity: "easeInOutCirc"
-								    }
-								  });
-						  */
+						   
 					  }
 					);
+
+			  var _height		=	 ($(window).outerHeight()-$('.wrs_header_main').outerHeight()-$('.rodape-main').outerHeight())-40;
+				
+				$('.container_main').height(_height);
+				
 				
 				$('.fullwidth').utilCarousel({
 					breakPoints: [[600, 2], [900, 3], [1200, 4], [1500, 5], [1800, 5]],
 					mouseWheel: true,
-					rewind: false,
-				/*	itemLess:'',*/
+					rewind: false
 				});
 
 
@@ -146,7 +128,13 @@ function WRS_RESIZE(){
 					$(this).height(height+16);
 					
 					});
-				 
+
+	 			WRS_RESIZE();
+
+	 			setTimeout(function(){
+					WRS_RESIZE;
+					},1000);
+	 			 
 			});
 	 
 

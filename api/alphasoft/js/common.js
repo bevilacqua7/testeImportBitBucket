@@ -21,6 +21,20 @@ if(IS_TRACE)
 	}
 	
 
+
+/*
+ * TODO:Não utilizado apenas para clone de exemplos modo debug apenas
+ * ele é executado pelo console
+ */
+function clone_jj(report)
+{
+	var _jj				=	getJsonDecodeBase64(jj);
+	var _report			=	_jj.kendoUi.REPORT_ID;
+	var _Report_atual	=	$('.WRS_ABA .'+report).attr('id-aba');
+	console.log('_jj',_jj);
+	$('.WRS_ABA .'+report).data('wrs_aba_data',_jj).attr('id-aba',_report).addClass(_report);
+}
+
 /*
  * Tipos de Execuções que o sistema opera para gerar uma novo Report
  */
@@ -37,6 +51,48 @@ var TYPE_RUN	=	{
 					};
 
 var ABA_TAG_NAME		=	'.WRSAbas ul';
+
+
+function not_close_save_info()
+{
+
+	
+	
+	//http://www.codigosnaweb.com/forum/viewtopic.php?t=5465
+	//http://stackoverflow.com/questions/1889404/jquery-ui-dialog-onbeforeunload
+	$(window).bind('beforeunload', function() {
+			
+		
+		var aba_data		=	 undefined;
+		var report_id		=	0;
+		var kendoUi			=	get_aba_active_kendoUi();
+	
+		$('.WRS_ABA').find('a').each(function(){
+			if($(this).find('.wrs_is_change_aba').length>=1)
+			{
+				aba_data		+=	"\n"+$(this).find('.title').html();
+				report_id		=	$(this).attr('id-aba');
+			}
+			
+		});
+		
+
+		if(aba_data==undefined) return null;
+		
+		//Ativa a aba
+		if(kendoUi['REPORT_ID']!=report_id)
+		{
+			$('.'+report_id).trigger('click'); //Active Aba
+		}
+		
+	  var message = LNG('NOT_CLOSE_WINDOW')+aba_data;
+	  
+
+	  
+	  return message;
+	});
+	
+}
 
 var wrsCookies = {
 	  getItem: function (sKey) {
@@ -87,23 +143,29 @@ function WRS_CONSOLE(){
 
 function WRS_IS_LOGGED_IN(){
 	var loggedin	=	false;
+	
 	$.ajax({
-		  type: 'POST',
-		  url: 'run.php',
-		  data: {'exit':1,'file':'WRS_LOGIN','class':'WRS_LOGIN','event':'userIsLogged'},
-		  success: function(data){
-						loggedin	=	data.trim()!='N'?data.trim():false;	
-						//WRS_CONSOLE('LOGGED IN?',data,loggedin);	
-					},
-		  async:false  // este é o segredo de aguardar o retorno do ajax antes de retornar a funcao
+			  type		: 'POST',
+			  url		: 'run.php',
+			  data		: {'file':'WRS_LOGIN','class':'WRS_LOGIN','event':'userIsLogged','is_js':true},
+			  success	: 	function(data){
+				  
+				  						loggedin	=	data.is_loged;
+								//WRS_CONSOLE('LOGGED IN?',data,loggedin);	
+							},
+			dataType	:	'json',
+			async		:false  // este é o segredo de aguardar o retorno do ajax antes de retornar a funcao
 		});
+	
+	
+//	alert(loggedin);
+	
 	return loggedin;
 }
 	
 function verifica_loggedin_periodico(){
-	
-	var periodicidade 	= 30;//em segundos
-	var logado = WRS_IS_LOGGED_IN(); // retorna o loginsessionID ou false caso nao esteja logado
+	var periodicidade 	= 	60;//em segundos
+	var logado 			= 	WRS_IS_LOGGED_IN(); // retorna o loginsessionID ou false caso nao esteja logado
 /*
 	var confCookie		= 'WRS_session_cookie';
 	
@@ -144,7 +206,7 @@ function verifica_loggedin_periodico(){
 
 			//Garante que não exista outra janela
 			$('body').find(MODAL_JOB).each(function(){$(this).remove()});
-			
+
 			//Adiciona a estrutura da JANELA
 			$('body').append(_html);
 
@@ -158,7 +220,11 @@ function verifica_loggedin_periodico(){
 	}
 
 }
-verifica_loggedin_periodico();
+
+
+if(SERVER_REQUEST_URI!='login'){
+	//verifica_loggedin_periodico();
+}
 
 
 function changeTypeRun(IDGrid,typeRun)
@@ -173,9 +239,14 @@ function changeTypeRun(IDGrid,typeRun)
 function isEmpty(obj) {
 
     // null and undefined are "empty"
-    if (obj == null) return true;
+    if(obj == null) return true;
 
-    if (obj == undefined) return true;
+    if(obj == undefined) return true;
+    
+    if(obj=='') return true;
+    
+    if(obj=='undefined') return true;
+    
     
     // Assume if it has a length property with a non-zero value
     // that that property is correct.
@@ -183,7 +254,9 @@ function isEmpty(obj) {
     if(typeof obj!='object')
     {
 	    if (obj.length > 0)    return false;
-	    if (obj.length === 0)  return true;
+	    if (obj.length === 0)  return false;
+	    
+	    return false;
     }
     
     // Otherwise, does it have any properties of its own?
@@ -193,7 +266,7 @@ function isEmpty(obj) {
         if (hasOwnProperty.call(obj, key)) return false;
     }
 
-    return true;
+    return false;
 }
 
 
@@ -457,6 +530,13 @@ function getJsonEncodeToElement(element)
 	return $.parseJSON(base64_decode(element.attr('json')));
 }
 
+function getDataMetricas(element)
+{
+	return element.data('wrs-data');
+}
+
+
+
 /*
  * Decodifica base 64 para json e para array
  */
@@ -608,9 +688,16 @@ function WRS_ALERT(_text,_type)
  */
 function TRACE_DEBUG(value)
 {
-	IS_TRACE=	true;
-	TRACE(value);
-	IS_TRACE=	false;
+
+	
+	if(empty($('.WRS_TRACE').html()))
+	{
+		$('body').append('<div class="WRS_TRACE"></div>');
+		$('.WRS_TRACE').dblclick(function() {$(this).html('');});
+	}
+	
+	$('.WRS_TRACE').append('<div>'+value+'</div>');
+	
 }
 
 function _START(input)
@@ -642,14 +729,30 @@ function TRACE(value)
 	var hours 		= date.getHours();
 	var minutes 	= date.getMinutes();
 	var seconds 	= date.getSeconds();
-
-	var prefix		=	hours+':'+minutes+':'+seconds+' | ';
+	var milliSecond	=	date.getMilliseconds();
+	
+	var prefix		=	hours+':'+minutes+':'+seconds+':'+milliSecond+' | ';
 	console.log(prefix+value);
 	//$('.WRS_TRACE').append('<div>'+value+'</div>');
 }
 
 
-
+function SetElementDataWrs(element)
+{
+	_START('SetElementDataWrs');
+	$(element).find('li').each(function()
+			{
+				var _wrs_data	=	$(this).attr('wrs-data');
+				
+					if(_wrs_data!=undefined && _wrs_data!='undefined')
+					{
+						_wrs_data	=	 jQuery.parseJSON(_wrs_data);
+						$(this).removeAttr('wrs-data').data('wrs-data',_wrs_data);
+					}
+			});
+	
+	_END('SetElementDataWrs');
+}
 
 function fwrs_error(msg)
 {
@@ -710,6 +813,7 @@ function wrsCheckLogin(login,pwd,event,perfil)
  */
 function merge_objeto(objFirst,objSecond)
 {
+
 	return $.extend({}, objFirst,objSecond);		
 }
 
@@ -1179,7 +1283,7 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG,label)
 
 									try{
 										controle_metricas=(_label.trim().toLowerCase().substr(0,5)=='cresc' || _label.trim().toLowerCase().substr(0,4)=='evol');
-									}catch(e){}
+									}catch(e){console.warn(' exception');}
 
 									//if(strpos(MEASURE_NAME,'Cresc.')!==false || strpos(MEASURE_NAME,'Evol.')!==false)	
 									if(controle_metricas)
@@ -1263,7 +1367,7 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG,label)
 
 $(document).ready(function(){
 	
-	$('body').WRSJobModal(); //Criando o BOX de CSS
+	$('body').managerJOB('create_modal'); //Criando o BOX de CSS
 	
 	$('.menu_administrativo_itens').hide();
 	

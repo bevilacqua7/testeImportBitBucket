@@ -32,6 +32,7 @@ function DRILL_FCC(index,columns)
 			field	=	index[columns[lineColumn]].field;
 		}catch(e){
 			field	=	'';
+			console.warn(' exception');
 		}
 		
 		if(empty(field)) continue;
@@ -137,7 +138,7 @@ function DRILL_HIERARQUIA_LINHA_setButton(_data,C000, line,column,DRILL_HIERARQU
 						return btn_minus+data;
 					}
 				}
-			}catch(e){}		
+			}catch(e){console.warn(' exception');}		
 		
 		
 		try{
@@ -150,7 +151,7 @@ function DRILL_HIERARQUIA_LINHA_setButton(_data,C000, line,column,DRILL_HIERARQU
 					
 					return  data;
 				}
-			}catch(e){}	
+			}catch(e){console.warn(' exception');}	
 	
 	
 	}
@@ -174,6 +175,7 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 	var rows		=	kendoGrid.wrsKendoUi.WRS_ROWS;
 	var wrs_type	=	$(this).attr('wrs-type');
 	var DrillDataTMP=	"";
+	
 	
 
 	for(lineData in rows)
@@ -280,8 +282,7 @@ function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 	{
 			'PAGE_CURRENT'					:	kendoGrid.dataSource._page,
 			'TYPE_RUN'						:	TYPE_RUN.coluna_header,
-			'DRILL_HIERARQUIA_LINHA_DATA'	:	base64_encode(implode('(_,_)',DrillData)),
-			'DRILL_LINE_STOP'				:	true
+			'DRILL_HIERARQUIA_LINHA_DATA'	:	base64_encode(implode('(_,_)',DrillData))
 	}
 	
 	

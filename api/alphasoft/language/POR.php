@@ -13,6 +13,8 @@
 	$language ['MSG_ERROR_TABLE_CACHE'] 				= "Consulta não pode ser executada, favor modificar o Layout dos Atributos selecionados";
 	$language ['VALOR'] 								= "Valor";
 	
+	
+	$language['NO_RESULTS_QUERY']	=	'sem resultados para a consulta: ';
 
 	
 	/*
@@ -32,9 +34,9 @@
 	$language ['JOB_CANCEL_ERRO'] 			= "Erro ao cancelar a Consulta <b>%s</b> favor tentar novamente";
 	$language ['JOB_NOTFOUND'] 				= "Não foi encontrado a Consulta para cancelar ou a mesma foi concluida";
 
-	$language ['JOB_CLOSE_ALERT'] 				= "Fechar Janela de Alerta";
-	$language['SORT_SSAS_TABLE_ERROR']			=	'ERROR::008 Não foi possível Sortear a tabela';	
-	
+	$language ['JOB_CLOSE_ALERT'] 			= 	"Fechar Janela de Alerta";
+	$language['SORT_SSAS_TABLE_ERROR']		=	"ERROR::008 Não foi possível Sortear a tabela";	
+	$language['CONSULTA_ATIVA_CANCELAR']	=	"Existe uma consulta em andamento para esse report, é necessário cancelar para solicitar uma nova consulta.";
 	/*
 	 * ALERTS
 	 */
@@ -42,6 +44,8 @@
 	$language ['SELECT_NULL'] 					= "Consulta retornou vazia";
 	$language ['RUN_GRID_CHANGE_NOT'] 			= "Não há modificações para gerar uma nova Consulta..";
 	
+	$language ['NOT_CLOSE_WINDOW'] 			= "As abas listadas a baixo não estão salvas";
+	$language ['ABA_TITLE_EMPTY'] 			= "É necessário digitar um <b>título</b> para o report";
 	/*
 	 * TITULOS
 	 */

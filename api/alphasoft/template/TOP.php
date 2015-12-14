@@ -2,7 +2,7 @@
 <div class="wrs_header_main">
 		<table width="100%" border="0" class="ui-state-focus" height="60">
 		  <tr>
-			<td align="left" width="22%">
+			<td align="left" width="22%" style="padding-left: 6px">
 				<img src="imagens/logo-wrs.png" width="110" height="50"/>
 			</td>
 			<td align="center" width="52%">

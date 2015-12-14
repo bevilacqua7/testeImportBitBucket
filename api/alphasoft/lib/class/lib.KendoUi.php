@@ -148,14 +148,15 @@ class KendoUi
 						'SHOW_LINE_TOTAL'						=> 	NULL,
 						'DRILL_HIERARQUIA_LINHA_DATA_HEADER'	=>	NULL,
 						'TYPE_RUN'								=>	NULL,
-						'PAGE_CURRENT'							=>	NULL,		// Pagina corrente
+						'PAGE_CURRENT'							=>	NULL,		//Pagina corrente
 						'TITLE_ABA'								=>	NULL,		//Titulo da ABA
-						'REPORT_ID'								=>	NULL,//IDentificador da ABA
+						'REPORT_ID'								=>	NULL,		//IDentificador da ABA
 						'FILTER_TMP'							=>	'IiI=',		//Contem a estrutura do filtro usada para o histórico
-						'QUERY_ID'								=> 	NULL,	//ID da query que foi requisitada
+						'QUERY_ID'								=> 	NULL,		//ID da query que foi requisitada
 						'IS_REFRESH'							=>	NULL,		//identifica se foi executado o F5 e ou o frefresh na tela
 						'TOP_CONFIG'							=>	NULL,		//COnfigurações dos tipos de TOPS e onde
-						'MULTIPLE_CUBE_ID'						=>	NULL		//Caso exista multiple cubos ele é preenchido com o ID_do CUBO
+						'MULTIPLE_CUBE_ID'						=>	NULL,		//Caso exista multiple cubos ele é preenchido com o ID_do CUBO
+						'EXPORT'								=>	FALSE		//Flag true or false para exportação de PDF excel entre outros
 					);	
 
 		
@@ -190,8 +191,8 @@ class KendoUi
 							'MKTIME_HISTORY',		//Mktime do Histori
 							'STOP_RUN',		//A Flag irá aparecer quando se navega entre as abas | true:false
 							'STOP_QUERY',	//Caso esteja true executa novamente mesmo com o histórico igual|true:false
-							'DRILL_LINE_STOP',	//quando ele estiver ativo não permite cancelar a consulta e iomite a string |  true:false
-							'TOTAL_COLUMN'		//Muito usado quando existir coluna ordenadas
+							'TOTAL_COLUMN',		//Muito usado quando existir coluna ordenadas
+							'JOB_RESULT'	//REsultado do JOB para o HIstórico
 		);
 	}
 
@@ -227,12 +228,15 @@ class KendoUi
 		
 		
 		$_param['pageable']		=	 array(	'refresh'	=>	false,
-											'pageSizes'	=> 	array(10,25,50,100,200,500,1000),
+											'pageSizes'	=> 	array(10,25,50,100,250,500,1000),
 											'input'		=>	true,
 											'numeric'	=>	false);
 		
 		//Declate start param
 		$this->_param	=	 $_param;
+		
+		
+		
 	}
 	
 	
@@ -411,6 +415,7 @@ class KendoUi
 																
 													});
 													
+													generate_hight_models('{$this->getId()}');
 													
 													$(".{$this->getId()}").wrsAbaData('setKendoUi',
 																{
@@ -580,10 +585,9 @@ HTML;
 			{
 				$menuTotalFlag[$param_label['LEVEL_FULL']][]	=	$param_label['TOTAL'];
 			}
-			
-			if(!empty($param_label['POS']))
+			else
 			{
-				$columns_table[]	=	$param_label['POS'];
+				$columns_table[]	=	$param_label['FIELD'];
 			}
 			
 			if($param_label['LEVEL_POS']>=1)
@@ -591,12 +595,12 @@ HTML;
 				$_menu			=	$this->findSetKey($_menu,$param_label);
 			}else{
 				$_param_label					=	$param_label;
-				$_param_label['KEYS']			=  	$_param_label['POS'];//count($arrayFrozen);
+				$_param_label['KEYS']			=  	$_param_label['FIELD'];//count($arrayFrozen);
 				$_param_label['LEVEL_VALUE']	=	$_param_label['LEVEL_NAME'];				
 				$arrayFrozen					=	$this->findSetKey($arrayFrozen,$_param_label,true);
 			}
 			
-			if(empty($param_label['SPAM']) && !empty($param_label['LEVEL_NAME']) && !empty($param_label['LEVEL_VALUE']))
+			if(empty($param_label['FIELD']) && !empty($param_label['LEVEL_NAME']) && !empty($param_label['LEVEL_VALUE']))
 			{
 					$frozenHeader[$param_label['LEVEL_NAME']]		=	$param_label;
 			}
@@ -749,7 +753,7 @@ HTML;
 		$value			=	(string)$_param['LEVEL_VALUE'];
 		$levelPos		=	(string)$_param['LEVEL_POS'];
 		$field			=	(string)$_param['FIELD'];
-		$pos			=	(string)$_param['POS'];
+		//$pos			=	(string)$_param['POS'];
 		
 		//$field			=	 str_replace(array('.','&',' '), array('[DOT]','[AND]','__'), $field);
 		
@@ -770,16 +774,16 @@ HTML;
 		
 		if(!empty($field))
 		{
-			$this->setField((string)$pos, $_param,$locked);
+			$this->setField((string)$field, $_param,$locked);
 			$paramTelerik["width"]		=	(strlen($value)*7)+10;
 			$paramTelerik["width"]		=	$paramTelerik["width"]==0 ? 45 : $paramTelerik["width"];
-			$paramTelerik['field']		=	(string)$pos;
+			$paramTelerik['field']		=	(string)$field;
 			$paramTelerik['title']		=	$paramTelerik['field']=='C000' ? '.' : $paramTelerik['title'];
 			$paramTelerik['tb_field']	=	(string)$field;
 			$paramTelerik['LEVEL_FULL']=	(string)$_param['LEVEL_FULL'];
 					
 			$_tmp_param					=	$_param;
-			$_tmp_param['INDEX']		=	 ((int)substr($pos, 1))-$this->wrsKendoUi['frozen'];
+			$_tmp_param['INDEX']		=	 ((int)substr($field, 1))-$this->wrsKendoUi['frozen'];
 			//$_tmp_param['FIELD']	
 			
 		//Comando para passar parametro de quais colunas esconder

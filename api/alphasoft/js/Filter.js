@@ -19,7 +19,7 @@
         	         content: {
 								text: function(event, api) 
 										{
-											return $('<div class="container"> '+tagFilterWRS()+'</div>');
+											return $('<div class="container "> '+tagFilterWRS()+'</div>');
 										},
 								title : 'Filtros'
             	         },
@@ -29,7 +29,15 @@
         	             render: function(event, api) {
         	                 // Grab the BGIFrame element
         	                 var elem = api.elements.bgiframe;
-        	             }}
+        	             }},
+        	             position: {
+        	 				viewport: $(window)
+        	 			},
+        	 			hide: {
+        	 				fixed: true,
+        	 				delay: 300
+        	 			}
+        	         
         	         /*position: {
         	        	 my: 'top left',  // Position my top left...
         	             at: 'top right', // at the bottom right of...
@@ -129,9 +137,11 @@ function filterMergeLoad(filter_current,filterMerge)
 }
 
 
+
+
+
 function changeWithDrillColumnRows(column,columnName)
 {
-	
 	_START('changeWithDrillColumnRows');
 	var current_layout		=	getLoadReport(true);
 	
@@ -144,11 +154,18 @@ function changeWithDrillColumnRows(column,columnName)
 		
 		set_value_box_relatorio(_column);
 		cleanPlaceholder();
-		$('.wrs_panel_filter_icon').attr('filter_hide','false').trigger('click');
+		$('.wrs_panel_filter_icon').attr('filter_hide','false');
+		//.trigger('click');
+		$.WrsFilter('wrs_panel_filter_icon');
 		wrsRunFilter();
 		
 	_END('changeWithDrillColumnRows');	
 }
+
+
+
+
+
 //Removendo qualquer informação de placeholder que é a mensagem de que não há valores na tela 
 function cleanPlaceholder()
 {
@@ -164,6 +181,7 @@ function changeWithDrillFilter(layout,filter_to_add)
 	
 	
 
+	
 	//Mudando o status para que possa ser renderizado
 	var current_layout	=	getLoadReport(true);
 	
@@ -220,7 +238,9 @@ function changeWithDrillFilter(layout,filter_to_add)
 	//Removendo qualquer informação de placeholder que é a mensagem de que não há valores na tela 
 	cleanPlaceholder();
 	
-	$('.wrs_panel_filter_icon').attr('filter_hide','false').trigger('click');
+	$('.wrs_panel_filter_icon').attr('filter_hide','false');
+	//.trigger('click');
+	$.WrsFilter('wrs_panel_filter_icon');
 	btnRun.trigger('click');
 	
 	_END('changeWithDrillFilter');
@@ -240,9 +260,10 @@ function compare_filter_change(_filters_compare)
 	  for(obj in filters_compare)
 	  {
 	  		var headerFilter	=	'#'+filters_compare[obj];
-	  		var header			=	$(headerFilter).attr('json');
-        	var json			=	$.parseJSON(base64_decode(header));	   
-
+//	  		var header			=	$(headerFilter).attr('json');
+	  		var header			=	$(headerFilter).data('filter');
+        	//var json			=	$.parseJSON(base64_decode(header));	   
+	  		var json			=	header;	   
         	var filter			=	 [];
 	  		var filter_click	=	 [];
 	  		
@@ -416,7 +437,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 				aba_active.wrsAbaData('setKendoUi',{STOP_QUERY:false});
 				flag	=	 false;
 			}
-		}catch(e){}
+		}catch(e){console.warn(' exception');}
 		
 		
 		
@@ -424,29 +445,10 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 		if(_trim(histoty_param['TOP_CONFIG'])!=_trim(param_request.TOP_CONFIG))
 		{
 			flag=false;
-			/*
-			if(!empty(histoty_param['TOP_CONFIG']))
-			{
-				//Exceção para limpar os TOPs
-				param_request.DRILL_HIERARQUIA_LINHA_DATA_HEADER	=	"";
-				TRACE_DEBUG('apagar');
-				param_request.DRILL_HIERARQUIA_LINHA_DATA		=	"";
-			}*/
+		
 		}
 
 	
-	if(!flag)
-	{
-		//Garante que ao clicar na linha de drill na primeira vez seja executada
-/*		if(	(!empty(histoty_param['DRILL_HIERARQUIA_LINHA_DATA']) && !empty(histoty_param['DRILL_HIERARQUIA_LINHA_DATA_HEADER']))  || 
-			param_request.TYPE_RUN=='DrillLinha' || 
-			param_request.TYPE_RUN=='DrillHeaderData')
-		{
-			param_request.DRILL_HIERARQUIA_LINHA_DATA_HEADER	=	"";
-			TRACE_DEBUG('APAGR_2');
-			param_request.DRILL_HIERARQUIA_LINHA_DATA		=	"";
-		}*/
-	}
 	
 	
 	
@@ -465,7 +467,6 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 			{
 				if(!manager_aba)
 				{	
-					//TRACE_DEBUG('NOT 02');
 					WRS_ALERT(LNG('RUN_GRID_CHANGE_NOT'),'warning');
 				}
 
@@ -501,18 +502,6 @@ _END('is_wrs_change_to_run');
 	}
 	else
 	{
-	
-		
-		if(eastonclose=='true')
-			{
-				if(loadStart)
-				{	
-					//MODAL_LOADING_WRS_PANEL();
-				}
-				//$('.wrs_run_filter').attr('eastonclose','false');
-			}
-		
-			 			
 			for(var lineHistoty_param in param_request)
 			{
 				histoty_param[lineHistoty_param]	=	param_request[lineHistoty_param];
@@ -580,6 +569,47 @@ function wrsFilterShow()
 	_END('wrsFilterShow');	
 }
 
+
+
+/**
+ * 
+ * @returns
+ */
+function get_exec_filter()
+{	
+		var _filter	=	null;
+		var _index	=	{};	
+		var _tmp	=	[];
+		
+		try{
+			_filter	=	get_aba_active_wrs_param().index_filtro;
+		}catch(e){
+			console.warn(' exception');
+			_filter	=	 null;
+			
+		}
+		
+		
+		if(_filter==null) return false;
+		
+		
+		_tmp		=	 explode(',',_filter);
+		
+		for(var lineTmp in _tmp)
+			{
+				_index[_tmp[lineTmp]] = true;
+			}
+		
+		return _index;
+		
+}
+
+function text_width(input)
+{
+	return  $("<div/>").text(input).textWidth()+(input.length*4);
+}
+
+
 function tagFilterWRS(typeReturn)
 {
 	_START('tagFilterWRS');
@@ -588,16 +618,21 @@ function tagFilterWRS(typeReturn)
 	var html_bk		=	'';// uso estas variaveis pra jogar os filtros fixos para o final de todos, sempre, e em vermelho
 	var html_fixed	=	'';
 	var structArray	=	[];
-
+	var exec_filter	=	get_exec_filter();
+	var _width		=	250;	
 	$(".WRS_DRAG_DROP_FILTER h2").each(function(){
  		
- 		var json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
- 		
+ 		//var json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
+		var json	=	 	$(this).data('filter');
+		
  		var atributo	=	$(this).attr('atributo');
  		var filter_fixed=	$(this).hasClass('hide');
  			atributo	=	empty(atributo) ? '' : atributo;
+ 		var tmp_width	=	0;
  			
  			structArray[structArray.length]	=	[json['LEVEL_FULL'], atributo ,json['FILTER']];
+ 			
+ 		
  			
  				if(!empty(json['FILTER']))
  				{
@@ -609,6 +644,13 @@ function tagFilterWRS(typeReturn)
  					if(!empty($(this).attr('vvalue')))
  	 				{
  	 					html+='<h3>'+$(this).attr('vvalue')+'</h3> ';
+ 	 					
+ 	 					
+ 	 					tmp_width 	=	text_width($(this).attr('vvalue'));
+ 	 					
+ 	 					
+ 	 					if(tmp_width>=_width) _width	=	tmp_width; 	 					
+ 	 					
  	 				}
  	 				
  					
@@ -616,12 +658,35 @@ function tagFilterWRS(typeReturn)
  					
  					for(obj in _explode)
  						{
- 							var value	=	_explode[obj];
+ 							var _value	=	_explode[obj];
  							
- 							var v_explode	=	 explode('[',value);
- 							value	=	str_replace(']','',v_explode[v_explode.length-1]);
- 							html+='<p>'+value+'</p>';
+ 							var v_explode	=	 explode('[',_value);
+ 							var value		=	str_replace(']','',v_explode[v_explode.length-1]);
+ 							
+ 							var div			=	 {'_class_i':'fa-eye-slash','_class':'filter-exec-slash'};
+ 							
+ 							try{
+ 								if(exec_filter[_value]==true)
+ 								{
+ 									div			=	 {'_class_i':'fa-eye','_class':'filter-exec'};
+ 								}
+ 							}catch(e){
+ 								div			=	 {'_class_i':'fa-eye-slash','_class':'filter-exec-slash'};
+ 								console.warn(' exception');
+ 							}
+ 							
+ 							//_value
+ 							html+='<p class="'+div._class+'"><i class="fa '+div._class_i+'"></i> '+value+'</p>';
+ 							
+ 							
+ 							tmp_width 	=	text_width(value);
+ 	 	 					
+ 	 	 					
+ 	 	 					if(tmp_width>=_width) _width	=	tmp_width; 
+ 	 	 					
  						}
+ 					
+ 					//<i class="fa fa-eye-slash"></i>não visualizado
  					if(filter_fixed){
  						html+='</font>';
  						html_fixed+=html;
@@ -630,6 +695,12 @@ function tagFilterWRS(typeReturn)
 			 		 	
 			 	}
  	});
+	
+	
+	
+	
+	$('.qtip-default').width(_width); 
+	
 	
 	if(html_fixed!=''){
 		html+=html_fixed;
@@ -651,34 +722,77 @@ function wrsFilterClickFalse(filter_hide)
 		_ONLY('wrsFilterClickFalse');
 		$('.wrs_panel_filter_icon').attr('filter_hide', filter_hide==undefined ? false : filter_hide); 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	 
 (function ( $ ) {
-    $.WrsFilter= function(typeEvent,typeValue) {
 	
-		_START('WrsFilter');	
-    	
-    	
-    	$event		=	 this;
-    
-    
+	
+	
+	
+    //$.WrsFilter	= function(typeEvent,typeValue) 
+	$.WrsFilter	= function(methodOrOptions) 
+    {
+    	var that				=	 this;
     	var G_MSG_FILTER_CLEAN	=	'';
+		
     	//Esconde o ACordion para a busca do Filtro
     	
-    	if(!$('.wrs_panel_filter_icon').attr('filter_hide')){
-    		$('.WRS_DRAG_DROP_FILTER_CONTAINER').hide();
-    	}
-    	//Ativando o Accordion dos menu
-    	$( ".WRS_DRAG_DROP_FILTER" ).accordion({collapsible: true,active: false,heightStyle: 'content'});
 
-    	
-    	
-    	var wrs_filter_check_change_filter = function()
+    	var __wrs_filter_check_change_filter = function()
     	{
-			_START('WrsFilter::wrs_filter_check_change_filter');	
+			_START('WrsFilter::__wrs_filter_check_change_filter');	
     		var flag_back		=	false;
     		$(".WRS_DRAG_DROP_FILTER").find('h2').each(function(){
-    			var json				=	$.parseJSON(base64_decode($(this).attr('json')));	   
-
+    			//var json				=	$.parseJSON(base64_decode($(this).attr('json')));	   
+    			var json				=	$(this).data('filter');	   
     			if(json['FILTER_TO_CLEAN']==true)
     			  	{
     			        if(compare_filter_change(json['FILTER_TO_COMPARE']))
@@ -689,7 +803,7 @@ function wrsFilterClickFalse(filter_hide)
     			       }
     			
     		});
-    		_END('WrsFilter::wrs_filter_check_change_filter');	
+    		_END('WrsFilter::__wrs_filter_check_change_filter');	
     		return flag_back;
     	}
 
@@ -699,8 +813,8 @@ function wrsFilterClickFalse(filter_hide)
 			_START('WrsFilter::setJsonEncodeDecode');	
     		var index_data			=	 localEvent.attr('index-data');
     		var main				=	$('#wrs_header_filter_main_'+index_data);
-    		var json				=	$.parseJSON(base64_decode(main.attr('json')));	
-    		
+    		//var json				=	$.parseJSON(base64_decode(main.attr('json')));	
+    		var json				=	main.data('filter');	
     		
     		if(is_array(label))
     			{
@@ -730,7 +844,8 @@ function wrsFilterClickFalse(filter_hide)
     			json['PG_CURRENT']				=	0;
     		}
     		
-    		main.attr('json',base64_encode(json_encode(json,true)));
+ //   		main.attr('json',base64_encode(json_encode(json,true)));
+    		main.data('filter',json);
     		
     		if(!noLoad)
     		{
@@ -756,7 +871,8 @@ function wrsFilterClickFalse(filter_hide)
 				
 			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 					var level_full					=	$(this).attr('level-full');	
-					var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
+					//var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
+					var json						=	$(this).data('filter');	
 					var not_use						=	$(this).hasClass('hide');
 					
 
@@ -805,6 +921,10 @@ function wrsFilterClickFalse(filter_hide)
 						}
 					
 			});
+			
+			
+			$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
+			
 			_END('WrsFilter::cleanFiltersDown');	
     	}
     	
@@ -821,6 +941,8 @@ function wrsFilterClickFalse(filter_hide)
 			var empty_filter	=	false;
 			var tagQuery		=	'';
 			var FilterOriginal	=	[];
+			var _index			=	[];
+
 			
 				levelUP			=	 explode(',',level_up);			
 			
@@ -831,7 +953,8 @@ function wrsFilterClickFalse(filter_hide)
 				
 			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 					var level_full					=	$(this).attr('level-full');	
-					var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
+					//var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
+					var json						=	$(this).data('filter');	
 					var _json_filter				=	'';
 						//Verificando se o Level Full exist no array passado
 						if(in_array(level_full, levelUP, true) || typeEvent=='all')
@@ -839,8 +962,8 @@ function wrsFilterClickFalse(filter_hide)
 							if(!empty(json.FILTER))
 							{
 									_json_filter						=	json.FILTER;
+									_index.push(json.FILTER);		
 									filters_up[filters_up.length]	=	'{'+json.FILTER+'}';								
-							
 							}
 							
 							FilterOriginal[FilterOriginal.length]	=	{'class':'__'+replace_attr(level_full),data:_json_filter};
@@ -851,12 +974,7 @@ function wrsFilterClickFalse(filter_hide)
 			
 			
 			FilterOriginal	=	merge_filter_in_array(FilterOriginal);
-			
-			//filters_up.push({})
-			
-			//foreach(FilterOriginal);
-			//if(empty_filter) return '';
-			
+
 			if(is_array(filters_up)) 
 				{
  					tagQuery	=	 implode(',',filters_up);
@@ -867,7 +985,7 @@ function wrsFilterClickFalse(filter_hide)
 			
 			if(typeEvent=='all') {
 				_END('WrsFilter::getFiltersLevelUP');
-				return {data:tagQuery,full:FilterOriginal};
+				return {data:tagQuery,full:FilterOriginal, index:implode(',',_index)};
 			}
 			_END('WrsFilter::getFiltersLevelUP');
  			return tagQuery; 			
@@ -877,39 +995,26 @@ function wrsFilterClickFalse(filter_hide)
 		 /*
 		  * Gravando total de atributos
 		  */
-		 var setSizeDataFilterClean = function(size_data)
+		 var __setSizeDataFilterClean = function(size_data)
 		 {
-			 _START('WrsFilter::setSizeDataFilterClean');
+			 _START('WrsFilter::__setSizeDataFilterClean');
 		     $('.WRS_DRAG_DROP_FILTER_CONTAINER').show();
 		     
 		     if($('.wrs_panel_filter_icon').attr('filter_hide') || size_data=='all')
 		     {		
 		    	 cleanFiltersDown('','all'); //Apagando todos os Selects
 		     }
-		      _END('WrsFilter::setSizeDataFilterClean');
+		      _END('WrsFilter::__setSizeDataFilterClean');
 		 }
 		 
 		 
-		var getAllFiltersToRun	=	 function()
+		var __getAllFiltersToRun	=	 function()
 			{
-					_ONLY('WrsFilter::getAllFiltersToRun');
+					_ONLY('WrsFilter::__getAllFiltersToRun');
 					return getFiltersLevelUP('','all');
-//					return getFiltersUP(size,true);
 			}
 		
 		 
-		
-		//Force Result Clean
-		switch(typeEvent)
-		{
-			case 'getAllFiltersToRun' 		: {
-				
-				var _getAllFiltersToRun	=	 getAllFiltersToRun()	;			
-				
-				_END('WrsFilter');
-				return _getAllFiltersToRun;
-			}; break;
-		}
 		
 	 
 		
@@ -1069,6 +1174,7 @@ function wrsFilterClickFalse(filter_hide)
 			 _START('WrsFilter::clickHeaderFiltro');
         	 var event				=	 _event;
         	 var pageHome			=	false;
+        	 
         	 if(type!='loadWrs')
         	 {
         		 event				=	 $(this);
@@ -1076,7 +1182,8 @@ function wrsFilterClickFalse(filter_hide)
         	 }
 
         	 
-        	 var json				=	$.parseJSON(base64_decode(event.attr('json')));	        	 
+        	 //var json				=	$.parseJSON(base64_decode(event.attr('json')));	        	 
+        	 var json				=	event.data('filter');	        	 
         	 var index_data			=	event.attr('index-data');
         	 var wrs_filter_body	=	'#wrs_filter_body_'+index_data;
         	 var body				=	$(wrs_filter_body);
@@ -1144,7 +1251,9 @@ function wrsFilterClickFalse(filter_hide)
 
 	 		var index_data			=	 data.data.index_data;
  			var _main				=	$('#wrs_header_filter_main_'+index_data);
-		 		_main.attr('json',base64_encode(json_encode(data.data,true)));
+		 		//_main.attr('json',base64_encode(json_encode(data.data,true)));
+		 		
+		 		_main.data('filter',data.data);
 
 				
 		 
@@ -1172,7 +1281,8 @@ function wrsFilterClickFalse(filter_hide)
 		 			
 		 			var index_data			=	 $(this).attr('index-data');
 		 			var main				=	$('#wrs_header_filter_main_'+index_data);
-		 			var json				=	$.parseJSON(base64_decode(main.attr('json')));	
+		 			//var json				=	$.parseJSON(base64_decode(main.attr('json')));	
+		 			var json				=	main.data('filter');	
 		 			
 		 			var page_current		=	json.PG_CURRENT;
 		 			
@@ -1232,12 +1342,15 @@ function wrsFilterClickFalse(filter_hide)
 				 			var checked		=	$(this).prop('checked');
 				 			var nameTagMain	=	'wrs_header_filter_main_'+index_data;
 				 			var mainFilter	=	$('#'+nameTagMain);
-				 			var json		=	$.parseJSON(base64_decode(mainFilter.attr('json')));	
+				 			//var json		=	$.parseJSON(base64_decode(mainFilter.attr('json')));	
+				 			var json		=	mainFilter.data('filter');	
 				 			var filter		=	 explode(',',json.FILTER);
 				 			var value		=	'';
 				 			
 				 			if(empty(filter) || filter=='') filter=[];
 				 			
+				 			
+				 			//aba_detect_change();
 				 			
 				 			
 				 			main.find('input[type=checkbox]').each(function(){
@@ -1274,7 +1387,8 @@ function wrsFilterClickFalse(filter_hide)
 				 			}
 				 				
 				 			//Gravando no JSON
-				 			mainFilter.attr('json',base64_encode(json_encode(json,true)));
+//				 			mainFilter.attr('json',base64_encode(json_encode(json,true)));
+				 			mainFilter.data('filter',json);
 				 			cleanFiltersDown(json['LEVEL_DOWN'],'',nameTagMain);
 							
 							_END('WrsFilter::funCallBackRun::btn_event_filtro_checkbox');
@@ -1287,11 +1401,14 @@ function wrsFilterClickFalse(filter_hide)
 				var index_data	=	$(this).attr('index-data');
 				var nameTag		=	'wrs_header_filter_main_'+index_data;
 	 			var main		=	$('#'+nameTag);
-	 			var json		=	$.parseJSON(base64_decode(main.attr('json')));	
+	 			//var json		=	$.parseJSON(base64_decode(main.attr('json')));	
+	 			var json		=	main.data('filter');	
 	 			var filter		=	'';
 	 			var type_input	=	$(this).attr('type');
 	 			var checked		=	$(this).prop('checked');
 	 			var value 		=	$(this).val();
+	 			
+	 			//aba_detect_change();
 	 			
 	 			if(type_input=='radio' && checked)
 		 			{
@@ -1332,7 +1449,9 @@ function wrsFilterClickFalse(filter_hide)
 		 			}
 	 			
 	 			//Gravando no JSON
-	 			main.attr('json',base64_encode(json_encode(json,true)));
+//	 			main.attr('json',base64_encode(json_encode(json,true)));
+	 			main.data('filter',json);
+	 			
 	 			cleanFiltersDown(json['LEVEL_DOWN'],'',nameTag);
 				
 				_END('WrsFilter::funCallBackRun::wrs_input_filter_single');
@@ -1354,6 +1473,8 @@ function wrsFilterClickFalse(filter_hide)
 		 			$(this).parent().find('input').prop('checked',!checked);
 		 			$(this).parent().find('input').triggerHandler('click');
 		 		}
+		 		
+		 		
 				_END('WrsFilter::funCallBackRun::pws_click_triger_single');
 		 	}
 		 	
@@ -1403,7 +1524,7 @@ function wrsFilterClickFalse(filter_hide)
 		 			$(this).triggerHandler('click');
 		 			
 		 			setJsonEncodeDecode(_hEvent,'ONLY_FIRST_CHECKBOX','',true,false);
-		 			wrs_check_filter_simples();
+		 			__wrs_check_filter_simples();
 		 		});
 		 		
 		 		/*
@@ -1436,6 +1557,37 @@ function wrsFilterClickFalse(filter_hide)
 	
      
      
+	 var filter_current_selected	=	 function()
+     {
+     	var _tmp	=	get_aba_active_wrs_param();
+     	
+     	var _filter_tmp	=	'';
+     	
+     		try{
+     			_filter_tmp	=	_tmp.FILTER_TMP;
+     		}catch(e){
+     			console.warn('exception');
+     			_filter_tmp	=	'';
+     		}
+     	var _filter	=	getJsonDecodeBase64(_filter_tmp);
+     	
+		var _obj	=	{};
+		
+
+		if(isEmpty(_filter)) return null;
+
+		for(var lineFilter in _filter)
+		{
+			var _sub				=	_filter[lineFilter];
+				_obj[_sub.class]	=	_sub.data;
+		}
+//FILTER
+//FILTER_CLICK
+
+		return _obj;
+
+     }
+	 
    	 var  setWRSFilterCommon = function()
 							 {
 								 
@@ -1450,9 +1602,14 @@ function wrsFilterClickFalse(filter_hide)
 							 	
 							 	//Salvando para poder recuperar as seleções
 							 	$(".WRS_DRAG_DROP_FILTER h2").each(function(){
-							 		jsonDROP[$(this).attr('level-full')]	=	$(this).attr('json');
-							 		jsonDROPExist	=	true;
+							 		
+							 		if($(this).attr('level-full')!=undefined){
+								 		jsonDROP[$(this).attr('level-full')]	=	$(this).data('wrs-data');
+								 		jsonDROPExist	=	true;
+							 		}
 							 	});
+							 	
+							 	
 							 	
 							 	$(".WRS_DRAG_DROP_FILTER").html(''); // Remove todos os filtros
 									//Criando a estrutura dos FIltros selecionados
@@ -1461,15 +1618,22 @@ function wrsFilterClickFalse(filter_hide)
 							 	
 							 	var size_data			=	 0;
 							 	var is_atributo_simples	=	false;
+							 	var filter_selectd		=	filter_current_selected();
+							 	
+								
 									 $('.sortable_filtro li').each(function()
 											{
 										 			var value		=	$(this).attr('vvalue');
-												 	var json		=	$(this).attr('json');
 												 	var index		=	$(this).index();
-												 	var jsonDecode	=	$.parseJSON(base64_decode(json));
 												 	var atributo	=	$(this).attr('atributo');
 												 	var not_use		=	 $(this).attr('not-use');
 												 	var _hide		=	 ' hide ';
+												 	var tag_class	=	 $(this).attr('tag-class');
+												 	var json		=	$('.wrs_panel_options ul .'+tag_class).data('wrs-data');
+												 	var jsonDecode	=	json;
+												 	
+												 	////FILTER
+//FILTER_CLICK
 												 	
 												 	if(empty(not_use))
 												 	{
@@ -1482,26 +1646,37 @@ function wrsFilterClickFalse(filter_hide)
 														 	
 														 	
 														 	//Substitui o Json pelo qualk já estva selecionado
-														 	
+														 	/*
 														 	if(jsonDROPExist)
 														 		{
 																 	if(isset(jsonDROP[jsonDecode.LEVEL_FULL]))
 																 		{
 																 			json				=	jsonDROP[jsonDecode.LEVEL_FULL];
 																 		}
-														 		}
+														 		}*/
 														 	
+															
+															try{
+														 				json['FILTER']	=	json['FILTER_CLICK']=		filter_selectd['__'+tag_class];
+																		
+														 		}catch(e){
+														 			console.warn(' exception');
+														 		}
+																
+																
+
+															
 														 	if(!empty(value))
 														 	{
 														 		var h2	=	 $('<h2/>',{	'vvalue'		:	value,
 														 									html			:	value,
-														 									'json'			:	json,
+//														 									'json'			:	json,
 														 									'level-full'	:	jsonDecode.LEVEL_FULL,
 														 									'index-data'	:	index,
 														 									'id'			:	'wrs_header_filter_main_'+index,
 																							'class'			:	'wrs_class_filter_header_main '+_hide,
 																							'atributo'		:	atributo
-																				 		});
+																				 		}).data('filter',json);
 														 		
 														 		var div	=	$('<div/>',
 														 								{
@@ -1520,7 +1695,6 @@ function wrsFilterClickFalse(filter_hide)
 									 $(".WRS_DRAG_DROP_FILTER").attr('is_atributo_simples',is_atributo_simples);
 									 
 									 jsonDROP	=	[];
-									 //setSizeDataFilterClean(size_data);
 						
 									/*
 									 * Ativando o Accordion
@@ -1536,11 +1710,13 @@ function wrsFilterClickFalse(filter_hide)
 
 		
 		
-				   	var wrs_panel_filter_icon	=	 function()
+				   	var __click_wrs_panel_filter_icon	=	 function()
 					{
-				   		_START('WrsFilter::wrs_panel_filter_icon');
-				   		var event	=	 $(this);
+				   		_START('WrsFilter::__click_wrs_panel_filter_icon');
+				   		
+				   		var event	=	 $('.wrs_panel_filter_icon');
 
+				   		
 				   		var filter_hide		=	event.attr('filter_hide'); //Flag armazenada no botão para saber se já foi pressionado
 				
 						if(filter_hide!='true' && filter_hide!='false') filter_hide='false';
@@ -1556,13 +1732,9 @@ function wrsFilterClickFalse(filter_hide)
 						}
 				
 						event.attr('filter_hide', filter_hide); //Atualiza a Flag
-						_END('WrsFilter::wrs_panel_filter_icon');
+						_END('WrsFilter::__click_wrs_panel_filter_icon');
 				 }
 				
-				/**
-				*  Evento que converte todos os Drags em formaato Toggle e com opções para trazer os resultados
-				*/
-				$('.wrs_panel_filter_icon').unbind('click').click(wrs_panel_filter_icon);
 		
 		
 		
@@ -1571,16 +1743,16 @@ function wrsFilterClickFalse(filter_hide)
 				/**
 				 *  Verificnado se os comapos simples estão preenchidos
 				 */
-				var wrs_check_filter_simples = function()
+				var __wrs_check_filter_simples = function()
 				{
-					_START('WrsFilter::wrs_check_filter_simples');
+					_START('WrsFilter::__wrs_check_filter_simples');
 					
 					var filter					=	$(".WRS_DRAG_DROP_FILTER");
 					var is_atributo_simples		=	filter.attr('is_atributo_simples');
 					var no_simple				=	true;
 
 					if(is_atributo_simples=='false') {
-						_END('WrsFilter::wrs_check_filter_simples');
+						_END('WrsFilter::__wrs_check_filter_simples');
 						return true;}
 					
 					filter.find("h2").each(function(){
@@ -1589,7 +1761,8 @@ function wrsFilterClickFalse(filter_hide)
 						
 						if(atributo=='simples')
 							{
-					 				json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
+//					 				json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
+					 				json	=	 	$(this).data('filter');
 
 					 				if(empty(json.FILTER))
 					 					{
@@ -1620,7 +1793,8 @@ function wrsFilterClickFalse(filter_hide)
 											}
 					 						filter.attr('check-simples',implode(',',check_simple));
 					 						
-					 						$(this).attr('json',base64_encode(json_encode(json,true)));
+//					 						$(this).attr('json',base64_encode(json_encode(json,true)));
+					 						$(this).data('filter',json);
 					 						
 					 						clickHeaderFiltro($(this),'loadWrs');
 					 					} 
@@ -1636,36 +1810,74 @@ function wrsFilterClickFalse(filter_hide)
 							$('.wrs_run_filter').attr('is_atributo_simples',true);
 							$('.wrs_run_filter').trigger('click');
 						}
-					_END('WrsFilter::wrs_check_filter_simples');
+					_END('WrsFilter::__wrs_check_filter_simples');
 					return false;
 				}
 				
+				
+				
+				
+				var __init	=	 function ()
+				{
+					if(!$('.wrs_panel_filter_icon').attr('filter_hide'))
+					{
+						$('.WRS_DRAG_DROP_FILTER_CONTAINER').hide();
+					}
+					
+					//Ativando o Accordion dos menu
+					$( ".WRS_DRAG_DROP_FILTER" ).accordion({collapsible: true,active: false,heightStyle: 'content'});
+					
+									/**
+						*  Evento que converte todos os Drags em formaato Toggle e com opções para trazer os resultados
+						*/
+						$('.wrs_panel_filter_icon').unbind('click').click(__click_wrs_panel_filter_icon);
+					
+					return that;
+				}
 				
 		
 				/**
 				 * Eventos por requisição
 				 */
-				var  _return	=	undefined;
-				switch(typeEvent)
+
+				
+				
+				/*
+				 * Metodos de funções
+				 * formas de chamadas externas
+				 */
+				var methods = 
 				{
-					case 'getAllFiltersToRun' 		: _return= getAllFiltersToRun()				; break;
-					case 'setSizeDataFilterClean'	: _return= setSizeDataFilterClean(typeValue)	; break;
-					case 'wrs_check_filter_simples'	: _return= wrs_check_filter_simples()			; break;
-					case 'wrs_filter_check_change_filter' :  _return= wrs_filter_check_change_filter(); break;
-				}
+				        init 							: 	__init,
+				        getAllFiltersToRun				:	__getAllFiltersToRun,
+				        setSizeDataFilterClean			:	__setSizeDataFilterClean,
+				        wrs_check_filter_simples		:	__wrs_check_filter_simples,
+				        wrs_filter_check_change_filter	:	__wrs_filter_check_change_filter,
+				        wrs_panel_filter_icon			:   __click_wrs_panel_filter_icon
+				};
 				
-				_END('WrsFilter');
-				
-				if(_return!=undefined){
-					
-					return _return;
-				}
-			
-				
-				
-				
-        return $event;
+				 
+				/*
+				 * 
+				 * Inicia a construção dos metodos
+				 * 
+				 */
+				if ( methods[methodOrOptions] )
+				{
+			            return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+			    }
+				else if ( typeof methodOrOptions === 'object' || ! methodOrOptions )
+				{
+			            // Default to "init"
+			            return methods.init.apply( this, arguments );
+			    }
+			    else
+			    {
+			            $.error( 'Method ' +  methodOrOptions + ' does not exist on jQuery.tooltip' );
+			    }
     };
+    
+    
 }( jQuery ));
 
 

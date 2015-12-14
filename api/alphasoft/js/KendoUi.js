@@ -8,7 +8,7 @@
 
 var RELATIONSHIPS_FULL_NAME	=	$.parseJSON(base64_decode( ATRIBUTOS_JSON));
 var RELATIONSHIPS_FULL		=	[];
-var _TRUE	=	'1',
+var _TRUE		=	'1',
 	TRUE		=	true,
 	NULL		=	null,
 	FALSE		=	false,
@@ -29,7 +29,7 @@ include_js('Menu');
 include_js('templateReport');
 include_js('Abas'); */
 
-function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
+function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi,load_direct)
 {
 	_START('WRSKendoGridCompleteRun');
 	var _layout	=	layout;
@@ -39,11 +39,14 @@ function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi)
 	var aba_active		=	 tagABA.find('.active');
 		_layout['KendoUi']	=	_paranKendoUi;
 	
+		if(load_direct!=undefined) {
+			_layout['load_direct']	=	true;
+		}
+		
+
 		$(ABA_TAG_NAME).wrsAbas('refresh_F5',_layout);
-	
 		
 		var wrs_data		=	aba_active.wrsAbaData('getWrsData');
-	
 		
 
 		//Remove a aba em branco ou aque não tiver linhas
@@ -90,7 +93,7 @@ function WRSKendoGridRefresh(history)
 					 multiple_cube_status_change(false);
 				}
 				 
-			 }catch(e){}
+			 }catch(e){console.warn(' exception');}
 			 
 		//	getRequestKendoUiDefault	=	merge_objeto(_paranKendoUi,_layout);
 
@@ -102,9 +105,13 @@ function WRSKendoGridRefresh(history)
 			
 			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
 			
+			
 	});
 	_END('WRSKendoGridRefresh');
 }
+
+
+
 
 
 function WRSKendoGridComplete(IDGrid)
@@ -116,12 +123,11 @@ function WRSKendoGridComplete(IDGrid)
 	
 		try{
 			trashHistory	=	WRSHistory[wrsKendoUi['REPORT_ID']];
-		}catch(e){}
+		}catch(e){console.warn(' exception');}
 		
-	//console.log('WRSHistory',WRSHistory);
 		
 	var history			=	$.parseJSON(base64_decode(trashHistory));
-	//var IDNav			=	IDGrid+'NAV .wrs_history_report';
+
 	var IDNav			=	IDGrid+'Main .wrs_history_report';
 	
 
@@ -155,15 +161,17 @@ function WRSKendoGridComplete(IDGrid)
 	var historyClick	=	 function()
 	{
 		_START('WRSKendoGridComplete::historyClick');
+		
 		var _wrs_id			=	$(this).attr('wrs-id');
 		var _mktime			=	$(this).attr('mktime');
 		var _history		=	$.parseJSON(base64_decode($(this).attr('json')));
 		var _layout			=	_history['layout'];
 		var _paranKendoUi	=	_history['kendoUi'];
 	
-			$(report_aba).wrsAbaData('setKendoUi',{MKTIME_HISTORY:_mktime});
+			_paranKendoUi['MKTIME_HISTORY']	=	_mktime;
 			
-			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi);
+			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi,true);
+			
 		_END('WRSKendoGridComplete::historyClick');
 	}
 	
@@ -403,12 +411,6 @@ function getWrsKendoColumn(data)
 	var DRILL_HIERARQUIA_REQUEST		=	arg.sender.dataSource._wrs_request_data.drill;
 	var typeColumnFrozen				=	false;
 	
-	
-
-
-
-		
-	
 	var layout							=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
 	var byFrozenLevelFull				=	[];
 	
@@ -417,6 +419,7 @@ function getWrsKendoColumn(data)
 		byFrozenLevelFull	=	arg.sender.headerIndex.byFrozenLevelFull;
 	}catch(e){
 		byFrozenLevelFull	=	[];
+		console.warn(' exception');
 	}
 	
 	var _DRILL_FCC						=	DRILL_FCC(byFrozenLevelFull,explode(',',layout.LAYOUT_ROWS));
@@ -480,6 +483,7 @@ function getWrsKendoColumn(data)
 					next_column	=	kendoUi.headerIndex.column_count[next_column_count];
 				}catch(e){
 					next_column	=	null;
+					console.warn(' exception');
 				}
 				
 				
@@ -631,9 +635,12 @@ function getWrsKendoColumn(data)
 	
 
 	/*
+	 * 
+	 * TODO: Apresenta lentidão devido a formatação do do HTML
 	 * Aplica a real formatação do resize
+	 * 
 	 */
-	for(idx in _width)
+	for(var idx in _width)
 		{
 			var padding	=	25;
 			
@@ -644,13 +651,12 @@ function getWrsKendoColumn(data)
 							if(_rows_frozen[_width[idx].column]){
 								padding	=	40;
 							}
-						}catch(e){}
+						}catch(e){console.warn(' exception');}
 				}
 			
 			var r_width								=	$("<div/>").text(_width[idx].data).textWidth()+padding;
 				_param[_width[idx].column]['width']	=	r_width;
 				
-				//arg.sender.headerIndex.byFrozenLevelFull
 				WRSSresize(id,idx, r_width,frozen-1); 
 		}
 	
@@ -701,14 +707,12 @@ function wrsKendoUiChange(nameID,param,value)
 
 
 function onDataBound(arg)
-	{
+{
 		_START('onDataBound');
 		
-		//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
+			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 			
 			resizeColumnKendoUi(arg);
-			 
-			
 
 			var classGrid		=	arg.sender.element.attr('id');
 			var nameID			=	 '#'+classGrid;
@@ -718,43 +722,18 @@ function onDataBound(arg)
 			var wrsKendoUi		=	_kendoUiParam;
 			var wrsparam		=	$(report_aba).wrsAbaData('getWrsData');
 			
-
-			$(report_aba).wrsAbaData('setKendoUi',{page_size:arg.sender.dataSource._pageSize, STOP_QUERY:false});
 			
+			
+						
+			$(report_aba).wrsAbaData('setKendoUi',{page_size:arg.sender.dataSource._pageSize, STOP_QUERY:false});
 				
 				/*Options To ABAS */
 				wrsparam['KendoUi']				=	_kendoUiParam;
-
-
 				
 				ELEMENT.attr('chart','false');
 				ELEMENT.attr('maps_wrs','false');
 				
-				
-				
-						//Se o Somatório estiver ativo então faz a configuração do SUM
-						if(wrsKendoUi.ALL_ROWS)
-						{
-							
-							if(wrsKendoUi.DRILL_HIERARQUIA_LINHA!=_TRUE)
-							{
-								$(nameID).find('.wrstelerikButtonHeader').each(function(){					
-									
-									var _rel	=	$(this).attr('rel');
-										_rel	= 	_rel=='plus' ? true : false;
-										
-									if(wrsKendoUi['PLUS_MINUS']==_rel)
-									{
-										$(this).trigger('click');
-									}
-									
-								});
-							}
-							
-
-							themeSUM(nameID,arg,wrsKendoUi);
-			
-						}
+			//theSum is here before
 			
 						 
 			//Removendo as cores entre as linhas
@@ -768,8 +747,6 @@ function onDataBound(arg)
 			CLOSE_LOAD_RELATORIO();
 			$('.'+classGrid+'BOX').show();
 			
-			 
-
 
 			addDrillOnDataBound(nameID,arg);
 			//Aplicando o Evento do CLick no DRILL LINHA
@@ -791,7 +768,7 @@ function onDataBound(arg)
 
 			$('.WRS_ABA').find('.'+classGrid).data('kendoUiDataAba',arg.sender);
 			
-			$('body').WRSJobModal('close',{'report_id':classGrid});
+			$('body').managerJOB('load_complete',{'report_id':classGrid});
 			
 			
 			wrsKendoUiChange(nameID,'IS_REFRESH',false);
@@ -805,15 +782,43 @@ function onDataBound(arg)
 			
 			
 			
+			//Se o Somatório estiver ativo então faz a configuração do SUM
+			if(wrsKendoUi.ALL_ROWS)
+			{
+				
+				if(wrsKendoUi.DRILL_HIERARQUIA_LINHA!=_TRUE)
+				{
+					$(nameID).find('.wrstelerikButtonHeader').each(function(){					
+						
+						var _rel	=	$(this).attr('rel');
+							_rel	= 	_rel=='plus' ? true : false;
+							
+						if(wrsKendoUi['PLUS_MINUS']==_rel)
+						{
+							$(this).trigger('click');
+						}
+						
+					});
+				}
+				
+				
+				themeSUM(nameID,arg,wrsKendoUi);
+
+			}
+			
+			
 			//Apenas para que os controles do next and Back funcione
 			var options_resize = {
-					  id    	: nameID,
-					  'window'	: wrsKendoUi['WINDOW'],
-					  resize: function( event ) 
-					  {
-						  $(this.id).WRSWindowGridEventTools(this.window,true);
-					  }
-					};
+									  id    	: nameID,
+									  'window'	: wrsKendoUi['WINDOW'],
+									  resize	: function( event ) 
+									  {
+										  $(this.id).WRSWindowGridEventTools(this.window,true);
+										  
+										  resize_container_grid(str_replace('#','',this.id),this.window);
+									  }
+								};
+
 			
 			var time_out 	= $.proxy( options_resize.resize, options_resize );
 			
@@ -822,6 +827,8 @@ function onDataBound(arg)
 			
 			
 			_END('onDataBound');
+			
+			
 			
 			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 	}
@@ -836,8 +843,8 @@ function onDataBound(arg)
 	 * @link http://jsbin.com/ikoley/2/edit?html,output
 	 * @link http://www.telerik.com/forums/change-column-widths-after-grid-created
 	 */
-	 function WRSSresize(gridId,idx, width,sizeFrozen) {
-		 
+	 function WRSSresize(gridId,idx, width,sizeFrozen) 
+	 {
 		 _START('WRSSresize');
 		var _idx		=	idx;
 		var _idxHeader	=	_idx;
@@ -871,7 +878,7 @@ function onDataBound(arg)
 		}
 		
 		_END('WRSSresize');
-		//TRACE(_idx+' | '+_idxHeader+' || '+sizeFrozen+' || '+width);
+
       }
 		
 		
@@ -943,25 +950,48 @@ function  buttonPlusMinus(nameID,hideShow,sizeFrozen)
 function  themeSUM(nameID,arg,wrsParam)
 {
 	_START('themeSUM');
-		var find_last			=	'last-child';
-		
-//Uncaught TypeError: Cannot read property 'field' of undefined		
+		var find_last					=	'last-child';
+		var drill_hierarquia_line		=	false;
+		var find_last_child_loacked		=	$(nameID).find('.k-grid-header-locked').find('tr:last-child').find('th:'+find_last);
+		//Uncaught TypeError: Cannot read property 'field' of undefined		
 		//Garante que se for LATITUDE pega o ultimo elemento
-		$(nameID).find('.k-grid-header-locked').find('tr:last-child').find('th:'+find_last).each(function(){
+		
+		if(wrsParam.DRILL_HIERARQUIA_LINHA	==_TRUE)
+		{
+			find_last_child_loacked		=	$(nameID).find('.k-grid-header-locked').find('tr:last-child').find('th');
+			drill_hierarquia_line		=	true;
+		}
+		
+		
+		find_last_child_loacked.each(function()
+				{
+				
+						
+						if(drill_hierarquia_line==true)
+						{
+							if(arg.sender.headerIndex.field[$(this).attr('data-field')].hidden!=true)
+							{
+								var eq		=	$(this).index();
+									find_last	=	 'eq('+eq+')';
+							}									
+						}else{ 	
 			
-			try{
-				if(arg.sender.headerIndex.field[$(this).attr('data-field')].map=="[LATITUDE]"){
-					var eq	=	$(this).index()-1;
-					find_last	=	 'eq('+eq+')';
-				}
-			} catch(e){
-				console.log('Falha na leitura de mapas mas pode não haver essa informação');
-			}
+							try{
+								if(arg.sender.headerIndex.field[$(this).attr('data-field')].map=="[LATITUDE]")
+								{
+									var eq			=	$(this).index()-1;
+										find_last	=	 'eq('+eq+')';
+								}
+							} catch(e){
+								console.warn('Falha na leitura de mapas mas pode não haver essa informação');
+							}
+							
+						}
+							
+					
 			
 		});
 		
-		
-		//END
 		
 		$(nameID).find('.k-grid-content-locked').find('tr').find('td:'+find_last).each(function(){
 			var index				=	$(this).parent().index();
@@ -971,30 +1001,47 @@ function  themeSUM(nameID,arg,wrsParam)
 
 			
 			//QUando for o caso se linha de DRILL habilita os totais apenas nas linhas corretas
-			if(arg.sender.wrsKendoUi.DRILL_HIERARQUIA_LINHA	==_TRUE){
 				
-				try{
-					if(arg.sender['drill_line_total_data'][index])
+				if(isTotal)
+				{
+					var html	=	 false;
+					var _a		=	$(this).find('a');
+					
+					if($.trim($(this).html())=='')
 					{
-						isTotal	=	 false;
+						html	=	 true;
 					}
-				} catch(e){}
-			}
-			
-			
-			if(isTotal)
-			{
-				if(empty($(this).html()) || $(this).attr('wrsNull')=='true')
+					
+					if(_a.length>=1)
 					{
-						$(nameID).find('.k-grid-content').find('tbody tr').eq(index).addClass('ui-state-default tag_total');
-						//Caso seja nula a linha de Total pesquisa e insere a ultima encontrada
-						for(var i=parent_index_data; (i>=1 && empty(html_data_index)); i--){
-							html_data_index	=	 strip_tags($(this).parent().find('td:eq('+i+')').html());
-						}
-						$(this).parent().attr('wrs-html-data',html_data_index);
+						if($.trim(_a.html())=='')
+							{
+								html	=	 true;
+							}else{
+								html	=	false;
+							}
 						
 					}
-			}
+					
+					
+					
+					
+					
+					if(html==true	|| $(this).attr('data-original')=='true')
+						{
+							$(nameID).find('.k-grid-content').find('tbody tr').eq(index).addClass('ui-state-default  tag_total');
+							$(this).parent().addClass('ui-state-default ');
+							//Caso seja nula a linha de Total pesquisa e insere a ultima encontrada
+							for(var i=parent_index_data; (i>=1 && empty(html_data_index)); i--){
+								html_data_index	=	 strip_tags($(this).parent().find('td:eq('+i+')').html());
+							}
+							
+							$(this).parent().attr('wrs-html-data',html_data_index);
+							
+						}else{
+							$(nameID).find('.k-grid-content').find('tbody tr').eq(index).removeClass('ui-state-default ');
+						}
+				}
 			
 				
 			});
@@ -1020,7 +1067,8 @@ function  themeSUM(nameID,arg,wrsParam)
 				});
 			}
 			
-_END('themeSUM');
+		_END('themeSUM');
+			
 }													
 													
 /**
@@ -1040,7 +1088,8 @@ _END('themeSUM');
 
 	 	
 	    $.fn.WrsGridKendoUiControlColumnPlusMinus = function(openStart) 
-	    {	_START('WrsGridKendoUiControlColumnPlusMinus');
+	    {	
+	    	_START('WrsGridKendoUiControlColumnPlusMinus');
 			addKendoUiColorJQueryGrid();
 			
 			var $eventTelerik		=	 this;
@@ -1054,8 +1103,6 @@ _END('themeSUM');
 			
 				telerikGrid['wrs_frozen_data']			=	[];
 				telerikGrid['wrs_frozen_data']['data']	=	[];
-				
-			
 			/*
 			 * Column Header Index criado por Marcelo Santos
 			 */
@@ -1067,17 +1114,43 @@ _END('themeSUM');
 			$eventTelerik.find('.k-header:first').attr('style','min-height:0px; height:0px;overflow:auto');
 			$eventTelerik.find('.k-header:first a').attr('style','min-height:0px; height:0px;overflow:auto').hide();
 			
+			
+			
+			
+			
 			var wrs_export_event	=	 function(){
 														_START('WrsGridKendoUiControlColumnPlusMinus::wrs_export_event');
 														var getClass	=	 $(this).attr('rel');
-														if(!empty(getClass))
+														var report_id	=	 $(this).attr('id-tag');
+														
+														
+															//Faz com que o sistema não execute opções nativas quando for export
+															$('.'+report_id).wrsAbaData('setKendoUi',{EXPORT:true});
+														
+															if(getClass=='k-grid-pdf')
 															{
-																$('.'+getClass).trigger('click');
+																//Renderiza a tela para que possa ser manipupada quando for o PDF
+																var _width	=	$(IDName).find('.k-grid-header-wrap').find('table').width()+$(IDName).find('.k-grid-header-locked').find('table').width();
+																
+																	$(IDName).width(_width);
+																	
+																	$(IDName).find('.k-grid-content').css({height:'auto'});
+																	$(IDName).find('.k-grid-content-locked').css({height:'auto'});
+																	$(IDName).css({height:'auto'});
+																//Finaliza
 															}
-														_END('WrsGridKendoUiControlColumnPlusMinus::wrs_export_event');
+															
+															if(!empty(getClass))
+																{
+																	$('.'+getClass).trigger('click');
+																}
+															
+															_END('WrsGridKendoUiControlColumnPlusMinus::wrs_export_event');
 													}
 			
-			$('.wrs_event_export').click(wrs_export_event);
+			
+			
+			$('.wrs_event_export').unbind('click').click(wrs_export_event);
 			
 			
 			var countFrozen	=	 function(data)
@@ -1241,6 +1314,8 @@ _END('themeSUM');
 											}
 											
 											
+											
+												themeSUM(IDName,{sender:localKendoUI},wrsKendoUi);
 											
 											_END('WrsGridKendoUiControlColumnPlusMinus::buttonHideShow');
 											return false;

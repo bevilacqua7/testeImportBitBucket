@@ -301,6 +301,14 @@ class WindowGrid extends FORM
 		}
 		
 		
+		if(empty($query))
+		{
+			$param['title']	=	LNG('WARNING_TITLE_RESULT_NOT_FOUND');
+			$param['html']	=	fwrs_warning(LNG('WARNING_BODY_RESULT_NOT_FOUND'));
+			return $param;
+		}
+		
+		
 		$query			= 	$this->query($query);
 		
 		$num_rows		=	0;
@@ -314,7 +322,6 @@ class WindowGrid extends FORM
 				$param['html']	=	fwrs_warning(LNG('WARNING_BODY_RESULT_NOT_FOUND'));
 				return $param;
 		}
-		
 		
 		
 		//$TAG_DIV
@@ -625,6 +632,8 @@ EOF;
 							$query_box			=	$this->manage_param->select($param_select['field'], $param_select['table'], $param_select['order']['order_by'], $param_select['order']['order_type'], 1, 1,$where_box);
 							
 						}
+						
+						
 						
 						$query_box			=	$this->query($query_box);
 						$html_option		=	'';

@@ -17,7 +17,7 @@ var HEIGHT_ABAS		=	50;
 	
     $.fn.WRSWindowGridEventTools = function(loadByAba,_click_auto)
     {
-		_START('WRSWindowGridEventTools');
+		_START('WRSWindowGridEventTools');''
 		
     	var eventTelerik	=	this;
     	var click_auto		=	_click_auto==undefined || _click_auto==null ? false : _click_auto;
@@ -136,11 +136,13 @@ var HEIGHT_ABAS		=	50;
 		 */
 		var WRSWindowGridEventToolsClick	=	function(e,data)
 		{
+
 			_START('WRSWindowGridEventTools::WRSWindowGridEventToolsClick');
 			var wrs_data		=	"";
 			var kendoUiTools	=	getElementsWrsKendoUi(GRID);
 			var height			=	$('.ui-layout-center').innerHeight()-HEIGHT_ABAS;
 
+			
 			if(empty(data))
 			{
 				wrs_data	=	$(this).attr('wrs-data');
@@ -149,11 +151,6 @@ var HEIGHT_ABAS		=	50;
 			{
 				wrs_data	=	data;
 			}
-			
-			
-			
-			
-		
 			
 
 				var isHistory	=	Boolean($(this).parent().parent().attr('isHistory'));	
@@ -190,6 +187,20 @@ var HEIGHT_ABAS		=	50;
 				/*
 				 * Criando Gráfico e Mapa
 				 */
+				
+				
+				try{
+					
+					if(kendoUiTools['EXPORT']==true)
+						{
+								
+							
+							_END('WRSWindowGridEventTools::WRSWindowGridEventToolsClick');
+							return false;
+						}
+				}catch(e){
+					console.warn(' exception');
+				}
 
 				switch(wrs_data)
 				{
@@ -238,12 +249,69 @@ var HEIGHT_ABAS		=	50;
 		
 		NAV.find('.btn-open-type-vision').unbind('click').click(function_btn_open_type_vision);
 		
-			_END('WRSWindowGridEventTools');
+		_END('WRSWindowGridEventTools');
+		
+		
     };
  
 }( jQuery ));
 
 
+function generate_hight_models(report_id)
+{
+	
+	var half		=	 false;
+	var ELEMENT		=	$('#'+report_id+'Elements');
+	var kendoUi		=	$('.'+report_id).wrsAbaData('getKendoUi');
+	var height		=	0;
+	
+		switch(kendoUi.WINDOW)
+		{
+			case "grid_chart"	:   
+			case "grid_map"		: 	
+			case "chart_grid"	: 	
+			case "chart_map"	: 	
+			case "map_grid"		: 	
+			case "map_chart"	: 	half=true				;	break;
+		}
+	
+	
+	
+	var layout_center_object	=		$('.ui-layout-center');
+	
+	var layout_center			=	{
+										padding_left	:	parseInt(layout_center_object.css('padding-left').replace("px", "")),
+										padding_right	:	parseInt(layout_center_object.css('padding-right').replace("px", "")),
+										context			:	layout_center_object,
+										height			:	layout_center_object.innerHeight()-HEIGHT_ABAS,
+										width			:	layout_center_object.outerWidth()
+									};
+	
+	//Ajustando as bordas
+	layout_center.width		-=	(layout_center.padding_left+5);
+	layout_center.height	-= (layout_center.padding_left+layout_center.padding_right);
+	
+	//Ajuste do tamanho do center layout removento o padding	
+	layout_center.width		=	layout_center.width-(layout_center.padding_left);
+	
+
+	if(half){
+		height= layout_center.height/2;
+	}else{
+		height	= layout_center.height;
+	}
+	
+	
+	
+	ELEMENT.height(height);
+
+	
+		$('#'+report_id).height(height);
+	
+	
+	
+	
+}
 
 /*
  * Nova versão de resize
@@ -255,11 +323,26 @@ function resize_container_grid(report_id,_type_grid)
 {
 	
 	_START('resize_container_grid');
-	var type_grid		=	_type_grid;
-
+	var type_grid		=		_type_grid;
+	var kendoUi			=		$('.'+report_id).wrsAbaData('getKendoUi');
+	
+	
+	
+	try{
+		if(kendoUi['EXPORT']==true)
+			{
+				_END('resize_container_grid');
+				return false;
+			}
+	}catch(e){
+		console.warn(' exception');
+	}
+	
+	
 	/* START */
 
 	var layout_center_object	=		$('.ui-layout-center');
+	
 	var layout_center			=	{
 										padding_left	:	parseInt(layout_center_object.css('padding-left').replace("px", "")),
 										padding_right	:	parseInt(layout_center_object.css('padding-right').replace("px", "")),
@@ -310,7 +393,7 @@ function resize_container_grid(report_id,_type_grid)
 		options.container_configure.innerWidth(layout_center.width);
 		
 		//configurando tela de modal
-		$('body').WRSJobModal('resize',{'height':layout_center_object.outerHeight(),'width':layout_center_object.outerWidth()});
+		$('body').managerJOB('resize',{'height':layout_center_object.outerHeight(),'width':layout_center_object.outerWidth()});
 		
 		//não deixa executa sem a GRID estar criada
 		if(options.grid==undefined || options.grid==null) return false;
@@ -824,6 +907,10 @@ function resize_container_grid(report_id,_type_grid)
 				_END('resize_container_grid::map_chart');	
 			}
 			
+			
+			
+			
+	 
 
 			switch(type_grid)
 			{
@@ -839,66 +926,6 @@ function resize_container_grid(report_id,_type_grid)
 			}
 
 		
-	/*
-	 * TODO: IMplementar a fase final do Resize
-	 */	
-	/* END */
-/*
-	if(telerikGrid)
-	{
-		
-		
-		var element_id	=	report_id+'Elements';
-		var element		=	$('#'+element_id);
-
-		var _width		=	element.width();
-		var _height		=	element.height();
-		
-			element.find('div').each(function(){
-				
-		
-				
-				$('#'+report_id).resize();
-				
-				
-				//$('#ABA_56979535263963Elements .map').data('goMap').map.center.lat()
-				//$('#ABA_56979535263963Elements .map').data('goMap').map.center.lng()
-				
-				$(this).width(_width);
-				$(this).height(_height);
-				
-				// @Link http://stackoverflow.com/questions/10913164/gomap-display-map-in-hidden-div
-				 
-				if($(this).hasClass('map'))
-				{
-					//$(this).html('');
-					//WRSMaps(telerikGrid);
-					var map		=	$(this).data('goMap').map;
-						
-						google.maps.event.trigger(map, 'resize'); 
-						
-
-				}
-				
-				if($(this).hasClass('chart'))
-				{
-					$(this).attr('id','CHART'+report_id);
-					
-					var chart_id	=	$('#CHART'+report_id);
-					
-					//	chart_id.width(_width);
-					//	chart_id.height(_height);
-					
-					var chart	=	chart_id.data("kendoChart");
-					       chart.resize();  
-				}
-				
-				
-				
-			});
-			
-		
-	}*/
 	
 	_END('resize_container_grid');
 	
@@ -953,6 +980,7 @@ function saveHistoryEvents(kendoParam,report_id)
 function rules_pendences_checkbox(element,fullEvent)
 {
 	_START('rules_pendences_checkbox');
+	
 	var dependence	=	element.attr('dependence');
 	var checked		=	element.prop('checked');
 	var _input		=	'';
@@ -970,7 +998,9 @@ function rules_pendences_checkbox(element,fullEvent)
 
 		}
 	}
-_END('rules_pendences_checkbox');	
+	
+	_END('rules_pendences_checkbox');	
+
 }
 
 //Variável default é preenchida pelo lib.WRS_PANEL
@@ -991,6 +1021,7 @@ var getRequestKendoUiDefault	=	{};
   {
 	  _START('wrsConfigGridDefault');
 	
+	  
 	  var aba_current				=	get_aba_active_object();
 	  var 	data_name				=	'wrsConfigGridDefault',
 			element					=	this,
@@ -1005,7 +1036,7 @@ var getRequestKendoUiDefault	=	{};
 			isClick					=	false;
 			nav_options.attr('id','wrs_grid_options_default');	
 		
-		
+
 
   		//WARNING:  O nome do ID nao pode ser removido pois existe outros lugares com pendencia no nome - wrs_panel
 		element.attr('id',data_name);
@@ -1039,71 +1070,76 @@ var getRequestKendoUiDefault	=	{};
   	{
 		_START('wrsConfigGridDefault::function_btn_open_type_vision');
 		
-  		check_exist_grid();
+		var _opts		=		get_aba_active_kendoUi();
+		
+  		
   		list_wrs_vision.find('li a').each(function(){
   				var _wrs_data		=	 $(this).attr('wrs-data');
   				$(this).removeClass('active_tools');
 
-  				if(opts.WINDOW	==	_wrs_data){
+  				if(_opts.WINDOW	==	_wrs_data){
   					$(this).addClass('active_tools');
   				}
   		});
+  		
+  		
 		_END('wrsConfigGridDefault::function_btn_open_type_vision');
   	}
   	
   	var function_click_list_wrs_vision			=	 function(){
 		_START('wrsConfigGridDefault::function_click_list_wrs_vision');
-  			var _wrs_data		=	$(this).attr('wrs-data');
-  				opts.WINDOW		=	_wrs_data;
 
-  				detect_event();//Abilita Evento
-  				list_wrs_vision.find('li a').removeClass('active_tools');
-  				$(this).addClass('active_tools');
-
-  				
-		  		aba_current.wrsAbaData('setKendoUi',{WINDOW:_wrs_data});
+				var _wrs_data		=	$(this).attr('wrs-data');
 				
-		_END('wrsConfigGridDefault::function_click_list_wrs_vision');				
+				var active_aba			=	get_aba_active_object();
+				
+				var _report_id_box		=	active_aba.attr('id-aba')+'BOX';
+				
+				
+				
+				$('.'+_report_id_box).find('.wrs_tools_options_window').find('a[wrs-data="'+_wrs_data+'"]').trigger('click');
+  	/*				
+
+  					detect_event();//Abilita Evento
+  					*/
+				
+  					list_wrs_vision.find('li a').removeClass('active_tools');
+  					$(this).addClass('active_tools');
+  					
+  					active_aba.wrsAbaData('setKendoUi',{WINDOW:_wrs_data});
+  					
+				
+  				_END('wrsConfigGridDefault::function_click_list_wrs_vision');				
+		
   				return false;
   	}
   	
-  	/*
-  	 * Atualiza de acordo com as informações contidas na original
-  	 * Função pesquisa no html por GRid complementar para que possa usar 
-  	 */
-  	var check_exist_grid	=	 function()
-  	{  	
-		_START('wrsConfigGridDefault::check_exist_grid');
-  		if(isClick) return true;
 
-  		var searchGrid		=	$(document).find('.wrsGrid');
-		var hasDefault		=	 $('.wrs_panel_filter_measure').is(':hidden');
-		
-
-		/*
-		 * TODO: Validar
-		 */
-	  		if(!empty(searchGrid.html()) && hasDefault==true)
-	  		{
-	  			opts	=	$('.WRS_ABA').find('.active').wrsAbaData('getKendoUi') 			
-	  		}  		
-		_END('wrsConfigGridDefault::check_exist_grid');	  		
-  	}
-  	
   	
   	//Click do Botão - nav_options
-  	var event_click_btn_options	=	 function(){
+  	var event_click_btn_options	=	 function()
+  	{
 		_START('wrsConfigGridDefault::event_click_btn_options');
-  		check_exist_grid(); 
-  		nav_options.find('input').each(function(){
-  				$(this).prop('checked',false);
-  				if(!empty(opts[$(this).attr('name')])){
-  					$(this).prop('checked',true);
-  				}else{
-  					$(this).prop('checked',false);
-  				}  				
-  				rules_pendences_checkbox($(this),$(this).parents('ul'));
+  		
+		var _opts		=		get_aba_active_kendoUi();	
+  		
+	
+		
+		$(this).parent().find('input').each(function()
+  				{
+	  				$(this).prop('checked',false);
+	  				
+	  				
+	  				
+	  				if(!empty(_opts[$(this).attr('name')])){
+	  					$(this).prop('checked',true);
+	  				}else{
+	  					$(this).prop('checked',false);
+	  				}  
+	  				
+	  				rules_pendences_checkbox($(this),$(this).parent().parent().parent());
   		});
+  		
 		_END('wrsConfigGridDefault::event_click_btn_options');
   	}
   	
@@ -1206,6 +1242,7 @@ var getRequestKendoUiDefault	=	{};
   	//Click do Botão OPTIONS
 
   	btn_options.unbind('click').click(event_click_btn_options);
+  	$('.btn-options-grid').unbind('click').click(event_click_btn_options);
   	
   	nav_options.find('li').each(function(){
   			$(this).find('input').unbind('click').click(event_find_nav_options_input);

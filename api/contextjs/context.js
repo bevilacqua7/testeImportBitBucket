@@ -25,11 +25,13 @@ var context = context || (function () {
 				$('.dropdown-context').css({display:''}).find('.drop-left').removeClass('drop-left');
 			});
 		});
+		
 		if(options.preventDoubleContext){
 			$(document).on('contextmenu', '.dropdown-context', function (e) {
 				e.preventDefault();
 			});
 		}
+		
 		$(document).on('mouseenter', '.dropdown-submenu', function(e){
 			
 			var $sub = $(this).find('.dropdown-context-sub:first'),
@@ -227,7 +229,6 @@ var context = context || (function () {
 		$('.dropdown-menu li').show();
 		
 		
-
 		for(x in layout)
 			{
 				var layout_inside	=	layout[x];
@@ -235,13 +236,16 @@ var context = context || (function () {
 				for(i in layout_inside)
 					{
 						var object	=	$('.dropdown-menu  .'+replace_attr(layout_inside[i]));
+						
 							object.hide();
-							
+							//object.addClass('hide');
 
 						object.find('.dropdown-context-sub').each(function(){
 								var subMain		=	 $(this);
 								var hide		=	 true;
-								$(this).find('li').each(function(){
+								
+								$(this).find('li').each(function()
+								{
 									if($(this).css("display")!='none'){
 										hide=false;
 									}else{
@@ -250,7 +254,7 @@ var context = context || (function () {
 								});
 								
 								if(!hide)  $(this).parent().show();
-							})
+							});
 							
 					}
 			}
@@ -397,7 +401,6 @@ var context = context || (function () {
 		
 		var divMainEvent		=	$wrsEventMain.parent().parent().parent().parent();
 		var type				=	divMainEvent.attr('type');
-		 
 		
 	 	/*
 		  *  LAYOUT_ROWS
@@ -405,9 +408,11 @@ var context = context || (function () {
 		  *  LAYOUT_MEASURES
 		  *  LAYOUT_FILTERS
 		  */
-		var _layout	=	wrsKendoUiContextMenu(whoEventRequest);
+		$('.dropdown-menu-drill').find('li').show();//Abilita todos 
 		
+		var _layout	=	wrsKendoUiContextMenu($('#'+get_aba_active_kendoUi().REPORT_ID));
 		
+
 			hideContextMenu(type,_layout.layout_clean);
 		
 		if(empty($wrsEventMain.html())) return true;

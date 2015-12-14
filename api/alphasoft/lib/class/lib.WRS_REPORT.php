@@ -198,6 +198,7 @@ HTML;
 		$user			=	WRS::INFO_SSAS_LOGIN();
 		
 		$sql			=	$this->_query->Get_SSAS_Reports($user['CUSTOMER_ID'], $user['USER_CODE'], $user['PERFIL_ID'], $database_id, $cube_id);
+		
 		return $sql;
 		
 	}
@@ -207,27 +208,40 @@ HTML;
 		
 		$sql			=	$this->getQuerySelectReports();
 		
-		$query			=	 $this->query($sql);
-		$error			=	false;
-		$last_error		=	'';
 		
-		if($this->num_rows($query))
+		
+		if(empty($sql))
 		{
-			
-			$rows		=	 $this->fetch_array($query);
-			
-			if(!empty($rows['ERROR_MESSAGE']))
-			{
-				$last_error		=	$rows['ERROR_MESSAGE'];
-				$error			=	true;
-			}else{
-				return WRS_MANAGE_PARAM::select($columns, $rows['TABLE_NAME'], $orderBy, $orderByPOS, $_start, $_end,$_where);
-			}
-			
-			
-		}else{
-			$last_error		=	'sem resultados para a consulta: '.$sql;
+			$last_error		=	LNG('NO_RESULTS_QUERY').$sql;
 			$error			=	true;
+		}else{
+			
+			
+			
+			$query			=	 $this->query($sql);
+			
+			
+			$error			=	false;
+			$last_error		=	'';
+			
+			if($this->num_rows($query))
+			{
+				
+				$rows		=	 $this->fetch_array($query);
+				
+				if(!empty($rows['ERROR_MESSAGE']))
+				{
+					$last_error		=	$rows['ERROR_MESSAGE'];
+					$error			=	true;
+				}else{
+					return WRS_MANAGE_PARAM::select($columns, $rows['TABLE_NAME'], $orderBy, $orderByPOS, $_start, $_end,$_where);
+				}
+				
+				
+			}else{
+				$last_error		=	LNG('NO_RESULTS_QUERY').$sql;
+				$error			=	true;
+			}
 		}
 		
 		

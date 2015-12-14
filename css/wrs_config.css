@@ -20,3 +20,24 @@ select{
 }
 
 
+.rodape-main
+{
+	display:block;
+	position:fixed;
+	bottom:0;
+	padding:5px 10px;
+	width:100%;
+	text-align: right !important;
+	border:none !important;
+	
+	-webkit-box-shadow: -3px -10px 5px -9px rgba(0,0,0,0.4);
+-moz-box-shadow: -3px -10px 5px -9px rgba(0,0,0,0.4);
+box-shadow: -3px -10px 5px -9px rgba(0,0,0,0.4);
+}
+
+.wrs_header_main{
+-webkit-box-shadow: -3px 12px 5px -9px rgba(0,0,0,0.4);
+-moz-box-shadow: -3px 12px 5px -9px rgba(0,0,0,0.4);
+box-shadow: -3px 12px 5px -9px rgba(0,0,0,0.4);
+	
+}

@@ -42,6 +42,7 @@ if(!isset($getRequestKendoUiDefault)) $getRequestKendoUiDefault =json_encode('',
 		$script_tags		=	<<<HTML
 										
 											$(function(){
+
 												$('.{$NAV_CONFIG_WRS}').wrsConfigGridDefault();
 											});
 										
@@ -128,17 +129,17 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						</button>
 						<ul class="dropdown-menu" role="menu_export">
 							<li id="dropdown-title"><h4 class="black"><i class="fa fa-th"></i> {$GRID_HEADER_SEE_GRID}</h4></li>
-
-						    <li><a href="#" class="wrs_event_export" rel="k-grid-pdf"><i class="fa fa-file-pdf-o"></i> {$GRID_HEADER_EXPORT_PDF}</a></li>
-						    <li><a href="#" class="wrs_event_export" rel="k-grid-excel"><i class="fa fa-file-excel-o"></i> {$GRID_HEADER_EXPORT_EXCEL}</a></li>
-					  		<li><a href="#" class="wrs_event_export" rel="k-grid-excel"><i class="fa fa-file-o"></i> {$GRID_HEADER_EXPORT_CSV}</a></li>
+							
+						    <li><a href="#" class="wrs_event_export" id-tag="{$idTag}" rel="k-grid-pdf"><i class="fa fa-file-pdf-o"></i> {$GRID_HEADER_EXPORT_PDF}</a></li>
+						    <li><a href="#" class="wrs_event_export" id-tag="{$idTag}" rel="k-grid-excel"><i class="fa fa-file-excel-o"></i> {$GRID_HEADER_EXPORT_EXCEL}</a></li>
+					  		<li><a href="#" class="wrs_event_export" id-tag="{$idTag}"  rel="k-grid-excel"><i class="fa fa-file-o"></i> {$GRID_HEADER_EXPORT_CSV}</a></li>
 						    <li><a href="#"><i class="fa fa-picture-o"></i> {$GRID_HEADER_EXPORT_IMAGE}</a></li>
 						    
 						    <li  class="info_chart divider"></li>
 						    <li class="info_chart" id="dropdown-title"><h4 class="black"><i class="fa fa-bar-chart"></i> {$GRID_HEADER_SEE_CHART}</h4></li>
-						    <li class="info_chart" ><a href="#" class="wrs_chart_export_svg"><i class="fa fa-file-o"></i> {$GRID_HEADER_EXPORT_IMAGE_SVG}</a></li>
-						    <li class="info_chart" ><a href="#" class="wrs_chart_export_image"><i class="fa fa-picture-o"></i> {$GRID_HEADER_EXPORT_IMAGE}</a></li>
-						    <li class="info_chart" ><a href="#" class="wrs_event_export wrs_chart_export_pdf" rel="k-grid-pdf"><i class="fa fa-file-pdf-o"></i> {$GRID_HEADER_EXPORT_PDF}</a></li>
+						    <li class="info_chart" ><a href="#" id-tag="{$idTag}" class="wrs_chart_export_svg"><i class="fa fa-file-o"></i> {$GRID_HEADER_EXPORT_IMAGE_SVG}</a></li>
+						    <li class="info_chart" ><a href="#" id-tag="{$idTag}" class="wrs_chart_export_image"><i class="fa fa-picture-o"></i> {$GRID_HEADER_EXPORT_IMAGE}</a></li>
+						    <li class="info_chart" ><a href="#" id-tag="{$idTag}" class="wrs_event_export wrs_chart_export_pdf" rel="k-grid-pdf"><i class="fa fa-file-pdf-o"></i> {$GRID_HEADER_EXPORT_PDF}</a></li>
 						    
 						</ul>
 				</div>
