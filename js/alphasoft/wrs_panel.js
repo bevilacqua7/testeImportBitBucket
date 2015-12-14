@@ -1773,7 +1773,9 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	{
 		
 		if(is_array(data))
-		{
+		{	
+			//console.log('MOUNT_LAYOUT_GRID_HEADERMOUNT_LAYOUT_GRID_HEADER',data);
+			console.log('Check');
 			if(!$('body').ThreadJobManager(data.REPORT_ID),true)
 			{
 				_END('MOUNT_LAYOUT_GRID_HEADER');

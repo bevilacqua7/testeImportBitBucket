@@ -11,6 +11,7 @@
 
 var IS_TRACE	=	false;
 var RAND_TOKEN	=	js_rand(0,9999999999999);
+
 	include_js('ThreadJobManager');
 
 	
@@ -99,20 +100,35 @@ function WRS_IS_LOGGED_IN(){
 		});
 	return loggedin;
 }
-	
+
+var confCookie		= 'WRS_session_cookie';
+wrsCookies.setItem(confCookie,RAND_TOKEN);
+
 function verifica_loggedin_periodico(){
 	
 	var periodicidade 	= 30;//em segundos
 	var logado = WRS_IS_LOGGED_IN(); // retorna o loginsessionID ou false caso nao esteja logado
-/*
-	var confCookie		= 'WRS_session_cookie';
 	
-	if(wrsCookies.hasItem(confCookie) && wrsCookies.getItem(confCookie)){
-		
-	}	
+	//
 	
-	wrsCookies.setItem('name',admin);
 
+
+	
+	if(wrsCookies.hasItem(confCookie))
+	{
+		if(wrsCookies.getItem(confCookie)!=RAND_TOKEN)
+		{
+			window.close();
+		}	
+	}
+	else
+	{
+		wrsCookies.setItem(confCookie,RAND_TOKEN);
+	}
+	
+	
+	
+/*
 	if (wrsCookies.getItem('name')=='admin'){alert('Welcome Admin.')}else{alert('You are Not User')}
 
 */
@@ -158,7 +174,10 @@ function verifica_loggedin_periodico(){
 	}
 
 }
+
 verifica_loggedin_periodico();
+
+
 
 
 function changeTypeRun(IDGrid,typeRun)

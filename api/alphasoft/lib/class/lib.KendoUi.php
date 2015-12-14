@@ -685,6 +685,9 @@ HTML;
 
 		$wrs_column			=	 array_merge($arrayFrozen,$_menuUseTmp);
 
+		
+		
+			
 		//Gravando as posições dos totais
 		$keysOnly										=	array_keys($wrs_column);
 		$wrs_column[$keysOnly[0]]['flag_total_column']	=	$menuTotalFlag;

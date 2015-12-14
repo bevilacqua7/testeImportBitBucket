@@ -1001,6 +1001,7 @@ function _exist_job_in_cancel(report_id)
 
     		that.data(MSG_JOBS,data);
     		
+			console.log('ThreadMainLoadData',data);
         	var data_param		=	that.data(DATA_NAME);
         	
 
@@ -1147,7 +1148,7 @@ function _exist_job_in_cancel(report_id)
     			var _event			=	'threadJobManager';
 
      				param_request	=	base64_encode(json_encode(get_report_ids(_data_param)));
-
+					console.log('1param_requestparam_request',param_request);
     				runCall(
     							{'jobs_manager':param_request},
     							_file,

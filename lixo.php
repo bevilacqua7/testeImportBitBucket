@@ -1,5 +1,56 @@
 <?php
+ini_set('display_errors',1);
+error_reporting(E_ALL);
+date_default_timezone_set('America/Los_Angeles');
 
+$arr = array(
+		'GOLD',
+		'NIVER',
+		'OFF',
+		'BLACKFRIDAY',
+		'BLACK'
+);
+
+for($i=0;$i<=100;$i++){
+	foreach($arr as $key){
+		$t = array(
+				$i.$key,
+				$key.$i
+				);
+		foreach($t as $k){
+			$res = tenta($k);
+			if($res->isSuccess){
+				echo "<br>OK: ".$k;
+			}else{
+				echo "<br>ERRO: ".$k;
+			}
+			flush();
+		}
+	}
+}
+
+
+
+function tenta($str){
+	$url = "https://www.netshoes.com.br/services/coupon.jsp?code=".$str;
+	/*
+	$ch = curl_init();
+	$timeout = 2;
+	curl_setopt ($ch, CURLOPT_URL, $url);
+	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+	$re = curl_exec($ch);
+	curl_close($ch);
+	*/
+	$re = file_get_contents($url);
+	return json_decode($re);
+}
+
+
+
+exit();
+
+/*
 session_start();
 
 echo '<pre>';
@@ -35,3 +86,4 @@ $data	=	 array(	'page_size'								=> 	25,
 					
 
 					print_r(array_keys($data));
+					*/
