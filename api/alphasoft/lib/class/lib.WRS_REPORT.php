@@ -241,6 +241,8 @@ HTML;
 			}else{
 				$last_error		=	LNG('NO_RESULTS_QUERY').$sql;
 				$error			=	true;
+			}else{
+				return WRS_MANAGE_PARAM::select('*', $rows['TABLE_NAME'], $orderBy, $orderByPOS, $_start, $_end,$_where);
 			}
 		}
 		

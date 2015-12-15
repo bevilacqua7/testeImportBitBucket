@@ -93,10 +93,25 @@ class WRS_MANAGE_PARAM
 	//Classe de Cliente ADMINISTRATIVO
 	public function ATT_WRS_CUSTOMER()
 	{
-		$button	=	array('new'=>'');
+		$button		=	$button_icon	=	array();
+		
+		$button['new']			=	'Novo';
+		$button['update']		=	'Salvar';
+		
+		if(!WRS_USER::getArrPerfUser('DRG')){
+			$button['remove']	=	'Apagar';
+		}
+		
+		$button_icon['new']		=	'fa fa-pencil-square-o';
+		$button_icon['update']	=	'fa fa-floppy-o';
+		
 		$table	=	'ATT_WRS_CUSTOMER';
 		$order	=	array('order_by'=>'CUSTOMER_ID' ,'order_type'=>'ASC');
 		$fields	=	array();
+		
+
+		$exceptions	=	array('class'=>'ATT_WRS_CUSTOMER'	,'file'=>'ATT_WRS_CUSTOMER'	, 'type'=>'');
+		$extend 	= 	array('class'=>'ATT_WRS_CUSTOMER' 	,'file'=>'ATT_WRS_CUSTOMER');
 		
 		$fields['WRS_ICON']			=	array('title'=>'#'					,   'width'=>50,     'basic'=>true, 'grid'=>true);
 		$fields['CUSTOMER_ID']		=	array('title'=>'ID'					,   'primary'=>true, 'type'=>'int', 'class'=>'hide');
@@ -113,7 +128,17 @@ class WRS_MANAGE_PARAM
 				'table'		=>	$table,
 				'order'		=>	$order,
 				'icon'		=>	'user.png',
-				'primary'	=>	'CUSTOMER_ID'
+				'primary'	=>	'CUSTOMER_ID',
+				'extend'				=>	$extend,											// NEW
+				'checkbox'				=>	true, 												// NEW
+				'button_icon'			=>	$button_icon,										// NEW
+				'button_force_label'	=>	true, 			  									// NEW
+ 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
+				'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
+				'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
+				'exception'				=>	$exceptions, 										// NEW
+				'aplicaClassLinhas'		=>	true,												// NEW
+				'aplicaClassHeaders'	=>	'text-center'										// NEW
 			);
 	}
 	
@@ -131,7 +156,6 @@ class WRS_MANAGE_PARAM
 			$button['remove']	=	'Apagar';
 		}
 		
-		$button['teste']		='ok';
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
 		
@@ -145,7 +169,8 @@ class WRS_MANAGE_PARAM
 		//return $this->REL_WRS_CUBE_USER();
 		//return $this->ATT_WRS_REPORT();
 //		return $this->ATT_WRS_DOWNLOAD();
-		
+
+		$extend = 	array('class'=>'ATT_WRS_USER' ,'file'=>'ATT_WRS_USER');
 		
 		$order							=	array('order_by'=>'USER_ID' ,'order_type'=>'ASC');
 		
@@ -173,6 +198,7 @@ class WRS_MANAGE_PARAM
 						'order'		=>	$order,
 						'icon'		=>	'user.png',
 						'primary'	=>	'USER_ID',
+						'extend'				=>	$extend,											// NEW
 						'checkbox'				=>	true, 												// NEW
 						'button_icon'			=>	$button_icon,										// NEW
 						'button_force_label'	=>	true, 			  									// NEW

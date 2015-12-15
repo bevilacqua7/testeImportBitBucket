@@ -93,11 +93,13 @@ class FORM  extends WRS_USER
 		if(!empty($event_form))
 		{
 			$exec_action	=	$this->exec_action_form($param,$event_form);
+		//	$exec_action	=	$exec_action;//.'<pre>'.print_r($_REQUEST,true).'</pre>';
 		}
 		
 		
 		$form			=	'<form class="grid_window_values_form">{form}</form>';
-		$param['html']	=	$exec_action.str_replace('{form}', $html, $form);
+		//$param['html']	=	$exec_action.str_replace('{form}', $html, $form);
+		$param['html']	=	str_replace('{form}', $html, $form);
 		
 		return $param;
 	}
@@ -132,7 +134,8 @@ class FORM  extends WRS_USER
 				case 'new' 		: {}	;	break;
 				case 'update' 	: {} 	; 	break;
 				case 'remove' 	: {} 	;	break;
-			}
+			}			
+			
 			return $query_data;
 			
 	}

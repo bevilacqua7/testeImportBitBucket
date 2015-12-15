@@ -27,6 +27,12 @@ class WindowGrid extends FORM
 	private $exception	=	NULL;
 	
 	
+	/**
+	 * 
+	 * @var WindowGrid
+	 */
+	
+	
 	private function extendException($param,$event)
 	{
 		/*
@@ -34,7 +40,7 @@ class WindowGrid extends FORM
 		 * Obtendo o evento para extender a classe que contem a regra da estrutura
 		 *
 		 */
-
+//form_event
 		if(array_key_exists('exception', $param) && is_array($param['exception']))
 		{
 			$this->exception	=	 $param['exception'];
@@ -97,13 +103,46 @@ class WindowGrid extends FORM
 				
 				//CHamando o Eventos
 				$param			=	$this->manage_param->$event();
+				
 				$p_request		=	fwrs_request('param_request');
+				
 				if(is_array($p_request) && count($p_request)>0)
 					foreach($p_request as $k=>$v)
 						$param[$k]=$v;
-				$param			=	$this->build_grid_form($param);				
+					
+				
+				$form_event		=	fwrs_request('form_event');
+				
+				
+				$LocalEvents	=	 $this;
+				
+				/*
+				 * extend 
+				 */
+				if(array_key_exists('extend', $param) && count($param['extend'])>0){
+					$extend			=	 $param['extend'];
+					includeCLASS($extend['file']);
+					$class			=	$extend['class'];
+					$objExtend		=	new $class();
+					$objExtend->SetObject($this);
+					$LocalEvents	=	$objExtend;
+				}
+				
+				
+				switch($form_event)
+				{
+					case 'remove' 	: 	$param	=	$LocalEvents->delete($param) ; break;
+					case 'update'	:	$param	=	$LocalEvents->update($param) ; break;
+					case 'new'		:	$param	=	$LocalEvents->insert($param); break;
+					default			:	$param	=	$this->build_grid_form($param); break;
+				}
+
+				//$param['html']="<pre>>>>".print_r($param,1)."</pre>".$param['html'];
 				
 				$this->extendException($param,$wrs_type_grid);
+				
+				
+				
 			}else{
 				$param['title']	=	LNG('ERROR_TITLE');
 				$param['html']	=	fwrs_error(LNG('ERROR_EVENT_NOT_FOUND'));
@@ -145,7 +184,33 @@ class WindowGrid extends FORM
 	}
 	
 	
- 
+	public function insert($options)
+	{
+		//WRS_DEBUG_QUERY('insert','oo.log');
+		$param	=	 $this->build_grid_form($options);
+		
+		$param['html']			=	'<pre>INSERT</pre>'.$param['html'];
+		
+		return $param;
+		
+		
+	}
+	
+	public function update($options)
+	{
+		//WRS_DEBUG_QUERY('update','oo.log');
+		$param	=	 $this->build_grid_form($options);
+		$param['html']			=	'<pre>UPDATE</pre>'.$param['html'];
+		return $param;
+	}
+	
+	public function delete($options)
+	{
+		//WRS_DEBUG_QUERY('delete','oo.log');
+		$param	=	 $this->build_grid_form($options);
+		$param['html']			=	'<pre>DELETE</pre>'.$param['html'];
+		return $param;
+	}
 	
 	/**
 	 * Criando os Botões e seus eventos
@@ -288,6 +353,13 @@ class WindowGrid extends FORM
 		$page_size		=	fwrs_request('page_size');
 		$page_size		=  	empty($page_size) ? 25 : $page_size;
 		//$page_size		=	10;
+		
+		if(!array_key_exists('order_by', $param['order'])){
+			$param['order']['order_by']='';
+		}
+		if(!array_key_exists('order_type', $param['order'])){
+			$param['order']['order_type']='';
+		}
 		
 		if(!empty($this->exception))
 		{
