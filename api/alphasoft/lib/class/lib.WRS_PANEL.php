@@ -1349,8 +1349,9 @@ HTML;
 				}
 				
 				
+				
+				
 				$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$field,$getRequestKendoUi['ALL_ROWS'],strtoupper($sort[0]['dir'])));
-				//$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$LAYOUT_ROWS_SIZE,$field,strtoupper($sort[0]['dir'])));
 						
 				if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
 				{
@@ -1371,10 +1372,28 @@ HTML;
 		$ROW_NUMBER_START		=	$skip==0 ? 1 : ($skip+1);
 		$ROW_NUMBER_END			=	$take+$skip;
 		
+		//Query convencional com a formatação para o gráfico
+		$sqlGrid				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
 		
-		$sqlGrid			=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		//Query convencional com a formatação para o gráfico
+		$sql_chart				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,0,$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+
+		//Query com o Tamanho das colunas
+		$sql_string_width_size	=	 $this->_query->SELECT_SSAS_SIZE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
 		
-		//$sqlGrid			=	 $this->_query->SELECT_SSAS_TABLE($TABLE_NAME.'S', $ROW_NUMBER_START, $ROW_NUMBER_END);
+		
+		
+		//Processando o bloco com o tamanho das colunas		
+		$columns_width			=	NULL;
+		$sql_width_size			=	 $this->query($sql_string_width_size);
+		if($this->num_rows($sql_width_size))
+		{	
+			$columns_width			=$this->fetch_array($sql_width_size);	
+		}
+		//END
+		
+		
+		//Validando a consulta da GRID
 		$sqlGrid_exec		=	 $this->query($sqlGrid);
 		if(!$this->num_rows($sqlGrid_exec))
 		{
@@ -1383,10 +1402,14 @@ HTML;
 			WRS_DEBUG_QUERY('A consulta retornou vazia  '.$sqlGrid);
 			return false;
 		}
+		
+		
+		
 
 		//Processando a Grid
 		$resultGrid		=	array();
 		$resultGridTmp	=	array();
+		$resultChart	=	array();
 		
 		$param_chart	= array();
 
@@ -1405,8 +1428,8 @@ HTML;
 												$page,
 												$pageSize,false);
 		
-//			$cube_id,$getRequestKendoUi,$column,$order,$page_current,$rows_page,$saveHistory=false
 
+		//Processando a Query da GRID
 		while ($rows =  $this->fetch_array($sqlGrid_exec))
 		{
 			$resultGridTmp		=	$rows;
@@ -1419,6 +1442,19 @@ HTML;
 			$resultGrid[]		=	$resultGridTmp;
 		}
 
+		
+		
+		//Processando a query e dados do CHart and MAP
+		$sqlChart_exec		=	 $this->query($sql_chart);
+		if($this->num_rows($sqlChart_exec))
+		{
+			//Processando a Query do CHART
+			while ($rows_chart =  $this->fetch_array($sqlChart_exec))
+			{
+				$resultChart[]		=	$rows_chart;
+			}
+		}
+		//END CHART MAPS
 		
 		
 		
@@ -1463,8 +1499,11 @@ HTML;
 
 		$result['wrs_request_data']					=	array();
 		$result['wrs_request_data']['drill']		=	$resultGridDrill;
+		$result['wrs_request_data']['columns_size']	=	$columns_width;
+		$result['wrs_request_data']['chart_data']	= 	$resultChart;
+		
 		echo json_encode($result);
-		//echo json_encode($array_info,true);
+
 		WRS_TRACE('END SELECT_CACHE_GRID', __LINE__, __FILE__);
 		
 	}
@@ -1571,6 +1610,7 @@ HTML;
 				}
 			}
 		}
+		
 		
 		echo json_encode($param_manager,true);
 		
