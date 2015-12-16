@@ -166,6 +166,7 @@ function DRILL_HIERARQUIA_LINHA_setButton(_data,C000, line,column,DRILL_HIERARQU
 function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 {
 	_START('DRILL_HIERARQUIA_LINHA_HEADER_CLICK');
+	
 	var column		=	$(this).attr('column');
 	var grid_id		=	$(this).attr('grid-id');
 	var kendoGrid	=	$(grid_id).data('kendoGrid');
@@ -224,7 +225,7 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 		s_param['PAGE_CURRENT']							=	kendoGrid.dataSource._page;
 		s_param['TYPE_RUN']								=	TYPE_RUN.coluna_header;
 
-
+ 
 		wrsKendoUiChange(grid_id,'',s_param);
 		
 

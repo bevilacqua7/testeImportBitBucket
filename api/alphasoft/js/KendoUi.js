@@ -281,8 +281,8 @@ function  wrsKendoUiContextMenuGetLayoutInfo(kendoUi)
 		_START('wrsKendoUiContextMenuGetLayoutInfo');
 		var keyName		=	getFirstValueArray(kendoUi.columns);
 		var layout		=	 kendoUi.columns[keyName]['layout'];
-		
 		_END('wrsKendoUiContextMenuGetLayoutInfo');
+		
 		return layout;
 }
  
@@ -571,7 +571,9 @@ function getWrsKendoColumn(data)
 										img		=	word[1];
 										word	=	word[0];
 									}
+								
 							_arg.items[i][obj]	= '<b class="color-black">'+word+img+'</b>';
+							
 						}else{
 							word	=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word,wrsKendoUi.SUMARIZA,false,(('LEVEL_NAME' in _param[obj]['wrsParam'])?_param[obj]['wrsParam']['LEVEL_NAME']:''));
 							
@@ -597,7 +599,6 @@ function getWrsKendoColumn(data)
 				{
 					var title			=	_param[obj]['title'];
 						_width[idx]		=	{data:title,column:obj};	
-					//	_param[obj]['width']	=	200;
 				}
 				
 				
@@ -608,8 +609,6 @@ function getWrsKendoColumn(data)
 				
 				if(word.length>_width[idx].data.length)
 				{
-						//_param[obj]['width']	=	200;
-						//_param[obj]['width']	=	_width[idx]		= 	word;			
 						_width[idx]		= 	{data:word,column:obj};			
 				}
 				
@@ -658,7 +657,7 @@ function getWrsKendoColumn(data)
 				_param[_width[idx].column]['width']	=	r_width;
 				
 				WRSSresize(id,idx, r_width,frozen-1); 
-		}
+		}	
 	
 	_END('onDataBinding');
 	
@@ -965,8 +964,6 @@ function  themeSUM(nameID,arg,wrsParam)
 		
 		find_last_child_loacked.each(function()
 				{
-				
-						
 						if(drill_hierarquia_line==true)
 						{
 							if(arg.sender.headerIndex.field[$(this).attr('data-field')].hidden!=true)
@@ -975,7 +972,6 @@ function  themeSUM(nameID,arg,wrsParam)
 									find_last	=	 'eq('+eq+')';
 							}									
 						}else{ 	
-			
 							try{
 								if(arg.sender.headerIndex.field[$(this).attr('data-field')].map=="[LATITUDE]")
 								{
@@ -985,11 +981,7 @@ function  themeSUM(nameID,arg,wrsParam)
 							} catch(e){
 								console.warn('Falha na leitura de mapas mas pode não haver essa informação');
 							}
-							
 						}
-							
-					
-			
 		});
 		
 		
@@ -1482,7 +1474,7 @@ function  themeSUM(nameID,arg,wrsParam)
 									
 									switch($(this).attr('name'))
 									{
-										case 'SUMARIZA'    :  	telerikGrid.dataSource.read(); break;
+//										case 'SUMARIZA'    :  	telerikGrid.dataSource.read(); break;
 										case 'COLORS_LINE' : 	telerikGrid.dataSource.read(); break; 
 									}
 									

@@ -1250,113 +1250,63 @@ function sumarizaValor(valor)
  */
 function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG,label)
 {
-	var _casa_decimal 	= '.';
-	var _milhar 		= ',';
-	var _label			= (label!=undefined && label.trim()!='')?label:'';
-
-	if(LNG('IDIOMA')== 'POR')
-	{
-		_casa_decimal 	= ',';
-		_milhar 		= '.';
-	}
+	
+	
+	
 	
 	switch(formatacao)
 	{
-		//Colunas de Valores
-		case '' : 
-		case 'Standard' :{
-								if(sumariza=='1')
-								{
-									return sumarizaValor(number_format(valor,0,'',''));
-								}
-								else
-								{
-									return number_format(valor,0,_casa_decimal,_milhar);
-								}
-						};
-		break;
-		case 'Currency' :	return "$"+number_format(valor,2,_casa_decimal,_milhar);	break;
 		case 'Percent' 	:
 							{
 
-									var controle_metricas=false;
+									var _label				= 	(label!=undefined && label.trim()!='')?label:'';
+									var controle_metricas	=	false;
+									
+									var _valor				=	valor;									
+									var seta				=	null;
+									_valor				=	parseFloat($.trim(_valor.replace(',','.').replace("%","")));
 
 									try{
 										controle_metricas=(_label.trim().toLowerCase().substr(0,5)=='cresc' || _label.trim().toLowerCase().substr(0,4)=='evol');
-									}catch(e){console.warn(' exception');}
+									}catch(e){console.warn(' exception');
+									controle_metricas	=	false;
+									}
+									
 
 									//if(strpos(MEASURE_NAME,'Cresc.')!==false || strpos(MEASURE_NAME,'Evol.')!==false)	
 									if(controle_metricas)
 									{
-										if(valor>0){
-											seta = "<img src='imagens/setinha_verde.png' width='9' height='9'/>";
+										if(_valor>0){
+											seta = " <img src='imagens/setinha_verde.png' width='9' height='9'/>";
 										}
-										else if(valor<0)
+										else if(_valor<0)
 										{
-											seta = "<img src='imagens/setinha_vermelha.png' width='9' height='9'/>";
-										}else if(number_format(valor*100,2,_casa_decimal,_milhar)=='0,00')
+											seta = " <img src='imagens/setinha_vermelha.png' width='9' height='9'/>";
+										}else if(_valor=='0.00' || _valor=='0' || _valor=="0.0")
 										{
-											seta = "<img src='imagens/yellow_square.png' width='9' height='9'/>";
+											seta = " <img src='imagens/yellow_square.png' width='9' height='9'/>";
 										}
 										else
 										{
 											seta = "";
 										}
-										if(!empty(notTAG))  return number_format(valor*100,2,_casa_decimal,_milhar);
-										
+										if(!empty(notTAG))  return valor;
+										 
 										/*
 										 * TODO:IMplementar a barra adicional para funcionar
 										 */
 //										seta	=	'';
-										return [number_format(valor*100,2,_casa_decimal,_milhar)+'% ',seta];
+										return [valor,seta];
 										
-									}
-									else
-									{
-										if(!empty(notTAG)) return number_format(valor*100,2,_casa_decimal,_milhar);
-											
-										return number_format(valor*100,2,_casa_decimal,_milhar)+'%';
 									}
 			
 							}
 		break;
-		case 'Short Date' : 
-		case 'Short Time' :	return valor;		break;
 	}
 	
 	
 
-	//Verifica formatação de casas decimais (Ex: #.## / #.00, etc)
-	if(	(strpos(formatacao,'.#')!==false) || 
-		(strpos(formatacao,'.0')!==false))
-	{
-		//Conta a quantidade de caracteres que contenham a formatação numérica;
-		qtd_casas 		= strspn(substr(formatacao,strpos(formatacao,'.')+1),"#0");
-		valor_formatado = number_format(valor,qtd_casas,_casa_decimal,_milhar);
-	}else{
-		valor_formatado = (valor == '' ? number_format(0,0,_casa_decimal,_milhar) : number_format(valor,0,_casa_decimal,_milhar));
-	}
-
-	
-	
-	//Verifica Caracter Literal no inicio da string
-	literal_inicio = strcspn(formatacao,"#0,.");
-	
-	if (literal_inicio > 0)
-	{
-		valor_formatado = substr(formatacao,0,literal_inicio).valor_formatado;
-	}
-	
-	
-	//Verifica Caracter Literal no final da string
-	literal_final = strlen(formatacao)-(literal_inicio+strspn(substr(formatacao,literal_inicio),"#0,."));
-	
-	if (literal_final > 0)
-	{
-		valor_formatado += substr(formatacao,-literal_final);
-	}
-
-	return valor_formatado;
+		return valor;
 	
 	
 	

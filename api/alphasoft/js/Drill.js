@@ -38,10 +38,10 @@ function addDrillOnDataBound(nameID,kendoUI)
 	
 	var clickDrillDown	=	 function(){
 		_START('addDrillOnDataBound::clickDrillDown');
+
 					var LEVEL_DRILL	=	 $(this).attr('LEVEL_DRILL');
 					var LEVEL_FULL	=	 $(this).attr('LEVEL_FULL');
 					var rel			=	 $(this).attr('rel');
-					
 					
 					var indexParent			=	 $(this).parent().index();
 					var _layout				=	[];
@@ -61,7 +61,9 @@ function addDrillOnDataBound(nameID,kendoUI)
 					
 						
 						filter_add							=	[['__'+replace_attr(LEVEL_FULL),'',LEVEL_FULL+'.['+strip_tags($(this).parent().html())+']']];
-					
+						
+						
+
 						
 						changeTypeRun(nameID,TYPE_RUN.drildown);//Informando o tipo de RUN foi solicitado
 						
@@ -117,7 +119,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 							if(!$(nameID+' .k-grid-content tr:eq('+$(this).index()+')').hasClass('tag_total'))
 							{
 								var event	=	$(this).find('td:eq('+(parseInt(x)+1)+')');
-								var aLink	=	$('<a/>',{href:'#','class':'underline','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
+								var aLink	=	$('<a/>',{href:'#',  'class':'underline','LEVEL_DRILL':json.LEVEL_DRILL,'title':'DrillDown: '+json.LEVEL_DRILL,'LEVEL_FULL':json.LEVEL_FULL}).html(event.html());
 									aLink.click(clickDrillDown);
 								event.html(aLink);
 								
@@ -242,6 +244,7 @@ function addTargetDisableContext(kendoUi,report_id)
 	_END('addTargetDisableContext');
 }
 
+
 (function ( $ ) {
     $.fn.WrsDrill		= function()
     {
@@ -290,6 +293,8 @@ function addTargetDisableContext(kendoUi,report_id)
     		var columns_fixed	=	explode(',',kendoUi.columns[keyName].layout['LAYOUT_ROWS']);
     			columns_fixed	=	columns_fixed.length+1;
 
+    		//Abilita para o reenvio	
+    			
     		
     		var rows		=  	'';
     		var column		=	'';
@@ -313,7 +318,7 @@ function addTargetDisableContext(kendoUi,report_id)
     		
 
     		
-    		changeTypeRun(IDName,TYPE_RUN[e.type]);//Informando o tipo de RUN foi solicitado
+    		$('.'+e.kendoId).wrsAbaData('setKendoUi',{STOP_RUN:false, 'TYPE_RUN':TYPE_RUN[e.type]});
     		
     		switch(e.type)
     		{
@@ -359,17 +364,30 @@ function addTargetDisableContext(kendoUi,report_id)
 															if(sizeTr==1 || (sizeTr-1)==indexTr)
 																{
 																	var index_rest	=	'';
+																	
 																		measure		=	explode(',',e.layout['LAYOUT_MEASURES']);
-		    															if(e.event.parent().hasClass('REMOVE_LINE_HEADER')){ // se clicou no botao remover
-		        															var newrows=[];
-		        															for(row in measure){
+
+		    															if(e.event.parent().hasClass('REMOVE_LINE_HEADER'))
+		    															{ // se clicou no botao remover
+		        															
+		    																var newrows=[];
+		    																
+		        															for(var row in measure)
+		        															{
 		        																if(measure[row]!=e.layout['COLUMN_HEADER'][indexParent+1])
 		        																	newrows[newrows.length]=measure[row];
 		        															}	
+		        															
 		        															measure = newrows;
 		    															}else{
-																			measure		=	fwrs_array_change_value(measure,e.layout['COLUMN_HEADER'][indexParent+1],e.json['MEASURE_UNIQUE_NAME']);
+		    																
+		    																var level_click		=	kendoUi.headerIndex.field[e.parent.attr('data-field')].LEVEL_FULL;
+		    																//
+//		    																console.log('measure::',measure,'column::',e.layout['COLUMN_HEADER'],'measure::',e.json['MEASURE_UNIQUE_NAME']);
+		    																
+																			measure		=	fwrs_array_change_value(measure,level_click,e.json['MEASURE_UNIQUE_NAME']);
 		    															}
+
 																		changeWithDrillColumnRows(measure,'LAYOUT_MEASURES');
 																}
 																else
@@ -395,12 +413,16 @@ function addTargetDisableContext(kendoUi,report_id)
     			case 'linha_header'			:	{
     												var sizeTr	=	e.parent.parent().parent().find('tr').length;
     												var indexTr	=	 e.parent.parent().index();
+    												
     													if(sizeTr==1 || (sizeTr-1)==indexTr)
     														{
 	    														rows				=	explode(',',e.layout['LAYOUT_ROWS']);
+	    														
     															if(e.event.parent().hasClass('REMOVE_LINE_HEADER')){ // se clicou no botao remover
         															var newrows=[];
-        															for(row in rows){
+        															
+        															for(var row in rows)
+        															{
         																if(rows[row]!=rows[indexParent])
         																	newrows[newrows.length]=rows[row];
         															}
@@ -408,6 +430,7 @@ function addTargetDisableContext(kendoUi,report_id)
     															}else{
     	    														rows[indexParent]	=	e.json['LEVEL_FULL'];
     															}
+    															
 	    														changeWithDrillColumnRows(rows,'LAYOUT_ROWS');
     														}
     														else
@@ -416,7 +439,8 @@ function addTargetDisableContext(kendoUi,report_id)
     															column			=	explode(',',e.layout['LAYOUT_COLUMNS']);
     															if(e.event.parent().hasClass('REMOVE_LINE_HEADER')){ // se clicou no botao remover
         															var newcolumn=[];
-        															for(col in column){
+        															for(var col in column)
+        															{
         																if(column[col]!=column[indexTr])
         																	newcolumn[newcolumn.length]=column[col];
         															}
@@ -484,13 +508,16 @@ function addTargetDisableContext(kendoUi,report_id)
 													}
 										}
 
+											var column_field	=	$(IDName).find('.k-grid-header-wrap tr:last-child th:eq(2)').attr('data-field');
+											
+											console.log('_filter',_filter);
+											
 											
 											_layout['LAYOUT_COLUMNS']	=	['empty'];
-											_layout['LAYOUT_MEASURES']	=	[e.layout['COLUMN_HEADER'][indexTD]];
+											_layout['LAYOUT_MEASURES']	=	[kendoUi.headerIndex.field[column_field].LEVEL_FULL];
 											_layout['LAYOUT_ROWS']		=	[e.json['LEVEL_FULL']];
 										
 											
-
 											changeWithDrillFilter(_layout,_filter);
 										
 					

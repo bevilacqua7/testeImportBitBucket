@@ -177,7 +177,7 @@ EOF;
 	 
 	 // ************* REMOVEU O PARAMETRO DE LINHAS, INCLUIU O PARAMETRO DE TOTAL LINHAS E A TABELA RETORNADA NÃO É MAS UMA COPIA DA TABELA ORIGINAL (NÃO DEVE SE UTILIZADA DIRETAMENTE)
 	
-	public function SORT_SSAS_TABLE( $TABLE_NAME, $COLUMN, $ALL_ROWS, $ORDER='ASC' )
+	public function SORT_SSAS_TABLE( $TABLE_NAME, $COLUMN, $ALL_ROWS, $ORDER='DESC' )
 	{
 		
 		$_ALL_ROWS		=	$ALL_ROWS;
@@ -296,8 +296,13 @@ EOF;
 	 
 	 // ************* INSERIDO PARAMETROS DE FORMATACAO / NUMEROS RESUMIDOS / LINGUAGEM
 	
-	public function SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END, $FORMAT, $RESUME, $LANGUAGE )
+	public function SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END, $FORMAT, $_RESUME, $LANGUAGE )
 	{
+		
+		
+		
+		$RESUME		=	empty($_RESUME) ? 0 : $_RESUME;
+		
 		// Exemplo: Exec Select_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F' OUTPUT,11,20,0,0,'POR'
 		$query = <<<EOF
 					EXEC Select_SSAS_Table '{$TABLE_NAME}',
@@ -309,6 +314,42 @@ EOF;
 EOF;
 		return $query;
 	}
+	
+	
+	
+	/**
+	 * Obtem Tamanho dos campos com base nos Registros e Formato utilizado para GRID,
+	 *
+	 * WARNING: Retorno dos campos são definidos como CNNN (onde NNNN = posição do campo na Tabela)
+	 *
+	 * @param string $TABLE_NAME
+	 * @param int $ROW_NUMBER_START
+	 * @param int $ROW_NUMBER_END
+	 * @param int $FORMAT
+	 * @param int $RESUME
+	 * @param string $LANGUAGE
+	 *
+	 * @return <recordset>
+	 */
+	
+	// ************* INSERIDO PARAMETROS DE FORMATACAO / NUMEROS RESUMIDOS / LINGUAGEM
+	
+	public function SELECT_SSAS_SIZE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END, $_FORMAT, $RESUME, $LANGUAGE )
+	{
+	
+	
+		// Exemplo: Exec Select_SSAS_Size '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F' OUTPUT,11,20,0,0,'POR'
+		$query = <<<EOF
+					EXEC Select_SSAS_Size '{$TABLE_NAME}',
+											{$ROW_NUMBER_START},
+											{$ROW_NUMBER_END},
+											{$FORMAT},
+											{$RESUME},
+											'{$LANGUAGE}'
+EOF;
+												return $query;
+	}
+	
 	
 	/**
 	 * Obtem Registros Abertos (Drill) juntamente com as Colunas Abertas

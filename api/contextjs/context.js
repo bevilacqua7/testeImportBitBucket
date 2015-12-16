@@ -77,6 +77,7 @@ var context = context || (function () {
 						eventAction = data[i].action;
 					$sub.find('a').attr('id', actionID);
 					$('#' + actionID).addClass('context-event');
+					
 					$(document).on('click', '#' + actionID, eventAction);
 				}
 				$menu.append($sub);
@@ -266,6 +267,7 @@ var context = context || (function () {
 	
 	function addContextWRS(selector, data,whoEventRequest) {
 		
+
 		destroyContext(selector);
 
 		var d 		= new Date(),
@@ -344,7 +346,10 @@ var context = context || (function () {
 							esconde=true;
 						}
 					}	
-			}		
+			}
+		
+		
+		
 		if(table_parents.first('div').attr('type')=='coluna_header_line'){
 			var qtde_trs_primeiro 		= table_parents.first('div').find('table:first').find('tr:first').find('th').length;
 			var qtde_trs_headers_linhas = table_parents.first('div').find('table:first').find('tr:first').next().find('th').length;
@@ -352,13 +357,17 @@ var context = context || (function () {
 			if(qtde_colunas_por_secao<=1){
 				esconde=true;
 			}
-		}	
+		}
+		
+		
 		if(table_parents.first('div').attr('type')=='coluna_header'){
 			var qtde_colunas_measures 		= table_parents.first('div').find('table:first').find('tr:first').find('th').length;
 			if(qtde_colunas_measures<=1){
 				esconde=true;
 			}
 		}
+		
+		
 		if(table_parents.first('div').attr('type')=='linha'){
 			var proxTd			=	$(this).next('td');
 			if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!='' && $(this).attr('data-original')!='true'){
@@ -367,6 +376,8 @@ var context = context || (function () {
 				$('#dropdown-' + id).find('.VER_MAPA').addClass('hide');				
 			}
 		}
+		
+		
 		if(esconde){
 			$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').addClass('hide');
 		}
@@ -450,11 +461,15 @@ var context = context || (function () {
 																				}
 
 																			var events		=	 {'json':json,'event':$(this),'parent':$wrsEventMain, 'type':type,'kendoId':whoEventRequest.attr('id'), 'layout':_layout.layout_full};
+																			
+
 																			return eventAction(events);
 																	}
 								);
 			});		
 		}
+		
+
 		/*
 		 * END IF
 		 */

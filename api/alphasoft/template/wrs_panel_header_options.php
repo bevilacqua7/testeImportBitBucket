@@ -92,7 +92,6 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						    <li><h4>{$GRID_HEADER_TITLE_EXIBITION}</h4></li>
 					  		<li>
 						  		<form>
-						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="SUMARIZA"> {$GRID_HEADER_OPTION_TOTAL_SUMARIZA}</label></div>
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="COLORS_LINE"> {$GRID_HEADER_OPTION_TOTAL_LINE_COLOR}</label></div>
 						  		</form>
 					  		</li>
@@ -104,9 +103,12 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="ALL_COLS" > {$GRID_HEADER_OPTION_TOTAL_COLUMN}</label></div>
 						  				<div class="checkbox"><label><input type="checkbox" value="1" name="ORDER_COLUMN"> {$GRID_HEADER_OPTION_ORDER_COLUMN}</label></div>
 						  				<div class="checkbox"><label><input type="checkbox" value="1" name="DRILL_HIERARQUIA_LINHA"> {$GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA}</label></div>
+						  				
+						  				<div class="checkbox"><label><input type="checkbox" value="1" name="SUMARIZA"> {$GRID_HEADER_OPTION_TOTAL_SUMARIZA}</label></div>
 						  		</form>
 					  		</li>
-					  		 
+	
+					  							  		 
 					  		<li class="info_chart divider"></li>
 					  		<li class="info_chart li-padding">
 					  			<button type="button" class="btn btn-info btn-configute-chart btn-block  btn-sm color_write chart_config_btn" data-target="#myModalChartConfig" ><i class="fa fa-cog"></i> {$CHART_CONFIG}</button>
