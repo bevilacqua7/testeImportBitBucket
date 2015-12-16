@@ -2031,10 +2031,11 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 																
 																	var __data_cC	=	_data_wrs[lineData][dataChartCol[linkdcC]];
 																	
-																		if(!empty(__data_cC))
+																		/*if(!empty(__data_cC))
 																		{
+																			
 																			__data_cC	=	strip_tags(__data_cC);
-																		}
+																		}*/
 																	
 																		__data_cC	=	_convertNumber(__data_cC);//str_replace(',','.',str_replace(['.','%'],'',__data_cC));
 																		/*

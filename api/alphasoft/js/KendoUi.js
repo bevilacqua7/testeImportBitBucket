@@ -389,281 +389,252 @@ function getWrsKendoColumn(data)
  function onDataBinding(arg)
  {
 	 _START('onDataBinding');
-	 //TRACE_DEBUG('onDataBinding::'+date('H:i:s'));
-	var report_id		=	arg.sender.element.attr('id');
-	var report_aba		=	'.'+report_id;
-	var id 				=	'#'+arg.sender.element.attr('id');
-	var kendoUi			=	arg.sender;
-	var wrsKendoUi		=	$(report_aba).wrsAbaData('getKendoUi');
-	var _arg			=	arg;
-	
-	//Pegando a Header e informações de formatação das colunas
-	var _param			=	getWrsKendoColumn(arg.sender.columns);
-	var _width							=	[];	//Responsável por criar o width das columnas
-	var frozen							=	0;
-	var sizeFrozen						=	$(id).find('.k-grid-header-locked tr:last-child').find('th').length-1;
-	var tmpFZ							=	0;
-	var totalFrozen						=	[];
-	var totalLastLabel					=	'';
-	var indexTh							=	0;
-	var lineToHideDrillLine				=	[];
-	var DRILL_HIERARQUIA_LINHA_DATA		=	base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA);
-	var DRILL_HIERARQUIA_REQUEST		=	arg.sender.dataSource._wrs_request_data.drill;
-	var typeColumnFrozen				=	false;
-	
-	var layout							=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
-	var byFrozenLevelFull				=	[];
-	
-	
-	try{
-		byFrozenLevelFull	=	arg.sender.headerIndex.byFrozenLevelFull;
-	}catch(e){
-		byFrozenLevelFull	=	[];
-		console.warn(' exception');
-	}
-	
-	var _DRILL_FCC						=	DRILL_FCC(byFrozenLevelFull,explode(',',layout.LAYOUT_ROWS));
-	var DRILL_LINE_LAST_COLUMN			=	_DRILL_FCC[_DRILL_FCC.length-1];
-	var LAYOUT_ROWS_B64					=	base64_encode(json_encode(_DRILL_FCC));
-	
 
-	arg.sender['wrsKendoUi']	=	[];
-	arg.sender['wrsKendoUi']['WRS_ROWS']							=	_DRILL_FCC;
-	arg.sender['wrsKendoUi']['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	explode(',',base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER));
-	arg.sender['wrsKendoUi']['DRILL_HIERARQUIA_LINHA']				=	wrsKendoUi.DRILL_HIERARQUIA_LINHA;
-	arg.sender['wrsKendoUi']['DRILL_LINE_LAST_COLUMN']				=	DRILL_LINE_LAST_COLUMN;
-	
-	arg.sender['drill_line_total_data']	=	[];
-	
-	//temporária para armazenar a coluna anterior a sendo chamada
-	_arg.sender._wrs_data	=	[]	;
-	
+			var report_id		=	arg.sender.element.attr('id');
+			var report_aba		=	'.'+report_id;
+			var id 				=	'#'+arg.sender.element.attr('id');
+			var kendoUi			=	arg.sender;
+			var wrsKendoUi		=	$(report_aba).wrsAbaData('getKendoUi');
+			var _arg			=	arg;
+			
+			//Pegando a Header e informações de formatação das colunas
+			var _param			=	getWrsKendoColumn(arg.sender.columns);
 
-	//Apenas realimenta as colunas que deve ser preenchida caso existe totais
-	if(wrsKendoUi.ALL_ROWS)
-	{
-		for(var o__param in  _param)
-		{
-			if(tmpFZ>sizeFrozen) continue;
-			tmpFZ++;
+			var frozen							=	0;
+			var sizeFrozen						=	$(id).find('.k-grid-header-locked tr:last-child').find('th').length-1;
+			var tmpFZ							=	0;
+			var totalFrozen						=	[];
+			var totalLastLabel					=	'';
+			var indexTh							=	0;
+			var lineToHideDrillLine				=	[];
+			var DRILL_HIERARQUIA_LINHA_DATA		=	base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA);
+			var DRILL_HIERARQUIA_REQUEST		=	arg.sender.dataSource._wrs_request_data.drill;
+			var typeColumnFrozen				=	false;
 			
-			if(_param[o__param]['map']=='[LATITUDE]') continue;
+			var layout							=	wrsKendoUiContextMenuGetLayoutInfo(kendoUi);
+			var byFrozenLevelFull				=	[];
 			
-			totalFrozen[totalFrozen.length]=	o__param;
 			
-			totalLastLabel	=	o__param;
-			indexTh			=	tmpFZ;
-		}
+			try{
+				byFrozenLevelFull	=	arg.sender.headerIndex.byFrozenLevelFull;
+			}catch(e){
+				byFrozenLevelFull	=	[];
+				console.warn(' exception');
+			}
+			
+			var _DRILL_FCC						=	DRILL_FCC(byFrozenLevelFull,explode(',',layout.LAYOUT_ROWS));
+			var DRILL_LINE_LAST_COLUMN			=	_DRILL_FCC[_DRILL_FCC.length-1];
+			var LAYOUT_ROWS_B64					=	base64_encode(json_encode(_DRILL_FCC));
+			
 		
-		_arg.sender['wrs_frozen_data']					=	[];
-		_arg.sender['wrs_frozen_data']['data']			=	[];
-		_arg.sender['wrs_frozen_data']['index']			=	indexTh-1;
-		_arg.sender['wrs_frozen_data']['field']			=	totalLastLabel;
-	}
-	//END
-	var next_column			=	'';
-	var next_column_count	=	0;
-	for(var i=0;i<_arg.items.length;i++)
-	{
-			var idx		=	0;
-				frozen	=	0;
-				
-				_arg.sender._wrs_data[i]	=	[];//Loading
+			arg.sender['wrsKendoUi']										=	[];
+			arg.sender['wrsKendoUi']['WRS_ROWS']							=	_DRILL_FCC;
+			arg.sender['wrsKendoUi']['DRILL_HIERARQUIA_LINHA_DATA_HEADER']	=	explode(',',base64_decode(wrsKendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER));
+			arg.sender['wrsKendoUi']['DRILL_HIERARQUIA_LINHA']				=	wrsKendoUi.DRILL_HIERARQUIA_LINHA;
+			arg.sender['wrsKendoUi']['DRILL_LINE_LAST_COLUMN']				=	DRILL_LINE_LAST_COLUMN;
 			
-			next_column_count		=	0;	
-			for(obj in _param)
+			arg.sender['drill_line_total_data']	=	[];
+			
+			//temporária para armazenar a coluna anterior a sendo chamada
+			
+		
+				
+			
+				//Apenas realimenta as colunas que deve ser preenchida caso existe totais
+				if(wrsKendoUi.ALL_ROWS)
+				{
+					for(var o__param in  _param)
+					{
+						if(tmpFZ>sizeFrozen) continue;
+						tmpFZ++;
+						
+						if(_param[o__param]['map']=='[LATITUDE]') continue;
+						
+						totalFrozen[totalFrozen.length]=	o__param;
+						
+						totalLastLabel	=	o__param;
+						indexTh			=	tmpFZ;
+					}
+					
+					_arg.sender['wrs_frozen_data']					=	[];
+					_arg.sender['wrs_frozen_data']['data']			=	[];
+					_arg.sender['wrs_frozen_data']['index']			=	indexTh-1;
+					_arg.sender['wrs_frozen_data']['field']			=	totalLastLabel;
+				}
+				//END
+			
+				
+				
+			/*
+			 * Processa a formatação dos campos
+			 */
+			var next_column			=	'';
+			var next_column_count	=	0;
+			
+			for(var i=0;i<_arg.items.length;i++)
 			{
-				var word			=	_arg.items[i][obj];
-				var img				=	'';	
-				
-				next_column_count++;
-				
-				//Caso o valor seja maoir não se aplica
-				try{
-					next_column	=	kendoUi.headerIndex.column_count[next_column_count];
-				}catch(e){
-					next_column	=	null;
-					console.warn(' exception');
-				}
-				
-				
-				/*
-				 * Impede que a a latitude seja formatada 
-				 */
-				if(_param[obj]['map']=='[LATITUDE]')
-				{
-					continue;
-				}
-				
-				//TRACE_DEBUG(obj);
-				
-				/*
-				 * Reposicionando o hide quando acionao o mais e menos 
-				 * Apenas pega as linhas em branco
-				 */
-				if(wrsKendoUi['ALL_ROWS'])
-				{
-					if(obj==totalLastLabel)
+					var idx		=	0;
+						frozen	=	0;
+						
+					
+					next_column_count		=	0;	
+					
+					for(obj in _param)
+					{
+						var word			=	_arg.items[i][obj];
+						var img				=	'';	
+						
+						next_column_count++;
+						
+						//Caso o valor seja maoir não se aplica
+						try{
+							next_column	=	kendoUi.headerIndex.column_count[next_column_count];
+						}catch(e){
+							next_column	=	null;
+							console.warn(' exception');
+						}
+						
+						/*
+						 * Impede que a a latitude seja formatada 
+						 */
+						if(_param[obj]['map']=='[LATITUDE]')
 						{
-							if(empty(word))
+							continue;
+						}
+						
+		
+						
+						/*
+						 * Reposicionando o hide quando acionao o mais e menos 
+						 * Apenas pega as linhas em branco
+						 */
+						if(wrsKendoUi['ALL_ROWS'])
+						{
+							if(obj==totalLastLabel)
 								{
-									var searchTotalValue	=	'';	
-									//Verificanso a coluna anterior tem dados
-									for(stv =(totalFrozen.length-1) ;  stv>=0; stv--)
-									{
-										if(!empty(_arg.items[i][totalFrozen[stv]]))
+									if(empty(word))
 										{
-											if(stv==0){//Não pega o primeiro elemento que seria os números das páginas
-												stv	=	-1;
-												continue;
+											var searchTotalValue	=	'';	
+											//Verificanso a coluna anterior tem dados
+											for(stv =(totalFrozen.length-1) ;  stv>=0; stv--)
+											{
+												if(!empty(_arg.items[i][totalFrozen[stv]]))
+												{
+													if(stv==0){//Não pega o primeiro elemento que seria os números das páginas
+														stv	=	-1;
+														continue;
+													}
+													
+													_arg.sender['wrs_frozen_data']['data'][i]	=	_arg.items[i][totalFrozen[stv]];
+													stv	=	-1;
+												}
+												
 											}
-											_arg.sender['wrs_frozen_data']['data'][i]	=	_arg.items[i][totalFrozen[stv]];
-											stv	=	-1;
+											
 										}
-										
-									}
 									
 								}
 							
 						}
-					
-				}
-				//END
-				
-				
-				if(_param[obj]['locked'])
-				{
-					//Procrssando apenas os Frozens
-					frozen++;
-					_arg.items[i][obj]	= strlen($.trim(_arg.items[i][obj]))==0 ? '' : _arg.items[i][obj]; //Removendo os NULL
-					_arg.sender._wrs_data[i][obj]	=	_arg.items[i][obj];
-					
-					typeColumnFrozen	=	true;
-					if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE)
+						//END
+						
+						
+						if(_param[obj]['locked'])
 						{
-							_arg.items[i][obj]		=	DRILL_HIERARQUIA_LINHA_setButton(	_arg.items[i][obj],
-																							_arg.items[i]['C000'],
-																							i,
-																							obj,
-																							DRILL_HIERARQUIA_REQUEST,
-																							LAYOUT_ROWS_B64,
-																							id,
-																							_DRILL_FCC,
-																							DRILL_LINE_LAST_COLUMN,
-																							arg.sender,
-																							next_column,
-																							_arg.items[i]);
-						}
-					
-					
-				}else{
-					typeColumnFrozen	=	 false;
-					_arg.sender._wrs_data[i][obj]	=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word,false,true); //Full para complementar
-
-					
-						if(isset(_arg.items[i]['bold'+obj]))
-						{
-							//Aplica o BOLD
-							word		=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word, wrsKendoUi.SUMARIZA,false,(('LEVEL_NAME' in _param[obj]['wrsParam'])?_param[obj]['wrsParam']['LEVEL_NAME']:''));
-								//Pois quando for Percente no Cresce vem Imagem junto
-								if(is_array(word))
-									{
-										img		=	word[1];
-										word	=	word[0];
-									}
-								
-							_arg.items[i][obj]	= '<b class="color-black">'+word+img+'</b>';
+							//Procrssando apenas os Frozens
+							frozen++;
+							_arg.items[i][obj]	= strlen($.trim(_arg.items[i][obj]))==0 ? '' : _arg.items[i][obj]; //Removendo os NULL
 							
-						}else{
-							word	=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word,wrsKendoUi.SUMARIZA,false,(('LEVEL_NAME' in _param[obj]['wrsParam'])?_param[obj]['wrsParam']['LEVEL_NAME']:''));
-							
-							//Pois quando for Percente no Cresce vem Imagem junto
-							if(is_array(word))
+							typeColumnFrozen	=	true;
+							if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE)
 								{
-									img		=	word[1];
-									word	=	word[0];
+									_arg.items[i][obj]		=	DRILL_HIERARQUIA_LINHA_setButton(	_arg.items[i][obj],
+																									_arg.items[i]['C000'],
+																									i,
+																									obj,
+																									DRILL_HIERARQUIA_REQUEST,
+																									LAYOUT_ROWS_B64,
+																									id,
+																									_DRILL_FCC,
+																									DRILL_LINE_LAST_COLUMN,
+																									arg.sender,
+																									next_column,
+																									_arg.items[i]);
 								}
 							
-							_arg.items[i][obj]	=	word+img;
 							
+						}else{
+							//Formatando e alterabdo quando contem imagens a serem apresentados
+							typeColumnFrozen	=	 false;
+							
+							
+								if(isset(_arg.items[i]['bold'+obj]))
+								{
+									//Aplica o BOLD
+									word		=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word, wrsKendoUi.SUMARIZA,false,(('LEVEL_NAME' in _param[obj]['wrsParam'])?_param[obj]['wrsParam']['LEVEL_NAME']:''));
+										//Pois quando for Percente no Cresce vem Imagem junto
+										if(is_array(word))
+											{
+												img		=	word[1];
+												word	=	word[0];
+											}
+										
+									_arg.items[i][obj]	= '<b class="color-black">'+word+img+'</b>';
+									
+								}else{
+									word	=	formataValue(_param[obj]['wrsParam']['LEVEL_FULL'],_param[obj]['wrsParam']['FORMAT_STRING'],word,wrsKendoUi.SUMARIZA,false,(('LEVEL_NAME' in _param[obj]['wrsParam'])?_param[obj]['wrsParam']['LEVEL_NAME']:''));
+									
+									//Pois quando for Percente no Cresce vem Imagem junto
+									if(is_array(word))
+										{
+											img		=	word[1];
+											word	=	word[0];
+										}
+									
+									_arg.items[i][obj]	=	word+img;
+									
+								}
 						}
-				}
-
-
-				
-				
-				
-				
-					
-				if(!isset(_width[idx]))
-				{
-					var title			=	_param[obj]['title'];
-						_width[idx]		=	{data:title,column:obj};	
-				}
-				
-				
-				if(empty(word)) word='W';
-			
-				
-					
-				
-				if(word.length>_width[idx].data.length)
-				{
-						_width[idx]		= 	{data:word,column:obj};			
-				}
-				
-				 
-				idx++;
-			}
-			
-			if(i==0 && wrsKendoUi['ALL_ROWS']==true)
-			{
-				
-					if(_arg.sender._wrs_data[0]['C000']==1)
-					{
-						$(report_aba).wrsAbaData('setFirstLineTotal',_arg.sender._wrs_data[0]);
+		
+		
+						
+						
+						
+						
+						 
+						
+						 
+						idx++;
 					}
-				
+					
+					
 			}
-				
+			
+
+			// Quando for total sempre salva a primeira linha de dados para o gráfico
+			if(_arg.items.length>=0 && wrsKendoUi['ALL_ROWS']==true)
+			{
+				$(report_aba).wrsAbaData('setFirstLineTotal',_arg.items[0]);
+			}
+			
+			
+			
+			//Declarando os dados para o Gráfico
+			_arg.sender._wrs_data	=	[]	;
+			_arg.sender._wrs_data	=	_arg.sender.dataSource._wrs_request_data.chart_data;	
+			
 
 			
-	}
-	
-	var _rows_frozen	=	 array_data(_arg.sender.wrsKendoUi.WRS_ROWS);
-	
-
-	/*
-	 * 
-	 * TODO: Apresenta lentidão devido a formatação do do HTML
-	 * Aplica a real formatação do resize
-	 * 
-	 */
-	for(var idx in _width)
-		{
-			var padding	=	25;
 			
-			if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE)
-				{
-						try{
-							
-							if(_rows_frozen[_width[idx].column]){
-								padding	=	40;
-							}
-						}catch(e){console.warn(' exception');}
-				}
+			//Salvando o total de colunas frozemn para ser usada no ondatabound para o rezide das colunas
+			_arg.sender.dataSource.size_frozen		=	frozen-1;
 			
-			var r_width								=	$("<div/>").text(_width[idx].data).textWidth()+padding;
-				_param[_width[idx].column]['width']	=	r_width;
-				
-				WRSSresize(id,idx, r_width,frozen-1); 
-		}	
-	
-	_END('onDataBinding');
+			_END('onDataBinding');
 	
 	//TRACE_DEBUG('onDataBinding::'+date('H:i:s'));
 	return _arg;
- }
+	
+ } //END onDataBinding
 
  
  
@@ -709,7 +680,6 @@ function onDataBound(arg)
 {
 		_START('onDataBound');
 		
-			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 			
 			resizeColumnKendoUi(arg);
 
@@ -720,8 +690,6 @@ function onDataBound(arg)
 			var _kendoUiParam	=	$(report_aba).wrsAbaData('getKendoUi');
 			var wrsKendoUi		=	_kendoUiParam;
 			var wrsparam		=	$(report_aba).wrsAbaData('getWrsData');
-			
-			
 			
 						
 			$(report_aba).wrsAbaData('setKendoUi',{page_size:arg.sender.dataSource._pageSize, STOP_QUERY:false});
@@ -775,11 +743,6 @@ function onDataBound(arg)
 
 			$(ABA_TAG_NAME).wrsAbas('refresh',wrsKendoUi);
 			
-			//resize da aba
-
-			//$(nameID).WRSWindowGridEventTools(wrsKendoUi['WINDOW'],true);
-			
-			
 			
 			//Se o Somatório estiver ativo então faz a configuração do SUM
 			if(wrsKendoUi.ALL_ROWS)
@@ -804,6 +767,37 @@ function onDataBound(arg)
 				themeSUM(nameID,arg,wrsKendoUi);
 
 			}
+			
+			
+			
+			
+			
+			
+			/*
+			 *	Processando o tamanho do coluna com vase no resultado da query 
+			 */
+			var columns_width_data		=	 arg.sender.dataSource._wrs_request_data.columns_size;
+			if(!isEmpty(columns_width_data))
+				{
+					var colElement		=	 {
+														count_column	:	0,
+														size_word		:	$("<div/>").text('Q').textWidth(),
+														padding_left	:	8
+											};
+					
+					var frozen			=	arg.sender.dataSource.size_frozen;
+					
+					for(var lineNameCol in columns_width_data)
+						{
+						
+								var _width		=	columns_width_data[lineNameCol];
+									_width		=	(_width*colElement.size_word)+colElement.padding_left;
+								
+									WRSSresize(nameID,colElement.count_column, _width,frozen); 
+								colElement.count_column++;
+						}
+				}
+			//END
 			
 			
 			//Apenas para que os controles do next and Back funcione
@@ -852,28 +846,30 @@ function onDataBound(arg)
 		{	
 			_idxHeader	=	idx-(sizeFrozen+1);
 			
+			
 			$(gridId+" .k-grid-content") //content
               .find("colgroup col")
               .eq(_idxHeader)
-              .css({width: width}).attr('up','up');;
+              .css({width: width});
 			  
 			   $(gridId+" .k-grid-header-wrap") //header
               .find("colgroup col")
               .eq(_idxHeader)
-              .css({width: width}).attr('up','up');
+              .css({width: width});
 			  
 		}
 		else
 		{
+			
 			$(gridId+" .k-grid-header-locked ") //header
               .find("colgroup col")
               .eq(_idx)
-              .css({width: width}).attr('DOQN','DOQN');
+              .css({width: width});
 			  
 			  $(gridId+" .k-grid-content-locked") //header
               .find("colgroup col")
               .eq(_idx)
-              .css({width: width}).attr('DOQN','DOQN');
+              .css({width: width});
 		}
 		
 		_END('WRSSresize');
