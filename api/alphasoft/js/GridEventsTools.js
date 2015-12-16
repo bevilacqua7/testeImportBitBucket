@@ -232,8 +232,17 @@ var HEIGHT_ABAS		=	50;
 		//Para o botão visão
 		var function_btn_open_type_vision		=	 function()
 	  	{
+			
 			_START('WRSWindowGridEventTools::function_btn_open_type_vision');
-			var wrsKendoUi			=	$(report_aba).wrsAbaData('getKendoUi');
+			
+			var wrsKendoUi			=	get_aba_active_kendoUi();
+			
+			
+			
+			if(isEmpty(wrsKendoUi.WINDOW)){
+				wrsKendoUi.WINDOW	=	 'grid';
+			}
+			
 			
 	  		$(this).parent().find('li a').each(function(){
 	  				$(this).removeClass('active_tools');
@@ -247,7 +256,9 @@ var HEIGHT_ABAS		=	50;
 
 		
 		
-		NAV.find('.btn-open-type-vision').unbind('click').click(function_btn_open_type_vision);
+		$('.btn-open-type-vision').unbind('click').click(function_btn_open_type_vision);
+		
+		//NAV.find('.btn-open-type-vision').unbind('click').click(function_btn_open_type_vision);
 		
 		_END('WRSWindowGridEventTools');
 		

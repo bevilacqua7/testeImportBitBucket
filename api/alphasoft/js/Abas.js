@@ -410,7 +410,7 @@ function optionsDataConvert(gridValue,with_decode)
 			/*
 			 * Salvando alterações na aba corrente
 			 */
-			var __save_info_aba_current		=	 function(_aba_active)
+			var __save_info_aba_current		=	 function(_aba_active,disable_run)
 			{
 				
 				_START('wrsAbas::__save_info_aba_current');
@@ -419,8 +419,6 @@ function optionsDataConvert(gridValue,with_decode)
 					return true;
 				}
 				var aba_active			=	 _aba_active;
-				
-				 
 				
 				
 				//habilita a janela
@@ -483,7 +481,11 @@ function optionsDataConvert(gridValue,with_decode)
 					aba_active.wrsAbaData('setWrsData',_param_request);
 					
 					//Ativa para não executar a grid se existir alterações
-					aba_active.wrsAbaData('setKendoUi',{STOP_RUN:true});
+					
+					if(disable_run!=false)
+					{
+						aba_active.wrsAbaData('setKendoUi',{STOP_RUN:true});
+					}
 					
 					//Desabilita a janela
 					activeToGetAllFiltersRecover(_filter_hide);
@@ -1704,6 +1706,12 @@ function optionsDataConvert(gridValue,with_decode)
 			 */
 			var __setKendoUi	=	 function(input)
 			{
+				/*
+				try{
+						
+						console.error('STOP_RUN',input['STOP_RUN']);
+				}catch(e){}
+				*/
 				
 				if(data_global==undefined || data_global==null)
 					{

@@ -150,13 +150,13 @@ function changeWithDrillColumnRows(column,columnName)
 	
 		_column[columnName]	=	 convert_to_class(column);
 		
-
-		
+//		console.log('_column',_column);
 		set_value_box_relatorio(_column);
 		cleanPlaceholder();
 		$('.wrs_panel_filter_icon').attr('filter_hide','false');
 		//.trigger('click');
 		$.WrsFilter('wrs_panel_filter_icon');
+		
 		wrsRunFilter();
 		
 	_END('changeWithDrillColumnRows');	
@@ -176,11 +176,9 @@ function cleanPlaceholder()
 function changeWithDrillFilter(layout,filter_to_add)
 {
 	_START('changeWithDrillFilter');
-	var 	btnRun	=	$('.wrs_run_filter');
-	var 	json	=	$('.WRS_ABA').find('.active').wrsAbaData('getHistory');
 	
-	
-
+	var 	btnRun		=	$('.wrs_run_filter');
+	var 	aba_current	=	$('.WRS_ABA').find('.active');
 	
 	//Mudando o status para que possa ser renderizado
 	var current_layout	=	getLoadReport(true);
@@ -189,6 +187,8 @@ function changeWithDrillFilter(layout,filter_to_add)
 	var changeLayout	=	optionsDataConvert(current_layout,true);
 	var filtersCurrent	=	tagFilterWRS(true);
 	
+		
+		aba_current.wrsAbaData('setKendoUi',wrs_clean_data(null));
 	
 
 	
@@ -226,21 +226,18 @@ function changeWithDrillFilter(layout,filter_to_add)
 		changeLayout['LAYOUT_FILTERS'] =  filterMergeLoad(filtersCurrent,filter_to_add);	
 	}
 	
+	 
 	
 
-	
-//	changeLayout	=	getLoadReport()
-
-
-	
 	set_value_box_relatorio(changeLayout);
 	
 	//Removendo qualquer informação de placeholder que é a mensagem de que não há valores na tela 
 	cleanPlaceholder();
 	
 	$('.wrs_panel_filter_icon').attr('filter_hide','false');
-	//.trigger('click');
+	
 	$.WrsFilter('wrs_panel_filter_icon');
+	
 	btnRun.trigger('click');
 	
 	_END('changeWithDrillFilter');
@@ -261,7 +258,7 @@ function compare_filter_change(_filters_compare)
 	  {
 	  		var headerFilter	=	'#'+filters_compare[obj];
 //	  		var header			=	$(headerFilter).attr('json');
-	  		var header			=	$(headerFilter).data('filter');
+	  		var header			=	$(headerFilter).data('wrs-data');
         	//var json			=	$.parseJSON(base64_decode(header));	   
 	  		var json			=	header;	   
         	var filter			=	 [];
@@ -401,7 +398,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 	histoty_param	=	$.parseJSON(base64_decode(history));
 	
 	
-	var _compare	= ['LAYOUT_ROWS','LAYOUT_COLUMNS','LAYOUT_MEASURES','LAYOUT_FILTERS','ORDER_COLUMN','ALL_COLS','ALL_ROWS','DRILL_HIERARQUIA_LINHA'];
+	var _compare	= ['LAYOUT_ROWS','LAYOUT_COLUMNS','LAYOUT_MEASURES','LAYOUT_FILTERS','ORDER_COLUMN','ALL_COLS','ALL_ROWS','DRILL_HIERARQUIA_LINHA','SUMARIZA'];
 
 		if(empty(param_request.ALL_COLS)) param_request.ALL_COLS='';
 		
@@ -623,7 +620,7 @@ function tagFilterWRS(typeReturn)
 	$(".WRS_DRAG_DROP_FILTER h2").each(function(){
  		
  		//var json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
-		var json	=	 	$(this).data('filter');
+		var json	=	 	$(this).data('wrs-data');
 		
  		var atributo	=	$(this).attr('atributo');
  		var filter_fixed=	$(this).hasClass('hide');
@@ -792,7 +789,7 @@ function wrsFilterClickFalse(filter_hide)
     		var flag_back		=	false;
     		$(".WRS_DRAG_DROP_FILTER").find('h2').each(function(){
     			//var json				=	$.parseJSON(base64_decode($(this).attr('json')));	   
-    			var json				=	$(this).data('filter');	   
+    			var json				=	$(this).data('wrs-data');	   
     			if(json['FILTER_TO_CLEAN']==true)
     			  	{
     			        if(compare_filter_change(json['FILTER_TO_COMPARE']))
@@ -814,7 +811,7 @@ function wrsFilterClickFalse(filter_hide)
     		var index_data			=	 localEvent.attr('index-data');
     		var main				=	$('#wrs_header_filter_main_'+index_data);
     		//var json				=	$.parseJSON(base64_decode(main.attr('json')));	
-    		var json				=	main.data('filter');	
+    		var json				=	main.data('wrs-data');	
     		
     		if(is_array(label))
     			{
@@ -845,7 +842,7 @@ function wrsFilterClickFalse(filter_hide)
     		}
     		
  //   		main.attr('json',base64_encode(json_encode(json,true)));
-    		main.data('filter',json);
+    		main.data('wrs-data',json);
     		
     		if(!noLoad)
     		{
@@ -872,7 +869,7 @@ function wrsFilterClickFalse(filter_hide)
 			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 					var level_full					=	$(this).attr('level-full');	
 					//var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
-					var json						=	$(this).data('filter');	
+					var json						=	$(this).data('wrs-data');	
 					var not_use						=	$(this).hasClass('hide');
 					
 
@@ -923,7 +920,7 @@ function wrsFilterClickFalse(filter_hide)
 			});
 			
 			
-			$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
+		//	$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
 			
 			_END('WrsFilter::cleanFiltersDown');	
     	}
@@ -935,6 +932,8 @@ function wrsFilterClickFalse(filter_hide)
 		 */
 		var getFiltersLevelUP =	function(level_up,typeEvent)
 		{
+			
+			
 			_START('WrsFilter::getFiltersLevelUP');	
 			var levelUP			=	[];
 			var filters_up		=	[];
@@ -954,13 +953,14 @@ function wrsFilterClickFalse(filter_hide)
 			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 					var level_full					=	$(this).attr('level-full');	
 					//var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
-					var json						=	$(this).data('filter');	
+					var json						=	$(this).data('wrs-data');	
 					var _json_filter				=	'';
 						//Verificando se o Level Full exist no array passado
 						if(in_array(level_full, levelUP, true) || typeEvent=='all')
 						{
 							if(!empty(json.FILTER))
 							{
+									
 									_json_filter						=	json.FILTER;
 									_index.push(json.FILTER);		
 									filters_up[filters_up.length]	=	'{'+json.FILTER+'}';								
@@ -971,10 +971,11 @@ function wrsFilterClickFalse(filter_hide)
 					
 			});
 			
-			
-			
-			FilterOriginal	=	merge_filter_in_array(FilterOriginal);
 
+			FilterOriginal	=	merge_filter_in_array(FilterOriginal);
+			
+
+			
 			if(is_array(filters_up)) 
 				{
  					tagQuery	=	 implode(',',filters_up);
@@ -1183,7 +1184,7 @@ function wrsFilterClickFalse(filter_hide)
 
         	 
         	 //var json				=	$.parseJSON(base64_decode(event.attr('json')));	        	 
-        	 var json				=	event.data('filter');	        	 
+        	 var json				=	event.data('wrs-data');	        	 
         	 var index_data			=	event.attr('index-data');
         	 var wrs_filter_body	=	'#wrs_filter_body_'+index_data;
         	 var body				=	$(wrs_filter_body);
@@ -1253,7 +1254,7 @@ function wrsFilterClickFalse(filter_hide)
  			var _main				=	$('#wrs_header_filter_main_'+index_data);
 		 		//_main.attr('json',base64_encode(json_encode(data.data,true)));
 		 		
-		 		_main.data('filter',data.data);
+		 		_main.data('wrs-data',data.data);
 
 				
 		 
@@ -1282,7 +1283,7 @@ function wrsFilterClickFalse(filter_hide)
 		 			var index_data			=	 $(this).attr('index-data');
 		 			var main				=	$('#wrs_header_filter_main_'+index_data);
 		 			//var json				=	$.parseJSON(base64_decode(main.attr('json')));	
-		 			var json				=	main.data('filter');	
+		 			var json				=	main.data('wrs-data');	
 		 			
 		 			var page_current		=	json.PG_CURRENT;
 		 			
@@ -1343,7 +1344,7 @@ function wrsFilterClickFalse(filter_hide)
 				 			var nameTagMain	=	'wrs_header_filter_main_'+index_data;
 				 			var mainFilter	=	$('#'+nameTagMain);
 				 			//var json		=	$.parseJSON(base64_decode(mainFilter.attr('json')));	
-				 			var json		=	mainFilter.data('filter');	
+				 			var json		=	mainFilter.data('wrs-data');	
 				 			var filter		=	 explode(',',json.FILTER);
 				 			var value		=	'';
 				 			
@@ -1383,12 +1384,13 @@ function wrsFilterClickFalse(filter_hide)
 				 				json['FILTER']	=	implode(',',filter);
 				 			}else
 				 			{
+				 				
 				 				json['FILTER']	=	'';
 				 			}
 				 				
 				 			//Gravando no JSON
 //				 			mainFilter.attr('json',base64_encode(json_encode(json,true)));
-				 			mainFilter.data('filter',json);
+				 			mainFilter.data('wrs-data',json);
 				 			cleanFiltersDown(json['LEVEL_DOWN'],'',nameTagMain);
 							
 							_END('WrsFilter::funCallBackRun::btn_event_filtro_checkbox');
@@ -1402,7 +1404,7 @@ function wrsFilterClickFalse(filter_hide)
 				var nameTag		=	'wrs_header_filter_main_'+index_data;
 	 			var main		=	$('#'+nameTag);
 	 			//var json		=	$.parseJSON(base64_decode(main.attr('json')));	
-	 			var json		=	main.data('filter');	
+	 			var json		=	main.data('wrs-data');	
 	 			var filter		=	'';
 	 			var type_input	=	$(this).attr('type');
 	 			var checked		=	$(this).prop('checked');
@@ -1438,7 +1440,6 @@ function wrsFilterClickFalse(filter_hide)
 						filter	=	wrsFilteValuerControl(filter,value,true);
 					}
 	 			
-	 			
 	 			if(is_array(filter))
 	 				{
 	 					json['FILTER']	=	implode(',',filter);
@@ -1450,7 +1451,7 @@ function wrsFilterClickFalse(filter_hide)
 	 			
 	 			//Gravando no JSON
 //	 			main.attr('json',base64_encode(json_encode(json,true)));
-	 			main.data('filter',json);
+	 			main.data('wrs-data',json);
 	 			
 	 			cleanFiltersDown(json['LEVEL_DOWN'],'',nameTag);
 				
@@ -1569,6 +1570,8 @@ function wrsFilterClickFalse(filter_hide)
      			console.warn('exception');
      			_filter_tmp	=	'';
      		}
+     		
+     		
      	var _filter	=	getJsonDecodeBase64(_filter_tmp);
      	
 		var _obj	=	{};
@@ -1581,12 +1584,38 @@ function wrsFilterClickFalse(filter_hide)
 			var _sub				=	_filter[lineFilter];
 				_obj[_sub.class]	=	_sub.data;
 		}
-//FILTER
-//FILTER_CLICK
+
 
 		return _obj;
 
      }
+	 
+	 
+	 /**
+	  * Faz a junção dos filtros selecionados e o que já está para ser selecionado
+	  */
+	 var join_filter_selected_current	=	 function(filter,selected)
+	 {
+		 	var _tmp_filter	=	filter.split(',');
+		 	var _selected	=	selected.split(',');
+		 	
+		 	
+		 	for(var line in _selected)
+		 	{
+		 		if(!isEmpty(_selected[line]))
+		 		{
+		 			if($.inArray(_selected[line],_tmp_filter)<0)
+		 				{
+		 					_tmp_filter.push(_selected[line]);
+		 				}
+		 		}
+		 	}
+		 	
+		 	
+		 	return _tmp_filter.join(',');
+		 
+	 }
+	 
 	 
    	 var  setWRSFilterCommon = function()
 							 {
@@ -1644,20 +1673,10 @@ function wrsFilterClickFalse(filter_hide)
 														 	
 														 	if(atributo=='simples')	is_atributo_simples=true;
 														 	
-														 	
-														 	//Substitui o Json pelo qualk já estva selecionado
-														 	/*
-														 	if(jsonDROPExist)
-														 		{
-																 	if(isset(jsonDROP[jsonDecode.LEVEL_FULL]))
-																 		{
-																 			json				=	jsonDROP[jsonDecode.LEVEL_FULL];
-																 		}
-														 		}*/
-														 	
 															
 															try{
-														 				json['FILTER']	=	json['FILTER_CLICK']=		filter_selectd['__'+tag_class];
+																	
+														 				json['FILTER']	=	json['FILTER_CLICK']=		join_filter_selected_current(json['FILTER'],filter_selectd['__'+tag_class]);
 																		
 														 		}catch(e){
 														 			console.warn(' exception');
@@ -1676,7 +1695,7 @@ function wrsFilterClickFalse(filter_hide)
 														 									'id'			:	'wrs_header_filter_main_'+index,
 																							'class'			:	'wrs_class_filter_header_main '+_hide,
 																							'atributo'		:	atributo
-																				 		}).data('filter',json);
+																				 		}).data('wrs-data',json);
 														 		
 														 		var div	=	$('<div/>',
 														 								{
@@ -1762,7 +1781,7 @@ function wrsFilterClickFalse(filter_hide)
 						if(atributo=='simples')
 							{
 //					 				json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
-					 				json	=	 	$(this).data('filter');
+					 				json	=	 	$(this).data('wrs-data');
 
 					 				if(empty(json.FILTER))
 					 					{
@@ -1794,7 +1813,7 @@ function wrsFilterClickFalse(filter_hide)
 					 						filter.attr('check-simples',implode(',',check_simple));
 					 						
 //					 						$(this).attr('json',base64_encode(json_encode(json,true)));
-					 						$(this).data('filter',json);
+					 						$(this).data('wrs-data',json);
 					 						
 					 						clickHeaderFiltro($(this),'loadWrs');
 					 					} 

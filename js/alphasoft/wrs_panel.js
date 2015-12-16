@@ -23,10 +23,35 @@ function wrs_north_onresize()
 
 
  
+function wrs_clean_data(input_default)
+{
+	_START('wrs_clean_data');
+		var object_clean		=	 {
+				TYPE_RUN 	:	false,
+				IS_REFRESH 	: 	false,
+				JOB_RESULT 	: 	null,
+				STOP_RUN 	: 	false,
+				TYPE_RUN 	: 	null,
+				new_aba 	: 	false
+		};
+	
+		
+	if(isEmpty(input_default))	{
+		_END('wrs_clean_data');
+		return object_clean;
+	}
+		
+	var call	=	merge_objeto(input_default,object_clean);
+	
+	_END('wrs_clean_data');
+	return call;
 
+}
 
-function set_userinfo_filter_fixed(obj){
-	if(typeof obj == 'object'){
+function set_userinfo_filter_fixed(obj)
+{
+	if(typeof obj == 'object')
+	{
 		userinfo_filter_fixed = obj;
 	}
 }
@@ -61,20 +86,33 @@ function merge_filter_in_array(_input_merge)
 	return input_merge;
 }
 
+
+
+
 // esconder os filtros fixos do usuario para que o mesmo nao possa ser manipulado
 function hide_fixed_filter()
 {
 	_START('hide_fixed_filter');
+	
+	
 	for(var lineFixed in userinfo_filter_fixed)
 	{
 		$('.wrs_panel_esquerdo_drag_drop').find('.'+replace_attr(lineFixed)).addClass('hide').attr('not-use',true);
+		
+		
 		var bt_painel_dd = $('.WRS_DRAG_DROP li.box_wrs_panel.'+replace_attr(lineFixed));
+		
 		if(!bt_painel_dd.hasClass('hide'))
 		{
 			bt_painel_dd.addClass('hide').attr('not-use',true);
-			var json_bt_painel_dd = $.parseJSON(base64_decode(bt_painel_dd.attr('json')));
+			
+
+			
+			var json_bt_painel_dd = bt_painel_dd.data('wrs-data');
+			
 			esconde_pais_drag_drop(json_bt_painel_dd);
 		}
+		
 	}
 	
 	_END('hide_fixed_filter');
@@ -971,6 +1009,7 @@ var droppableOptionsOl			=	{};
 var TMP_DEFAULT_OPTIONS_TOPS	=	null;
 function DROP_EVENT( event, ui ,eventReceive)
 {
+
 		_START('DROP_EVENT');
 		var toEvent;
 		var receiveEvent	=	$(this);
@@ -979,6 +1018,9 @@ function DROP_EVENT( event, ui ,eventReceive)
 		{
 			toEvent			=	ui;
 			receiveEvent	=	eventReceive;
+			
+	//		console.log('ui',ui.data('wrs-data'));
+		//	foreach(ui.data('wrs-data'));
 		}else{
 			toEvent			=	ui.draggable;
 		}
@@ -1076,7 +1118,10 @@ function DROP_EVENT( event, ui ,eventReceive)
 	
 	
 	var json 			=	toEvent.data('wrs-data');
-	json['FILTER']	=	'';
+	
+
+
+//	json['FILTER']	=	'';
 	toEvent.data('wrs-data',json);
 	
 	/*
@@ -1162,6 +1207,8 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 		var _class				=	 '';
 		var simples_composto	=	false;
 		var is_filter			=	'';
+		
+		
 		if(substr(_values[x],0,2)=='__')
 			{
 				if(is_array(_values[x]))
@@ -1172,7 +1219,7 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 					
 					if(value[1]=='simples') simples_composto=true;
 					
-					is_filter	=	 empty(value[2]) ? '' : value[2];
+						is_filter	=	 empty(value[2]) ? '' : value[2];
 					
 				}
 				else
@@ -1197,15 +1244,27 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 				}
 				
 
-  			if(!empty(is_filter))
+  			if(!isEmpty(is_filter))
 				{
-					//var json 			=	$.parseJSON(base64_decode(object.attr('json')));
 					var json 			=	object.data('wrs-data');
+					
+					
+				
 					if(json!=null)
-						json['FILTER']	=	is_array(is_filter) ? implode(',',is_filter) : is_filter;
+					{
+					 
+						var _tmp_filter		=	typeof is_filter == "object" ? implode(',',is_filter) : is_filter;
+						
+						
+						json['FILTER']=_tmp_filter;
+						
 
-						//object.attr('json',base64_encode(json_encode(json,true)));
-						object.data('wrs-data',json);
+							//console.log('json',json);
+							object.data('wrs-data',json);
+
+					}
+						
+						
 				}
 				
 				DROP_EVENT( 'DIRECT', object,$(_clone));
@@ -1213,51 +1272,14 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 			}
 	}
 	
-	
-	if(_clone=='.sortable_filtro')
-	{
-		hide_fixed_filter();
-	}
-	
-	}
-	/*
-	
-	$(where_find+' li').each(function(){
 		
-		var li_value	=	$(this).attr('vvalue');
-		
-		for(obj in _values)
+		if(_clone=='.sortable_filtro')
 		{
-			var obj_value	=	_values[obj];
-			var simples_composto	=	false;
-			
-			if(is_array(_values[obj]))
-				{
-					obj_value			=	_values[obj][0];
-					simples_composto	=	true;
-				}
-			
-			if(obj_value== li_value)
-				{
-
-				if(simples_composto)
-				{
-					$(this).attr('sc_load',_values[obj][1]);
-				}
-					//TRACE_DEBUG($(this).attr('class'));
-					DROP_EVENT( 'DIRECT', $(this),$(_clone)); 
-					
-					if(simples_composto)
-					{
-						$(this).attr('sc_load','');
-					}	
-				}
-			
+			hide_fixed_filter();
 		}
-		
-	});
 	
-	*/
+	}
+	
 	
 	_END('find_relatorio_attributo_metrica');
 }
@@ -1288,22 +1310,23 @@ function set_value_box_relatorio(object)
 	
 	if(isset(object.LAYOUT_ROWS))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR ',object.LAYOUT_ROWS,'.sortable_linha');
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options',object.LAYOUT_ROWS,'.sortable_linha');
 	}
 	
 	if(isset(object.LAYOUT_COLUMNS))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR ',object.LAYOUT_COLUMNS,'.sortable_coluna');
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options',object.LAYOUT_COLUMNS,'.sortable_coluna');
 	}
 	
 	if(isset(object.LAYOUT_FILTERS))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR ',object.LAYOUT_FILTERS,'.sortable_filtro');
+
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options ',object.LAYOUT_FILTERS,'.sortable_filtro');
 	}
 	
 	if(isset(object.LAYOUT_MEASURES))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_METRICA ',object.LAYOUT_MEASURES,'.sortable_metrica');
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_METRICA .wrs_panel_options',object.LAYOUT_MEASURES,'.sortable_metrica');
 	}
 	
 	$('.WRS_DRAG_DROP_FILTER').html(str_replace('li','h2',$('.sortable_filtro').html()));
@@ -1395,6 +1418,7 @@ function wrs_run_filter()
 	var _report_id			=	report_KendoUi['REPORT_ID'];
 	
 	
+	
 	var _filtro_size		=	$('.sortable_filtro').find('li');
 	
 	
@@ -1420,10 +1444,8 @@ function wrs_run_filter()
 		wrs_panel_layout.open('west');
 	}
 		
-	
-	
-	
-		if(aba_active.wrsAbaData('get_change_aba')==true)
+
+	if(aba_active.wrsAbaData('get_change_aba')==true)
 		{
 			aba_active.wrsAbaData('set_change_aba',false);	
 			configure_options_show_grid($(this));
@@ -1431,7 +1453,6 @@ function wrs_run_filter()
 			aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
 			
 			panel_open_by_time_out(_report_id);
-			
 			
 			return true;
 		}
@@ -1446,8 +1467,6 @@ function wrs_run_filter()
 			$(this).removeAttr('noactive');
 			//stop_job_timeout(_report_id);
 			_END('wrs_run_filter');
-			
-			
 			return true;
 		}
 	
@@ -1489,7 +1508,6 @@ function wrs_run_filter()
 	if(job_exist(report_KendoUi.REPORT_ID))
 	{
 		//click_stop_job();
-		//console.log('já existe no JOB então não processa');
 		WRS_ALERT(LNG('CONSULTA_ATIVA_CANCELAR'),'warning');
 		return true;
 	}
@@ -1497,6 +1515,7 @@ function wrs_run_filter()
 	
 	//Ao navegar pelas abas essa função impede que seja executada mesmo se tiver aoteração a alteração só será efetivada ao mandar executar
 	try{
+		
 		if(report_KendoUi.STOP_RUN==true)
 		{
 			aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
@@ -1595,9 +1614,9 @@ function wrs_run_filter()
 					wrs_data_param.LAYOUT_MEASURES	=	base64_encode(implode(',',request_metrica));
 					
 					
-					//Força a conversão do Menu 
-					wrsFilterShow();
-					
+							//Força a conversão do Menu 
+							wrsFilterShow();
+							
 					
 					
 
@@ -1609,6 +1628,8 @@ function wrs_run_filter()
 		
 								wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
 								wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));
+								
+								
 								
 								if(report_KendoUi['TYPE_RUN']==TYPE_RUN.coluna_header)//Apenas executa quando for clique por DILLColuna
 								{
@@ -1878,7 +1899,6 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 			if($('body').managerJOB('exist_job_render',{report_id:data.REPORT_ID,force_loop_job:true}))
 			{
 				_END('MOUNT_LAYOUT_GRID_HEADER not in JOB');
-			//	console.log('não libera o MOUNT_LAYOUT_GRID_HEADER');
 				return true;
 			}
 			

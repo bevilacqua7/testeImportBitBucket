@@ -430,7 +430,13 @@ class WRS_PANEL  extends WRS_USER
 		$kendoUi['frozen']		=	0;
 		
 
-		$kendoUi['SUMARIZA']	=	$this->isEmptyNotZero($kendoUi['SUMARIZA'], 1);
+		
+		if($kendoUi['SUMARIZA']!=0){
+			$kendoUi['SUMARIZA']	=	$this->isEmptyNotZero($kendoUi['SUMARIZA'], 1);
+		}else{
+			$kendoUi['SUMARIZA']	=	0;
+		}
+		
 		$kendoUi['COLORS_LINE']	=	$this->isEmptyNotZero($kendoUi['COLORS_LINE'], 1);
 		
 		
@@ -683,6 +689,7 @@ class WRS_PANEL  extends WRS_USER
 		$getRequestWrsExceptions			=	fwrs_request($getRequestWrsExceptions);
 		
 		$QUERY_TABLE_CACHE				=	''; //Irá contem o cache da tabela
+		
 		
 		//PAssando o parametro encontrado pelo request ou pelo nativo
 		if(empty($getRequestKendoUi['WINDOW']))
@@ -1050,7 +1057,6 @@ class WRS_PANEL  extends WRS_USER
 		
 //		$getRequestKendoUi['ALL_ROWS']
 
-	
 		$LAYOUT_ROWS_SIZE							=	count(explode(',',$ROWSL));
 		$msg										=	''; //mensagens do sistema ela muda a cada conjunto de regras
 		
@@ -1076,30 +1082,26 @@ class WRS_PANEL  extends WRS_USER
 				}
 			}			
 		}//END
-
 		
 		//$LAYOUT_ROWS_SIZE			=	$LAYOUT_ROWS_SIZE > $rows['COLUMNS']  ?  1 : $LAYOUT_ROWS_SIZE ;
-		
 		
 		$_sort_current		=	(int)substr($getRequestKendoUi['ORDER_BY_COLUMN'], 1);
 		$_sort_column		=	WRS::GET_TOTAL_COLUMN($_cube['TABLE_CACHE']);
 		
 		$_sort_order		=	$_sort_current > $_sort_column ? $_sort_column : $_sort_current;
-		/*
+
 		$SORT_SSAS_TABLE	=	$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$_sort_order,$getRequestKendoUi['ALL_ROWS']));
 		//$SORT_SSAS_TABLE	=	$this->query($this->_query->SORT_SSAS_TABLE($cube['TABLE_CACHE'],$LAYOUT_ROWS_SIZE,$_sort_order));
-		
 		if(!$SORT_SSAS_TABLE)
 		{
 			return array('error'=>LNG('SORT_SSAS_TABLE_ERROR'),'REPORT_ID'=>$getRequestKendoUi['REPORT_ID']);
 		}
-		*/
-/*		if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
+		if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
 		{
 			// Obtem a Tabela Contendo Registros Abertos (Drill)
 			$query_DRILL_SSAS_TABLE_INFO = $this->_query->GET_SSAS_DRILL( $cube['TABLE_CACHE'] );
 			$this->query($query_DRILL_SSAS_TABLE_INFO);
-		}*/
+		}
 		
 		// Obtem a Quantidade de Registros da Consulta		
 		$query_table = $this->query($this->_query->COUNT_SSAS_TABLE($_cube['TABLE_CACHE'],((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
@@ -1147,14 +1149,22 @@ class WRS_PANEL  extends WRS_USER
 			/*
 			 * Apenas informa qual o nome das columns 
 			 */
-			$param[] 	= 	array( 'FIELD'=>$rows['FIELD'], 'TOTAL'=>$rows['TOTAL'],
-				 	               'LEVEL_TYPE'=>$rows['LEVEL_TYPE'], 'LEVEL_FULL'=>$rows['LEVEL_FULL'], 'LEVEL_NAME'=>$rows['LEVEL_NAME'], 'LEVEL_VALUE'=>$rows['LEVEL_VALUE'], 'LEVEL_POS'=>$rows['LEVEL_POS'],
-					               'FORMAT_STRING'=>$rows['FORMAT_VALUE'], 'KEYS'=>$rows['KEYS'], 'KEYS_UP'=>$rows['KEYS_UP'] );
+			$param[] 	= 	array( 	'FIELD'			=>	$rows['FIELD'], 
+									'TOTAL'			=>	$rows['TOTAL'],
+				 	               	'LEVEL_TYPE'	=>	$rows['LEVEL_TYPE'], 
+									'LEVEL_FULL'	=>	$rows['LEVEL_FULL'], 
+									'LEVEL_NAME'	=>	$rows['LEVEL_NAME'], 
+									'LEVEL_VALUE'	=>	$rows['LEVEL_VALUE'], 
+									'LEVEL_POS'		=>	$rows['LEVEL_POS'],
+					               	'FORMAT_STRING'	=>	$rows['FORMAT_VALUE'], 
+									'KEYS'			=>	$rows['KEYS'], 
+									'KEYS_UP'		=>	$rows['KEYS_UP'] 
+								);
 				
 //			$param[] 	= 	array( 'POS'=>$rows['POS'],'FIELD'=>$rows['FIELD'], 'SPAM'=>$rows['SPAM'],'TOTAL'=>$rows['TOTAL'] 	,  'LEVEL_TYPE'=>$rows['LEVEL_TYPE'] 	, 'LEVEL_FULL'=>$rows['LEVEL_FULL']	,  'LEVEL_NAME'=>$rows['LEVEL_NAME'] 		, 'LEVEL_VALUE'=>$rows['LEVEL_VALUE'] , 'LEVEL_POS'=>$rows['LEVEL_POS'] , 'FORMAT_STRING'=>$rows['FORMAT_STRING'] , 'KEYS'=>$rows['KEYS'], 'KEYS_UP'=>$rows['KEYS_UP']);
 			
 			//Pegando apenas as colunas de dados
-			if(!empty($rows['POS']) && $rows['LEVEL_TYPE']=='MEASURE')
+			if(!empty($rows['FIELD']) && $rows['LEVEL_TYPE']=='MEASURE')
 			{
 				$_column[]	=	$rows['LEVEL_FULL'];
 			}
@@ -1182,6 +1192,7 @@ HTML;
 		$tagToUrl['REPORT_ID']					=	$getRequestKendoUi['REPORT_ID'];
 		$tagToUrl['ALL_ROWS']					=	$getRequestKendoUi['ALL_ROWS'];
 		$tagToUrl['CUBE_ID']					=	$CUBE;
+		$tagToUrl['SUMARIZA']					=	$getRequestKendoUi['SUMARIZA'];
 		
 		
 		$tagToUrl['tableCache']	=	$cube['TABLE_CACHE'];
@@ -1303,10 +1314,10 @@ HTML;
 		$pageSize				=	$request['pageSize'];
 		$resultGridDrill		=	NULL;
 	
+		
 		/*
 		 * Pegando os eventos do WRS_PAnel
 		 */
-		 
 
 		$numRows			=	fwrs_request('numRows');
 		$TABLE_NAME			=	fwrs_request('tableCache');	
@@ -1318,18 +1329,18 @@ HTML;
 		 */
 		
 		
-
 		if(isset($sort[0]['field']))
 		{
 			
 			$field			=	(int)substr($sort[0]['field'], 1);
+			$field_compare	=	$field.$sort[0]['dir'];		//para poder identificar quando a coluna é nova e tem que ser sorteada. manter o lick da ordenação ativo
 			$total_atual	=	 WRS::GET_TOTAL_COLUMN($TABLE_NAME);
 			
 
-			if($total_atual!=$field )
+			if($total_atual!=$field_compare )
 			{	
 				
-				WRS::SET_TOTAL_COLUMN($TABLE_NAME,$field);
+				WRS::SET_TOTAL_COLUMN($TABLE_NAME,$field_compare);
 				
 				if($field>$TOTAL_COLUMN)
 				{
@@ -1340,8 +1351,7 @@ HTML;
 				
 				$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$field,$getRequestKendoUi['ALL_ROWS'],strtoupper($sort[0]['dir'])));
 				//$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$LAYOUT_ROWS_SIZE,$field,strtoupper($sort[0]['dir'])));
-				
-				
+						
 				if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
 				{
 					// Obtem a Tabela Contendo Registros Abertos (Drill)
@@ -1355,15 +1365,15 @@ HTML;
 		}
 		
 		
-		
-		
 		/*
 		 * Processa a tabela temporária
 		 */
 		$ROW_NUMBER_START		=	$skip==0 ? 1 : ($skip+1);
 		$ROW_NUMBER_END			=	$take+$skip;
 		
-		$sqlGrid			=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,0,0,$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		
+		$sqlGrid			=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		
 		//$sqlGrid			=	 $this->_query->SELECT_SSAS_TABLE($TABLE_NAME.'S', $ROW_NUMBER_START, $ROW_NUMBER_END);
 		$sqlGrid_exec		=	 $this->query($sqlGrid);
 		if(!$this->num_rows($sqlGrid_exec))
@@ -1380,7 +1390,6 @@ HTML;
 		
 		$param_chart	= array();
 
-		//WRS_DEBUG_QUERY(print_r($request,true));
 		
 		
 			$order_field	=	isset($sort[0]['field']) ? $sort[0]['field'] : '';

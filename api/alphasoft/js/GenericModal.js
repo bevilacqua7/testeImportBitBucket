@@ -96,15 +96,21 @@ $.fn.extend({
 
 				var _continue=true;
 				
-				if(_options.bt_salvar_extra_action_validator!=null){
-					_continue = _options.bt_salvar_extra_action_validator(_param);
-				}
+					if(_options.bt_salvar_extra_action_validator!=null)
+					{
+						_continue = _options.bt_salvar_extra_action_validator(_param);
+					}
 				
-				if(_continue){
-					_runCalll(_param);	
-				}
+					if(_continue)
+					{
+						_runCalll(_param);	
+					}
+					
 				_END('modalGeneric::bt_salvar');			
+				
 			}	
+		
+		
 		
 		var bt_atualizar	=	 function()
 			{
