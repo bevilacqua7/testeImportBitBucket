@@ -234,15 +234,13 @@ HTML;
 					$last_error		=	$rows['ERROR_MESSAGE'];
 					$error			=	true;
 				}else{
-					return WRS_MANAGE_PARAM::select($columns, $rows['TABLE_NAME'], $orderBy, $orderByPOS, $_start, $_end,$_where);
+					return WRS_MANAGE_PARAM::select('*', $rows['TABLE_NAME'], $orderBy, $orderByPOS, $_start, $_end,$_where);
 				}
 				
 				
 			}else{
 				$last_error		=	LNG('NO_RESULTS_QUERY').$sql;
 				$error			=	true;
-			}else{
-				return WRS_MANAGE_PARAM::select('*', $rows['TABLE_NAME'], $orderBy, $orderByPOS, $_start, $_end,$_where);
 			}
 		}
 		
@@ -268,11 +266,13 @@ HTML;
 				var input	=	 $('<input/>',{name:"dadosJs",type:'text', value:base64_encode(json_encode(reportAtual))}).css('display','none');
 				$('#insert_report').append(input);
 				$('#report_name').val(reportAtual.KendoUi.TITLE_ABA); // preenche com o nome atual vindo do JS
-
+				$('#report_auto').prop( "checked", ((reportAtual.KendoUi.REPORT_AUTOLOAD==1)?true:false) );
+				$('#report_share').prop( "checked", ((reportAtual.KendoUi.REPORT_SHARE==1)?true:false) );
+				// nao retorno os grupos selecionados pois o mesmo nao retorna na query nem no objeto reportAtual ainda
 HTML;
 		// preenche os 'grupos' do formulario com os tipos cadastrados no banco (query passada pelo facioli em 26-08-2015)
 		$user			=	WRS::INFO_SSAS_LOGIN();		
-		$sql			=	"select distinct USER_TYPE from ATT_WRS_USER where CUSTOMER_ID =".$user['CUSTOMER_ID'];		
+		$sql			=	$this->_query->Get_SSAS_Reports_Groups($user['CUSTOMER_ID']);
 		$query			=	$this->query($sql);
 		$tipos=array();
 		while($res			=	$this->fetch_array($query)){
