@@ -158,7 +158,8 @@ class WindowGrid extends FORM
 		//Aplicando a conversão das TAGS para aplicar no HTML
 		$TPL_TITLE				=		$param['title'];
 		$TPL_HTML				=		$param['html'];
-		$TPL_DATA				=		$param['data'];
+
+		$TPL_DATA				=		(isset($param['data']))?$param['data']:'';
 		$TPL_COMPLEMENT_TITLE	=		$param['title_menu'];
 		
 		
@@ -287,7 +288,7 @@ class WindowGrid extends FORM
 										'list'			=>true,
 										'order'			=>true,
 										'order_type'	=>true);
-		
+
 		
 		//Formulário
 		if($wrs_type_grid=='form')
@@ -619,7 +620,6 @@ EOF;
 		
 
 		$query	=	 $this->query($query);
-		
 		
 		
 		if(isset($param['field']['WRS_ICON']))

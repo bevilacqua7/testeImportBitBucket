@@ -289,6 +289,17 @@
 	$language['LINE_TOTAL_BUBBLE']			=	'Deseja usar as linha de totais no gráfico?';
 	
 	
+	// UPLOAD FORM
+	$language['msg_maxNumberOfFiles']					=	'Número maximo de arquivos excedido';
+	$language['msg_acceptFileTypes']					=	'Arquivo de extensão nao permitida';
+	$language['msg_acceptFileTypes']					=	'Arquivo de tamanho excedido';
+	$language['msg_minFileSize']						=	'Arquivo de tamanho mínimo não alcancado';
+	$language['upload_form_selecionar']					=	'Selecionar';
+	$language['upload_form_enviar']						=	'Enviar';
+	$language['upload_form_cancelar']					=	'Cancelar';
+	$language['upload_form_apagar']						=	'Apagar';
+	$language['upload_form_processando']				=	'Processando...';
+	$language['upload_form_erro']						=	'Erro no envio';
 	
 	
 	

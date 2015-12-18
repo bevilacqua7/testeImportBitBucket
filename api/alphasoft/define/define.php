@@ -2,6 +2,8 @@
 
 date_default_timezone_set('America/Sao_Paulo');
 
+
+
 WRS_INI::LOAD_INI();
 $WRS_DEFINE		=	 WRS_INI::WRS_DEFINE();
 	
@@ -111,6 +113,18 @@ define('WRS_DEBUG_QUERY_FILE_NAME',$WRS_DEFINE['WRS_DEBUG_QUERY_FILE_NAME']);
  */
 define('PATH_DEFAULT',dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR);
 
+define('PATH_API',PATH_DEFAULT);
+
+define('PATH_SMARTY',PATH_API.'Smarty-3.1.20'.DIRECTORY_SEPARATOR);
+
+
+
+define('DS_URL',	'/');
+
+//Arquivos de UPLOADS
+define('PATH_FILE',			dirname(PATH_DEFAULT).DS.'files'.DS);
+
+define('PATH_FILE_URL',		'files'.DS_URL);
 
 define('DEBUG_TRACE'		, $WRS_DEFINE['DEBUG_TRACE']);
 

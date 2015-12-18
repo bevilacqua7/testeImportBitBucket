@@ -310,6 +310,7 @@ var AUTO_LOAD_RUN			= <?php echo (($request_exec_report && $request_exec_report=
 <?php include 'modal_confirm.php'; ?>
 <!--END MODAL CONFIRM-->
 
+<?PHP include_once(PATH_TEMPLATE.'upload_script.php'); ?>
 </body>
 
 <script>

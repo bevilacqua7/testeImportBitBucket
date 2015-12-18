@@ -7,6 +7,7 @@
 includeQUERY('WRS_MANAGE_PARAM');
 includeCLASS('WRS_USER');
 
+
 	
 class FORM  extends WRS_USER
 {
@@ -17,6 +18,7 @@ class FORM  extends WRS_USER
 	 * @var WRS_MANAGE_PARAM
 	 */
 	protected  $manage_param	=	NULL;
+	private $obj_atual 			= 	NULL;
 	
 	/**
 	 * 
@@ -28,6 +30,7 @@ class FORM  extends WRS_USER
 		
 
 		$param				=	$_param;
+				
 		$html				=	NULL;
 		
 		if(!array_key_exists('button', $param) || !is_array($param['button']) || count($param['button'])<=0){
@@ -39,7 +42,7 @@ class FORM  extends WRS_USER
 		
 		$primary_number		=	 fwrs_request($param['primary']);
 		$rows_select		=	 NULL;
-		unset($param['field']['WRS_ICON']);
+		
 		
 		
 		//Caso a opção do select seja vazio
@@ -57,14 +60,16 @@ class FORM  extends WRS_USER
 				}
 			}
 		}
+
+		$this->obj_atual	=	array('table'=>$param['table'],'id'=>$rows_select[$param['primary']]);
 		
 		foreach($param['field'] as $label =>$tools)
 		{
 			$object								=	 $tools;
-			
+						
 			$object['title']					=	$tools['title'];
 			$object['label']					=	$label;
-			$object['length']					=	$tools['length'];
+			$object['length']					=	(isset($tools['length']))?$tools['length']:'';
 			$object['value']					=	fwrs_request($label);
 			
 			$param['field'][$label]['value']	=	$object['value']	=	fwrs_request($label);
@@ -85,10 +90,9 @@ class FORM  extends WRS_USER
 					}					 
 				}
 			}
-			
+
 			$html.=$this->input($object);
 		}
-		
 		
 		if(!empty($event_form))
 		{
@@ -140,17 +144,7 @@ class FORM  extends WRS_USER
 			
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 	private function input($param)
 	{
 		
@@ -159,7 +153,13 @@ class FORM  extends WRS_USER
 				{
 					return $this->select_box($param);	
 				}
-
+				
+				//Verificando se é upload
+				if(isset($param['is_upload']))
+				{
+					return $this->upload_field($param);	
+				}
+				
 				$length	=	"";
 				$class	=	"";
 				if(!empty($param['length']))
@@ -274,6 +274,47 @@ EOF;
  
 	 
 	
+		private function upload_field($param,$_extra_params=NULL)
+		{
+			includeCLASS('Upload');
+			
+			$rels				=	 array('class'=>'form-group form-control-wrs_color');
+			$rel				=	 $this->getParamFormInput($this->merge_array_value($param,$rels));
+
+			$upload_dir_key 	= 	array($this->obj_atual['table'],$this->obj_atual['id'],$param['label']); // chave consiste em usuario logado + formulario em questao (ex. ATT_WRS_USER) + valor da chave da tabela (ex. USER_ID = 3)
+			$extra_params		=	array(
+					'autoUpload'		=> 	true,
+					//'acceptFileTypes'	=>	"/(\.|\/)(gif|jpe?g|png)$/i",
+					'maxFileSize'		=> 	3000000, // 3 MB,
+					'maxNumberOfFiles'	=> 	1,
+					'botao_selecionar'	=>	true,
+					'botao_enviar'		=>	false,
+					'botao_cancelar'	=>	false,
+					'botao_apagar'		=>	false,
+					'barra_status'		=>	false
+			);
+			
+			if($_extra_params!=NULL && is_array($_extra_params)){
+				$extra_params = $_extra_params + $extra_params;
+			}
+			
+			$upload				=	new WRSUpload($upload_dir_key,$extra_params);
+			$htmlUpload			=	$upload->uploadHTML();			
+
+			$html 				=	<<<EOF
+											<div  {$rel}>
+									    		<label for="{$param['label']}"  >{$param['title']}</label>
+										    	<div class="">
+													{$htmlUpload}
+												</div>
+									    	</div>
+EOF;
+	
+			return $html;
+			
+		}
+ 
+	 
 	
 		private function getParamFormInput($param)
 		{

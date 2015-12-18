@@ -98,13 +98,14 @@ class WRS_MANAGE_PARAM
 		$button['new']			=	'Novo';
 		$button['update']		=	'Salvar';
 		
+		
 		if(!WRS_USER::getArrPerfUser('DRG')){
 			$button['remove']	=	'Apagar';
 		}
 		
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
-		
+				
 		$table	=	'ATT_WRS_CUSTOMER';
 		$order	=	array('order_by'=>'CUSTOMER_ID' ,'order_type'=>'ASC');
 		$fields	=	array();
@@ -113,7 +114,7 @@ class WRS_MANAGE_PARAM
 		$exceptions	=	array('class'=>'ATT_WRS_CUSTOMER'	,'file'=>'ATT_WRS_CUSTOMER'	, 'type'=>'');
 		$extend 	= 	array('class'=>'ATT_WRS_CUSTOMER' 	,'file'=>'ATT_WRS_CUSTOMER');
 		
-		$fields['WRS_ICON']			=	array('title'=>'#'					,   'width'=>50,     'basic'=>true, 'grid'=>true);
+		$fields['WRS_ICON']			=	array('title'=>'Icone'				,   'width'=>50,     'basic'=>true, 'grid'=>true, 'is_upload'=>true);
 		$fields['CUSTOMER_ID']		=	array('title'=>'ID'					,   'primary'=>true, 'type'=>'int', 'class'=>'hide');
 		$fields['CUSTOMER_CODE']	=	array('title'=>'Código'				,	'length'=>15,    'list'=>true,	'basic'=>true,  'grid'=>true);
 		$fields['CUSTOMER_DESC']	=	array('title'=>'Nome'				,	'length'=>180,   'list'=>true,	'basic'=>true , 'grid'=>true);
@@ -136,7 +137,7 @@ class WRS_MANAGE_PARAM
  				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
 				'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
 				'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
-				'exception'				=>	$exceptions, 										// NEW
+				'exception'				=>	true, 												// NEW
 				'aplicaClassLinhas'		=>	true,												// NEW
 				'aplicaClassHeaders'	=>	'text-center'										// NEW
 			);
@@ -175,7 +176,7 @@ class WRS_MANAGE_PARAM
 		$order							=	array('order_by'=>'USER_ID' ,'order_type'=>'ASC');
 		
 		$fields							=	array();
-		$fields['WRS_ICON']				=	array('title'=>'#'						, 'width'=>60,     'basic'=>true, 'grid'=>true);
+		$fields['WRS_ICON']				=	array('title'=>'Icone'					, 'width'=>60,     'basic'=>true, 'grid'=>true, 'is_upload'=>true);
 		$fields['USER_ID']				=	array('title'=>'ID'						, 'primary'=>true, 'type'=>'int', 'class'=>'hide');
 		$fields['USER_CODE']			=	array('title'=>'Usuário'				, 'length'=>200,   'basic'=>true, 'list'=>true,  'grid'=>true);
 		$fields['USER_PWD']				=	array('title'=>'Senha'					, 'length'=>30);

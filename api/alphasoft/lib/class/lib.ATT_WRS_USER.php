@@ -48,7 +48,7 @@ class ATT_WRS_USER extends WRS_BASE
 		}
 		
 		$param	=	 $this->OBJECT->build_grid_form($options);	
-		$param['html']			=	'<pre>UPDATE CLASS - tabela: '.$_tabela.'<hr>'.json_encode($arr_campos_request,1).'</pre>'.$param['html'];	
+		$param['html']			=	'<pre>UPDATE CLASS - tabela: '.$_tabela.'<hr>'.print_r($_POST,1).'</pre>'.$param['html'];	
 		return $param;
 	}
 	

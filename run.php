@@ -1,19 +1,26 @@
 <?PHP
 
-//ini_set("display_errors","1");
+//	ini_set("display_errors","1");
 	/**
 	 * file:WRS_CLASS
 	 * class: Name class
 	 * event: INterno para cada processo
 	 */
-//	ini_set("log_errors", 1);
-//	ini_set("error_log", dirname(__FILE__).DIRECTORY_SEPARATOR."api".DIRECTORY_SEPARATOR."alphasoft".DIRECTORY_SEPARATOR."var".DIRECTORY_SEPARATOR."php-error.log");
+	ini_set("log_errors", 1);
+	ini_set("error_log", dirname(__FILE__).DIRECTORY_SEPARATOR."api".DIRECTORY_SEPARATOR."alphasoft".DIRECTORY_SEPARATOR."var".DIRECTORY_SEPARATOR."php-error.log");
 
 //	header("Content-Type: text/html; charset=ISO-8859-1",true);
 //	header("Content-Type: text/html; charset=ISO-8859-1",true);
 	include_once 'config/configCommon.php';
 	
-	$data		=	array('file', 'event', 'class');
+	$filename = fwrs_request('filename');
+	$name_file='file';
+	if(isset($filename) && trim($filename)!=''){
+		$name_file = 'filename';		
+	}
+	
+	$data		=	array($name_file, 'event', 'class');
+	
 	$data		=	fwrs_request($data);
 
 	
@@ -55,7 +62,7 @@
 	
 	
 	
-	includeCLASS($data['file']);
+	includeCLASS($data[$name_file]);
 	$class	=	 $data['class'];	
 	$obj	=	 new $class();
 	$obj->set_conn($conn_wrs);
