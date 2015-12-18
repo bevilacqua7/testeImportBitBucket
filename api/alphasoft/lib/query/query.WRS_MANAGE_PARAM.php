@@ -217,11 +217,23 @@ class WRS_MANAGE_PARAM
 	//Classe de Database ADMINISTRATIVO
 	public function ATT_WRS_DATABASE()
 	{
+
+		$button		=	$button_icon	=	array();
 		
-		//Qdo é um COMBO sem Ser de Tabela, tipo o STATUS?
-		$button	=	array('new'=>'');
+		$button['new']			=	'Novo';
+		$button['update']		=	'Salvar';
+		
+		
+		if(!WRS_USER::getArrPerfUser('DRG')){
+			$button['remove']	=	'Apagar';
+		}
+		
+		$button_icon['new']		=	'fa fa-pencil-square-o';
+		$button_icon['update']	=	'fa fa-floppy-o';
+		
 		$table	=	'ATT_WRS_DATABASE';
 		$order	=	array('order_by'=>'DATABASE_ID' ,'order_type'=>'ASC');
+		$extend	= 	array('class'=>'ATT_WRS_DATABASE' 	,'file'=>'ATT_WRS_DATABASE');
 		$fields	=	array();
 		
 		$fields['WRS_ICON']			=	array('title'=>'#',   			'width'=>50,     'basic'=>true, 'grid'=>true);
@@ -243,7 +255,17 @@ class WRS_MANAGE_PARAM
 				'table'		=>	$table,
 				'order'		=>	$order,
 				'icon'		=>	'user.png',
-				'primary'	=>	'DATABASE_ID'
+				'primary'	=>	'DATABASE_ID',
+				'extend'				=>	$extend,											// NEW
+				'checkbox'				=>	true, 												// NEW
+				'button_icon'			=>	$button_icon,										// NEW
+				'button_force_label'	=>	true, 			  									// NEW
+ 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
+				'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
+				'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
+				'exception'				=>	true, 												// NEW
+				'aplicaClassLinhas'		=>	true,												// NEW
+				'aplicaClassHeaders'	=>	'text-center'										// NEW
 			);
 	}
 	
@@ -251,9 +273,22 @@ class WRS_MANAGE_PARAM
 	//Classe de Cubo ADMINISTRATIVO
 	public function ATT_WRS_CUBE()
 	{
-		$button	=	array('new'=>'');
+		$button		=	$button_icon	=	array();
+		
+		$button['new']			=	'Novo';
+		$button['update']		=	'Salvar';
+		
+		
+		if(!WRS_USER::getArrPerfUser('DRG')){
+			$button['remove']	=	'Apagar';
+		}
+		
+		$button_icon['new']		=	'fa fa-pencil-square-o';
+		$button_icon['update']	=	'fa fa-floppy-o';
+				
 		$table	=	'ATT_WRS_CUBE';
 		$order	=	array('order_by'=>'CUBE_ID' ,'order_type'=>'ASC');
+		$extend	= 	array('class'=>'ATT_WRS_CUBE' 	,'file'=>'ATT_WRS_CUBE');
 		$fields	=	array();
 		
 		$fields['WRS_ICON']			=	array('title'=>'#',   		'width'=>50,    'basic'=>true , 'grid'=>true);
@@ -269,7 +304,17 @@ class WRS_MANAGE_PARAM
 				'table'		=>	$table,
 				'order'		=>	$order,
 				'icon'		=>	'user.png',
-				'primary'	=>	'CUBE_ID'
+				'primary'	=>	'CUBE_ID',
+				'extend'				=>	$extend,											// NEW
+				'checkbox'				=>	true, 												// NEW
+				'button_icon'			=>	$button_icon,										// NEW
+				'button_force_label'	=>	true, 			  									// NEW
+ 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
+				'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
+				'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
+				'exception'				=>	true, 												// NEW
+				'aplicaClassLinhas'		=>	true,												// NEW
+				'aplicaClassHeaders'	=>	'text-center'										// NEW
 			);
 	}
 	
@@ -303,9 +348,22 @@ class WRS_MANAGE_PARAM
 	//Classe de Perfil ADMINISTRATIVO
 	public function ATT_WRS_PERFIL()
 	{
-		$button	=	array('new'=>'');
+		$button		=	$button_icon	=	array();
+		
+		$button['new']			=	'Novo';
+		$button['update']		=	'Salvar';
+		
+		
+		if(!WRS_USER::getArrPerfUser('DRG')){
+			$button['remove']	=	'Apagar';
+		}
+		
+		$button_icon['new']		=	'fa fa-pencil-square-o';
+		$button_icon['update']	=	'fa fa-floppy-o';
+				
 		$table	=	'ATT_WRS_PERFIL';
 		$order	=	array('order_by'=>'PERFIL_ID' ,'order_type'=>'ASC');
+		$extend	= 	array('class'=>'ATT_WRS_PERFIL' 	,'file'=>'ATT_WRS_PERFIL');
 		$fields	=	array();
 		
 		$fields['WRS_ICON']			=	array('title'=>'#',   			'width'=>50,  		'basic'=>true,  'grid'=>true);
@@ -322,7 +380,17 @@ class WRS_MANAGE_PARAM
 				'table'		=>	$table,
 				'order'		=>	$order,
 				'icon'		=>	'user.png',
-				'primary'	=>	'PERFIL_ID'
+				'primary'	=>	'PERFIL_ID',
+				'extend'				=>	$extend,											// NEW
+				'checkbox'				=>	true, 												// NEW
+				'button_icon'			=>	$button_icon,										// NEW
+				'button_force_label'	=>	true, 			  									// NEW
+ 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
+				'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
+				'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
+				'exception'				=>	true, 												// NEW
+				'aplicaClassLinhas'		=>	true,												// NEW
+				'aplicaClassHeaders'	=>	'text-center'										// NEW
 			);
 	}
 		
@@ -330,9 +398,22 @@ class WRS_MANAGE_PARAM
 	//Classe de Relação CUBO-USUÁRIO ADMINISTRATIVO
 	public function REL_WRS_CUBE_USER()
 	{
-		$button	=	array('new'=>'');
+		$button		=	$button_icon	=	array();
+		
+		$button['new']			=	'Novo';
+		$button['update']		=	'Salvar';
+		
+		
+		if(!WRS_USER::getArrPerfUser('DRG')){
+			$button['remove']	=	'Apagar';
+		}
+		
+		$button_icon['new']		=	'fa fa-pencil-square-o';
+		$button_icon['update']	=	'fa fa-floppy-o';
+				
 		$table	=	'REL_WRS_CUBE_USER';
 		$order	=	array('order_by'=>'CUBE_ID' ,'order_type'=>'ASC');
+		$extend	= 	array('class'=>'REL_WRS_CUBE_USER' 	,'file'=>'REL_WRS_CUBE_USER');
 		
 		
 		$fields							=	array();
@@ -347,7 +428,17 @@ class WRS_MANAGE_PARAM
 						'table'		=>	$table,
 						'order'		=>	$order,
 						'icon'		=>	'user.png',
-						'primary'	=>	'CUBE_ID'
+						'primary'	=>	'CUBE_ID',
+						'extend'				=>	$extend,											// NEW
+						'checkbox'				=>	true, 												// NEW
+						'button_icon'			=>	$button_icon,										// NEW
+						'button_force_label'	=>	true, 			  									// NEW
+		 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
+						'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
+						'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
+						'exception'				=>	true, 												// NEW
+						'aplicaClassLinhas'		=>	true,												// NEW
+						'aplicaClassHeaders'	=>	'text-center'										// NEW
 					);
 					
 					
@@ -390,9 +481,22 @@ class WRS_MANAGE_PARAM
 	//Classe de Arquivos para Download ADMINISTRATIVO
 	public function ATT_WRS_DOWNLOAD()
 	{
-		$button	=	array('new'=>'');
+		$button		=	$button_icon	=	array();
+		
+		$button['new']			=	'Novo';
+		$button['update']		=	'Salvar';
+		
+		
+		if(!WRS_USER::getArrPerfUser('DRG')){
+			$button['remove']	=	'Apagar';
+		}
+		
+		$button_icon['new']		=	'fa fa-pencil-square-o';
+		$button_icon['update']	=	'fa fa-floppy-o';
+				
 		$table	=	'ATT_WRS_DOWNLOAD';
 		$order	=	array('order_by'=>'DOWNLOAD_ID' ,'order_type'=>'ASC');
+		$extend	= 	array('class'=>'ATT_WRS_DOWNLOAD' 	,'file'=>'ATT_WRS_DOWNLOAD');
 		$fields	=	array();
 		
 		$fields['WRS_ICON']			=	array('title'=>'#',   			'width'=>50,      'basic'=>true,  'grid'=>true);
@@ -410,7 +514,17 @@ class WRS_MANAGE_PARAM
 				'table'		=>	$table,
 				'order'		=>	$order,
 				'icon'		=>	'user.png',
-				'primary'	=>	'DOWNLOAD_ID'
+				'primary'	=>	'DOWNLOAD_ID',
+				'extend'				=>	$extend,											// NEW
+				'checkbox'				=>	true, 												// NEW
+				'button_icon'			=>	$button_icon,										// NEW
+				'button_force_label'	=>	true, 			  									// NEW
+ 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
+				'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
+				'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
+				'exception'				=>	true, 												// NEW
+				'aplicaClassLinhas'		=>	true,												// NEW
+				'aplicaClassHeaders'	=>	'text-center'										// NEW
 			);
 	}
 	
@@ -418,9 +532,22 @@ class WRS_MANAGE_PARAM
 	//Classe de Logs ADMINISTRATIVO
 	public function ATT_WRS_LOG()
 	{
-		$button	=	array('new'=>'');
+		$button		=	$button_icon	=	array();
+		
+		$button['new']			=	'Novo';
+		$button['update']		=	'Salvar';
+		
+		
+		if(!WRS_USER::getArrPerfUser('DRG')){
+			$button['remove']	=	'Apagar';
+		}
+		
+		$button_icon['new']		=	'fa fa-pencil-square-o';
+		$button_icon['update']	=	'fa fa-floppy-o';
+				
 		$table	=	'ATT_WRS_LOG';
 		$order	=	array('order_by'=>'DATE_ID' ,'order_type'=>'DESC');
+		$extend	= 	array('class'=>'ATT_WRS_LOG' 	,'file'=>'ATT_WRS_LOG');
 		$fields	=	array();
 	
 		$fields['WRS_ICON']			=	array('title'=>'#',    		'width'=>50,	  'grid'=>true);
@@ -438,7 +565,17 @@ class WRS_MANAGE_PARAM
 				'table'		=>	$table,
 				'order'		=>	$order,
 				'icon'		=>	'user.png',
-				'primary'	=>	'TRANSACTION_ID'
+				'primary'	=>	'TRANSACTION_ID',
+				'extend'				=>	$extend,											// NEW
+				'checkbox'				=>	true, 												// NEW
+				'button_icon'			=>	$button_icon,										// NEW
+				'button_force_label'	=>	true, 			  									// NEW
+ 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
+				'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
+				'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
+				'exception'				=>	true, 												// NEW
+				'aplicaClassLinhas'		=>	true,												// NEW
+				'aplicaClassHeaders'	=>	'text-center'										// NEW
 		);
 	}
 	

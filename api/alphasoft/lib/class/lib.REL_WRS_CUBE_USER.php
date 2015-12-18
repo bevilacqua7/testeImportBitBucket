@@ -6,11 +6,11 @@
 
 includeCLASS('WRS_BASE');
 
-class ATT_WRS_USER extends WRS_BASE
+class REL_WRS_CUBE_USER extends WRS_BASE
 {
 	
 	private $OBJECT	= NULL;
-	private $classname = 'ATT_WRS_USER';
+	private $classname = 'REL_WRS_CUBE_USER';
 	
 	
 	public function SetObject($Object)

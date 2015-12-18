@@ -6,11 +6,11 @@
 
 includeCLASS('WRS_BASE');
 
-class ATT_WRS_USER extends WRS_BASE
+class ATT_WRS_DOWNLOAD extends WRS_BASE
 {
 	
 	private $OBJECT	= NULL;
-	private $classname = 'ATT_WRS_USER';
+	private $classname = 'ATT_WRS_DOWNLOAD';
 	
 	
 	public function SetObject($Object)
