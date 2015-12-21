@@ -57,6 +57,8 @@ function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi,load_direct)
 					aba_active.find('.icon-remove-aba').trigger('click');
 				}
 		}
+		
+		delete _layout,wrs_data;
 	_END('WRSKendoGridCompleteRun');	
 }
 
@@ -105,6 +107,7 @@ function WRSKendoGridRefresh(history)
 			
 			WRSKendoGridCompleteRun('#wrs_grid_options_default',_layout,_paranKendoUi);
 			
+			delete _history,getRequestKendoUiDefault,get_aba_active,wrs_multiple_cube_event_class;
 			
 	});
 	_END('WRSKendoGridRefresh');
@@ -149,13 +152,14 @@ function WRSKendoGridComplete(IDGrid)
 			var liVal	=	[history[lineHistory]['date'],type,json,history[lineHistory]['mktime']];
 			
 				html	=	html+str_replace(liSubmit,liVal,li);
+				delete json;
 				
 		}
 	
 	
 	
 	$(IDNav).html(html);
-	
+	delete html;
 	
 	
 	var historyClick	=	 function()
@@ -171,12 +175,16 @@ function WRSKendoGridComplete(IDGrid)
 			_paranKendoUi['MKTIME_HISTORY']	=	_mktime;
 			
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi,true);
-			
+			delete _history;
 		_END('WRSKendoGridComplete::historyClick');
 	}
 	
 	$(IDNav+' a').unbind('click').click(historyClick);
 
+	delete wrsKendoUi;
+	delete trashHistory;
+	delete history;
+	
 		_END('WRSKendoGridComplete');
 }
 
@@ -249,7 +257,10 @@ SET_RELATIONSHIPS_FULL_NAME();
 	
 	_END('wrsKendoUiContextMenu');	
 	
-	 return {'layout_full':layout, 'layout_clean' : layout_tmp};
+	 var data= {'layout_full':layout, 'layout_clean' : layout_tmp};
+	 
+	 delete kendoUi,layout;
+	 return data;
 	 
  }
 
@@ -484,6 +495,8 @@ function getWrsKendoColumn(data)
 						var word			=	_arg.items[i][obj];
 						var img				=	'';	
 						
+						 
+						
 						next_column_count++;
 						
 						//Caso o valor seja maoir não se aplica
@@ -629,6 +642,18 @@ function getWrsKendoColumn(data)
 			//Salvando o total de colunas frozemn para ser usada no ondatabound para o rezide das colunas
 			_arg.sender.dataSource.size_frozen		=	frozen-1;
 			
+			
+			
+			delete kendoUi;
+			delete wrsKendoUi;
+			delete _param;
+			delete DRILL_HIERARQUIA_LINHA_DATA;
+			delete DRILL_HIERARQUIA_REQUEST;
+			delete layout;
+			delete _DRILL_FCC;
+			delete LAYOUT_ROWS_B64;
+			delete word;
+
 			_END('onDataBinding');
 	
 	//TRACE_DEBUG('onDataBinding::'+date('H:i:s'));
@@ -668,6 +693,7 @@ function wrsKendoUiChange(nameID,param,value)
 
 
 	$(chIClass(nameID)).wrsAbaData('setKendoUi',kendoUiData);
+	delete kendoUiData;
 	_END('wrsKendoUiChange');
 		
 }
@@ -769,36 +795,7 @@ function onDataBound(arg)
 			}
 			
 			
-			
-			
-			
-			
-			/*
-			 *	Processando o tamanho do coluna com vase no resultado da query 
-			 */
-			var columns_width_data		=	 arg.sender.dataSource._wrs_request_data.columns_size;
-			if(!isEmpty(columns_width_data))
-				{
-					var colElement		=	 {
-														count_column	:	0,
-														size_word		:	$("<div/>").text('Q').textWidth(),
-														padding_left	:	8
-											};
-					
-					var frozen			=	arg.sender.dataSource.size_frozen;
-					
-					for(var lineNameCol in columns_width_data)
-						{
-						
-								var _width		=	columns_width_data[lineNameCol];
-									_width		=	(_width*colElement.size_word)+colElement.padding_left;
-								
-									WRSSresize(nameID,colElement.count_column, _width,frozen); 
-								colElement.count_column++;
-						}
-				}
-			//END
-			
+			columns_resize_grid(arg.sender,nameID);
 			
 			//Apenas para que os controles do next and Back funcione
 			var options_resize = {
@@ -818,17 +815,56 @@ function onDataBound(arg)
 			setTimeout(time_out,50);
 			
 			
+			delete _kendoUiParam;
+			delete wrsparam;
+			
 			
 			_END('onDataBound');
 			
 			
 			
-			//TRACE_DEBUG('onDataBound::'+date('H:i:s'));
 	}
 
 	
+	/*
+	 *	Processando o tamanho do coluna com base no resultado da query 
+	 */
+	function columns_resize_grid(kendoData,nameID)
+	{
 
-	
+		/*
+		 *	Processando o tamanho do coluna com base no resultado da query 
+		 */
+		var columns_width_data		=	 kendoData.dataSource._wrs_request_data.columns_size;
+		
+
+		if(!isEmpty(columns_width_data))
+			{
+				var colElement		=	 {
+													count_column	:	0,
+													size_word		:	$("<div/>").text('Q').textWidth(),
+													padding_left	:	8
+										};
+				
+				var frozen			=	kendoData.dataSource.size_frozen;
+				
+				for(var lineNameCol in columns_width_data)
+					{
+					
+							var _width		=	columns_width_data[lineNameCol];
+								_width		=	(_width*colElement.size_word)+colElement.padding_left;
+							
+								WRSSresize(nameID,colElement.count_column, _width,frozen); 
+							colElement.count_column++;
+					}
+					
+					delete colElement;
+			}
+		
+		delete columns_width_data;
+		//END
+		
+	}
 	
 	
  
@@ -896,7 +932,7 @@ function resizeColumnKendoUi(arg)
 				$(this).removeClass('k-alt');
 			});
 		
-	
+	delete _arg;
 		_END('resizeColumnKendoUi');	
 }
 
@@ -924,6 +960,7 @@ function  buttonPlusMinus(nameID,hideShow,sizeFrozen)
 																		
 																		if(index!=0){
 																			$(this).html(htmlName);
+																			delete htmlName;
 																		}
 																		
 																		if($(this).attr('wrsNull')!='true')
@@ -1224,6 +1261,8 @@ function  themeSUM(nameID,arg,wrsParam)
 												$('.'+$(this).attr('class')).hide();
 											}
 
+											
+											
 											if(type=='plus') event='show';
 											 
 											 var type_plus_minus		=	type=='plus' ? true : false;
@@ -1231,6 +1270,7 @@ function  themeSUM(nameID,arg,wrsParam)
 											wrsKendoUiChange(IDName,'PLUS_MINUS',type_plus_minus);
 											 
 											buttonPlusMinus(IDName,type_plus_minus,ColumnLength);
+											
 
 											//Escondendo as headers 
 											$(IDName).find('.k-grid-header-locked').find('tr:last-child').find('th').each(function(){
@@ -1261,6 +1301,8 @@ function  themeSUM(nameID,arg,wrsParam)
 													
 												}
 											});
+											
+											
 											//END 
 											//Apenas mantem a última coluna ativa
 											
@@ -1279,6 +1321,8 @@ function  themeSUM(nameID,arg,wrsParam)
 											*/
 											
 										
+											
+											
 											if(localKendoUI['wrs_frozen_data']['data'].length)
 											{
 												
@@ -1303,8 +1347,14 @@ function  themeSUM(nameID,arg,wrsParam)
 											
 											
 											
-												themeSUM(IDName,{sender:localKendoUI},wrsKendoUi);
 											
+											
+											themeSUM(IDName,{sender:localKendoUI},wrsKendoUi);
+											
+											columns_resize_grid(localKendoUI,IDName);
+											resize_common();
+																					
+											delete localKendoUI,telerikColumn,ColumnLength;
 											_END('WrsGridKendoUiControlColumnPlusMinus::buttonHideShow');
 											return false;
 									};
@@ -1355,13 +1405,14 @@ function  themeSUM(nameID,arg,wrsParam)
 				}
 			}
 			
+		
 			
 			if(wrsKendoUi['DRILL_HIERARQUIA_LINHA']==1)
 				{
 					minusButton.addClass('hide');
 					plusButton.addClass('hide');
 				}
-			
+				delete plusButton,minusButton;
 			
 			/**
 			 * Configuraçõs dos TOP Options
@@ -1451,7 +1502,7 @@ function  themeSUM(nameID,arg,wrsParam)
 															
 															
 															$(IDName+'NAV').find('.dropdown-menu-configuration').find('input[type=checkbox]').each(eachFind); //Starta o eventos
-															
+															delete eachFind;
 															//Gravando os Parametros
 															wrsKendoUiChange(IDName,'',getSelected);
 														//	wrsKendoUiChange($(IDName),'',getSelected);
@@ -1563,7 +1614,7 @@ function  themeSUM(nameID,arg,wrsParam)
 				$(this).addClass('border_color');
 			});
 			/* END THEME */
-			
+				delete telerikGrid;
 			_END('WrsGridKendoUiControlColumnPlusMinus');
 	        return this;
 	    };
@@ -1579,6 +1630,8 @@ function  themeSUM(nameID,arg,wrsParam)
 				var telerikGrid 	= 	this.data('kendoGrid');
 				var minWidth		=	_param.minWidth;
 				var maxWidth		=	_param.maxWidth;
+				
+			delete telerikGrid;
 				return this;
 		}
 		

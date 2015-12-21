@@ -172,7 +172,7 @@ HTML;
 	{
 		switch($this->event)
 		{
-			case 'runGrid':  return $this->runGrid($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL); break;
+			case 'runGrid':  return $this->runGrid($table,$orderBy,$orderByPOS,$_start,$_end, $_where); break;
 		}
 	}
 	

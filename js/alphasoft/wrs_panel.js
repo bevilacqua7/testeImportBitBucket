@@ -1121,7 +1121,7 @@ function DROP_EVENT( event, ui ,eventReceive)
 	
 
 
-//	json['FILTER']	=	'';
+//	json['FILTER']	=	null;
 	toEvent.data('wrs-data',json);
 	
 	/*
@@ -1255,11 +1255,9 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 					 
 						var _tmp_filter		=	typeof is_filter == "object" ? implode(',',is_filter) : is_filter;
 						
-						
-						json['FILTER']=_tmp_filter;
-						
+							
+							json['FILTER']=_tmp_filter;
 
-							//console.log('json',json);
 							object.data('wrs-data',json);
 
 					}
@@ -1301,12 +1299,15 @@ jQuery.expr[':'].containClass = function(a, i, m) {
 /**
  * 	Fazendos os inputs dos elementos na grid
  */
-function set_value_box_relatorio(object)
+function set_value_box_relatorio(object,clean)
 {
 	_START('set_value_box_relatorio');
 	
-	$('.wrs_panel_receive').find('li').remove();
-	$('.WRS_DRAG_DROP_FILTER').html('');
+	if(clean==undefined)
+		{
+			$('.wrs_panel_receive').find('li').remove();
+			$('.WRS_DRAG_DROP_FILTER').html('');
+		}
 	
 	if(isset(object.LAYOUT_ROWS))
 	{
@@ -1320,7 +1321,6 @@ function set_value_box_relatorio(object)
 	
 	if(isset(object.LAYOUT_FILTERS))
 	{
-
 		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options ',object.LAYOUT_FILTERS,'.sortable_filtro');
 	}
 	
@@ -1329,7 +1329,9 @@ function set_value_box_relatorio(object)
 		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_METRICA .wrs_panel_options',object.LAYOUT_MEASURES,'.sortable_metrica');
 	}
 	
-	$('.WRS_DRAG_DROP_FILTER').html(str_replace('li','h2',$('.sortable_filtro').html()));
+	if(clean==undefined){
+		$('.WRS_DRAG_DROP_FILTER').html(str_replace('li','h2',$('.sortable_filtro').html()));
+	}
 	
 	
 	
@@ -1362,6 +1364,9 @@ function rows_by_metrica_attr_base64(object,_type)
 		var tag_class	=	$(this).attr('tag-class');
 		var get_object	=	$('.ui-layout-pane-east ul').find('.'+tag_class);
 		
+		
+
+		
 		//console.log(get_object.data('wrs-data'));
 		var json		=	get_object.data('wrs-data');//$.parseJSON(base64_decode(get_object.attr('json')));
 
@@ -1376,6 +1381,9 @@ function rows_by_metrica_attr_base64(object,_type)
 
 				_request[_request.length]	=	json.MEASURE_UNIQUE_NAME;
 			}
+			
+			
+			
 		}
 		
 		
@@ -1454,6 +1462,13 @@ function wrs_run_filter()
 			
 			panel_open_by_time_out(_report_id);
 			
+			
+			
+			delete aba_active;
+			delete report_KendoUi;
+			delete history;
+			delete _filtro_size;
+			
 			return true;
 		}
 	
@@ -1467,6 +1482,13 @@ function wrs_run_filter()
 			$(this).removeAttr('noactive');
 			//stop_job_timeout(_report_id);
 			_END('wrs_run_filter');
+			
+						delete aba_active;
+			delete report_KendoUi;
+			delete history;
+			delete _filtro_size;
+
+			
 			return true;
 		}
 	
@@ -1509,6 +1531,20 @@ function wrs_run_filter()
 	{
 		//click_stop_job();
 		WRS_ALERT(LNG('CONSULTA_ATIVA_CANCELAR'),'warning');
+		
+			delete aba_active;
+			delete report_KendoUi;
+			delete history;
+			delete _filtro_size;
+			delete sortable_metrica;
+			delete sortable_linha;
+			delete sortable_coluna;
+			delete sortable_filtro;
+			delete request_metrica;
+			delete request_linha;
+			delete request_coluna;
+			delete request_filtro;
+			
 		return true;
 	}
 	
@@ -1521,7 +1557,22 @@ function wrs_run_filter()
 			aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
 			configure_options_show_grid($(this));
 			//stop_job_timeout(_report_id);
+			
+				delete aba_active;
+			delete report_KendoUi;
+			delete history;
+			delete _filtro_size;
+			delete sortable_metrica;
+			delete sortable_linha;
+			delete sortable_coluna;
+			delete sortable_filtro;
+			delete request_metrica;
+			delete request_linha;
+			delete request_coluna;
+			delete request_filtro;
+			
 			_END('wrs_run_filter');
+			
 			return true;
 		}
 	}catch(e){console.warn(' exception');}
@@ -1629,14 +1680,13 @@ function wrs_run_filter()
 								wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
 								wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));
 								
-								
-								
 								if(report_KendoUi['TYPE_RUN']==TYPE_RUN.coluna_header)//Apenas executa quando for clique por DILLColuna
 								{
 									wrs_data_param.ALL_ROWS					=	1;
 									wrs_data_param.DRILL_HIERARQUIA_LINHA	=	1;
 								}
 								
+
 								//Salva na aba a nova estrutura
 								aba_active.wrsAbaData('setWrsData',{
 																			LAYOUT_FILTERS			:	wrs_data_param.LAYOUT_FILTERS	, 
@@ -1678,8 +1728,29 @@ function wrs_run_filter()
 						
 						$('body').wrsAbas('remove_event_click');
 						//stop_job_timeout(_report_id);
+						
+						delete aba_active;
+						delete report_KendoUi;
+						delete history;
+						delete _filtro_size;
+						delete sortable_metrica;
+						delete sortable_linha;
+						delete sortable_coluna;
+						delete sortable_filtro;
+						delete request_metrica;
+						delete request_linha;
+						delete request_coluna;
+						delete request_filtro;
+						delete wrs_data_param;
+						delete getAllFiltersToRun;
+						delete wrsConfigGridDefault_data;
+						delete _param_request;
+
 						_END('wrs_run_filter');
+						
 						return false;
+						
+
 					}
 
 					var is_wrs_change_to	=	is_wrs_change_to_run(_param_request,manager_aba,_param_request['REPORT_ID']);
@@ -1693,6 +1764,24 @@ function wrs_run_filter()
 						{
 							configure_options_show_grid($(this));
 							//stop_job_timeout(_report_id);
+							delete aba_active;
+							delete report_KendoUi;
+							delete history;
+							delete _filtro_size;
+							delete sortable_metrica;
+							delete sortable_linha;
+							delete sortable_coluna;
+							delete sortable_filtro;
+							delete request_metrica;
+							delete request_linha;
+							delete request_coluna;
+							delete request_filtro;
+							delete wrs_data_param;
+							delete getAllFiltersToRun;
+							delete wrsConfigGridDefault_data;
+							delete _param_request;
+							delete is_wrs_change_to;
+
 							_END('wrs_run_filter');
 							return true;
 						}
@@ -1724,17 +1813,37 @@ function wrs_run_filter()
 
 			$('.wrs_run_filter').removeAttr('status_load');
 			//stop_job_timeout(_report_id);
+			
+							delete aba_active;
+							delete report_KendoUi;
+							delete history;
+							delete _filtro_size;
+							delete sortable_metrica;
+							delete sortable_linha;
+							delete sortable_coluna;
+							delete sortable_filtro;
+							delete request_metrica;
+							delete request_linha;
+							delete request_coluna;
+							delete request_filtro;
+							delete wrs_data_param;
+							delete getAllFiltersToRun;
+							delete wrsConfigGridDefault_data;
+							delete _param_request;
+							delete is_wrs_change_to;
+							
 			_END('wrs_run_filter');
 			return true;
 		}
 		
-
+		//chave para cancelar o o resultado do job
+		_param_request['KEYS']	=	 _param_request['REPORT_ID']+'_'+js_rand(0,9999999999999);
 		
-		$('body').managerJOB('start_job',{report_id:_param_request['REPORT_ID'],title_aba:_param_request['TITLE_ABA'], 'mktime':mktime(), type_run: _param_request['TYPE_RUN']});
 		
-		//É necessário zerar essas funções para que não mande recriar novamente a estrutura de deill
 		
-
+	//É necessário zerar essas funções para que não mande recriar novamente a estrutura de deill
+		
+		
 		var data_header_drill_column	=	report_KendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER;
 
 		
@@ -1752,9 +1861,15 @@ function wrs_run_filter()
 																	DRILL_HIERARQUIA_LINHA_DATA_HEADER	: 	data_header_drill_column,
 																	TYPE_RUN							:	null,
 																	MKTIME_HISTORY						:	null,
+																	KEYS								:	_param_request['KEYS'],//Chave para cancelamento
 																	JOB_RESULT							:	null 	//Apagando a estrutura de JOB Result caso seja selecionando,
 																}
 												);
+		
+		
+		$('body').managerJOB('start_job',{report_id:_param_request['REPORT_ID'],title_aba:_param_request['TITLE_ABA'], 'mktime':mktime(), type_run: _param_request['TYPE_RUN'], KEYS : _param_request['KEYS']});
+		
+	
 		
 		try{
 			if(report_KendoUi['MKTIME_HISTORY']!=null)
@@ -1775,6 +1890,8 @@ function wrs_run_filter()
 			aba_active.wrsAbas('resize_aba');
 		}
 		
+		
+		clean_filters();
 
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
@@ -1813,6 +1930,24 @@ function wrs_run_filter()
 			//END
 			
 	}
+	
+	delete aba_active;
+	delete report_KendoUi;
+	delete history;
+	delete _filtro_size;
+	delete sortable_metrica;
+	delete sortable_linha;
+	delete sortable_coluna;
+	delete sortable_filtro;
+	delete request_metrica;
+	delete request_linha;
+	delete request_coluna;
+	delete request_filtro;
+	delete wrs_data_param;
+	delete getAllFiltersToRun;
+	delete wrsConfigGridDefault_data;
+	delete _param_request;
+	delete is_wrs_change_to;
 	
 	_END('wrs_run_filter');
 	
@@ -1888,6 +2023,24 @@ function wrsRunGridButton(param_request)
 function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 {
 	
+	
+	try{
+		if(data.error_job==true)
+			{
+						$('.'+data.REPORT_ID).wrsAbaData('setKendoUi',{STOP_RUN:false});
+						WRS_ALERT(data.error,'error');
+						$('body').managerJOB('error_html',{report_id:data.REPORT_ID,msg:data.error});
+						$('body').managerJOB('setMessengerWindow',{kendoUi:$('.'+data.REPORT_ID).wrsAbaData('getKendoUi'),messenger:data.error});
+						
+						return false;
+			}
+	}
+	catch(e)
+	{
+		
+	}
+	
+	
 	_START('MOUNT_LAYOUT_GRID_HEADER');
 	
 	if(is_job_call!='ThreadMainLoadData')
@@ -1899,6 +2052,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 			if($('body').managerJOB('exist_job_render',{report_id:data.REPORT_ID,force_loop_job:true}))
 			{
 				_END('MOUNT_LAYOUT_GRID_HEADER not in JOB');
+				delete data;
 				return true;
 			}
 			
@@ -1909,6 +2063,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 			}
 		}
 	}
+	
 	
 
 
@@ -1924,16 +2079,42 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		if(_report_id!=undefined && _report_id!='undefined')
 		{
 			$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
+			
 		}
 	
 	$('.container_panel_relatorio_rows').each(function(){var id_remove	=	 $(this).attr('id'); if(id_remove==remove_report)	$(this).remove();});
 	
+	
+	
+	var tmp_div_reports	=	$('#'+remove_report);
+	var msg_error		=	tmp_div_reports.attr('rel');
+	var keys			=	tmp_div_reports.attr('keys');
+	
+	
+
+	
+	var getKeys		=	$('body').managerJOB('getKeys');
+	
+	try{
+			
+			if(getKeys[keys]==_report_id)
+			{
+				console.log('Não recebe os dados pois foram cancelados');
+				$('body').managerJOB('setKeys',keys,null);//Apagando keys
+				
+				delete remove_report;
+				delete data;
+				delete aba_ativa;
+				delete tmp_div_reports;
+
+				return true;
+			}
+			
+	}catch(e){
+		
+	}
+	
 	$('.container_panel_relatorio').append(data);
-	
-	
-	var msg_error		=	$('#'+remove_report).attr('rel');
-	
-	
 	
 	
 	//Se não for a aba ativa então faz o hide nbo HTML 
@@ -1941,7 +2122,11 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	find_and_hide_container(aba_ativa);
 	
 	 
-		
+	if(_report_id!=undefined && _report_id!='undefined')
+	{
+		//Apagando os filtros a ser adicionados
+		$('.'+_report_id).wrsAbaData('setNewFilter',{tag:null});
+	}
 		
 		$('#'+aba_ativa+'Main').removeClass('hide');
 	
@@ -1954,9 +2139,11 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		
 		if(msg_error=='error')
 		{
-			var body_html_error		=	$('#'+remove_report).find('div').html();
+			var body_html_error		=	tmp_div_reports.find('div').html();
 			
 			$('body').managerJOB('error_html',{report_id:_report_id,msg:body_html_error});
+			
+			delete body_html_error;
 			
 		}else{
 			
@@ -1978,6 +2165,12 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	$(window).resize();
 	
+	delete remove_report;
+	delete data;
+	delete aba_ativa;
+	delete tmp_div_reports;
+
+				
 	_END('MOUNT_LAYOUT_GRID_HEADER');
 }
 

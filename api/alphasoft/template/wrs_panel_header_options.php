@@ -26,6 +26,8 @@ $CHART_CONFIG								=	LNG('CHART_CONFIG');
 $GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA	=	LNG('GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA');
 $REPORT_RESULT_HISTORY						=	LNG('REPORT_RESULT_HISTORY');
 $script_tags								=	'';
+
+$LAYOUTS					=	LNG('tpl_layout');
 //TAG pode ser enviada externamente pelo include
 if(!isset($HIDE_EXPORT)) $HIDE_EXPORT		=	'';
 
@@ -82,7 +84,11 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 			<div class="navbar-right">
 			
 				<div class="grid_button_header_menu ">
-					  		
+						<button type="button" class="btn btn-default btn-xs btn-open-layouts ">
+						    <i class="fa fa-th-large"></i> {$LAYOUTS} 
+						</button>
+				
+						
 				<!-- TOTAL -->
 				<div class="btn-group dropdown-menu-configuration wrs_grid_options">
 						<button type="button" class="btn btn-default btn-options-grid btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
@@ -175,6 +181,8 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 			
 		  </div>
 		</nav>
+						
+		<script> btn_open_layouts_events() </script>
 HTML;
 				
 		?>

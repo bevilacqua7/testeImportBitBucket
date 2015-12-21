@@ -230,6 +230,8 @@ function DRILL_HIERARQUIA_LINHA_HEADER_CLICK()
 		
 
 		wrsRunFilter();
+		
+		delete kendoGrid,s_param;
 	_END('DRILL_HIERARQUIA_LINHA_HEADER_CLICK');
 	return false; //Obriga a não reordenar a coluna
 
@@ -295,7 +297,7 @@ function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 	$(chIClass(grid_id)).wrsAbaData('setKendoUi',options_change);
 	
 	wrsRunFilter();
-	
+	delete rows,options_change,kendoGrid;
 	_END('DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS');
 }
 

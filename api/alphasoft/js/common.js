@@ -12,6 +12,7 @@
 var IS_TRACE	=	false;
 var RAND_TOKEN	=	js_rand(0,9999999999999);
 	include_js('ThreadJobManager');
+	include_js('Layouts');
 
 	
 if(IS_TRACE)
@@ -47,7 +48,9 @@ var TYPE_RUN	=	{
 						coluna_header		:	'DrillColuna',//Não modificar sem antes também modificar na lib pois é por esse nome que não insiro no histórico
 						coluna_header_line	:	'DrillLinhaHeader',
 						linha_header		:	'DrillHeaderData',
-						data				:	'DrillValue'
+						data				:	'DrillValue',
+						layout				:	'Layout'
+							
 					};
 
 var ABA_TAG_NAME		=	'.WRSAbas ul';
@@ -358,7 +361,19 @@ function array_length(array)
 }
 
 
-
+function implode_wrs(arrayInput)
+{
+	
+	var _tmp		=	[];
+	
+	
+	for(var lineInput in arrayInput)
+	{
+		_tmp.push(arrayInput[lineInput]);
+	}
+	
+	return _tmp.join(',');
+}
 
 function array_join(_param,__param)
 {
@@ -666,6 +681,8 @@ function WRS_ALERT(_text,_type)
 	var _tite		=	"ALERT_TITLE_INFO";
 	var _is_type	=	_type;
 	
+	 
+	
 	switch(_type)
 	{
 		case 'info' 	: _title	=	LNG('ALERT_TITLE_INFO') ;break;
@@ -673,6 +690,8 @@ function WRS_ALERT(_text,_type)
 		case 'success' 	: _title	=	LNG('ALERT_TITLE_SUCCESS') ;break;
 		case 'warning' 	: _title	=	LNG('ALERT_TITLE_WARNING') ;break;
 	}
+	
+
 	
 	modal({
 		type  		: _type,

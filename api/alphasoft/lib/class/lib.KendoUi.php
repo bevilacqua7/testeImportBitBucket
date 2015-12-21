@@ -193,7 +193,8 @@ class KendoUi
 							'STOP_RUN',		//A Flag irá aparecer quando se navega entre as abas | true:false
 							'STOP_QUERY',	//Caso esteja true executa novamente mesmo com o histórico igual|true:false
 							'TOTAL_COLUMN',		//Muito usado quando existir coluna ordenadas
-							'JOB_RESULT'	//REsultado do JOB para o HIstórico
+							'JOB_RESULT',	//REsultado do JOB para o HIstórico
+							'KEYS', //Usado para controlar a chave para cancelamento		
 		);
 	}
 
@@ -382,7 +383,7 @@ class KendoUi
 		$html 	= <<<HTML
 		
 			
-			<div id="{$idTag}Main" class="container_panel_relatorio_rows hide">
+			<div id="{$idTag}Main" class="container_panel_relatorio_rows hide" keys="{$getRequestWrsExceptions['KEYS']}">
 						<div class="wrs_box {$idTag}BOX">
 									{$WRS_PANEL_HEADER_TABLE}
 								

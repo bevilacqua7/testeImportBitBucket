@@ -315,6 +315,8 @@ var AUTO_LOAD_RUN			= <?php echo (($request_exec_report && $request_exec_report=
 <script>
 $(function(){
 	$(ABA_TAG_NAME).wrsAbas('auto_load', AUTO_LOAD);
+
+	controllers_layout();//click controllers layout
 })
 </script>
 

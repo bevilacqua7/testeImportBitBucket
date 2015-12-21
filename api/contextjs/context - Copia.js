@@ -97,7 +97,7 @@ var context = context || (function () {
 	function buildMenuWRS(data, id, subMenu) {
 		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
 			compressed = options.compress ? ' compressed-context' : '',
-			$menu = $('<ul class="dropdown-menu dropdown-menu-drill-wrs dropdown-menu-drill dropdown-context' + subClass + compressed+'" context-wrs="'+id+'" id="dropdown-' + id + '"></ul>');
+			$menu = $('<ul class="dropdown-menu dropdown-menu-drill dropdown-context' + subClass + compressed+'" id="dropdown-' + id + '"></ul>');
         var i = 0, linkTarget = '';
         for(i; i<data.length; i++) {
         	if (typeof data[i].divider !== 'undefined') {
@@ -268,26 +268,14 @@ var context = context || (function () {
 	function addContextWRS(selector, data,whoEventRequest) {
 		
 
-		
 		destroyContext(selector);
 
 		var d 		= new Date(),
-			id 		= d.getTime();
-			
-
+			id 		= d.getTime(),
+			$menu 	= buildMenuWRS(data, id);
 		
-		//WARNING:: Procedimento para poder deixar o modelo mais rápido
-		if($('.dropdown-menu-drill-wrs').length==0){
-			//processo natural
-			var $menu 	= buildMenuWRS(data, id);
-			
-				$('body').append($menu);
-				delete $menu;
-			
-		}else{
-			//mudança por marcelo santos
-			id	=	$('.dropdown-menu-drill-wrs').attr('context-wrs');
-		}
+			$('body').append($menu);
+	
 			
 			/*
 			 * COntrolando os eventos do Hover 

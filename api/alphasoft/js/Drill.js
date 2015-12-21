@@ -69,6 +69,8 @@ function addDrillOnDataBound(nameID,kendoUI)
 						
 						changeWithDrillFilter(_layout,filter_add);
 						
+						delete rows,column;
+						
 		_END('addDrillOnDataBound::clickDrillDown');				
 		
 	};
@@ -137,6 +139,8 @@ function addDrillOnDataBound(nameID,kendoUI)
 						})
 					}
 				}	
+				
+				delete json;
 		}
 	
 
@@ -195,13 +199,13 @@ function addDrillOnDataBound(nameID,kendoUI)
 				}
 			
 			
-
+			delete json;
 			
 		}
 
 	
 	
-	
+		delete kendo,rows_tag,column_tag,_data,__kendoUI;
 	_END('addDrillOnDataBound');
 	
 }
@@ -240,6 +244,8 @@ function addTargetDisableContext(kendoUi,report_id)
 		
 		tr++;
 	}
+	
+	delete keyName;
 	
 	_END('addTargetDisableContext');
 }
@@ -524,6 +530,7 @@ function addTargetDisableContext(kendoUi,report_id)
     			};break;
     		}
 			
+			delete kendoUi,_data,keyName,layout,_layout;
 			_END('WrsDrill::drill_click_option');
     	}// EDN drill_click_option(e)
     	
@@ -590,7 +597,7 @@ function addTargetDisableContext(kendoUi,report_id)
         					menuMain[menuMain.length]	=	{text	: TITLE	, subMenu:subMenu,className:replace_attr(fullName)};
         				//menuMain[menuMain.length]=	 {divider: true};
         		}
-    		
+    		delete subMenu;
 			_END('WrsDrill::menu_context_relation_ship_measure');
         	return menuMain;
     	}
@@ -675,7 +682,7 @@ function addTargetDisableContext(kendoUi,report_id)
     			}   		 
     	}
   
-
+delete jsonRelationShip,jsonMeasure,kendoUi,e_infos,e_colunas,e_linhas,cols_qtde,data_line_header,data_line_row;
 _END('WrsDrill');
         return $event;
     };
