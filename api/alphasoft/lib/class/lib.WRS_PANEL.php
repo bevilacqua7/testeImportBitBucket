@@ -186,6 +186,14 @@ class WRS_PANEL  extends WRS_USER
 
 
 		$gridFlag		=	$this->getGrid($SERVER,$DATABASE,$CUBE,$USER_CODE);
+		
+		
+		if(!empty($gridFlag['error']))
+		{
+			header('Content-Type: application/json');
+			echo json_encode($gridFlag);	
+		}
+		
 	}
 	
 	
@@ -212,6 +220,8 @@ class WRS_PANEL  extends WRS_USER
 		//Ou invoca apenas a criação do Elemento que está sendo solicitado
 		//$CUBE			=	'[SAN - MDTR_NEW]';
 		$gridFlag		=	$this->getGrid($SERVER,$DATABASE,$CUBE,$USER_CODE);
+
+		
 		
 		/*
 		 * Declarando as variáveis que irá para o HTML
@@ -875,6 +885,13 @@ class WRS_PANEL  extends WRS_USER
 						$queryGrid			=	 $this->_query->CREATE_SSAS_JOB($SERVER, $DATABASE, $CUBE, $ROWSL, $COLUMNS, $MEASURES, $FILTERS, $ALL_ROWS, $ALL_COLS, $COLS_ORDER, 0, '');
 				
 						$queryGrid_exec		=	 $this->query($queryGrid);
+						
+						
+						if(!$queryGrid_exec)
+						{
+							return array('error'=>LNG('ERROR_CANT_CREATE_JOB'),'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'error_job'=>true);
+						}
+						
 						$job_num_rows		=	$this->num_rows($queryGrid_exec);
 						
 						if($job_num_rows)
@@ -1376,12 +1393,10 @@ HTML;
 		$sqlGrid				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
 		
 		//Query convencional com a formatação para o gráfico
-		$sql_chart				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,0,$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		$sql_chart				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,0,0,$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
 
 		//Query com o Tamanho das colunas
 		$sql_string_width_size	=	 $this->_query->SELECT_SSAS_SIZE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
-		
-		
 		
 		//Processando o bloco com o tamanho das colunas		
 		$columns_width			=	NULL;
@@ -1489,10 +1504,10 @@ HTML;
 			
 		}
 		
+
 		/*
 		 * Retorna os valores para o Json 
 		 */
-		
 		$result				=	 array();
 		$result['total']	=	$numRows;
 		$result['data']		=	$resultGrid;

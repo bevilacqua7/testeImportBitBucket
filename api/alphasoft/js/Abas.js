@@ -149,6 +149,7 @@ function optionsDataConvert(gridValue,with_decode)
 					set_value_box_relatorio(opts);
 					filter_configure_window();
 			
+			delete optionsAba,opts;
 					_END('wrsAbas::open_configure_default');
 			}
 			
@@ -224,6 +225,7 @@ function optionsDataConvert(gridValue,with_decode)
 									
 									$(window).resize();		
 									resize_container_grid(report_id);
+									delete history;
 								return true;
 								
 							}else{
@@ -232,6 +234,7 @@ function optionsDataConvert(gridValue,with_decode)
 
 						if(is_load==true) 
 						{
+							delete history;
 							return true;
 						}
 						
@@ -275,7 +278,7 @@ function optionsDataConvert(gridValue,with_decode)
 						
 						$(window).resize();		
 						resize_container_grid(report_id);
-						
+						delete history;
 						_END('wrsAbas::__manager_vision_grid_edit');
 			}
 			
@@ -365,11 +368,13 @@ function optionsDataConvert(gridValue,with_decode)
 											
 											$('.container_panel_relatorio_rows').addClass('hide');
 								btn_add_new_aba();	
+								
+								delete getElement;
 					}
 					tagABA.find('.'+className).remove();
 					tagABA.append(htmlABA);
 					tagABA.find('.'+className).unbind('click').click(_click_btn_new_aba);
-					
+
 					_END('wrsAbas::btn_add_new_aba');
 			}
 			/**
@@ -401,7 +406,7 @@ function optionsDataConvert(gridValue,with_decode)
 					}
 					
 						tagABA.find('.'+currentABA).data(kendoUiDataAba,kendoUiGrid);
-					
+					delete kendoUiGrid;
 						_END('wrsAbas::saveKendoGridData');
 						
 			}
@@ -444,7 +449,7 @@ function optionsDataConvert(gridValue,with_decode)
 				
 					if(empty(_param_request) || _param_request=='null') _param_request	=	{};
 					
-				
+
  				
 				var sortable_metrica	=	 rows_by_metrica_attr_base64('.sortable_metrica','metrica');
 				var sortable_linha		=	 rows_by_metrica_attr_base64('.sortable_linha','attr');
@@ -462,14 +467,16 @@ function optionsDataConvert(gridValue,with_decode)
 					_param_request['LAYOUT_ROWS']		=	base64_encode(implode(',',request_linha));
 					_param_request['LAYOUT_COLUMNS']	=	base64_encode(implode(',',request_coluna));
 					_param_request['LAYOUT_MEASURES']	=	base64_encode(implode(',',request_metrica));
-					_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
-					_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
+					//_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
+					//_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
+
 					
 					
 					try{
 						if(_aba_active.wrsAbaData('getKendoUi').new_aba==true)
 							{
 								_aba_active.wrsAbaData('setKendoUi',{new_aba:false});
+								delete aba_active,_filter_hide,_param_request,sortable_metrica,sortable_linha,sortable_coluna,sortable_filtro,getAllFiltersToRun,request_metrica,request_linha,request_coluna,request_filtro;
 								return true;
 							}
 				}catch(e){ 
@@ -490,6 +497,7 @@ function optionsDataConvert(gridValue,with_decode)
 					//Desabilita a janela
 					activeToGetAllFiltersRecover(_filter_hide);
 					
+					delete aba_active,_filter_hide,_param_request,sortable_metrica,sortable_linha,sortable_coluna,sortable_filtro,getAllFiltersToRun,request_metrica,request_linha,request_coluna,request_filtro;
 					_END('wrsAbas::__save_info_aba_current');
 				
 			}
@@ -525,7 +533,7 @@ function optionsDataConvert(gridValue,with_decode)
 					multiple_cube_id	=			null;	
 					console.warn(' exception');
 				}
-				
+				delete kendoObject;
 				_END('wrsAbas::multiple_cube_active');
 
 			}
@@ -543,7 +551,6 @@ function optionsDataConvert(gridValue,with_decode)
 				var hasDefault		=	$('.wrs_panel_filter_measure').is(':hidden');
 				var _report_id		=	$(this).attr('id-aba');
 				var IDCurrent		=	'#'+_report_id;
-				
 				var current			=	 $(IDCurrent+'Main');
 				
 				/*
@@ -614,6 +621,7 @@ function optionsDataConvert(gridValue,with_decode)
 							open_configure_default();
 							__manager_vision_grid_edit($(this),_report_id,noactive,_isLoad,mensagem_window);
 							//$(window).resize();
+							delete data_array_aba,_isLoad,gridValue,mensagem_window;
 							_END('wrsAbas::dblclick_open_aba');
 							return true;
 						}
@@ -689,6 +697,7 @@ function optionsDataConvert(gridValue,with_decode)
 
 					__manager_vision_grid_edit($(this),_report_id,noactive,_isLoad,mensagem_window);
 					
+					delete data_array_aba,_isLoad,gridValue,mensagem_window,optionsAba;
 					_END('wrsAbas::dblclick_open_aba');
 			}
 			
@@ -884,7 +893,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 				
 				
-				
+				delete kendoUi;
 						
 			}
 			
@@ -1049,7 +1058,7 @@ function optionsDataConvert(gridValue,with_decode)
 						
 
 			
-			
+						delete aba_data;
 					}	
 					
 					event_span_editable();
@@ -1235,7 +1244,10 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					
 					
-					if(be_loaded) return true;
+					if(be_loaded){
+						delete optionsAba,kendoUi;
+						return true;
+					}
 					
 					btn_add_new_aba();
 					
@@ -1251,6 +1263,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					if(empty(_report_id)) {
 						_END('wrsAbas::__load_multiple');
+						delete optionsAba,kendoUi,optionsAba;
 						return false;
 					}
 					
@@ -1280,7 +1293,7 @@ function optionsDataConvert(gridValue,with_decode)
 					}
 					
 				 
-					
+					delete aba_active,optionsAba,kendoUi,optionsAba,get_last_active;
 					
 				_END('wrsAbas::__load_multiple');	
 			}
@@ -1376,7 +1389,7 @@ function optionsDataConvert(gridValue,with_decode)
 						
 						}
 					
-					
+					delete opts,optsDefault;
 					_END('wrsAbas::encode_to_aba_create');
 					
 					return optsDefault;
@@ -1415,6 +1428,8 @@ function optionsDataConvert(gridValue,with_decode)
 						}
 						
 						__load_multiple([opts_encode],true);
+						
+						delete optionsAba,opts,opts_encode;
 						
 					_END('wrsAbas::__refresh_F5');	
 			}
@@ -1504,7 +1519,7 @@ function optionsDataConvert(gridValue,with_decode)
 						{
 							aba_active.find('.icon-remove-aba').trigger('click');
 						}
-					
+					delete input;
 					_END('wrsAbas::__show_grid');
 			}
 			
@@ -1628,6 +1643,209 @@ function optionsDataConvert(gridValue,with_decode)
 			}
 			
 			
+			
+			/**
+			 * Pegando o resultado do filtros que está no registro da ABA
+			 */
+			var __getFilter			=	 function(options)
+			{
+				if(data_global==undefined) return false;
+				
+				
+				var get_filter	=	getJsonDecodeBase64(data_global.data.FILTER_TMP);
+				
+				
+				if(isEmpty(get_filter)) return '';
+				
+
+				
+				for(var lineFilter in get_filter)
+					{
+						if(get_filter[lineFilter]['class']	==	'__'+options.tag) return get_filter[lineFilter]['data'];
+					}
+				
+				return '';
+			}
+			
+			var delete_filter_selected	=	 function(options)
+			{
+				var filter_o		=	data_global.data.FILTER_TMP;
+				var filter			=	getJsonDecodeBase64(filter_o);
+				var filter_class	=	[];
+				var detect			=	false;
+				
+				for(var line in filter)
+					{
+							if(filter[line]['class']=='__'+options.tag)
+							{
+								
+								var _data		=	 explode(',',filter[line].data);
+								var _data_tmp	=	[];
+								
+								if(options.data!=null) 
+								{
+									for(var lineData in _data)
+										{
+											if(_data[lineData]!=options.data)
+												{
+													_data_tmp.push(_data[lineData]);
+												}
+										}
+								}
+								
+								filter_class.push({'class' : '__'+options.tag, data : _data_tmp.join(',')});
+								detect	=	true;
+							}
+							else
+							{
+								filter_class.push(filter[line]);
+							}
+						
+					}
+				
+				
+				if(detect==true)	return base64_encode(json_encode(filter_class));
+					
+				return filter_o;
+				
+			}
+			/**
+			 * Filtros temporários executados
+			 * tag
+			 * data
+			 * only_data
+			 */
+			var __setNewFilter	=	 function(filterName)
+			{
+				
+				if(data_global==undefined) return false;
+				
+				
+				try{
+					if(!data_global.data.filter_tmp)
+						{
+							data_global.data['filter_tmp']	=	{};
+						}
+				}catch(e){
+					
+					data_global.data['filter_tmp']	=	{};
+				}
+				
+				
+				
+				//Removendo todos os filtros a ser aplicado
+				if(filterName.tag==null)
+				{
+					data_global.data['filter_tmp']	=	{};
+					that.data(wrsDataName,data_global);
+					return false;
+				}
+				
+				
+				
+				//Removendo todos os filtros a ser aplicado
+				if(filterName.data==null)
+				{
+					data_global.data['filter_tmp'][filterName.tag]	=	[];
+					that.data(wrsDataName,data_global);
+					
+					data_global.data.FILTER_TMP	= delete_filter_selected(filterName);
+					
+					return true;
+				}
+				
+				//removendo data
+				try{
+						if(filterName.remove==true)
+						{
+							//verificando se existe filtro a ser removido do temporário	
+							var _tmp_remove	=	data_global.data.filter_tmp[filterName.tag];
+							var is_temp		=	true;
+								for(var line in _tmp_remove)
+									{
+											if(_tmp_remove[line]==filterName.data)
+												{
+													delete data_global.data.filter_tmp[filterName.tag][line];
+													is_temp	=	 false;
+												}
+									}
+								
+								if(is_temp==true)	data_global.data.FILTER_TMP	= delete_filter_selected(filterName);
+							
+							that.data(wrsDataName,data_global);
+							return false;
+							
+						}
+				}catch(e){}
+				
+				
+				//Opção de radio que é permitido apenas 1 opção
+				try{
+					if(filterName.only_data==true)
+						{
+							data_global.data.filter_tmp[filterName.tag]	=	[];
+						}
+					
+				}catch(e){}
+				
+
+				
+				try{
+					if(typeof  data_global.data.filter_tmp[filterName.tag]!="object")
+						{
+							data_global.data.filter_tmp[filterName.tag]=	[];
+						}
+				}catch(e)
+				{
+					data_global.data.filter_tmp[filterName.tag]=	[];
+				}
+				
+				
+				
+				if(exist_in_array(data_global.data.filter_tmp[filterName.tag],filterName.data)) return false;
+				
+				
+				data_global.data.filter_tmp[filterName.tag].push(filterName.data);
+				that.data(wrsDataName,data_global);
+				
+			}
+			
+			
+			/**
+			 * Recupera os Filtros que estão a a ser executados
+			 */
+			var __getNewFilter	=	 function(filterName)
+			{
+				
+					if(data_global==undefined) return false;
+				
+					try{
+						
+						if(!data_global.data.filter_tmp)
+							{
+								data_global.data['filter_tmp']	=	{};
+							}
+						
+					}catch(e){
+						
+						data_global.data.filter_tmp	=	{}
+					}
+					
+					var _data	=	null;
+					
+					try{
+						_data	=	data_global.data.filter_tmp[filterName.tag];
+					}catch(e){
+						_data	=	null;
+					}
+					
+					
+					return _data;
+				
+			}
+			
+			
+			
 			/**
 			 * Verificando se existe modificações
 			 * @returns {Boolean}
@@ -1706,12 +1924,6 @@ function optionsDataConvert(gridValue,with_decode)
 			 */
 			var __setKendoUi	=	 function(input)
 			{
-				/*
-				try{
-						
-						console.error('STOP_RUN',input['STOP_RUN']);
-				}catch(e){}
-				*/
 				
 				if(data_global==undefined || data_global==null)
 					{
@@ -1876,8 +2088,10 @@ function optionsDataConvert(gridValue,with_decode)
 			        get_change_aba		:	__get_change_aba,
 			        getEnableChange		:	__getEnableChange,
 			        aba_detect_change	:	__aba_detect_change,
-			        remove_asterisk		:	__remove_asterisk
-			        
+			        remove_asterisk		:	__remove_asterisk,
+			        setNewFilter		: 	__setNewFilter,
+			        getNewFilter		:	__getNewFilter,
+			        getFilter			:	__getFilter
 			};
 			
 				/*

@@ -217,6 +217,9 @@ var HEIGHT_ABAS		=	50;
 				
 
 				resize_container_grid(idName,wrs_data);
+				
+				
+				delete kendoUiTools;
 			_END('WRSWindowGridEventTools::WRSWindowGridEventToolsClick');
 		};
 
@@ -251,6 +254,7 @@ var HEIGHT_ABAS		=	50;
 	  				}
 	  		});
 			
+			delete wrsKendoUi;
 			_END('WRSWindowGridEventTools::function_btn_open_type_vision');
 	  	}
 
@@ -260,6 +264,13 @@ var HEIGHT_ABAS		=	50;
 		
 		//NAV.find('.btn-open-type-vision').unbind('click').click(function_btn_open_type_vision);
 		
+	delete eventTelerik;
+	delete GRID;
+	delete NAV;
+	delete ELEMENT;
+	delete BOX;
+	delete MAP;
+	delete CHART;
 		_END('WRSWindowGridEventTools');
 		
 		
@@ -317,6 +328,10 @@ function generate_hight_models(report_id)
 	ELEMENT.height(height);
 
 	
+		delete kendoUi;
+		delete ELEMENT;
+		delete layout_center;
+
 		$('#'+report_id).height(height);
 	
 	
@@ -376,6 +391,7 @@ function resize_container_grid(report_id,_type_grid)
 									wrs_tools_options_window	:	'.wrs_tools_options_window .active_tools',
 									info_chart					:	'.info_chart',
 									grid_button_header_menu		:	'.grid_button_header_menu',
+									k_pager_info				:	'.k-pager-info',
 									k_pager_sizes				:	'.k-pager-sizes',
 									k_dropdown_wrap				:	'.k-dropdown-wrap',
 									k_animation_container		:	'.k-animation-container',
@@ -520,6 +536,9 @@ function resize_container_grid(report_id,_type_grid)
 //										console.log('receive');
 							}
 					}
+					
+					delete order_options,order;
+					
 				_END('resize_container_grid::change_order');
 			}
 
@@ -694,9 +713,30 @@ function resize_container_grid(report_id,_type_grid)
 				
 					options.container_configure.find(options.tag.k_grid_page).remove();
 					options.container_configure.find(options.tag.grid_button_header_menu).prepend(options.grid.find(options.tag.k_grid_page).clone());
-					options.container_configure.find(options.tag.k_pager_sizes).append(' '+options.kendoGrid.dataSource._total);
+
+					
+					var _div	=	$("<div/>").html(options.container_configure.find(options.tag.k_pager_sizes).html());
+						_div.find('span').remove();
+
+					var _html_tmp	=	options.container_configure.find(options.tag.k_pager_sizes).html();
+					
+					
+					options.container_configure.find(options.tag.k_pager_sizes).html(_html_tmp.replace(strip_tags(_div.html()),''));
+					
+					
+					
+				
+					options.container_configure.find(options.tag.k_pager_sizes).append(LNG('label_total')+' : '+options.kendoGrid.dataSource._total);
+					
+					//options.container_configure.find(options.tag.k_pager_sizes).append(' '+options.kendoGrid.dataSource._total);
 					
 					options.container_configure.find(options.tag.grid_button_header_menu).find(options.tag.k_dropdown_wrap).hide();
+					
+					
+					
+					
+				
+					
 					
 					//Select da nova header
 					options.container_configure.find(options.tag.grid_button_header_menu).find('.k-dropdown select').data('optionsWRS',options).show().change(function() {
@@ -743,6 +783,9 @@ function resize_container_grid(report_id,_type_grid)
 								
 					    }
 					});
+					
+					
+					
 				_END('resize_container_grid::clone_header_pagination');	
 			}
 			
@@ -937,7 +980,13 @@ function resize_container_grid(report_id,_type_grid)
 			}
 
 		
-	
+	delete kendoUi;
+	delete type_grid;
+	delete layout_center_object;
+	delete layout_center;
+	delete html_class;
+	delete options;
+
 	_END('resize_container_grid');
 	
 }
@@ -972,7 +1021,7 @@ function saveHistoryEvents(kendoParam,report_id)
 		param			=	 base64_encode(json_encode(param));
 	var param_request	=	{'report_id':report_id,'history_options':param,'cube_s':CUBE_S};
 		runCall(param_request, 'WRS_PANEL', 'WRS_PANEL', 'save_history', null, 'modal');
-		
+		delete param;
 	_END('saveHistoryEvents');	
 }
 
@@ -1093,7 +1142,7 @@ var getRequestKendoUiDefault	=	{};
   				}
   		});
   		
-  		
+  		delete _opts;
 		_END('wrsConfigGridDefault::function_btn_open_type_vision');
   	}
   	
@@ -1119,7 +1168,7 @@ var getRequestKendoUiDefault	=	{};
   					
   					active_aba.wrsAbaData('setKendoUi',{WINDOW:_wrs_data});
   					
-				
+				delete active_aba;
   				_END('wrsConfigGridDefault::function_click_list_wrs_vision');				
 		
   				return false;
@@ -1151,6 +1200,7 @@ var getRequestKendoUiDefault	=	{};
 	  				rules_pendences_checkbox($(this),$(this).parent().parent().parent());
   		});
   		
+		delete _opts;
 		_END('wrsConfigGridDefault::event_click_btn_options');
   	}
   	
@@ -1186,6 +1236,8 @@ var getRequestKendoUiDefault	=	{};
 
 	  		get_aba.wrsAbaData('setKendoUi',opts);
 	  		rules_pendences_checkbox($(this),$(this).parents('ul'));
+			
+			delete get_aba;
 	  			
 		_END('wrsConfigGridDefault::event_find_nav_options_input');
   	}
@@ -1202,6 +1254,7 @@ var getRequestKendoUiDefault	=	{};
   				var _json		=	 $(this).attr('json');
   				var _json_data	=	getJsonDecodeBase64(_json);
   				get_measures_title[_json_data.MEASURE_UNIQUE_NAME]	=	_json_data.MEASURE_NAME;
+				delete _json_data,_json;
 
   			});
   			
@@ -1240,6 +1293,7 @@ var getRequestKendoUiDefault	=	{};
   		
   		$($(this).attr('data-target')).modal('show');  	
 
+		delete KendoUi;
 		_END('wrsConfigGridDefault::event_btn_configute_chart');		
   	}
   	
@@ -1270,6 +1324,8 @@ var getRequestKendoUiDefault	=	{};
   	element.attr('isDefault',true).wrsTopOptions();
 	_END('wrsConfigGridDefault');
   		
+		delete data,opts,nav_options;
+		
       return element;
 
   };

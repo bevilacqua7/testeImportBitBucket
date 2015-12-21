@@ -248,9 +248,16 @@ function repair_reportname_kendoui(_obj){
 		var attr = obj.REPORT_OPTIONS;
 		if (typeof attr !== typeof undefined && attr !== false) {
 			
-			
+
 			
 			var param_options 		= 	$.parseJSON(base64_decode(obj.REPORT_OPTIONS));
+			
+
+			if(isEmpty(param_options))  
+			{
+				return false;
+			}
+			
 				param_options.TITLE_ABA		=	obj.REPORT_DESC;
 			
 			

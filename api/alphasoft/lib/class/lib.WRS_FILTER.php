@@ -117,6 +117,8 @@ class WRS_FILTER  extends WRS_BASE
 		$FILTER_REQUEST			=	fwrs_request('FILTER');
 		$FILTER_UP				=	fwrs_request('FILTER_UP');
 		
+		$tag_class				=	 fwrs_request('tag_class');
+		
 		/*
 		 * Identifica se o tipo de campo é checkBox ou Radio simples
 		 */
@@ -190,7 +192,7 @@ class WRS_FILTER  extends WRS_BASE
 		$body	=	array();
 		$_body	=	array();
 		
-		$input			=	'<input type="checkbox" class="btn_event_filtro_checkbox"  index-data="'.$index_data.'">';
+		$input			=	'<input type="checkbox" tag-class="'.$tag_class.'"  class="btn_event_filtro_checkbox"  index-data="'.$index_data.'">';
 		$input_type		=	'checkbox';
 		
 		if(!$atributo_simples_composto) 
@@ -236,7 +238,7 @@ class WRS_FILTER  extends WRS_BASE
 			$count++;
 			if($LIMIT_PAGE==$count) continue;
 			
-			$body[]	=	'<input type="'.$input_type.'" name="'.$LEVEL_FULL.'" class="wrs_input_filter_single" index-data="'.$index_data.'"  '.fwrs_checkbox($FILTER_ARRAY, $value).' value="'.$value.'">';
+			$body[]	=	'<input type="'.$input_type.'" tag-class="'.$tag_class.'" name="'.$LEVEL_FULL.'" class="wrs_input_filter_single" index-data="'.$index_data.'"  '.fwrs_checkbox($FILTER_ARRAY, $value).' value="'.$value.'">';
 			$body[]	=	$_value;
 			$table_body.= $this->table_body($body,"text_original='".$_value."'",NULL,NULL,array('pws_click_triger_single','pws_click_triger_single pws_filter_text') );
 		}

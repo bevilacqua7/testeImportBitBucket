@@ -14,6 +14,10 @@
 	$language ['VALOR'] 								= "Valor";
 	
 	
+	$language ['ERROR_CANT_CREATE_JOB'] 						= "Ops.. Favor reenviar a consulta, não foi possível criar um job, se o erro persistir favor entrar em contato com o suporte";
+	
+	
+	
 	$language['NO_RESULTS_QUERY']	=	'sem resultados para a consulta: ';
 
 	
@@ -231,9 +235,31 @@
 	$language ['BTN_UPDATE'] 	= "Alterar";
 	$language ['BTN_NEW'] 		= "Novo";
 	$language ['BTN_SAVE'] 		= "Salvar";
-	$language ['BTN_APPLY'] 		= "Aplicar";
+	$language ['BTN_APPLY'] 	= "Aplicar";
 	$language['OF'] 			= "de";
 	$language['PAGE'] 			= "Página";
+	
+	
+	$language['tpl_layout_remove_empty'] 				= "É necessário selecionar algum relatório para poder deletar";
+	$language['tpl_layout_remove_sucess'] 				= "Layouts Removidos com sucesso";
+	$language['tpl_layout_remove_error'] 				= "Não foi possivel remover alguns layouts";
+	
+	$language['tpl_layout_options_default'] 				= "Padrão";
+	
+	$language['tpl_layout'] 				= "Layouts";
+	$language['tpl_layout_title'] 			= "Salvar Layout";
+	$language['tpl_layout_name'] 			= "Nome Layout";
+	$language['tpl_layout_alias'] 			= "Alias Layout";
+	$language['tpl_layout_name_empty'] 		= "É necessário digitar o <b>Nome Layout</b>";
+	$language['tpl_layout_alias_empty'] 	= "É necessário digitar o <b>Alias Layout</b>";
+	$language['tpl_layout_data_empty'] 		= "É necessário preencher uma das opções para salvar um layout <b>Métricas, Linhas ou Colunas</b>";
+	
+	$language['tpl_layout_option_select_empty'] 		= "É necessário selecionar alguma opção para o layout";
+	
+	
+	$language['tpl_layout_share'] 			= "Compartilhar";
+	$language['tpl_layout_error'] 			= "OPS... Erro ao salvar o layout,favor tentar novamente";
+	$language['tpl_layout_sucess'] 			= "Layout salvo com sucesso";
 	
 	
 	$language ['ALERT_TITLE_ERRO'] 		= "Aconteceu um erro.";
@@ -286,6 +312,7 @@
 	$language ['TITLE_ATT_WRS_LOG'] 		=  "Gerenciamento de Logs";
 	
 	$language['LINE_TOTAL']					=	'TOTAL';
+	$language['label_total']				=	'Total';
 	$language['LINE_TOTAL_BUBBLE']			=	'Deseja usar as linha de totais no gráfico?';
 	
 	

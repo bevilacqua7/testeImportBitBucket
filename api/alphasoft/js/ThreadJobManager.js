@@ -50,6 +50,7 @@ function job_exist(report_id)
 													job					:	{},	//Processos que ainda estão em execução pelo JOB do Banco de dados
 													job_render			:	{}, //Processos de load que ainda está em execução mesmo que o job já tenha finalizado  é a copia de dados do JOB mas apenas para que a Grid finaliza de carregar
 													cancel				:	{}, //Solicitação de cancelamento
+													keys				:	{}, //Chave para retorno caso não exita a chave para o retorno então não mostra na tela
 													mensagens			:	{},	//Contem as mensagens de erro que foram geradas apenas se limpa quando solicita uma nova
 													mktime				:	{}, //contem todos os mktime da criação do event 
 													_time				:	null, // 
@@ -58,7 +59,9 @@ function job_exist(report_id)
 													modal				:	'.modal-window-wrs',
 													close_modal			:	'.manager-job-modal-close',
 													cancel_job			:	'.manager-job-modal-cancel',
-													aba_close_report_id :  false
+													aba_close_report_id :  false,
+															
+													
 												}
 						
 						return $.extend({}, defaultData,data_body);
@@ -70,6 +73,8 @@ function job_exist(report_id)
 					_data.not_title		=		not_title;
 					setData(_data);
 					
+					delete _data;
+					
 			}
 			
 			
@@ -78,6 +83,7 @@ function job_exist(report_id)
 				var _data							=		GetData();
 					_data.aba_close_report_id		=		report_id;
 					setData(_data);
+					delete _data;
 			}
 			
 			
@@ -86,6 +92,7 @@ function job_exist(report_id)
 				//console.error('__setData',data);
 				
 				$('body').data(DataManagerJob,data);
+				delete data;
 			}
 		
 			
@@ -94,6 +101,7 @@ function job_exist(report_id)
 				var _data						=		GetData();
 					_data.report_id_active		=		data;
 					setData(_data);
+					delete _data;
 			}			
 			
 			var setTime	=	 function(data)
@@ -102,6 +110,7 @@ function job_exist(report_id)
 					_data._time		=		data;
 					
 					setData(_data);
+					delete _data;
 			}			
 			
 			var setMktime	=	 function(key,data)
@@ -124,6 +133,7 @@ function job_exist(report_id)
 					}
 					
 					setData(_data);
+					delete _data;
 			}
 						
 			var setMensagens	=	 function(key,data)
@@ -146,7 +156,8 @@ function job_exist(report_id)
 					}
 					
 					setData(_data);
-			}			
+					delete _data;
+			}
 			
 			
 			
@@ -170,7 +181,60 @@ function job_exist(report_id)
 					}
 					
 					setData(_data);
+					delete _data;
 			}
+			
+			
+			
+			var __setKeys		=	 function(key,data)
+			{
+				_START('setKeys');
+				var _data					=	GetData();
+				
+				if(data==undefined || data=='undefined' || data==null || data=='')
+					{
+						if(key==undefined || key=='undefined' || key==null || key=='')
+						{
+							_data.keys	=	{};
+						}else
+						{
+							delete _data.keys[key];
+						}
+					}
+					else
+					{
+						_data.keys[key]	=	data;
+					}
+					
+					setData(_data);
+					delete _data;
+					_END('setKeys');
+			}
+			
+			
+			
+			
+			var __getKeys		=	 function()
+			{
+				_ONLY('getKeys');
+				var _data					=	GetData();
+				var key 					= _data.keys;
+				delete _data;
+				return key;
+			}	
+			
+			
+			
+			var getCancelCall	=	 function()
+			{
+				var _data					=	GetData();
+				
+				var ccancel	=	 _data.cancel_call;
+				delete _data;
+				return ccancel;
+			}
+			
+			
 			
 			var setJobRender	=	 function(key,data)
 			{
@@ -192,6 +256,7 @@ function job_exist(report_id)
 					}
 					
 					setData(_data);
+					delete _data;
 			}			 
 			
 			
@@ -218,6 +283,7 @@ function job_exist(report_id)
 					}
 					
 					setData(_data);
+					delete _data;
 			}
 			
 			
@@ -228,6 +294,7 @@ function job_exist(report_id)
 				var _data			=	GetData();
 					_data.job		=	data;
 					setData(_data);
+					delete _data;
 			}
 			
 			var __init		=	function()
@@ -260,6 +327,7 @@ function job_exist(report_id)
 						$(_data.modal).addClass('hide');
 					}
 					
+				delete _data;
 				_END('managerJOB::__load_complete');
 			}
 			
@@ -324,6 +392,8 @@ function job_exist(report_id)
 								$(_data.close_modal).removeClass('hide');
 								$(_data.modal).addClass('hide');
 							}
+							
+					delete _data;
 						
 					_END('managerJOB::__start_job');	
 			}
@@ -394,6 +464,7 @@ function job_exist(report_id)
 							console.error('Error no JOB '+data.report_id,data.html);
 						}
 					
+					delete _data;
 				_END('managerJOB::RequestProccessCancelJOB');	
 			}
 			
@@ -408,6 +479,7 @@ function job_exist(report_id)
 				
 					var _data		=	 GetData();
 					var _report_id	=	_data.report_id_active;
+					var kendoActive	=	get_aba_active_kendoUi();
 					
 					
 					var setElementsLocal	=	 function(_report_id,_data)
@@ -431,7 +503,9 @@ function job_exist(report_id)
 							_report_id	=	_data.aba_close_report_id;
 						}
 						
-					
+						
+						
+						
 						//Não permite a parace se o title do botão tiver desabilitado
 						if(_data.not_title==true)
 						{
@@ -440,6 +514,18 @@ function job_exist(report_id)
 							return true;
 						}
 						
+						
+						if(!isEmpty(kendoActive.KEYS))
+							{
+								__setKeys(kendoActive.KEYS,kendoActive.REPORT_ID);
+								setElementsLocal(_report_id,_data);
+							}
+						
+						//show grid
+						$('#'+_report_id+'Main').removeClass('hide');
+						
+						$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_QUERY:true});
+						$(_data.modal).addClass('hide');
 						
 						//Se não existir job então não permite o cancelamento
 						if(ExistRealJob(_report_id,_data.job)==false)
@@ -450,8 +536,7 @@ function job_exist(report_id)
 							return true;
 						}
 
-						//show grid
-						$('#'+_report_id+'Main').removeClass('hide');
+
 						
 					
 					var _file			=	'WRS_PANEL';
@@ -459,8 +544,7 @@ function job_exist(report_id)
 					var _event			=	'stopjob';
 					var param_request	=	{report_id:_report_id};
 						
-						$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_QUERY:true});
-						$(_data.modal).addClass('hide');
+						
 
 							runCall(
 										param_request,
@@ -472,8 +556,10 @@ function job_exist(report_id)
 									);	
 
 
-						setElementsLocal(_report_id,_data);				
+						//setElementsLocal(_report_id,_data);				
 							
+				delete _data,kendoActive;
+				
 				_END('managerJOB::EventClickJobModalCancel');
 			}
 			
@@ -509,6 +595,8 @@ function job_exist(report_id)
 					$('.wrs_run_filter').removeAttr('locked');
 					
 					setMensagens(_data.report_id_active,undefined);//remove a mensagel
+					
+					delete _data,_active_aba;
 			}
 			
 			
@@ -534,11 +622,12 @@ function job_exist(report_id)
 						if(!isEmpty(is_messenger))
 						{
 							__setMessengerWindow({kendoUi:options.kendoUi,messenger:is_messenger});
+							delete _data,is_messenger;
 							return  false;
 						}
 
 						
-						
+						delete _data,is_messenger;
 						return true;
 					}
 					
@@ -546,7 +635,7 @@ function job_exist(report_id)
 					time_loop_control();
 					
 					$(_data.modal).removeClass('hide');
-					
+					delete _data;
 					return true;
 				_END('managerJOB::__setActiveAba');
 			}
@@ -570,7 +659,7 @@ function job_exist(report_id)
 					$(_data.modal).find('.modal-title-wrs-job').html(options.kendoUi.TITLE_ABA);
 					$(_data.modal).find('.modal-text-wrs-job').html(options.messenger);
 					
-					
+					delete _data;
 				_END('managerJOB::__setMessengerWindow');
 			}
 			
@@ -604,7 +693,7 @@ function job_exist(report_id)
 					
 	
 					$(_data.modal).width(	_options.width	).height(_options.height);
-
+				delete _data,_options;
 				_END('managerJOB::__resize');
 			}
 			
@@ -662,10 +751,11 @@ function job_exist(report_id)
 								//setJob(lineData,lineData);
 								setTimeout(ThreaLoopJobManager, WRS_TIME_THREAD);
 							}
-								
+								delete _data,_data_job_render;
 							return true;
 						}
 					}
+				delete _data,_data_job_render;
 				
 				_END('managerJOB::__exist_job_render');
 				
@@ -691,7 +781,7 @@ function job_exist(report_id)
 						setAbaClose(_report_id);	
 						EventClickJobModalCancel();
 						setAbaClose(false);
-						
+						delete _data;
 				_END('managerJOB::__remove_aba_cancel_job');
 			}
 			
@@ -725,6 +815,8 @@ function job_exist(report_id)
 									'json'
 								);	
 				}
+				
+			delete _data;
     		_END('ThreaLoopJob');
     	}
 		
@@ -829,6 +921,8 @@ function job_exist(report_id)
 													$(_data_local.cancel_job).addClass('hide');
 													$(_data_local.close_modal).removeClass('hide');
 												}
+												
+												delete aba_active;
 										}
 							}catch(e){console.warn(' exception');}
 							
@@ -868,6 +962,11 @@ function job_exist(report_id)
     				setJob(undefined);
     			}
 				
+				delete data;
+				delete _data_local;
+				delete modal;
+				delete _data_local;
+
 			_END('ThreaLoopJobManagerData');	
 			
     	}
@@ -888,6 +987,8 @@ function job_exist(report_id)
     			_messenger	=	 null;
     		}
     		
+			
+			delete _options,_data;
     		return _messenger;
     		//_options.report_id
     	}
@@ -959,6 +1060,9 @@ function job_exist(report_id)
 					$('.wrs-modal-time').html(_date);
 					
 					setTimeout(time_loop_control, TIME_LOAD);
+					
+					
+					delete _data;
 			}
 			
 			
@@ -975,7 +1079,9 @@ function job_exist(report_id)
 				getMessenger			:	__getMessenger,
 				setMessengerWindow		:	__setMessengerWindow,
 				data					:	GetData,
-				remove_aba_cancel_job	:	__remove_aba_cancel_job
+				remove_aba_cancel_job	:	__remove_aba_cancel_job,
+				getKeys					:	__getKeys,
+				setKeys					:	__setKeys
 		};
 		
 		 

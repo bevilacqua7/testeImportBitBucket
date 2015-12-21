@@ -1,5 +1,6 @@
 <?php
 
+use phpDocumentor\Plugin\Parameter;
 /*
  * Carrega as configurações principais para o funcionamento do Sistema
  */
@@ -52,24 +53,28 @@ function includeFileLIB($filename,$folder,$whoCall,$firstName='lib.')
 	}
 
 }
-
 /**
  * Faz o include dos templates
  * @param file $name
  */
-function includeTemplate($name)
+function includeTemplate($file,$parameter,$return=false)
 {
-
-	$filename_configure	=	PATH_WRS.'template'.DIRECTORY_SEPARATOR.$name.'.php';
-
-	if(@file_exists($filename_configure)){
+	$filename_configure		=	PATH_TEMPLATE.$file.'.php';
+	
+	if(@file_exists($filename_configure))
+	{
 		include_once $filename_configure;
+		
+		if($return) return $HTML;
+		
 	}else{
 		echo 'Arquivo includeTemplate <b>'.$filename_configure.'</b> Não encontrado';
 		exit();
 	}
-
+	 
 }
+
+ 
 
 /**
  * Inlcui o arquivo da pasta CLASS

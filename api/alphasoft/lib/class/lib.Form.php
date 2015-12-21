@@ -106,6 +106,8 @@ class FORM  extends WRS_USER
 	
 	protected  function type_convert($type,$data,$tools,$acion='get')
 	{
+		if(empty($data)) return '';
+		
 		switch($type)
 		{
 			case 'date_object' : {
