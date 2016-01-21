@@ -217,10 +217,10 @@ function MENU_DRAG_DROP_DIREITO(container,valueShow,_type)
 	
 	var li			=	'<li 	class="ui-widget-content box_wrs_panel {class}" tag-class="{class}" api="wrs"  type="{type}"'+
 						'			vvalue="{label}" json="{json}" '+
-						"wrs-data='{wrs-data}'>"+
+						"wrs-data='{wrs-data}' {desc_title} >"+
 						'<span class="btn-left glyphicon glyphicon glyphicon-'+icon+'"></span>{value}</li>';
-
-	var liSearch	=	 ['{label}','{value}','{json}','{type}','{class}','{wrs-data}'];
+	
+	var liSearch	=	 ['{label}','{value}','{json}','{type}','{class}','{wrs-data}','{desc_title}'];
 	
 	var dragDrop	=	'		<h2 rel="{rel}">'+
 						'			<a href="#">{title}</a>'+
@@ -228,7 +228,7 @@ function MENU_DRAG_DROP_DIREITO(container,valueShow,_type)
 						'		<div class="wrs_panel_options {rel}" >'+
 						'			<ul>{liBody}</ul>'+
 						'		</div>';
-
+	
 	var dragDropSearch		=	 ['{title}','{liBody}','{rel}'];
 	
 	
@@ -240,23 +240,27 @@ function MENU_DRAG_DROP_DIREITO(container,valueShow,_type)
 	for(var label in  container  )
 	{
 			var value	=	container[label];
-				liTemp	=	NULL;
+			liTemp	=	NULL;
 			
 			for(var _ilabel in value )
 			{
 				var _ivalue		=	value[_ilabel];
 				var param_json	=	_ivalue;
 				var $class		=	replace_attr(empty(param_json['LEVEL_FULL']) ? param_json['MEASURE_UNIQUE_NAME'] : param_json['LEVEL_FULL']);
+				if(param_json['DESCRIPTION']!=undefined){
+					param_json['DESCRIPTION'] = base64_encode(param_json['DESCRIPTION']);
+				}
 				var lReplace	=	[
-				            	 	 	_ivalue[valueShow[0]],
-				            	 	 	_ivalue[valueShow[1]],
-				            	 	 	//base64_encode(json_encode(param_json,true)),
-				            	 	 	'',
-				            	 	 	type,
-				            	 	 	$class,
-				            	 	 	json_encode(param_json,true)
-				            	 	 ];
-					liTemp		+=	str_replace(liSearch, lReplace, li);
+				        	 	 	_ivalue[valueShow[0]],
+				        	 	 	_ivalue[valueShow[1]],
+				        	 	 	//base64_encode(json_encode(param_json,true)),
+				        	 	 	'',
+				        	 	 	type,
+				        	 	 	$class,
+				        	 	 	json_encode(param_json,true),
+				        	 	 	((param_json['DESCRIPTION']!=undefined)?'wrs_description='+'"'+param_json['DESCRIPTION']+'"':'')
+				        	 	 ];
+				liTemp		+=	str_replace(liSearch, lReplace, li);
 			}
 			
 			var rel				=	replace_attr(empty(param_json['LEVEL_FULL']) ? param_json['MEASURE_UNIQUE_NAME'] : param_json['LEVEL_FULL']);

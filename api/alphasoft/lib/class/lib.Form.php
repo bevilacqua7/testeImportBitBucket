@@ -132,13 +132,13 @@ class FORM  extends WRS_USER
 			
 			$query_data		=	implode(',',$form_value);
 			
-			
+			/* -- deve estar depreciado, variavel $event_form nao existe neste contexto - felipeb 20160118
 			switch($event_form)
 			{
 				case 'new' 		: {}	;	break;
 				case 'update' 	: {} 	; 	break;
 				case 'remove' 	: {} 	;	break;
-			}			
+			}			*/
 			
 			return $query_data;
 			
@@ -239,12 +239,25 @@ EOF;
 									$html_option		=	 array();
 									$value_option		=	$rows[$param_select['primary']];
 									
-									foreach($param_select['field'] as $label =>$value)
+
+									if(isset($param['select_fields_in_table']) && is_array($param['select_fields_in_table']))
 									{
-										if(isset($value['select']))
+										
+										foreach($param['select_fields_in_table'] as $label)
 										{
 											$html_option[]	=	$rows[$label];
 										}
+										
+									}else{
+										
+										foreach($param_select['field'] as $label =>$value)
+										{
+											if(isset($value['select']))
+											{
+												$html_option[]	=	$rows[$label];
+											}
+										}
+										
 									}
 									
 									$option	.=	 fwrs_option($value_option, implode(' - ',$html_option),$param['value']);

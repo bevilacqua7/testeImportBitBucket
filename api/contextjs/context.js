@@ -97,6 +97,9 @@ var context = context || (function () {
 		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
 			compressed = options.compress ? ' compressed-context' : '',
 			$menu = $('<ul class="dropdown-menu dropdown-menu-drill dropdown-context' + subClass + compressed+'" id="dropdown-' + id + '"></ul>');
+			// versao do santos
+			//$menu = $('<ul class="dropdown-menu dropdown-menu-drill-wrs dropdown-menu-drill dropdown-context' + subClass + compressed+'" context-wrs="'+id+'" id="dropdown-' + id + '"></ul>');
+        
         var i = 0, linkTarget = '';
         for(i; i<data.length; i++) {
         	if (typeof data[i].divider !== 'undefined') {
@@ -270,9 +273,25 @@ var context = context || (function () {
 
 		var d 		= new Date(),
 			id 		= d.getTime(),
+
+
 			$menu 	= buildMenuWRS(data, id);
-		
 			$('body').append($menu);
+			// versao do santos			
+			/*		
+					//WARNING:: Procedimento para poder deixar o modelo mais rápido
+					if($('.dropdown-menu-drill-wrs').length==0){
+						//processo natural
+						var $menu 	= buildMenuWRS(data, id);
+						
+							$('body').append($menu);
+							delete $menu;
+						
+					}else{
+						//mudança por marcelo santos
+						id	=	$('.dropdown-menu-drill-wrs').attr('context-wrs');
+					}
+			*/			
 	
 			
 			/*
@@ -324,7 +343,7 @@ var context = context || (function () {
 		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
 		 */		
 		var table_parents	=	$(this).parents('div');
-		var esconde=false;				
+		var esconde=esconde_vernomapa=false;				
 		if(table_parents.attr('type')=='linha_header')
 			{	
 					table_parents		=	table_parents.find('table:first').find('tr');
@@ -362,10 +381,13 @@ var context = context || (function () {
 		if(table_parents.first('div').attr('type')=='linha'){
 			var proxTd			=	$(this).next('td');
 			if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!='' && $(this).attr('data-original')!='true'){
-				$('#dropdown-' + id).find('.VER_MAPA').removeClass('hide');	
+				esconde_vernomapa=false;	
 			}else{
-				$('#dropdown-' + id).find('.VER_MAPA').addClass('hide');				
+				esconde_vernomapa=true;				
 			}
+		}
+		if(esconde_vernomapa || table_parents.first('div').attr('type')!='linha'){
+			$('#dropdown-' + id).find('.VER_MAPA').addClass('hide');
 		}
 		if(esconde){
 			$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').addClass('hide');
@@ -408,9 +430,10 @@ var context = context || (function () {
 		  *  LAYOUT_MEASURES
 		  *  LAYOUT_FILTERS
 		  */
-		$('.dropdown-menu-drill').find('li').show();//Abilita todos 
-		
-		var _layout	=	wrsKendoUiContextMenu($('#'+get_aba_active_kendoUi().REPORT_ID));
+		var _layout	=	wrsKendoUiContextMenu(whoEventRequest);  
+		// versao do santos  
+		//$('.dropdown-menu-drill').find('li').show();//Abilita todos 
+		//var _layout	=	wrsKendoUiContextMenu($('#'+get_aba_active_kendoUi().REPORT_ID));
 		
 
 			hideContextMenu(type,_layout.layout_clean);

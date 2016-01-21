@@ -28,7 +28,7 @@ class WRSUpload extends WRS_BASE
 										'barra_status'		=>	true
 									 );
 
-	private $nameFile;
+	public $nameFile;
 	private $urlServerVar;
 	
 	public function WRSUpload($filename=NULL,$extra_params=NULL){
@@ -84,9 +84,11 @@ class WRSUpload extends WRS_BASE
 		$parameter_upload['id']						=	$id;
 		$parameter_upload['upload_server']			=	'run.php'.$this->urlServerVar;
 		$parameter_upload['upload_extra_options']	=	$this->monta_parameters_for_extra_options($this->parameter);
-						
-		include_once(PATH_TEMPLATE.'upload.php');
-				
+
+		/*
+		 * TODO: ver com o Santos o por quê deste include_once já ter sido chamado e nao acrescentar de novo o upload
+		 */
+		include(PATH_TEMPLATE.'upload.php');
 		return $HTML;
 		
 	}
@@ -100,9 +102,6 @@ class WRSUpload extends WRS_BASE
 		}
 	}
 	
-	/**
-	 * TODO:Criar regra para a criação do diretório
-	 */
 	private function ruleFileName()
 	{
 		$nameFile							=	$this->nameFile;
@@ -115,14 +114,40 @@ class WRSUpload extends WRS_BASE
 		
 	}
 	
-	
+
 	public function Handler()
 	{
 		$this->ruleFileName();
 		$UploadHandler = new UploadHandler($this->parameter);
 	}
 	
+
+	public function listFiles()
+	{
+		$files=array();
+		if(trim($this->nameFile)!=''){
+			$files = array_diff(scandir(PATH_FILE.$this->nameFile), array('..', '.'));
+		}		
+		return $files;
+	}
+
+	public function getFileContent($file){
+		$arq = PATH_FILE.$this->nameFile.$file;
+		if(is_file($arq)){
+			return file_get_contents($arq);
+		}else{
+			return false;
+		}
+	}
 	
+	public function removeFile($file){
+		$arq = PATH_FILE.$this->nameFile.$file;
+		if(is_file($arq)){
+			return unlink($arq);
+		}else{
+			return false;
+		}
+	}
  
 	
 	

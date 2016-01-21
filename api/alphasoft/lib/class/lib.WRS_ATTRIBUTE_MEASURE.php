@@ -147,6 +147,7 @@ class WRS_ATTRIBUTE_MEASURE  extends WRS_BASE
 			while ($rows = $this->fetch_array($query))
 			{
 				if(!isset($measure_tmp[$rows['MEASURE_DISPLAY_FOLDER']])) $measure_tmp[$rows['MEASURE_DISPLAY_FOLDER']]=array();
+				if(array_key_exists('DESCRIPTION', $rows)) $rows['DESCRIPTION']=base64_encode($rows['DESCRIPTION']);
 				
 				if($first_measure)
 				{

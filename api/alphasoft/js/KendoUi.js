@@ -835,7 +835,54 @@ function onDataBound(arg)
 
 	
 
+
+/*
+ *	Processando o tamanho do coluna com base no resultado da query 
+ */
+function columns_resize_grid(kendoData,nameID)
+{
+
+	/*
+	 *	Processando o tamanho do coluna com base no resultado da query 
+	 */
+	var columns_width_data		=	 kendoData.dataSource._wrs_request_data.columns_size;
 	
+
+	if(!isEmpty(columns_width_data))
+		{
+			var colElement		=	 {
+												count_column	:	0,
+												size_word		:	$("<div/>").text('Q').textWidth(),
+												padding_left	:	8
+									};
+			
+			var frozen			=	kendoData.dataSource.size_frozen;
+			
+			var hasHiddenField=false;
+			for(ii in kendoData.dataSource.options.fields){
+				if(kendoData.dataSource.options.fields[ii].hide){
+					hasHiddenField=true;
+				}
+			}
+			WRS_CONSOLE('tem campo escondido - latitude?',hasHiddenField);
+			for(var lineNameCol in columns_width_data)
+				{
+				
+						var _width		=	columns_width_data[lineNameCol];
+							_width		=	(_width*colElement.size_word)+colElement.padding_left;
+						
+							WRSSresize(nameID,colElement.count_column, _width,frozen,hasHiddenField); 
+						colElement.count_column++;
+				}
+				
+				delete colElement;
+		}
+	
+	delete columns_width_data;
+	//END
+	
+}
+
 	
 	
  
@@ -856,8 +903,12 @@ function onDataBound(arg)
 			$(gridId+" .k-grid-content") //content
               .find("colgroup col")
               .eq(_idxHeader)
-              .css({width: width}).attr('up','up');;
-			  
+              .css({width: width}).attr('up','up');
+
+			WRS_CONSOLE('ajustou',$(gridId+" .k-grid-header-wrap") //content
+			              .find("colgroup")
+						  .find("col"),'de indice',_idxHeader,'para',width);
+			
 			   $(gridId+" .k-grid-header-wrap") //header
               .find("colgroup col")
               .eq(_idxHeader)

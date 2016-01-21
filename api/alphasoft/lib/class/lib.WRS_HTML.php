@@ -52,10 +52,10 @@ EOF;
 		//Ao manipular essa função lembranbdo que tem que fazer o mesmo no WRSMultipleCube.js
 		$li			=	<<<EOF
 								<li  	class="ui-widget-content box_wrs_panel {class}" tag-class="{class}" api="wrs" type="{type}"
-										vvalue="{label}" json="{json}" wrs-data='{wrs-data}' ><span class="btn-left glyphicon glyphicon glyphicon-{$icon}"></span>{value}</li>
+										vvalue="{label}" json="{json}" wrs-data='{wrs-data}' {desc_title} ><span class="btn-left glyphicon glyphicon glyphicon-{$icon}"></span>{value}</li>
 EOF;
 
-		$liSearch	=	 array('{label}','{value}','{json}','{type}','{class}','{wrs-data}');
+		$liSearch	=	 array('{label}','{value}','{json}','{type}','{class}','{wrs-data}','{desc_title}');
 		
 		$dragDrop	=	<<<EOF
 			<h2 rel="{rel}">
@@ -77,9 +77,11 @@ EOF;
 				{
 					$param_json						=	$_ivalue;
 					$param_json['CUBE_POS_SESSION']	=	$pos_cube_session;
-					
+					if(array_key_exists('DESCRIPTION', $param_json) && trim($param_json['DESCRIPTION'])!=''){
+						$param_json['DESCRIPTION'] = base64_encode($param_json['DESCRIPTION']);
+					}
 					$class		=	fwrs_replace_attr(empty($param_json['LEVEL_FULL']) ? $param_json['MEASURE_UNIQUE_NAME'] : $param_json['LEVEL_FULL']);
-					$lReplace	=	 array($_ivalue[$valueShow[0]],$_ivalue[$valueShow[1]],'',$type,$class,json_encode($param_json,true));
+					$lReplace	=	 array($_ivalue[$valueShow[0]],$_ivalue[$valueShow[1]],'',$type,$class,json_encode($param_json,true),((array_key_exists('DESCRIPTION', $param_json) && trim($param_json['DESCRIPTION'])!='')?'wrs_description='.'"'.$param_json['DESCRIPTION'].'"':''));
 					//$lReplace	=	 array($_ivalue[$valueShow[0]],$_ivalue[$valueShow[1]],base64_encode(json_encode($param_json,true)),$type,$class,json_encode($param_json,true));
 					
 					$liTemp		.=str_replace($liSearch, $lReplace, $li);

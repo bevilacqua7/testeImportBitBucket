@@ -45,10 +45,11 @@ function onDataBoundWindowGrid(arg)
 	var _linha_header	= arg.sender.thead.children('tr');
 	var _classes_Line 		= [];
 	var _classes_Header		= [];
-	var _param_aplicaClassLinhas 	= arg.sender.wrs_grid.param.aplicaClassLinhas;
-	var _param_aplicaClassHeaders 	= arg.sender.wrs_grid.param.aplicaClassHeaders;
+	var _param_aplicaClassLinhas 	= (arg.sender.wrs_grid==undefined)?'':arg.sender.wrs_grid.param.aplicaClassLinhas;
+	var _param_aplicaClassHeaders 	= (arg.sender.wrs_grid==undefined)?'':arg.sender.wrs_grid.param.aplicaClassHeaders;
 	
 	// preencho o array com as classes existentes
+	if(arg.sender.wrs_grid!=undefined)
 	for(idx in arg.sender.wrs_grid.column){
 		// se houver classe por linha de coluna OU houver uma classe forcada para todas as linhas de colunas
 		if(arg.sender.wrs_grid.column[idx].classDataLine!=undefined || (_param_aplicaClassLinhas!=false && _param_aplicaClassLinhas!=true)){
@@ -61,7 +62,7 @@ function onDataBoundWindowGrid(arg)
 	}
 
 	// se houverem classes para preencher na grid, varre a linha e adiciona as classes na coluna correspondente
-	if(_classes_Line.length>0 || (arg.sender.wrs_grid.param.aplicaClassLinhas!=false && arg.sender.wrs_grid.param.aplicaClassLinhas!=true)){
+	if(_classes_Line.length>0 || (arg.sender.wrs_grid!=undefined && arg.sender.wrs_grid.param.aplicaClassLinhas!=false && arg.sender.wrs_grid.param.aplicaClassLinhas!=true)){
 		if(arg.sender.wrs_grid.param.aplicaClassLinhas==true){ // verifica parametro na WRSPARAM
 			_linhas_tabela.each(function(){ // aplica em cada linha do conteudo
 				if($(this).find('input.checkline').length){ // excecao para alinhar no centro quando houver checkbox na linha
@@ -83,7 +84,7 @@ function onDataBoundWindowGrid(arg)
 		}
 	}
 	// se houverem classes para preencher na grid, varre a linha das headers e adiciona as classes na coluna correspondente
-	if(_classes_Header.length>0 || (arg.sender.wrs_grid.param.aplicaClassHeaders!=false && arg.sender.wrs_grid.param.aplicaClassHeaders!=true)){
+	if(_classes_Header.length>0 || (arg.sender.wrs_grid!=undefined && arg.sender.wrs_grid.param.aplicaClassHeaders!=false && arg.sender.wrs_grid.param.aplicaClassHeaders!=true)){
 		if(arg.sender.wrs_grid.param.aplicaClassHeaders==true){ // verifica parametro na WRSPARAM
 			_linha_header.each(function(){ // aplica a classe tambem na linha de cabecalho para corresponder ao conteudo
 				if($(this).find('input.checkline').length){ // excecao para alinhar no centro quando houver checkbox na linha
@@ -264,25 +265,38 @@ function get_grid_window_values_form(_event)
 }
 
 
-function btn_window_grid_event()
+function btn_window_grid_event(_functionCallBack,_action_type,_table,_extraValues)
 {
 	_START('btn_window_grid_event');
-	var action_type				=	 $(this).attr('action_type');
-	var table					=	 $(this).attr('table');
+	var action_type				=	 _action_type==undefined?$(this).attr('action_type'):_action_type;
+	var table					=	 _table==undefined?$(this).attr('table'):_table;
 	var values					=	 get_grid_window_values_form();
-	
+	var option					=	 {cube_s:CUBE_S};
+	var functionCallBack		=	_functionCallBack;
+	var extraValues				=	_extraValues;
 		values['wrs_type_grid']	=	'form';
-	
+		
+		
 		switch(action_type)
 		{
 			case 'new' 		: values['form_event']='new'	;	break;
 			case 'update' 	: values['form_event']='update' ; 	break;
 			case 'remove' 	: values['form_event']='remove' ;	break;
+			case 'import' 	: values['form_event']='import' ;	break;
+			case 'export' 	: values['form_event']='export' ;	break;
+			case 'back' 	: values['form_event']='back' 	;	break;
+		}
+
+		values = merge_objeto(values,option);
+
+		if(extraValues!=undefined){
+			values = merge_objeto(values,{'extraValues':((typeof extraValues!='string')?json_encode(extraValues):extraValues)});
 		}
 		
-		grid_window_modal(values,table);
+		grid_window_modal(values,table,functionCallBack);
 	_END('btn_window_grid_event');	
 }
+
 
 function wrs_window_grid_events_tools(objectClick)
 {
@@ -324,15 +338,14 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 	var Oevent			=	empty(Event) ? 'ATT_WRS_USER' : Event;
 
 	var funCallBackData		=	 _funCallBackData;
-
-	if(!isset(_funCallBackData)){
+	if(!isset(_funCallBackData) || _funCallBackData==undefined){
 		funCallBackData	=	function(data)
 		{
 				$('.modal-content-grid').html(data);
 				wrs_window_grid_events_tools();
 		};
 	}
-		
+
 	var header	=	'<div class="modal-header ui-accordion-header  ui-accordion-header-active ui-state-active"><h4 class="modal-title" id="myModalLabel">'+LNG('LABEL_LOAD')+'</h4></div><div class="body_grid_window_center_Load"></div>';
 	$('.modal-content-grid').html(header);
 	setLoading($('.body_grid_window_center_Load'));	

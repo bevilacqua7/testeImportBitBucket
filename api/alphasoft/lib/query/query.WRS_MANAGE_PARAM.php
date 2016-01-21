@@ -94,17 +94,23 @@ class WRS_MANAGE_PARAM
 	public function ATT_WRS_CUSTOMER()
 	{
 		$button		=	$button_icon	=	array();
-		
-		$button['new']			=	'Novo';
-		$button['update']		=	'Salvar';
+
+		$button['back']			=	LNG('bt_back');
+		$button['new']			=	LNG('bt_new');
+		$button['update']		=	LNG('bt_update');
+		$button['export']		=	LNG('bt_export_customer');
+		$button['import']		=	LNG('bt_import_customer');
 		
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
-			$button['remove']	=	'Apagar';
+			$button['remove']	=	LNG('bt_remove');
 		}
-		
+
+		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
+		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
+		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 				
 		$table	=	'ATT_WRS_CUSTOMER';
 		$order	=	array('order_by'=>'CUSTOMER_ID' ,'order_type'=>'ASC');
@@ -134,7 +140,7 @@ class WRS_MANAGE_PARAM
 				'checkbox'				=>	true, 												// NEW
 				'button_icon'			=>	$button_icon,										// NEW
 				'button_force_label'	=>	true, 			  									// NEW
- 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
+ 				'callback_btn_events'	=>	'carrega_grid_list_admin', 							// NEW
 				'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
 				'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
 				'exception'				=>	true, 												// NEW
@@ -149,16 +155,21 @@ class WRS_MANAGE_PARAM
 	{
 		$button		=	$button_icon	=	array();
 		
-		$button['new']			=	'Novo';
-		$button['update']		=	'Salvar';
-		
+		$button['back']			=	LNG('bt_back');
+		$button['new']			=	LNG('bt_new');
+		$button['update']		=	LNG('bt_update');		
+		$button['export']		=	LNG('bt_export_user');
+		$button['import']		=	LNG('bt_import_user');
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
-			$button['remove']	=	'Apagar';
+			$button['remove']	=	LNG('bt_remove');
 		}
-		
+
+		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
+		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
+		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 		
 		$table	=	'ATT_WRS_USER';
 		
@@ -189,8 +200,8 @@ class WRS_MANAGE_PARAM
 		$fields['USER_STATUS']			=	array('title'=>'Status'					, 'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','0'=>'Inativo'), 'basic'=>true, 'list'=>true, 'grid'=>true);
 		$fields['USER_FORMAT']			=	array('title'=>'Tema'					, 'is_select'=>array('-1'=>'Selecionar','azul'=>'Azul','cinza'=>'Cinza','laranja'=>'Laranja','verde'=>'Verde','vermelho'=>'Vermelho'));
 		$fields['LANGUAGE_ID']			=	array('title'=>'Idioma'					, 'is_select'=>array('-1'=>'Selecionar','EN'=>'Inglês','ES'=>'Espanhol','POR'=>'Português'));
-		$fields['PERFIL_ID']			=	array('title'=>'Perfil'					, 'is_select'=>'ATT_WRS_PERFIL', 'length'=>255);
-		$fields['CUSTOMER_ID']			=	array('title'=>'Cliente'				, 'is_select'=>'ATT_WRS_CUSTOMER','length'=>255);
+		$fields['PERFIL_ID']			=	array('title'=>'Perfil'					, 'is_select'=>'ATT_WRS_PERFIL', 'select_fields_in_table'=>array('PERFIL_ID','PERFIL_DESC'), 'length'=>255);
+		$fields['CUSTOMER_ID']			=	array('title'=>'Cliente'				, 'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_CODE','CUSTOMER_DESC'),'length'=>255);
 
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_USER'), 
 						'button'	=>	$button,
@@ -219,17 +230,23 @@ class WRS_MANAGE_PARAM
 	{
 
 		$button		=	$button_icon	=	array();
-		
-		$button['new']			=	'Novo';
-		$button['update']		=	'Salvar';
+
+		$button['back']			=	LNG('bt_back');
+		$button['new']			=	LNG('bt_new');
+		$button['update']		=	LNG('bt_update');
+		$button['export']		=	LNG('bt_export_database');
+		$button['import']		=	LNG('bt_import_database');
 		
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
-			$button['remove']	=	'Apagar';
+			$button['remove']	=	LNG('bt_remove');
 		}
-		
+
+		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
+		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
+		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 		
 		$table	=	'ATT_WRS_DATABASE';
 		$order	=	array('order_by'=>'DATABASE_ID' ,'order_type'=>'ASC');
@@ -246,7 +263,11 @@ class WRS_MANAGE_PARAM
 		$fields['DATABASE_LINK']  	=	array('title'=>'Link',   		'length'=>255);
 		//IMAGEM (DATABASE_IMAGE) => Combo com as imagens que foram UPLOAD
 		$fields['DATABASE_ORDER']	=	array('title'=>'Ordem',   		'type'=>'int');
-		$fields['SERVER_ID']	=	array('title'=>'Servidor',   	'is_select'=>'ATT_WRS_SERVER','list'=>true,   'grid'=>true);
+		/*
+		 * TODO: nao existe ATT_WRS_SERVER para buscar informacoes
+		 */
+		//$fields['SERVER_ID']	=	array('title'=>'Servidor',   	'is_select'=>'ATT_WRS_SERVER','list'=>true,   'grid'=>true);
+		$fields['SERVER_ID']	=	array('title'=>'Servidor',   	'list'=>true,   'grid'=>true);
 		$fields['CUSTOMER_ID']		=	array('title'=>'Cliente',   	'is_select'=>'ATT_WRS_CUSTOMER','list'=>true,   'grid'=>true);
 		
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_DATABASE'), 
@@ -274,17 +295,23 @@ class WRS_MANAGE_PARAM
 	public function ATT_WRS_CUBE()
 	{
 		$button		=	$button_icon	=	array();
-		
-		$button['new']			=	'Novo';
-		$button['update']		=	'Salvar';
+
+		$button['back']			=	LNG('bt_back');
+		$button['new']			=	LNG('bt_new');
+		$button['update']		=	LNG('bt_update');
+		$button['export']		=	LNG('bt_export_cube');
+		$button['import']		=	LNG('bt_import_cube');
 		
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
-			$button['remove']	=	'Apagar';
+			$button['remove']	=	LNG('bt_remove');
 		}
-		
+
+		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
+		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
+		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 				
 		$table	=	'ATT_WRS_CUBE';
 		$order	=	array('order_by'=>'CUBE_ID' ,'order_type'=>'ASC');
@@ -295,8 +322,8 @@ class WRS_MANAGE_PARAM
 		$fields['CUBE_ID']		    =	array('title'=>'Código',   	'primary'=>true,'list'=>true,   'grid'=>true);
 		$fields['CUBE_DESC']	    =	array('title'=>'Nome',		'length'=>180,  'basic'=>true,  'list'=>true,  'grid'=>true);
 		$fields['CUBE_STATUS']		=	array('title'=>'Status',	'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','0'=>'Inativo'),     'basic'=>true, 'list'=>true, 'grid'=>true);
-		$fields['DATABASE_ID']		=	array('title'=>'Database',  'is_select'=>'ATT_WRS_DATABASE',  'length'=>180,    'list'=>true,  'grid'=>true);
-		$fields['CUSTOMER_ID']		=	array('title'=>'Cliente',   'is_select'=>'ATT_WRS_CUSTOMER',  'grid'=>true,     'class'=>'hide');
+		$fields['DATABASE_ID']		=	array('title'=>'Database',  'is_select'=>'ATT_WRS_DATABASE', 'select_fields_in_table'=>array('DATABASE_ID','DATABASE_DESC'),  'length'=>180,    'list'=>true,  'grid'=>true);
+		$fields['CUSTOMER_ID']		=	array('title'=>'Cliente',   'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_CODE','CUSTOMER_DESC'),  'grid'=>true,     'class'=>'hide');
 		
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_CUBE'), 
 				'button'	=>	$button,
@@ -349,17 +376,23 @@ class WRS_MANAGE_PARAM
 	public function ATT_WRS_PERFIL()
 	{
 		$button		=	$button_icon	=	array();
-		
-		$button['new']			=	'Novo';
-		$button['update']		=	'Salvar';
+
+		$button['back']			=	LNG('bt_back');
+		$button['new']			=	LNG('bt_new');
+		$button['update']		=	LNG('bt_update');
+		$button['export']		=	LNG('bt_export_profile');
+		$button['import']		=	LNG('bt_import_profile');
 		
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
-			$button['remove']	=	'Apagar';
+			$button['remove']	=	LNG('bt_remove');
 		}
-		
+
+		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
+		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
+		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 				
 		$table	=	'ATT_WRS_PERFIL';
 		$order	=	array('order_by'=>'PERFIL_ID' ,'order_type'=>'ASC');
@@ -399,17 +432,23 @@ class WRS_MANAGE_PARAM
 	public function REL_WRS_CUBE_USER()
 	{
 		$button		=	$button_icon	=	array();
-		
-		$button['new']			=	'Novo';
-		$button['update']		=	'Salvar';
+
+		$button['back']			=	LNG('bt_back');
+		$button['new']			=	LNG('bt_new');
+		$button['update']		=	LNG('bt_update');
+		$button['export']		=	LNG('bt_export_cube_user');
+		$button['import']		=	LNG('bt_import_cube_user');
 		
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
-			$button['remove']	=	'Apagar';
+			$button['remove']	=	LNG('bt_remove');
 		}
-		
+
+		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
+		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
+		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 				
 		$table	=	'REL_WRS_CUBE_USER';
 		$order	=	array('order_by'=>'CUBE_ID' ,'order_type'=>'ASC');
@@ -444,7 +483,7 @@ class WRS_MANAGE_PARAM
 					
 	}
 	
-	
+	/*
 	//Classe de Relatórios ADMINISTRATIVO
 	public function ATT_WRS_REPORT()
 	{
@@ -476,23 +515,28 @@ class WRS_MANAGE_PARAM
 				'primary'	=>	'REPORT_ID'
 			);
 	}
-	
+	*/
 	
 	//Classe de Arquivos para Download ADMINISTRATIVO
 	public function ATT_WRS_DOWNLOAD()
 	{
 		$button		=	$button_icon	=	array();
-		
-		$button['new']			=	'Novo';
-		$button['update']		=	'Salvar';
-		
+
+		$button['back']			=	LNG('bt_back');
+		$button['new']			=	LNG('bt_new');
+		$button['update']		=	LNG('bt_update');		
+		$button['export']		=	LNG('bt_export_download');
+		$button['import']		=	LNG('bt_import_download');
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
-			$button['remove']	=	'Apagar';
+			$button['remove']	=	LNG('bt_remove');
 		}
-		
+
+		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
+		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
+		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 				
 		$table	=	'ATT_WRS_DOWNLOAD';
 		$order	=	array('order_by'=>'DOWNLOAD_ID' ,'order_type'=>'ASC');
@@ -533,17 +577,22 @@ class WRS_MANAGE_PARAM
 	public function ATT_WRS_LOG()
 	{
 		$button		=	$button_icon	=	array();
-		
-		$button['new']			=	'Novo';
-		$button['update']		=	'Salvar';
-		
+
+		$button['back']			=	LNG('bt_back');
+		$button['new']			=	LNG('bt_new');
+		$button['update']		=	LNG('bt_update');
+		$button['export']		=	LNG('bt_export_log');
+		$button['import']		=	LNG('bt_import_log');
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
-			$button['remove']	=	'Apagar';
+			$button['remove']	=	LNG('bt_remove');
 		}
-		
+
+		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
+		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
+		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 				
 		$table	=	'ATT_WRS_LOG';
 		$order	=	array('order_by'=>'DATE_ID' ,'order_type'=>'DESC');
@@ -591,10 +640,13 @@ class WRS_MANAGE_PARAM
 		$button['new']		=	'Abrir Relatório';
 		if(!WRS_USER::getArrPerfUser('DRG')){
 			$button['update']	=	'Abrir Layout';
-			$button['remove']	=	'Apagar';
+			$button['remove']	=	LNG('bt_remove');
 		}
+
+		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
+		$button_icon['new']		=	'fa fa-pencil-square-o';
+		$button_icon['update']	=	'fa fa-floppy-o';
 		
-		$button_icon=	array('new'=>'fa fa-folder-open');
 		/*
 		 * TODO: pegar do language esses labels
 		 */
