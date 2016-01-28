@@ -391,6 +391,7 @@ class WindowGrid extends FORM
 		
 		if(!empty($this->exception))
 		{
+		
 			
 			$query			=	$this->exception->change_query_exception($param['table'], $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
 			
@@ -521,7 +522,7 @@ EOF;
 				$columns[]				=	$this->checkbox_exist();
 		}
 		
-		 
+		
 			foreach($param['field'] as $label =>$field)
 			{
 					//Pegando o ID primary
@@ -536,7 +537,8 @@ EOF;
 					/*
 					 * TODO: Analisar o porquê do KendoUi não respeitar o tamanho das colunas enviadas para o script.  A coluna está sendo tratada corretamente de acordo com seu conteúdo e sua exceção (use_auto_width), porém o KendoUi parece espremer as colunas pela quantidade existente quando há muitas colunas a serem exibidas (tabela de usuarios por exmeplo)
 					 */
-					if(!isset($_tmp_column['width']) && (!array_key_exists('use_auto_width', $param) || $param['use_auto_width'])){
+					if(!isset($_tmp_column['width']) && (!array_key_exists('use_auto_width', $param) || $param['use_auto_width']))
+					{
 						$_tmp_column['width']	=	 (strlen($field['title'])*13)+10;
 					}
 							
@@ -554,27 +556,7 @@ EOF;
 								$columns[]				=	$_tmp_column;					
 					}
 					
-				/*
-					//Apenas informações do list é para apresentar
-					if($exec_vision=='list' || $exec_vision=='details')
-					{
-						if(isset($field['grid']) || $exec_vision=='list')
-						{
-							if($field['grid'] || $exec_vision=='list')
-							{
-								$columns[]				=	$_tmp_column;
-							} 
-						}
-					}else{
-					if(isset($field['basic']))
-								{
-									if($field['basic'])
-									{
-										$columns[]				=	$_tmp_column;
-									}	
-								}
-					}
-				*/
+			 
 					
 			}
 		 	
@@ -626,7 +608,7 @@ EOF;
 		
 		if(!count($sort))
 		{
-				$sort				=	array();
+				$sort				=	array('field'=>null,'dir'=>null);
 				$sort['field']		=	$param['order']['order_by'];
 				$sort['dir']		=	$param['order']['order_type'];
 		}
@@ -681,6 +663,8 @@ EOF;
 		
 		while($rows	=	 $this->fetch_array($query))
 		{
+			
+			
 			$rows_tmp		=	$rows;
 			$num_rows		=	(!array_key_exists('ROWS_TOTAL', $rows))?$this->num_rows($query):$rows['ROWS_TOTAL'];
 			

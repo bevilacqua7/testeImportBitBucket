@@ -47,6 +47,7 @@ class WRS_MANAGE_PARAM
 		$functions['ATT_WRS_DOWNLOAD']	=	true;
 		$functions['ATT_WRS_LOG']		=	true;
 		$functions['GET_SSAS_REPORT']	=	true;
+		$functions['GET_SSAS_LAYOUTS']	=	true;
 		
 		//Verificando se o eventos está a disposição
 		if(isset($functions[$_event])) return true;
@@ -686,6 +687,71 @@ class WRS_MANAGE_PARAM
 						 'aplicaClassHeaders'	=>	'text-center'										// NEW
 		 );
 		
+	}
+	
+	
+	
+	
+	
+	public function GET_SSAS_LAYOUTS()
+	{
+		$table		=	'GET_SSAS_LAYOUTS';
+		$order		=	array();
+		$fields		=	array();
+		$button		=	array();
+	
+		
+		if(!WRS_USER::getArrPerfUser('DRG'))
+		{
+			$button['remove']	=	LNG('BTN_REMOVE');
+		}
+	
+		$button_icon=	array('new'=>'fa fa-folder-open');
+		/*
+		 * TODO: pegar do language esses labels
+		*/
+	
+		$exceptions	=	array('file'=>'ReportLayout', 'class'=>'ReportLayout','type'=>'');
+		
+	
+		$fields['LAYOUT_ID']		=	array('title'=>'#'							, 	'width'=>50,		'class'=>'hide','grid'=>false );
+		$fields['LAYOUT_DESC']		=	array('title'=>LNG('tpl_layout_name')		, 	'width'=>300,	'classDataLine'=>'text-center', 'list'=>true, 	'basic'=>true, 	'grid'=>false);
+		$fields['LAYOUT_ALIAS']		=	array('title'=>LNG('tpl_layout_alias')		, 	'width'=>300,	'classDataLine'=>'text-center',	'label_icon_big'=>true,		'list'=>true,	'basic'=>true,  'grid'=>true, 		);
+		$fields['LAYOUT_SHARE']		=	array('title'=>'Comartilhado'				, 	'width'=>50,	'classDataLine'=>'text-center', 'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array(''=>'Sem opção','1'=>'Sim','0'=>'Não'));
+		$fields['LAYOUT_ROWS']		=	array('title'=>LNG('ATTRIBUTOS_LINHA')		, 	'width'=>150,	'classDataLine'=>'text-left',	'label_icon_middle'=>true,	'label_icon_big'=>true,		'list'=>true,	'basic'=>true,  'grid'=>true);
+		$fields['LAYOUT_COLUMNS']	=	array('title'=>LNG('ATTRIBUTOS_COLUNA')		, 	'width'=>150,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
+		$fields['LAYOUT_MEASURES']	=	array('title'=>LNG('ATTRIBUTOS_METRICA')	, 	'width'=>150,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
+		$fields['LAYOUT_FILTERS']	=	array('title'=>LNG('ATTRIBUTOS_FILTRO')		, 	'width'=>150,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
+		$fields['LAYOUT_DATE']		=	array('title'=>'Data'						, 	'width'=>100,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false ,'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true);
+		$fields['LAYOUT_UPDATE']	=	array('title'=>'Update'						, 	'width'=>100,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false, 'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true);
+		$fields['LAYOUT_FLAG']		=	array('title'=>'Flag'						, 	'width'=>60,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false ,'is_select'=>array(''=>'Sem opção','1'=>'Sim','0'=>'Não'));
+		$fields['LAYOUT_STATUS']	=	array('title'=>'Status'						,	'list'=>false,	'basic'=>false, 'grid'=>false);
+		$fields['SERVER_ID']		=	array('title'=>'Server ID'					,	'list'=>false,	'basic'=>false, 'grid'=>false);
+		$fields['DATABASE_ID']		=	array('title'=>'Database ID'				,	'list'=>false,	'basic'=>false, 'grid'=>false);
+		$fields['CUBE_ID']			=	array('title'=>'Cube ID'					,	'list'=>false,	'basic'=>false, 'grid'=>false);
+		$fields['USER_ID']			=	array('title'=>'User ID'					,	'list'=>false,	'basic'=>false, 'grid'=>false);
+	
+		
+		return array(	 'title'				=>	LNG('tpl_layout'),
+						'button'				=>	$button,
+						'field'					=>	$fields,
+						'table'					=>	$table,
+						'order'					=>	$order,
+						'icon'					=>	'report.png',
+						'primary'				=>	'REPORT_ID',
+						'button_force_label'	=>	true, 			  			// NEW
+						'button_icon'			=>	$button_icon,				// NEW
+						'exception'				=>	$exceptions, 				// NEW
+						'checkbox'				=>	true, 						// NEW
+						'label_icon_custom'		=>	true, 						// NEW
+						'use_auto_width'		=>	false, 						// NEW
+						'callback_btn_events'	=>	null, 						// NEW
+						'actionSingle'			=>	'layout_actionSingle',		// NEW
+						'actionDouble'			=>	'layout_actionDouble',		// NEW
+						'aplicaClassLinhas'		=>	true,						// NEW
+						'aplicaClassHeaders'	=>	'text-center'				// NEW
+				);
+	
 	}
 	
 	

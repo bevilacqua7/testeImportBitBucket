@@ -116,7 +116,7 @@ var AUTO_LOAD_RUN			= <?php echo (($request_exec_report && $request_exec_report=
 <!--  CONTEXT MENU JS COM BOOTSTRAP -->
 <link href="api/contextjs/context.bootstrap.css" type="text/css" rel="stylesheet" />
 <link href="api/contextjs/context.standalone.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="api/contextjs/context.js"></script>
+<script type="text/javascript" src="api/contextjs/context.js?<?php echo RAND_TOKEN;?>"></script>
 
 <link href="api/silviomoreto-bootstrap-select/dist/css/bootstrap-select.min.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript" src="api/silviomoreto-bootstrap-select/js/bootstrap-select.js"></script>
@@ -317,6 +317,8 @@ var AUTO_LOAD_RUN			= <?php echo (($request_exec_report && $request_exec_report=
 <script>
 $(function(){
 	$(ABA_TAG_NAME).wrsAbas('auto_load', AUTO_LOAD);
+
+	controllers_layout();//click controllers layout
 })
 </script>
 

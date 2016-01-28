@@ -48,11 +48,14 @@ $.fn.extend({
 	 */
 	modalGeneric: function (options) {
 		
+		var that	=	 this;
+		
 		_START('modalGeneric');
 		var janela_modal 		= 	$('#myModalGenericConfig');
 		var janela_modal_body 	= 	$('#myModalGenericConfig .modal-body');
 		var janela_title		=	$('#myModalGenericConfig  #myModalGenericConfigLabel');
 		var _dataName			=	'WRSGeneridModal';
+		
 		var optionsDefault		= {
 										'file'									:	null, 
 										'classe'								:	null,
@@ -66,11 +69,15 @@ $.fn.extend({
 										'bt_apagar_extra_action_validator'		:	null,
 										'bt_cancelar'							:	true,
 										'returnModal'							:	false,
-										'extraParam'							:	null
+										'extraParam'							:	null,
+										'btn_events'								:	null
 									};
+		
+		
 		
 		var  _options	=	 $.extend( {}, optionsDefault, options );						
 		
+
 		var _callback = function(data)
 			{	
 				_ONLY('modalGeneric::_callback');
@@ -95,16 +102,21 @@ $.fn.extend({
 				var  _param			=	 $.extend( {}, o_param, get_inputs_val(janela_modal_body) );
 
 				var _continue=true;
+					if(_options.bt_salvar_extra_action_validator!=null)
+					{
+						_continue = _options.bt_salvar_extra_action_validator(_param);
+					}
 				
-				if(_options.bt_salvar_extra_action_validator!=null){
-					_continue = _options.bt_salvar_extra_action_validator(_param);
-				}
-				
-				if(_continue){
-					_runCalll(_param);	
-				}
+					if(_continue)
+					{
+						_runCalll(_param);	
+					}
+					
 				_END('modalGeneric::bt_salvar');			
+				
 			}	
+		
+		
 		
 		var bt_atualizar	=	 function()
 			{

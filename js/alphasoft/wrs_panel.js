@@ -23,10 +23,35 @@ function wrs_north_onresize()
 
 
  
+function wrs_clean_data(input_default)
+{
+	_START('wrs_clean_data');
+		var object_clean		=	 {
+				TYPE_RUN 	:	false,
+				IS_REFRESH 	: 	false,
+				JOB_RESULT 	: 	null,
+				STOP_RUN 	: 	false,
+				TYPE_RUN 	: 	null,
+				new_aba 	: 	false
+		};
+	
+		
+	if(isEmpty(input_default))	{
+		_END('wrs_clean_data');
+		return object_clean;
+	}
+		
+	var call	=	merge_objeto(input_default,object_clean);
+	
+	_END('wrs_clean_data');
+	return call;
 
+}
 
-function set_userinfo_filter_fixed(obj){
-	if(typeof obj == 'object'){
+function set_userinfo_filter_fixed(obj)
+{
+	if(typeof obj == 'object')
+	{
 		userinfo_filter_fixed = obj;
 	}
 }
@@ -61,20 +86,33 @@ function merge_filter_in_array(_input_merge)
 	return input_merge;
 }
 
+
+
+
 // esconder os filtros fixos do usuario para que o mesmo nao possa ser manipulado
 function hide_fixed_filter()
 {
 	_START('hide_fixed_filter');
+	
+	
 	for(var lineFixed in userinfo_filter_fixed)
 	{
 		$('.wrs_panel_esquerdo_drag_drop').find('.'+replace_attr(lineFixed)).addClass('hide').attr('not-use',true);
+		
+		
 		var bt_painel_dd = $('.WRS_DRAG_DROP li.box_wrs_panel.'+replace_attr(lineFixed));
+		
 		if(!bt_painel_dd.hasClass('hide'))
 		{
 			bt_painel_dd.addClass('hide').attr('not-use',true);
-			var json_bt_painel_dd = $.parseJSON(base64_decode(bt_painel_dd.attr('json')));
+			
+
+			
+			var json_bt_painel_dd = bt_painel_dd.data('wrs-data');
+			
 			esconde_pais_drag_drop(json_bt_painel_dd);
 		}
+		
 	}
 	
 	_END('hide_fixed_filter');
@@ -971,6 +1009,7 @@ var droppableOptionsOl			=	{};
 var TMP_DEFAULT_OPTIONS_TOPS	=	null;
 function DROP_EVENT( event, ui ,eventReceive)
 {
+
 		_START('DROP_EVENT');
 		var toEvent;
 		var receiveEvent	=	$(this);
@@ -979,6 +1018,9 @@ function DROP_EVENT( event, ui ,eventReceive)
 		{
 			toEvent			=	ui;
 			receiveEvent	=	eventReceive;
+			
+	//		console.log('ui',ui.data('wrs-data'));
+		//	foreach(ui.data('wrs-data'));
 		}else{
 			toEvent			=	ui.draggable;
 		}
@@ -1076,7 +1118,10 @@ function DROP_EVENT( event, ui ,eventReceive)
 	
 	
 	var json 			=	toEvent.data('wrs-data');
-	json['FILTER']	=	'';
+	
+
+
+//	json['FILTER']	=	null;
 	toEvent.data('wrs-data',json);
 	
 	/*
@@ -1162,6 +1207,8 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 		var _class				=	 '';
 		var simples_composto	=	false;
 		var is_filter			=	'';
+		
+		
 		if(substr(_values[x],0,2)=='__')
 			{
 				if(is_array(_values[x]))
@@ -1172,7 +1219,7 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 					
 					if(value[1]=='simples') simples_composto=true;
 					
-					is_filter	=	 empty(value[2]) ? '' : value[2];
+						is_filter	=	 empty(value[2]) ? '' : value[2];
 					
 				}
 				else
@@ -1197,15 +1244,25 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 				}
 				
 
-  			if(!empty(is_filter))
+  			if(!isEmpty(is_filter))
 				{
-					//var json 			=	$.parseJSON(base64_decode(object.attr('json')));
 					var json 			=	object.data('wrs-data');
+					
+					
+				
 					if(json!=null)
-						json['FILTER']	=	is_array(is_filter) ? implode(',',is_filter) : is_filter;
+					{
+					 
+						var _tmp_filter		=	typeof is_filter == "object" ? implode(',',is_filter) : is_filter;
+						
+							
+							json['FILTER']=_tmp_filter;
 
-						//object.attr('json',base64_encode(json_encode(json,true)));
-						object.data('wrs-data',json);
+							object.data('wrs-data',json);
+
+					}
+						
+						
 				}
 				
 				DROP_EVENT( 'DIRECT', object,$(_clone));
@@ -1213,51 +1270,14 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 			}
 	}
 	
-	
-	if(_clone=='.sortable_filtro')
-	{
-		hide_fixed_filter();
-	}
-	
-	}
-	/*
-	
-	$(where_find+' li').each(function(){
 		
-		var li_value	=	$(this).attr('vvalue');
-		
-		for(obj in _values)
+		if(_clone=='.sortable_filtro')
 		{
-			var obj_value	=	_values[obj];
-			var simples_composto	=	false;
-			
-			if(is_array(_values[obj]))
-				{
-					obj_value			=	_values[obj][0];
-					simples_composto	=	true;
-				}
-			
-			if(obj_value== li_value)
-				{
-
-				if(simples_composto)
-				{
-					$(this).attr('sc_load',_values[obj][1]);
-				}
-					//TRACE_DEBUG($(this).attr('class'));
-					DROP_EVENT( 'DIRECT', $(this),$(_clone)); 
-					
-					if(simples_composto)
-					{
-						$(this).attr('sc_load','');
-					}	
-				}
-			
+			hide_fixed_filter();
 		}
-		
-	});
 	
-	*/
+	}
+	
 	
 	_END('find_relatorio_attributo_metrica');
 }
@@ -1279,34 +1299,39 @@ jQuery.expr[':'].containClass = function(a, i, m) {
 /**
  * 	Fazendos os inputs dos elementos na grid
  */
-function set_value_box_relatorio(object)
+function set_value_box_relatorio(object,clean)
 {
 	_START('set_value_box_relatorio');
 	
-	$('.wrs_panel_receive').find('li').remove();
-	$('.WRS_DRAG_DROP_FILTER').html('');
+	if(clean==undefined)
+		{
+			$('.wrs_panel_receive').find('li').remove();
+			$('.WRS_DRAG_DROP_FILTER').html('');
+		}
 	
 	if(isset(object.LAYOUT_ROWS))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR ',object.LAYOUT_ROWS,'.sortable_linha');
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options',object.LAYOUT_ROWS,'.sortable_linha');
 	}
 	
 	if(isset(object.LAYOUT_COLUMNS))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR ',object.LAYOUT_COLUMNS,'.sortable_coluna');
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options',object.LAYOUT_COLUMNS,'.sortable_coluna');
 	}
 	
 	if(isset(object.LAYOUT_FILTERS))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR ',object.LAYOUT_FILTERS,'.sortable_filtro');
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options ',object.LAYOUT_FILTERS,'.sortable_filtro');
 	}
 	
 	if(isset(object.LAYOUT_MEASURES))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_METRICA ',object.LAYOUT_MEASURES,'.sortable_metrica');
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_METRICA .wrs_panel_options',object.LAYOUT_MEASURES,'.sortable_metrica');
 	}
 	
-	$('.WRS_DRAG_DROP_FILTER').html(str_replace('li','h2',$('.sortable_filtro').html()));
+	if(clean==undefined){
+		$('.WRS_DRAG_DROP_FILTER').html(str_replace('li','h2',$('.sortable_filtro').html()));
+	}
 	
 	
 	
@@ -1339,6 +1364,9 @@ function rows_by_metrica_attr_base64(object,_type)
 		var tag_class	=	$(this).attr('tag-class');
 		var get_object	=	$('.ui-layout-pane-east ul').find('.'+tag_class);
 		
+		
+
+		
 		//console.log(get_object.data('wrs-data'));
 		var json		=	get_object.data('wrs-data');//$.parseJSON(base64_decode(get_object.attr('json')));
 
@@ -1353,6 +1381,9 @@ function rows_by_metrica_attr_base64(object,_type)
 
 				_request[_request.length]	=	json.MEASURE_UNIQUE_NAME;
 			}
+			
+			
+			
 		}
 		
 		
@@ -1395,6 +1426,7 @@ function wrs_run_filter()
 	var _report_id			=	report_KendoUi['REPORT_ID'];
 	
 	
+	
 	var _filtro_size		=	$('.sortable_filtro').find('li');
 	
 	
@@ -1420,10 +1452,8 @@ function wrs_run_filter()
 		wrs_panel_layout.open('west');
 	}
 		
-	
-	
-	
-		if(aba_active.wrsAbaData('get_change_aba')==true)
+
+	if(aba_active.wrsAbaData('get_change_aba')==true)
 		{
 			aba_active.wrsAbaData('set_change_aba',false);	
 			configure_options_show_grid($(this));
@@ -1432,6 +1462,12 @@ function wrs_run_filter()
 			
 			panel_open_by_time_out(_report_id);
 			
+			
+			
+			delete aba_active;
+			delete report_KendoUi;
+			delete history;
+			delete _filtro_size;
 			
 			return true;
 		}
@@ -1447,6 +1483,11 @@ function wrs_run_filter()
 			//stop_job_timeout(_report_id);
 			_END('wrs_run_filter');
 			
+						delete aba_active;
+			delete report_KendoUi;
+			delete history;
+			delete _filtro_size;
+
 			
 			return true;
 		}
@@ -1489,20 +1530,49 @@ function wrs_run_filter()
 	if(job_exist(report_KendoUi.REPORT_ID))
 	{
 		//click_stop_job();
-		//console.log('já existe no JOB então não processa');
 		WRS_ALERT(LNG('CONSULTA_ATIVA_CANCELAR'),'warning');
+		
+			delete aba_active;
+			delete report_KendoUi;
+			delete history;
+			delete _filtro_size;
+			delete sortable_metrica;
+			delete sortable_linha;
+			delete sortable_coluna;
+			delete sortable_filtro;
+			delete request_metrica;
+			delete request_linha;
+			delete request_coluna;
+			delete request_filtro;
+			
 		return true;
 	}
 	
 	
 	//Ao navegar pelas abas essa função impede que seja executada mesmo se tiver aoteração a alteração só será efetivada ao mandar executar
 	try{
+		
 		if(report_KendoUi.STOP_RUN==true)
 		{
 			aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
 			configure_options_show_grid($(this));
 			//stop_job_timeout(_report_id);
+			
+				delete aba_active;
+			delete report_KendoUi;
+			delete history;
+			delete _filtro_size;
+			delete sortable_metrica;
+			delete sortable_linha;
+			delete sortable_coluna;
+			delete sortable_filtro;
+			delete request_metrica;
+			delete request_linha;
+			delete request_coluna;
+			delete request_filtro;
+			
 			_END('wrs_run_filter');
+			
 			return true;
 		}
 	}catch(e){console.warn(' exception');}
@@ -1595,9 +1665,9 @@ function wrs_run_filter()
 					wrs_data_param.LAYOUT_MEASURES	=	base64_encode(implode(',',request_metrica));
 					
 					
-					//Força a conversão do Menu 
-					wrsFilterShow();
-					
+							//Força a conversão do Menu 
+							wrsFilterShow();
+							
 					
 					
 
@@ -1616,6 +1686,7 @@ function wrs_run_filter()
 									wrs_data_param.DRILL_HIERARQUIA_LINHA	=	1;
 								}
 								
+
 								//Salva na aba a nova estrutura
 								aba_active.wrsAbaData('setWrsData',{
 																			LAYOUT_FILTERS			:	wrs_data_param.LAYOUT_FILTERS	, 
@@ -1657,8 +1728,29 @@ function wrs_run_filter()
 						
 						$('body').wrsAbas('remove_event_click');
 						//stop_job_timeout(_report_id);
+						
+						delete aba_active;
+						delete report_KendoUi;
+						delete history;
+						delete _filtro_size;
+						delete sortable_metrica;
+						delete sortable_linha;
+						delete sortable_coluna;
+						delete sortable_filtro;
+						delete request_metrica;
+						delete request_linha;
+						delete request_coluna;
+						delete request_filtro;
+						delete wrs_data_param;
+						delete getAllFiltersToRun;
+						delete wrsConfigGridDefault_data;
+						delete _param_request;
+
 						_END('wrs_run_filter');
+						
 						return false;
+						
+
 					}
 
 					var is_wrs_change_to	=	is_wrs_change_to_run(_param_request,manager_aba,_param_request['REPORT_ID']);
@@ -1672,6 +1764,24 @@ function wrs_run_filter()
 						{
 							configure_options_show_grid($(this));
 							//stop_job_timeout(_report_id);
+							delete aba_active;
+							delete report_KendoUi;
+							delete history;
+							delete _filtro_size;
+							delete sortable_metrica;
+							delete sortable_linha;
+							delete sortable_coluna;
+							delete sortable_filtro;
+							delete request_metrica;
+							delete request_linha;
+							delete request_coluna;
+							delete request_filtro;
+							delete wrs_data_param;
+							delete getAllFiltersToRun;
+							delete wrsConfigGridDefault_data;
+							delete _param_request;
+							delete is_wrs_change_to;
+
 							_END('wrs_run_filter');
 							return true;
 						}
@@ -1703,17 +1813,37 @@ function wrs_run_filter()
 
 			$('.wrs_run_filter').removeAttr('status_load');
 			//stop_job_timeout(_report_id);
+			
+							delete aba_active;
+							delete report_KendoUi;
+							delete history;
+							delete _filtro_size;
+							delete sortable_metrica;
+							delete sortable_linha;
+							delete sortable_coluna;
+							delete sortable_filtro;
+							delete request_metrica;
+							delete request_linha;
+							delete request_coluna;
+							delete request_filtro;
+							delete wrs_data_param;
+							delete getAllFiltersToRun;
+							delete wrsConfigGridDefault_data;
+							delete _param_request;
+							delete is_wrs_change_to;
+							
 			_END('wrs_run_filter');
 			return true;
 		}
 		
-
+		//chave para cancelar o o resultado do job
+		_param_request['KEYS']	=	 _param_request['REPORT_ID']+'_'+js_rand(0,9999999999999);
 		
-		$('body').managerJOB('start_job',{report_id:_param_request['REPORT_ID'],title_aba:_param_request['TITLE_ABA'], 'mktime':mktime(), type_run: _param_request['TYPE_RUN']});
 		
-		//É necessário zerar essas funções para que não mande recriar novamente a estrutura de deill
 		
-
+	//É necessário zerar essas funções para que não mande recriar novamente a estrutura de deill
+		
+		
 		var data_header_drill_column	=	report_KendoUi.DRILL_HIERARQUIA_LINHA_DATA_HEADER;
 
 		
@@ -1731,9 +1861,15 @@ function wrs_run_filter()
 																	DRILL_HIERARQUIA_LINHA_DATA_HEADER	: 	data_header_drill_column,
 																	TYPE_RUN							:	null,
 																	MKTIME_HISTORY						:	null,
+																	KEYS								:	_param_request['KEYS'],//Chave para cancelamento
 																	JOB_RESULT							:	null 	//Apagando a estrutura de JOB Result caso seja selecionando,
 																}
 												);
+		
+		
+		$('body').managerJOB('start_job',{report_id:_param_request['REPORT_ID'],title_aba:_param_request['TITLE_ABA'], 'mktime':mktime(), type_run: _param_request['TYPE_RUN'], KEYS : _param_request['KEYS']});
+		
+	
 		
 		try{
 			if(report_KendoUi['MKTIME_HISTORY']!=null)
@@ -1754,6 +1890,8 @@ function wrs_run_filter()
 			aba_active.wrsAbas('resize_aba');
 		}
 		
+		
+		clean_filters();
 
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 
@@ -1792,6 +1930,24 @@ function wrs_run_filter()
 			//END
 			
 	}
+	
+	delete aba_active;
+	delete report_KendoUi;
+	delete history;
+	delete _filtro_size;
+	delete sortable_metrica;
+	delete sortable_linha;
+	delete sortable_coluna;
+	delete sortable_filtro;
+	delete request_metrica;
+	delete request_linha;
+	delete request_coluna;
+	delete request_filtro;
+	delete wrs_data_param;
+	delete getAllFiltersToRun;
+	delete wrsConfigGridDefault_data;
+	delete _param_request;
+	delete is_wrs_change_to;
 	
 	_END('wrs_run_filter');
 	
@@ -1867,6 +2023,24 @@ function wrsRunGridButton(param_request)
 function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 {
 	
+	
+	try{
+		if(data.error_job==true)
+			{
+						$('.'+data.REPORT_ID).wrsAbaData('setKendoUi',{STOP_RUN:false});
+						WRS_ALERT(data.error,'error');
+						$('body').managerJOB('error_html',{report_id:data.REPORT_ID,msg:data.error});
+						$('body').managerJOB('setMessengerWindow',{kendoUi:$('.'+data.REPORT_ID).wrsAbaData('getKendoUi'),messenger:data.error});
+						
+						return false;
+			}
+	}
+	catch(e)
+	{
+		
+	}
+	
+	
 	_START('MOUNT_LAYOUT_GRID_HEADER');
 	
 	if(is_job_call!='ThreadMainLoadData')
@@ -1878,7 +2052,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 			if($('body').managerJOB('exist_job_render',{report_id:data.REPORT_ID,force_loop_job:true}))
 			{
 				_END('MOUNT_LAYOUT_GRID_HEADER not in JOB');
-			//	console.log('não libera o MOUNT_LAYOUT_GRID_HEADER');
+				delete data;
 				return true;
 			}
 			
@@ -1889,6 +2063,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 			}
 		}
 	}
+	
 	
 
 
@@ -1904,16 +2079,42 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		if(_report_id!=undefined && _report_id!='undefined')
 		{
 			$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
+			
 		}
 	
 	$('.container_panel_relatorio_rows').each(function(){var id_remove	=	 $(this).attr('id'); if(id_remove==remove_report)	$(this).remove();});
 	
+	
+	
+	var tmp_div_reports	=	$('#'+remove_report);
+	var msg_error		=	tmp_div_reports.attr('rel');
+	var keys			=	tmp_div_reports.attr('keys');
+	
+	
+
+	
+	var getKeys		=	$('body').managerJOB('getKeys');
+	
+	try{
+			
+			if(getKeys[keys]==_report_id)
+			{
+				console.log('Não recebe os dados pois foram cancelados');
+				$('body').managerJOB('setKeys',keys,null);//Apagando keys
+				
+				delete remove_report;
+				delete data;
+				delete aba_ativa;
+				delete tmp_div_reports;
+
+				return true;
+			}
+			
+	}catch(e){
+		
+	}
+	
 	$('.container_panel_relatorio').append(data);
-	
-	
-	var msg_error		=	$('#'+remove_report).attr('rel');
-	
-	
 	
 	
 	//Se não for a aba ativa então faz o hide nbo HTML 
@@ -1921,7 +2122,11 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	find_and_hide_container(aba_ativa);
 	
 	 
-		
+	if(_report_id!=undefined && _report_id!='undefined')
+	{
+		//Apagando os filtros a ser adicionados
+		$('.'+_report_id).wrsAbaData('setNewFilter',{tag:null});
+	}
 		
 		$('#'+aba_ativa+'Main').removeClass('hide');
 	
@@ -1934,9 +2139,11 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		
 		if(msg_error=='error')
 		{
-			var body_html_error		=	$('#'+remove_report).find('div').html();
+			var body_html_error		=	tmp_div_reports.find('div').html();
 			
 			$('body').managerJOB('error_html',{report_id:_report_id,msg:body_html_error});
+			
+			delete body_html_error;
 			
 		}else{
 			
@@ -1958,6 +2165,12 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	$(window).resize();
 	
+	delete remove_report;
+	delete data;
+	delete aba_ativa;
+	delete tmp_div_reports;
+
+				
 	_END('MOUNT_LAYOUT_GRID_HEADER');
 }
 

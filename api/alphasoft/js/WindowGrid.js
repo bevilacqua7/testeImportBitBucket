@@ -22,6 +22,24 @@
 }( jQuery ));
 
 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * Construlçao do Dado da GRid
  */
@@ -36,6 +54,11 @@ function onDataBoundWindowGrid(arg)
 	_START('onDataBoundWindowGrid');
 	var tabela				=	arg.sender.element.attr('id');
 	var IDName				=	'#'+tabela;
+	
+	
+	
+	$(IDName).data('wrs-modal',arg.sender._data);
+
 	var loadParanGridWindow	=	$(IDName).data('loadParanGridWindow');
 	var telerikGrid 		= 	$(IDName).data('kendoGrid');
 		
@@ -165,6 +188,7 @@ function onDataBoundWindowGrid(arg)
 	}else{
 		
 	}
+	
 _END('onDataBoundWindowGrid');
 }
 
@@ -255,6 +279,14 @@ function get_grid_window_values_form(_event)
 	});
 	
 	
+	form.find('input[type=checkbox]').each(function(){
+		
+		var _value			=	$(this).prop('checked')==true ? $(this).val() : 0;
+		
+		param[$(this).attr('name')]	=	_value;
+	});
+	
+	
 	form.find('select').each(function(){
 		param[$(this).attr('name')]	=	$(this).val();
 	});
@@ -297,8 +329,7 @@ function btn_window_grid_event(_functionCallBack,_action_type,_table,_extraValue
 	_END('btn_window_grid_event');	
 }
 
-
-function wrs_window_grid_events_tools(objectClick)
+function wrs_window_grid_events_tools(objectClick,btn_events)
 {
 	_START('wrs_window_grid_events_tools');
 	var _options	=	{
@@ -307,8 +338,14 @@ function wrs_window_grid_events_tools(objectClick)
 						icondbl	:	wrd_grid_window_to_form_dbl,
 						btn		:	btn_window_grid_event
 					};
-
 	
+	
+	if(!isEmpty(btn_events))
+	{
+		_options.btn	=	btn_events.btn;
+	}
+
+
 	var options		=	_options;
 	
 		if(!empty(objectClick)){
@@ -332,6 +369,7 @@ function wrs_window_grid_events_tools(objectClick)
 function grid_window_modal(param_request,Event,_funCallBackData)
 {
 	_START('grid_window_modal');
+	
 	//var param_request	=	 {wrs_type_grid:type};
 	var Ofile			=	'WindowGrid';
 	var Oclass			=	'WindowGrid';
@@ -339,10 +377,34 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 
 	var funCallBackData		=	 _funCallBackData;
 	if(!isset(_funCallBackData) || _funCallBackData==undefined){
+	var btn_events			=	null; 
+	
+	
+	if(Event=='GET_SSAS_LAYOUTS')
+		{
+				btn_events	=	{btn:layout_events_button};
+		}
+	
+	if(!isset(_funCallBackData)){
 		funCallBackData	=	function(data)
 		{
+			
+			
+			
+			
 				$('.modal-content-grid').html(data);
-				wrs_window_grid_events_tools();
+				wrs_window_grid_events_tools(null,btn_events);
+				
+				$(".wrs_grid_window_event a[rel="+param_request.wrs_type_grid+"]").addClass('active_tools');
+				
+				if(Event=='GET_SSAS_LAYOUTS')
+				{
+					$(".wrs_grid_window_event a[rel=icon_big]").parent().hide();
+					$(".wrs_grid_window_event a[rel=icon_small]").parent().hide();
+					$(".wrs_grid_window_event a[rel=icon_middle]").parent().hide();
+				 
+				}
+
 		};
 	}
 

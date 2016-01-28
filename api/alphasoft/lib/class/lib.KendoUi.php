@@ -127,6 +127,7 @@ class KendoUi
 	{
 		/*
 		 * WARNING:O Comando 'TYPE_RUN' é apenas para saber qual o tipo de Execução está sendo solicitado e por esse motivo ele deve ser sempre empty quando finalizado o processo
+		 * Ao criar uma flag de controle lembrar que tem que modificar ao optar por sal var o relatório 
 		 */
 
 		$data	=	 array(	'page_size'								=> 	25,
@@ -192,7 +193,8 @@ class KendoUi
 							'STOP_RUN',		//A Flag irá aparecer quando se navega entre as abas | true:false
 							'STOP_QUERY',	//Caso esteja true executa novamente mesmo com o histórico igual|true:false
 							'TOTAL_COLUMN',		//Muito usado quando existir coluna ordenadas
-							'JOB_RESULT'	//REsultado do JOB para o HIstórico
+							'JOB_RESULT',	//REsultado do JOB para o HIstórico
+							'KEYS', //Usado para controlar a chave para cancelamento		
 		);
 	}
 
@@ -381,7 +383,7 @@ class KendoUi
 		$html 	= <<<HTML
 		
 			
-			<div id="{$idTag}Main" class="container_panel_relatorio_rows hide">
+			<div id="{$idTag}Main" class="container_panel_relatorio_rows hide" keys="{$getRequestWrsExceptions['KEYS']}">
 						<div class="wrs_box {$idTag}BOX">
 									{$WRS_PANEL_HEADER_TABLE}
 								
@@ -560,7 +562,7 @@ HTML;
 	 * @param array $_param
 	 * 
 	 */
-	public function setHeaderColumnWRS($param)
+	public function setHeaderColumnWRS($_param)
 	{
 		
 		/**
@@ -575,11 +577,13 @@ HTML;
 		$columnOnly		=	false;
 		$menuTotalFlag	=	array();
 		$columns_table	=	array();
+		$param			=	$_param;
 
 		
-
+		
 		foreach ($param as $param_label)
 		{
+			
 			
 			if(empty($param_label['FIELD']))
 			{
@@ -600,10 +604,12 @@ HTML;
 				$arrayFrozen					=	$this->findSetKey($arrayFrozen,$_param_label,true);
 			}
 			
+			
 			if(empty($param_label['FIELD']) && !empty($param_label['LEVEL_NAME']) && !empty($param_label['LEVEL_VALUE']))
 			{
 					$frozenHeader[$param_label['LEVEL_NAME']]		=	$param_label;
 			}
+			
 		}
 		
 		
@@ -662,7 +668,6 @@ HTML;
 											$_menuUse[$pos]['columns']			=	array_values($_menuUseTmp[$value['key']]);
 											$_menuUse[$pos]['tb_field']			=	(string)$value['FIELD'];
 											$_menuUse[$pos]['LEVEL_FULL']		=	(string)$value['LEVEL_FULL'];
-										//	$_menuUse[$pos]['field']			=	'';
 										
 										}										
 								}else{
@@ -671,14 +676,18 @@ HTML;
 										
 										$_menuUse[$value['keyUp']][$value['key']]['tb_field']	=	(string)$value['FIELD'];
 										$_menuUse[$value['keyUp']][$value['key']]['LEVEL_FULL']	=	(string)$value['LEVEL_FULL'];
-									//	$_menuUse[$value['keyUp']][$value['key']]['field']		=	'';
-		
-										//$_menuUse[$value['keyUp']][$value['key']]['tb_field']	=	(string)$value['FIELD'];
 								}
 					}
 					else
 					{
-						$_menuUse[$value['keyUp']][$value['key']]	=	$value;
+						 
+							if(empty($value['keyUp']))
+							{
+								$_menuUse[0]	=	$value;
+							}else{
+								$_menuUse[$value['keyUp']][$value['key']]	=	$value;
+							}
+						
 					}
 				}
 				
@@ -690,26 +699,28 @@ HTML;
 		$wrs_column			=	 array_merge($arrayFrozen,$_menuUseTmp);
 
 		
-		
-			
 		//Gravando as posições dos totais
 		$keysOnly										=	array_keys($wrs_column);
 		$wrs_column[$keysOnly[0]]['flag_total_column']	=	$menuTotalFlag;
 		$wrs_column[$keysOnly[0]]['column_table']		=	$columns_table;
 		$wrs_column[$keysOnly[0]]['layout']				=	$this->getDrillLayout();
 		
-		
 
-		//WRS_DEBUG_QUERY(print_r($wrs_column,true));
+
 		
-		if($columnOnly)
-		{
+		//if($columnOnly)
+		//{
 			$wrs_column		=	 array_values($wrs_column);
-		}
+	//	}
+		
 		
 		$this->set_total_column(count($columns_table));
 		
+
+		
 		$this->setColumn($wrs_column);
+		
+		
 		return true;
 		
 	}
@@ -769,6 +780,7 @@ HTML;
 		$paramTelerik['tb_field']=	(string)$field;
 		$paramTelerik['LEVEL_FULL']=	(string)$_param['LEVEL_FULL'];
 		$paramTelerik['field']		=	'';
+
 		if($locked)
 		{
 			$paramTelerik['locked']	=	$locked;
@@ -790,7 +802,7 @@ HTML;
 			//$_tmp_param['FIELD']	
 			
 		//Comando para passar parametro de quais colunas esconder
-				if(strpos($_tmp_param['FIELD'],'[LATITUDE]')===false)
+				if(strpos($_tmp_param['LEVEL_NAME'],'.LATITUDE')===false)
 				{
 					if(strpos($_tmp_param['FIELD'],'[*LATITUDE*]')===false)
 					{

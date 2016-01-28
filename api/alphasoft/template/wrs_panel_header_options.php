@@ -26,6 +26,8 @@ $CHART_CONFIG								=	LNG('CHART_CONFIG');
 $GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA	=	LNG('GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA');
 $REPORT_RESULT_HISTORY						=	LNG('REPORT_RESULT_HISTORY');
 $script_tags								=	'';
+
+$LAYOUTS					=	LNG('tpl_layout');
 //TAG pode ser enviada externamente pelo include
 if(!isset($HIDE_EXPORT)) $HIDE_EXPORT		=	'';
 
@@ -82,7 +84,11 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 			<div class="navbar-right">
 			
 				<div class="grid_button_header_menu ">
-					  		
+						<button type="button" class="btn btn-default btn-xs btn-open-layouts ">
+						    <i class="fa fa-th-large"></i> {$LAYOUTS} 
+						</button>
+				
+						
 				<!-- TOTAL -->
 				<div class="btn-group dropdown-menu-configuration wrs_grid_options">
 						<button type="button" class="btn btn-default btn-options-grid btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
@@ -92,7 +98,6 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						    <li><h4>{$GRID_HEADER_TITLE_EXIBITION}</h4></li>
 					  		<li>
 						  		<form>
-						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="SUMARIZA"> {$GRID_HEADER_OPTION_TOTAL_SUMARIZA}</label></div>
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="COLORS_LINE"> {$GRID_HEADER_OPTION_TOTAL_LINE_COLOR}</label></div>
 						  		</form>
 					  		</li>
@@ -103,10 +108,12 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" dependence="DRILL_HIERARQUIA_LINHA"  name="ALL_ROWS" > {$GRID_HEADER_OPTION_TOTAL_LINE}</label></div>
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="ALL_COLS" > {$GRID_HEADER_OPTION_TOTAL_COLUMN}</label></div>
 						  				<div class="checkbox"><label><input type="checkbox" value="1" name="ORDER_COLUMN"> {$GRID_HEADER_OPTION_ORDER_COLUMN}</label></div>
+						  				<div class="checkbox"><label><input type="checkbox" value="1" name="SUMARIZA"> {$GRID_HEADER_OPTION_TOTAL_SUMARIZA}</label></div>
 						  				<div class="checkbox"><label><input type="checkbox" value="1" name="DRILL_HIERARQUIA_LINHA"> {$GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA}</label></div>
 						  		</form>
 					  		</li>
-					  		 
+	
+					  							  		 
 					  		<li class="info_chart divider"></li>
 					  		<li class="info_chart li-padding">
 					  			<button type="button" class="btn btn-info btn-configute-chart btn-block  btn-sm color_write chart_config_btn" data-target="#myModalChartConfig" ><i class="fa fa-cog"></i> {$CHART_CONFIG}</button>
@@ -145,10 +152,6 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 				</div>
 				<!-- END Export -->	  
 					
-					  		
-					  		
-					  		
-					  		
 					
 				<!-- Visao -->
 				 <div class="btn-group ">
@@ -178,6 +181,8 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 			
 		  </div>
 		</nav>
+						
+		<script> btn_open_layouts_events() </script>
 HTML;
 				
 		?>

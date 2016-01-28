@@ -2,8 +2,8 @@
 		<div class="nav nav-tabs ui-accordion-header  ui-accordion-header-active ui-state-active wrs_panel_esquerdo_header DRAG_DROP_LATERAIS_title">
 			<span class="navbar-left title_left"><i class="glyphicon glyphicon-th-list colorSelect"  ></i> <?php echo LNG('ATTRIBUTOS_TITLE');?></span>
 			<div class="navbar-right btn-group DRAG_DROP_LATERAIS_title_btn_right">
-				<button type="button" class="btn btn-default btn-xs glyphicon glyphicon-floppy-disk"></button>
-				<button type="button" class="btn btn-default btn-xs glyphicon glyphicon-folder-open"></button>
+				<button type="button" class="btn btn-default btn-xs glyphicon glyphicon-floppy-disk event-layout-save" ></button>
+				<button type="button" class="btn btn-default btn-xs glyphicon glyphicon-folder-open menu_cadastro" tabela="GET_SSAS_LAYOUTS" ></button>
 			</div>
 		</div>
 

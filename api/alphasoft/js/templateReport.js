@@ -200,7 +200,7 @@ _START('carrega_grid_list_reports');
 	
 	var active_aba	=	get_aba_active_object();
 	
-		active_aba.wrsAbas('save_info_aba_current',active_aba);
+		active_aba.wrsAbas('save_info_aba_current',active_aba, false);
 
 
 	var funCallBackVision = function()
@@ -248,9 +248,16 @@ function repair_reportname_kendoui(_obj){
 		var attr = obj.REPORT_OPTIONS;
 		if (typeof attr !== typeof undefined && attr !== false) {
 			
-			
+
 			
 			var param_options 		= 	$.parseJSON(base64_decode(obj.REPORT_OPTIONS));
+			
+
+			if(isEmpty(param_options))  
+			{
+				return false;
+			}
+			
 				param_options.TITLE_ABA		=	obj.REPORT_DESC;
 			
 			
@@ -424,7 +431,7 @@ function getLoadReport(no_request)
 	
 	var active_aba	=	get_aba_active_object();
 	
-		active_aba.wrsAbas('save_info_aba_current',active_aba);
+		active_aba.wrsAbas('save_info_aba_current',active_aba,false);
 		
 		
 
@@ -439,6 +446,9 @@ function getLoadReport(no_request)
 	var filter_selected				=	$.WrsFilter('getAllFiltersToRun');
 	
 	
+	wrs_grid_options_default		=	wrs_clean_data(wrs_grid_options_default);
+	
+	
 	
 	if(no_request){
 		
@@ -446,24 +456,23 @@ function getLoadReport(no_request)
 				'LAYOUT_ROWS'			:	sortable_linha.request,
 				'LAYOUT_COLUMNS'		:	sortable_coluna.request,
 				'LAYOUT_MEASURES'		:	sortable_metrica.request,
-				'FILTER_TMP'		:	filter_selected.full,
+				'FILTER_TMP'			:	filter_selected.full,
 				
 }
 		
 		
 	}else{
-	_param	=	{
-					'LAYOUT_ROWS'			:	sortable_linha,
-					'LAYOUT_COLUMNS'		:	sortable_coluna,
-					'LAYOUT_MEASURES'		:	sortable_metrica,
-					'LAYOUT_FILTERS'		:	sortable_filtro,
-					'KendoUi'				:	wrs_grid_options_default,
-					'filter_selected'		:	filter_selected
-	}
+		_param	=	{
+						'LAYOUT_ROWS'			:	sortable_linha,
+						'LAYOUT_COLUMNS'		:	sortable_coluna,
+						'LAYOUT_MEASURES'		:	sortable_metrica,
+						'LAYOUT_FILTERS'		:	sortable_filtro,
+						'KendoUi'				:	wrs_grid_options_default,
+						'filter_selected'		:	filter_selected
+		}
 	}
 	
-//	console.log('filter_selected',filter_selected);
-	
+
 	//Desabilita a janela
 	activeToGetAllFiltersRecover(_filter_hide);
 	_END('getLoadReport');

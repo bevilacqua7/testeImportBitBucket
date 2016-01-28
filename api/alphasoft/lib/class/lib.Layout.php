@@ -54,8 +54,10 @@ class WRS_LAYOUT extends Smarty
 		 */
 				
 		
-		if(is_array($_SESSION['PWS_LNG'])){			
-			foreach ($_SESSION['PWS_LNG'] as $label =>$value){
+		if(is_array($_SESSION['PWS_LNG']))
+		{			
+			foreach ($_SESSION['PWS_LNG'] as $label =>$value)
+			{
 				$this->assign($label,$value);
 			}
 		}
