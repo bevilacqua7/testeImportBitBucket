@@ -687,15 +687,9 @@ function WRS_CONFIRM(_text,_type,_callback,_extraButtonParam,_extraType,_extraFo
 		case 'warning' 	: _title	=	LNG('ALERT_TITLE_WARNING') ;break;
 	}
 	
-<<<<<<< .mine
- 
-	
-
-=======
 	var buttons		=	{ok:LNG('BTN_CONFIRM'),yes:LNG('BTN_SIM'),cancel:LNG('BTN_NAO')};
 	buttons			=	extraButtonParam?merge_objeto(buttons,extraButtonParam):buttons;
 
->>>>>>> .theirs
 	modal({
 		type  		: extraType,
 		wrs_type	:	_type,
