@@ -890,7 +890,7 @@ function onDataBound(arg)
 		delete columns_width_data;
 		//END
 		
-	}
+	
 	
 
 	if(!isEmpty(columns_width_data))

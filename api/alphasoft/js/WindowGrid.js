@@ -376,7 +376,6 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 	var Oevent			=	empty(Event) ? 'ATT_WRS_USER' : Event;
 
 	var funCallBackData		=	 _funCallBackData;
-	if(!isset(_funCallBackData) || _funCallBackData==undefined){
 	var btn_events			=	null; 
 	
 	
@@ -385,7 +384,8 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 				btn_events	=	{btn:layout_events_button};
 		}
 	
-	if(!isset(_funCallBackData)){
+	if(!isset(_funCallBackData) || _funCallBackData==undefined)
+	{
 		funCallBackData	=	function(data)
 		{
 			

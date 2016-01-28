@@ -670,44 +670,61 @@ function replace_attr(value)
 
 
 
-function WRS_CONFIRM(_text,_type,_callback,_extraButtonParam,_extraType,_extraForceButtons, hide_btn_no)
+function WRS_CONFIRM(_text,_type,_callback,_extraButtonParam,_extraType,_extraForceButtons)
 {
-	
 	var _title				=	"ALERT_TITLE_INFO";
 	var _is_type			=	_type;
 	var extraButtonParam	=	_extraButtonParam==undefined?false:_extraButtonParam;
 	var extraType			=	_extraType==undefined?'confirm':_extraType;
-	var extraForceButtons	=	_extraForceButtons==undefined?'[{text : "OK",val : true,onClick : function(e) {	return true	}} ]':_extraForceButtons;
+	var hide_btn_no			=	 false;
 	
-	switch(_type)
-	{
-		case 'info' 	: _title	=	LNG('ALERT_TITLE_INFO') ;break;
-		case 'error' 	: _title	=	LNG('ALERT_TITLE_ERRO') ;break;
-		case 'success' 	: _title	=	LNG('ALERT_TITLE_SUCCESS') ;break;
-		case 'warning' 	: _title	=	LNG('ALERT_TITLE_WARNING') ;break;
-	}
-	
-	var buttons		=	{ok:LNG('BTN_CONFIRM'),yes:LNG('BTN_SIM'),cancel:LNG('BTN_NAO')};
-	buttons			=	extraButtonParam?merge_objeto(buttons,extraButtonParam):buttons;
-
-	modal({
-		type  		: extraType,
-		wrs_type	:	_type,
-		 title		:	_title,
-		 buttonText : buttons,
-		 buttons 	: extraForceButtons,
-		closeClick 	: false, //Close Modal on click near the box
-		text  		: _text,
-		callback	: function(result){ _callback(result); }
-	});
-	
-	
-	$('#modal-window .modal-buttons a:first-child').show();
-	
-	if(hide_btn_no==true)
-	{
-		$('#modal-window .modal-buttons a:first-child').hide();
-	}
+		switch(_type)
+		{
+			case 'info' 	: _title	=	LNG('ALERT_TITLE_INFO') ;break;
+			case 'error' 	: _title	=	LNG('ALERT_TITLE_ERRO') ;break;
+			case 'success' 	: _title	=	LNG('ALERT_TITLE_SUCCESS') ;break;
+			case 'warning' 	: _title	=	LNG('ALERT_TITLE_WARNING') ;break;
+		}
+		
+		var buttons		=	{ok:LNG('BTN_CONFIRM'),yes:LNG('BTN_SIM'),cancel:LNG('BTN_NAO')};
+		
+		if(typeof _extraButtonParam =='object')
+			{
+				buttons			=	extraButtonParam?merge_objeto(buttons,extraButtonParam):buttons;
+			}else{
+				
+				if(_extraButtonParam==true)
+					{
+						hide_btn_no=true;
+					}
+			}
+		
+		
+		var _modal		=	{
+									type  		: 	extraType,
+									wrs_type	:	_type,
+									title		:	_title,
+									buttonText 	: 	buttons,
+									closeClick 	: 	false, //Close Modal on click near the box
+									text  		: 	_text,
+									callback	: 	function(result){ _callback(result); }
+							};
+		
+		
+		if(_extraForceButtons!=undefined)
+		{
+			_modal			=	merge_objeto(_modal,{buttons 	: _extraForceButtons});
+		}
+		
+		modal(_modal);
+		
+		
+		$('#modal-window .modal-buttons a:first-child').show();
+		
+		if(hide_btn_no==true)
+		{
+			$('#modal-window .modal-buttons a:first-child').hide();
+		}
 }
 
 
