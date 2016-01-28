@@ -480,23 +480,22 @@ function getLoadReport(no_request)
 	
 }
 
-function atualiza_id_aba_ativa(rep_id)
+function atualiza_id_aba_ativa(_rep_id)
 {
 	_START('atualiza_id_aba_ativa');
 	
-	if(rep_id!='' && parseInt(rep_id)>0){
+	var rep_id	=	_rep_id;
+	
+	if(rep_id!='' && parseInt(rep_id)>0)
+	{
 
-		rep_id='REL_'+rep_id;
+		rep_id='A'+rep_id;
 		
-		var aba_ativa = $(".WRS_ABA ul li.active");
-		
-		// atualizando o nome da aba no class da aba
-		aba_ativa.removeClass(aba_ativa.attr('id-aba')).addClass(rep_id);
-		// atualizando o nome da aba no atributo id-aba da aba
-		aba_ativa.attr('id-aba',rep_id);
+		var aba_ativa 	= $(".WRS_ABA ul li.active");
+		var get_old_id	=	aba_ativa.attr('id-aba');
+
+		aba_ativa.wrsAbaData('change_div_elements',{old:get_old_id,id:rep_id});
 		aba_ativa.wrsAbaData('remove_asterisk');
-		aba_ativa.wrsAbaData('setWrsData',{getKendoUi:rep_id});
-		
 		
 	}
 	

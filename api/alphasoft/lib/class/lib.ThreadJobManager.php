@@ -168,6 +168,18 @@ class ThreadJobManager extends WRS_USER
 		}
 		
 		
+		
+		
+		//ERROR
+		if($rows_CREATE_SSAS_JOB['JOB_STATUS'] == -4 || $rows_CREATE_SSAS_JOB['JOB_STATUS'] == -5 || $rows_CREATE_SSAS_JOB['JOB_STATUS'] == 0)
+		{
+			WRS_TRACE('MSG_ERROR:: '.$rows_GET_SSAS_JOB['JOB_ERROR'].' - '.$queryGrid, __LINE__, __FILE__);
+			WRS_DEBUG_QUERY('MSG_ERROR:: '.$rows_GET_SSAS_JOB['JOB_ERROR'].' - '.$queryGrid);
+				
+			return array('error'=>$rows_GET_SSAS_JOB['JOB_ERROR'],'REPORT_ID'=>$report_id,'data'=>$rows_GET_SSAS_JOB);
+		}
+		
+		
 		/*
 		 * TODO: Remover
 		 */

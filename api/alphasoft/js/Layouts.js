@@ -1,8 +1,12 @@
 
-function event_btn_change_layout_options(data)
+function event_btn_change_layout_options()
 {
 	
-	if(isEmpty(data)) return false;
+//	if(isEmpty(data)) return false;
+	
+	var container_find		=	$(this).parent().parent();
+	
+
 	
 	var options		=	{
 							param		:	 {},
@@ -11,7 +15,7 @@ function event_btn_change_layout_options(data)
 						};
 
 	
-	$('.layout-select-box select').each(function()
+	container_find.find('select').each(function()
 			{
 						var selected		=	 $(this).find('option:selected').val();
 						
@@ -35,16 +39,7 @@ function event_btn_change_layout_options(data)
 	
 	set_value_box_relatorio(options.param,true);
 	
-	$('#myModalGenericConfig').modal('hide');
-	
-	
-	
-	
-	
-	
-	
-	
-	
+//	$('#myModalGenericConfig').modal('hide');
 	wrsRunFilter();
 	
 	delete options;
@@ -56,6 +51,15 @@ function event_btn_change_layout_options(data)
 
 function btn_open_layouts_events()
 {
+	var _callback_run_call		=	 function(data)
+	{
+		$('.layout_container_custom').html(data);
+
+		$('.layout_container_custom').unbind('click').click(function(){return false;});
+		
+		$('.btn-layout-aply-custom').unbind('click').click(event_btn_change_layout_options);
+	}
+	
 	
 	var btn_open_layouts_click	=	 function()
 	{
@@ -63,31 +67,29 @@ function btn_open_layouts_events()
 		 
 		var param_request			=	[];
 			param_request['cube_s']	=	CUBE_S;
-		
-		var optionsDefault			= {
+
+		var _options			= {
 												'file'									:	'ReportLayout', 
 												'classe'								:	'ReportLayout',
+												'cube_s'								:	CUBE_S,
 												'event'									:	'layout_options_load',
 												'title'									:	LNG('tpl_layout'),
-												'bt_salvar'								:	true,
-												'bt_atualizar'							:	false,
-												'bt_apagar'								:	false,
-												'bt_salvar_extra_action_validator'		:	event_btn_change_layout_options,
-												'bt_atualizar_extra_action_validator'	:	null,
-												'bt_apagar_extra_action_validator'		:	null,
-												'bt_cancelar'							:	true,
-												'returnModal'							:	false,
-												'extraParam'							:	param_request
-											};
+										};
 		
-			$(this).modalGeneric(optionsDefault);
+		$('.layout_container_custom').html(LNG('LABEL_LOAD'));
 		
+		runCall(_options,_options.file,_options.classe,_options.event,_callback_run_call,'modal');
 		
 	}
 	
 	
 	$('.btn-open-layouts').unbind('click').click(btn_open_layouts_click);
 }
+
+
+
+
+
 var layout_events_button	=	 function()
 {
 	

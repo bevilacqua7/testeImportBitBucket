@@ -32,6 +32,10 @@ function job_exist(report_id)
 	return $('body').managerJOB('exist_job_render',{'report_id':report_id});
 }
 
+function get_all_jobs()
+{
+	return $('body').data('managerWrsJOB');
+}
 
 (function($){
 
@@ -321,6 +325,7 @@ function job_exist(report_id)
 					//setJob(_report_id,undefined);
 					setMktime(_report_id,undefined);
 					setNotTitle(false);
+					
 					
 					if(_data.report_id_active==_report_id)
 					{
@@ -834,9 +839,7 @@ function job_exist(report_id)
     		var report_id_modal		=	modal.find('.modal-buttons-wrs-job').attr('report_id');
 
     			setJobData(data);
-    	
     			
-    		
     		for(var _report_id in data)
     			{
     					var _data_json	=	typeof(data[_report_id]) == 'string' ? $.parseJSON(data[_report_id]) : data[_report_id];

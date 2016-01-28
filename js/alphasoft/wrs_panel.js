@@ -6,12 +6,12 @@
  * @link http://layout.jquery-dev.com/demos/custom_scrollbars.html
  */
 
-var qtde_max_linhas		=	15;
-var qtde_max_colunas	=	10;
-var qtde_max_metricas	=	30;
-var hideeast			=	in_array('DRG',PERFIL_ID_USER)?true:false;
-var LXLX				=	true;
-var userinfo_filter_fixed = null;
+var qtde_max_linhas			=	15;
+var qtde_max_colunas		=	10;
+var qtde_max_metricas		=	30;
+var hideeast				=	in_array('DRG',PERFIL_ID_USER)?true:false;
+var LXLX					=	true;
+var userinfo_filter_fixed 	= 	null;
 
 function wrs_north_onresize()
 {
@@ -36,7 +36,8 @@ function wrs_clean_data(input_default)
 		};
 	
 		
-	if(isEmpty(input_default))	{
+	if(isEmpty(input_default))	
+	{
 		_END('wrs_clean_data');
 		return object_clean;
 	}
@@ -276,6 +277,41 @@ function formata_texto_resultado_filtros(){
 			}
 		});
 	});
+}
+
+function metricas_tool_tip()
+{
+	$('.metricas-tooltip').each(function(){
+		create_tool_tip($(this));
+	});
+}
+
+function metricas_tool_tip_drag_drop()
+{
+	$('.sortable_metrica').find('.metricas-tooltip').each(function(){
+		create_tool_tip($(this));
+	});
+}
+
+
+function create_tool_tip(obj)
+{
+	var _width	=	250;
+		obj.qtip('destroy', true);
+	
+	if(isEmpty(obj.attr('text_original'))) return true;
+	
+	obj.qtip({
+		content	: 	obj.attr('text_original'),
+		style	: 	{                                                     
+    	 				width: _width
+    	 			//	classes: 'qtip-bootstrap qtip-shadow qtip-filtros'
+					},
+		position	: 	{
+					        at		: 'auto left',
+					        adjust	: { x: -_width, y: -2 }
+	    				}
+     });	
 }
 
 // cria o qtip para o objeto em questão (fazer pra cada um, outra alternativa a mandar atualizar o DOM (varrendo um por um))
@@ -727,14 +763,20 @@ function btn_right_remove()
 				
 				$('.WRS_DRAG_DROP_FILTER h2').each(function(){
 						
-					if($(this).attr('vvalue')==vvalue) $(this).remove();
+					if($(this).attr('vvalue')==vvalue) {
+						$(this).remove();
+					}
 						
 				});
 
 			}
 			
+			$(this).parent().qtip('destroy', true);
 			$(this).parent().remove();
-
+			
+			
+			
+			
 			insetDragDropEmpry();
 			
 			DEFAULT_OPTIONS_TOPS();
@@ -871,6 +913,7 @@ function insetDragDropEmpry()
 		}
 		
 	});
+	
 	
 	_END('insetDragDropEmpry');
 }
@@ -1129,6 +1172,7 @@ function DROP_EVENT( event, ui ,eventReceive)
 	json['FILTER']	=	'';
 	toEvent.attr('json',base64_encode(json_encode(json,true)));
 	*/
+	metricas_tool_tip_drag_drop();
 
 	_END('DROP_EVENT');
 }
@@ -1697,7 +1741,10 @@ function wrs_run_filter()
 																	}
 													);
 							}
+
 					
+					//		console.log('filter',getAllFiltersToRun.data);
+					//		console.log('tmp',getAllFiltersToRun.full);
 					
 					var wrsConfigGridDefault_data	=	get_aba_active_kendoUi()
 					
@@ -2018,10 +2065,25 @@ function wrsRunGridButton(param_request)
 
 /**
  * Montando a Grid com header
- * @param data
+ * @param dataWRS_CONFIRM
  */
 function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 {
+
+	if(isEmpty(data))
+	{
+		
+		WRS_CONFIRM(LNG('DATABASE_NOT_CONECTED'),'error',function(data){
+			SYSTEM_OFF	=	true;
+				window.location	= "./login.php";
+		},true);
+		
+		return false;
+	}
+	
+	
+	
+	
 	
 	
 	try{
@@ -2042,6 +2104,8 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	
 	_START('MOUNT_LAYOUT_GRID_HEADER');
+	
+	
 	
 	if(is_job_call!='ThreadMainLoadData')
 	{
@@ -2075,7 +2139,6 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	var _report_id		=	 str_replace('Main','',remove_report);
 	var aba_ativa		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
 	
-	
 		if(_report_id!=undefined && _report_id!='undefined')
 		{
 			$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_RUN:false});
@@ -2094,7 +2157,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 
 	
 	var getKeys		=	$('body').managerJOB('getKeys');
-	
+
 	try{
 			
 			if(getKeys[keys]==_report_id)
@@ -2114,6 +2177,8 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		
 	}
 	
+	
+	
 	$('.container_panel_relatorio').append(data);
 	
 	
@@ -2126,14 +2191,19 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	{
 		//Apagando os filtros a ser adicionados
 		$('.'+_report_id).wrsAbaData('setNewFilter',{tag:null});
+		
 	}
 		
 		$('#'+aba_ativa+'Main').removeClass('hide');
 	
 		var is_active	=	 true;
-		if(aba_ativa!=_report_id){
+		if(aba_ativa!=_report_id)
+		{
 			$('.wrsGrid').removeClass('wrsGrid');
 			is_active	=	 false;
+		}else{
+			//Se o retorno for do mesmo ID que estiver ativo então fecha a janela
+			$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
 		}	
 		
 		
@@ -2465,7 +2535,6 @@ function acoes_multiplas_menu_painel()
 			confere_se_existe_menu_panel_selecionado($(this).parents('div.wrs_panel_options'));
 		});
 	}); 
-	
 	_END('acoes_multiplas_menu_painel');
 }
 
@@ -2606,7 +2675,8 @@ function mostrar_botoes_nao_selecionados_ocultos(painel){
 	painel.find('li.botoes_nao_selecionados').show(0,function(){ $(this).removeClass('botoes_nao_selecionados'); });		
 }
 
-function limpa_botoes_selecionados_filtros(painel){
+function limpa_botoes_selecionados_filtros(painel)
+{
 	_START('limpa_botoes_selecionados_filtros');
 	var _painel='';
 	if(painel.type=='click'){ // quando for evento vindo de click ao inves de uma funcao, gerar o painel manualmente
@@ -2619,4 +2689,6 @@ function limpa_botoes_selecionados_filtros(painel){
 	_painel.find('li.ui-draggable.ui-state-focus').removeClass('ui-state-focus');
 	
 	_END('limpa_botoes_selecionados_filtros');
+	
+	
 }

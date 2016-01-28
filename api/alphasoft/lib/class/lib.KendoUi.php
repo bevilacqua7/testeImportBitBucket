@@ -414,7 +414,6 @@ class KendoUi
 																
 																
 																
-																
 													});
 													
 													generate_hight_models('{$this->getId()}');
@@ -579,11 +578,8 @@ HTML;
 		$columns_table	=	array();
 		$param			=	$_param;
 
-		
-		
 		foreach ($param as $param_label)
 		{
-			
 			
 			if(empty($param_label['FIELD']))
 			{
@@ -596,6 +592,7 @@ HTML;
 			
 			if($param_label['LEVEL_POS']>=1)
 			{
+				
 				$_menu			=	$this->findSetKey($_menu,$param_label);
 			}else{
 				$_param_label					=	$param_label;
@@ -611,6 +608,7 @@ HTML;
 			}
 			
 		}
+		
 		
 		
 		$arrayFrozen			=	$arrayFrozen[0];
@@ -638,6 +636,7 @@ HTML;
 		$tmpContinue	=	NULL;
 		
 		
+
 		foreach ($_menuReverse as $Reverselabel =>$ReverseValue)
 		{
 				$_menuUse	=	 array();
@@ -683,13 +682,16 @@ HTML;
 						 
 							if(empty($value['keyUp']))
 							{
-								$_menuUse[0]	=	$value;
+							//	$_menuUse[0]	=	$value; //Verão descontinuada da regra antiga
+								$_menuUse	=	$ReverseValue;
 							}else{
 								$_menuUse[$value['keyUp']][$value['key']]	=	$value;
 							}
 						
 					}
 				}
+				
+
 				
 				$_menuUseTmp	=	$_menuUse;
 		}
@@ -705,7 +707,6 @@ HTML;
 		$wrs_column[$keysOnly[0]]['column_table']		=	$columns_table;
 		$wrs_column[$keysOnly[0]]['layout']				=	$this->getDrillLayout();
 		
-
 
 		
 		//if($columnOnly)

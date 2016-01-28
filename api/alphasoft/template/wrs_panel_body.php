@@ -1,8 +1,9 @@
 <div class="wrs_panel_filter_measure wrs_panel_center_body">
-<div class="wrs_panel_center_body_container">
+<div class="wrs_panel_center_body_container" >
 
 		<?php 
 				$HIDE_EXPORT	=	'hide';
+				$no_btn_layout	=	false;
 				include ('wrs_panel_header_options.php'); 
 				echo $WRS_PANEL_HEADER_TABLE;
 		?>

@@ -370,7 +370,7 @@ class WRS_PANEL  extends WRS_USER
 
 	
 	
-	protected function getMeasuteAttribute($SERVER, $DATABASE, $CUBE,$CUBE_USER_CURRENT=NULL)
+	protected function getMeasuteAttribute($SERVER, $DATABASE, $CUBE,$CUBE_USER_CURRENT=NULL,$getRequestKendoUi=NULL)
 	{
 		WRS_TRACE('getMeasuteAttribute', __LINE__, __FILE__);
 		
@@ -413,6 +413,12 @@ class WRS_PANEL  extends WRS_USER
 		if(empty($relationships))
 		{	
 			$wrs_measure_relationships['relationships']	=	WRS::SET_SSAS_RELATIONSHIPS_BY_CUBE($CUBE, $attibuteMeasure->getAtributos($SERVER, $DATABASE, $CUBE));
+			
+			if(empty($wrs_measure_relationships['relationships']))
+			{
+				return array('error'=>LNG('DATABASE_NOT_CONECTED'),'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'error_job'=>true);
+			}
+			
 		}
 		
 		//Verificando se existe metricas na sessão
@@ -422,7 +428,19 @@ class WRS_PANEL  extends WRS_USER
 		if(empty($metricas))
 		{
 				$wrs_measure_relationships['measure']	=	WRS::SET_SSAS_MEASURES_BY_CUBE($CUBE, $attibuteMeasure->getMetricas($SERVER, $DATABASE, $CUBE));
+				
+				if(empty($wrs_measure_relationships['measure']))
+				{
+					return array('error'=>LNG('DATABASE_NOT_CONECTED'),'REPORT_ID'=>$getRequestKendoUi['REPORT_ID'],'error_job'=>true);
+				}
 		}
+		
+		
+		
+		
+		
+		
+		
 		
 		//Como as variáveis são usadas apenas para repassar informações para a sessão 
 		//Então libero espaço na memoria do PHP
@@ -714,7 +732,6 @@ class WRS_PANEL  extends WRS_USER
 			$getRequestKendoUi['PLUS_MINUS']	=	 true;
 		}
 		
-		
 
 		$getRequestKendoUi				=	$this->loadWrsKEndoUi($getRequestKendoUi);
 		$this->getRequestKendoUiDefault	=	$getRequestKendoUiDefault	=	json_encode(array_merge($TelerikUi->jsRequestWrsKendoUiParam(),$getRequestKendoUi),true);
@@ -738,13 +755,13 @@ class WRS_PANEL  extends WRS_USER
 			//Multiplos cubos
 			foreach($get_multiple_SSAS_CUBE as $multiple_cube)
 			{
-				$MEASURE_RELATIONSSHIPS[$multiple_cube['CUBE_ID']]	=	$this->getMeasuteAttribute($SERVER, $DATABASE, $multiple_cube['CUBE_ID'],$CUBE);
+				$MEASURE_RELATIONSSHIPS[$multiple_cube['CUBE_ID']]	=	$this->getMeasuteAttribute($SERVER, $DATABASE, $multiple_cube['CUBE_ID'],$CUBE,$getRequestKendoUi);
 			}
 			
 			$this->MEASURE_RELATIONSSHIPS		=	$MEASURE_RELATIONSSHIPS;
 		}else{
 			//Cubo simples 
-			$this->getMeasuteAttribute($SERVER, $DATABASE, $CUBE);
+			$this->getMeasuteAttribute($SERVER, $DATABASE, $CUBE,NULL,$getRequestKendoUi);
 		}
 		
 		
@@ -768,10 +785,6 @@ class WRS_PANEL  extends WRS_USER
 		$DillLayout['LAYOUT_COLUMNS']	=	$COLUMNS;
 		$DillLayout['LAYOUT_MEASURES']	=	$MEASURES;
 		$DillLayout['LAYOUT_FILTERS']	=	$FILTERS;
-		
-		
-		
-		
 
 		//Criando o ID do REPORT ID
 		if(empty($getRequestKendoUi['REPORT_ID']))
@@ -789,8 +802,6 @@ class WRS_PANEL  extends WRS_USER
 		$TelerikUi->setId($getRequestKendoUi['REPORT_ID']);		
 		$TelerikUi->setWrsKendoUi($getRequestKendoUi); //Passando para Gravar no JS as integrações recebidas
 				
-		
-		
 		$ROWSFrozen		=	array();
 		/*
 		 * Validando se as metricas principais estão nulas

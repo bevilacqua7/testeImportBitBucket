@@ -1447,13 +1447,13 @@ function wrsFilterClickFalse(filter_hide)
 	 			var checked		=	$(this).prop('checked');
 	 			var value 		=	$(this).val();
 	 			
-	 			 var aba_active			=			get_aba_active_object();
+	 			 var aba_active	=			get_aba_active_object();
 	 			 var tag_class	=	$(this).attr('tag-class');
 	 			
 	 			if(type_input!='radio')
 					{
 	 					var _val		=	$(this).val();
-	 					
+
 	 					aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:_val,remove:checked? false: true});
 	 					
 					}else{

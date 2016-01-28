@@ -217,7 +217,7 @@ function MENU_DRAG_DROP_DIREITO(container,valueShow,_type)
 	
 	var li			=	'<li 	class="ui-widget-content box_wrs_panel {class}" tag-class="{class}" api="wrs"  type="{type}"'+
 						'			vvalue="{label}" json="{json}" '+
-						"wrs-data='{wrs-data}'>"+
+						"wrs-data='{wrs-data}' >"+
 						'<span class="btn-left glyphicon glyphicon glyphicon-'+icon+'"></span>{value}</li>';
 
 	var liSearch	=	 ['{label}','{value}','{json}','{type}','{class}','{wrs-data}'];

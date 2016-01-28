@@ -29,10 +29,12 @@ class WRS_HTML
 	 */
 	public function MENU_DRAG_DROP_DIREITO($pos_cube_session,$container,$valueShow,$type=NULL,$_direira_esquerda="wrs_search_drad_drop_direita")
 	{
-		$icon		=	'font';
-		
-		if($type=='metrica'){
+		$icon				=	'font';
+		$class_to_tool_tip	=	null;
+		if($type=='metrica')
+		{
 			$icon	=	'usd';
+			$class_to_tool_tip	=	'metricas-tooltip';
 		}
 		
 		
@@ -51,11 +53,11 @@ EOF;
 		
 		//Ao manipular essa função lembranbdo que tem que fazer o mesmo no WRSMultipleCube.js
 		$li			=	<<<EOF
-								<li  	class="ui-widget-content box_wrs_panel {class}" tag-class="{class}" api="wrs" type="{type}"
+								<li  	class="ui-widget-content box_wrs_panel {class} {$class_to_tool_tip}" text_original="{title}" tag-class="{class}" api="wrs" type="{type}"
 										vvalue="{label}" json="{json}" wrs-data='{wrs-data}' ><span class="btn-left glyphicon glyphicon glyphicon-{$icon}"></span>{value}</li>
 EOF;
 
-		$liSearch	=	 array('{label}','{value}','{json}','{type}','{class}','{wrs-data}');
+		$liSearch	=	 array('{label}','{value}','{json}','{type}','{class}','{wrs-data}','{title}');
 		
 		$dragDrop	=	<<<EOF
 			<h2 rel="{rel}">
@@ -77,9 +79,29 @@ EOF;
 				{
 					$param_json						=	$_ivalue;
 					$param_json['CUBE_POS_SESSION']	=	$pos_cube_session;
-					
 					$class		=	fwrs_replace_attr(empty($param_json['LEVEL_FULL']) ? $param_json['MEASURE_UNIQUE_NAME'] : $param_json['LEVEL_FULL']);
-					$lReplace	=	 array($_ivalue[$valueShow[0]],$_ivalue[$valueShow[1]],'',$type,$class,json_encode($param_json,true));
+					
+					$title		=	null;
+					
+					
+					if(isset($param_json['DESCRIPTION'])){
+						if(!empty($param_json['DESCRIPTION']))
+						{
+							$title	=	$param_json['DESCRIPTION'];
+						}
+					}
+					
+					
+					if($type=='metrica')
+					{
+						$title_tt[0] = '<b>Title</b><br>Nova linha com informações<br>demosntração nova linha';
+						$title_tt[1] = '<b>Title ZXJHATSD</b><br>Nova linha com informações<br>demosntração nova linha<br><b>asdasasd</b>asdadasd<br>asdasd<br>';
+						
+						$title		=	$title_tt[rand(0,1)];
+					}
+					
+					
+					$lReplace	=	 array($_ivalue[$valueShow[0]],$_ivalue[$valueShow[1]],'',$type,$class,json_encode($param_json,true),$title);
 					//$lReplace	=	 array($_ivalue[$valueShow[0]],$_ivalue[$valueShow[1]],base64_encode(json_encode($param_json,true)),$type,$class,json_encode($param_json,true));
 					
 					$liTemp		.=str_replace($liSearch, $lReplace, $li);

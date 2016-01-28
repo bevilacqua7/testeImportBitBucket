@@ -23,7 +23,7 @@
 
 	<div
 		class="nav nav-tabs ui-accordion-header  ui-accordion-header-active ui-state-active wrs_panel_esquerdo_header DRAG_DROP_LATERAIS_title">
-		<span class="navbar-left title_left"><i class="fa fa-puzzle-piece"></i>  <?php echo LNG('ATTRIBUTOS_METRICA');?></span>
+		<span class="navbar-left title_left"><i class="fa fa-puzzle-piece"></i><?php echo LNG('ATTRIBUTOS_METRICA');?></span>
 	</div>
 
 
@@ -37,6 +37,12 @@
 	
 	<script>
 		SetElementDataWrs('.wrs_options_select');
+
+		$(function(){
+			metricas_tool_tip();
+			});
+		
+		
 	</script>
 
 

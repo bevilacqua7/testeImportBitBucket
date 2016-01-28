@@ -604,21 +604,24 @@ function addTargetDisableContext(kendoUi,report_id)
 
     	
     	var kendoUi		=	$('#'+$event.attr('id')).data('kendoGrid');
-    	var e_infos = wrsKendoUiContextMenu($event);
-    	var e_colunas 	= explode(',',e_infos.layout_full['LAYOUT_COLUMNS']);
-    	var e_linhas 	= explode(',',e_infos.layout_full['LAYOUT_ROWS']);
-    	var cols_qtde = [e_colunas.length,e_linhas.length];
+    	var e_infos 	= 	wrsKendoUiContextMenu($event);
+    	var e_colunas 	= 	explode(',',e_infos.layout_full['LAYOUT_COLUMNS']);
+    	var e_linhas 	= 	explode(',',e_infos.layout_full['LAYOUT_ROWS']);
+    	var cols_qtde 	= 	[e_colunas.length,e_linhas.length];
+
     	/*
     	 * Context Menu das Linhas
     	 */
     	var data_line_header							=	 menu_context_relation_ship_measure(jsonRelationShip);
     		data_line_header[data_line_header.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
+    	
     		
-    	var data_line_row							=	 menu_context_relation_ship_measure(jsonRelationShip);
-    		data_line_row[data_line_row.length]	=	{text	: 'VER NO MAPA'		, className:'VER_MAPA',action:drill_click_option, json:''};
+    	var data_line_row								=	 menu_context_relation_ship_measure(jsonRelationShip);
+    		data_line_row[data_line_row.length]			=	{text	: LNG('SEE_IN_MAP')		, className:'VER_MAPA',action:drill_click_option, json:''};
     		
     		
-    	if(!in_array('DRT',PERFIL_ID_USER)){
+    	if(!in_array('DRT',PERFIL_ID_USER))
+    	{
 	    	// cabecalho de cada linha	
 	    	$(TAG_REPORT_ID+" .k-grid-content-locked").attr('rel','noContext').attr('type','linha');
 	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-content-locked td'				, data_line_row, $event);
@@ -628,13 +631,13 @@ function addTargetDisableContext(kendoUi,report_id)
 	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-locked th'	, data_line_header,$event);    	  	
     	}
     	
+    	
     	//Dados
     	if(!in_array('DRV',PERFIL_ID_USER))
     	{
     		$(TAG_REPORT_ID+" .k-grid-content").attr('type','data');
     		context.attachWRS(TAG_REPORT_ID+' .k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event);    		
     	}
-
     	
     	
     	//ContextMenu das Heardes mas das Colunas
@@ -644,7 +647,6 @@ function addTargetDisableContext(kendoUi,report_id)
     	 * Aplicando a header com linhas e colunas na header de resultados
     	 */
     	
-    	
     		
     	addTargetDisableContext(kendoUi.columns,TAG_REPORT_ID);
     	
@@ -653,12 +655,14 @@ function addTargetDisableContext(kendoUi,report_id)
     		$(TAG_REPORT_ID+" .k-grid-header .k-grid-header-wrap").attr('type','coluna_header');
     		
 			var data_line_header2							=	menu_context_relation_ship_measure(jsonMeasure);
-    			data_line_header2[data_line_header2.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
+    			data_line_header2[data_line_header2.length]	=	{text	: LNG('REMOVE')		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
     		// header de cada coluna
         	if(!in_array('DRT',PERFIL_ID_USER)){
-        		context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap tr:eq(0) th '	, data_line_header2,$event);
+        		context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap tr:eq(0) th '	, data_line_header2,$event,'measure');
         	}
-    	}else{
+    	}
+    	else
+    	{
     		
     		$(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap').attr('type','coluna_header_line');
     		 
@@ -676,7 +680,7 @@ function addTargetDisableContext(kendoUi,report_id)
 	    						var data_line_header2							=	 menu_context_relation_ship_measure(jsonMeasure);
 	    		        		data_line_header2[data_line_header2.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
 	    		        		// metricas
-	    						context.attachWRS(tag	, data_line_header2,$event);
+	    						context.attachWRS(tag	, data_line_header2,$event,'measure');
     				    	}
     					}
     			}   		 

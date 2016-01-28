@@ -26,6 +26,7 @@ $CHART_CONFIG								=	LNG('CHART_CONFIG');
 $GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA	=	LNG('GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA');
 $REPORT_RESULT_HISTORY						=	LNG('REPORT_RESULT_HISTORY');
 $script_tags								=	'';
+$LABEL_LOAD									=	LNG('LABEL_LOAD');
 
 $LAYOUTS					=	LNG('tpl_layout');
 //TAG pode ser enviada externamente pelo include
@@ -51,6 +52,42 @@ if(!isset($getRequestKendoUiDefault)) $getRequestKendoUiDefault =json_encode('',
 HTML;
 
 	}			
+
+	
+
+	
+$HTM_BTN_LAYOUT				=	<<<HTML
+				<div class="btn-group">
+						<button type="button" class="btn btn-default btn-xs dropdown-toggle btn-open-layouts" data-toggle="dropdown" aria-expanded="true">
+						    <i class="fa fa-th-large"></i> {$LAYOUTS} <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" role="layout">
+							<li>
+									<div class="layout_container_custom"  >{$LABEL_LOAD}</div>
+							</li>
+							<li class="divider"></li>
+							<li class="li-padding {$HIDE_EXPORT}">
+					  			<button type="button" class="btn btn-success  btn-block  btn-sm btn-layout-aply-custom">
+					  					<i class="fa fa-filter"></i> {$BTN_APLY}
+					  			</button>
+					  		</li>
+							
+						</ul>
+				</div>
+HTML;
+					  			
+
+
+//Regra para não deixar informação do layout na tela de Drag and Drop
+if(isset($no_btn_layout))
+{
+	if($no_btn_layout==false)
+	{
+		$HTM_BTN_LAYOUT	=	'';
+	}
+}
+
+
 	
 $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 <script>
@@ -76,7 +113,7 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 			 </div>
 			<!-- END Botão Histórico -->
 			<div class="btn-group  " role="group" aria-label="...">
-					  <span class="h4 report_title" contenteditable="true">{$ABA_TITLE}</span>
+					  <span class="h4 report_title" types="drag" contenteditable="true">{$ABA_TITLE}</span>
 			</div>
 					
 			 </div>
@@ -84,10 +121,12 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 			<div class="navbar-right">
 			
 				<div class="grid_button_header_menu ">
-						<button type="button" class="btn btn-default btn-xs btn-open-layouts ">
-						    <i class="fa fa-th-large"></i> {$LAYOUTS} 
-						</button>
 				
+						 
+						
+						<!-- LAYOUT -->
+						{$HTM_BTN_LAYOUT}
+						<!-- END -->
 						
 				<!-- TOTAL -->
 				<div class="btn-group dropdown-menu-configuration wrs_grid_options">

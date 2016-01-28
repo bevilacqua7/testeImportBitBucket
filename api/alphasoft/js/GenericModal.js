@@ -54,6 +54,11 @@ $.fn.extend({
 		var janela_modal 		= 	$('#myModalGenericConfig');
 		var janela_modal_body 	= 	$('#myModalGenericConfig .modal-body');
 		var janela_title		=	$('#myModalGenericConfig  #myModalGenericConfigLabel');
+		
+		
+	 
+		
+		
 		var _dataName			=	'WRSGeneridModal';
 		
 		var optionsDefault		= {
@@ -70,7 +75,7 @@ $.fn.extend({
 										'bt_cancelar'							:	true,
 										'returnModal'							:	false,
 										'extraParam'							:	null,
-										'btn_events'								:	null
+										'btn_events'							:	null
 									};
 		
 		
@@ -83,6 +88,8 @@ $.fn.extend({
 				_ONLY('modalGeneric::_callback');
 				janela_modal_body.html(data);
 			}
+		
+		
 			
 		var _runCalll	=	 function(_options)
 			{
@@ -92,6 +99,9 @@ $.fn.extend({
 				runCall(_options,_options.file,_options.classe,_options.event,_callback,'modal');
 				_END('modalGeneric::_runCalll');
 			}
+		
+		
+		
 			
 		var bt_salvar	=	 function()
 			{

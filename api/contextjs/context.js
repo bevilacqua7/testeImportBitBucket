@@ -94,10 +94,12 @@ var context = context || (function () {
 	}
 
 	
-	function buildMenuWRS(data, id, subMenu) {
+	function buildMenuWRS(data, id, subMenu,type) 
+	{
+		
 		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
 			compressed = options.compress ? ' compressed-context' : '',
-			$menu = $('<ul class="dropdown-menu dropdown-menu-drill-wrs dropdown-menu-drill dropdown-context' + subClass + compressed+'" context-wrs="'+id+'" id="dropdown-' + id + '"></ul>');
+			$menu = $('<ul class="dropdown-menu dropdown-menu-drill-wrs  '+type+' dropdown-menu-drill dropdown-context' + subClass + compressed+'" context-wrs="'+id+'" id="dropdown-' + id + '"></ul>');
         var i = 0, linkTarget = '';
         for(i; i<data.length; i++) {
         	if (typeof data[i].divider !== 'undefined') {
@@ -156,7 +158,7 @@ var context = context || (function () {
 				}
 				$menu.append($sub);
 				if (typeof data[i].subMenu != 'undefined') {
-					var subMenuData = buildMenuWRS(data[i].subMenu, id, true);
+					var subMenuData = buildMenuWRS(data[i].subMenu, id, true,type);
 					$menu.find('li:last').append(subMenuData);
 				}
 			}
@@ -265,7 +267,7 @@ var context = context || (function () {
 	}
 	
 	
-	function addContextWRS(selector, data,whoEventRequest) {
+	function addContextWRS(selector, data,whoEventRequest,type) {
 		
 
 		
@@ -274,20 +276,24 @@ var context = context || (function () {
 		var d 		= new Date(),
 			id 		= d.getTime();
 			
-
+		
+		var control_measure_attr		=	 isEmpty(type) ? 'attr' : 'measure';
 		
 		//WARNING:: Procedimento para poder deixar o modelo mais rápido
-		if($('.dropdown-menu-drill-wrs').length==0){
+		if($('.dropdown-menu-drill-wrs .'+control_measure_attr).length==0){
 			//processo natural
-			var $menu 	= buildMenuWRS(data, id);
-			
-				$('body').append($menu);
+			var $menu 	= buildMenuWRS(data, id,undefined, control_measure_attr);
+
+			$('body').append($menu);
+				
 				delete $menu;
 			
 		}else{
 			//mudança por marcelo santos
-			id	=	$('.dropdown-menu-drill-wrs').attr('context-wrs');
+			id	=	$('.dropdown-menu-drill-wrs .'+control_measure_attr).attr('context-wrs');
 		}
+		
+		
 			
 			/*
 			 * COntrolando os eventos do Hover 
@@ -379,6 +385,8 @@ var context = context || (function () {
 			}
 		}
 		
+		//Sempre inicia como hide
+		$('#dropdown-' + id).find('.VER_MAPA').addClass('hide');
 		
 		if(table_parents.first('div').attr('type')=='linha'){
 			var proxTd			=	$(this).next('td');

@@ -19,8 +19,9 @@
 	
 	
 	$language['NO_RESULTS_QUERY']	=	'sem resultados para a consulta: ';
+	$language['NAME_REPORT_EMPTY']	=	'Escolha um nome para o relatório';
 
-	
+	$language['DATABASE_NOT_CONECTED']	=	"Sem conexão com o banco de dados, tente desconectar e logar no sistema novamente";
 	/*
 	 * CUBO ERRO
 	 */
@@ -48,8 +49,12 @@
 	$language ['SELECT_NULL'] 					= "Consulta retornou vazia";
 	$language ['RUN_GRID_CHANGE_NOT'] 			= "Não há modificações para gerar uma nova Consulta..";
 	
-	$language ['NOT_CLOSE_WINDOW'] 			= "As abas listadas a baixo não estão salvas";
+	$language ['NOT_CLOSE_WINDOW'] 			= "As abas listadas a baixo não estão salvas:";
 	$language ['ABA_TITLE_EMPTY'] 			= "É necessário digitar um <b>título</b> para o report";
+	
+	$language['SEE_IN_MAP']					=	'VER NO MAPA';
+	$language['REMOVE']						=	'REMOVER';
+	
 	/*
 	 * TITULOS
 	 */

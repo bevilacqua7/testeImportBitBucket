@@ -557,22 +557,31 @@ function getWrsKendoColumn(data)
 							//Procrssando apenas os Frozens
 							frozen++;
 							_arg.items[i][obj]	= strlen($.trim(_arg.items[i][obj]))==0 ? '' : _arg.items[i][obj]; //Removendo os NULL
+
+						 
 							
 							typeColumnFrozen	=	true;
 							if(wrsKendoUi.DRILL_HIERARQUIA_LINHA==_TRUE)
 								{
-									_arg.items[i][obj]		=	DRILL_HIERARQUIA_LINHA_setButton(	_arg.items[i][obj],
-																									_arg.items[i]['C000'],
-																									i,
-																									obj,
-																									DRILL_HIERARQUIA_REQUEST,
-																									LAYOUT_ROWS_B64,
-																									id,
-																									_DRILL_FCC,
-																									DRILL_LINE_LAST_COLUMN,
-																									arg.sender,
-																									next_column,
-																									_arg.items[i]);
+								
+									//Verifica se existe a palavra others se existir não permite customização
+									if(words_restrict.other.toLowerCase() !=_arg.items[i][obj].toLowerCase())
+									{
+	
+										_arg.items[i][obj]		=	DRILL_HIERARQUIA_LINHA_setButton(	_arg.items[i][obj],
+																										_arg.items[i]['C000'],
+																										i,
+																										obj,
+																										DRILL_HIERARQUIA_REQUEST,
+																										LAYOUT_ROWS_B64,
+																										id,
+																										_DRILL_FCC,
+																										DRILL_LINE_LAST_COLUMN,
+																										arg.sender,
+																										next_column,
+																										_arg.items[i]);
+										
+									}
 								}
 							
 							
@@ -760,7 +769,6 @@ function onDataBound(arg)
 			//var nameID		=	 '#'+arg.sender.element.attr('id');
 
 			$('.WRS_ABA').find('.'+classGrid).data('kendoUiDataAba',arg.sender);
-			
 			$('body').managerJOB('load_complete',{'report_id':classGrid});
 			
 			
@@ -836,7 +844,11 @@ function onDataBound(arg)
 		 *	Processando o tamanho do coluna com base no resultado da query 
 		 */
 		var columns_width_data		=	 kendoData.dataSource._wrs_request_data.columns_size;
+		var column_frozem_fixed		=	null;
 		
+		try{
+			column_frozem_fixed	=	kendoData.wrs_frozen_data.field;
+		}catch(e){}
 
 		if(!isEmpty(columns_width_data))
 			{
@@ -847,6 +859,15 @@ function onDataBound(arg)
 										};
 				
 				var frozen			=	kendoData.dataSource.size_frozen;
+
+
+				var is_button_plus	=	$(nameID+' .wrstelerikButtonHeader[rel=plus]').is(":visible");
+
+				if(is_button_plus==false)
+					{
+						column_frozem_fixed	=	 null;
+					}
+				
 				
 				for(var lineNameCol in columns_width_data)
 					{
@@ -854,7 +875,12 @@ function onDataBound(arg)
 							var _width		=	columns_width_data[lineNameCol];
 								_width		=	(_width*colElement.size_word)+colElement.padding_left;
 							
-								WRSSresize(nameID,colElement.count_column, _width,frozen); 
+								WRSSresize(	nameID,
+											colElement.count_column, 
+											_width,
+											frozen,
+											lineNameCol,
+											column_frozem_fixed); 
 							colElement.count_column++;
 					}
 					
@@ -867,46 +893,55 @@ function onDataBound(arg)
 	}
 	
 	
- 
 	/*
 	 * @link http://jsbin.com/ikoley/2/edit?html,output
 	 * @link http://www.telerik.com/forums/change-column-widths-after-grid-created
 	 */
-	 function WRSSresize(gridId,idx, width,sizeFrozen) 
+	 function WRSSresize(gridId,idx, width,sizeFrozen,nameCol,column_frozem_fixed) 
 	 {
 		 _START('WRSSresize');
+		 
 		var _idx		=	idx;
-		var _idxHeader	=	_idx;
+		var tableCols	=	{header:null,data:null};
+		
+	
+				if(idx>sizeFrozen)
+				{	
+					//DAta
+					_idx		=	$(gridId+' .k-grid-header-wrap tr:last-child th[data-field="'+nameCol+'"]').index();			
+					tableCols	=	{header:'.k-grid-header-wrap',data:'.k-grid-content'};
+				}
+				else
+				{
+					//Frozem
+					tableCols	=	{header:'.k-grid-header-locked',data:'.k-grid-content-locked'};
+					_idx		=	$(gridId+' .k-grid-header-locked tr:last-child th[data-field="'+nameCol+'"]').index();
+				}
+		
+			 
+		
+		//Mantem o tamanho correto da estrutura quando for modificado o plus e minus do total
+		if(column_frozem_fixed!=null)
+			{
+				if(nameCol==column_frozem_fixed){
+					_idx	=	1;
+				}
+			}
+				
+		
+		$(gridId+" "+tableCols.data) //content
+        .find("colgroup col")
+        .eq(_idx)
+        .css({width: width});
+		  
 
-		if(idx>sizeFrozen)
-		{	
-			_idxHeader	=	idx-(sizeFrozen+1);
-			
-			
-			$(gridId+" .k-grid-content") //content
-              .find("colgroup col")
-              .eq(_idxHeader)
-              .css({width: width});
-			  
-			   $(gridId+" .k-grid-header-wrap") //header
-              .find("colgroup col")
-              .eq(_idxHeader)
-              .css({width: width});
-			  
-		}
-		else
-		{
-			
-			$(gridId+" .k-grid-header-locked ") //header
-              .find("colgroup col")
-              .eq(_idx)
-              .css({width: width});
-			  
-			  $(gridId+" .k-grid-content-locked") //header
-              .find("colgroup col")
-              .eq(_idx)
-              .css({width: width});
-		}
+		
+		   $(gridId+" "+tableCols.header) //header
+        .find("colgroup col")
+        .eq(_idx)
+        .css({width: width});
+		   
+		   
 		
 		_END('WRSSresize');
 
@@ -1245,7 +1280,6 @@ function  themeSUM(nameID,arg,wrsParam)
 											
 											$(this).parent().find('.wrstelerikButtonHeader').hide();
 											
-											
 											var telerikColumn	=	getRecursiveColumnFrozen(telerikGrid.columns);	//Procura por qual nível da sub header está a informação									
 											var ColumnLength	=	countFrozen(telerikColumn);
 											
@@ -1267,10 +1301,11 @@ function  themeSUM(nameID,arg,wrsParam)
 											 
 											 var type_plus_minus		=	type=='plus' ? true : false;
 											 
+
+											 
 											wrsKendoUiChange(IDName,'PLUS_MINUS',type_plus_minus);
 											 
 											buttonPlusMinus(IDName,type_plus_minus,ColumnLength);
-											
 
 											//Escondendo as headers 
 											$(IDName).find('.k-grid-header-locked').find('tr:last-child').find('th').each(function(){
@@ -1286,14 +1321,11 @@ function  themeSUM(nameID,arg,wrsParam)
 													{
 														if(event=='hide')
 														{
-															
 															telerikGrid.hideColumn(td_column);
 														}
 														else
 														{
-
 																telerikGrid.showColumn(td_column);
-
 														}
 														
 														lastKey	=	i_key;
@@ -1314,14 +1346,17 @@ function  themeSUM(nameID,arg,wrsParam)
 											{
 												telerikGrid.showColumn(telerikGrid.headerIndex[lastKey]);
 											}
+											
 											/*
 											data || 1,D06-BACTROBAN
 											index || 3
 											field || C002
 											*/
 											
-										
 											
+											
+											
+	
 											
 											if(localKendoUI['wrs_frozen_data']['data'].length)
 											{

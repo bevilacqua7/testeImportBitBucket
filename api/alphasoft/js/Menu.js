@@ -9,13 +9,31 @@ $(document).ready(function(){
 			if(typeof data=='object' && data.event=='save'){ 
 				if(data.report_name.trim()==''){
 					retorno_padrao = false;
-					WRS_ALERT('Escolha um nome para o relatório','warning'); 
+					WRS_ALERT(LNG('NAME_REPORT_EMPTY'),'warning'); 
 				}
+				
+				
+			  	var aba_ativa	=	get_aba_active_kendoUi();
+
+			  	$('#'+aba_ativa.REPORT_ID+'Main').find('.report_title').html(data.report_name);
+			  	
+				//Muda os titles
+				$('.wrs_panel_center_body_container').find('.report_title').html(data.report_name).trigger('keyup');
+				
+				
+
+			  	
+			  	
 			}
+			
+			
+			
+			
 			_END('btn_salvar_extra_action_validator');
-			return retorno_padrao;
+			return retorno_padrao; 
 		}
 		
+
 		var _param	= {
 				'file'			:	'WRS_REPORT', 
 				'classe'		:	'WRS_REPORT',

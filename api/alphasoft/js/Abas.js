@@ -353,7 +353,8 @@ function optionsDataConvert(gridValue,with_decode)
 											getElement['REPORT_ID']			=	generateReportId();
 											getElement['SUMARIZA']			=	1;
  											getElement['COLORS_LINE']		=	1;
-											getElement['MULTIPLE_CUBE_ID']		=	multiple_cube(); //Atualização
+											getElement['MULTIPLE_CUBE_ID']	=	multiple_cube(); //Atualização
+											
 											var optionsAba		=	{
 																		LAYOUT_ROWS			:base64_json({}),
 																		LAYOUT_COLUMNS		:base64_json({}),
@@ -362,6 +363,7 @@ function optionsDataConvert(gridValue,with_decode)
 																		KendoUi				:base64_json(getElement),
 																		FILTER_TMP			:""
 																	};//Atualização
+											
 											
 											__load_multiple([optionsAba]);
 											
@@ -730,7 +732,11 @@ function optionsDataConvert(gridValue,with_decode)
 					//Não permite o enter
 					var code = event.keyCode || event.which;
 					
-					if ( code == 13 ) return false;
+					if ( code == 13 ) 
+					{
+						this.blur();//Tirando o foco
+						return false;
+					}
 					
 						var getID					=	$(this).attr('id-tag');
 						
@@ -740,12 +746,6 @@ function optionsDataConvert(gridValue,with_decode)
 						var title					=	$(this).html();
 						var _report_id_new			=	'';
 						var abaJquery				=	$('.'+getID);
-						
-						
-					
-						
-						
-					
 						
 						
 						
@@ -765,6 +765,12 @@ function optionsDataConvert(gridValue,with_decode)
 												  	var _title		=	__new_name_aba();
 												  	this.that.html(_title);
 												  	this.title.html(_title);
+												  	
+												  	//Force find
+
+												  	$('.wrs_panel_filter_measure .report_title').html(_title);
+												  	
+												  	
 												  	this.element.wrsAbaData('setKendoUi',{TITLE_ABA:_title});
 												  	WRS_ALERT(LNG('ABA_TITLE_EMPTY'),'warning');
 												  	ResizeABA();
@@ -794,8 +800,11 @@ function optionsDataConvert(gridValue,with_decode)
 							}else{
 								abaJquery.wrsAbaData('setKendoUi',{TITLE_ABA:title});
 							}
-
+							
 							abaJquery.find('.title').html(title);
+						  	var aba_ativa	=	get_aba_active_kendoUi();
+							$('.wrs_panel_filter_measure .report_title').html(title);
+							$('#'+aba_ativa.REPORT_ID+'Main').find('.report_title').html(title);
 							ResizeABA();
 							
 
@@ -1717,6 +1726,7 @@ function optionsDataConvert(gridValue,with_decode)
 			 */
 			var __setNewFilter	=	 function(filterName)
 			{
+				_ONLY('__setNewFilter');
 				
 				if(data_global==undefined) return false;
 				
@@ -1730,8 +1740,6 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					data_global.data['filter_tmp']	=	{};
 				}
-				
-				
 				
 				//Removendo todos os filtros a ser aplicado
 				if(filterName.tag==null)
@@ -1924,7 +1932,6 @@ function optionsDataConvert(gridValue,with_decode)
 			 */
 			var __setKendoUi	=	 function(input)
 			{
-				
 				if(data_global==undefined || data_global==null)
 					{
 						console.error('data_global nãoi foi definido ainda data_Error:',input);
@@ -1952,6 +1959,43 @@ function optionsDataConvert(gridValue,with_decode)
 			{
 				_ONLY('wrsAbaData::__setWrsData');
 				set_input_poolin(input,'data');
+			}
+			
+			var __change_div_elements	=	 function(input)
+			{
+				//input.old
+				//input.id
+				
+				//that
+				//Mudando o ID antigo do Container para o Novo isso se o ID Existir
+				if($('#'+input.old).length==1)
+				{
+					$('#'+input.old).attr("id",input.id);
+					
+					$('#'+input.old+'Main').attr("id",input.id+'Main');
+					$('#'+input.old+'Elements').attr("id",input.id+'Elements');
+					
+					$('.'+input.old+'BOX').addClass(input.id+'BOX').removeClass(input.old+'BOX');
+				}
+				
+				// atualizando o nome da aba no class da aba
+				that.removeClass(that.attr('id-aba')).addClass(input.id);
+				// atualizando o nome da aba no atributo id-aba da aba
+				that.attr('id-aba',input.id);
+				
+				that.wrsAbaData('setWrsData',{getKendoUi:input.id});
+				that.wrsAbaData('setKendoUi',{REPORT_ID:input.id});
+				
+
+				//Atualizando os status do JOB
+				//Ou pode forçar o click para ativar a aba
+				var gridValue		=	that.wrsAbaData('getKendoUi');
+					$('body').managerJOB('setActiveAba',{report_id:input.id,kendoUi:gridValue});
+					
+					
+				
+				
+				
 			}
 			
 			var  __getKendoUi	=	 function()
@@ -2091,7 +2135,8 @@ function optionsDataConvert(gridValue,with_decode)
 			        remove_asterisk		:	__remove_asterisk,
 			        setNewFilter		: 	__setNewFilter,
 			        getNewFilter		:	__getNewFilter,
-			        getFilter			:	__getFilter
+			        getFilter			:	__getFilter,
+			        change_div_elements	:	__change_div_elements
 			};
 			
 				/*
