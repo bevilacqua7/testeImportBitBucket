@@ -866,6 +866,40 @@ function onDataBound(arg)
 		
 	}
 	
+
+	if(!isEmpty(columns_width_data))
+		{
+			var colElement		=	 {
+												count_column	:	0,
+												size_word		:	$("<div/>").text('Q').textWidth(),
+												padding_left	:	8
+									};
+			
+			var frozen			=	kendoData.dataSource.size_frozen;
+			
+			var hasHiddenField=false;
+			for(ii in kendoData.dataSource.options.fields){
+				if(kendoData.dataSource.options.fields[ii].hide){
+					hasHiddenField=true;
+				}
+			}
+			WRS_CONSOLE('tem campo escondido - latitude?',hasHiddenField);
+			for(var lineNameCol in columns_width_data)
+				{
+				
+						var _width		=	columns_width_data[lineNameCol];
+							_width		=	(_width*colElement.size_word)+colElement.padding_left;
+						
+							WRSSresize(nameID,colElement.count_column, _width,frozen,hasHiddenField); 
+						colElement.count_column++;
+				}
+				
+				delete colElement;
+		}
+	
+}
+
+	
 	
  
 	/*

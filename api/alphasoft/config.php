@@ -19,7 +19,8 @@ define('PATH_CONFIG_SMARTY',PATH_VAR.'smarty_config'.DIRECTORY_SEPARATOR);
 /*
  * INformações para API
 */
-define('PATH_API',PATH_WRS.'api'.DIRECTORY_SEPARATOR);
+
+
 
 define('PATH_DEFINE',PATH_WRS.'define'.DIRECTORY_SEPARATOR);
 /*
@@ -27,7 +28,6 @@ define('PATH_DEFINE',PATH_WRS.'define'.DIRECTORY_SEPARATOR);
 */
 define('PATH_LANGUAGE',PATH_WRS.'language'.DIRECTORY_SEPARATOR);
 
-define('PATH_SMARTY',PATH_API.'Smarty-3.1.20'.DIRECTORY_SEPARATOR);
 
 
 

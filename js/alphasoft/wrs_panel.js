@@ -2465,7 +2465,7 @@ function acoes_multiplas_menu_painel()
 			confere_se_existe_menu_panel_selecionado($(this).parents('div.wrs_panel_options'));
 		});
 	}); 
-	
+	aplicaQtipItem('.WRS_DRAG_DROP_METRICA','left');
 	_END('acoes_multiplas_menu_painel');
 }
 
@@ -2619,4 +2619,31 @@ function limpa_botoes_selecionados_filtros(painel){
 	_painel.find('li.ui-draggable.ui-state-focus').removeClass('ui-state-focus');
 	
 	_END('limpa_botoes_selecionados_filtros');
+}
+
+
+
+function aplicaQtipItem(classe,posit){
+	_START('apply_qtip_in_menu_items_has_description');
+	$(classe).find('li[wrs_description]').each(function(){ var title=base64_decode($(this).attr('wrs_description')); $(this).qtip('destroy',true).qtip({
+        content: {
+					text: $('<div class="container" style="word-wrap:break-word;width:450px;padding:8px;"> '+title+'</div>')						
+	         },
+        style: {
+       	 classes: 'qtip-bootstrap qtip-shadow'
+        }, events: {
+            render: function(event, api) {
+                var elem = api.elements.bgiframe;
+            }},
+            position: {
+				my: (posit=='left')?'bottom right':'bottom left',
+				at: 'top left'
+			},
+			hide: {
+				fixed: true,
+				delay: 300
+			}
+    	}); 
+	});
+	_END('apply_qtip_in_menu_items_has_description');
 }

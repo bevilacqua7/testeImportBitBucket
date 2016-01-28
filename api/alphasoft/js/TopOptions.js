@@ -537,6 +537,7 @@ function DEFAULT_OPTIONS_TOPS()
 				$(function () {
 					  $('[data-toggle="tooltip"]').tooltip()
 					})
+				aplicaQtipItem('.WRS_DRAG_DROP_RECEIVER.WRS_MEASURE_DRAG','right');
 			_END('wrsTopOptions');		
 		}
 		

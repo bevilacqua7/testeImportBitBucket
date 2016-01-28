@@ -316,8 +316,25 @@
 	$language['LINE_TOTAL_BUBBLE']			=	'Deseja usar as linha de totais no gráfico?';
 	
 	
+	// UPLOAD FORM
+	$language['msg_maxNumberOfFiles']					=	'Número maximo de arquivos excedido';
+	$language['msg_acceptFileTypes']					=	'Arquivo de extensão nao permitida';
+	$language['msg_acceptFileTypes']					=	'Arquivo de tamanho excedido';
+	$language['msg_minFileSize']						=	'Arquivo de tamanho mínimo não alcancado';
+	$language['upload_form_selecionar']					=	'Selecionar';
+	$language['upload_form_enviar']						=	'Enviar';
+	$language['upload_form_cancelar']					=	'Cancelar';
+	$language['upload_form_apagar']						=	'Apagar';
+	$language['upload_form_processando']				=	'Processando...';
+	$language['upload_form_erro']						=	'Erro no envio';
 	
-	
+	// UPLOAD DE ARQUIVOS PARA IMPORTACAO DE DADOS EM MASSA
+
+	$language['upload_files_select']					=	'Selecione o arquivo para importação:';
+	$language['upload_files_success_sing']				=	' registro importado com sucesso';
+	$language['upload_files_success_plur']				=	' registros importados com sucesso';
+	$language['upload_files_error_sing']				=	' registro importado com erro';
+	$language['upload_files_error_plur']				=	' registros importados com erro';
 	
 	// MODAL GENERICA
 	$language['MODAL_GENERICA_SALVAR']		=	'Salvar';
@@ -329,4 +346,54 @@
 	// MODAL CONFIRM
 	$language['MODAL_CONFIRM_BT_CONFIRM']	=	'Apagar';
 	$language['MODAL_CONFIRM_BT_CANCEL']	=	'Cancelar';
+	
+	
+	
+	// ADMIN MANAGE PARAM
+	$language['bt_back'] 					= 'Voltar';
+	$language['bt_new'] 					= 'Novo';
+	$language['bt_update'] 					= 'Salvar';
+	$language['bt_remove'] 					= 'Apagar';
+	$language['bt_export'] 					= 'Exportar';
+	$language['bt_import'] 					= 'Importar';
+	$language['bt_export_user'] 			= $language['bt_export'].' Usuários';
+	$language['bt_import_user'] 			= $language['bt_import'].' Usuários';
+	$language['bt_export_customer'] 		= $language['bt_export'].' Clientes';
+	$language['bt_import_customer'] 		= $language['bt_import'].' Clientes';
+	$language['bt_export_database'] 		= $language['bt_export'].' Databases';
+	$language['bt_import_database'] 		= $language['bt_import'].' Databases';
+	$language['bt_export_cube'] 			= $language['bt_export'].' Cubos';
+	$language['bt_import_cube'] 			= $language['bt_import'].' Cubos';
+	$language['bt_export_profile'] 			= $language['bt_export'].' Perfis';
+	$language['bt_import_profile'] 			= $language['bt_import'].' Perfis';
+	$language['bt_export_cube_user'] 		= $language['bt_export'].' Cubo/Usuários';
+	$language['bt_import_cube_user'] 		= $language['bt_import'].' Cubo/Usuários';
+	$language['bt_export_download'] 		= $language['bt_export'].' Downloads';
+	$language['bt_import_download'] 		= $language['bt_import'].' Downloads';
+	$language['bt_export_log'] 				= $language['bt_export'].' Logs';
+	$language['bt_import_log'] 				= $language['bt_import'].' Logs';
+
+	
+	// JSs de MENU, ADMIN e REPORTS
+	$language['JS_menu_report_include'] 	= 	'Inclusão de Relatório';
+	$language['JS_menu_report_name'] 		= 	'Escolha um nome para o relatório';
+
+	$language['JS_admin_confirm_export'] 	= 	'Deseja exportar quais registros?';
+	$language['JS_admin_all_records'] 		= 	'Todos os registros';
+	$language['JS_admin_selecteds'] 		= 	'Somente o%s selecionado%s';
+	$language['JS_admin_select_one'] 		= 	'Selecione ao menos um registro';
+	$language['JS_admin_confirm_remove'] 	= 	'Deseja realmente apagar este%s registro%s?';
+	$language['JS_admin_removed'] 			= 	'Registro%s removido%s com sucesso';
+
+	$language['JS_report_confirm_remove'] 	= 	'Deseja apagar este%s relatório%s?';
+	$language['JS_report_select_one'] 		= 	'Selecione ao menos um relatório';
+	$language['JS_report_removed'] 			= 	'Relatório%s removido%s com sucesso';
+	
+	
+	// EXPORT ADMIN OPTIONS
+	$language['ADMIN_EXPORT_OPTION_ERROR'] 	= 	'Não há registros para serem exportados';
+	$language['ADMIN_EXPORT_OPTION_OK'] 	= 	'Iniciando o download...';
+	
+	
+	
 ?>

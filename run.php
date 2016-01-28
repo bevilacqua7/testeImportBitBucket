@@ -1,6 +1,6 @@
 <?PHP
 
-//ini_set("display_errors","1");
+//	ini_set("display_errors","1");
 	/**
 	 * file:WRS_CLASS
 	 * class: Name class
@@ -13,7 +13,14 @@
 //	header("Content-Type: text/html; charset=ISO-8859-1",true);
 	include_once 'config/configCommon.php';
 	
-	$data		=	array('file', 'event', 'class');
+	$filename = fwrs_request('filename');
+	$name_file='file';
+	if(isset($filename) && trim($filename)!=''){
+		$name_file = 'filename';		
+	}
+	
+	$data		=	array($name_file, 'event', 'class');
+	
 	$data		=	fwrs_request($data);
 
 	
@@ -55,7 +62,7 @@
 	
 	
 	
-	includeCLASS($data['file']);
+	includeCLASS($data[$name_file]);
 	$class	=	 $data['class'];	
 	$obj	=	 new $class();
 	$obj->set_conn($conn_wrs);

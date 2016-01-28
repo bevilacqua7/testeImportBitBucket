@@ -169,6 +169,7 @@ var AUTO_LOAD_RUN			= <?php echo (($request_exec_report && $request_exec_report=
 	include_js('GenericModal');
 	include_js('Menu');
 	include_js('templateReport');
+	include_js('adminWindows');
 	include_js('Abas');
 	
 ?> 
@@ -310,6 +311,7 @@ var AUTO_LOAD_RUN			= <?php echo (($request_exec_report && $request_exec_report=
 <?php include 'modal_confirm.php'; ?>
 <!--END MODAL CONFIRM-->
 
+<?PHP include_once(PATH_TEMPLATE.'upload_script.php'); ?>
 </body>
 
 <script>

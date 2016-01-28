@@ -88,6 +88,7 @@ class WRS_LOGIN extends WRS_BASE
 	{
 		WRS_TRACE('setLogin()', __LINE__, __FILE__);
 		
+		
 		$user_cookie	=	json_decode($_COOKIE['WRS_LOGIN'],true);
 		//fwrs_set_cookie_clean('WRS_LOGIN');
 		
