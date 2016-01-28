@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
 encoding//api/alphasoft/define/common.php=UTF-8
 encoding//api/alphasoft/define/define.php=UTF-8
+encoding//api/alphasoft/lib/class/lib.ATT_WRS_CUSTOMER.php=UTF-8
+encoding//api/alphasoft/lib/class/lib.ATT_WRS_USER.php=UTF-8
 encoding//api/alphasoft/lib/class/lib.SqlServer.php=UTF-8
 encoding//api/alphasoft/lib/class/lib.WRS_BASE.php=UTF-8
 encoding//api/alphasoft/lib/class/lib.WRS_PANEL.php=UTF-8

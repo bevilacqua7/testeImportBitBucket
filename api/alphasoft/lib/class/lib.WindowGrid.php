@@ -27,6 +27,12 @@ class WindowGrid extends FORM
 	private $exception	=	NULL;
 	
 	
+	/**
+	 * 
+	 * @var WindowGrid
+	 */
+	
+	
 	private function extendException($param,$event)
 	{
 		/*
@@ -34,7 +40,7 @@ class WindowGrid extends FORM
 		 * Obtendo o evento para extender a classe que contem a regra da estrutura
 		 *
 		 */
-
+//form_event
 		if(array_key_exists('exception', $param) && is_array($param['exception']))
 		{
 			$this->exception	=	 $param['exception'];
@@ -94,16 +100,51 @@ class WindowGrid extends FORM
 
 			if($this->manage_param->load($event))
 			{
+				$form_event		=	fwrs_request('form_event');
 				
 				//CHamando o Eventos
 				$param			=	$this->manage_param->$event();
+				
 				$p_request		=	fwrs_request('param_request');
+				
 				if(is_array($p_request) && count($p_request)>0)
 					foreach($p_request as $k=>$v)
 						$param[$k]=$v;
-				$param			=	$this->build_grid_form($param);				
+					
+								
+				$LocalEvents	=	 $this;
+				
+				/*
+				 * extend 
+				 */
+				if(array_key_exists('extend', $param) && count($param['extend'])>0){
+					$extend			=	 $param['extend'];
+					includeCLASS($extend['file']);
+					$class			=	$extend['class'];
+					$objExtend		=	new $class();
+					$objExtend->SetObject($this);
+					$LocalEvents	=	$objExtend;
+				}
+				
+				switch($form_event)
+				{
+					case 'remove' 	: 	$param	=	$LocalEvents->delete($param) ; break;
+					case 'update'	:	$param	=	$LocalEvents->update($param) ; break;
+					case 'new'		:	$param	=	$LocalEvents->insert($param); break;
+					case 'import'	:	$param	=	$LocalEvents->import($param); break;
+					case 'export'	:	$param	=	$LocalEvents->export($param); break;
+					case 'back'		:	{
+											$_REQUEST['wrs_type_grid'] = $wrs_type_grid = 'list';
+										}
+					default			:	$param	=	$this->build_grid_form($param); break;
+				}
+
+				//$param['html']="<pre>>>>".print_r($form_event,1)."</pre>".$param['html'];
 				
 				$this->extendException($param,$wrs_type_grid);
+				
+				
+				
 			}else{
 				$param['title']	=	LNG('ERROR_TITLE');
 				$param['html']	=	fwrs_error(LNG('ERROR_EVENT_NOT_FOUND'));
@@ -119,7 +160,8 @@ class WindowGrid extends FORM
 		//Aplicando a conversão das TAGS para aplicar no HTML
 		$TPL_TITLE				=		$param['title'];
 		$TPL_HTML				=		$param['html'];
-		$TPL_DATA				=		$param['data'];
+
+		$TPL_DATA				=		(isset($param['data']))?$param['data']:'';
 		$TPL_COMPLEMENT_TITLE	=		$param['title_menu'];
 		
 		
@@ -127,6 +169,7 @@ class WindowGrid extends FORM
 			unset($param['button']['new']); 	// se o usuario estiver no formulario para alteracao, ele so pode salvar ou apagar algo (sem botao de novo)
 		}else{
 			unset($param['button']['update']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
+			unset($param['button']['back']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
 		}
 	
 		$this->setButton($param['button'],$param['table'],((array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false),((array_key_exists('button_icon',$param) && is_array($param['button_icon']) && count($param['button_icon'])>0)?$param['button_icon']:false));
@@ -145,7 +188,49 @@ class WindowGrid extends FORM
 	}
 	
 	
- 
+	public function insert($options)
+	{
+		//WRS_DEBUG_QUERY('insert','oo.log');
+		$param	=	 $this->build_grid_form($options);
+		
+		$param['html']			=	'<pre>INSERT windowgrid</pre>'.$param['html'];
+		
+		return $param;
+		
+		
+	}
+
+	public function import($options)
+	{
+		//WRS_DEBUG_QUERY('import');
+		$param	=	 $this->build_grid_form($options);
+		$param['html']			=	'<pre>IMPORT windowgrid</pre>'.$param['html'];
+		return $param;
+	}
+	
+	public function export($options)
+	{
+		//WRS_DEBUG_QUERY('import');
+		$param	=	 $this->build_grid_form($options);
+		$param['html']			=	'<pre>EXPORT windowgrid</pre>'.$param['html'];
+		return $param;
+	}
+	
+	public function update($options)
+	{
+		//WRS_DEBUG_QUERY('update','oo.log');
+		$param	=	 $this->build_grid_form($options);
+		$param['html']			=	'<pre>UPDATE windowgrid</pre>'.$param['html'];
+		return $param;
+	}
+	
+	public function delete($options)
+	{
+		//WRS_DEBUG_QUERY('delete','oo.log');
+		$param	=	 $this->build_grid_form($options);
+		$param['html']			=	'<pre>DELETE windowgrid</pre>'.$param['html'];
+		return $param;
+	}
 	
 	/**
 	 * Criando os Botões e seus eventos
@@ -160,11 +245,20 @@ class WindowGrid extends FORM
 	{
 		$button_merge			=	array('new','update','remove');
 		$map_buttons			=	array();
-				
+		
+		// BOTAO GENERICO DINAMICO - o que tiver a mais na manage_param será construído neste laço
+		if(is_array($button)){
+			foreach($button as $action_bt=>$label_bt){
+				if(!in_array($action_bt, $button_merge)){
+					$map_buttons[$action_bt]		=	'<button type="button"  {complement} table="'.$table.'"	 action_type="'.$action_bt.'" 		class="btn btn_extra '.(($action_bt=='back')?'btn-default':'btn-info btn-color-write').' 	btn_window_grid_event">	<i class="'.(($button_icon && array_key_exists($action_bt, $button_icon))		?$button_icon[$action_bt]:'glyphicon glyphicon-plus color_write')								.'"></i> '	.$label_bt.	'</button>';
+				}					
+			}
+		}
+		
 		$map_buttons['new']		=	'<button type="button"  {complement} table="'.$table.'"	 action_type="new" 		class="btn btn-color-write btn-success 	btn_window_grid_event">	<i class="'.(($button_icon && array_key_exists('new', $button_icon))		?$button_icon['new']:'fa fa-floppy-o')								.'"></i> '	.LNG('BTN_SAVE').	'</button>';
 		$map_buttons['update']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="update"  	class="btn btn-color-write btn-info		btn_window_grid_event">	<i class="'.(($button_icon && array_key_exists('update', $button_icon))		?$button_icon['update']:'fa fa-pencil-square-o')					.'"></i> '	.LNG('BTN_UPDATE').	'</button>';
 		$map_buttons['remove']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="remove" 	class="btn btn-color-write btn-danger	btn_window_grid_event">	<i class="'.(($button_icon && array_key_exists('remove', $button_icon))		?$button_icon['remove']:'glyphicon glyphicon-trash color_write')	.'"></i> '	.LNG('BTN_REMOVE').	'</button>';
-		$map_buttons['out']		=	'<button type="button" 															class="btn btn-default" 	data-dismiss="modal">				<i class="glyphicon glyphicon-off"></i> '				.LNG('BTN_SAIR').	'</button>';
+		$map_buttons['out']		=	'<button type="button" 															class="btn btn-default" 	data-dismiss="modal">				<i class="glyphicon glyphicon-off"></i> '				.LNG('BTN_CLOSE').	'</button>';
 		
 		foreach($button as $label => $_btn)
 		{
@@ -173,7 +267,7 @@ class WindowGrid extends FORM
 				$value_btn		=	$_btn;
 				$partes_btn		=	explode("</i>",$map_buttons[$label]);
 				if($label_force){
-					$this->button.=$partes_btn[0]."</i>".$value_btn."</button>";
+					$this->button.=str_replace('{complement}', '', $partes_btn[0]."</i>".$value_btn."</button>");
 				}else{
 					$this->button.=str_replace('{complement}', $value_btn, $map_buttons[$label]);
 				}
@@ -222,8 +316,8 @@ class WindowGrid extends FORM
 										'list'			=>true,
 										'order'			=>true,
 										'order_type'	=>true);
-		
-		
+
+
 		//Formulário
 		if($wrs_type_grid=='form')
 		{
@@ -246,7 +340,6 @@ class WindowGrid extends FORM
 		}
 		
 		$exec_vision	=	$wrs_type_grid;
-
 
 		switch($exec_vision)
 		{
@@ -288,6 +381,13 @@ class WindowGrid extends FORM
 		$page_size		=	fwrs_request('page_size');
 		$page_size		=  	empty($page_size) ? 25 : $page_size;
 		//$page_size		=	10;
+		
+		if(!array_key_exists('order_by', $param['order'])){
+			$param['order']['order_by']='';
+		}
+		if(!array_key_exists('order_type', $param['order'])){
+			$param['order']['order_type']='';
+		}
 		
 		if(!empty($this->exception))
 		{
@@ -531,7 +631,6 @@ EOF;
 		$query	=	 $this->query($query);
 		
 		
-		
 		if(isset($param['field']['WRS_ICON']))
 		{
 			$is_icon	=	 true;
@@ -567,7 +666,7 @@ EOF;
 			
 			
 			$rows_tmp		=	$rows;
-			$num_rows		=	$rows['ROWS_TOTAL'];
+			$num_rows		=	(!array_key_exists('ROWS_TOTAL', $rows))?$this->num_rows($query):$rows['ROWS_TOTAL'];
 			
 			if($is_icon){
 				$rows_tmp['WRS_ICON']	=	'<img width="50" src="imagens/icons/'.$param['icon'].'">';
@@ -600,7 +699,7 @@ EOF;
 					if(is_array($sel_value))
 					{
 
-						$rows_tmp[$sel_label]=	$sel_value[$rows_tmp[$sel_label]];						
+						$rows_tmp[$sel_label]=	@$sel_value[$rows_tmp[$sel_label]];						
 					}else{
 						$param_select	=	$this->manage_param->$sel_value();
 						
@@ -624,17 +723,27 @@ EOF;
 						if($this->num_rows($query_box))
 						{
 							$row_box	=	 $this->fetch_array($query_box);
+
+							if(isset($param['field'][$param_select['primary']]['select_fields_in_table']) && is_array($param['field'][$param_select['primary']]['select_fields_in_table']))
+							{
 							
-							
-							
-							foreach($param_select['field'] as $param_select_label =>$param_select_value)
+								foreach($param['field'][$param_select['primary']]['select_fields_in_table'] as $label)
 								{
-									if(isset($param_select_value['select']))
-									{
-										$html_option[]	=	$row_box[$param_select_label];
-									}
+									$html_option[]	=	$row_box[$label];
 								}
+							
+							}else{
 								
+								foreach($param_select['field'] as $param_select_label =>$param_select_value)
+									{
+										if(isset($param_select_value['select']))
+										{
+											$html_option[]	=	$row_box[$param_select_label];
+										}
+									}
+									
+							}
+							
 							$rows_tmp[$sel_label]		=	is_array($html_option) ?  implode(' - ',$html_option) : '';
 						}
 					
@@ -643,8 +752,8 @@ EOF;
 			}
 			//Ens select
 			
-						
-			$rows_tmp[$sort['field']]	=	'<b>'.$rows_tmp[$sort['field']].'</b>';
+			if(array_key_exists($sort['field'], $rows_tmp))			
+				$rows_tmp[$sort['field']]	=	'<b>'.$rows_tmp[$sort['field']].'</b>';
 			
 			//Inserindo o checkbox field
 			if($checkbox_exist)

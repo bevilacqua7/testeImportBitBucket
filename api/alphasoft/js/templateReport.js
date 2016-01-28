@@ -226,8 +226,8 @@ _START('carrega_grid_list_reports');
 		retorno = $.parseJSON(options);
 		if(retorno!= null && typeof retorno == 'object' && typeof retorno.relatorios_apagados != 'undefined'){
 			$('#myModalGenericConfig').modal('hide');	
-			var s = (retorno.relatorios_apagados>1)?'s':'';
-			WRS_ALERT('Relatório'+s+' removido'+s+' com sucesso','success');	
+			var _s = (retorno.relatorios_apagados>1)?'s':'';
+			WRS_ALERT(LNG_s('JS_report_removed',_s),'success');	
 		}
 	}
 
@@ -399,7 +399,7 @@ function btn_window_grid_event_report(data)
 			
 		}
 	}else{
-		WRS_ALERT('selecione ao menos um relatório','warning'); 
+		WRS_ALERT(LNG('JS_report_select_one'),'warning'); 
 	}
 	_END('btn_window_grid_event_report');
 }
@@ -417,8 +417,8 @@ function removeReport(arrRepIds)
 				runCall(param_request,Ofile,Oclass,Oevent,carrega_grid_list_reports,'modal');
 		   }
 	}
-
-	WRS_CONFIRM("Deseja apagar este(s) relatório(s)?",'warning',_callbackDelete);
+	var _s = arrRepIds.length>1?'s':'';
+	WRS_CONFIRM(LNG_s('JS_report_confirm_remove',_s),'warning',_callbackDelete);
 	_END('removeReport');
 	
 }
@@ -503,3 +503,4 @@ function atualiza_id_aba_ativa(_rep_id)
 	
 	_END('atualiza_id_aba_ativa');
 }
+

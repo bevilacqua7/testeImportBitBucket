@@ -37,7 +37,7 @@ $(document).ready(function(){
 		var _param	= {
 				'file'			:	'WRS_REPORT', 
 				'classe'		:	'WRS_REPORT',
-				'title'			:	'Inclusão de Relatório',
+				'title'			:	LNG('JS_menu_report_include'),
 				'bt_salvar'		:	true,
 				'bt_cancelar'	:	true,
 				'returnModal'	:	true,
@@ -54,5 +54,24 @@ $(document).ready(function(){
 		$('#myModal').modal('show');
 	});
 	
+	
+	
+	
+	$('.menu_administrativo_itens').hide();
+	
+	$('.menuADM_link').click(function(){
+		$('.menu_administrativo_itens, #fullwidth, #fullwidth_ds').toggle();
+	});
+
+	$('.menu_cadastro').click(function(){
+		carrega_grid_list_admin(undefined,$(this));
+		$('#myModal').modal('show');
+	});
+		
+	
+	
+	
 	_END('Menu.js');
+	
+	
 });

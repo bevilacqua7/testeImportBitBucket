@@ -43,6 +43,18 @@ function clone_jj(report)
 	$('.WRS_ABA .'+report).data('wrs_aba_data',_jj).attr('id-aba',_report).addClass(_report);
 }
 
+// substitui o LNG trocando os %s por s se existirem
+function LNG_s(str,_char,_recursiva){
+	var char 		= _char==undefined?'s':_char;
+	var recursiva 	= _recursiva==undefined?false:true;
+	var string 		= recursiva?str:LNG(str);
+	if(string.indexOf('%s')>0){
+		return LNG_s(string.replace('%s',char),char,true);
+	}else{
+		return string;
+	}
+}
+
 /*
  * Tipos de Execuções que o sistema opera para gerar uma novo Report
  */
@@ -658,11 +670,14 @@ function replace_attr(value)
 
 
 
-function WRS_CONFIRM(_text,_type,_callback,hide_btn_no)
+function WRS_CONFIRM(_text,_type,_callback,_extraButtonParam,_extraType,_extraForceButtons, hide_btn_no)
 {
 	
-	var _tite		=	"ALERT_TITLE_INFO";
-	var _is_type	=	_type;
+	var _title				=	"ALERT_TITLE_INFO";
+	var _is_type			=	_type;
+	var extraButtonParam	=	_extraButtonParam==undefined?false:_extraButtonParam;
+	var extraType			=	_extraType==undefined?'confirm':_extraType;
+	var extraForceButtons	=	_extraForceButtons==undefined?'[{text : "OK",val : true,onClick : function(e) {	return true	}} ]':_extraForceButtons;
 	
 	switch(_type)
 	{
@@ -672,13 +687,21 @@ function WRS_CONFIRM(_text,_type,_callback,hide_btn_no)
 		case 'warning' 	: _title	=	LNG('ALERT_TITLE_WARNING') ;break;
 	}
 	
+<<<<<<< .mine
  
 	
+
+=======
+	var buttons		=	{ok:LNG('BTN_CONFIRM'),yes:LNG('BTN_SIM'),cancel:LNG('BTN_NAO')};
+	buttons			=	extraButtonParam?merge_objeto(buttons,extraButtonParam):buttons;
+
+>>>>>>> .theirs
 	modal({
-		type  		: 'confirm',
+		type  		: extraType,
 		wrs_type	:	_type,
 		 title		:	_title,
-		 buttonText : {ok:LNG('BTN_CONFIRM'),yes:LNG('BTN_SIM'),cancel:LNG('BTN_NAO')},
+		 buttonText : buttons,
+		 buttons 	: extraForceButtons,
 		closeClick 	: false, //Close Modal on click near the box
 		text  		: _text,
 		callback	: function(result){ _callback(result); }
@@ -696,7 +719,7 @@ function WRS_CONFIRM(_text,_type,_callback,hide_btn_no)
 
 function WRS_ALERT(_text,_type)
 {
-	var _tite		=	"ALERT_TITLE_INFO";
+	var _title		=	"ALERT_TITLE_INFO";
 	var _is_type	=	_type;
 	
 	 
@@ -1359,16 +1382,5 @@ $(document).ready(function(){
 	
 	$('body').managerJOB('create_modal'); //Criando o BOX de CSS
 	
-	$('.menu_administrativo_itens').hide();
-	
-	$('.menuADM_link').click(function(){
-		$('.menu_administrativo_itens, #fullwidth, #fullwidth_ds').toggle();
-	});
-
-	$('.menu_cadastro').click(function(){
-		grid_window_modal({wrs_type_grid:'list',cube_s:CUBE_S},$(this).attr('tabela'));
-		$('#myModal').modal('show');
-	});
-		
 
 });
