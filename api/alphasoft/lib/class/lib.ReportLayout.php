@@ -20,6 +20,7 @@ class ReportLayout extends WRS_USER
 	private $_query			=	null;
 	private $paran_query	=	NULL;
 	private $cube			=	array();
+
 	
 	
 	public function run($_event,$paran_query,$cube_s)
@@ -184,7 +185,7 @@ class ReportLayout extends WRS_USER
 		
 		
 		
-		$query	=	$this->_query->Get_SSAS_Layouts(WRS::CUSTOMER_ID(), WRS::USER_CODE(), $this->cube['DATABASE_ID'], $this->cube['CUBE_ID']);
+		$query	=	$this->_query->Get_SSAS_Layouts(WRS::CUSTOMER_ID(), WRS::USER_CODE(), $this->cube['DATABASE_ID'], $this->cube['CUBE_ID'],0,1);
 		$query	=	 $this->query($query);
 		
 		if(!$this->num_rows($query)) return NULL;
@@ -197,10 +198,14 @@ class ReportLayout extends WRS_USER
 		$option			=	'<option value="{label}" >{value}</option>'.PHP_EOL;
 		$option_array	=	array('{label}','{value}');
 		
+		$option_empty	=	'<option value="" ></option>';
 		
-		$parameter['ATTRIBUTOS_LINHA_OPTIONS']		=	'<option value="" >'.LNG('tpl_layout_options_default').'</option>';
-		$parameter['ATTRIBUTOS_METRICA_OPTIONS']	=	'<option value="" >'.LNG('tpl_layout_options_default').'</option>';
-		$parameter['ATTRIBUTOS_COLUNA_OPTIONS']		=	'<option value="" >'.LNG('tpl_layout_options_default').'</option>';
+		$parameter['ATTRIBUTOS_LINHA_OPTIONS']		=	$option_empty.'<option value="default" >'.LNG('tpl_layout_options_default').'</option>';
+		$parameter['ATTRIBUTOS_METRICA_OPTIONS']	=	$option_empty.'<option value="default" >'.LNG('tpl_layout_options_default').'</option>';
+		$parameter['ATTRIBUTOS_COLUNA_OPTIONS']		=	$option_empty.'<option value="default" >'.LNG('tpl_layout_options_default').'</option>';
+		
+		
+		
 		
 		if($this->num_rows($_select))
 		{
@@ -293,7 +298,13 @@ class ReportLayout extends WRS_USER
 	private function runGrid($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
 	{
 	
-		$query	=	$this->_query->Get_SSAS_Layouts(WRS::CUSTOMER_ID(), WRS::USER_CODE(), $this->cube['DATABASE_ID'], $this->cube['CUBE_ID']);
+		$query	=	$this->_query->Get_SSAS_Layouts(	WRS::CUSTOMER_ID(), 
+														WRS::USER_CODE(), 
+														$this->cube['DATABASE_ID'], 
+														$this->cube['CUBE_ID'],
+														0,
+														1
+													);
 		$query	=	 $this->query($query);
 
 		if(!$this->num_rows($query)) return NULL;

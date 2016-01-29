@@ -79,7 +79,8 @@ EOF;
 				{
 					$param_json						=	$_ivalue;
 					$param_json['CUBE_POS_SESSION']	=	$pos_cube_session;
-					$class		=	fwrs_replace_attr(empty($param_json['LEVEL_FULL']) ? $param_json['MEASURE_UNIQUE_NAME'] : $param_json['LEVEL_FULL']);
+					$unique_full					=	empty($param_json['LEVEL_FULL']) ? $param_json['MEASURE_UNIQUE_NAME'] : $param_json['LEVEL_FULL'];
+					$class		=	fwrs_replace_attr($unique_full);
 					
 					$title		=	null;
 					
@@ -91,14 +92,15 @@ EOF;
 						}
 					}
 					
-					
+					$param_json['UNIQUE_FULL']	=	$unique_full;
+					/*
 					if($type=='metrica')
 					{
 						$title_tt[0] = '<b>Title</b><br>Nova linha com informações<br>demosntração nova linha';
 						$title_tt[1] = '<b>Title ZXJHATSD</b><br>Nova linha com informações<br>demosntração nova linha<br><b>asdasasd</b>asdadasd<br>asdasd<br>';
 						
 						$title		=	$title_tt[rand(0,1)];
-					}
+					}*/
 					
 					
 					$lReplace	=	 array($_ivalue[$valueShow[0]],$_ivalue[$valueShow[1]],'',$type,$class,json_encode($param_json,true),$title);
@@ -108,7 +110,7 @@ EOF;
 				}		
 				//WRS_DEBUG_QUERY(print_r($param_json,true));
 				
-				$rel				=	fwrs_replace_attr(empty($param_json['LEVEL_FULL']) ? $param_json['MEASURE_UNIQUE_NAME'] : $param_json['LEVEL_FULL']);
+				$rel				=	fwrs_replace_attr($unique_full);
 				$dragDropReplace	=	array($label,$liFindGroup.$liTemp,$rel);
 				$html				.=	str_replace($dragDropSearch, $dragDropReplace, $dragDrop);
 		}

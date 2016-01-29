@@ -345,6 +345,7 @@ function optionsDataConvert(gridValue,with_decode)
 				var _click_btn_new_aba		=	 function()
 					{
 							var aba_active		=	tagABA.find('.active');
+							
 								__save_info_aba_current(aba_active);
 
 								
@@ -371,8 +372,17 @@ function optionsDataConvert(gridValue,with_decode)
 											$('.container_panel_relatorio_rows').addClass('hide');
 								btn_add_new_aba();	
 								
+								var new_active_aba		=	get_aba_active_object();
+								
+								
+								//Informando ao sistema que a aba pode ser salva
+								new_active_aba.wrsAbaData('setEnableChange',true);
+								new_active_aba.wrsAbaData('aba_detect_change');
+								
+								
 								delete getElement;
 					}
+				
 					tagABA.find('.'+className).remove();
 					tagABA.append(htmlABA);
 					tagABA.find('.'+className).unbind('click').click(_click_btn_new_aba);
@@ -1609,6 +1619,7 @@ function optionsDataConvert(gridValue,with_decode)
 										data			:	{},
 										kendoGrid		:	{},
 										reportDetails	:	{},
+										first_MLC		:	null,
 										history			:	null,
 										first_line_total:	{}, 
 										change_aba		:	false,
@@ -1874,7 +1885,7 @@ function optionsDataConvert(gridValue,with_decode)
 				var report_id			=	kendoUi.REPORT_ID;
 				
 				var html				=	'<i class="wrs_is_change_aba fa fa-asterisk"></i>  ';
-				
+
 				if(that.find('.wrs_is_change_aba').length==0)
 				{
 					that.find('a').prepend(html);
@@ -1884,6 +1895,48 @@ function optionsDataConvert(gridValue,with_decode)
 				
 			}
 			
+			
+			/**
+			 * 	Gravando informações MLC
+			 * 	Measure/Line/Column
+			 *	Essa gravação é feita apenas a primeira vez quem que se gera um relatório essa informação é a que irá ser salva como a padrão do sistema
+			 * 
+			 */
+			var __set_first_MLC	=	 function (input)
+			{
+				_ONLY('__set_first_MLC');
+				
+				if(data_global==undefined)  return false;
+				
+				var change	=	false;
+
+				if(data_global.first_MLC!=null) return true;
+				
+				/*
+				 * Padrão do array que conterá no input
+				 * {line:null,column:'', measure:}
+				 */
+				data_global.first_MLC	=	input;
+				
+				
+				
+				that.data(wrsDataName,data_global);
+			}
+			
+			
+			/**
+			 * Obtendo informações do MLC
+			 * 
+			 */
+			var __get_first_MLC	=	 function ()
+			{
+				_ONLY('__set_first_MLC');
+				
+				if(data_global==undefined)  return false;
+				
+				return data_global.first_MLC;
+				
+			}
 			
 			
 			
@@ -2107,6 +2160,8 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			
 			
+		
+			
 			
 			
 			
@@ -2136,7 +2191,9 @@ function optionsDataConvert(gridValue,with_decode)
 			        setNewFilter		: 	__setNewFilter,
 			        getNewFilter		:	__getNewFilter,
 			        getFilter			:	__getFilter,
-			        change_div_elements	:	__change_div_elements
+			        change_div_elements	:	__change_div_elements,
+			        set_first_MLC		:	__set_first_MLC,
+			        get_first_MLC		:	__get_first_MLC
 			};
 			
 				/*

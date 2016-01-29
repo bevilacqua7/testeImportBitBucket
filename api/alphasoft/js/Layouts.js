@@ -18,10 +18,26 @@ function event_btn_change_layout_options()
 	container_find.find('select').each(function()
 			{
 						var selected		=	 $(this).find('option:selected').val();
+						var get_active_aba	=	get_aba_active_object();
+						
+						
 						
 						if(!isEmpty(selected))
 						{
-							options.param[$(this).attr('name')]		=	filter_array_convert(selected);
+							
+							if(selected=='default')
+								{
+									var _dataMLC	=	get_active_aba.wrsAbaData('get_first_MLC');
+									switch($(this).attr('name'))
+									{
+										case 'LAYOUT_COLUMNS'	:	selected	=	_dataMLC['column']		; break;
+										case 'LAYOUT_ROWS'		:	selected	=	_dataMLC['line']		; break;
+										case 'LAYOUT_MEASURES' 	:  	selected	=	_dataMLC['measure']		; break;
+									}
+								}
+							
+								options.param[$(this).attr('name')]		=	filter_array_convert(selected);
+							
 							options.is_empty						=	 false;
 						}
 		
@@ -53,6 +69,7 @@ function btn_open_layouts_events()
 {
 	var _callback_run_call		=	 function(data)
 	{
+		_ONLY('btn_open_layouts_events::_callback_run_call');
 		$('.layout_container_custom').html(data);
 
 		$('.layout_container_custom').unbind('click').click(function(){return false;});
@@ -64,22 +81,21 @@ function btn_open_layouts_events()
 	var btn_open_layouts_click	=	 function()
 	{
 		 
-		 
+		_ONLY('btn_open_layouts_click');
+
 		var param_request			=	[];
 			param_request['cube_s']	=	CUBE_S;
 
-		var _options			= {
+		var _options			= 	{
 												'file'									:	'ReportLayout', 
 												'classe'								:	'ReportLayout',
 												'cube_s'								:	CUBE_S,
 												'event'									:	'layout_options_load',
 												'title'									:	LNG('tpl_layout'),
-										};
+									};
 		
 		$('.layout_container_custom').html(LNG('LABEL_LOAD'));
-		
 		runCall(_options,_options.file,_options.classe,_options.event,_callback_run_call,'modal');
-		
 	}
 	
 	

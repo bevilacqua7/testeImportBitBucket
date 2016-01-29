@@ -18,9 +18,13 @@
             return clone;
         }(styles));
         sheet = sheet || document.styleSheets[document.styleSheets.length - 1];
+        
 
-        if (sheet.insertRule) sheet.insertRule(selector + " {" + styles + "}", sheet.cssRules.length);
-        else if (sheet.addRule) sheet.addRule(selector, styles);
+        if(sheet.cssRules!=null)
+        {
+	        if (sheet.insertRule) sheet.insertRule(selector + " {" + styles + "}", sheet.cssRules.length);
+	        else if (sheet.addRule) sheet.addRule(selector, styles);
+        }
 
 		_END('addRule');
         return this;
@@ -41,6 +45,7 @@
     
     
 }(window.jQuery));
+
 
 
 
