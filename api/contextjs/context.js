@@ -339,17 +339,21 @@ var context = context || (function () {
 		e.preventDefault();
 		e.stopPropagation();
 		
+
 		
 		/*
 		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
 		 */		
 		var table_parents	=	$(this).parents('div');
-		var esconde=false;				
+		var esconde=false;			
+
+		$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
+		
 		if(table_parents.attr('type')=='linha_header')
 			{	
 					table_parents		=	table_parents.find('table:first').find('tr');
 					var size_tr			=	table_parents.length;					
-					$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
+					
 					if(($(this).parent().index()+1)>=size_tr){
 						if( $(table_parents[$(this).parent().index()]).find('th').length<=2 || // existe uma coluna vazia, por isso, se for maior que 2 é pq existe mais de uma coluna de informacoes
 							(
