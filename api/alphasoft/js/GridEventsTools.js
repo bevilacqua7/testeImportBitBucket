@@ -1197,7 +1197,7 @@ var getRequestKendoUiDefault	=	{};
 	  					$(this).prop('checked',false);
 	  				}  
 	  				
-	  				rules_pendences_checkbox($(this),$(this).parent().parent().parent());
+	  				rules_pendences_checkbox($(this),$(this).parent().parent().parents('ul'));
   		});
   		
 		delete _opts;

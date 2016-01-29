@@ -1388,7 +1388,37 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG,label)
 	
 }
 
+/*
+ * cria um replace semelhante ao do javascript, mas utilizando arrays
+ */
+String.prototype.replaceComArray = function (find, replace) {
+    var replaceString = this;
+    for (var i = 0; i < find.length; i++) {
+        // global replacement
+        var pos = replaceString.indexOf(find[i]);
+        while (pos > -1) {
+            replaceString = replaceString.replace(find[i], replace[i]);
+            pos = replaceString.indexOf(find[i]);
+        }
+    }
+    return replaceString;
+};
 
+/*
+ * bloqueia caracteres contidos em um array - por default remove aspas simples e duplas
+ */
+function bloqueia_chars(obj,chars){
+	var _chars 			= chars==undefined?["'",'"']:chars;
+	var r=[]; for(i in _chars) r.push(''); // gera um array espelho vazio com a qtde proporcional
+	var _chars_verso 	= r;
+	obj.unbind('keypress').bind('keypress', function (event) {
+	    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+	    if (_chars.indexOf(key)>-1) {
+	       event.preventDefault();
+	       return false;
+	    }
+	}).val(obj.val().replaceComArray(_chars,_chars_verso));
+}
 
 
 $(document).ready(function(){

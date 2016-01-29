@@ -516,7 +516,7 @@ function addTargetDisableContext(kendoUi,report_id)
 
 											var column_field	=	$(IDName).find('.k-grid-header-wrap tr:last-child th:eq(2)').attr('data-field');
 											
-											console.log('_filter',_filter);
+											//console.log('_filter',_filter);
 											
 											
 											_layout['LAYOUT_COLUMNS']	=	['empty'];
@@ -613,12 +613,14 @@ function addTargetDisableContext(kendoUi,report_id)
     	 * Context Menu das Linhas
     	 */
     	var data_line_header							=	 menu_context_relation_ship_measure(jsonRelationShip);
-    		data_line_header[data_line_header.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
-    	
-    		
+		data_line_header[data_line_header.length]		=	{text	: LNG('REMOVE')		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
+	
+		
     	var data_line_row								=	 menu_context_relation_ship_measure(jsonRelationShip);
-    		data_line_row[data_line_row.length]			=	{text	: LNG('SEE_IN_MAP')		, className:'VER_MAPA',action:drill_click_option, json:''};
-    		
+    		data_line_row[data_line_row.length]			=	{text	: LNG('SEE_IN_MAP')	, className:'VER_MAPA',action:drill_click_option, json:''};
+    		data_line_row[data_line_row.length]			=	{text	: LNG('REMOVE')		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
+	
+			
     		
     	if(!in_array('DRT',PERFIL_ID_USER))
     	{
@@ -628,6 +630,7 @@ function addTargetDisableContext(kendoUi,report_id)
 	    	    	
 	    	// cabecalho inicial (canto superior esquerdo) da coluna e da linha apenas
 	    	$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked").attr('type','linha_header');
+	    	//console.log('INCLUIU HEADER',$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked"),$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked th"),data_line_header);
 	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-locked th'	, data_line_header,$event);    	  	
     	}
     	
@@ -678,7 +681,7 @@ function addTargetDisableContext(kendoUi,report_id)
     					}else{
     				    	if(!in_array('DRM',PERFIL_ID_USER)){
 	    						var data_line_header2							=	 menu_context_relation_ship_measure(jsonMeasure);
-	    		        		data_line_header2[data_line_header2.length]	=	{text	: 'REMOVER'		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
+	    		        		data_line_header2[data_line_header2.length]	=	{text	: LNG('REMOVE')		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
 	    		        		// metricas
 	    						context.attachWRS(tag	, data_line_header2,$event,'measure');
     				    	}

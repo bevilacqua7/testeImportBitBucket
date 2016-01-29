@@ -1713,6 +1713,11 @@ function  themeSUM(nameID,arg,wrsParam)
 	}( jQuery ));
  
  
- 
+
+$(function(){
+	addKendoUiColorJQueryGrid();
+});
+
+
  
  

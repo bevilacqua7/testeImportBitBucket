@@ -268,6 +268,7 @@ HTML;
 				$('#report_name').val(reportAtual.KendoUi.TITLE_ABA); // preenche com o nome atual vindo do JS
 				$('#report_auto').prop( "checked", ((reportAtual.KendoUi.REPORT_AUTOLOAD==1)?true:false) );
 				$('#report_share').prop( "checked", ((reportAtual.KendoUi.REPORT_SHARE==1)?true:false) );
+				bloqueia_chars($('#report_name'));
 				// nao retorno os grupos selecionados pois o mesmo nao retorna na query nem no objeto reportAtual ainda
 HTML;
 		// preenche os 'grupos' do formulario com os tipos cadastrados no banco (query passada pelo facioli em 26-08-2015)

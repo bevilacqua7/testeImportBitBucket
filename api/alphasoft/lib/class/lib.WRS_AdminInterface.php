@@ -36,6 +36,12 @@ class WRS_AdminInterface  extends WRS_BASE
 		if(!is_dir(PATH_FILE.$this->classname.DS.'exportFiles')){
 			mkdir(PATH_FILE.$this->classname.DS.'exportFiles', 0777, true);
 		}
+		$scr_field_bloq = <<<HTML
+		<script>
+			$('input[type=text]').each(function(){ bloqueia_chars($(this)); });
+		</script>
+HTML;
+		echo $scr_field_bloq;
 	}
 	
 	public function downloadLink($_registros,$_chavePrimaria,$_param){

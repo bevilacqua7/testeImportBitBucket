@@ -415,11 +415,6 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 	_END('grid_window_modal');
 }
 
-$(function(){
-	addKendoUiColorJQueryGrid();
-});
-
-
 
 /*
  * 
