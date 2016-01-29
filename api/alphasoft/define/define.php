@@ -215,6 +215,9 @@ function WRS_UTF_FILE($data)
 
 function fwrs_replace_attr($value)
 {
+	
+	return md5($value);
+	
 	$repalce		=	array('[',']','.','%'    ,'&',' ',',','(',')','/','#');
 	$sub			=	array('' ,'' ,'' ,'_por_','' ,'' ,'' ,'' ,'' ,'' ,'');
 	return str_replace($repalce,$sub,$value);	

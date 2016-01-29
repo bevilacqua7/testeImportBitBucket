@@ -840,19 +840,31 @@ function insetDragDropEmpry()
 		var notRepeatValueFlag	= 	notRepeatValueFlag_LF	= 	[]; //Contem as informações dentro de cada bloco 
 				
 		$(this).find('li').each(function(){
-				var json 			=	$.parseJSON(base64_decode($(this).attr('json')));
-				var level_full		=	(typeof json == 'object' && $(json).is('[LEVEL_FULL]'))?json.LEVEL_FULL:'';
+
+				
+				
+				
+				var tag_class	=	$(this).attr('tag-class');
+				var get_object	=	$('.ui-layout-pane-east ul').find('.'+tag_class);
+				var json		=	get_object.data('wrs-data');
+				var level_full	=	md5((typeof json == 'object' && $(json).is('[LEVEL_FULL]'))?json.LEVEL_FULL:'');
+				
+				
+				
 				var vvalue			=	$(this).attr('vvalue');
+
+
 				//Verificação apra confirmar a remoção de Filtro para linha ou coluna
 				if($(this).parent().parent().attr('type')!='filtro')
 				{		
-						/*// validacao pelo level-full ao inves do vvalue
+						// validacao pelo level-full ao inves do vvalue
+					/*
 						if(isset(DragValues[vvalue]))
 							{
 								notRepeatValueFlag[vvalue]=	true;
 							}
-						DragValues[vvalue]	=	true;
-						*/
+						DragValues[vvalue]	=	true;*/
+						
 					
 						// validacao pelo level-full ao inves do vvalue
 						if(isset(DragValues_LF[level_full]))
@@ -873,8 +885,9 @@ function insetDragDropEmpry()
 						$(this).remove();
 					}
 				}
+				/*
 				
-				/*// validacao pelo level-full ao inves do vvalue
+				// validacao pelo level-full ao inves do vvalue
 				if(!isset(notRepeatValueFlag[vvalue]))
 				{
 						//PAra não permitir que a estrutura possa ir para a coluna e linhas
@@ -884,8 +897,8 @@ function insetDragDropEmpry()
 						WRS_ALERT(sprintf(LNG('DRAG_DROP_FILE_IN_USER_REMOVE'),vvalue),'warning');
 						$(this).remove();
 					}
-				}
-				*/
+				}*/
+				
 				
 				
 				//Validando repetição em Filtros
@@ -1084,6 +1097,10 @@ function DROP_EVENT( event, ui ,eventReceive)
 		if(api!='wrs') return false;
 	
 		var value		=	toEvent.attr('vvalue');
+		var json 		=	toEvent.data('wrs-data');
+		
+		
+		
 		var insert		=	true;
 
 		var typesDraggable		=	toEvent.attr('type');
@@ -1123,7 +1140,7 @@ function DROP_EVENT( event, ui ,eventReceive)
 									}
 			}; break;
 		}
- 	
+
  	if(cloneTAGWrs!='true')
  	{
  		var flag_alert		=	true;
@@ -1131,7 +1148,19 @@ function DROP_EVENT( event, ui ,eventReceive)
  		
 				whereFoundReceive.find('li').each(function()
 													{
-															if(value==$(this).attr('vvalue')) 
+					
+
+														
+
+					var tag_class	=	$(this).attr('tag-class');
+					var get_object	=	$('.ui-layout-pane-east ul').find('.'+tag_class);
+					var json_current=	get_object.data('wrs-data');
+					
+						
+					
+					
+															//if(value==$(this).attr('vvalue')) 
+															if(json['UNIQUE_FULL']==json_current['UNIQUE_FULL'])
 															{
 																insert=false;
 																if(flag_alert)
@@ -1159,8 +1188,8 @@ function DROP_EVENT( event, ui ,eventReceive)
 	}
 	
 	
-	
-	var json 			=	toEvent.data('wrs-data');
+	//TODO:Removido em 29/01/2016 e inserido na header dessa funcao
+	//var json 			=	toEvent.data('wrs-data');
 	
 
 
@@ -1243,6 +1272,8 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 	 * Aplicando quando vier com CLASS
 	 */
 	
+
+	
 	if(is_array(_values))
 	{
 		
@@ -1268,14 +1299,15 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 				}
 				else
 				{
-					
 					_class	=	substr(_values[x],2,_values[x].length);
-					
 				}
 				
-
+				
 				//var object	=	$(where_find).find('li.'+_class);				 
 				var object	=	$(where_find).find("li:containClass('"+_class+"')"); // alterado para procurar nas classes do objeto (case insensitive)
+				
+				
+
 				
 				
 				if(simples_composto)
@@ -1292,7 +1324,6 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 				{
 					var json 			=	object.data('wrs-data');
 					
-					
 				
 					if(json!=null)
 					{
@@ -1308,8 +1339,12 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 						
 						
 				}
-				
-				DROP_EVENT( 'DIRECT', object,$(_clone));
+  			
+  			
+  			
+  			
+  			
+					DROP_EVENT( 'DIRECT', object,$(_clone));
 
 			}
 	}
@@ -1464,7 +1499,7 @@ function wrs_run_filter()
 	var noactive			=	$(this).attr('noactive');
 		noactive			=	empty(noactive) ? false : true;
 	
-	var aba_active			=	$('.WRS_ABA').find('.active');
+	var aba_active			=	get_aba_active_object();
 	var report_KendoUi		=	aba_active.wrsAbaData('getKendoUi');
 	var history				=	aba_active.wrsAbaData('getHistory');
 	var _report_id			=	report_KendoUi['REPORT_ID'];
@@ -1704,6 +1739,10 @@ function wrs_run_filter()
 					}
 					
 					
+					//Gravando informações do MLC para a primeira consulta
+					aba_active.wrsAbaData('set_first_MLC',{line:request_linha,column:request_coluna, measure:request_metrica});
+					
+					
 					wrs_data_param.LAYOUT_ROWS		=	base64_encode(implode(',',request_linha));
 					wrs_data_param.LAYOUT_COLUMNS	=	base64_encode(implode(',',request_coluna));
 					wrs_data_param.LAYOUT_MEASURES	=	base64_encode(implode(',',request_metrica));
@@ -1941,7 +1980,6 @@ function wrs_run_filter()
 		clean_filters();
 
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
-
 		
 		//AUTO LOAD
 		if($(this).attr('auto_load')=='true')
@@ -1960,7 +1998,6 @@ function wrs_run_filter()
 	}
 	else
 	{
-			
 			//wrs_panel_layout.open('east');
 		
 			$('body').wrsAbas('remove_event_click');
