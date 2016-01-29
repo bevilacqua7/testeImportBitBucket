@@ -249,7 +249,8 @@
 	$language['tpl_layout_remove_sucess'] 				= "Layouts Removidos com sucesso";
 	$language['tpl_layout_remove_error'] 				= "Não foi possivel remover alguns layouts";
 	
-	$language['tpl_layout_options_default'] 				= "Padrão";
+	$language['tpl_layout_options_default'] 			= "Padrão";
+
 	
 	$language['tpl_layout'] 				= "Layouts";
 	$language['tpl_layout_title'] 			= "Salvar Layout";

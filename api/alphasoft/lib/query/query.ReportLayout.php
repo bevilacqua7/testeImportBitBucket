@@ -21,15 +21,20 @@ class QUERY_ReportLayout
 	 * @param unknown $CUBE_ID
 	 * @return string
 	 */
-	public function Get_SSAS_Layouts($CUSTOMER_ID,$USER_CODE,$DATABASE_ID,$CUBE_ID)
+	public function Get_SSAS_Layouts($CUSTOMER_ID,$USER_CODE,$DATABASE_ID,$CUBE_ID,$REPORT_ID=0,$CREATE_TABLE=NULL)
 	{
+	
+	 
+		
 	
 		$query	=	<<<HTML
 							EXEC Get_SSAS_Layouts
 													{$CUSTOMER_ID},
 													'{$USER_CODE}',
 													'{$DATABASE_ID}',
-													'{$CUBE_ID}'
+													'{$CUBE_ID}',
+													 {$REPORT_ID},
+													 {$CREATE_TABLE}	
 	
 HTML;
 		return $query;

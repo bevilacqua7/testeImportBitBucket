@@ -663,6 +663,8 @@ function WRS_PANEL_RELATORIO()
 
 function replace_attr(value)
 {
+	return md5(value);
+	
 	var replace		=	['[',']','.','%'    ,'&',' ',',','(',')','{','}','/','#'];
 	var sub			=	['' ,'' ,'' ,'_por_','' ,'' ,'' ,'' ,'' ,'' ,'' ,'' ,'' ];
 	return str_replace(replace,sub,value);	

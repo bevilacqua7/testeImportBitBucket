@@ -1171,7 +1171,7 @@ var getRequestKendoUiDefault	=	{};
 				delete active_aba;
   				_END('wrsConfigGridDefault::function_click_list_wrs_vision');				
 		
-  				return false;
+  				return true;
   	}
   	
 
