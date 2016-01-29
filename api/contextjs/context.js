@@ -385,6 +385,13 @@ var context = context || (function () {
 			}
 		}
 		
+		
+		
+		if(table_parents.first('div').attr('type')=='data'){			
+			esconde=true;
+		}
+		
+		
 		//Sempre inicia como hide
 		$('#dropdown-' + id).find('.VER_MAPA').addClass('hide');
 		

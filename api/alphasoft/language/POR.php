@@ -200,8 +200,8 @@
 	 * Header das GRID
 	 */
 	$language['GRID_HEADER_OPTION'] 				 	= 	"Opções";
-	$language['GRID_HEADER_OPTION_TOTAL_LINE']		 	=	"Total de Linhas";
-	$language['GRID_HEADER_OPTION_TOTAL_COLUMN']	 	=	"Total Colunas";
+	$language['GRID_HEADER_OPTION_TOTAL_LINE']		 	=	"Linhas";
+	$language['GRID_HEADER_OPTION_TOTAL_COLUMN']	 	=	"Colunas";
 	$language['GRID_HEADER_OPTION_TOTAL_SUMARIZA']	 	=	"Numeros Resumidos";
 	$language['GRID_HEADER_OPTION_TOTAL_LINE_COLOR']	=	"Linhas Intercaladas";
 	$language['GRID_HEADER_OPTION_ORDER_COLUMN']	 	=	"Inverter Colunas";
@@ -223,8 +223,9 @@
 	$language['GRID_HEADER_SEE_CHART']	=	"Gráfico";
 	$language['GRID_HEADER_SEE_MAP']	=	"Mapa";
 	
-	$language['GRID_HEADER_TITLE_DADOS']		=	"Dados";
-	$language['GRID_HEADER_TITLE_EXIBITION']	=	"Exibição";
+	$language['GRID_HEADER_TITLE_DADOS']		=	"DADOS";
+	$language['GRID_HEADER_TITLE_TOTAL']		=	"TOTAL";
+	$language['GRID_HEADER_TITLE_EXIBITION']	=	"EXIBIÇÃO";
 		
 	$language['WHAT_SEARCH'] = "O que procura?";
 	

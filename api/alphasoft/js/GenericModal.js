@@ -207,3 +207,66 @@ function carrega_report_generic_modal(arg)
 	_ONLY('carrega_report_generic_modal:Empty');
 	console.log('ARG',arg);
 }
+
+
+/**
+ * Quando finalizou de construir os elemtnos da GRid
+ * @param arg
+ */
+
+function ajustaTags(arr){
+	_START('ajustaTags');
+	var ret=[];
+	
+	if(Array.isArray(arr))
+	{
+		if(arr.length>0)
+		{		
+			for(var nova in arr)
+			{
+				if(arr[nova].trim()!='')
+				{
+					var s='__'+replace_attr(arr[nova]);
+					ret.push(s);
+				}
+			}
+		}
+	}
+	else
+	{
+		ret = '__'+replace_attr(arr);
+	}
+	
+	_END('ajustaTags');
+	return ret;
+}
+
+function callback_check_line_generic_modal(data,tabela){
+	_START('callback_check_line_generic_modal');
+	var attr = data.visao_atual;
+	if (typeof attr !== typeof undefined && attr !== false) {
+		if(data.obj_sel.hasClass('selecao_icon')){
+			data.obj_sel.removeClass('selecao_icon');
+		}else{
+			data.obj_sel.addClass('selecao_icon');
+		}
+	}else if(typeof data == 'object' && tabela!=undefined && tabela!=''){	
+		var linha=$('#'+tabela+' .k-grid-content table').find('tr')[parseInt(data.ROW_ID)-1];
+		var check = !$(linha).find('td input.checkline').prop('checked');
+		$(linha).find('td input.checkline').prop('checked',check);
+		$('#'+tabela+' .k-grid-header table').find('input.checkline').prop('checked',false); // qualquer alteracao na linha, desmarca o checkall da coluna
+		if($($(event.target).context).hasClass('checkline')){ // se o click vier do checkbox
+			$($(event.target).context).prop('checked',!check);
+		}
+	}
+	_END('callback_check_line_generic_modal');
+}
+
+function trataCheckColuna(obj,tabela){
+	_START('trataCheckColuna');
+	var checkColuna = obj.prop('checked');
+	$('#'+tabela+' .k-grid-content table').find('tr').each(function(){
+		$(this).find('td input.checkline').prop('checked',checkColuna);
+	});
+	_END('trataCheckColuna');
+}

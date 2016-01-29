@@ -18,6 +18,7 @@ $GRID_HEADER_SEE_CHART						=	LNG('GRID_HEADER_SEE_CHART');
 $GRID_HEADER_SEE_MAP						=	LNG('GRID_HEADER_SEE_MAP');
 $GRID_HEADER_TITLE_EXIBITION				=	LNG('GRID_HEADER_TITLE_EXIBITION');
 $GRID_HEADER_TITLE_DADOS					=	LNG('GRID_HEADER_TITLE_DADOS');
+$GRID_HEADER_TITLE_TOTAL					=	LNG('GRID_HEADER_TITLE_TOTAL');
 $GRID_HEADER_OPTION_ORDER_COLUMN			=  	LNG('GRID_HEADER_OPTION_ORDER_COLUMN');
 $BTN_SAIR									=	LNG('BTN_SAIR');
 $BTN_SAVE									=	LNG('BTN_SAVE');
@@ -141,12 +142,20 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						  		</form>
 					  		</li>
 					  		<li class="divider"></li>
-					  		<li><h4>{$GRID_HEADER_TITLE_DADOS}</h4></li>
+					  		
+						    <li><h4>{$GRID_HEADER_TITLE_TOTAL}</h4></li>
 					  		<li>
 						  		<form>
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" dependence="DRILL_HIERARQUIA_LINHA"  name="ALL_ROWS" > {$GRID_HEADER_OPTION_TOTAL_LINE}</label></div>
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="ALL_COLS" > {$GRID_HEADER_OPTION_TOTAL_COLUMN}</label></div>
-						  				<div class="checkbox"><label><input type="checkbox" value="1" name="ORDER_COLUMN"> {$GRID_HEADER_OPTION_ORDER_COLUMN}</label></div>
+						  		</form>
+					  		</li>
+					  		<li class="divider"></li>
+					  		
+					  		<li><h4>{$GRID_HEADER_TITLE_DADOS}</h4></li>
+					  		<li>
+						  		<form>
+						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="ORDER_COLUMN"> {$GRID_HEADER_OPTION_ORDER_COLUMN}</label></div>
 						  				<div class="checkbox"><label><input type="checkbox" value="1" name="SUMARIZA"> {$GRID_HEADER_OPTION_TOTAL_SUMARIZA}</label></div>
 						  				<div class="checkbox"><label><input type="checkbox" value="1" name="DRILL_HIERARQUIA_LINHA"> {$GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA}</label></div>
 						  		</form>

@@ -57,10 +57,11 @@ $(document).ready(function(){
 	
 	
 	
-	$('.menu_administrativo_itens').hide();
 	
 	$('.menuADM_link').click(function(){
-		$('.menu_administrativo_itens, #fullwidth, #fullwidth_ds').toggle();
+		if(window.location.href.indexOf('//alphaweb')>-1){ // exibe o menu somente em ambiente de desenvolvimento
+			$('.menu_administrativo_itens, #fullwidth, #fullwidth_ds, .bt_config_templates').fadeToggle();
+		}
 	});
 
 	$('.menu_cadastro').click(function(){
