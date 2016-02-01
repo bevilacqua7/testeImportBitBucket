@@ -399,6 +399,9 @@ function get_all_jobs()
 							}
 							
 					delete _data;
+					
+					
+					__show_modal();
 						
 					_END('managerJOB::__start_job');	
 			}
@@ -447,6 +450,20 @@ function get_all_jobs()
 				
 			}
 			
+			var __show_modal		=	 function()
+			{
+				var _data		=	GetData();
+				
+				
+
+
+				try{
+					$(_data.close_modal).addClass('hide');				
+					$(_data.cancel_job).removeClass('hide');
+				}catch(e){}
+				
+				$('.modal-manager-job').removeClass('hide');
+			}
 			
 			
 			var RequestProccessCancelJOB	=	 function(data)
@@ -1084,7 +1101,8 @@ function get_all_jobs()
 				data					:	GetData,
 				remove_aba_cancel_job	:	__remove_aba_cancel_job,
 				getKeys					:	__getKeys,
-				setKeys					:	__setKeys
+				setKeys					:	__setKeys,
+				show_modal				:	__show_modal
 		};
 		
 		 

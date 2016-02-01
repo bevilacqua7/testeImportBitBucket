@@ -1160,16 +1160,21 @@ function DROP_EVENT( event, ui ,eventReceive)
 					
 					
 															//if(value==$(this).attr('vvalue')) 
-															if(json['UNIQUE_FULL']==json_current['UNIQUE_FULL'])
-															{
-																insert=false;
-																if(flag_alert)
+															try{
+																if(json['UNIQUE_FULL']==json_current['UNIQUE_FULL'])
 																{
-																		WRS_ALERT(sprintf(LNG('DRAG_DROP_FILE_IN_USER'),value),'error');
-																		flag_alert=false; //Não repete a mensagem
+																	insert=false;
+																	if(flag_alert)
+																	{
+																			WRS_ALERT(sprintf(LNG('DRAG_DROP_FILE_IN_USER'),value),'error');
+																			flag_alert=false; //Não repete a mensagem
+																	}
 																}
-															}
+															}catch(e){ //pode não existir o UNIQUE_FULL
+																}
+															
 										  			});
+						
  	}
 			
  	
