@@ -847,25 +847,18 @@ function insetDragDropEmpry()
 				var tag_class	=	$(this).attr('tag-class');
 				var get_object	=	$('.ui-layout-pane-east ul').find('.'+tag_class);
 				var json		=	get_object.data('wrs-data');
-				var level_full	=	md5((typeof json == 'object' && $(json).is('[LEVEL_FULL]'))?json.LEVEL_FULL:'');
+				var level_full	=	tag_class;//md5((typeof json == 'object' && $(json).is('[LEVEL_FULL]'))?json.LEVEL_FULL:'');
 				
 				
 				
 				var vvalue			=	$(this).attr('vvalue');
 
+				
+				
 
 				//Verificação apra confirmar a remoção de Filtro para linha ou coluna
 				if($(this).parent().parent().attr('type')!='filtro')
 				{		
-						// validacao pelo level-full ao inves do vvalue
-					/*
-						if(isset(DragValues[vvalue]))
-							{
-								notRepeatValueFlag[vvalue]=	true;
-							}
-						DragValues[vvalue]	=	true;*/
-						
-					
 						// validacao pelo level-full ao inves do vvalue
 						if(isset(DragValues_LF[level_full]))
 						{
@@ -874,32 +867,23 @@ function insetDragDropEmpry()
 						DragValues_LF[level_full]	=	true;
 				}
 				
+				
 				// validacao pelo level-full ao inves do vvalue
 				if(!isset(notRepeatValueFlag_LF[level_full]))
 				{
 						//PAra não permitir que a estrutura possa ir para a coluna e linhas
 						notRepeatValueFlag_LF[level_full]=	true;
 				}else{
-					if(!empty(level_full)){
-						WRS_ALERT(sprintf(LNG('DRAG_DROP_FILE_IN_USER_REMOVE'),vvalue),'warning');
-						$(this).remove();
+					if(!isEmpty(level_full))
+					{
+						if(!$(this).hasClass('.ui-sortable-helper'))
+						{
+							
+							WRS_ALERT(sprintf(LNG('DRAG_DROP_FILE_IN_USER_REMOVE'),vvalue),'warning');
+							$(this).remove();
+						}
 					}
 				}
-				/*
-				
-				// validacao pelo level-full ao inves do vvalue
-				if(!isset(notRepeatValueFlag[vvalue]))
-				{
-						//PAra não permitir que a estrutura possa ir para a coluna e linhas
-						notRepeatValueFlag[vvalue]=	true;
-				}else{
-					if(!empty(vvalue)){
-						WRS_ALERT(sprintf(LNG('DRAG_DROP_FILE_IN_USER_REMOVE'),vvalue),'warning');
-						$(this).remove();
-					}
-				}*/
-				
-				
 				
 				//Validando repetição em Filtros
 				
@@ -1149,16 +1133,9 @@ function DROP_EVENT( event, ui ,eventReceive)
 				whereFoundReceive.find('li').each(function()
 													{
 					
-
-														
-
 					var tag_class	=	$(this).attr('tag-class');
 					var get_object	=	$('.ui-layout-pane-east ul').find('.'+tag_class);
 					var json_current=	get_object.data('wrs-data');
-					
-						
-					
-					
 															//if(value==$(this).attr('vvalue')) 
 															try{
 																if(json['UNIQUE_FULL']==json_current['UNIQUE_FULL'])
