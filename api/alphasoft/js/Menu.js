@@ -4,6 +4,8 @@ $(document).ready(function(){
 	$('.wrs_open_save').unbind('click').click(function() {
 		
 		var btn_salvar_extra_action_validator = function(data){ // validacoes extra antes da acao principal do botao padrao
+			
+			
 		_START('btn_salvar_extra_action_validator');
 			var retorno_padrao = true;
 			if(typeof data=='object' && data.event=='save'){ 
@@ -45,6 +47,7 @@ $(document).ready(function(){
 				'event'			:	'openModalSave',
 				'bt_salvar_extra_action_validator'	: btn_salvar_extra_action_validator  // validacoes extra antes da acao principal do botao padrao
 			};
+		
 		var modal_save = $(this).modalGeneric(_param);
 	});
 

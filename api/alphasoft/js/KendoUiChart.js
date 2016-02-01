@@ -1249,7 +1249,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 								var cCHART				=	{};
 
 								var chart_configLegend 	=	bodyConfigChart.find('.legend-types-config').is(':checked');
-								
+								var active_aba			=	get_aba_active_kendoUi();
 								var legend 	=	{
 													position	:	bodyConfigChart.find('.legend-types:checked').val(),
 													visible		: 	bodyConfigChart.find('.LEGEND_WRS').prop('checked')
@@ -1299,6 +1299,20 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							  			saveHistory['CHART']	=	chartParam;
 							  			saveHistoryEvents(saveHistory,infoDefault['REPORT_ID']);
 
+							  			//forçando o resize do window para quando mudar opções do gráfico
+							  			//isso de deve pois ao aplicar o gráfico tenho que deixa-lo grande e depois diminuir para as opções selecionadas
+							  			//$(window).trigger('resize');
+							  	
+							  		//TODO:	
+							  		//Para reforçar e renovar os elementos quando for solicitado a troca de página 
+							  			
+							  		var active_aba_Select	=	active_aba.WINDOW;
+							  		
+							  		if(active_aba_Select!='chart')
+							  			{
+							  				NAV.find('.wrs_tools_options_window a[wrs-data='+active_aba_Select+']').trigger('click');
+							  			}
+							  			
 							  			
 								_END('WRSKendoUiChart::loadTypesMeasuresAction::toRunConfigChartWrs');	
 							};

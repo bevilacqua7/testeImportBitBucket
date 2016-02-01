@@ -20,39 +20,47 @@ $(function(){
  * Considera que existem botoes com as class: toActive, toMeasure, toAllActive, toAllMeasure
  * e tamb�m as selects multiples com as class: wrs-measures e wrs-measures-receive
  */
-function select_work($id_div){
+function select_work($id_div)
+{
+	/* TODO: Melhoras opções abaixo*/	 
 	$('#'+$id_div).find('.toActive').unbind('click').click(function(){
 		$('#'+$id_div).find('.wrs-measures :selected').each(function(i, selected){ 
 			$(this).remove().appendTo($('#'+$id_div).find('.wrs-measures-receive'));
 		});
 		$('#'+$id_div).find('.wrs-measures-receive :selected').removeAttr("selected");
 	});
+	
 	$('#'+$id_div).find('.toAllActive').unbind('click').click(function(){
 		$('#'+$id_div).find('.wrs-measures option').each(function(i, selected){ 
 			$(this).remove().appendTo($('#'+$id_div).find('.wrs-measures-receive'));
 		});
 		$('#'+$id_div).find('.wrs-measures-receive :selected').removeAttr("selected");
 	});
+	
 	$('#'+$id_div).find('.toMeasure').unbind('click').click(function(){
 		$('#'+$id_div).find('.wrs-measures-receive :selected').each(function(i, selected){ 
 			$(this).remove().appendTo($('#'+$id_div).find('.wrs-measures'));
 		});
 		$('#'+$id_div).find('.wrs-measures :selected').removeAttr("selected");
 	});
+	
 	$('#'+$id_div).find('.toAllMeasure').unbind('click').click(function(){
 		$('#'+$id_div).find('.wrs-measures-receive option').each(function(i, selected){ 
 			$(this).remove().appendTo($('#'+$id_div).find('.wrs-measures'));
 		});
 		$('#'+$id_div).find('.wrs-measures :selected').removeAttr("selected");
 	});
+
 	$('#'+$id_div).find('.wrs-measures').unbind('dblclick').bind('dblclick',function(){
 		$("option:selected", this).remove().appendTo($('#'+$id_div).find('.wrs-measures-receive'));
 		$('#'+$id_div).find('.wrs-measures-receive :selected').removeAttr("selected");
 	});
+	
 	$('#'+$id_div).find('.wrs-measures-receive').unbind('dblclick').bind('dblclick',function(){
 		$("option:selected", this).remove().appendTo($('#'+$id_div).find('.wrs-measures'));
 		$('#'+$id_div).find('.wrs-measures :selected').removeAttr("selected");
 	});
+	
 }
 
 </script>

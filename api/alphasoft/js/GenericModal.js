@@ -93,6 +93,7 @@ $.fn.extend({
 			
 		var _runCalll	=	 function(_options)
 			{
+
 				_START('modalGeneric::_runCalll');
 				_options	=	$.extend( {}, _options, _options.extraParam );
 				janela_modal_body.html('Carregando...');				
