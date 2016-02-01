@@ -373,10 +373,10 @@ var context = context || (function () {
 		
 		
 		if(table_parents.first('div').attr('type')=='coluna_header_line'){
-			var qtde_trs_primeiro 		= table_parents.first('div').find('table:first').find('tr:first').find('th').length;
-			var qtde_trs_headers_linhas = table_parents.first('div').find('table:first').find('tr:first').next().find('th').length;
+			var qtde_trs_primeiro 		= table_parents.first('div').find('table:first').find('tr:last').prev().find('th').length;
+			var qtde_trs_headers_linhas = table_parents.first('div').find('table:first').find('tr:last').find('th').length;
 			var qtde_colunas_por_secao	= qtde_trs_headers_linhas/qtde_trs_primeiro;
-			if(qtde_colunas_por_secao<=1){
+			if(qtde_colunas_por_secao<=1 || !$(this).parents('tr:first').is(table_parents.first('div').find('table:first').find('tr:last'))){ // se existe mais de uma metrica por coluna pai OU a linha da metrica clicada não é a ultima linha (somente de metricas - pois nao deve aparecer remover nas linhas de cima, dos atributos)
 				esconde=true;
 			}
 		}
