@@ -137,7 +137,8 @@ class SQL_SERVER
 		}	
 			
 	//	$_data			=	date('H:i:s d-m-Y').' '.$data.PHP_EOL;
-		$_data			=	date('H:i:s d-m-Y').' | '.$data.PHP_EOL;
+	//	$_data			=	date('H:i:s d-m-Y').' | '.$data.PHP_EOL;
+		$_data			=	PHP_EOL.'-- '.date('H:i:s d-m-Y').PHP_EOL.$data.PHP_EOL;
 		$_data			.=	str_repeat("-", 50).PHP_EOL;
 		
 		$handle 		= 	fopen($file_path,"a+");
