@@ -117,7 +117,7 @@ class WRS_REPORT  extends  WRS_USER
  		$REPORT_FORMULAS 	= '';
  		$REPORT_FILTER 		= '';
  		$REPORT_FLAG 		= '';
- 		$LAYOUT_SHARE 		= (is_array($layouts)?implode(PARAMETERS_SEPARATORS('vir'),$layouts):$layouts); // TODO: ver onde salvar estes valores
+ 		$LAYOUT_SHARE 		= (is_array($layouts)?implode(PARAMETERS_SEPARATORS('vir'),$layouts):$layouts); 
  		$USER_TYPE 			= (is_array($grupos)?implode(PARAMETERS_SEPARATORS('vir'),$grupos):$grupos);
  		$REPORT_SHARE 		= fwrs_request('report_share')=='1'?1:0;
  		$REPORT_AUTOLOAD 	= fwrs_request('report_auto')=='1'?1:0;

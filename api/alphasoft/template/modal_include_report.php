@@ -56,7 +56,7 @@ $HTML	=	<<<HTML
 				}
 				
 				</script>
-				<form id="insert_report" name="insert_report">
+				<form id="insert_report" class="modal_report" name="insert_report">
 				
 								<label for="report_name">Nome</label><br>
 									<input type="text" id="report_name" name="report_name" value="{$nome_report}" style="width: 768px;">	

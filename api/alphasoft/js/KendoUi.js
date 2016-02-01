@@ -845,16 +845,20 @@ function onDataBound(arg)
 		 */
 		var columns_width_data		=	 kendoData.dataSource._wrs_request_data.columns_size;
 		var column_frozem_fixed		=	null;
+		var word_width				=	'A';
+		var wrs_aba_active			=	get_aba_active_kendoUi();
+		
 		
 		try{
 			column_frozem_fixed	=	kendoData.wrs_frozen_data.field;
 		}catch(e){}
 
+		
 		if(!isEmpty(columns_width_data))
 			{
 				var colElement		=	 {
 													count_column	:	0,
-													size_word		:	$("<div/>").text('Q').textWidth(),
+													size_word		:	$("<div/>").text(word_width).textWidth(),
 													padding_left	:	8
 										};
 				
@@ -862,19 +866,22 @@ function onDataBound(arg)
 
 
 				var is_button_plus	=	$(nameID+' .wrstelerikButtonHeader[rel=plus]').is(":visible");
+				
 
+				
 				if(is_button_plus==false)
 					{
 						column_frozem_fixed	=	 null;
+
 					}
 				
-				
+			 
 				for(var lineNameCol in columns_width_data)
 					{
 					
 							var _width		=	columns_width_data[lineNameCol];
-								_width		=	(_width*colElement.size_word)+colElement.padding_left;
-							
+								_width		=	(_width*colElement.size_word)+colElement.padding_left;						
+						
 								WRSSresize(	nameID,
 											colElement.count_column, 
 											_width,
@@ -882,6 +889,7 @@ function onDataBound(arg)
 											lineNameCol,
 											column_frozem_fixed); 
 							colElement.count_column++;
+							
 					}
 					
 					delete colElement;
@@ -891,37 +899,45 @@ function onDataBound(arg)
 		//END
 		
 	
-	
-
+	/*
+	 * TODO:Removido em 01/02/2016 O funcionamento parece desnecessário pois já aplica o tamanho na linha acima isso para o teste no linha de totais consolidades e para o brick está normal tbm
+		//checagem apenas para o hide frozem 
 	if(!isEmpty(columns_width_data))
 		{
 			var colElement		=	 {
 												count_column	:	0,
-												size_word		:	$("<div/>").text('Q').textWidth(),
+												size_word		:	$("<div/>").text(word_width).textWidth(),
 												padding_left	:	8
 									};
 			
 			var frozen			=	kendoData.dataSource.size_frozen;
 			
 			var hasHiddenField=false;
-			for(ii in kendoData.dataSource.options.fields){
+			
+			for(var ii in kendoData.dataSource.options.fields){
 				if(kendoData.dataSource.options.fields[ii].hide){
 					hasHiddenField=true;
 				}
 			}
-			WRS_CONSOLE('tem campo escondido - latitude?',hasHiddenField);
+			
+
+			
+//			WRS_CONSOLE('tem campo escondido - latitude?',hasHiddenField);
 			for(var lineNameCol in columns_width_data)
 				{
 				
 						var _width		=	columns_width_data[lineNameCol];
 							_width		=	(_width*colElement.size_word)+colElement.padding_left;
 						
+
+							
+							
 							WRSSresize(nameID,colElement.count_column, _width,frozen,hasHiddenField); 
 						colElement.count_column++;
 				}
 				
 				delete colElement;
-		}
+		}*/
 	
 }
 
@@ -947,6 +963,7 @@ function onDataBound(arg)
 				}
 				else
 				{
+
 					//Frozem
 					tableCols	=	{header:'.k-grid-header-locked',data:'.k-grid-content-locked'};
 					_idx		=	$(gridId+' .k-grid-header-locked tr:last-child th[data-field="'+nameCol+'"]').index();
@@ -955,13 +972,15 @@ function onDataBound(arg)
 			 
 		
 		//Mantem o tamanho correto da estrutura quando for modificado o plus e minus do total
-		if(column_frozem_fixed!=null)
-			{
-				if(nameCol==column_frozem_fixed){
-					_idx	=	1;
-				}
-			}
 				
+	
+			if(column_frozem_fixed!=null)
+				{
+					if(nameCol==column_frozem_fixed){
+						_idx	=	1;
+					}
+				}
+			
 		
 		$(gridId+" "+tableCols.data) //content
         .find("colgroup col")
