@@ -12,6 +12,7 @@
 includeCLASS('WRS_USER');
 includeQUERY('WRS_PANEL');
 includeQUERY('WRS_REPORT');
+includeQUERY('ReportLayout');
 includeQUERY('WRS_MANAGE_PARAM');
 
 class WRS_REPORT  extends  WRS_USER
@@ -20,12 +21,17 @@ class WRS_REPORT  extends  WRS_USER
 	private $event			=	NULL;
 	private $paran_query	=	NULL;
 	private $cube			=	array();
-	
+
 	/**
-	 * 
+	 *
 	 * @var QUERY_WRS_REPORT
 	 */
 	private $_query			=	NULL;
+	/**
+	 * 
+	 * @var QUERY_WRS_LAYOUT
+	 */
+	private $_query_layout	=	NULL;
 	
 	public function run($event,$paran_query,$cube_s)
 	{		
@@ -36,6 +42,7 @@ class WRS_REPORT  extends  WRS_USER
 		$cubes				=	WRS::GET_SSAS_USER();
 		$this->cube			=	$cubes[$cube_s];
 		$this->_query		=	new QUERY_WRS_REPORT();
+		$this->_query_layout=	new QUERY_ReportLayout();
 
 		if(!empty($this->event))
 		{
@@ -94,11 +101,11 @@ class WRS_REPORT  extends  WRS_USER
  				{
  					if(count($dadosJs->filter_selected->full)>0 && trim($dadosJs->filter_selected->full[$pos]->data)!='')
  					{
- 						$arr_filtros_sel[]	=	$filtro."(_,_)".$dadosJs->filter_selected->full[$pos]->data;
+ 						$arr_filtros_sel[]	=	$filtro.PARAMETERS_SEPARATORS('vir').$dadosJs->filter_selected->full[$pos]->data;
  					}
  				}
  				
- 				$FILTERS_VALUES = implode("(_|_)",$arr_filtros_sel);
+ 				$FILTERS_VALUES = implode(PARAMETERS_SEPARATORS('pipe'),$arr_filtros_sel);
  				
  			}
  		} 		
@@ -110,8 +117,8 @@ class WRS_REPORT  extends  WRS_USER
  		$REPORT_FORMULAS 	= '';
  		$REPORT_FILTER 		= '';
  		$REPORT_FLAG 		= '';
- 		$LAYOUT_SHARE 		= '';//(is_array($layouts)?implode("(_,_)",$layouts):$layouts); // TODO: ver onde salvar estes valores
- 		$USER_TYPE 			= (is_array($grupos)?implode("(_,_)",$grupos):$grupos);
+ 		$LAYOUT_SHARE 		= (is_array($layouts)?implode(PARAMETERS_SEPARATORS('vir'),$layouts):$layouts); // TODO: ver onde salvar estes valores
+ 		$USER_TYPE 			= (is_array($grupos)?implode(PARAMETERS_SEPARATORS('vir'),$grupos):$grupos);
  		$REPORT_SHARE 		= fwrs_request('report_share')=='1'?1:0;
  		$REPORT_AUTOLOAD 	= fwrs_request('report_auto')=='1'?1:0;
  		
@@ -189,17 +196,43 @@ HTML;
 			default: return $html;			
 		}
 	}
-	
-	private function getQuerySelectReports(){
 
+	private function getQuerySelectReports(){
+	
 		$cube_id		=	fwrs_remove_colchete($this->cube['CUBE_ID']);
 		$database_id	=	fwrs_remove_colchete($this->cube['DATABASE_ID']);
-		
+	
 		$user			=	WRS::INFO_SSAS_LOGIN();
-		
+	
 		$sql			=	$this->_query->Get_SSAS_Reports($user['CUSTOMER_ID'], $user['USER_CODE'], $user['PERFIL_ID'], $database_id, $cube_id);
-		
+	
 		return $sql;
+	
+	}
+	
+	private function getQueryLayouts(){
+		
+		$sql	=	$this->_query_layout->Get_SSAS_Layouts(WRS::CUSTOMER_ID(), WRS::USER_CODE(), $this->cube['DATABASE_ID'], $this->cube['CUBE_ID'],0,0);
+		return $sql;
+		
+	}
+	
+	private function getLayoutListObjects(){
+		$query	=	$this->query($this->getQueryLayouts());
+		
+		if(!$this->num_rows($query)) return NULL;
+		
+	
+		$_result		=	 $query;
+		$array_result	=	array();
+		if($this->num_rows($_result)>0){
+			while($res = $this->fetch_array($_result)){
+				$array_result[]=$res;
+			}
+			return $array_result;
+		}else{
+			return false;
+		}
 		
 	}
 		
@@ -258,44 +291,63 @@ HTML;
 	
 	public function openModalSave()
 	{
-		$dadosJs			= json_decode(base64_decode(fwrs_request('dadosJs')));
+		$dadosJs			= 	json_decode(base64_decode(fwrs_request('dadosJs')));
+		$nome_report		=	'report_name';		
+		
 		// injeta as variaveis de ambiente (configuracao atual) no formulario para a inclusao no banco
-		$JS	=	<<<HTML
+		$EXTRA_SCRIPT	=	<<<HTML
 				var reportAtual = getLoadReport();
 				WRS_CONSOLE('atual',reportAtual);
-				var input	=	 $('<input/>',{name:"dadosJs",type:'text', value:base64_encode(json_encode(reportAtual))}).css('display','none');
+				var input	=	 $('<input/>',{name:"dadosJs",type:'hidden', value:base64_encode(json_encode(reportAtual))}).css('display','none');
 				$('#insert_report').append(input);
 				$('#report_name').val(reportAtual.KendoUi.TITLE_ABA); // preenche com o nome atual vindo do JS
 				$('#report_auto').prop( "checked", ((reportAtual.KendoUi.REPORT_AUTOLOAD==1)?true:false) );
 				$('#report_share').prop( "checked", ((reportAtual.KendoUi.REPORT_SHARE==1)?true:false) );
-				bloqueia_chars($('#report_name'));
 				// nao retorno os grupos selecionados pois o mesmo nao retorna na query nem no objeto reportAtual ainda
+				select_work($('#select1'));
+				select_work($('#select2'));
 HTML;
+		
+		$combo	 		= 	<<<COMBO
+				<option value="%VAL%" %SEL%>%LAB%</option>
+COMBO;
+				
 		// preenche os 'grupos' do formulario com os tipos cadastrados no banco (query passada pelo facioli em 26-08-2015)
-		$user			=	WRS::INFO_SSAS_LOGIN();		
-		$sql			=	$this->_query->Get_SSAS_Reports_Groups($user['CUSTOMER_ID']);
-		$query			=	$this->query($sql);
-		$tipos=array();
-		while($res			=	$this->fetch_array($query)){
-			$tipos[]=$res['USER_TYPE'];
+		$user				=	WRS::INFO_SSAS_LOGIN();		
+		$sql				=	$this->_query->Get_SSAS_Reports_Groups($user['CUSTOMER_ID']);
+		$query				=	$this->query($sql);
+		$tipos				=	array();
+		$combo_grupos		=	'';
+		$combo_grupos_sel	=	'';
+		/*
+		 * TODO: preencher os selecionados
+		 */
+		if($this->num_rows($query)>0){
+			while($res			=	$this->fetch_array($query)){
+				$combo_grupos.=str_replace(array('%VAL%','%SEL%','%LAB%'),array($res['USER_TYPE'],'',$res['USER_TYPE']),$combo);
+			}
 		}
-		$JS2='';
-		foreach($tipos as $nome){
-			$JS2.= "\n$('#select2').find('.wrs-measures').append($('<option/>').html('".$nome."').val('".$nome."'));
-					";
+
+		// preenche os 'layouts' do formulario com os tipos cadastrados no banco (query extraida da tela de layouts que ja existe)		
+		$listaLayouts 		= 	$this->getLayoutListObjects();
+		$combo_layouts		=	'';
+		$combo_layouts_sel	=	'';
+		if($listaLayouts){
+			foreach($listaLayouts as $objLayout){				
+				if($objLayout['LAYOUT_SHARE']!='1'){			
+					if($objLayout['REPORT_ID']=='1'){
+						$combo_layouts_sel.=str_replace(array('%VAL%','%SEL%','%LAB%'),array($objLayout['LAYOUT_ID'],'',$objLayout['LAYOUT_DESC']),$combo);
+					}else{
+						$combo_layouts.=str_replace(array('%VAL%','%SEL%','%LAB%'),array($objLayout['LAYOUT_ID'],'',$objLayout['LAYOUT_DESC']),$combo);
+					}
+				}
+			}
 		}
-		echo fwrs_javascript($JS);
-		echo fwrs_javascript($JS2);
 		
-		$nome_report='report_name';
-		
-		include PATH_TEMPLATE.'modal_include_report.php';
-		exit();
+		include PATH_TEMPLATE.'modal_include_report.php';		
+		echo $HTML;
 		
 	}
-	
-	 
-
 	
 	
 }

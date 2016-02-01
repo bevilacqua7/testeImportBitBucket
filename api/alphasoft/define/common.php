@@ -15,6 +15,26 @@ define('WRS_TEMP_RAND',rand(0,99999999999999));
  */
 
 
+function PARAMETERS_SEPARATORS($key)
+{
+
+	
+	$local = array(
+			'vir'	=>'(_,_)',
+			'pipe'	=>'(_|_)'
+	);
+	
+	
+	if(array_key_exists($key, $local))
+	{
+		return $local[$key];
+	}
+	
+		return false;
+	
+
+}
+
 /**
  * Debug 
  * @param string $texto

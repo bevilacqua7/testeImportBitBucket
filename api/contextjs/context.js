@@ -348,7 +348,7 @@ var context = context || (function () {
 		var esconde=false;			
 
 		$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
-		
+
 		if(table_parents.attr('type')=='linha_header')
 			{	
 					table_parents		=	table_parents.find('table:first').find('tr');
@@ -391,7 +391,7 @@ var context = context || (function () {
 		
 		
 		
-		if(table_parents.first('div').attr('type')=='data'){			
+		if(table_parents.first('div').attr('type')=='data' || table_parents.first('div').attr('type')=='linha'){			
 			esconde=true;
 		}
 		
