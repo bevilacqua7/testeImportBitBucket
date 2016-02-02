@@ -17,6 +17,16 @@ var words_restrict	=
 };
 
 
+//funcao recursiva para encontrar o pai
+function find_parent_class(object,_class)
+{
+	if(object.hasClass(_class)==true) return object;
+	
+	return find_parent_class(object.parent(),_class);
+}
+
+
+
 var RAND_TOKEN	=	js_rand(0,9999999999999);
 	include_js('ThreadJobManager');
 	include_js('Layouts');
@@ -1289,21 +1299,25 @@ function sumarizaValor(valor)
 		_value_limit	=	16;
 		_WORD			=	'T';
 	}
+	
 	else if(valor>1000000000000)
 	{
 		_value_limit	=	12;
 		_WORD			=	'G';
 	}
+	
 	else if(valor>1000000000)
 	{
 		_value_limit	=	8;
 		_WORD			=	'M';
 	}
+	
 	else if(valor>1000000)
 	{
 		_value_limit	=	4;
 		_WORD			=	'K';
 	}
+	
 	
 	if(_value>200 || _value<-200)
 	{

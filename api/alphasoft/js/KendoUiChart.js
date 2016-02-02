@@ -352,6 +352,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			var ActiveDefault	=	'line';
 			var tmpTotalLine	=	[];
 			
+			
 
 			var gaugeOptions	=	{data: [],min:0,max:0};
 			
@@ -1114,16 +1115,17 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						var bodyConfigChart			=	$('.chart-config-body');
 						var measures				=	bodyConfigChart.find('.wrs-measures');
 						var measures_receive		=	bodyConfigChart.find('.wrs-measures-receive');
-						
+
 						/*
 						 * TODO:COmentado em 11/09/2015 
 						 */
 //							if(GRID.attr('chart-wrs')=='true') return true;
 						
+
 							measures.find('option').remove();
 							measures_receive.find('option').remove();
 							
-							for(lineChartTitles in chartTitles)
+							for(var lineChartTitles in chartTitles)
 							{
 								//verificando se já existe essa informação 
 								var _json		=	'';
@@ -1143,6 +1145,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 
 								to_add.append($('<option/>',{'json':_json,'value':lineChartTitles,'html':chartTitles[lineChartTitles]}));
 							}
+							
 							
 							var disableInputBySize	=	 function(_event){
 								_START('WRSKendoUiChart::loadTypesMeasuresAction::disableInputBySize');
@@ -1576,13 +1579,19 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					
 
 					
-					if(strpos(header.tb_field,'[LATITUDE]'))
-						{
+
+					
+					//if(strpos(header.tb_field,'[LATITUDE]'))
+					if(header.map=='[LATITUDE]')
+					{
 							key		=	$(this).parent().index()+'_'+(index-1);
-						}
+					}
 					
 					columnToLabel	=	headerIndex[key].field ;
 					titleFrozen		=	headerIndex[key].title ;
+					
+					
+					
 					ChartTitle[0]	=	titleFrozen;
 					
 					
@@ -1592,6 +1601,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							ChartTitle[1]	=	titleHigth;
 					}
 					
+					
+	
 					
 					
 						
@@ -2379,7 +2390,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 										
 										headerIndex['chart']['category']	=	array_remove_value(headerIndex['chart']['category'],category_remove);
 										
-										
 										//Alimentando o Array para ser implementado no chart posteriormente
 										chart['series']					=	series;
 										chart['valueAxes']				=	axis;
@@ -2405,6 +2415,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 									var tmpSeries			=	paramChart['series'];
 									var tmpSeriesArray		=	[];
 									var title				=	paramChart['title'];
+									
 									var _title				=	title;
 									var titleMultiple		=	[];
 									var _titleSubNivel		=	'';
@@ -2711,6 +2722,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 													
 
 												}
+											
 												
 										}else if(bubble){
 											chartSeries			=	[];
@@ -2742,7 +2754,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 														
 														
 														pathChart	=	$('<div/>',{'class':'col-md-'+col_md+' wrs_multiple_chart wrs_box_chart'+lineChart,'id':'wrs_box_chart'+lineChart}).height(ELEMENT.attr('chart-multiple-height'));
+														 
 														title		=	_title+_titleSubNivel+' ( '+titleMultiple[lineChart]+' )';
+														
 														kendoChart.find('.row').append(pathChart);
 														
 														var __dchart = $('wrs_box_chart'+lineChart).data("kendoChart");
@@ -2878,7 +2892,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 													    left: _left
 													});
 												}
-
+ 
 												pathChart.kendoChart(kendoChartOptions);
 												
 												//console.log('WRS CHART::',pathChart.data('kendoChart'));

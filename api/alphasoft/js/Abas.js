@@ -1829,6 +1829,28 @@ function optionsDataConvert(gridValue,with_decode)
 				
 			}
 			
+			var __removeFilter	=	 function (keyRemove)
+			{
+					_START('__removeFilter');
+				
+					if(data_global==undefined) return false;
+
+					try{
+						if(isEmpty(data_global.data.filter_tmp)) return false;
+					}catch(e){
+						return false;
+					}
+					
+					
+					delete data_global.data.filter_tmp[keyRemove];
+					
+					__setNewFilter({tag:keyRemove,data:null});
+					
+					that.data(wrsDataName,data_global);
+					
+					_END('__removeFilter');
+			}
+			
 			
 			/**
 			 * Recupera os Filtros que estão a a ser executados
@@ -2193,7 +2215,8 @@ function optionsDataConvert(gridValue,with_decode)
 			        getFilter			:	__getFilter,
 			        change_div_elements	:	__change_div_elements,
 			        set_first_MLC		:	__set_first_MLC,
-			        get_first_MLC		:	__get_first_MLC
+			        get_first_MLC		:	__get_first_MLC,
+			        removeFilter		:	__removeFilter
 			};
 			
 				/*
