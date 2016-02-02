@@ -188,13 +188,13 @@ function repair_reportname_kendoui(_obj){
 			
 
 			
-			var param_options 		= 	$.parseJSON(base64_decode(obj.REPORT_OPTIONS));
+			var param_options 		= 	{};//$.parseJSON(base64_decode(obj.REPORT_OPTIONS));
 			
-
+/*
 			if(isEmpty(param_options))  
 			{
 				return false;
-			}
+			}*/
 			
 				param_options.TITLE_ABA		=	obj.REPORT_DESC;
 			
@@ -242,7 +242,6 @@ function btn_window_grid_event_report(data)
 	var values					=	 get_grid_window_values_form();
 
 	var _data					=	 $('#myModal, .body_grid_window').data('wrsGrid');
-	
 	var param					=	 _data.param_original;
 	var visao					=	'grid';
 	
@@ -280,7 +279,6 @@ function btn_window_grid_event_report(data)
 				var index			=	$('.modal-content-grid #GET_SSAS_REPORT .k-grid-content tr').index(this);
 				objDados 			= repair_reportname_kendoui($('#GET_SSAS_REPORT').data().handler._data[index]);
 			}
-			
 			
 			
 			arrReportsIds.push(objDados.REPORT_ID);
