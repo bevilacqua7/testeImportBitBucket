@@ -12,6 +12,12 @@ function get_inputs_val(form)
 		param[$(this).attr('name')]	=	$(this).val();
 	});
 	
+
+	form.find('input[type=hidden]').each(function(){
+		param[$(this).attr('name')]	=	$(this).val();
+	});
+	
+	
 	
 	form.find('input[type=checkbox]').each(function(){		
 		if($(this).is(':checked'))
@@ -21,6 +27,9 @@ function get_inputs_val(form)
 			param[$(this).attr('name')]	=	false;
 		}
 	});
+	
+	
+	
 	
 
 	
@@ -112,6 +121,7 @@ $.fn.extend({
 					
 				var  _param			=	 $.extend( {}, o_param, get_inputs_val(janela_modal_body) );
 
+				console.log('_param',_param);
 				var _continue=true;
 					if(_options.bt_salvar_extra_action_validator!=null)
 					{
@@ -156,7 +166,7 @@ $.fn.extend({
 				var o_param			=	janela_modal.data(_dataName);
 					o_param.event	=	'apagar';
 				var  _param			=	 $.extend( {}, o_param, get_inputs_val(janela_modal_body) );
-				
+console.log('_param',_param);				
 				var _continue=true;
 				
 				if(_options.bt_apagar_extra_action_validator!=null){
