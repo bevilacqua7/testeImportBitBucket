@@ -683,6 +683,7 @@ function tagFilterWRS(typeReturn)
  					}
  					
  					
+ 					
  					for(var obj in _explode)
  						{
  							var _value		=	_explode[obj];
@@ -726,12 +727,12 @@ function tagFilterWRS(typeReturn)
 		 							tmp_width 	=	text_width(value);
 		 	 	 					if(tmp_width>=_width) _width	=	tmp_width; 
  	 	 						}
- 	 	 					
  						}
+ 					
  					
  					structArray[structArray.length]	=	[level_full, atributo ,_filter.push(',')];
  					
-			 	
+ 					
  	});
 	
 	
@@ -1092,9 +1093,12 @@ function wrsFilterClickFalse(filter_hide)
 			
 			$(nameID).find('.div_componente_filter').remove();
 			
+			
 			switch(type)
 			{
-				case 'before'	:  $(nameID).prepend(html); break;
+				case 'before'	:  {$(nameID).prepend(html);
+
+				}; break;
 				case 'after'	:  
 									{
 											var table = $(nameID).find('table tr:first-child td:eq(1)');
@@ -1107,7 +1111,6 @@ function wrsFilterClickFalse(filter_hide)
 											{
 												var _html	=	$(nameID).html();
 												$(nameID).html('<div class="wrs_filter_body_container">'+html+_html+'</div>');
-												
 											}
 											
 											
@@ -1138,14 +1141,22 @@ function wrsFilterClickFalse(filter_hide)
 		 	
 		 	var btn_event_filtro_remove=	 function(){
 
-		 		$evento	=	$(this);
+		 		$evento			=	$(this);
+		 		$key_object		=		find_parent_class($evento,'wrs_filter_body').attr('tag-class');
 		 		
 		 		WRS_CONFIRM(LNG('FILTER_CLEAN_FILTER'),'warning',function(result){
 		 			
 		 									if(result)
 		 									{
 		 										G_MSG_FILTER_CLEAN	= LNG('FILTER_CLEAN_FILTER_SUCCESS');
-		 										setJsonEncodeDecode($evento,['FILTER','LIKE'],'',true);		 										
+
+		 										setJsonEncodeDecode($evento,['FILTER','LIKE'],'',true);		
+		 										var active_aba_object	=		get_aba_active_object();	
+		 										
+		 										active_aba_object.wrsAbaData('removeFilter',$key_object);
+		 										$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
+		 										
+		 										
 		 									}
 		 		});
 		 		
@@ -1294,7 +1305,7 @@ function wrsFilterClickFalse(filter_hide)
      		
         	 
 			 setLoading(body.find('.wrs_filter_body_container'));
-			 
+
 			 menuFilter(index_data,wrs_filter_body,'before',json['LIKE']);
 			 
         	 runCall(json,'WRS_FILTER','WRS_FILTER','filter_select_info',funCallBackRun,'modal','json');
@@ -1453,9 +1464,7 @@ function wrsFilterClickFalse(filter_hide)
 	 			if(type_input!='radio')
 					{
 	 					var _val		=	$(this).val();
-
 	 					aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:_val,remove:checked? false: true});
-	 					
 					}else{
 						aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:$(this).val(),only_data:true});
 					}
@@ -1706,8 +1715,9 @@ function wrsFilterClickFalse(filter_hide)
 														 		
 														 		var div	=	$('<div/>',
 														 								{
-														 									'id'	:	'wrs_filter_body_'+index,
-														 									'class':	'wrs_filter_body'
+														 									'id'			:	'wrs_filter_body_'+index,
+														 									'class'			:	'wrs_filter_body',
+														 									'tag-class'		:	tag_class
 														 									
 														 								}).html($('<div/>',{'class':'wrs_filter_body_container'}));
 														 		

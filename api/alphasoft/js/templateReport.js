@@ -177,7 +177,8 @@ _START('carrega_grid_list_reports');
 }
 
 
-function repair_reportname_kendoui(_obj){
+function repair_reportname_kendoui(_obj)
+{
 	
 	var obj		=	_obj;
 	
@@ -188,13 +189,15 @@ function repair_reportname_kendoui(_obj){
 			
 
 			
-			var param_options 		= 	{};//$.parseJSON(base64_decode(obj.REPORT_OPTIONS));
+			var param_options 		= $.parseJSON(base64_decode(obj.REPORT_OPTIONS));
 			
-/*
+
+			//TODO: Validar regra
 			if(isEmpty(param_options))  
 			{
-				return false;
-			}*/
+				param_options	=	{};
+				//return false;
+			}
 			
 				param_options.TITLE_ABA		=	obj.REPORT_DESC;
 			

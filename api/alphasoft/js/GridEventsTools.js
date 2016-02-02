@@ -1183,13 +1183,9 @@ var getRequestKendoUiDefault	=	{};
   		
 		var _opts		=		get_aba_active_kendoUi();	
   		
-	
-		
 		$(this).parent().find('input').each(function()
   				{
 	  				$(this).prop('checked',false);
-	  				
-	  				
 	  				
 	  				if(!empty(_opts[$(this).attr('name')])){
 	  					$(this).prop('checked',true);
@@ -1251,15 +1247,15 @@ var getRequestKendoUiDefault	=	{};
 
   			
   			$('.WRS_MEASURE_DRAG').find('li').each(function(){
-  				var _json		=	 $(this).attr('json');
-  				var _json_data	=	getJsonDecodeBase64(_json);
+  			//	var _json_data		=	 $(this).data('wrs-data');
+//  				var _json_data	=	getJsonDecodeBase64(_json);
+				var tag_class	=	$(this).attr('tag-class');
+				var _json_data	=	$('.ui-layout-pane-east ul').find('.'+tag_class).data('wrs-data');
+				
   				get_measures_title[_json_data.MEASURE_UNIQUE_NAME]	=	_json_data.MEASURE_NAME;
-				delete _json_data,_json;
+				delete _json_data;
 
   			});
-  			
-  			
-  			 
   			
   			
   			var KendoUi	=	{
@@ -1288,8 +1284,6 @@ var getRequestKendoUiDefault	=	{};
   			
   		WRSKendoUiChart(KendoUi,true);
   		
-  		
- // 		TRACE_DEBUG(nav_options.html());
   		
   		$($(this).attr('data-target')).modal('show');  	
 

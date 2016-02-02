@@ -535,10 +535,8 @@ $(document).ready(function () {
 					$('.container_panel_relatorio').show();
 					$('.wrs_panel_filter_measure').hide();
 					
-
 				if(!east__onclose)
 				{
-
 					if($('.wrs_run_filter').attr('locked')!='locked')
 					{
 						$('.wrs_run_filter').attr('eastonclose','true').attr('flag_load','true');//Pra informar que o clique partir da opção para feixare a tela da direira 
@@ -575,9 +573,6 @@ $(document).ready(function () {
 	 wrs_panel_layout	 = 	$('body').layout(jqueryLayoutOptions);
 	
 //	 $('body').data('wrs_panel_layout',wrs_panel_layout);
-	
-	 
-	
 	
 	wrs_north_onresize('west', wrs_panel_layout.panes.west);
 	wrs_west_onresize();
@@ -735,6 +730,8 @@ function wrs_clean_box_drag_drop()
 													DEFAULT_OPTIONS_TOPS();
 													WRS_ALERT(mensagem_sucess,'success');
 												}
+												
+												$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
 									});
 									
 									_END('wrs_clean_box_drag_drop');
