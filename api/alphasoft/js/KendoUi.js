@@ -632,11 +632,15 @@ function getWrsKendoColumn(data)
 					
 			}
 			
-
+//
 			// Quando for total sempre salva a primeira linha de dados para o gráfico
 			if(_arg.items.length>=0 && wrsKendoUi['ALL_ROWS']==true)
 			{
-				$(report_aba).wrsAbaData('setFirstLineTotal',_arg.items[0]);
+				if(_arg.sender.dataSource._wrs_request_data.chart_data[0]['C000']==1)
+				{
+					$(report_aba).wrsAbaData('setFirstLineTotal',_arg.sender.dataSource._wrs_request_data.chart_data[0]);
+					//$(report_aba).wrsAbaData('setFirstLineTotal',_arg.items[0]);
+				}
 			}
 			
 			
