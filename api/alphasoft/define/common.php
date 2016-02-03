@@ -40,12 +40,18 @@ function PARAMETERS_SEPARATORS($key)
  * @param string $texto
  * @param string $fileName
  */
-function WRS_DEBUG_QUERY($texto,$fileName='wrs_debug_query.log')
+function WRS_DEBUG_QUERY($texto,$_fileName='wrs_debug_query.log')
 {
 	if(is_array($texto)) $texto = print_r($texto,true);
 	
+	
+	$fileName		=	$_fileName;
+	$fileName		=	date('Y_m_d_').$fileName;
+	
+	
 	$fp = fopen(PATH_VAR.DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR.$fileName,'a');
 
+	
 	if($fileName=='WRS_DEBUG.txt')
 		fwrite($fp,$texto.PHP_EOL.'---------------------------------------------------------------------------------------------'.PHP_EOL); // grava a string no arquivo. Se o arquivo não existir ele será criado
 	else

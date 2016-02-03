@@ -121,7 +121,7 @@ $.fn.extend({
 					
 				var  _param			=	 $.extend( {}, o_param, get_inputs_val(janela_modal_body) );
 
-				console.log('_param',_param);
+
 				var _continue=true;
 					if(_options.bt_salvar_extra_action_validator!=null)
 					{

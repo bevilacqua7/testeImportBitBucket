@@ -123,13 +123,13 @@ class SQL_SERVER
 		}
 		
 		//Caminho do debug por nome do usuario		
-		$file_path_by_user	=	$file_path.WRS_DEBUG_QUERY_FILE_NAME;
+		$file_path_by_user	=	$file_path.date('Y_m_d_').WRS_DEBUG_QUERY_FILE_NAME;
 		
 		//Verifica se o arquivo existe e se existir insere o debug nesse diretório
 		if(file_exists($file_path_by_user)){
 			$file_path	=	$file_path_by_user;
 		}else{
-			$file_path.=WRS_DEBUG_QUERY_FILE_NAME;
+			$file_path.=date('Y_m_d_').WRS_DEBUG_QUERY_FILE_NAME;
 		}
 		
 		if(file_exists($file_path)){

@@ -158,8 +158,29 @@ class WRS_REPORT  extends  WRS_USER
  		$res			=	 $this->fetch_array($query);
  		$rep_id			=	 $res['REPORT_ID'];
  		$error			=	 $res['ERROR_MESSAGE'];
- 		if($rep_id=='0' || trim($error)!=''){
+ 		
+
+ 		
+ 		if(!empty($res['ERROR_MESSAGE']))
+ 		{
+ 			
+ 		$DATA_BASE_ERROR		=	 LNG('DATA_BASE_ERROR');	
+ 		$msg		=	$DATA_BASE_ERROR.$res['ERROR_MESSAGE'];
+ 		
+ 		$JS=<<<HTML
+	 		$('#myModalGenericConfig').modal('hide');
+	 		atualiza_id_aba_ativa({$rep_id});
+			WRS_ALERT('{$msg}','error'); 
+HTML;
+			echo fwrs_javascript($JS);
+ 		
+ 			exit();
+ 		}
+ 		
+ 		if($rep_id=='0' || trim($error)!='')
+ 		{
  			echo $error."<hr>Query: ".$sql;
+ 			
  		}else{
  			$JS=<<<HTML
  		$('#myModalGenericConfig').modal('hide');
@@ -204,7 +225,7 @@ HTML;
 	
 		$user			=	WRS::INFO_SSAS_LOGIN();
 	
-		$sql			=	$this->_query->Get_SSAS_Reports($user['CUSTOMER_ID'], $user['USER_CODE'], $user['PERFIL_ID'], $database_id, $cube_id);
+		$sql			=	$this->_query->Get_SSAS_Reports($user['CUSTOMER_ID'], $user['USER_CODE'], $user['PERFIL_ID'], $database_id, $cube_id, 1);
 	
 		return $sql;
 	

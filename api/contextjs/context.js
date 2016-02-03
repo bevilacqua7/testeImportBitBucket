@@ -275,9 +275,10 @@ var context = context || (function () {
 
 		var d 		= new Date(),
 			id 		= d.getTime();
-			
 		
-		var control_measure_attr		=	 isEmpty(type) ? 'attr' : 'measure';
+		console.log('type',type);
+		//no type será passado todas as nomeclaturas de onde será fixada o evento mas o atributo para orientação é attr nomeclatura o ficial apenas para controle de log
+		var control_measure_attr		=	 isEmpty(type) && type!='measure' ? 'attr' : 'measure';
 		
 		//WARNING:: Procedimento para poder deixar o modelo mais rápido
 		if($('.dropdown-menu-drill-wrs .'+control_measure_attr).length==0){

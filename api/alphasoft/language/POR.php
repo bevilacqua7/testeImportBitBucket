@@ -55,6 +55,8 @@
 	$language['SEE_IN_MAP']					=	'VER NO MAPA';
 	$language['REMOVE']						=	'REMOVER';
 	
+	$language['DATA_BASE_ERROR']			=	'<b>Ops... Erro no Banco de dados:</b> ';
+	
 	/*
 	 * TITULOS
 	 */

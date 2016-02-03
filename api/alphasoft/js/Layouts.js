@@ -95,6 +95,7 @@ function btn_open_layouts_events()
 									};
 		
 		$('.layout_container_custom').html(LNG('LABEL_LOAD'));
+	
 		runCall(_options,_options.file,_options.classe,_options.event,_callback_run_call,'modal');
 	}
 	
@@ -146,7 +147,7 @@ var layout_events_button	=	 function()
 
 		var param_request			=	{};
 		param_request['remove']	=	 json_encode(_data_remove);
-	
+
 		runCall(param_request,Ofile,Oclass,Oevent,funCallBackDataLayout_events_button,'modal','json');
 		
 	_END('layout_events_button');

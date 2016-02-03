@@ -34,10 +34,11 @@ _START('carrega_grid_list_admin');
 		}
 	}
 	
-	var tabela = $(this).attr('tabela')==undefined && typeof obj == 'object'?obj.attr('tabela'):$(this).attr('tabela');
+	var tabela 		= $(this).attr('tabela')==undefined && typeof obj == 'object'?obj.attr('tabela'):$(this).attr('tabela');
+
 	
 	grid_window_modal(
-			 				((options!=null && options!='' && typeof options == 'object')?options:{wrs_type_grid:'list'}),
+			 				((options!=null && options!='' && typeof options == 'object')?options:{wrs_type_grid:'list','cube_s':CUBE_S}),
 			 				tabela,
 			 				funCallBack);
 	_END('carrega_grid_list_admin'); 
