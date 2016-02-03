@@ -110,8 +110,6 @@ function optionsDataConvert(gridValue,with_decode)
 		 */
 		$.fn.wrsAbas = function(methodOrOptions) 
 		{
-			
-			
 			var tagName			=	'WRSAbas';
 			var that			=	 this;
 			var abaData			=	'WRSAbasDATA'; 
@@ -127,7 +125,7 @@ function optionsDataConvert(gridValue,with_decode)
 			 * 					  </ul>
 			 */
 			var tagABA			=	$('.WRS_ABA ul');
-			var htmlABA			=	'<li class="{active} {IDaba}" id-aba="{IDaba}" ><a href="#"><span class="title"  >{li}</span><span class="icon-remove-aba glyphicon glyphicon-remove"></span></a></li>';
+			var htmlABA			=	'<li class="{active} {IDaba}"  id-aba="{IDaba}" ><a href="#"><span class="title"  >{li}</span><span class="icon-remove-aba glyphicon glyphicon-remove"></span></a></li>';
 			var htmlABAReplace	=	['{li}','{active}','{IDaba}','{editable}'];
 			
 			/*
@@ -375,9 +373,7 @@ function optionsDataConvert(gridValue,with_decode)
 								var new_active_aba		=	get_aba_active_object();
 								
 								
-								//Informando ao sistema que a aba pode ser salva
-								new_active_aba.wrsAbaData('setEnableChange',true);
-								new_active_aba.wrsAbaData('aba_detect_change');
+								
 								
 								
 								delete getElement;

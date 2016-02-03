@@ -1,6 +1,38 @@
  
 (function ($) {
 
+	//@link http://jsfiddle.net/ARTsinn/bNkfP/
+    window.addRuleOriginal = function (selector, styles, sheet) {
+
+        if (typeof styles !== "string") {
+            var clone = "";
+            for (var style in styles) {
+                var val = styles[style];
+
+                style = style.replace(/([A-Z])/g, "-$1").toLowerCase(); // convert to dash-case
+                clone += style + ":" + (style === "content" ? '"' + val + '"' : val) + "; ";
+            }
+            styles = clone;
+        }
+
+        sheet = sheet || document.styleSheets[0];
+
+        if (sheet.insertRule) sheet.insertRule(selector + " {" + styles + "}", sheet.cssRules.length);
+        else if (sheet.addRuleOriginal) sheet.addRuleOriginal(selector, styles);
+
+        return this;
+
+    };
+
+    if ($) {
+        $.fn.addRuleOriginal = function (styles, sheet) {
+        	addRuleOriginal(this.selector, styles, sheet);
+            return this;
+        };
+    }
+
+    //MOdificado by WRS
+
     window.addRule = function (selector, styles, sheet) {
 		
 		_START('addRule');
@@ -2880,14 +2912,12 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 													kendoChartOptions.title.text+=_titleSubNivel;
 													
 													
-
 													
-													
-													$(kendoChartTAG+':after').addRule({
+													$(kendoChartTAG+':after').addRuleOriginal({
 													    content: kendoChartOptions.xAxis.wrs_title
 													});
 													//VAlue 
-													$(kendoChartTAG+':before').addRule({
+													$(kendoChartTAG+':before').addRuleOriginal({
 													    content: kendoChartOptions.yAxis.wrs_title,
 													    left: _left
 													});

@@ -294,12 +294,22 @@ class WRS_PANEL  extends WRS_USER
 		$DATABASE		=	$_cube['DATABASE_ID'];
 		$CUBE			=	$_cube['CUBE_ID'];
 				
-		$sql			= 	QUERY_PANEL::GET_SSAS_REPORT($DATABASE, $CUBE);
+		$sql			= 	QUERY_PANEL::GET_SSAS_REPORT($DATABASE, $CUBE, 0);
 		$queryGrid_exec	=	$this->query($sql);
 		$rows_REPORTS	=	array();
 		
-		
+		// Retorna os Relatorios Autoloads
 		if($this->num_rows($queryGrid_exec))
+		{
+			while($report	=	$this->fetch_array($queryGrid_exec))
+			{
+				if(trim($report['REPORT_AUTOLOAD'])=='1'){
+					$rows_REPORTS[] 	=	'AUTO_LOAD.push(callback_load_report_generic_modal('.json_encode($report,1).',true))';
+				}			
+			}
+		}
+		
+		/*if($this->num_rows($queryGrid_exec))
 		{
 			$table_temp				=	$this->fetch_array($queryGrid_exec);
 			
@@ -318,7 +328,7 @@ class WRS_PANEL  extends WRS_USER
 						}
 					}
 			}
-		}
+		}*/
 		
 		if(count($rows_REPORTS)>0 && fwrs_request('exec_reports')=='1'){ // exec_reports!=1 para nao carregar relatorios quando é somente layout
 			echo fwrs_javascript('AUTO_LOAD = [];'.implode(';',$rows_REPORTS).';AUTO_LOAD=base64_json(AUTO_LOAD);');

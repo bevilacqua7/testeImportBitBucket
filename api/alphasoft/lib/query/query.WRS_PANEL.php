@@ -407,7 +407,7 @@ EOF;
 	 *
 	 * @return string
 	 */
-	public static function GET_SSAS_REPORT( $DATABASE_ID, $CUBE_ID )
+	public static function GET_SSAS_REPORT( $DATABASE_ID, $CUBE_ID, $CREATE_TABLE )
 	{
 		// Exemplo: EXEC Get_SSAS_Reports 1,'mfacioli','','GSK - DDD',''
 		$USER_CODE 			= WRS::USER_CODE();
@@ -417,7 +417,7 @@ EOF;
 		$CUBE_ID 			= str_replace(array('[',']'),'',$CUBE_ID);
 
 		$query = <<<EOF
-					EXEC Get_SSAS_Reports {$USER_CUSTOMER_ID}, '{$USER_CODE}', '{$USER_TYPE}', '{$DATABASE_ID}', '{$CUBE_ID}'
+					EXEC Get_SSAS_Reports {$USER_CUSTOMER_ID}, '{$USER_CODE}', '{$USER_TYPE}', '{$DATABASE_ID}', '{$CUBE_ID}', {$CREATE_TABLE}
 EOF;
 		return $query;
 	}

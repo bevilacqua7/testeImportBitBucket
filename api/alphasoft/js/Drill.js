@@ -626,12 +626,13 @@ function addTargetDisableContext(kendoUi,report_id)
     	{
 	    	// cabecalho de cada linha	
 	    	$(TAG_REPORT_ID+" .k-grid-content-locked").attr('rel','noContext').attr('type','linha');
-	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-content-locked td'				, data_line_row, $event);
+
+	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-content-locked td'				, data_line_row, $event,'linha');
 	    	    	
 	    	// cabecalho inicial (canto superior esquerdo) da coluna e da linha apenas
 	    	$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked").attr('type','linha_header');
 	    	//console.log('INCLUIU HEADER',$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked"),$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked th"),data_line_header);
-	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-locked th'	, data_line_header,$event);    	  	
+	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-locked th'	, data_line_header,$event,'linha_header');    	  	
     	}
     	
     	
@@ -639,7 +640,7 @@ function addTargetDisableContext(kendoUi,report_id)
     	if(!in_array('DRV',PERFIL_ID_USER))
     	{
     		$(TAG_REPORT_ID+" .k-grid-content").attr('type','data');
-    		context.attachWRS(TAG_REPORT_ID+' .k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event);    		
+    		context.attachWRS(TAG_REPORT_ID+' .k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event,'data');    		
     	}
     	
     	
@@ -676,7 +677,7 @@ function addTargetDisableContext(kendoUi,report_id)
     					if(i!=(length-1))
     					{	// header de cada coluna
     				    	if(!in_array('DRT',PERFIL_ID_USER)){
-    				    		context.attachWRS(tag	, menu_context_relation_ship_measure(jsonRelationShip),$event);
+    				    		context.attachWRS(tag	, menu_context_relation_ship_measure(jsonRelationShip),$event,'coluna_header_line');
     				    	}
     					}else{
     				    	if(!in_array('DRM',PERFIL_ID_USER)){

@@ -1482,7 +1482,17 @@ function wrs_run_filter()
 	var report_KendoUi		=	aba_active.wrsAbaData('getKendoUi');
 	var history				=	aba_active.wrsAbaData('getHistory');
 	var _report_id			=	report_KendoUi['REPORT_ID'];
+	var get_active_aba_data	=	get_aba_active();
 	
+	
+	//Verificando se existe informações nas linhas se não existir informações nas linhas assumo que seja uma nova aba que está sendo executada
+	//Ao detectar insere o * para informar que a aba falta ser salva
+	if(isEmpty(get_active_aba_data.history))
+		{
+			aba_active.wrsAbaData('setEnableChange',true);
+			aba_active.wrsAbaData('aba_detect_change');
+
+		}
 	
 	
 	var _filtro_size		=	$('.sortable_filtro').find('li');

@@ -142,7 +142,7 @@ function WRS_TRACE($word,$line,$file)
 	if(IS_WRS_TRACE)
 	{
 		$text_debug	=	WRS::LOGIN().' - '.$word.'  | LINE:'.$line.' | FILE:'.$file;
-		$fileName	=	DEBUG_TRACE;
+		$fileName	=	date('Y_m_d_').DEBUG_TRACE;
 		$fp 		= 	fopen(dirname(__DIR__).DIRECTORY_SEPARATOR.'var'.DIRECTORY_SEPARATOR.$fileName,'a');
 		fwrite($fp,date('d-m-Y H:i:s | ').$text_debug.PHP_EOL); // grava a string no arquivo. Se o arquivo não existir ele será criado
 		fclose($fp);

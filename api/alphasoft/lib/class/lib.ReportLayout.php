@@ -43,6 +43,8 @@ class ReportLayout extends WRS_USER
 		$this->_query			=	 new QUERY_ReportLayout();
 		
 		
+
+		
 		switch($event)
 		{
 			//chamado pelo evento controllers_layout
@@ -181,6 +183,7 @@ class ReportLayout extends WRS_USER
 		$parameter['ATTRIBUTOS_METRICA'] 		= LNG('ATTRIBUTOS_METRICA');
 		$parameter['ATTRIBUTOS_LINHA'] 			= LNG('ATTRIBUTOS_LINHA');
 		$parameter['ATTRIBUTOS_COLUNA'] 		= LNG('ATTRIBUTOS_COLUNA');
+		
 		
 		
 		
