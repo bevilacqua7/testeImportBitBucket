@@ -28,8 +28,7 @@ function find_parent_class(object,_class)
 
 
 var RAND_TOKEN	=	js_rand(0,9999999999999);
-	include_js('ThreadJobManager');
-	include_js('Layouts');
+
 
 	
 if(IS_TRACE)
@@ -1435,9 +1434,30 @@ function bloqueia_chars(obj,chars){
 }
 
 
-$(document).ready(function(){
-	
-	$('body').managerJOB('create_modal'); //Criando o BOX de CSS
-	
 
-});
+
+
+/*
+ * Ativando configurações para o Tema
+ */
+function addKendoUiColorJQueryGrid()
+{
+	 _START('addKendoUiColorJQueryGrid');
+	 
+	 
+	//Pegando  as especificação das cores do DRAG and DROP para poder inserir no Tabele do Kendo Ui
+	var div_color	=	$('.ui-state-default, .ui-state-focus');
+	var color		=	div_color.css('border-color');
+	var colorFont	=	div_color.css('color');
+	
+	var ui_state_active =	$('.ui-state-active').css('color');
+	
+	var style	=	'';
+		style	+=	"<style>.table_border,.border_color tr td {border-color : "+color+" !important;}";
+		style	+=	".bold{color:"+colorFont+" !important;}";
+		style	+=	".colorSelect{color:"+ui_state_active+" !important;}";
+		style	+='</style>';
+	$(style).appendTo( "head" );
+	
+	 _END('addKendoUiColorJQueryGrid');
+}

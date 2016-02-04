@@ -10,39 +10,21 @@
 
 
 
-		
-		
-<script type="text/javascript" src="./js/jquery/jquery-1.8.2.min.js"></script>
-<script type="text/javascript" src="./<?php echo JS_PATH_API;?>php_js.js?<?php echo WRS_TEMP_RAND;?>"></script>
-<script type="text/javascript" src="./language_javascript.php?<?php echo WRS_TEMP_RAND;?>"></script>
-<script type="text/javascript" src="./<?php echo JS_PATH_API;?>common.js?<?php echo WRS_TEMP_RAND;?>"></script>
-
-<link href="./api/bootstrap-3.3.0/dist/css/bootstrap-wrs.css?v=1.0 " rel="stylesheet">
-<link href="./api/bootstrap-3.3.0/dist/css/bootstrap-theme.min.css?v=1.0 " rel="stylesheet">
-
-<link rel="stylesheet" href="api/fakeLoader/fakeLoader.css">
-  <script type="text/javascript" src="api/fakeLoader/fakeLoader.js"></script>
-  
-<link href="./css/wrs_config.css?v=0.0.1 " rel="stylesheet">
-
-<!-- TODO:: Colocar o gerenciamneto na tela -->
-<link rel="stylesheet" type="text/css" href="./css/<?php echo WRS::INFO_SSAS_LOGIN('USER_FORMAT')?>/jquery-ui-1.8.22.custom.css?v=1.0" id="themeHost"  host="./css/{host}/jquery-ui-1.8.22.custom.css?v=1.0"  />
-
-
 <?php 
 
-	if(wrs_get_user_browser()=='ie'){
-		echo '<link rel="stylesheet" type="text/css" href="./css/wrs_ie.css?'.rand(0,999999).'" />';
-	}
-	
-	if(wrs_get_user_browser()=='firefox'){
-		echo '<link rel="stylesheet" type="text/css" href="./css/wrs_firefox.css?'.rand(0,999999).'" />';
-	}
+	//  verificar quais scripts realmente fazem funcionar as modais de cadastro
+	$_REQUEST[TAG_URL_CUBE_SELECTED]=0;
+	$ATRIBUTOS_JSON=base64_encode('{}');
+	$TAG_HEADER					=	'main';
+	include_once(PATH_TEMPLATE.'scripts_ini.php');
+
 ?>
 
-</HEAD>
-<BODY onResize="" onLoad="">
 
+</HEAD>
+
+
+<BODY onResize="" onLoad="">
 
 <div id="fakeloader"></div><script type="text/javascript">$("#fakeloader").fakeLoader();</script>
  	

@@ -298,26 +298,7 @@ function  wrsKendoUiContextMenuGetLayoutInfo(kendoUi)
 }
  
  
- /*
-  * Ativando configurações para o Tema
-  */
- function addKendoUiColorJQueryGrid()
- {
-	 _START('addKendoUiColorJQueryGrid');
- 	var color		=	$('.ui-state-default').css('border-color');
-	var colorFont	=	$('.ui-state-default').css('color');
-	var ui_state_active =	$('.ui-state-active').css('color');
-	
-	 
-	var style	=	'';
-		style	+=	"<style>.table_border,.border_color tr td {border-color : "+color+" !important;}";
-		style	+=	".bold{color:"+colorFont+" !important;}";
-		style	+=	".colorSelect{color:"+ui_state_active+" !important;}";
-		style	+='</style>';
-	$(style).appendTo( "head" );
-	
-	 _END('addKendoUiColorJQueryGrid');
- }
+
  
 function getWrsKendoColumn(data)
 {
