@@ -21,6 +21,15 @@ function wrs_north_onresize()
 
 
 
+function get_aa()
+{
+	var html	=	"\n";
+	$('head').find('script').each(function(){
+		html	+=	'$tag[]		=	array("host"=>"'+$(this).attr('src')+'","access"=>array("main","panel"));'+"\n";
+	});
+	
+	console.log(html);
+}
 
  
 function wrs_clean_data(input_default)
@@ -1489,8 +1498,11 @@ function wrs_run_filter()
 	//Ao detectar insere o * para informar que a aba falta ser salva
 	if(isEmpty(get_active_aba_data.history))
 		{
-			aba_active.wrsAbaData('setEnableChange',true);
-			aba_active.wrsAbaData('aba_detect_change');
+			if(isEmpty(get_active_aba_data.data.LAYOUT_MEASURES))
+			{
+				aba_active.wrsAbaData('setEnableChange',true);
+				aba_active.wrsAbaData('aba_detect_change');
+			}
 
 		}
 	

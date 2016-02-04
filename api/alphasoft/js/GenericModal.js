@@ -252,24 +252,39 @@ function ajustaTags(arr){
 	return ret;
 }
 
-function callback_check_line_generic_modal(data,tabela){
+//Apenas marca o select
+function callback_check_line_generic_modal(data,tabela)
+{
 	_START('callback_check_line_generic_modal');
-	var attr = data.visao_atual;
-	if (typeof attr !== typeof undefined && attr !== false) {
-		if(data.obj_sel.hasClass('selecao_icon')){
-			data.obj_sel.removeClass('selecao_icon');
-		}else{
-			data.obj_sel.addClass('selecao_icon');
+	
+		var attr = data.visao_atual;
+		
+		if (typeof attr !== typeof undefined && attr !== false) 
+		{
+			if(data.obj_sel.hasClass('selecao_icon'))
+			{
+				data.obj_sel.removeClass('selecao_icon');
+			}
+			else
+			{
+				data.obj_sel.addClass('selecao_icon');
+			}
 		}
-	}else if(typeof data == 'object' && tabela!=undefined && tabela!=''){	
-		var linha=$('#'+tabela+' .k-grid-content table').find('tr')[parseInt(data.ROW_ID)-1];
-		var check = !$(linha).find('td input.checkline').prop('checked');
-		$(linha).find('td input.checkline').prop('checked',check);
-		$('#'+tabela+' .k-grid-header table').find('input.checkline').prop('checked',false); // qualquer alteracao na linha, desmarca o checkall da coluna
-		if($($(event.target).context).hasClass('checkline')){ // se o click vier do checkbox
-			$($(event.target).context).prop('checked',!check);
+		else if(typeof data == 'object' && tabela!=undefined && tabela!='')
+		{	
+			var linha=$('#'+tabela+' .k-grid-content table').find('tr')[parseInt(data.ROW_ID)-1];
+			var check = !$(linha).find('td input.checkline').prop('checked');
+			
+				$(linha).find('td input.checkline').prop('checked',check);
+				$('#'+tabela+' .k-grid-header table').find('input.checkline').prop('checked',false); // qualquer alteracao na linha, desmarca o checkall da coluna
+				
+				if($($(event.target).context).hasClass('checkline'))
+				{ // se o click vier do checkbox
+					$($(event.target).context).prop('checked',!check);
+				}
 		}
-	}
+		
+	
 	_END('callback_check_line_generic_modal');
 }
 

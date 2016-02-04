@@ -67,6 +67,9 @@ $(document).ready(function(){
 		}
 	});
 
+	
+	
+	//Evento do menu Administrativo 
 	$('.menu_cadastro').click(function(){
 		carrega_grid_list_admin(undefined,$(this));
 		$('#myModal').modal('show');

@@ -35,6 +35,11 @@ function PARAMETERS_SEPARATORS($key)
 
 }
 
+
+
+
+
+
 /**
  * Debug 
  * @param string $texto

@@ -1,29 +1,18 @@
 <?php 
 	include_once(PATH_TEMPLATE.'headerCommon.php');
+
+	
 	include_once(PATH_TEMPLATE.'TOP.php');
 	
 	?>
 	
 	
-<?php 
 
-/* -- verificar quais scripts realmente fazem funcionar as modais de cadastro
-	$_REQUEST[TAG_URL_CUBE_SELECTED]=0;
-	$ATRIBUTOS_JSON=base64_encode('{}');
-	include_once(PATH_TEMPLATE.'scripts_ini.php');
-*/	
-	
-?>
-	<!-- IMPLEMENTOS -->
-		<link href="api/assets/css/allWrs.css" rel="stylesheet">
-		<link rel="stylesheet" href="api/fonte/stylesheet.css" />
-		<link rel="stylesheet" href="api/assets/utilcarousel-files/utilcarousel/util.carousel.skins.css" />
+<link rel="stylesheet" type="text/css" href="css/wrs_main.css?<?php echo RAND_TOKEN;?>" />
+<!-- IMPLEMENTOS -->
 
-		
-<!-- CSS Gerenciador de JOBS para utilizar o mesmo padrao das MODAIS pro logoff -->
-<link href="api/jquery.modal-1.2/css/jquery.modal.wrs.job.css" type="text/css" rel="stylesheet" />
-<link href="api/font-awesome-4.3.0/css/font-awesome.min.css?v=0.0.1" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="api/bootstrap-3.3.0/dist/css/bootstrap.css" />
+
+
 
 <div class="container_main">
 
@@ -49,7 +38,7 @@
 		</div>
 	 
 	
-<script src="api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2"></script>
+
 
 <script>
 

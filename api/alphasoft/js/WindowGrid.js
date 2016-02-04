@@ -32,8 +32,12 @@
 
 
 
-
-
+//Essa função é apenas para evitar erros pois o CUBE_S é utilizado apenas no Main para identidicar qual o cubo da requisição
+try{
+	if(CUBE_S){}//Validação para verificar se CUBES Existe
+}catch(e){
+	var CUBE_S	=	null;
+}
 
 
 
@@ -73,6 +77,7 @@ function onDataBoundWindowGrid(arg)
 	
 	// preencho o array com as classes existentes
 	if(arg.sender.wrs_grid!=undefined)
+		
 	for(idx in arg.sender.wrs_grid.column){
 		// se houver classe por linha de coluna OU houver uma classe forcada para todas as linhas de colunas
 		if(arg.sender.wrs_grid.column[idx].classDataLine!=undefined || (_param_aplicaClassLinhas!=false && _param_aplicaClassLinhas!=true)){
@@ -162,6 +167,8 @@ function onDataBoundWindowGrid(arg)
 			option['wrs_type_grid']		=	'form';
 			option[param['primary']]	=	value_primary;
 
+			
+			
 		try{	
 			var is_exception 	= ('exception' in param && (typeof param['exception'] == 'object' || param['exception']==true));
 
@@ -175,6 +182,8 @@ function onDataBoundWindowGrid(arg)
 			console.warn(' exception');
 			grid_window_modal(option,table);
 		}
+		
+		
 			_END('onDataBoundWindowGrid::KendoGridWindowToolsAuxSingleClick');
 	}
 
@@ -188,6 +197,9 @@ function onDataBoundWindowGrid(arg)
 	}else{
 		
 	}
+
+	//Corrige Thema
+	addKendoUiColorJQueryGrid();
 	
 _END('onDataBoundWindowGrid');
 }
@@ -299,12 +311,28 @@ function get_grid_window_values_form(_event)
 
 function btn_window_grid_event(_functionCallBack,_action_type,_table,_extraValues)
 {
+	
 	_START('btn_window_grid_event');
 	var action_type				=	 _action_type==undefined?$(this).attr('action_type'):_action_type;
 	var table					=	 _table==undefined?$(this).attr('table'):_table;
 	var values					=	 get_grid_window_values_form();
-	var option					=	 {cube_s:CUBE_S};
+	var option					=	 {};
+	
+	try{
+		//CUBE_S existe apenas no Painel ele pe a referencia de qual cubo está sendo utilizado pelo system
+		option['cube_s']	=	CUBE_S;
+	}catch(e){
+		delete option['cube_s'];
+	}
+
+	
+	
 	var functionCallBack		=	_functionCallBack;
+	/*
+	var functionCallBack	=	 function(data){
+		console.log('data',data);
+	}	
+	*/
 	var extraValues				=	_extraValues;
 		values['wrs_type_grid']	=	'form';
 		
@@ -321,14 +349,18 @@ function btn_window_grid_event(_functionCallBack,_action_type,_table,_extraValue
 
 		values = merge_objeto(values,option);
 
-		if(extraValues!=undefined){
+		if(extraValues!=undefined)
+		{
 			values = merge_objeto(values,{'extraValues':((typeof extraValues!='string')?json_encode(extraValues):extraValues)});
 		}
 		
 		grid_window_modal(values,table,functionCallBack);
-	_END('btn_window_grid_event');	
+		
+		_END('btn_window_grid_event');	
+	
 }
 
+//Change Evento de Doble clique da modal
 function wrs_window_grid_events_tools(objectClick,btn_events)
 {
 	_START('wrs_window_grid_events_tools');
@@ -348,7 +380,8 @@ function wrs_window_grid_events_tools(objectClick,btn_events)
 
 	var options		=	_options;
 	
-		if(!empty(objectClick)){
+		if(!empty(objectClick))
+		{
 			options		=	merge_objeto(_options,objectClick);
 		}
 		
@@ -365,6 +398,9 @@ function wrs_window_grid_events_tools(objectClick,btn_events)
 	
 	_END('wrs_window_grid_events_tools');
 }
+
+
+
 
 function grid_window_modal(param_request,Event,_funCallBackData)
 {
@@ -388,10 +424,6 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 	{
 		funCallBackData	=	function(data)
 		{
-			
-			
-			
-			
 				$('.modal-content-grid').html(data);
 				wrs_window_grid_events_tools(null,btn_events);
 				
@@ -404,6 +436,7 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 					$(".wrs_grid_window_event a[rel=icon_middle]").parent().hide();
 				 
 				}
+				
 
 		};
 	}

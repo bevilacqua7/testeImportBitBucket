@@ -1130,3 +1130,11 @@ function get_all_jobs()
  
 }( jQuery ));
 
+
+
+$(document).ready(function(){
+	
+	$('body').managerJOB('create_modal'); //Criando o BOX de CSS
+	
+
+});

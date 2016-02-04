@@ -295,8 +295,8 @@ class WRS_MANAGE_PARAM
 	//Classe de Cubo ADMINISTRATIVO
 	public function ATT_WRS_CUBE()
 	{
+		//Botões Language
 		$button		=	$button_icon	=	array();
-
 		$button['back']			=	LNG('bt_back');
 		$button['new']			=	LNG('bt_new');
 		$button['update']		=	LNG('bt_update');
@@ -304,21 +304,32 @@ class WRS_MANAGE_PARAM
 		$button['import']		=	LNG('bt_import_cube');
 		
 		
-		if(!WRS_USER::getArrPerfUser('DRG')){
+	
+		if(!WRS_USER::getArrPerfUser('DRG'))
+		{
 			$button['remove']	=	LNG('bt_remove');
 		}
+		
 
+		
+		//Personalizando o icone
 		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
 		$button_icon['new']		=	'fa fa-pencil-square-o';
 		$button_icon['update']	=	'fa fa-floppy-o';
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
-				
+		
+		
+		
 		$table	=	'ATT_WRS_CUBE';
 		$order	=	array('order_by'=>'CUBE_ID' ,'order_type'=>'ASC');
-		$extend	= 	array('class'=>'ATT_WRS_CUBE' 	,'file'=>'ATT_WRS_CUBE');
-		$fields	=	array();
 		
+		//Extend para classe que irá executar a query diferente do GeneridWindow
+		$extend	= 	array('class'=>'ATT_WRS_CUBE' 	,'file'=>'ATT_WRS_CUBE');
+		
+		
+		//Campos da table
+		$fields	=	array();
 		$fields['WRS_ICON']			=	array('title'=>'#',   		'width'=>50,    'basic'=>true , 'grid'=>true);
 		$fields['CUBE_ID']		    =	array('title'=>'Código',   	'primary'=>true,'list'=>true,   'grid'=>true);
 		$fields['CUBE_DESC']	    =	array('title'=>'Nome',		'length'=>180,  'basic'=>true,  'list'=>true,  'grid'=>true);
@@ -326,6 +337,9 @@ class WRS_MANAGE_PARAM
 		$fields['DATABASE_ID']		=	array('title'=>'Database',  'is_select'=>'ATT_WRS_DATABASE', 'select_fields_in_table'=>array('DATABASE_ID','DATABASE_DESC'),  'length'=>180,    'list'=>true,  'grid'=>true);
 		$fields['CUSTOMER_ID']		=	array('title'=>'Cliente',   'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_CODE','CUSTOMER_DESC'),  'grid'=>true,     'class'=>'hide');
 		
+		
+		
+		//Atributos de execuções e Eventos
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_CUBE'), 
 				'button'	=>	$button,
 				'field'		=>	$fields,
