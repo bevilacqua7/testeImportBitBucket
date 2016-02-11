@@ -288,7 +288,12 @@ class WRS_PANEL  extends WRS_USER
 		WRS_TRACE('END eventDefault()', __LINE__, __FILE__);
 	}
 	
-	private function load_reports_autoload(){
+	
+	/**
+	 * Lendo auto loads
+	 */
+	private function load_reports_autoload()
+	{
 
 		$_cube			=	$this->getCube();
 		$DATABASE		=	$_cube['DATABASE_ID'];
@@ -303,6 +308,8 @@ class WRS_PANEL  extends WRS_USER
 		{
 			while($report	=	$this->fetch_array($queryGrid_exec))
 			{
+				
+
 				if(trim($report['REPORT_AUTOLOAD'])=='1'){
 					$rows_REPORTS[] 	=	'AUTO_LOAD.push(callback_load_report_generic_modal('.json_encode($report,1).',true))';
 				}			
@@ -329,8 +336,9 @@ class WRS_PANEL  extends WRS_USER
 					}
 			}
 		}*/
-		
-		if(count($rows_REPORTS)>0 && fwrs_request('exec_reports')=='1'){ // exec_reports!=1 para nao carregar relatorios quando é somente layout
+
+		if(count($rows_REPORTS)>0 && fwrs_request('exec_reports')=='1')
+		{ // exec_reports!=1 para nao carregar relatorios quando é somente layout
 			echo fwrs_javascript('AUTO_LOAD = [];'.implode(';',$rows_REPORTS).';AUTO_LOAD=base64_json(AUTO_LOAD);');
 		}
 	}

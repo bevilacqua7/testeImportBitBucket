@@ -9,7 +9,9 @@
  * @link http://layout.jquery-dev.com/
  */
 
-var IS_TRACE	=	false;
+var IS_TRACE		=	false;
+var IS_EXCEPTION	=	false;
+
 
 var words_restrict	=	
 {
@@ -1357,7 +1359,7 @@ function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG,label)
 
 									try{
 										controle_metricas=(_label.trim().toLowerCase().substr(0,5)=='cresc' || _label.trim().toLowerCase().substr(0,4)=='evol');
-									}catch(e){console.warn(' exception');
+									}catch(e){if(IS_EXCEPTION) console.warn(' exception');
 									controle_metricas	=	false;
 									}
 									

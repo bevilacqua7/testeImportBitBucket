@@ -91,6 +91,8 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	var _kendoui			=	$.parseJSON(base64_decode(data.REPORT_OPTIONS));
 	var _filter_selected 	=	'';
 	
+	_kendoui['load_direct']	=	true;
+	
 	var _param		=	{
 							'LAYOUT_ROWS'			:	wrs_base64encode(_ROWS),
 							'LAYOUT_COLUMNS'		:	wrs_base64encode(_COLUMNS),
@@ -99,7 +101,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 							'KendoUi'				:	base64_json(_kendoui),
 							'FILTER_TMP'			:	formata_filters_tmp(_FILTERS,_FILTERS_VALUES)//wrs_base64encode(_filter_selected)
 						}
-	
+
 	if(return_params)
 	{
 		_END('callback_load_report_generic_modal');
@@ -381,15 +383,13 @@ function getLoadReport(no_request)
 	var sortable_filtro				=	rows_by_metrica_attr_base64('.sortable_filtro','attr');
 	var wrs_grid_options_default	=	get_aba_active_kendoUi();
 	
-	var _filter_hide=activeToGetAllFilters();
+	var _filter_hide				=	activeToGetAllFilters();
 	var filter_selected				=	$.WrsFilter('getAllFiltersToRun');
-	
 	
 	wrs_grid_options_default		=	wrs_clean_data(wrs_grid_options_default);
 	
-	
-	
-	if(no_request){
+	if(no_request)
+	{
 		
 		_param	=	{
 				'LAYOUT_ROWS'			:	sortable_linha.request,
@@ -397,7 +397,7 @@ function getLoadReport(no_request)
 				'LAYOUT_MEASURES'		:	sortable_metrica.request,
 				'FILTER_TMP'			:	filter_selected.full,
 				
-}
+			}
 		
 		
 	}else{

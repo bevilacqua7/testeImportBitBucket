@@ -15,7 +15,9 @@
 	
 	$filename = fwrs_request('filename');
 	$name_file='file';
-	if(isset($filename) && trim($filename)!=''){
+	
+	if(isset($filename) && trim($filename)!='')
+	{
 		$name_file = 'filename';		
 	}
 	

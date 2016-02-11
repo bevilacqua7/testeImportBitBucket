@@ -466,7 +466,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 				aba_active.wrsAbaData('setKendoUi',{STOP_QUERY:false});
 				flag	=	 false;
 			}
-		}catch(e){console.warn(' exception');}
+		}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 		
 		
 		
@@ -616,7 +616,7 @@ function get_exec_filter()
 		try{
 			_filter	=	get_aba_active_wrs_param().index_filtro;
 		}catch(e){
-			console.warn(' exception');
+			if(IS_EXCEPTION) console.warn(' exception');
 			_filter	=	 null;
 			
 		}
@@ -1694,7 +1694,7 @@ function wrsFilterClickFalse(filter_hide)
 																	
 														 				json['FILTER']	=	json['FILTER_CLICK']=		join_filter_selected_current(json['FILTER'],filter_selectd['__'+tag_class]);
 														 		}catch(e){
-														 			console.warn(' exception');
+														 			if(IS_EXCEPTION) console.warn(' exception');
 														 		}
 																
 																

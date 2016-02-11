@@ -488,7 +488,7 @@ function optionsDataConvert(gridValue,with_decode)
 								return true;
 							}
 				}catch(e){ 
-					console.warn(' exception');
+					if(IS_EXCEPTION) console.warn(' exception');
 				}
 				
 				
@@ -539,7 +539,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 				}catch(e){
 					multiple_cube_id	=			null;	
-					console.warn(' exception');
+					if(IS_EXCEPTION) console.warn(' exception');
 				}
 				delete kendoObject;
 				_END('wrsAbas::multiple_cube_active');
@@ -962,7 +962,7 @@ function optionsDataConvert(gridValue,with_decode)
 					if(_full_data['load_direct']==true) is_direct=false;
 				}catch(e){
 					is_direct	=	 false;
-					console.warn(' exception');
+					if(IS_EXCEPTION) console.warn(' exception');
 				}
 					
 					//se o report vier nulo então é criado um novo report
@@ -1051,7 +1051,7 @@ function optionsDataConvert(gridValue,with_decode)
 						catch(e)
 						{
 							_reportDetails	=	{};
-							console.warn(' exception');
+							if(IS_EXCEPTION) console.warn(' exception');
 						}
 						
 
@@ -1189,6 +1189,7 @@ function optionsDataConvert(gridValue,with_decode)
 					var aba_active			=	get_aba_active_kendoUi();
 					var _report_id_active	=	aba_active.REPORT_ID;
 					
+					
 					//tagABA.find('.'+tag_aba_empty).each(function(){$(this).remove();});
 					// atualizacao do tratamento acima que nao funcionava
 					$('.WRS_ABA ul li').each(function(){ if($(this).attr('class')==''){ $(this).remove(); } });
@@ -1219,12 +1220,12 @@ function optionsDataConvert(gridValue,with_decode)
 									
 									if(empty(_report_id))	_report_id	=	kendoUi['REPORT_ID'];
 
-									
+
 									try{
 										if(opts['load_direct']==true) is_load_direct= true;
 									}catch(e){
 										is_load_direct	= false;
-										console.warn(' exception');
+										if(IS_EXCEPTION) console.warn(' exception');
 									}
 									
 
@@ -1259,7 +1260,8 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					
 					
-					if(be_loaded){
+					if(be_loaded)
+					{
 						delete optionsAba,kendoUi;
 						return true;
 					}
@@ -1276,7 +1278,8 @@ function optionsDataConvert(gridValue,with_decode)
 
 					$('.NAV_CONFIG_WRS').attr('is-event',true);
 					
-					if(empty(_report_id)) {
+					if(empty(_report_id)) 
+					{
 						_END('wrsAbas::__load_multiple');
 						delete optionsAba,kendoUi,optionsAba;
 						return false;
@@ -1289,7 +1292,8 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					
 					var get_last_active	=	$('.WRS_ABA ul .active');
-
+					
+					
 					if(is_load_direct==false)
 					{
 						tagABA.find('.'+_report_id).trigger('click');
@@ -1439,7 +1443,7 @@ function optionsDataConvert(gridValue,with_decode)
 							opts_encode['load_direct']	=	options['load_direct'];
 						}catch(e){
 							_ONLY('load_direct history');
-							console.warn(' exception');
+							if(IS_EXCEPTION) console.warn(' exception');
 						}
 						
 						__load_multiple([opts_encode],true);
@@ -1513,8 +1517,8 @@ function optionsDataConvert(gridValue,with_decode)
 				if(empty(inputBase64)) return false;
 				
 				var input		=	 getJsonDecodeBase64(inputBase64);
-
 				
+
 				
 					if(input.length!=0)
 					{
@@ -1534,6 +1538,8 @@ function optionsDataConvert(gridValue,with_decode)
 						{
 							aba_active.find('.icon-remove-aba').trigger('click');
 						}
+					
+					
 					delete input;
 					_END('wrsAbas::__show_grid');
 			}
@@ -2074,17 +2080,17 @@ function optionsDataConvert(gridValue,with_decode)
 //				_START('wrsAbaData::__getKendoUi');
 				try{
 					
-					try{delete data_global.kendoUi.LAYOUT_COLUMNS; 	} catch(e){console.warn(' exception');}
-					try{delete data_global.kendoUi.LAYOUT_FILTERS;	} catch(e){console.warn(' exception');}
-					try{delete data_global.kendoUi.LAYOUT_MEASURES;	} catch(e){console.warn(' exception');}
-					try{delete data_global.kendoUi.LAYOUT_ROWS;		} catch(e){console.warn(' exception');}
-					try{delete data_global.kendoUi.FILTER_TMP;		} catch(e){console.warn(' exception');}
+					try{delete data_global.kendoUi.LAYOUT_COLUMNS; 	} catch(e){if(IS_EXCEPTION) console.warn(' exception');}
+					try{delete data_global.kendoUi.LAYOUT_FILTERS;	} catch(e){if(IS_EXCEPTION) console.warn(' exception');}
+					try{delete data_global.kendoUi.LAYOUT_MEASURES;	} catch(e){if(IS_EXCEPTION) console.warn(' exception');}
+					try{delete data_global.kendoUi.LAYOUT_ROWS;		} catch(e){if(IS_EXCEPTION) console.warn(' exception');}
+					try{delete data_global.kendoUi.FILTER_TMP;		} catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 					
 					//_END('wrsAbaData::__getKendoUi');
 					return data_global.kendoUi;
 				}catch(e){
 					//_END('wrsAbaData::__getKendoUi');
-					console.warn(' exception');
+					if(IS_EXCEPTION) console.warn(' exception');
 					return {SUMARIZA:1,COLORS_LINE:1};
 				}
 				
