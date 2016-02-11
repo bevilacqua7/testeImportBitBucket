@@ -41,8 +41,7 @@ function wrs_clean_data(input_default)
 				JOB_RESULT 	: 	null,
 				STOP_RUN 	: 	false,
 				TYPE_RUN 	: 	null,
-				new_aba 	: 	false,
-				load_direct	:	true
+				new_aba 	: 	false
 		};
 	
 		
@@ -1474,10 +1473,9 @@ function stop_job_timeout(report_id)
  * 
  */
 function wrs_run_filter()
-{
-
+{ 
 	_START('wrs_run_filter');
-	
+ 
 	var manager_aba			=	$(this).attr('manager_aba');
 		manager_aba			=	empty(manager_aba) ? false : true;
 		$(this).removeAttr('manager_aba');
@@ -1539,7 +1537,9 @@ function wrs_run_filter()
 		{
 			aba_active.wrsAbaData('set_change_aba',false);	
 			configure_options_show_grid($(this));
-			_END('wrs_run_filter');
+			
+			_END('wrs_run_filter 1');
+			
 			aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
 			
 			panel_open_by_time_out(_report_id);
@@ -1563,7 +1563,7 @@ function wrs_run_filter()
 		{
 			$(this).removeAttr('noactive');
 			//stop_job_timeout(_report_id);
-			_END('wrs_run_filter');
+			_END('wrs_run_filter 2');
 			
 						delete aba_active;
 			delete report_KendoUi;
@@ -1653,7 +1653,7 @@ function wrs_run_filter()
 			delete request_coluna;
 			delete request_filtro;
 			
-			_END('wrs_run_filter');
+			_END('wrs_run_filter 3');
 			
 			return true;
 		}
@@ -1835,7 +1835,7 @@ function wrs_run_filter()
 						delete wrsConfigGridDefault_data;
 						delete _param_request;
 
-						_END('wrs_run_filter');
+						_END('wrs_run_filter 4');
 						
 						return false;
 						
@@ -1871,7 +1871,7 @@ function wrs_run_filter()
 							delete _param_request;
 							delete is_wrs_change_to;
 
-							_END('wrs_run_filter');
+							_END('wrs_run_filter 5');
 							return true;
 						}
 		}else{
@@ -1921,7 +1921,7 @@ function wrs_run_filter()
 							delete _param_request;
 							delete is_wrs_change_to;
 							
-			_END('wrs_run_filter');
+			_END('wrs_run_filter 6');
 			return true;
 		}
 		
@@ -2036,7 +2036,7 @@ function wrs_run_filter()
 	delete _param_request;
 	delete is_wrs_change_to;
 	
-	_END('wrs_run_filter');
+	_END('wrs_run_filter 7');
 	
 }
 

@@ -135,7 +135,9 @@
 </body>
 
 <script>
-$(function(){
+$(function()
+	{
+
 	$(ABA_TAG_NAME).wrsAbas('auto_load', AUTO_LOAD);
 
 	controllers_layout();//click controllers layout

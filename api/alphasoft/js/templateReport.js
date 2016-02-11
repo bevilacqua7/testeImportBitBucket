@@ -91,7 +91,6 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	var _kendoui			=	$.parseJSON(base64_decode(data.REPORT_OPTIONS));
 	var _filter_selected 	=	'';
 	
-	_kendoui['load_direct']	=	true;
 	
 	var _param		=	{
 							'LAYOUT_ROWS'			:	wrs_base64encode(_ROWS),
@@ -101,7 +100,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 							'KendoUi'				:	base64_json(_kendoui),
 							'FILTER_TMP'			:	formata_filters_tmp(_FILTERS,_FILTERS_VALUES)//wrs_base64encode(_filter_selected)
 						}
-
+		
 	if(return_params)
 	{
 		_END('callback_load_report_generic_modal');
@@ -127,6 +126,7 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 		}*/
 		
 	}
+	return _param;
 	_END('callback_load_report_generic_modal');
 }
 

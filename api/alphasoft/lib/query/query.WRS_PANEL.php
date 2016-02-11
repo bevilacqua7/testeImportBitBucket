@@ -421,6 +421,9 @@ EOF;
 EOF;
 		return $query;
 	}
+	
+	
+	
 
 	/**
 	 * Salva Relatorios na Base de Dados
