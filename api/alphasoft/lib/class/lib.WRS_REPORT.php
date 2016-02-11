@@ -225,7 +225,8 @@ HTML;
 	
 		$user			=	WRS::INFO_SSAS_LOGIN();
 	
-		$sql			=	$this->_query->Get_SSAS_Reports($user['CUSTOMER_ID'], $user['USER_CODE'], $user['PERFIL_ID'], $database_id, $cube_id, 1);
+		
+		$sql			=	QUERY_PANEL::GET_SSAS_REPORT($database_id, $cube_id, 1);
 	
 		return $sql;
 	
@@ -332,7 +333,7 @@ HTML;
 		$combo	 		= 	<<<COMBO
 				<option value="%VAL%" %SEL%>%LAB%</option>
 COMBO;
-				
+	
 		// preenche os 'grupos' do formulario com os tipos cadastrados no banco (query passada pelo facioli em 26-08-2015)
 		$user				=	WRS::INFO_SSAS_LOGIN();		
 		$sql				=	$this->_query->Get_SSAS_Reports_Groups($user['CUSTOMER_ID']);

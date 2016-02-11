@@ -111,7 +111,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 				
 			}catch(e){
 				json_level_drill	=	 null;
-				console.warn(' exception');
+				if(IS_EXCEPTION) console.warn(' exception');
 			}
 
 			
@@ -165,7 +165,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 				
 			}catch(e){
 				json_level_drill	=	 null;
-				console.warn(' exception');
+				if(IS_EXCEPTION) console.warn(' exception');
 			}
 			
 			
@@ -298,9 +298,11 @@ function addTargetDisableContext(kendoUi,report_id)
     		var sizeColumns		=	kendoUi.columns[keyName].flag_total_column
     		var columns_fixed	=	explode(',',kendoUi.columns[keyName].layout['LAYOUT_ROWS']);
     			columns_fixed	=	columns_fixed.length+1;
-
-    		//Abilita para o reenvio	
+    		var IDWrs			=	e.kendoId;
     			
+    			
+    			
+    		//Abilita para o reenvio	
     		
     		var rows		=  	'';
     		var column		=	'';
@@ -316,7 +318,8 @@ function addTargetDisableContext(kendoUi,report_id)
     		var _layout				=	 [];
     		var layout				=	e.layout;
     		
-
+    		
+    		 
     		for(x in layout)
     			{
     					_layout[x]	=	explode(',',layout[x]);
@@ -325,6 +328,8 @@ function addTargetDisableContext(kendoUi,report_id)
 
     		
     		$('.'+e.kendoId).wrsAbaData('setKendoUi',{STOP_RUN:false, 'TYPE_RUN':TYPE_RUN[e.type]});
+    		
+
     		
     		switch(e.type)
     		{
@@ -356,8 +361,15 @@ function addTargetDisableContext(kendoUi,report_id)
 													}else{
 														value_select	=	strip_tags(_data[indexTR][name_column[indexTD]]);
 														rows_current_full_name				=	_layout['LAYOUT_ROWS'][indexParent];
+														
 														_layout['LAYOUT_ROWS'][indexParent]	=	e.json['LEVEL_FULL'];
+														
+														
+														
 														filter_add							=	[['__'+replace_attr(rows_current_full_name),'',rows_current_full_name+'.['+value_select+']']];
+														
+
+														
 														changeWithDrillFilter(_layout,filter_add);
 													}
 				};	
@@ -608,7 +620,13 @@ function addTargetDisableContext(kendoUi,report_id)
     	var e_colunas 	= 	explode(',',e_infos.layout_full['LAYOUT_COLUMNS']);
     	var e_linhas 	= 	explode(',',e_infos.layout_full['LAYOUT_ROWS']);
     	var cols_qtde 	= 	[e_colunas.length,e_linhas.length];
-
+    	var IDWrs		=	$event.attr('id');
+    	
+    	
+//    	$('.'+IDWrs+'ContextMenu').remove();
+    	
+    	
+    	context.remove(IDWrs);
     	/*
     	 * Context Menu das Linhas
     	 */
@@ -625,22 +643,22 @@ function addTargetDisableContext(kendoUi,report_id)
     	if(!in_array('DRT',PERFIL_ID_USER))
     	{
 	    	// cabecalho de cada linha	
-	    	$(TAG_REPORT_ID+" .k-grid-content-locked").attr('rel','noContext').attr('type','linha');
+	    	$(TAG_REPORT_ID+" .k-grid-content-locked").attr('rel','noContext').attr('type','linha').addClass('type_wrs_container');
 
-	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-content-locked td'				, data_line_row, $event,'linha');
+	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-content-locked td'				, data_line_row, $event,'linha',IDWrs);
 	    	    	
 	    	// cabecalho inicial (canto superior esquerdo) da coluna e da linha apenas
-	    	$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked").attr('type','linha_header');
+	    	$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked").attr('type','linha_header').addClass('type_wrs_container');
 	    	//console.log('INCLUIU HEADER',$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked"),$(TAG_REPORT_ID +" .k-grid-header .k-grid-header-locked th"),data_line_header);
-	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-locked th'	, data_line_header,$event,'linha_header');    	  	
+	    	context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-locked th'	, data_line_header,$event,'linha_header',IDWrs);    	  	
     	}
     	
     	
     	//Dados
     	if(!in_array('DRV',PERFIL_ID_USER))
     	{
-    		$(TAG_REPORT_ID+" .k-grid-content").attr('type','data');
-    		context.attachWRS(TAG_REPORT_ID+' .k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event,'data');    		
+    		$(TAG_REPORT_ID+" .k-grid-content").attr('type','data').addClass('type_wrs_container');
+    		context.attachWRS(TAG_REPORT_ID+' .k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event,'data',IDWrs);    		
     	}
     	
     	
@@ -656,35 +674,38 @@ function addTargetDisableContext(kendoUi,report_id)
     	
     	if(length==1)
     	{
-    		$(TAG_REPORT_ID+" .k-grid-header .k-grid-header-wrap").attr('type','coluna_header');
+    		$(TAG_REPORT_ID+" .k-grid-header .k-grid-header-wrap").attr('type','coluna_header').addClass('type_wrs_container');
     		
 			var data_line_header2							=	menu_context_relation_ship_measure(jsonMeasure);
     			data_line_header2[data_line_header2.length]	=	{text	: LNG('REMOVE')		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
     		// header de cada coluna
         	if(!in_array('DRT',PERFIL_ID_USER)){
-        		context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap tr:eq(0) th '	, data_line_header2,$event,'measure');
+        		context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap tr:eq(0) th '	, data_line_header2,$event,'measure',IDWrs);
         	}
     	}
     	else
     	{
     		
-    		$(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap').attr('type','coluna_header_line');
+    		$(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap').attr('type','coluna_header_line').addClass('type_wrs_container');
     		 
     		var tag					=	'';
+    		
     		for(var i=0;i<length;i++)
     			{    			
     					tag		=	TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap tr:eq('+i+') th ';
     					if(i!=(length-1))
     					{	// header de cada coluna
-    				    	if(!in_array('DRT',PERFIL_ID_USER)){
-    				    		context.attachWRS(tag	, menu_context_relation_ship_measure(jsonRelationShip),$event,'coluna_header_line');
+    				    	if(!in_array('DRT',PERFIL_ID_USER))
+    				    	{
+    				    		context.attachWRS(tag	, menu_context_relation_ship_measure(jsonRelationShip),$event,'coluna_header_line',IDWrs);
     				    	}
     					}else{
-    				    	if(!in_array('DRM',PERFIL_ID_USER)){
+    				    	if(!in_array('DRM',PERFIL_ID_USER))
+    				    	{
 	    						var data_line_header2							=	 menu_context_relation_ship_measure(jsonMeasure);
 	    		        		data_line_header2[data_line_header2.length]	=	{text	: LNG('REMOVE')		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
 	    		        		// metricas
-	    						context.attachWRS(tag	, data_line_header2,$event,'measure');
+	    						context.attachWRS(tag	, data_line_header2,$event,'measure',IDWrs);
     				    	}
     					}
     			}   		 

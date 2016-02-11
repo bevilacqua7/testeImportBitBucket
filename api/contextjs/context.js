@@ -94,12 +94,20 @@ var context = context || (function () {
 	}
 
 	
-	function buildMenuWRS(data, id, subMenu,type) 
+	function buildMenuWRS(data, id, subMenu,type,IdWRS) 
 	{
+		var class_main	=	IdWRS+'ContextMenu '; 
+		
+		if(subMenu==true)
+		{
+			class_main	=	'';
+		}
+		
 		
 		var subClass = (subMenu) ? ' dropdown-context-sub' : '',
 			compressed = options.compress ? ' compressed-context' : '',
-			$menu = $('<ul class="dropdown-menu dropdown-menu-drill-wrs  '+type+' dropdown-menu-drill dropdown-context' + subClass + compressed+'" context-wrs="'+id+'" id="dropdown-' + id + '"></ul>');
+			$menu = $('<ul class="dropdown-menu dropdown-menu-drill-wrs  '+type+' '+class_main+'  dropdown-menu-drill dropdown-context' + subClass + compressed+'" context-wrs="'+id+'" id="dropdown-' + id + '"></ul>');
+		
         var i = 0, linkTarget = '';
         for(i; i<data.length; i++) {
         	if (typeof data[i].divider !== 'undefined') {
@@ -267,33 +275,34 @@ var context = context || (function () {
 	}
 	
 	
-	function addContextWRS(selector, data,whoEventRequest,type) {
+	function addContextWRS(selector, data,whoEventRequest,type,IdWrs) {
 		
 
 		
 		destroyContext(selector);
 
-		var d 		= new Date(),
-			id 		= d.getTime();
-		
-		console.log('type',type);
+		var d 		= 	new Date();
+//			id 		= 	d.getTime();
 		//no type será passado todas as nomeclaturas de onde será fixada o evento mas o atributo para orientação é attr nomeclatura o ficial apenas para controle de log
-		var control_measure_attr		=	 isEmpty(type) && type!='measure' ? 'attr' : 'measure';
+		var control_measure_attr		=	 type=='measure' ?  'measure' : 'attr';
+		
+		var id		=	IdWrs+'-'+control_measure_attr;
 		
 		//WARNING:: Procedimento para poder deixar o modelo mais rápido
-		if($('.dropdown-menu-drill-wrs .'+control_measure_attr).length==0){
+		if($('.dropdown-menu-drill-wrs .'+control_measure_attr).length==0)
+		{
 			//processo natural
-			var $menu 	= buildMenuWRS(data, id,undefined, control_measure_attr);
+			var $menu 	= buildMenuWRS(data, id,undefined, control_measure_attr,IdWrs);
 
 			$('body').append($menu);
 				
-				delete $menu;
+			//	delete $menu;
 			
 		}else{
 			//mudança por marcelo santos
 			id	=	$('.dropdown-menu-drill-wrs .'+control_measure_attr).attr('context-wrs');
+
 		}
-		
 		
 			
 			/*
@@ -315,7 +324,6 @@ var context = context || (function () {
 				//Não permite alicar o filtro
 				//A class bold é exclusiva do Total para linha e colunas
 
-				
 				if(dropdown_menu.hasClass('bold')){
 					return true;
 				}
@@ -335,18 +343,22 @@ var context = context || (function () {
 			
 			
 			var eventAction	=	data[0].action;
-	
-	$(document).on('contextmenu', selector, function (e) {
-		e.preventDefault();
-		e.stopPropagation();
-		
+			
 
+	
+	$(document).on('contextmenu', selector, function (e) 
+	{
+		e.preventDefault();
 		
+		e.stopPropagation();
+				
 		/*
 		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
 		 */		
-		var table_parents	=	$(this).parents('div');
-		var esconde=false;			
+		//var table_parents	=	$(this).parents('div');
+		var table_parents	=	find_parent_class($(this),'type_wrs_container');
+		
+		var esconde			=	false;			
 
 		$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
 
@@ -372,19 +384,22 @@ var context = context || (function () {
 			}
 		
 		
-		
-		if(table_parents.first('div').attr('type')=='coluna_header_line'){
-			var qtde_trs_primeiro 		= table_parents.first('div').find('table:first').find('tr:last').prev().find('th').length;
-			var qtde_trs_headers_linhas = table_parents.first('div').find('table:first').find('tr:last').find('th').length;
-			var qtde_colunas_por_secao	= qtde_trs_headers_linhas/qtde_trs_primeiro;
-			if(qtde_colunas_por_secao<=1 || !$(this).parents('tr:first').is(table_parents.first('div').find('table:first').find('tr:last'))){ // se existe mais de uma metrica por coluna pai OU a linha da metrica clicada não é a ultima linha (somente de metricas - pois nao deve aparecer remover nas linhas de cima, dos atributos)
+		if(table_parents.attr('type')=='coluna_header_line')
+		{
+			var qtde_trs_primeiro 			= 	table_parents.find('table:first').find('tr:last').prev().find('th').length;
+			var qtde_trs_headers_linhas 	= 	table_parents.find('table:first').find('tr:last').find('th').length;
+			var qtde_colunas_por_secao		= 	qtde_trs_headers_linhas/qtde_trs_primeiro;
+			
+			if(qtde_colunas_por_secao<=1 || !$(this).parents('tr:first').is(table_parents.find('table:first').find('tr:last')))
+			{ // se existe mais de uma metrica por coluna pai OU a linha da metrica clicada não é a ultima linha (somente de metricas - pois nao deve aparecer remover nas linhas de cima, dos atributos)
 				esconde=true;
 			}
+			
 		}
 		
 		
-		if(table_parents.first('div').attr('type')=='coluna_header'){
-			var qtde_colunas_measures 		= table_parents.first('div').find('table:first').find('tr:first').find('th').length;
+		if(table_parents.attr('type')=='coluna_header'){
+			var qtde_colunas_measures 		= table_parents.find('table:first').find('tr:first').find('th').length;
 			if(qtde_colunas_measures<=1){
 				esconde=true;
 			}
@@ -392,7 +407,7 @@ var context = context || (function () {
 		
 		
 		
-		if(table_parents.first('div').attr('type')=='data' || table_parents.first('div').attr('type')=='linha'){			
+		if(table_parents.attr('type')=='data' || table_parents.attr('type')=='linha'){			
 			esconde=true;
 		}
 		
@@ -400,7 +415,7 @@ var context = context || (function () {
 		//Sempre inicia como hide
 		$('#dropdown-' + id).find('.VER_MAPA').addClass('hide');
 		
-		if(table_parents.first('div').attr('type')=='linha'){
+		if(table_parents.attr('type')=='linha'){
 			var proxTd			=	$(this).next('td');
 			if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!='' && $(this).attr('data-original')!='true'){
 				$('#dropdown-' + id).find('.VER_MAPA').removeClass('hide');	
@@ -442,7 +457,8 @@ var context = context || (function () {
 		
 		$wrsEventMain		=	 $(this);
 		
-		var divMainEvent		=	$wrsEventMain.parent().parent().parent().parent();
+		//var divMainEvent		=	$wrsEventMain.parent().parent().parent().parent();
+		var divMainEvent		=	 find_parent_class($wrsEventMain,'type_wrs_container');
 		var type				=	divMainEvent.attr('type');
 		
 	 	/*
@@ -473,14 +489,19 @@ var context = context || (function () {
 		}
 		
 		
+	 
+		
 		var wrs_event	=	$dd.attr('wrs_event');
 		
 		/*
 		 * impedindo que o evento seja replicado diversas vezes
 		 */
-		if(!wrs_event){
+		if(!wrs_event)
+		{
 			$dd.attr('wrs_event','true');
+			
 			$dd.find('li a').each(function(){
+				
 				$(document).on('click', '#' + $(this).attr('id'), function(event)
 																	{ 
 																			var json	=	$(this).attr('json');
@@ -506,12 +527,18 @@ var context = context || (function () {
 		 * END IF
 		 */
 		var max_x  = parseInt(parseInt($(window).width()) - parseInt($dd.css('width')))-2;
+		
 		var var_left=parseInt((e.pageX - 13))+parseInt($dd.css('width'))>parseInt($(window).width())?max_x:(e.pageX - 13);
+		
 		var pos_seta=parseInt($dd.css('width'))-parseInt(parseInt($(window).width())-parseInt(e.pageX));
-		if(max_x==var_left){
+		
+		if(max_x==var_left)
+		{
 			$('#'+$dd.attr('id')+':before').addRule({left:(parseInt(pos_seta)-1)+'px'});
 			$('#'+$dd.attr('id')+':after').addRule({left:pos_seta+'px'});
 		}
+		
+		
 		if (typeof options.above == 'boolean' && options.above) {
 			$dd.addClass('dropdown-context-up').css({
 				top: e.pageY - 20 - $('#dropdown-' + id).height(),
@@ -539,11 +566,17 @@ var context = context || (function () {
 		$(document).off('contextmenu', selector).off('click', '.context-event');
 	}
 	
+	function removeBox(id)
+	{
+			$('.'+id+'ContextMenu').remove();
+	}
+	
 	return {
 		init: initialize,
 		settings	: updateOptions,
 		attach		: addContext,
 		attachWRS	: addContextWRS,//Criado Por Marcelo Santos customização para o Dril WRS
-		destroy		: destroyContext
+		destroy		: destroyContext,
+		remove		: removeBox
 	};
 })();
