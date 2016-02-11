@@ -536,6 +536,12 @@ function base64_json(inputArray)
 }
 
 
+function base64_json_decode(inputArray)
+{
+	return json_decode(base64_decode(inputArray));
+}
+
+
 
 function cleanJsonEncodeToElement(element)
 {
