@@ -166,16 +166,23 @@ class WindowGrid extends FORM
 		
 		
 		if($wrs_type_grid=='form'){
-			unset($param['button']['new']); 	// se o usuario estiver no formulario para alteracao, ele so pode salvar ou apagar algo (sem botao de novo)
+			unset($param['button']['new']); 
+			unset($param['button']['remove']); 	// se o usuario estiver no formulario para alteracao, ele so pode salvar ou apagar algo (sem botao de novo)
+			if(array_key_exists('export',$param['button'])){
+				unset($param['button']['export']); // no formulario de alteracao nao tem de aparecer botoes de import/export se existirem
+			}
+			if(array_key_exists('import',$param['button'])){
+				unset($param['button']['import']);
+			}
 		}else{
 			unset($param['button']['update']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
 			unset($param['button']['back']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
 		}
-	
+		
+		
+		
 		$this->setButton($param['button'],$param['table'],((array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false),((array_key_exists('button_icon',$param) && is_array($param['button_icon']) && count($param['button_icon'])>0)?$param['button_icon']:false));
-		
-		
-		
+				
 		$TPL_BUTTON				=		$this->getButton();
 				
 		if(!fwrs_request('return_html')){

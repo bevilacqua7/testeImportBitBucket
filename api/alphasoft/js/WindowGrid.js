@@ -253,19 +253,6 @@ function wrd_grid_window_to_form_dbl(arg)
 }
 
 
-function callback_load_admin_generic_modal(arg,tabela)
-{
-	_START('callback_load_admin_generic_modal');
-	var _data			=	 $('#myModal').data('wrsGrid');
-	var param			=	 _data.param_original;
-	var option						=	 [];
-		option['wrs_type_grid']		=	'form';
-		option[param['primary']]	=	arg.ROW_ID;
-		option['param_request']			=	param;
-	grid_window_modal(option,tabela);
-	_END('callback_load_admin_generic_modal');
-}
-
 function wrs_grid_window_event()
 {
 	_START('wrs_grid_window_event');
@@ -361,26 +348,21 @@ function btn_window_grid_event(_functionCallBack,_action_type,_table,_extraValue
 }
 
 //Change Evento de Doble clique da modal
-function wrs_window_grid_events_tools(objectClick,btn_events)
+function wrs_window_grid_events_tools(objectClick)
 {
 	_START('wrs_window_grid_events_tools');
 	var _options	=	{
-						visao	:	wrs_grid_window_event,
-						icon	:	wrd_grid_window_to_form,
-						icondbl	:	wrd_grid_window_to_form_dbl,
-						btn		:	btn_window_grid_event
-					};
+							visao	:	wrs_grid_window_event,
+							icon	:	wrd_grid_window_to_form,
+							icondbl	:	wrd_grid_window_to_form_dbl,
+							btn		:	btn_window_grid_event
+						};
 	
 	
-	if(!isEmpty(btn_events))
-	{
-		_options.btn	=	btn_events.btn;
-	}
-
 
 	var options		=	_options;
 	
-		if(!empty(objectClick))
+		if(!isEmpty(objectClick))
 		{
 			options		=	merge_objeto(_options,objectClick);
 		}
@@ -424,9 +406,10 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 	{
 		funCallBackData	=	function(data)
 		{
+			
 				$('.modal-content-grid').html(data);
-				wrs_window_grid_events_tools(null,btn_events);
-				
+				wrs_window_grid_events_tools(btn_events);
+			
 				$(".wrs_grid_window_event a[rel="+param_request.wrs_type_grid+"]").addClass('active_tools');
 				
 				if(Event=='GET_SSAS_LAYOUTS')
@@ -436,13 +419,12 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 					$(".wrs_grid_window_event a[rel=icon_middle]").parent().hide();
 				 
 				}
-				
-
 		};
 	}
 
 	var header	=	'<div class="modal-header ui-accordion-header  ui-accordion-header-active ui-state-active"><h4 class="modal-title" id="myModalLabel">'+LNG('LABEL_LOAD')+'</h4></div><div class="body_grid_window_center_Load"></div>';
 	$('.modal-content-grid').html(header);
+	
 	setLoading($('.body_grid_window_center_Load'));	
 	runCall(param_request,Ofile,Oclass,Oevent,funCallBackData,'modal');
 	_END('grid_window_modal');
