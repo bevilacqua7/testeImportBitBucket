@@ -1,4 +1,62 @@
 
+
+function callback_load_admin_generic_modal(arg,tabela)
+{
+	_START('callback_load_admin_generic_modal');
+	var _data			=	 $('#myModal, .modal-content-grid').data('wrsGrid');
+	var param			=	 _data.param_original;
+	var option						=	 [];
+		option['wrs_type_grid']		=	'form';
+		option[param['primary']]	=	arg.ROW_ID;
+		option['param_request']			=	param;
+
+
+		var funCallBackVision = function()
+		{
+			_START('carrega_grid_list_admin::funCallBackVision');
+			var rel		=	 $(this).attr('rel');
+			var table	=	 $(this).attr('table');
+			
+			
+			var option	=	 {wrs_type_grid:rel};
+			
+			
+			try{
+				//CUBE_S existe apenas no Painel ele pe a referencia de qual cubo está sendo utilizado pelo system
+				option['cube_s']	=	CUBE_S;
+			}catch(e){
+				delete option['cube_s'];
+			}
+
+			
+			
+			carrega_grid_list_admin(option);
+			_END('carrega_grid_list_admin::funCallBackVision');
+		}
+
+		
+		
+		
+		var funCallBack	=	function(data)
+		{
+			_START('carrega_grid_list_admin::funCallBack');
+			
+				$('.modal-content-grid').html(data);
+				
+				wrs_window_grid_events_tools({btn:btn_window_grid_event_admin, visao: funCallBackVision});
+				
+			_END('carrega_grid_list_admin::funCallBack');	
+		};
+		
+		
+		
+
+	grid_window_modal(option,tabela,funCallBack);
+		
+	_END('callback_load_admin_generic_modal');
+}
+
+
 function carrega_grid_list_admin(options,obj)
 {
 _START('carrega_grid_list_admin');
@@ -94,10 +152,49 @@ function btn_window_grid_event_admin(data)
 	var values					=	 get_grid_window_values_form();
 
 	var _data					=	 $('#myModal, .body_grid_window').data('wrsGrid');
-	
+	var dadosKendo				=	 (!$("#"+table).length)?_data:$("#"+table).data('wrsModal');
 
-	
+	//console.log('dadosKendo',dadosKendo);
+
+	var funCallBackVision = function()
+	{
+		_START('btn_window_grid_event_admin::funCallBackVision');
+		var rel		=	 $(this).attr('rel');
+		var table	=	 $(this).attr('table');
+		var option	=	 {wrs_type_grid:rel};
+		
+		try{
+			//CUBE_S existe apenas no Painel ele pe a referencia de qual cubo está sendo utilizado pelo system
+			option['cube_s']	=	CUBE_S;
+		}catch(e){
+			delete option['cube_s'];
+		}
+
+		carrega_grid_list_admin(option);
+		_END('btn_window_grid_event_admin::funCallBackVision');
+	}
+
+	var funCallBack	=	function(data)
+	{
+		_START('btn_window_grid_event_admin::funCallBack');
+			$('.modal-content-grid').html(data);
+			wrs_window_grid_events_tools({btn:btn_window_grid_event_admin, visao: funCallBackVision});
+		_END('btn_window_grid_event_admin::funCallBack');	
+	};
+		
 	var param					=	 _data.param_original;
+	
+	/*
+	 * Como esta funcao (btn_window_grid_event_admin) é chamada para centralizar e normalizar as acoes especificas do ADMIN
+	 * ela é a mesma para quando há itens selecionados na grid como para as acoes dos botoes (salvar, etc).  Por isso é verificado
+	 * se existem parametros selecionados (mais de um item), caso nao houver, executa a acao com os dados da tela (formulario) para um unico item
+	 */
+	if(param==undefined){
+		btn_window_grid_event(funCallBack,action_type,table);
+		_END('btn_window_grid_event_admin:0808');
+		return true;		
+	}
+	
 	var chave_primaria			=	param.primary;
 	var visao					=	'grid';
 	
@@ -143,7 +240,7 @@ function btn_window_grid_event_admin(data)
 							{
 								index			=	$('.modal-content-grid #'+table+' .k-grid-content tr').index(this);
 							}
-							objDados 			= 	_data[index];							
+							objDados 			= 	dadosKendo[index];							
 							arrRegisterIds.push(objDados[chave_primaria]);
 							arrObjetosSelecionados.push(objDados);
 														
@@ -151,38 +248,7 @@ function btn_window_grid_event_admin(data)
 		}
 	}
 	
-	
-
-	var funCallBackVision = function()
-	{
-		_START('btn_window_grid_event_admin::funCallBackVision');
-		var rel		=	 $(this).attr('rel');
-		var table	=	 $(this).attr('table');
-		var option	=	 {wrs_type_grid:rel};
-		
-		try{
-			//CUBE_S existe apenas no Painel ele pe a referencia de qual cubo está sendo utilizado pelo system
-			option['cube_s']	=	CUBE_S;
-		}catch(e){
-			delete option['cube_s'];
-		}
-		
-		carrega_grid_list_admin(option);
-		_END('btn_window_grid_event_admin::funCallBackVision');
-	}
-
-	var funCallBack	=	function(data)
-	{
-		_START('btn_window_grid_event_admin::funCallBack');
-		console.log('data',data)
-			$('.modal-content-grid').html(data);
-			wrs_window_grid_events_tools({btn:btn_window_grid_event_admin, visao: funCallBackVision});
-		_END('btn_window_grid_event_admin::funCallBack');	
-	};
-	
 	var _extraValues = undefined;
-
-	console.log('action_type',action_type)
 	
 	
 			switch(action_type)
@@ -191,7 +257,8 @@ function btn_window_grid_event_admin(data)
 										if(qtde_linhas_selecionadas>0){										
 											var retornoQuestion = function(escolha){
 												if(escolha){
-													btn_window_grid_event(funCallBack,action_type,table);
+													_extraValues = {'objetosSelecionados':(escolha=='all')?'*':arrRegisterIds,'chave_primaria':chave_primaria};			
+													btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 												}
 											}
 											var _s = (qtde_linhas_selecionadas>1)?'s':'';

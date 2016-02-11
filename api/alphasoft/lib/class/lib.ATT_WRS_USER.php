@@ -46,6 +46,7 @@ class ATT_WRS_USER extends WRS_BASE
 		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));	
 		unset($param['button']['import']);
 		unset($param['button']['export']);
+		unset($param['button']['remove']);
 		$param['html']			=	'<pre>INSERT CLASS '.$this->admin->classname.' - tabela: '.$_tabela.'<hr>'.json_encode($arr_campos_request,1).'</pre>'.$param['html'];	
 		return $param;
 	}
@@ -75,6 +76,7 @@ class ATT_WRS_USER extends WRS_BASE
 		$_request_original 	= $_REQUEST;
 		$_tabela			= $options['table'];
 		$arr_campos_request = array();
+		$_regForExport		= json_decode($_request_original['extraValues'],1);
 		foreach($_fields as $nome_campo => $valores){
 			if(array_key_exists($nome_campo, $_request_original)){
 				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
@@ -84,7 +86,9 @@ class ATT_WRS_USER extends WRS_BASE
 		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
 		unset($param['button']['import']);
 		unset($param['button']['export']);
-		$param['html']			=	'<pre>DELETE CLASS '.$this->admin->classname.' - tabela: '.$_tabela.'<hr>'.json_encode($arr_campos_request,1).'</pre>'.$param['html'];
+		unset($param['button']['update']);
+		unset($param['button']['remove']);
+		$param['html']			=	'<pre>DELETE CLASS '.$this->admin->classname.' - tabela: '.$_tabela.'<hr>'.print_r($_regForExport,1).'</pre>'.$param['html'];
 		return $param;
 	}
 	

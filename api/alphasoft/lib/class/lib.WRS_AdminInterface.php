@@ -93,14 +93,17 @@ HTML;
 			header("Content-Disposition: attachment; filename=\"".$temp_filename_zip."\"");
 			header("Content-Transfer-Encoding: binary");
 			header("Content-Length: ".filesize($this->temp_folder.$temp_filename_zip));
+			ob_clean();
 			flush();
-			readfile($this->temp_folder.$temp_filename_zip);
-			$this->apagarArquivoGerado($this->temp_folder.$temp_filename_zip);
+			ignore_user_abort(true);
+			if(readfile($this->temp_folder.$temp_filename_zip))
+			{
+				$this->apagarArquivoGerado($this->temp_folder.$temp_filename_zip);
+			}
 			exit();
 				
 		}else{
-			exit('erro...');
-			//header('',404);
+			return false;
 		}
 	
 	}
@@ -143,6 +146,7 @@ HTML;
 	
 	public function gerarArquivoCSVExport($nome,$conteudo){
 		$fp = fopen($this->temp_folder.$nome, 'w');
+		if(!is_array($conteudo)) $conteudo = array($conteudo);
 		foreach ($conteudo as $linha) {
 			fputcsv($fp, $linha);
 		}
