@@ -7,18 +7,6 @@
 
 class QUERY_WRS_REPORT
 {
-
-
-	public function Get_SSAS_Reports($CUSTOMER_ID,$USER_CODE,$USER_TYPE,$DATABASE_ID,$CUBE_ID,$CREATE_TABLE)
-	{
-	
-		$query	=	<<<HTML
-							EXEC Get_SSAS_Reports {$CUSTOMER_ID}, '{$USER_CODE}', '{$USER_TYPE}', '{$DATABASE_ID}', '{$CUBE_ID}', {$CREATE_TABLE}
-	
-HTML;
-		return $query;
-	
-	}
 	
 	public function Get_SSAS_Reports_Groups($CUSTOMER_ID)
 	{
@@ -27,5 +15,8 @@ HTML;
 		return $query;
 		
 	}
+	
+	
+	
 	
 }

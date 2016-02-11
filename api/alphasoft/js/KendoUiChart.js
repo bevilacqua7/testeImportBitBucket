@@ -363,7 +363,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						
 						
 						}
-			}catch(e){console.warn(' exception');}
+			}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 			
 			
 			
@@ -418,7 +418,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					}
 					
 				}
-			}catch(e){console.warn(' exception');}
+			}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 			
 			
 			if(empty(kendoUiTools.GAUGE_COLOR)){
@@ -640,7 +640,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					try{
 						return totalBubble[column];
 					}catch(e) {
-						console.warn(' exception');
+						if(IS_EXCEPTION) console.warn(' exception');
 						return '';
 					}
 						return '';
@@ -778,7 +778,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						infoFirst.value	=	kendoUiTools.ORDER_BY_COLUMN;
 					}catch(e)
 					{
-						console.warn(' exception');
+						if(IS_EXCEPTION) console.warn(' exception');
 					}
 				}
 			}//END 
@@ -2182,7 +2182,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 																			try {
 																					_getDataParam		=	getData[lineDataMeasure][_line];
 																				}catch(e) {
-																					console.warn(' exception');
+																					if(IS_EXCEPTION) console.warn(' exception');
 																					getData[lineDataMeasure][_line]	=	{name:'',data:[]};
 																				}
 																		
@@ -2712,7 +2712,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 															_mergeChartConfigLegend	=	typeChart[getVals[0].level_full];
 														}catch(e){
 															_mergeChartConfigLegend='';
-															console.warn(' exception');
+															if(IS_EXCEPTION) console.warn(' exception');
 														}
 														
 														//Apenas para não dar erro 

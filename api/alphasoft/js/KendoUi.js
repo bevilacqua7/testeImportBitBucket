@@ -95,7 +95,7 @@ function WRSKendoGridRefresh(history)
 					 multiple_cube_status_change(false);
 				}
 				 
-			 }catch(e){console.warn(' exception');}
+			 }catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 			 
 		//	getRequestKendoUiDefault	=	merge_objeto(_paranKendoUi,_layout);
 
@@ -126,7 +126,7 @@ function WRSKendoGridComplete(IDGrid)
 	
 		try{
 			trashHistory	=	WRSHistory[wrsKendoUi['REPORT_ID']];
-		}catch(e){console.warn(' exception');}
+		}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 		
 		
 	var history			=	$.parseJSON(base64_decode(trashHistory));
@@ -411,7 +411,7 @@ function getWrsKendoColumn(data)
 				byFrozenLevelFull	=	arg.sender.headerIndex.byFrozenLevelFull;
 			}catch(e){
 				byFrozenLevelFull	=	[];
-				console.warn(' exception');
+				if(IS_EXCEPTION) console.warn(' exception');
 			}
 			
 			var _DRILL_FCC						=	DRILL_FCC(byFrozenLevelFull,explode(',',layout.LAYOUT_ROWS));
@@ -485,7 +485,7 @@ function getWrsKendoColumn(data)
 							next_column	=	kendoUi.headerIndex.column_count[next_column_count];
 						}catch(e){
 							next_column	=	null;
-							console.warn(' exception');
+							if(IS_EXCEPTION) console.warn(' exception');
 						}
 						
 						/*

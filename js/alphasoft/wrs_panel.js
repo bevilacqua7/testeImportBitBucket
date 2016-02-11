@@ -41,7 +41,8 @@ function wrs_clean_data(input_default)
 				JOB_RESULT 	: 	null,
 				STOP_RUN 	: 	false,
 				TYPE_RUN 	: 	null,
-				new_aba 	: 	false
+				new_aba 	: 	false,
+				load_direct	:	true
 		};
 	
 		
@@ -52,6 +53,7 @@ function wrs_clean_data(input_default)
 	}
 		
 	var call	=	merge_objeto(input_default,object_clean);
+	
 	
 	_END('wrs_clean_data');
 	return call;
@@ -1655,7 +1657,7 @@ function wrs_run_filter()
 			
 			return true;
 		}
-	}catch(e){console.warn(' exception');}
+	}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 	
 	
 	var demo_top	=	'';
@@ -1735,7 +1737,7 @@ function wrs_run_filter()
 							{
 								report_KendoUi['TYPE_RUN']=TYPE_RUN.direct;
 							}
-						}catch(e){console.warn(' exception');}
+						}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 							is_param		=	true;
 					}
 					
@@ -1964,7 +1966,7 @@ function wrs_run_filter()
 				_param_request['MKTIME_HISTORY']	=	report_KendoUi['MKTIME_HISTORY'];
 			}
 		}catch(e){
-			console.warn(' exception');
+			if(IS_EXCEPTION) console.warn(' exception');
 			_param_request['MKTIME_HISTORY']	=	null;
 		}
 		

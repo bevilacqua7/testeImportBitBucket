@@ -6,7 +6,6 @@
 
 includeCLASS('WRS_USER');
 includeQUERY('WRS_PANEL');
-includeQUERY('ATT_WRS_CUSTOMER');
 includeQUERY('WRS_MANAGE_PARAM');
 
 class ATT_WRS_CUSTOMER extends WRS_BASE
@@ -21,10 +20,12 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 	public function run($event,$paran_query,$cube_s)
 	{
 		$this->event		=	empty($event)?fwrs_request('event'):$event;
-		$this->_query		=	new QUERY_WRS_CUSTOMER();
+		$this->_query		=	new QUERY_PANEL();
 		$cube_s				=	empty($cube_s)?fwrs_request('cube_s'):$cube_s;		
+		
 		$cubes				=	WRS::GET_SSAS_USER();
 		$this->cube			=	$cubes[$cube_s];
+		
 		return "EVENTO RUN lib.ATT_WRS_CUSTOMER - Event: ".print_r($event,1).' - param: '.print_r($paran_query,1).' - cube_s: '.print_r($cube_s,1);
 	}
 	
@@ -50,8 +51,8 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 		$database_id	=	fwrs_remove_colchete($this->cube['DATABASE_ID']);
 	
 		$user			=	WRS::INFO_SSAS_LOGIN();
-	
-		$sql			=	$this->_query->Get_SSAS_Reports($user['CUSTOMER_ID'], $user['USER_CODE'], $user['PERFIL_ID'], $database_id, $cube_id);
+
+		$sql			=	$this->_query->GET_SSAS_REPORT($database_id, $cube_id,0);
 		return $sql;
 	
 	}

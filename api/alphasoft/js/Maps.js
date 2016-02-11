@@ -151,7 +151,7 @@ function WRSMaps(KendoUi)
 								try{
 									data_value		=	headerIndex['field'][is_sort]['title']+' : '+_data[obj][is_sort];
 								}catch(e){
-									console.warn(' exception');
+									if(IS_EXCEPTION) console.warn(' exception');
 								}
 							}
 						}else{

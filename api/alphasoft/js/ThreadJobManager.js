@@ -759,7 +759,7 @@ function get_all_jobs()
 					
 				}catch(e){
 					_is_force	=	 false;
-					console.warn(' exception');
+					if(IS_EXCEPTION) console.warn(' exception');
 				}
 				
 				if(ExistRealJob(_report_id,_data)==true) return true;
@@ -871,7 +871,7 @@ function get_all_jobs()
 								}
 							}catch(e){
 								is_Cancel	=	 false;
-								console.warn(' exception');
+								if(IS_EXCEPTION) console.warn(' exception');
 							}
 							
 
@@ -888,7 +888,7 @@ function get_all_jobs()
 										
 											modal.find('.modal-text-wrs-job').html(msg_job);
 									}									
-								}catch(e){console.warn(' exception');}
+								}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 							}
 							
 							
@@ -944,7 +944,7 @@ function get_all_jobs()
 												
 												delete aba_active;
 										}
-							}catch(e){console.warn(' exception');}
+							}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 							
 							
 							
@@ -966,7 +966,7 @@ function get_all_jobs()
 											
 											//setJob(_data_json['REPORT_ID'],undefined)//Removendo a estrutura do JOB
 										}
-								}catch(e){console.warn(' exception');}
+								}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 								
     			}
     		
@@ -1045,7 +1045,7 @@ function get_all_jobs()
 					_type_run		=	_data.mktime[_data.report_id_active].type_run
 				}catch(e){
 					_mktime= null;
-					console.warn(' exception');
+					if(IS_EXCEPTION) console.warn(' exception');
 				}
 				
 				if(_mktime==null) return false;

@@ -149,7 +149,7 @@ function onDataBoundWindowGrid(arg)
 				window[toAction](HandleArg.sender._data[index],table);	
 				
 			}
-		}catch(e){console.warn(' exception');}
+		}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 		
 			_END('onDataBoundWindowGrid::KendoGridWindowTools');
 	}
@@ -179,7 +179,7 @@ function onDataBoundWindowGrid(arg)
 				grid_window_modal(option,table);
 			}
 		}catch(e){
-			console.warn(' exception');
+			if(IS_EXCEPTION) console.warn(' exception');
 			grid_window_modal(option,table);
 		}
 		

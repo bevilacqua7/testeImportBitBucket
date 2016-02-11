@@ -199,7 +199,7 @@ var HEIGHT_ABAS		=	50;
 							return false;
 						}
 				}catch(e){
-					console.warn(' exception');
+					if(IS_EXCEPTION) console.warn(' exception');
 				}
 
 				switch(wrs_data)
@@ -361,7 +361,7 @@ function resize_container_grid(report_id,_type_grid)
 				return false;
 			}
 	}catch(e){
-		console.warn(' exception');
+		if(IS_EXCEPTION) console.warn(' exception');
 	}
 	
 	
