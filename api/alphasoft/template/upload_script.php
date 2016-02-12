@@ -62,14 +62,16 @@
 				    <tr class="template-download fade">
 				        <td>
 				            <span class="preview">
-				                {% if (file.thumbnailUrl) { %}
+				                {% if (false && file.thumbnailUrl) { %}
 				                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+				                {% } else { %}
+				                    <img src="{%=file.thumbnailUrl%}">
 				                {% } %}
 				            </span>
 				        </td>
 				        <td>
 				            <p class="name">
-				                {% if (file.url) { %}
+				                {% if (false && file.url) { %}
 				                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
 				                {% } else { %}
 				                    <span>{%=file.name%}</span>
