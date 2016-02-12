@@ -272,8 +272,12 @@ function get_grid_window_values_form(_event)
 	if(!empty(_event))	form	=	_event;
 	
 	var param		=	[];
-	
+
 	form.find('input[type=text]').each(function(){
+		param[$(this).attr('name')]	=	$(this).val();
+	});
+
+	form.find('input[type=hidden]').each(function(){
 		param[$(this).attr('name')]	=	$(this).val();
 	});
 	

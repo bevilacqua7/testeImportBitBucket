@@ -168,10 +168,10 @@ class WindowGrid extends FORM
 		if($wrs_type_grid=='form'){
 			unset($param['button']['new']); 
 			unset($param['button']['remove']); 	// se o usuario estiver no formulario para alteracao, ele so pode salvar ou apagar algo (sem botao de novo)
-			if(array_key_exists('export',$param['button'])){
+			if(array_key_exists('export',$param['button']) && $form_event!='export'){
 				unset($param['button']['export']); // no formulario de alteracao nao tem de aparecer botoes de import/export se existirem
 			}
-			if(array_key_exists('import',$param['button'])){
+			if(array_key_exists('import',$param['button']) && $form_event!='import'){
 				unset($param['button']['import']);
 			}
 		}else{

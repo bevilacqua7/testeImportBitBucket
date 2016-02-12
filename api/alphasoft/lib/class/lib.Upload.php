@@ -120,15 +120,26 @@ class WRSUpload extends WRS_BASE
 		$this->ruleFileName();
 		$UploadHandler = new UploadHandler($this->parameter);
 	}
-	
+
 
 	public function listFiles()
 	{
 		$files=array();
 		if(trim($this->nameFile)!=''){
-			$files = array_diff(scandir(PATH_FILE.$this->nameFile), array('..', '.'));
-		}		
+			$files = array_diff(scandir(PATH_FILE.$this->nameFile), array('..', '.','thumbnail')); // gerado pela visualizacao do windows [thumbnail]
+		}
 		return $files;
+	}
+
+	public function removeAllFiles()
+	{
+		$files=$this->listFiles();
+		if(is_array($files) && count($files)>0){
+			foreach($files as $file){
+				$this->removeFile($file);
+			}
+		}
+		return true;
 	}
 
 	public function getFileContent($file){

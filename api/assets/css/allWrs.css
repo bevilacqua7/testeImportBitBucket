@@ -2694,7 +2694,7 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 		padding-bottom: 15px;
 	}
 	.navbar-nav.navbar-right:last-child {
-		margin-right: -15px;
+		margin-right: 0px;
 	}
 }
 
