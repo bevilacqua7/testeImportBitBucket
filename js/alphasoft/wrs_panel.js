@@ -9,7 +9,6 @@
 var qtde_max_linhas			=	15;
 var qtde_max_colunas		=	10;
 var qtde_max_metricas		=	30;
-var hideeast				=	in_array('DRG',PERFIL_ID_USER)?true:false;
 var LXLX					=	true;
 var userinfo_filter_fixed 	= 	null;
 
@@ -407,7 +406,7 @@ $(document).ready(function () {
 
 	var SizeBar = (isMobile.any() ? 16 : 8);
 
-	if(hideeast){
+	if(getArrPerfUser('DRG')){
 		$('div.WRS_ABA ul.nav li.new_file').addClass('hide');
 	}
 	 
@@ -524,8 +523,8 @@ $(document).ready(function () {
 			east__resizerTip				: "Redimensiona Layouts",
 			east__togglerContent_open		: "<span class='ui-icon ui-icon-triangle-1-e' style='margin-left:-4px'></span>",
 			east__togglerContent_closed		: "<span class='ui-icon ui-icon-triangle-1-w' style='margin-left:-4px'></span>",
-			east__onresize 	: hideeast?hide_east: wrs_east_onresize,
-			east__onopen: hideeast?hide_east:function () {
+			east__onresize 	: getArrPerfUser('DRG')?hide_east: wrs_east_onresize,
+			east__onopen: getArrPerfUser('DRG')?hide_east:function () {
 				_START('east__onopen');
 											WRS_PANEL_DRAG();
 											$('.WRS_DRAG_DROP_RECEIVER_FILTER').show();
@@ -535,7 +534,7 @@ $(document).ready(function () {
 											
 											_END('east__onopen');
 										},
-			east__onclose: hideeast?hide_east:function () 
+			east__onclose: getArrPerfUser('DRG')?hide_east:function () 
 			{
 				_START('east__onclose');
 				//Executa o Click para executar o Gráfico
@@ -592,7 +591,7 @@ $(document).ready(function () {
 
 	$('.wrs_clean_box_drag_drop').click(wrs_clean_box_drag_drop);
  
-	if(hideeast){ hide_east(); }
+	if(getArrPerfUser('DRG')){ hide_east(); }
 });
 
 

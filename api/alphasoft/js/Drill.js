@@ -115,7 +115,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 			}
 
 			
-			if(!empty(json_level_drill) && !in_array('DRD',PERFIL_ID_USER)){
+			if(!empty(json_level_drill) && !getArrPerfUser('DRD')){
 					if(is_in_array(json.LEVEL_DRILL)){
 						$(nameID).find('.k-grid-content-locked tr').each(function(){
 							if(!$(nameID+' .k-grid-content tr:eq('+$(this).index()+')').hasClass('tag_total'))
@@ -175,7 +175,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 		
 
 
-			if(!empty(json_level_drill) && !in_array('DRD',PERFIL_ID_USER))
+			if(!empty(json_level_drill) && !getArrPerfUser('DRD'))
 				{
 						if(is_in_array(json.LEVEL_DRILL))
 						{
@@ -640,7 +640,7 @@ function addTargetDisableContext(kendoUi,report_id)
 	
 			
     		
-    	if(!in_array('DRT',PERFIL_ID_USER))
+    	if(!getArrPerfUser('DRT'))
     	{
 	    	// cabecalho de cada linha	
 	    	$(TAG_REPORT_ID+" .k-grid-content-locked").attr('rel','noContext').attr('type','linha').addClass('type_wrs_container');
@@ -655,7 +655,7 @@ function addTargetDisableContext(kendoUi,report_id)
     	
     	
     	//Dados
-    	if(!in_array('DRV',PERFIL_ID_USER))
+    	if(!getArrPerfUser('DRV'))
     	{
     		$(TAG_REPORT_ID+" .k-grid-content").attr('type','data').addClass('type_wrs_container');
     		context.attachWRS(TAG_REPORT_ID+' .k-grid-content td'				, menu_context_relation_ship_measure(jsonRelationShip),$event,'data',IDWrs);    		
@@ -679,7 +679,7 @@ function addTargetDisableContext(kendoUi,report_id)
 			var data_line_header2							=	menu_context_relation_ship_measure(jsonMeasure);
     			data_line_header2[data_line_header2.length]	=	{text	: LNG('REMOVE')		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
     		// header de cada coluna
-        	if(!in_array('DRT',PERFIL_ID_USER)){
+        	if(!getArrPerfUser('DRT')){
         		context.attachWRS(TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap tr:eq(0) th '	, data_line_header2,$event,'measure',IDWrs);
         	}
     	}
@@ -695,12 +695,12 @@ function addTargetDisableContext(kendoUi,report_id)
     					tag		=	TAG_REPORT_ID+' .k-grid-header .k-grid-header-wrap tr:eq('+i+') th ';
     					if(i!=(length-1))
     					{	// header de cada coluna
-    				    	if(!in_array('DRT',PERFIL_ID_USER))
+    				    	if(!getArrPerfUser('DRT'))
     				    	{
     				    		context.attachWRS(tag	, menu_context_relation_ship_measure(jsonRelationShip),$event,'coluna_header_line',IDWrs);
     				    	}
     					}else{
-    				    	if(!in_array('DRM',PERFIL_ID_USER))
+    				    	if(!getArrPerfUser('DRM'))
     				    	{
 	    						var data_line_header2							=	 menu_context_relation_ship_measure(jsonMeasure);
 	    		        		data_line_header2[data_line_header2.length]	=	{text	: LNG('REMOVE')		, className:'REMOVE_LINE_HEADER',action:drill_click_option, json:''};
