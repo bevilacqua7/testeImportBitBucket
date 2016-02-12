@@ -40,6 +40,15 @@ if(IS_TRACE)
 	}
 	
 
+/**
+ * Gerenciamento de perfil
+ * @param perfilTest
+ * @returns
+ */
+function getArrPerfUser(perfilTest)
+{
+	return in_array(perfilTest,PERFIL_ID_USER);
+}
 
 /*
  * TODO:Não utilizado apenas para clone de exemplos modo debug apenas

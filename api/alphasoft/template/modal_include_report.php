@@ -1,5 +1,51 @@
 <?php
 
+
+
+
+$DG_SELECT 		=	<<<HTML
+
+<br>
+								<label for="select1">Layouts</label>
+					      		<div class="row default_config" id="select1">
+				      				<select name="layouts_unselected" class="select_altura col-sm-5 wrs-measures multiple" multiple="multiple">
+				  					{$combo_layouts}
+									</select>		      		 
+						      		<div class="col-sm-2 spance_paddding_top_wrs">		      			
+						      			<button type="button" class="bt_pequeno toActive btn btn-block btn-default"><i class="fa fa-angle-right"></i></button>
+										<button type="button" class="bt_pequeno toMeasure btn btn-block btn-default"><i class="fa fa-angle-left"></i></button>
+										<button type="button" class="bt_pequeno toAllActive btn btn-block btn-info color_write"><i class="fa fa-angle-double-right"></i></button>
+										<button type="button" class="bt_pequeno toAllMeasure btn btn-block btn-info color_write"><i class="fa fa-angle-double-left"></i></button>
+									</div>				
+				  					<select name="layouts" class="select_altura col-sm-5 wrs-measures-receive multiple" multiple="multiple">
+				  					{$combo_layouts_sel}
+									</select>				
+								</div>
+								<br>
+								<label for="select2">Grupos</label>
+					      		<div class="row default_config" id="select2">
+				      				<select name="grupos_unselected" class="select_altura col-sm-5 wrs-measures multiple" multiple="multiple">
+				  					{$combo_grupos}
+									</select>		      		 
+						      		<div class="col-sm-2 spance_paddding_top_wrs">		      			
+						      			<button type="button" class="bt_pequeno toActive btn btn-block btn-default"><i class="fa fa-angle-right"></i></button>
+										<button type="button" class="bt_pequeno toMeasure btn btn-block btn-default"><i class="fa fa-angle-left"></i></button>
+										<button type="button" class="bt_pequeno toAllActive btn btn-block btn-info color_write"><i class="fa fa-angle-double-right"></i></button>
+										<button type="button" class="bt_pequeno toAllMeasure btn btn-block btn-info color_write"><i class="fa fa-angle-double-left"></i></button>
+									</div>				
+				  					<select name="grupos" class="select_altura col-sm-5 wrs-measures-receive multiple" multiple="multiple">
+				  					{$combo_grupos_sel}
+									</select>				
+								</div>
+									
+HTML;
+
+//Não tem permissãoi para GD				  					
+if(WRS_USER::getArrPerfUser('DRG'))
+{
+	$DG_SELECT	='';				  	
+}
+
 $HTML	=	<<<HTML
 				<style>
 				.bt_pequeno{
@@ -62,40 +108,7 @@ $HTML	=	<<<HTML
 									<input type="text" id="report_name" name="report_name" value="{$nome_report}" style="width: 768px;">	
 								<br>
 								<input type="checkbox" id="report_auto" name="report_auto" value="1"> <label for="report_auto">Carga Automática </label>  &nbsp; &nbsp; &nbsp; <input type="checkbox" id="report_share" name="report_share" value="1"> <label for="report_share">Compartilhado</label>	
-												
-								<br>
-								<label for="select1">Layouts</label>
-					      		<div class="row default_config" id="select1">
-				      				<select name="layouts_unselected" class="select_altura col-sm-5 wrs-measures multiple" multiple="multiple">
-				  					{$combo_layouts}
-									</select>		      		 
-						      		<div class="col-sm-2 spance_paddding_top_wrs">		      			
-						      			<button type="button" class="bt_pequeno toActive btn btn-block btn-default"><i class="fa fa-angle-right"></i></button>
-										<button type="button" class="bt_pequeno toMeasure btn btn-block btn-default"><i class="fa fa-angle-left"></i></button>
-										<button type="button" class="bt_pequeno toAllActive btn btn-block btn-info color_write"><i class="fa fa-angle-double-right"></i></button>
-										<button type="button" class="bt_pequeno toAllMeasure btn btn-block btn-info color_write"><i class="fa fa-angle-double-left"></i></button>
-									</div>				
-				  					<select name="layouts" class="select_altura col-sm-5 wrs-measures-receive multiple" multiple="multiple">
-				  					{$combo_layouts_sel}
-									</select>				
-								</div>
-								<br>
-								<label for="select2">Grupos</label>
-					      		<div class="row default_config" id="select2">
-				      				<select name="grupos_unselected" class="select_altura col-sm-5 wrs-measures multiple" multiple="multiple">
-				  					{$combo_grupos}
-									</select>		      		 
-						      		<div class="col-sm-2 spance_paddding_top_wrs">		      			
-						      			<button type="button" class="bt_pequeno toActive btn btn-block btn-default"><i class="fa fa-angle-right"></i></button>
-										<button type="button" class="bt_pequeno toMeasure btn btn-block btn-default"><i class="fa fa-angle-left"></i></button>
-										<button type="button" class="bt_pequeno toAllActive btn btn-block btn-info color_write"><i class="fa fa-angle-double-right"></i></button>
-										<button type="button" class="bt_pequeno toAllMeasure btn btn-block btn-info color_write"><i class="fa fa-angle-double-left"></i></button>
-									</div>				
-				  					<select name="grupos" class="select_altura col-sm-5 wrs-measures-receive multiple" multiple="multiple">
-				  					{$combo_grupos_sel}
-									</select>				
-								</div>
-				
+							{$DG_SELECT}						
 				</form>
 HTML;
 

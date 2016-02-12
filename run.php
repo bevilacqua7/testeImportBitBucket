@@ -6,11 +6,11 @@
 	 * class: Name class
 	 * event: INterno para cada processo
 	 */
-	ini_set("log_errors", 1);
-	ini_set("error_log", dirname(__FILE__).DIRECTORY_SEPARATOR."api".DIRECTORY_SEPARATOR."alphasoft".DIRECTORY_SEPARATOR."var".DIRECTORY_SEPARATOR.date('Y_m_d_')."php-error.log");
+//	ini_set("log_errors", 1);
+//	ini_set("error_log", dirname(__FILE__).DIRECTORY_SEPARATOR."api".DIRECTORY_SEPARATOR."alphasoft".DIRECTORY_SEPARATOR."var".DIRECTORY_SEPARATOR.date('Y_m_d_')."php-error.log");
 
 //	header("Content-Type: text/html; charset=ISO-8859-1",true);
-//	header("Content-Type: text/html; charset=ISO-8859-1",true);
+
 	include_once 'config/configCommon.php';
 	
 	$filename = fwrs_request('filename');
@@ -35,7 +35,6 @@
 	$pwd		=	 fwrs_request('pwd');
 	
 	
- 
 	
 	
 	/*

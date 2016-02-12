@@ -1790,6 +1790,37 @@ function optionsDataConvert(gridValue,with_decode)
 				}
 				
 				
+
+				
+				
+				//Verificando se o index_filtro não está vazio e não pode ser a função com o evento de remover
+				if(!isEmpty(data_global.data.FILTER_TMP) && filterName.remove!=true)
+				{
+					//Verificando se ele ainda não existe na estrutura
+					var filter	=	json_decode(base64_decode(data_global.data.FILTER_TMP));
+					//Lendo toda a estrutura
+					for(var lineFilter in filter)
+						{
+								//VErificando se é o mesmo nível
+								var _class		=	 $.trim(str_replace('__','',filter[lineFilter]['class']));
+								if($.trim(filterName.tag)== _class)
+											{
+												
+												var _explode_data	=	 explode(',',filter[lineFilter].data);
+												//Lendo os filtros
+												for(var lineExplode in _explode_data)
+													{
+														//console.log('if',filterName.data,'==',_explode_data[lineExplode]);
+														if(filterName.data	==_explode_data[lineExplode]) 
+														{
+															return false; //não continua a processar a função principal
+														}
+													}
+											}								
+						}
+					
+				}//Fim da verificação da existencia no filtro já no registro
+				
 				
 				//Removendo todos os filtros a ser aplicado
 				if(filterName.data==null)

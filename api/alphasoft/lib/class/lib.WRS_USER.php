@@ -191,12 +191,20 @@ class WRS_USER extends WRS_BASE
 	}
 	
 	
-	public function getArrPerfUser($perfilTest=null){
-		$arrPerfil = explode('-',WRS::INFO_SSAS_LOGIN('PERFIL_ID'));;
-		if($perfilTest==null){
+	public function getArrPerfUser($perfilTest=null)
+	{
+		$arrPerfil = explode('-',WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
+		
+		if($perfilTest==null)
+		{
 			return $arrPerfil;
-		}else{
-			return (is_string($perfilTest)?in_array($perfilTest,$arrPerfil):false)?'1':'0';
+		}else
+		{
+			/*
+			 * TODO: Felipe não pode usar '0' ou '1' apenas true our false
+			 * verifique onde tem que fazer as adequações
+			 */
+			return (is_string($perfilTest)	?	in_array($perfilTest,$arrPerfil) : FALSE) ? TRUE : FALSE;
 		}
 	}
 
