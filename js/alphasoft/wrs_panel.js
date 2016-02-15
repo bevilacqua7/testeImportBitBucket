@@ -10,7 +10,7 @@ var qtde_max_linhas			=	15;
 var qtde_max_colunas		=	10;
 var qtde_max_metricas		=	30;
 var LXLX					=	true;
-var userinfo_filter_fixed 	= 	null;
+
 
 function wrs_north_onresize()
 {
@@ -58,75 +58,10 @@ function wrs_clean_data(input_default)
 
 }
 
-function set_userinfo_filter_fixed(obj)
-{
-	if(typeof obj == 'object')
-	{
-		userinfo_filter_fixed = obj;
-	}
-}
-
-
-function merge_filter_in_array(_input_merge)
-{
-	var input_merge		=	 _input_merge;
-	
-	if(userinfo_filter_fixed!=null)
-	{
-			for(var lineFilterFixed in userinfo_filter_fixed)
-				{
-				
-						var _tmp_filter			=	[];
-						var _tmp_filter_array	=	userinfo_filter_fixed[lineFilterFixed];
-
-						
-						for(var lineInside in _tmp_filter_array)
-						{
-							var value	=	_tmp_filter_array[lineInside];
-								_tmp_filter.push(lineFilterFixed+'.['+value+']');
-						}
-						
-						
-						
-						var _merge		=	 {'class':'__'+replace_attr(lineFilterFixed),data:_tmp_filter.join(',')};
-						input_merge.push(_merge);
-				}
-	}
-
-	return input_merge;
-}
 
 
 
-
-// esconder os filtros fixos do usuario para que o mesmo nao possa ser manipulado
-function hide_fixed_filter()
-{
-	_START('hide_fixed_filter');
-	
-	
-	for(var lineFixed in userinfo_filter_fixed)
-	{
-		$('.wrs_panel_esquerdo_drag_drop').find('.'+replace_attr(lineFixed)).addClass('hide').attr('not-use',true);
-		
-		
-		var bt_painel_dd = $('.WRS_DRAG_DROP li.box_wrs_panel.'+replace_attr(lineFixed));
-		
-		if(!bt_painel_dd.hasClass('hide'))
-		{
-			bt_painel_dd.addClass('hide').attr('not-use',true);
-			
-
-			
-			var json_bt_painel_dd = bt_painel_dd.data('wrs-data');
-			
-			esconde_pais_drag_drop(json_bt_painel_dd);
-		}
-		
-	}
-	
-	_END('hide_fixed_filter');
-}
+ 
 
 // funcao recursiva para verificar e apagar todos os pais de um atributo
 function esconde_pais_drag_drop(json_bt_painel_dd)
@@ -526,6 +461,7 @@ $(document).ready(function () {
 			east__onresize 	: getArrPerfUser('DRG')?hide_east: wrs_east_onresize,
 			east__onopen: getArrPerfUser('DRG')?hide_east:function () {
 				_START('east__onopen');
+
 											WRS_PANEL_DRAG();
 											$('.WRS_DRAG_DROP_RECEIVER_FILTER').show();
 											$('.WRS_DRAG_DROP_FILTER_CONTAINER').hide();
@@ -1254,7 +1190,8 @@ _END('setDraggable');
 function find_relatorio_attributo_metrica(where_find,_values,_clone)
 {
 	_START('find_relatorio_attributo_metrica');
-
+	
+	
 	$(_clone).html('');
 	/*
 	 * Aplicando quando vier com CLASS
@@ -1265,83 +1202,78 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 	if(is_array(_values))
 	{
 		
-	for(x in _values)
-	{
-		var _class				=	 '';
-		var simples_composto	=	false;
-		var is_filter			=	'';
-		
-		
-		if(substr(_values[x],0,2)=='__')
+			for(x in _values)
 			{
-				if(is_array(_values[x]))
-				{
-					
-					var value	=	_values[x]
-						_class	=	substr(value[0],2,value[0].length);
-					
-					if(value[1]=='simples') simples_composto=true;
-					
-						is_filter	=	 empty(value[2]) ? '' : value[2];
-					
-				}
-				else
-				{
-					_class	=	substr(_values[x],2,_values[x].length);
-				}
+				var _class				=	 '';
+				var simples_composto	=	false;
+				var is_filter			=	'';
 				
 				
-				//var object	=	$(where_find).find('li.'+_class);				 
-				var object	=	$(where_find).find("li:containClass('"+_class+"')"); // alterado para procurar nas classes do objeto (case insensitive)
-				
-				
-
-				
-				
-				if(simples_composto)
-				{
-					object.attr('sc_load','simples');
-				}
-				else
-				{
-					object.attr('sc_load','');
-				}
-				
-
-  			if(!isEmpty(is_filter))
-				{
-					var json 			=	object.data('wrs-data');
-					
-				
-					if(json!=null)
+				if(substr(_values[x],0,2)=='__')
 					{
-					 
-						var _tmp_filter		=	typeof is_filter == "object" ? implode(',',is_filter) : is_filter;
-						
+						if(is_array(_values[x]))
+						{
 							
-							json['FILTER']=_tmp_filter;
-
-							object.data('wrs-data',json);
-
-					}
+							var value	=	_values[x]
+								_class	=	substr(value[0],2,value[0].length);
+							
+							if(value[1]=='simples') simples_composto=true;
+							
+								is_filter	=	 empty(value[2]) ? '' : value[2];
+							
+						}
+						else
+						{
+							_class	=	substr(_values[x],2,_values[x].length);
+						}
 						
 						
-				}
-  			
-  			
-  			
-  			
-  			
-					DROP_EVENT( 'DIRECT', object,$(_clone));
-
-			}
-	}
-	
+						//var object	=	$(where_find).find('li.'+_class);				 
+						var object	=	$(where_find).find("li:containClass('"+_class+"')"); // alterado para procurar nas classes do objeto (case insensitive)
+						
+						
 		
-		if(_clone=='.sortable_filtro')
-		{
-			hide_fixed_filter();
-		}
+						
+						
+						if(simples_composto)
+						{
+							object.attr('sc_load','simples');
+						}
+						else
+						{
+							object.attr('sc_load','');
+						}
+						
+		
+		  			if(!isEmpty(is_filter))
+						{
+							var json 			=	object.data('wrs-data');
+							
+						
+							if(json!=null)
+							{
+							 
+								var _tmp_filter		=	typeof is_filter == "object" ? implode(',',is_filter) : is_filter;
+								
+									
+									json['FILTER']=_tmp_filter;
+		
+									object.data('wrs-data',json);
+		
+							}
+								
+								
+						}
+		  			
+		  			
+		  			
+		  			
+		  			
+							DROP_EVENT( 'DIRECT', object,$(_clone));
+		
+					}
+			}
+	
 	
 	}
 	
@@ -1389,6 +1321,7 @@ function set_value_box_relatorio(object,clean)
 	if(isset(object.LAYOUT_FILTERS))
 	{
 		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options ',object.LAYOUT_FILTERS,'.sortable_filtro');
+		
 	}
 	
 	if(isset(object.LAYOUT_MEASURES))
@@ -1400,9 +1333,9 @@ function set_value_box_relatorio(object,clean)
 		$('.WRS_DRAG_DROP_FILTER').html(str_replace('li','h2',$('.sortable_filtro').html()));
 	}
 	
+	//Escondendo os atributos que estão no filtro fixo
+	$('body').filterFixed('hide');
 	
-	
-	hide_fixed_filter();
 	_END('set_value_box_relatorio');
 }
 
@@ -1759,7 +1692,6 @@ function wrs_run_filter()
 							//Se for drill então não insere os filtros
 							if(isEmpty(report_KendoUi['DRILL_HIERARQUIA_LINHA_DATA'])) 
 							{
-								
 								getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
 		
 								wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
@@ -1770,7 +1702,6 @@ function wrs_run_filter()
 									wrs_data_param.ALL_ROWS					=	1;
 									wrs_data_param.DRILL_HIERARQUIA_LINHA	=	1;
 								}
-								
 
 								//Salva na aba a nova estrutura
 								aba_active.wrsAbaData('setWrsData',{
@@ -1782,6 +1713,8 @@ function wrs_run_filter()
 																	}
 													);
 							}
+							
+							
 
 					
 					//		console.log('filter',getAllFiltersToRun.data);

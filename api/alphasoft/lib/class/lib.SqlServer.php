@@ -113,7 +113,7 @@ class SQL_SERVER
 	 * @param string $file_path
 	 * @param string $data
 	 */
-	private function query_debug($data)
+	public static function query_debug($data)
 	{
 		$file_path	=	 PATH_VAR.DIRECTORY_SEPARATOR;
 		
@@ -133,7 +133,7 @@ class SQL_SERVER
 		}
 		
 		if(file_exists($file_path)){
-			$this->file_limit_size($file_path);
+			self::file_limit_size($file_path);
 		}	
 			
 	//	$_data			=	date('H:i:s d-m-Y').' '.$data.PHP_EOL;
@@ -152,7 +152,7 @@ class SQL_SERVER
 	 * @param unknown $bytes
 	 * @param int $decimals
 	 */
-	private function filesize2bytes($bytes, $decimals = 2) 
+	private static function filesize2bytes($bytes, $decimals = 2) 
 	{
 		$sz = 'BKMGTP';
 		$factor = floor((strlen($bytes) - 1) / 3);
@@ -165,9 +165,9 @@ class SQL_SERVER
 	 *
 	 * @param unknown $file_path
 	 */
-	private function file_limit_size($file_path)
+	private static function file_limit_size($file_path)
 	{
-		$file_size = $this->filesize2bytes(filesize ($file_path));
+		$file_size = self::filesize2bytes(filesize ($file_path));
 		
 		//Verifica de o arquivo é em M e é maior que 2MB
 		if($file_size[1]=='M' && $file_size[0]>2)

@@ -142,28 +142,35 @@ class WRS
 	
 	/**
 	 * Retorna informações das restricoes dos filtros do Cliente
+	 * Alterado por Santos : 12/02/2016
 	 */
 	public static function INFO_SSAS_LOGIN_FILTER_FIXED()
 	{
 		$filters 		= WRS::INFO_SSAS_LOGIN('USER_FILTER');
 		$filters_values = WRS::INFO_SSAS_LOGIN('USER_FILTER_VALUE');
-		$arr_retorno=false;
+		
+		$arr_retorno	=	false;
+		
 		if(trim($filters)!='' && trim($filters_values)!='')
 		{
 			$qtde_filters 						= 	explode(',',$filters);
 			$qtde_filters_values 				= 	explode(',',$filter_values);
+			
 			if(count($qtde_filters)>1 && count($qtde_filters_values)>1)
 			{
 				foreach($qtde_filters as $key => $filtro)
 				{
-					$arr_retorno[$filtro]		=	explode(',',str_replace(array('[',']'),'',$qtde_filters_values[$key]));
+					$arr_retorno[md5($filtro)]		=	array('class'=>$filtro , 'data'=>explode(',',str_replace(array('[',']'),'',$qtde_filters_values[$key])));
 				}
 			}
 			else
 			{
-				$arr_retorno[trim($filters)] 	= 	array(trim($filters_values));
+				$arr_retorno[md5(trim($filters))] 	= 	array('class'=>$filters , 'data'=> array(trim($filters_values)));
 			}
+			
+			
 		}
+		
 		return $arr_retorno;
 	}
 	

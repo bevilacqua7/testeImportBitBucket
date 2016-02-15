@@ -311,8 +311,6 @@ var context = context || (function () {
 			 */
 			$('.dropdown-menu li a').unbind('hover').hover(function(event){
 				
-				
-				
 				var dropdown_menu		=	$(this);				
 				var offset 				= 	dropdown_menu.offset();
 				var mainHeight			=	dropdown_menu.outerHeight()+8;
@@ -324,7 +322,8 @@ var context = context || (function () {
 				//Não permite alicar o filtro
 				//A class bold é exclusiva do Total para linha e colunas
 
-				if(dropdown_menu.hasClass('bold')){
+				if(dropdown_menu.hasClass('bold'))
+				{
 					return true;
 				}
 				

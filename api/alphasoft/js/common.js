@@ -280,8 +280,10 @@ function changeTypeRun(IDGrid,typeRun)
 
 
 //http://stackoverflow.com/questions/4994201/is-object-empty
-function isEmpty(obj) {
+function isEmpty(obj,ttype) {
 
+	
+	
     // null and undefined are "empty"
     if(obj == null) return true;
 
@@ -291,10 +293,11 @@ function isEmpty(obj) {
     
     if(obj=='undefined') return true;
     
+
     
     // Assume if it has a length property with a non-zero value
     // that that property is correct.
-    
+
     if(typeof obj!='object')
     {
 	    if (obj.length > 0)    return false;
@@ -303,14 +306,21 @@ function isEmpty(obj) {
 	    return false;
     }
     
+    
     // Otherwise, does it have any properties of its own?
     // Note that this doesn't handle
     // toString and valueOf enumeration bugs in IE < 9
-    for (var key in obj) {
+    for (var key in obj) 
+    {
         if (hasOwnProperty.call(obj, key)) return false;
+        
+        if(key!=null || key!=undefined) return false;
+    	
+    	if(obj[key]!=null || obj[key]!=undefined) return false;
+    	
     }
 
-    return false;
+    return true;
 }
 
 
@@ -690,10 +700,11 @@ function WRS_PANEL_RELATORIO()
 function replace_attr(value)
 {
 	return md5(value);
-	
+	/*
 	var replace		=	['[',']','.','%'    ,'&',' ',',','(',')','{','}','/','#'];
 	var sub			=	['' ,'' ,'' ,'_por_','' ,'' ,'' ,'' ,'' ,'' ,'' ,'' ,'' ];
 	return str_replace(replace,sub,value);	
+	*/
 }
 
 

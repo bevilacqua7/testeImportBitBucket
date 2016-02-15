@@ -1709,6 +1709,10 @@ border-radius: 3px;
 	color:#A94442;
 }
 
+.filter-fixed{
+	color: #8a6d3b;
+}
+
 .filter-exec{
 	color:#3C763D;
 	font-weight:bold;
@@ -1759,3 +1763,8 @@ border-radius: 3px;
 .box_wrs_panel:hover{ border: 1px solid #58BCE7; background: #2191C0 url("theme-azul/images/ui-bg_diagonals-small_50_2191C0_40x40.png") 50% 50% repeat ; font-weight: bold; color: #ffffff;  color: #ffffff; text-decoration: none; }
 
 
+.red{
+	color:red;
+	text-decoration:line-through;
+
+}
