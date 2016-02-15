@@ -1183,6 +1183,8 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					if(!empty(noactive)) _noactive = noactive;
 					
+					
+					
 					if(empty(options)) return false;
 					
 					
@@ -1303,6 +1305,8 @@ function optionsDataConvert(gridValue,with_decode)
 					if(!_noactive)
 					{
 						$('.wrs_run_filter').attr('noactive','true');
+					}else{
+						$('.wrs_run_filter').removeAttr('noactive');
 					}
 					
 					
@@ -1331,6 +1335,7 @@ function optionsDataConvert(gridValue,with_decode)
 					 */
 					if(auto_load==true)
 					{
+						
 						setTimeout(function(){
 							$('.WRS_ABA ul li').each(function(){ if($(this).attr('class')!='new_file'){ 
 								$(this).wrsAbaData('set_change_aba',false);
@@ -1549,7 +1554,9 @@ function optionsDataConvert(gridValue,with_decode)
 
 					if(input.length!=0)
 					{
-						__load_multiple(input,AUTO_LOAD_RUN,true);
+
+						
+						__load_multiple(input,input.length==1 ? true : AUTO_LOAD_RUN,true);
 						
 						$('.wrs_run_filter').data('auto_load_data',base64_encode(json_encode(slice_top(input))));
 						$('.wrs_run_filter').attr('auto_load','true');

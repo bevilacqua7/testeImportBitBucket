@@ -48,8 +48,10 @@ include_once(PATH_DEFINE.DS.'common.php');
 		
 		if( $conn_wrs === false )
 		{
-			echo "Could not connect.\n<pre>";
-			die( print_r( sqlsrv_errors(), true));
+			includeClass('SqlServer');
+			echo fwrs_error(LNG('DATABASE_NOT_FOUND'));
+			SQL_SERVER::query_debug('Could not connect'.PHP_EOL.print_r( sqlsrv_errors(), true));
+			exit();
 		}
 	}
 /*

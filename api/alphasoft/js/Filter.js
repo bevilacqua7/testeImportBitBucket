@@ -652,91 +652,141 @@ function tagFilterWRS(typeReturn)
 	var structArray	=	[];
 	var exec_filter	=	get_exec_filter();
 	var _width		=	250;	
-	var aba_active	=			get_aba_active_object();
+	var aba_active	=	get_aba_active_object();
+	
+	
+	
+	var makeTitle	=	 function(title,tmp_width,width,_class)
+	{
+		var _width	=	width;
+		var css__class	=	isEmpty(_class) ? '' : _class;
+		
+		if(!empty(title))
+			{
+				
+				tmp_width 	=	text_width(title);
+				if(tmp_width>=_width) _width	=	tmp_width; 
+				
+				return {html:'<h3 class="'+css__class+'">'+title+'</h3>', 'width':_width};
+			}
+		
+		return {html:'', 'width':_width};
+	}
+	
+	
+	var makeDesck	=	function(input,tmp_width,width,_div,_explode_to_add)
+	{
+		var _explode  	= 	input;
+		var html		=	'';
+		var _width		=	width;
+		var _filter		= [];
+		
+		for(var obj in _explode)
+			{
+				var _value		=	_explode[obj];
+				var v_explode	=	 explode('[',_value);
+				var value		=	str_replace(']','',v_explode[v_explode.length-1]);
+				var div			=	 _div;
+				 
+				_filter.push(_value);
+				
+				if(_explode_to_add!=undefined)
+				{
+					if(!isEmpty(_explode_to_add))
+					{
+						if(exist_in_array(_explode_to_add,_value)) continue;
+					}
+				}
+				
+				if(value!='null' && !isEmpty(value))
+					{
+						//_value
+						html+='<p class="'+div._class+'"><i class="fa '+div._class_i+'"></i> '+value+'</p>';
+						tmp_width 	=	text_width(value);
+	 					if(tmp_width>=_width) _width	=	tmp_width; 
+					}
+			}
+		
+		
+		return {'html':html,'width':_width, 'filter':_filter};
+	}
+	
 	$(".WRS_DRAG_DROP_FILTER h2").each(function(){
- 		
-
-		var tag_class	=	$(this).attr('tag-class');
-		var filters		=	aba_active.wrsAbaData('getFilter',{tag:tag_class});
-		var level_full	=	$(this).attr('level-full');
- 		var tmp_width	=	0;
- 		var _filter		=	[];
- 					var _explode			=	explode(',',filters);
- 					var _explode_to_add		=	aba_active.wrsAbaData('getNewFilter',{tag:tag_class});
+		/*
+		 * Esse primeiro IF impede que o filtro fixo não seja exibido
+		 */
+		if($(this).hasClass('red')!=true) 
+		{	
+		
+				var tag_class			=	$(this).attr('tag-class');
+				var filters				=	aba_active.wrsAbaData('getFilter',{tag:tag_class});
+				var level_full			=	$(this).attr('level-full');
+		 		var tmp_width			=	0;
+		 		
+		 		var _filter				=	[];
+				var _explode			=	explode(',',filters);
+				var _explode_to_add		=	aba_active.wrsAbaData('getNewFilter',{tag:tag_class});
+		 			
+		 		
+				//Para o add o Filreo no Drill
+				var atributo	=	$(this).attr('atributo');
+					atributo	=	empty(atributo) ? '' : atributo;
+		 					
+						if(!exist_in_array(_explode,'') || !isEmpty(_explode_to_add))
+						{
+							var _title	=	makeTitle($(this).attr('vvalue'),tmp_width,_width);
+							
+							html+=_title.html;
+							_width	=	_title.width;
+						}
+						
+							
+	
+		 					//Filtros Que já está em uso
+		 			 		var in_use	=	makeDesck(_explode,tmp_width,_width,{'_class_i':'fa-eye','_class':'filter-exec'},_explode_to_add);
+		 						html+=in_use.html;
+		 						_width=in_use.width;
+		 						
+		 						_filter	=	merge_filter_data(in_use.filter, _filter);
+		 					
+		 					//Filtros que estão a ser inseridos
+		 					var to_add	=	makeDesck(_explode_to_add,tmp_width,_width,{'_class_i':'fa-eye-slash','_class':'filter-exec-slash'},undefined);
+		 						html+=to_add.html;
+		 						_width=to_add.width;
+		 						
+		 						_filter	=	merge_filter_data(to_add.filter, _filter);
+		 						
+		 					
+		 					structArray[structArray.length]	=	[level_full, atributo ,_filter.push(',')];
  					
- 					
- 					//Para o add o Filreo no Drill
- 					var atributo	=	$(this).attr('atributo');
- 						atributo	=	empty(atributo) ? '' : atributo;
- 					
- 					
- 					
- 					
- 					if(!exist_in_array(_explode,'') || !isEmpty(_explode_to_add))
- 					{
-	 					if(!empty($(this).attr('vvalue')))
-	 	 				{
-	 	 					html+='<h3>'+$(this).attr('vvalue')+'</h3> ';
-	 	 					tmp_width 	=	text_width($(this).attr('vvalue'));
-	 	 					if(tmp_width>=_width) _width	=	tmp_width; 	 					
-	 	 				}
- 					}
- 					
- 					
- 					
- 					for(var obj in _explode)
- 						{
- 							var _value		=	_explode[obj];
- 							var v_explode	=	 explode('[',_value);
- 							var value		=	str_replace(']','',v_explode[v_explode.length-1]);
- 							var div			=	 {'_class_i':'fa-eye','_class':'filter-exec'};
- 							 
- 							_filter.push(_value);
- 							
- 							if(!isEmpty(_explode_to_add))
- 							{
- 								if(exist_in_array(_explode_to_add,_value)) continue;
- 							}
- 							
- 							if(value!='null' && !isEmpty(value))
- 								{
- 									//_value
-		 							html+='<p class="'+div._class+'"><i class="fa '+div._class_i+'"></i> '+value+'</p>';
-		 							tmp_width 	=	text_width(value);
-		 	 	 					if(tmp_width>=_width) _width	=	tmp_width; 
- 	 	 					
- 							}
- 	 	 					
- 						}
- 					
- 					
- 					
- 					for(var obj in _explode_to_add)
- 						{
- 							var _value		=	_explode_to_add[obj];
- 							var v_explode	=	 explode('[',_value);
- 							var value		=	str_replace(']','',v_explode[v_explode.length-1]);
- 							var div			=	 {'_class_i':'fa-eye-slash','_class':'filter-exec-slash'};
- 							 
- 							_filter.push(_value);
- 							
- 							if(value!='null' && !isEmpty(value))
- 								{
- 									//_value
-		 							html+='<p class="'+div._class+'"><i class="fa '+div._class_i+'"></i> '+value+'</p>';
-		 							tmp_width 	=	text_width(value);
-		 	 	 					if(tmp_width>=_width) _width	=	tmp_width; 
- 	 	 						}
- 						}
- 					
- 					
- 					structArray[structArray.length]	=	[level_full, atributo ,_filter.push(',')];
- 					
- 					
+		}//END IF RED	
  	});
 	
 	
+	var get_filter_fixed		=	 $('body').filterFixed('hideTooltipe');
 	
+		if(get_filter_fixed!=false){
+	
+			for(var lineFixed in get_filter_fixed)
+			{
+				var tmp_width	=	0;
+				//Pegando infor para o title
+				var get_object	=	$('.ui-layout-pane-east ul').find('.'+lineFixed);
+				var json		=	get_object.data('wrs-data');
+				
+				//Title
+				var _title	=	makeTitle(json.LEVEL_NAME,tmp_width,_width,'filter-fixed');
+					html+=_title.html;
+					_width	=	_title.width;
+				
+				//Verificando para adicionar na lista dos filtros fixos
+					var to_add	=	makeDesck(get_filter_fixed[lineFixed].filter,tmp_width,_width,{'_class_i':'fa-puzzle-piece','_class':'filter-fixed'},undefined);
+						html+=to_add.html;
+						_width=to_add.width;
+					
+			}
+		}
+			
 	
 	$('.qtip-default').width(_width); 
 	
@@ -972,7 +1022,8 @@ function wrsFilterClickFalse(filter_hide)
 			
 				levelUP			=	 explode(',',level_up);			
 			
-			if(empty(level_up) && empty(typeEvent)) {
+			if(empty(level_up) && empty(typeEvent)) 
+			{
 				_END('WrsFilter::getFiltersLevelUP');	
 				return '';
 			}
@@ -982,16 +1033,23 @@ function wrsFilterClickFalse(filter_hide)
 					var tag_class					=	$(this).attr('tag-class');
 					var _data_filter				=	'';
 					
+
 					
 					var _json_filter				=	'';
 						//Verificando se o Level Full exist no array passado
 						if(in_array(level_full, levelUP, true) || typeEvent=='all')
 						{
-							
 						  
-							
-							_data_filter	=	aba_active.wrsAbaData('getFilter',{tag:tag_class});
+							_data_filter		=	aba_active.wrsAbaData('getFilter',{tag:tag_class});
 					         var getNewFilter	=	aba_active.wrsAbaData('getNewFilter',{tag:tag_class});
+					         
+					         if($(this).hasClass('red'))
+					        	{
+					        	 	var filter_fixed	=	$('body').filterFixed('hideTooltipe',tag_class);
+					        	 		_data_filter		=	 implode(',',filter_fixed.filter);
+
+					        	 	
+					        	 }
 					         
 
 					         var vir			=	',';
@@ -1000,6 +1058,7 @@ function wrsFilterClickFalse(filter_hide)
 					        	 if(isEmpty(_data_filter) || isEmpty(getNewFilter))	vir	=	'';
 					        	 _data_filter = _data_filter+vir+implode_wrs(getNewFilter);
 					         }
+					         
 					         
 					         
 					         
@@ -1017,9 +1076,6 @@ function wrsFilterClickFalse(filter_hide)
 						}
 					
 			});
-			
-
-			FilterOriginal	=	merge_filter_in_array(FilterOriginal);
 			
 
 			
@@ -1709,7 +1765,7 @@ function wrsFilterClickFalse(filter_hide)
 														 									'index-data'	:	index,
 														 									'tag-class'		:	tag_class,
 														 									'id'			:	'wrs_header_filter_main_'+index,
-																							'class'			:	'wrs_class_filter_header_main '+_hide,
+																							'class'			:	'wrs_class_filter_header_main '+_hide+' WRS-'+tag_class,
 																							'atributo'		:	atributo
 																				 		}).data('wrs-data',json);
 														 		
@@ -1737,6 +1793,10 @@ function wrsFilterClickFalse(filter_hide)
 									 */
 									//http://api.jqueryui.com/accordion/#method-destroy
 									$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
+									
+									
+									//Bloqueia o drag and drop
+									$('body').filterFixed('hide',true);
 									 
 									_END('WrsFilter::setWRSFilterCommon'); 
 							 } //End setWRSFilterCommon
@@ -1909,14 +1969,235 @@ function wrsFilterClickFalse(filter_hide)
 			    }
 			    else
 			    {
-			            $.error( 'Method ' +  methodOrOptions + ' does not exist on jQuery.tooltip' );
+			            $.error( 'Method ' +  methodOrOptions + ' does not exist on Filter.Filter' );
 			    }
     };
     
     
+    
+    
+    
+    
+   
+    	
 }( jQuery ));
 
 
+
+ 
+
+(function ( $ ) {
+	 /**
+     * Estrutura do Filtro Fixo
+     */
+	$.fn.filterFixed	= function(methodOrOptions) 
+    {
+    	
+    	var dataFilterFixed		=	'filterFixed';
+		/**
+		 * Pegando todos os registros do ManagerJOB
+		 */
+		var GetData		=	function()
+			{
+					var data_body		=	$('body').data(dataFilterFixed);
+					
+						data_body		=	data_body==undefined || data_body==null || data_body=='' ? {} : data_body;
+						
+					var defaultData		=	{
+												filter_fixed					:	[]//Contem toda a estrutuda do filtro fixo
+											}
+					
+					return $.extend({}, defaultData,data_body);
+			}
+		
+		
+		
+		
+		
+		//Carrega com as informações iniciais para o filtro fixo
+    	var __init		=	 function(_jsonFilterFixed)
+    	{
+    		var jsonFilterFixed		=	 _jsonFilterFixed;
+    		_ONLY('filterFixed::__init');
+    		//variávelk global antiga userinfo_filter_fixed
+    		
+    		if(typeof jsonFilterFixed == 'object')
+    		{
+	    		if(isEmpty(jsonFilterFixed)) return false;
+	    		
+	    		//Mount Filters
+	    		for(var lineDataFilter in jsonFilterFixed)
+	    		{
+	    			var _data										=	jsonFilterFixed[lineDataFilter].data;
+	    				jsonFilterFixed[lineDataFilter]['filter']	=	[];
+	    			var tmp											=	[];
+	    			
+			    			for(var lineData in _data )
+			    				{
+			    					tmp.push(jsonFilterFixed[lineDataFilter]['class']+".["+_data[lineData]+"]");	
+			    				}
+		    			
+		    			jsonFilterFixed[lineDataFilter]['filter']	=	tmp;
+	    		}//END Maount
+	    		
+	    		
+	    		
+	    		var get_data				=	GetData();
+	    			get_data.filter_fixed	=	jsonFilterFixed;
+	    			 
+	    			
+	    		$('body').data(dataFilterFixed,get_data);
+    		}
+    	}
+    	
+    	
+    	
+    	
+    	
+    	//Essa função é chamada em apenas dois lugares
+    	var __hide	=	 function(setFilter)
+    	{
+    		_START('filterFixed::__hide');
+    		var _data		=	 GetData();
+    		
+    		//Verificando se o array está vazio
+    		if(isEmpty(_data.filter_fixed)==true) 
+    		{
+    			_END('filterFixed::__hide - empty');
+    			return false; 
+    		}
+    		
+    		var	filter				=	_data.filter_fixed;
+    		var add_filter_fixed	=	{};	
+    		 
+    		//Escondendo os valores para drag and drop
+    		for(var _class in filter)
+    		{
+
+    			//Área das Métricas e Filtros mas apenas o DRAG
+    			$('.wrs_panel_options li.'+_class).addClass('hide');
+    			//Deixando apenas nas measures
+    			$('.wrs_panel_filter_measure').find('.'+_class).removeClass('hide');
+    			//Insere a classe de identificação de não se aplica e  remove o click
+    			
+	    		$('.WRS-'+_class).addClass('red').unbind('click');
+	    		
+	    		if($('.WRS-'+_class).length==0)
+	    		{
+	    			add_filter_fixed[_class]=	filter[_class];
+	    		}
+    			
+    		}
+    		
+    		
+    		//Fazendo a validação para poder inserir o filtro se ele não existir
+    		if(setFilter==true)
+    			{
+    				
+	    			if(!isEmpty(add_filter_fixed,true))
+	    				{
+	    					//console.log('add_filter_fixed',add_filter_fixed);
+	    					
+	    					for(var lineADDFilter in add_filter_fixed)
+	    						{
+	    							var _m_filter		=	{LAYOUT_FILTERS: ['__'+lineADDFilter, "", add_filter_fixed[lineADDFilter].filter]};
+	    								//Adicionando o Filtro Apenas para ficar visível na tela
+	    								set_value_box_relatorio(_m_filter,false);
+	    								$.WrsFilter('wrs_panel_filter_icon'); //Apenas Eventro do trigger click para o icone aparecer
+
+
+	    						}
+	    				}
+    				
+    			}
+    		
+    		
+    		_END('filterFixed::__hide');
+    	}
+    	
+    	
+    	
+    	
+    	
+    	
+    	//Apenas devolve o array para ser tratado
+    	var __hideTooltipe	=	 function(index)
+    	{
+    		
+    		_START('filterFixed::__tagFilterWRS');
+    		
+    		var _data		=	 GetData();
+    		
+    		//Verificando se o array está vazio
+    		if(isEmpty(_data.filter_fixed)==true) 
+    		{
+    			_END('filterFixed::__tagFilterWRS - empty');
+    			return false; 
+    		}
+    		
+    					_END('filterFixed::__tagFilterWRS - data');
+    		
+    		if(index!=undefined)
+    			{
+    			
+    				return _data.filter_fixed[index];
+    			}else{
+    					return _data.filter_fixed;
+    			}
+    		
+    		
+    		_END('filterFixed::__tagFilterWRS - not');
+    		return false;
+    		
+    		
+    	}
+    	
+
+    	
+    	var __joinFilter	=	 function(data)
+    	{
+    		
+    			_START('filterFixed::__joinFilter');
+    			
+    			
+    		
+    	}
+    	
+    	/*
+		 * Metodos de funções
+		 * formas de chamadas externas
+		 */
+		var methods = 
+		{
+		        init 							: 	__init,
+		        hide							:	__hide,
+		        hideTooltipe					:	__hideTooltipe,
+		        joinFilter						:	__joinFilter	
+		};
+		
+		 
+		/*
+		 * 
+		 * Inicia a construção dos metodos
+		 * 
+		 */
+		if ( methods[methodOrOptions] )
+		{
+	            return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+	    }
+		else if ( typeof methodOrOptions === 'object' || ! methodOrOptions )
+		{
+	            // Default to "init"
+	            return methods.init.apply( this, arguments );
+	    }
+	    else
+	    {
+	            $.error( 'Method ' +  methodOrOptions + ' does not exist on Filter.filterFixed' );
+	    }
+		
+		
+    };	
+}( jQuery ));
 
 
 

@@ -329,7 +329,7 @@ function addTargetDisableContext(kendoUi,report_id)
     		
     		$('.'+e.kendoId).wrsAbaData('setKendoUi',{STOP_RUN:false, 'TYPE_RUN':TYPE_RUN[e.type]});
     		
-
+    		console.log('type',e.type);
     		
     		switch(e.type)
     		{
@@ -341,6 +341,7 @@ function addTargetDisableContext(kendoUi,report_id)
 													//if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!='') -- esse foi o felipe || Estava equivocado
 													if(e.event.parent().attr('class')=='VER_MAPA')
 													{
+
 														$('a[wrs-data=grid_map]').last().trigger('click');														
 														var _explode		=	 explode('|',str_replace(' ','',proxTd.text()));
 														//centraliza o mapa no ponto em questao
@@ -359,6 +360,8 @@ function addTargetDisableContext(kendoUi,report_id)
 														
 													    
 													}else{
+														
+														
 														value_select	=	strip_tags(_data[indexTR][name_column[indexTD]]);
 														rows_current_full_name				=	_layout['LAYOUT_ROWS'][indexParent];
 														
@@ -368,7 +371,7 @@ function addTargetDisableContext(kendoUi,report_id)
 														
 														filter_add							=	[['__'+replace_attr(rows_current_full_name),'',rows_current_full_name+'.['+value_select+']']];
 														
-
+														console.log('filter_add',filter_add);
 														
 														changeWithDrillFilter(_layout,filter_add);
 													}
