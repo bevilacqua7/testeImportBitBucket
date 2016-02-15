@@ -150,6 +150,9 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 		
 		return $param;
 	}
+	
+	
+	
 
 }
 

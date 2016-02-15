@@ -285,10 +285,19 @@ function addTargetDisableContext(kendoUi,report_id)
 		 * 
 		 * 
 		 */
-    	function drill_click_option(e)
+    	function drill_click_option(_e)
     	{
 			
 			_START('WrsDrill::drill_click_option');
+			var e				=	_e;
+			
+			//Recuperando os eventos do click do mouse
+			//Correção devido a melhorias na estrutura do drilll
+			var _drillGLobal	=	$('body').WrsGlobal('getJS','drill');
+			
+				e.type			=	_drillGLobal.type;
+				e.parent		=	_drillGLobal.parent;
+			//END
 			
     		var IDName			=	'#'+e.kendoId;
     		var kendoUi			=	$(IDName).data('kendoGrid');
@@ -370,8 +379,6 @@ function addTargetDisableContext(kendoUi,report_id)
 														
 														
 														filter_add							=	[['__'+replace_attr(rows_current_full_name),'',rows_current_full_name+'.['+value_select+']']];
-														
-														console.log('filter_add',filter_add);
 														
 														changeWithDrillFilter(_layout,filter_add);
 													}

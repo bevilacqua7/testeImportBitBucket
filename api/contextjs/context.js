@@ -310,7 +310,6 @@ var context = context || (function () {
 			 * by Marcelo Santos
 			 */
 			$('.dropdown-menu li a').unbind('hover').hover(function(event){
-				
 				var dropdown_menu		=	$(this);				
 				var offset 				= 	dropdown_menu.offset();
 				var mainHeight			=	dropdown_menu.outerHeight()+8;
@@ -322,8 +321,7 @@ var context = context || (function () {
 				//Não permite alicar o filtro
 				//A class bold é exclusiva do Total para linha e colunas
 
-				if(dropdown_menu.hasClass('bold'))
-				{
+				if(dropdown_menu.hasClass('bold')){
 					return true;
 				}
 				
@@ -360,7 +358,15 @@ var context = context || (function () {
 		var esconde			=	false;			
 
 		$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
+		
+		
+	 
 
+		 
+		 //Responsável por gravar na variável global as informações do drill que será usado para manipular o drill
+		 $('body').WrsGlobal('setJS',{type:'drill', data:{'parent':$(this), 'type':table_parents.attr('type')}});
+		 
+		 
 		if(table_parents.attr('type')=='linha_header')
 			{	
 					table_parents		=	table_parents.find('table:first').find('tr');
@@ -471,6 +477,7 @@ var context = context || (function () {
 		var _layout	=	wrsKendoUiContextMenu($('#'+get_aba_active_kendoUi().REPORT_ID));
 		
 
+
 			hideContextMenu(type,_layout.layout_clean);
 		
 		if(empty($wrsEventMain.html())) return true;
@@ -500,7 +507,7 @@ var context = context || (function () {
 			$dd.attr('wrs_event','true');
 			
 			$dd.find('li a').each(function(){
-				
+
 				$(document).on('click', '#' + $(this).attr('id'), function(event)
 																	{ 
 																			var json	=	$(this).attr('json');
@@ -513,7 +520,7 @@ var context = context || (function () {
 																				}
 
 																			var events		=	 {'json':json,'event':$(this),'parent':$wrsEventMain, 'type':type,'kendoId':whoEventRequest.attr('id'), 'layout':_layout.layout_full};
-																			
+
 
 																			return eventAction(events);
 																	}

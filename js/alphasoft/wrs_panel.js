@@ -2044,7 +2044,6 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 
 	if(isEmpty(data))
 	{
-		
 		WRS_CONFIRM(LNG('DATABASE_NOT_CONECTED'),'error',function(data){
 			SYSTEM_OFF	=	true;
 				window.location	= "./login.php";
@@ -2052,11 +2051,6 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		
 		return false;
 	}
-	
-	
-	
-	
-	
 	
 	try{
 		if(data.error_job==true)
@@ -2068,20 +2062,13 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 						
 						return false;
 			}
-	}
-	catch(e)
-	{
-		
-	}
+	}catch(e){}
 	
 	
 	_START('MOUNT_LAYOUT_GRID_HEADER');
 	
-	
-	
 	if(is_job_call!='ThreadMainLoadData')
 	{
-
 		if(is_array(data))
 		{
 			//Força o inicio do JOB Nesse ponto
