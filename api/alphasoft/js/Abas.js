@@ -2076,9 +2076,10 @@ function optionsDataConvert(gridValue,with_decode)
 			{
 				if(data_global==undefined || data_global==null)
 					{
-						console.error('data_global nãoi foi definido ainda data_Error:',input);
+						console.error('data_global não foi definido ainda data_Error:',input);
 						return false;
 					}
+				
 				_ONLY('wrsAbaData::__setKendoUi');
 				set_input_poolin(input,'kendoUi');
 			}

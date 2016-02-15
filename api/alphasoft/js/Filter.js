@@ -109,6 +109,8 @@ function findFilterMergeLoad(filterMerge,levelFull)
 	_END('findFilterMergeLoad');
 	return '';
 }
+
+
 function filterMergeLoad(filter_current,filterMerge)
 {
 	
@@ -117,25 +119,41 @@ function filterMergeLoad(filter_current,filterMerge)
 	var filters_add		=	[];//INforma quais atributos já foram utilizados para não repetir
 
 	
+	
 	for(x in filter_current)
 		{
-			var levelFull		=	'__'+replace_attr(filter_current[x][0]);
+	
+			var levelFullEmpty	=filter_current[x][0];
+			var levelFull		=	'__'+levelFullEmpty;
 			
 			var replace_filter	=	findFilterMergeLoad(filterMerge,levelFull);
 			
 			var filter			= 	!isset(filter_current[x][2]) ? 'a' : filter_current[x][2];
 			
-			if(!empty(replace_filter))
-			{
-				if(empty(filter))
-					replace_filter			=	replace_filter;
-				else					
-					replace_filter			=	filter+','+replace_filter;
-				
-				filter		=	replace_filter;
-				filters_add[levelFull]	=	true;		
 			
-			}
+			
+        	 //	var filter_fixed	=	$('body').filterFixed('hideTooltipe',levelFullEmpty);
+
+        	 /*
+			if(filter_fixed==false)
+			{*/
+				if(!empty(replace_filter))
+				{
+					if(empty(filter))
+						replace_filter			=	replace_filter;
+					else					
+						replace_filter			=	filter+','+replace_filter;
+					
+					filter		=	replace_filter;
+					filters_add[levelFull]	=	true;		
+				
+				}
+			 
+				/*
+			}else{
+				//Acrescenta o filtro fixo
+				filter		=	 filter_fixed.filter;
+			}*/
 			//garante que não se repita as informações no array principal
 			array_user[array_user.length]	=	[levelFull,filter_current[x][1],filter];
 		}
@@ -159,6 +177,7 @@ function filterMergeLoad(filter_current,filterMerge)
 			}
 	
 	if(array_user.length==0) return '';
+	
 	
 	_END('filterMergeLoad');
 	return array_user;
@@ -215,7 +234,12 @@ function changeWithDrillFilter(layout,filter_to_add)
 	
 	var changeLayout	=	optionsDataConvert(current_layout,true);
 	
-	var filtersCurrent	=	tagFilterWRS(true);
+
+//	var filtersCurrent	=	tagFilterWRS(true);
+	var filtersCurrent	=	$.WrsFilter('getAllFiltersToRun').filter;
+
+		
+
 	
 		aba_current.wrsAbaData('setKendoUi',wrs_clean_data(null));
 	
@@ -248,7 +272,12 @@ function changeWithDrillFilter(layout,filter_to_add)
 	}else{
 		//Quando já existir filtros
 		changeLayout['LAYOUT_FILTERS'] =  filterMergeLoad(filtersCurrent,filter_to_add);	
+
 	}
+	
+	
+	
+
 
 	//Add elemento para ser acrescentado
 	
@@ -802,6 +831,9 @@ function tagFilterWRS(typeReturn)
  	return html;
  	
 }
+
+
+
 function wrsFilterClickFalse(filter_hide)
 {
 		_ONLY('wrsFilterClickFalse');
@@ -1017,6 +1049,7 @@ function wrsFilterClickFalse(filter_hide)
 			var empty_filter	=	false;
 			var tagQuery		=	'';
 			var FilterOriginal	=	[];
+			var addFilter		=	[];
 			var _index			=	[];
 			var aba_active			=			get_aba_active_object();
 			
@@ -1047,8 +1080,6 @@ function wrsFilterClickFalse(filter_hide)
 					        	{
 					        	 	var filter_fixed	=	$('body').filterFixed('hideTooltipe',tag_class);
 					        	 		_data_filter		=	 implode(',',filter_fixed.filter);
-
-					        	 	
 					        	 }
 					         
 
@@ -1073,6 +1104,8 @@ function wrsFilterClickFalse(filter_hide)
 							
 
 							FilterOriginal[FilterOriginal.length]	=	{'class':'__'+replace_attr(level_full),data:_json_filter};
+							
+							addFilter[addFilter.length]	=	[replace_attr(level_full),'',_json_filter];
 						}
 					
 			});
@@ -1089,7 +1122,7 @@ function wrsFilterClickFalse(filter_hide)
 			
 			if(typeEvent=='all') {
 				_END('WrsFilter::getFiltersLevelUP');
-				return {data:tagQuery,full:FilterOriginal, index:implode(',',_index)};
+				return {data:tagQuery,full:FilterOriginal,filter:addFilter, index:implode(',',_index)};
 			}
 			_END('WrsFilter::getFiltersLevelUP');
  			return tagQuery; 			
@@ -2121,6 +2154,7 @@ function wrsFilterClickFalse(filter_hide)
     	
     	
     	//Apenas devolve o array para ser tratado
+    	//È trabalhado também no perfil onde é manipulado para mandar para o filtro
     	var __hideTooltipe	=	 function(index)
     	{
     		
@@ -2139,8 +2173,14 @@ function wrsFilterClickFalse(filter_hide)
     		
     		if(index!=undefined)
     			{
-    			
-    				return _data.filter_fixed[index];
+    				//validando se existe o filtro a ser pesquisado
+    				try{
+    					return _data.filter_fixed[index];
+    				}catch(e){
+    					return false;
+    				}
+    				
+    				
     			}else{
     					return _data.filter_fixed;
     			}

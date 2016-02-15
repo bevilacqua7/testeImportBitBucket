@@ -174,6 +174,9 @@ function WRSKendoGridComplete(IDGrid)
 	
 			_paranKendoUi['MKTIME_HISTORY']	=	_mktime;
 			
+			_paranKendoUi['load_direct']	=	true;	//Permite que seja executado o histórico
+			//load_direct
+			
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi,true);
 			delete _history;
 		_END('WRSKendoGridComplete::historyClick');

@@ -132,6 +132,8 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 		return $param;
 	}
 	
+	
+	
 	public function delete($options)
 	{
 		$_fields			= $options['field'];
@@ -148,6 +150,9 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 		$param['html']			=	'<pre>DELETE CLASS - tabela: '.$_tabela.'<hr>'.json_encode($arr_campos_request,1).'</pre>'.$param['html'];	
 		return $param;
 	}
+	
+	
+	
 	
 	
 

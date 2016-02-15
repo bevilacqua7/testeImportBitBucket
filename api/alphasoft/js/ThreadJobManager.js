@@ -317,8 +317,10 @@ function get_all_jobs()
 			var __load_complete	=	 function(options)
 			{
 				_START('managerJOB::__load_complete');
+				
 				var _report_id	=	 options.report_id;
 				var _data		= 	GetData();
+				var _kendoActive=	get_aba_active_kendoUi();
 				
 					setMensagens(_report_id,undefined);
 					setJobRender(_report_id,undefined);
@@ -327,9 +329,11 @@ function get_all_jobs()
 					setNotTitle(false);
 					
 					
-					if(_data.report_id_active==_report_id)
+					if(_kendoActive.REPORT_ID==_report_id)
 					{
+						
 						$(_data.modal).addClass('hide');
+
 					}
 					
 				delete _data;
@@ -545,9 +549,10 @@ function get_all_jobs()
 						
 						//show grid
 						$('#'+_report_id+'Main').removeClass('hide');
+						$(_data.modal).addClass('hide');
 						
 						$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_QUERY:true});
-						$(_data.modal).addClass('hide');
+						
 						
 						//Se não existir job então não permite o cancelamento
 						if(ExistRealJob(_report_id,_data.job)==false)
