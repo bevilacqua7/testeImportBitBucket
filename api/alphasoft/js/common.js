@@ -767,13 +767,11 @@ function WRS_CONFIRM(_text,_type,_callback,_extraButtonParam,_extraType,_extraFo
 }
 
 
-function WRS_ALERT(_text,_type)
+function WRS_ALERT(_text,_type,_callback)
 {
 	var _title		=	"ALERT_TITLE_INFO";
 	var _is_type	=	_type;
-	
-	 
-	
+		
 	switch(_type)
 	{
 		case 'info' 	: _title	=	LNG('ALERT_TITLE_INFO') ;break;
@@ -782,15 +780,19 @@ function WRS_ALERT(_text,_type)
 		case 'warning' 	: _title	=	LNG('ALERT_TITLE_WARNING') ;break;
 	}
 	
-
+	var _modal = {
+						type  		: 	_type,
+						title		:	_title,
+						buttonText 	: 	{ok:LNG('BTN_CONFIRM'),yes:LNG('BTN_SIM'),cancel:LNG('BTN_NAO')},
+						closeClick 	: 	false, //Close Modal on click near the box
+						text  		: 	_text
+				 };
 	
-	modal({
-		type  		: _type,
-		title		:	_title,
-		 buttonText : {ok:LNG('BTN_CONFIRM'),yes:LNG('BTN_SIM'),cancel:LNG('BTN_NAO')},
-		closeClick 	: false, //Close Modal on click near the box
-		text  		: _text
-	});
+	if(_callback!=undefined){
+		_modal			=	merge_objeto(_modal,{callback	: 	function(result){ _callback(result); }});
+	}
+		
+	modal(_modal);
 }
 
 /**

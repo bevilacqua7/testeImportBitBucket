@@ -1,102 +1,34 @@
 <?php
 
-/**
- * Obtendo informações do usuário
- */
-
-includeCLASS('WRS_USER');
-includeQUERY('WRS_PANEL');
-includeQUERY('WRS_MANAGE_PARAM');
+includeCLASS('WRS_BASE');
+includeCLASS('WRS_AdminInterface'); // interface com funcoes para a area administrativa
 
 class ATT_WRS_CUSTOMER extends WRS_BASE
 {
+	private $admin = NULL;
 	
-	private $OBJECT			= 	NULL;
-	private $event			=	NULL;
-	private $_query			=	NULL;
-	private $cube			=	array();
-	
-
-	public function run($event,$paran_query,$cube_s)
-	{
-		$this->event		=	empty($event)?fwrs_request('event'):$event;
-		$this->_query		=	new QUERY_PANEL();
-		$cube_s				=	empty($cube_s)?fwrs_request('cube_s'):$cube_s;		
-		
-		$cubes				=	WRS::GET_SSAS_USER();
-		$this->cube			=	$cubes[$cube_s];
-		
-		return "EVENTO RUN lib.ATT_WRS_CUSTOMER - Event: ".print_r($event,1).' - param: '.print_r($paran_query,1).' - cube_s: '.print_r($cube_s,1);
+	public function __construct(){
+		$this->admin = new WRS_AdminInterface();
+		$this->admin->classname = 'ATT_WRS_CUSTOMER';
 	}
 	
 	public function SetObject($Object)
 	{
-		$this->OBJECT=$Object;
+		$this->admin->SetObject($Object);
 	}
-	
 
-
-	public function change_query_exception($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
-	{
-		switch($this->event)
+	public function run()
+	{	
+		$event	=	 fwrs_request('event');
+		switch($event)
 		{
-			case 'runGrid':  return $this->runGrid($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL); break;
+			case 'downloadFile' : $this->downloadFile(); break;
 		}
 	}
 	
-
-	private function getQuerySelectReports(){
-	
-		$cube_id		=	fwrs_remove_colchete($this->cube['CUBE_ID']);
-		$database_id	=	fwrs_remove_colchete($this->cube['DATABASE_ID']);
-	
-		$user			=	WRS::INFO_SSAS_LOGIN();
-
-		$sql			=	$this->_query->GET_SSAS_REPORT($database_id, $cube_id,0);
-		return $sql;
-	
+	public function downloadFile(){
+		$this->admin->downloadFile();
 	}
-	
-	
-	private function runGrid($table,$orderBy,$orderByPOS,$_start,$_end, $_where=NULL)
-	{
-	
-		$sql			=	$this->getQuerySelectReports();
-	
-		$query			=	 $this->query($sql);
-		$error			=	false;
-		$last_error		=	'';
-	
-		if($this->num_rows($query))
-		{
-				
-			$rows		=	 $this->fetch_array($query);
-				
-			if(!empty($rows['ERROR_MESSAGE']))
-			{
-				$last_error		=	$rows['ERROR_MESSAGE'];
-				$error			=	true;
-			}else{
-				return WRS_MANAGE_PARAM::select('*', $rows['TABLE_NAME'], $orderBy, $orderByPOS, $_start, $_end,$_where);
-			}
-				
-				
-		}else{
-			$last_error		=	'sem resultados para a consulta: '.$sql;
-			$error			=	true;
-		}
-	
-	
-	
-	
-		if($error)
-		{
-			WRS_TRACE($last_error, __LINE__, __FILE__);
-			return false;
-		}
-	
-	}
-	
 	
 	public function insert($options)
 	{
@@ -109,9 +41,12 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
 			}
 		}
-		
-		$param	=	 $this->OBJECT->build_grid_form($options);	
-		$param['html']			=	'<pre>INSERT CLASS - tabela: '.$_tabela.'<hr>'.json_encode($arr_campos_request,1).'</pre>'.$param['html'];	
+
+		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));	
+		unset($param['button']['import']);
+		unset($param['button']['export']);
+		unset($param['button']['remove']);
+		$param['html']			=	'<pre>INSERT CLASS '.$this->admin->classname.' - tabela: '.$_tabela.'<hr>'.json_encode($arr_campos_request,1).'</pre>'.$param['html'];	
 		return $param;
 	}
 	
@@ -126,19 +61,68 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
 			}
 		}
-		
-		$param	=	 $this->OBJECT->build_grid_form($options);	
-		$param['html']			=	'<pre>UPDATE CLASS - tabela: '.$_tabela.'<hr>'.json_encode($arr_campos_request,1).'</pre>'.$param['html'];	
+
+		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));	
+		unset($param['button']['import']);
+		unset($param['button']['export']);
+		$param['html']			=	'<pre>UPDATE CLASS '.$this->admin->classname.' - tabela: '.$_tabela.'<hr>'.print_r($_POST,1).'</pre>'.$param['html'];	
 		return $param;
 	}
-	
-	
-	
+
 	public function delete($options)
 	{
 		$_fields			= $options['field'];
 		$_request_original 	= $_REQUEST;
 		$_tabela			= $options['table'];
+		$arr_campos_request = array();
+		$_regForExport		= json_decode($_request_original['extraValues'],1);
+		foreach($_fields as $nome_campo => $valores){
+			if(array_key_exists($nome_campo, $_request_original)){
+				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
+			}
+		}
+	
+		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
+		unset($param['button']['import']);
+		unset($param['button']['export']);
+		unset($param['button']['update']);
+		unset($param['button']['remove']);
+		$param['html']			=	'<pre>DELETE CLASS '.$this->admin->classname.' - tabela: '.$_tabela.'<hr>'.print_r($_regForExport,1).'</pre>'.$param['html'];
+		return $param;
+	}
+	
+	public function import($options)
+	{
+		
+		$_fields			= $options['field'];
+		$_request_original 	= $_REQUEST;
+		$_tabela			= $options['table'];
+		$arr_campos_request = array();
+		
+		foreach($_fields as $nome_campo => $valores){
+			if(array_key_exists($nome_campo, $_request_original)){
+				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
+			}
+		}
+
+		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));	
+
+		unset($param['button']['update']);
+		unset($param['button']['remove']);
+		unset($param['button']['export']);
+
+		// criacao do HTML para exibir o form de upload ou realizar a importacao se houverem arquivos enviados
+		$param['html'] = $this->admin->importarDadosEmMassa('importCustomers',$_request_original);		
+		
+		return $param;
+	}
+	
+	public function export($options)
+	{
+		$_fields			= $options['field'];
+		$_request_original 	= $_REQUEST;
+		$_tabela			= $options['table'];
+		$_regForExport		= json_decode($_request_original['extraValues'],1);
 		$arr_campos_request = array();
 		foreach($_fields as $nome_campo => $valores){
 			if(array_key_exists($nome_campo, $_request_original)){
@@ -146,12 +130,26 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 			}
 		}
 		
-		$param	=	 $this->OBJECT->build_grid_form($options);	
-		$param['html']			=	'<pre>DELETE CLASS - tabela: '.$_tabela.'<hr>'.json_encode($arr_campos_request,1).'</pre>'.$param['html'];	
+		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));	
+		
+		unset($param['button']['update']);
+		unset($param['button']['remove']);
+		unset($param['button']['import']);
+		
+		include PATH_TEMPLATE.'export_file_window.php';
+		$link_download = $this->admin->downloadLink($_regForExport['objetosSelecionados'],$_regForExport['chave_primaria'],$param);
+		if(!$link_download){
+			$msg 	= LNG('ADMIN_EXPORT_OPTION_ERROR');
+			$tipomsg= "error";
+		}else{
+			$msg 	= LNG('ADMIN_EXPORT_OPTION_OK');
+			$tipomsg= "success";
+		}
+		$HTML 	= str_replace(array('{MENSAGEM}','{TIPOMENSAGEM}','{URL_DOWNLOAD}'),array($msg,$tipomsg,$link_download),$HTML);
+		$param['html'] = $HTML;
+		
 		return $param;
 	}
-	
-	
 	
 	
 	

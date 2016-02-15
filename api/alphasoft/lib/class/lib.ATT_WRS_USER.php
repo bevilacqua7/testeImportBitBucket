@@ -2,7 +2,6 @@
 
 includeCLASS('WRS_BASE');
 includeCLASS('WRS_AdminInterface'); // interface com funcoes para a area administrativa
-includeQUERY('ATT_WRS_USER');
 
 class ATT_WRS_USER extends WRS_BASE
 {
@@ -112,7 +111,7 @@ class ATT_WRS_USER extends WRS_BASE
 		unset($param['button']['export']);
 
 		// criacao do HTML para exibir o form de upload ou realizar a importacao se houverem arquivos enviados
-		$param['html'] = $this->admin->importarDadosEmMassa('importUsers');		
+		$param['html'] = $this->admin->importarDadosEmMassa('importUsers',$_request_original);		
 		
 		return $param;
 	}

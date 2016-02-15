@@ -228,14 +228,18 @@ HTML;
 	
 	}
 	
-	public function importarDadosEmMassa($name){
+	public function importarDadosEmMassa($name,$_request_original=NULL){
+		
+		$form_send			= (is_array($_request_original) && array_key_exists('envio_de_arquivo', $_request_original) && $_request_original['envio_de_arquivo']==1);
+		$event_form			= $_request_original['event'];
+		
 		$upload_dir_key 	= 	array($_tabela,0,$name); // chave consiste em usuario logado + formulario em questao (ex. ATT_WRS_USER) + valor da chave da tabela (ex. USER_ID = 3)
 	
 		$extra_params		=	array(
 				'autoUpload'		=> 	true,
 				//'acceptFileTypes'	=>	"/(\.|\/)(gif|jpe?g|png)$/i",
 				'maxFileSize'		=> 	3000000, // 3 MB,
-				'maxNumberOfFiles'	=> 	5,
+				'maxNumberOfFiles'	=> 	1,
 				'botao_selecionar'	=>	true,
 				'botao_enviar'		=>	false,
 				'botao_cancelar'	=>	false,
@@ -246,7 +250,8 @@ HTML;
 		// validacao se existir arquivos par a realizacao da importacao dos dados em massa
 		include PATH_TEMPLATE.'import_file_window.php';
 		$arquivos_existentes = $upload->listFiles();
-		if(is_array($arquivos_existentes) && count($arquivos_existentes)>0){
+		//exit('<pre>'.print_r($arquivos_existentes,1));
+		if($form_send && is_array($arquivos_existentes) && count($arquivos_existentes)>0){
 			$cont = 0;
 			$msgs_erros = array();
 			foreach($arquivos_existentes as $arq){
@@ -258,6 +263,7 @@ HTML;
 					$cont++;
 				}
 			}
+			$upload->removeAllFiles();
 			$cont_err 		= count($arquivos_existentes)-$cont;
 	
 			$mensagem_success		= $cont . ($cont>1?LNG('upload_files_success_plur'):LNG('upload_files_success_sing'));
@@ -276,6 +282,7 @@ HTML;
 				
 			return str_replace(array('{MENSAGEM}','{TIPOMENSAGEM}'),array($mensagem,$tipo_mensagem),$HTML_OK);
 		}else{
+			$upload->removeAllFiles();
 			return $HTML_UPLOAD;
 		}
 	}

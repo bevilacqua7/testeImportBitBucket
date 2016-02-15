@@ -392,6 +392,7 @@
 	$language['JS_admin_all_records'] 		= 	'Todos os registros';
 	$language['JS_admin_selecteds'] 		= 	'Somente o%s selecionado%s';
 	$language['JS_admin_select_one'] 		= 	'Selecione ao menos um registro';
+	$language['JS_admin_select_one_file'] 	= 	'Selecione um arquivo antes de importar';
 	$language['JS_admin_confirm_remove'] 	= 	'Deseja realmente apagar este%s registro%s?';
 	$language['JS_admin_removed'] 			= 	'Registro%s removido%s com sucesso';
 

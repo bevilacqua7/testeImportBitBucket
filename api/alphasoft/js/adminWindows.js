@@ -13,12 +13,12 @@ function callback_load_admin_generic_modal(arg,tabela)
 
 		var funCallBackVision = function()
 		{
-			_START('carrega_grid_list_admin::funCallBackVision');
+			_START('callback_load_admin_generic_modal::funCallBackVision');
 			var rel		=	 $(this).attr('rel');
 			var table	=	 $(this).attr('table');
 			
 			
-			var option	=	 {wrs_type_grid:rel};
+			var option	=	 {wrs_type_grid:rel,tabela:table};
 			
 			
 			try{
@@ -31,7 +31,7 @@ function callback_load_admin_generic_modal(arg,tabela)
 			
 			
 			carrega_grid_list_admin(option);
-			_END('carrega_grid_list_admin::funCallBackVision');
+			_END('callback_load_admin_generic_modal::funCallBackVision');
 		}
 
 		
@@ -71,7 +71,7 @@ _START('carrega_grid_list_admin');
 		var table	=	 $(this).attr('table');
 		
 		
-		var option	=	 {wrs_type_grid:rel};
+		var option	=	 {wrs_type_grid:rel,tabela:table};
 		
 		
 		try{
@@ -116,7 +116,7 @@ _START('carrega_grid_list_admin');
 		}
 	}
 	
-	var tabela 		= $(this).attr('tabela')==undefined && typeof obj == 'object'?obj.attr('tabela'):$(this).attr('tabela');
+	var tabela 		= ($(this).attr('tabela')==undefined && typeof obj == 'object' && obj.attr('tabela')!=undefined)?obj.attr('tabela'):(($(this).attr('tabela')==undefined && typeof options == 'object' && options['tabela']!=undefined)?options['tabela']:$(this).attr('tabela'));
 	
 	var _options	=	((options!=null && options!='' && typeof options == 'object')?options:{wrs_type_grid:'list'});
 	
@@ -128,7 +128,7 @@ _START('carrega_grid_list_admin');
 	}catch(e){
 		delete _options['cube_s'];
 	}
-	
+
 	grid_window_modal(
 							_options,
 			 				tabela,
@@ -156,12 +156,12 @@ function btn_window_grid_event_admin(data)
 
 	//console.log('dadosKendo',dadosKendo);
 
-	var funCallBackVision = function()
+	var funCallBackVision = function(dados)
 	{
 		_START('btn_window_grid_event_admin::funCallBackVision');
 		var rel		=	 $(this).attr('rel');
 		var table	=	 $(this).attr('table');
-		var option	=	 {wrs_type_grid:rel};
+		var option	=	 {wrs_type_grid:rel,tabela:table};
 		
 		try{
 			//CUBE_S existe apenas no Painel ele pe a referencia de qual cubo está sendo utilizado pelo system
@@ -316,11 +316,22 @@ function btn_window_grid_event_admin(data)
 										break;
 									}
 				
-				
+
+				case 'import' 	: 	{	
+										if( // validacao se o usuario clicou pra importar sem selecionar arquivo
+											$('form.grid_window_values_form').length > 0 // verifica se existe o formulario de importacao ou se esta clicando no botao de importacao da tela da grid (inicial)
+										){
+											if(
+													$('form.grid_window_values_form tbody.files tr').length == 0 // verifica se existe alguma linha de arquivo, pois este formulario de importacao efetua o upload automatico e mantem o inputfile sempre vazio, mas cria esta estrutura html/table adicionando as linhas de arquivos
+											){
+												WRS_ALERT(LNG('JS_admin_select_one_file'),'warning');
+												return false;
+											}
+										}
+									}
 				case 'back' 	: 
 				case 'new' 		: 
 				case 'update' 	: 
-				case 'import' 	: 
 						btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 						break;
 				
