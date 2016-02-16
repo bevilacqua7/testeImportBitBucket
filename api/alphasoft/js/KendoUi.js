@@ -35,20 +35,22 @@ function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi,load_direct)
 	var _layout	=	layout;
 
 	
-	var tagABA			=	$('.WRS_ABA ul');
-	var aba_active		=	 tagABA.find('.active');
+	var tagABA				=	$('.WRS_ABA ul');
+	var aba_active			=	tagABA.find('.active');
 		_layout['KendoUi']	=	_paranKendoUi;
+		
 	
-		if(load_direct!=undefined) {
+		if(load_direct!=undefined) 
+		{
 			_layout['load_direct']	=	true;
 		}
-		
 
 		$(ABA_TAG_NAME).wrsAbas('refresh_F5',_layout);
+	
 		
-		var wrs_data		=	aba_active.wrsAbaData('getWrsData');
 		
-
+	var wrs_data		=	aba_active.wrsAbaData('getWrsData');
+		
 		//Remove a aba em branco ou aque não tiver linhas
 		if(wrs_data!=undefined)
 		{
@@ -59,7 +61,9 @@ function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi,load_direct)
 		}
 		
 		delete _layout,wrs_data;
+		
 	_END('WRSKendoGridCompleteRun');	
+	
 }
 
 
@@ -176,7 +180,7 @@ function WRSKendoGridComplete(IDGrid)
 			
 			_paranKendoUi['load_direct']	=	true;	//Permite que seja executado o histórico
 			//load_direct
-			
+
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi,true);
 			delete _history;
 		_END('WRSKendoGridComplete::historyClick');

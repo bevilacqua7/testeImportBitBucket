@@ -1479,6 +1479,9 @@ function optionsDataConvert(gridValue,with_decode)
 							if(IS_EXCEPTION) console.warn(' exception');
 						}
 						
+						//console.log('opts_encode',opts_encode);
+						
+						
 						__load_multiple([opts_encode],true);
 						
 						delete optionsAba,opts,opts_encode;
