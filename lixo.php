@@ -1,46 +1,28 @@
-<?php 
+<script type="text/javascript" src="js/jquery/jquery-1.8.2.min.js?332458"></script>
+<script type="text/javascript" src="api/alphasoft/js/Global.js?520751"></script>
 
-	
-	$_sleep	=	$_REQUEST['sleep'];
-	
-	
-	if(!empty($_sleep))
-	{
-		sleep($_sleep);
-		
-		echo 'sleep='.$_sleep." Sender=".$_REQUEST['event_sender'];
-		
-		exit();
-		
-	}
-
-
-?>
-
-
-<script type="text/javascript" src="js/jquery/jquery-1.8.2.min.js?35766"></script>
-
-<div class="msd"></div>
-
+<body>
 <script>
 
-	
-	function load_data(event,sleep)
-	{
-		
-		var cal_back	=	 function(data)
-		{
-			console.log('event',event,'|',data);
-		}
-	
-		$.post('lixo.php',{'sleep':sleep,'event_sender':event},cal_back);
-	}
-	
-	
-	load_data(55,3);
-	load_data(60,1);
-	load_data(10,2);
-	load_data(25,1);
-
+$('body').WrsGlobal('setJS',{type:'filter',data:{a:1,b:2,c:3}});
+$('body').WrsGlobal('setJS',{type:'drill',data:'dataFinal'});
 </script>
+<?php 
 
+
+include_once 'config/configCommon.php';
+
+
+WRS_GLOBAL::setPHP(array('type'=>'measure','data'=>array(1,2,3,4,5,6)));
+WRS_GLOBAL::setPHP(array('type'=>'attr','data'=>array('ano'=>2012,'mes'=>11)));
+WRS_GLOBAL::setJS(array('type'=>'drill','data'=>array('col'=>'CANAL')));
+
+
+
+echo WRS_GLOBAL::loadGLobal();
+
+echo '<pre>';
+print_r(WRS_GLOBAL::getPHP('measure'));
+
+?>
+</body>

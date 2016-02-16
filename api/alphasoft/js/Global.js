@@ -118,6 +118,27 @@
     		return GetData();
     	}
     	
+    	
+    	/**
+    	 * Faz carga inicial dos Dados
+    	 */
+    	var __loadGLobal	=	 function(loadData)
+    	{
+    		var data	=	GetData();
+    		
+    		for(var lineData in loadData)
+    		{
+    			var dataInside	=	loadData[lineData];
+    			
+    			for(var lineInside in dataInside)
+        		{
+    				data[lineData][lineInside]	=	dataInside[lineInside]
+        		}
+    		}
+    		
+    		$('body').data(dataWrsGlobal,data);
+    		
+    	}
 		
     	/*
 		 * Metodos de funções
@@ -130,7 +151,8 @@
 		        setPHP			:	__setPHP,
 		        getJS			:	__getJS,
 		        getPHP			:	__getPHP,
-		        getData			:	__getData
+		        getData			:	__getData,
+		        loadGLobal		:	__loadGLobal
 		};
 		
 		 
