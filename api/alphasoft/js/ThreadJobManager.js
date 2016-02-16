@@ -331,10 +331,11 @@ function get_all_jobs()
 					
 					if(_kendoActive.REPORT_ID==_report_id)
 					{
-						
 						$(_data.modal).addClass('hide');
-
 					}
+					
+					
+					
 					
 				delete _data;
 				_END('managerJOB::__load_complete');
@@ -400,6 +401,7 @@ function get_all_jobs()
 							{
 								$(_data.close_modal).removeClass('hide');
 								$(_data.modal).addClass('hide');
+								
 							}
 							
 					delete _data;
@@ -466,7 +468,9 @@ function get_all_jobs()
 					$(_data.cancel_job).removeClass('hide');
 				}catch(e){}
 				
-				$('.modal-manager-job').removeClass('hide');
+				
+				$(_data.modal).removeClass('hide');
+				
 			}
 			
 			
@@ -507,6 +511,14 @@ function get_all_jobs()
 					var _report_id	=	_data.report_id_active;
 					var kendoActive	=	get_aba_active_kendoUi();
 					
+						//Faz com que o cancelamento seja efetivado se for a mesma aba corrente
+						if(kendoActive.REPORT_ID!=_report_id)
+						{
+							return false;
+						}
+						
+						
+						
 					
 					var setElementsLocal	=	 function(_report_id,_data)
 					{
@@ -679,7 +691,6 @@ function get_all_jobs()
 				var _data			=	GetData();
 				
 					$(_data.modal).removeClass('hide');
-					
 					$(_data.cancel_job).addClass('hide');
 					$(_data.close_modal).removeClass('hide');
 					

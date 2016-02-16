@@ -239,14 +239,13 @@ var context = context || (function () {
 //		if(empty(layout)) return false;
 		$('.dropdown-menu li').show();
 		
-		
 		for(x in layout)
 			{
 				var layout_inside	=	layout[x];
 				
 				for(i in layout_inside)
 					{
-						var object	=	$('.dropdown-menu  .'+replace_attr(layout_inside[i]));
+						var object	=	$('.dropdown-menu  .'+layout_inside[i]);
 						
 							object.hide();
 							//object.addClass('hide');
@@ -478,7 +477,7 @@ var context = context || (function () {
 		
 
 
-			hideContextMenu(type,_layout.layout_clean);
+		hideContextMenu(type,_layout.layout_clean);
 		
 		if(empty($wrsEventMain.html())) return true;
 		

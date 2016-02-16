@@ -493,8 +493,6 @@ function addTargetDisableContext(kendoUi,report_id)
 											column			=	explode(',',e.layout['LAYOUT_COLUMNS']);
 											value_select	=	strip_tags(_data[indexTR][name_column[indexTD]]);
 											
-
-											
 										var _layout		=	[];
 										var _filter		=	[];
 										var _value		=	'';
@@ -503,7 +501,11 @@ function addTargetDisableContext(kendoUi,report_id)
 												for(x in rows)
 													{
 														_value					=	strip_tags(_data[indexTR][name_column[parseInt(x)+1]]);
-														_filter[_filter.length]	=	['__'+replace_attr(rows[x]),'',rows[x]+'.['+_value+']'];
+														
+														if(!isEmpty(_value))//Se na coluna não tiver dados não apresenta
+														{
+															_filter[_filter.length]	=	['__'+replace_attr(rows[x]),'',rows[x]+'.['+_value+']'];
+														}
 													}
 												
 										header_size	=	$event.find('.k-grid-header-wrap tr').length;

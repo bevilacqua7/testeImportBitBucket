@@ -757,7 +757,7 @@ function onDataBound(arg)
 			//var nameID		=	 '#'+arg.sender.element.attr('id');
 
 			$('.WRS_ABA').find('.'+classGrid).data('kendoUiDataAba',arg.sender);
-			$('body').managerJOB('load_complete',{'report_id':classGrid});
+			
 			
 			
 			wrsKendoUiChange(nameID,'IS_REFRESH',false);
@@ -813,6 +813,9 @@ function onDataBound(arg)
 			
 			delete _kendoUiParam;
 			delete wrsparam;
+			
+			
+			$('body').managerJOB('load_complete',{'report_id':classGrid});
 			
 			
 			_END('onDataBound');
