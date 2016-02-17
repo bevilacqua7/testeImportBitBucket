@@ -1662,7 +1662,8 @@ function optionsDataConvert(gridValue,with_decode)
 										history			:	null,
 										first_line_total:	{}, 
 										change_aba		:	false,
-										enable_change	:	false	 //Habilita para iniciar a detectar se existe modificações no sistema
+										enable_change	:	false,	 //Habilita para iniciar a detectar se existe modificações no sistema
+										filter_negado	:	{}
 									};
 				
 				
@@ -2253,8 +2254,52 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			
 			
-		
+			/**
+			 * Habilitando a negação para o menu principal
+			 */
+			var __enableFilterNegado	=	 function(data)
+			{
+				_START('__enableFilterNegado');		
+				
+					if(data.data==false)
+						{
+							try{
+								delete data_global.filter_negado[data.type];
+							}catch(e){}
+							
+						}else{
+							data_global.filter_negado[data.type]	=	data.data;
+						}
+					
+					that.data(wrsDataName,data_global);
+					
+					_END('__enableFilterNegado');
+			}
 			
+			//Verificando o Status do Filter 
+			var __getFilterNegado	=	 function(type)
+			{
+				_START('__getFilterNegado');		
+				
+				
+				
+							try{
+								
+								var _data	=	data_global.filter_negado[type];
+								
+								if(_data==true) {
+									return true;
+								}else{
+									return false;
+								}
+							}catch(e){
+								return false
+							}
+						
+					return false;
+					
+					_END('__getFilterNegado');
+			}
 			
 			
 			
@@ -2287,7 +2332,12 @@ function optionsDataConvert(gridValue,with_decode)
 			        change_div_elements	:	__change_div_elements,
 			        set_first_MLC		:	__set_first_MLC,
 			        get_first_MLC		:	__get_first_MLC,
-			        removeFilter		:	__removeFilter
+			        removeFilter		:	__removeFilter,
+			        
+			        //Filtro Negado
+			        
+			        enableFilterNegado		:	__enableFilterNegado,
+			        getFilterNegado		:	__getFilterNegado
 			};
 			
 				/*
@@ -2308,7 +2358,7 @@ function optionsDataConvert(gridValue,with_decode)
 			    }
 			    else
 			    {
-			            $.error( 'Method ' +  methodOrOptions + ' does not exist on jQuery.tooltip' );
+			            $.error( 'Method ' +  methodOrOptions + ' does not exist on Abas.tooltip' );
 			    }    	
 		}// END $.fn.wrsAbas = function(methodOrOptions)
 		

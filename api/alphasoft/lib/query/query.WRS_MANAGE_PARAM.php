@@ -8,7 +8,13 @@
 
 class WRS_MANAGE_PARAM
 {
-	var $array_retorno_padrao = array(	 'title'				=>	'',
+	
+	public static function _LNG($data)
+	{
+		return LNG($data);
+	}
+	
+	private  $array_retorno_padrao = array(	 'title'				=>	'',
 										 'button'				=>	'',
 										 'field'				=>	'',
 										 'table'				=>	'',
@@ -134,6 +140,7 @@ class WRS_MANAGE_PARAM
 				'button'	=>	$button,
 				'field'		=>	$fields,
 				'table'		=>	$table,
+
 				'order'		=>	$order,
 				'icon'		=>	'user.png',
 				'primary'	=>	'CUSTOMER_ID',

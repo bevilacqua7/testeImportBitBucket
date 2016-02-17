@@ -117,8 +117,7 @@ function WRS_MENU_FOOTER(){
 			$('html').one('click',function() {
 				$('.wrs_menu_footer_sub').removeClass('wrs_visible');
 			  });
-
-			  event.stopPropagation();
+				  event.stopPropagation();
 			  
 		});
 	_END('WRS_MENU_FOOTER');	

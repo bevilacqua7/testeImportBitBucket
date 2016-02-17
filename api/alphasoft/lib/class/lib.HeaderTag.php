@@ -161,7 +161,7 @@ class HeaderTag
 
 	 	$tag[]		=	array("host"=>"api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2",				"access"=>array("main"),'version'=>'no-use');//Main
 	 	
-	 	$tag[]		=	array("host"=>"js/alphasoft/wrs_panel.js",				"access"=>array("panel"));
+	 	$tag[]		=	array("host"=>JS_PATH_API."Painel.js",				"access"=>array("panel"));
 	 	
 	 	
 	 	

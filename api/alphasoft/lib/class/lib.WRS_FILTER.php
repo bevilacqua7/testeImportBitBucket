@@ -211,7 +211,7 @@ class WRS_FILTER  extends WRS_BASE
 			{
 				return fwrs_warning(LNG('FILTER_NOT_ROWS'));
 			}
-		
+
 		$table_body.= $this->table_body($body,NULL,'header_filtro');
 			
 		$FILTER_ARRAY		=	explode(',',$FILTER_REQUEST);
@@ -286,7 +286,7 @@ HTML_ENTITIES;
 		}
 
 		
-		$html	=	 $this->table_show(NULL, $table_body);
+		$html	=	 $this->table_show(NULL, $table_body,'wrs-filter-'.$tag_class);
 		
 		$this->setDataRequest($data);
 		
