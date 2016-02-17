@@ -177,13 +177,29 @@ include_once $file_language;
 
 function LNG($string)
 {
-	//Recebe a variável global 
+	//Recebe a variável global
 	GLOBAL $language;
-	
+
 	if(!isset($language[$string])) return $string;
-	
+
 	return ($language[$string]);
 }
+
+// substitui o LNG trocando os %s por s se existirem
+function LNG_S($string,$char=false,$recursiva=false)
+{
+	$_char 			= $char===false?'s':$char;
+	$_recursiva 	= !$recursiva?false:true;
+	$_string 		= $_recursiva?$string:LNG($string);
+	
+	if(strpos($_string,'%s')){
+		return LNG_S(str_replace('%s',$_char,$_string),$_char,true);
+	}else{
+		return $_string;
+	}
+}
+
+
 
 
 function LNG_JOIN($string)

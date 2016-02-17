@@ -170,10 +170,32 @@ class FORM  extends WRS_USER
 								maxlength="{$param['length']}" size="{$param['length']}"
 EOF;
 				}
-	
+
 				if($param['length']>80)
 				{
 					$class ='form-control-wrs-auto';
+				}
+
+				$mask	=	"";
+				if(array_key_exists('mask',$param) && $param['mask']!='')
+				{
+					$mask =	<<<EOF
+								maskfield="{$param['mask']}" 
+EOF;
+				}
+
+				if(array_key_exists('type',$param) && $param['type']=='int')
+				{
+					$class =' input_type_int_only ';
+				}
+				
+				$type_input = 'text';
+				$extra_html = '';
+				if(array_key_exists('type',$param) && $param['type']=='password')
+				{
+					$type_input ='password';
+					$extra_html ='<input type="checkbox" class="show_pass_field"> '.LNG('FORM_TYPE_PASSWORD_SHOW');
+					$class =' input_type_password ';
 				}
 				
 				$rels		=	 array('class'=>'form-group form-control-wrs_color');
@@ -183,8 +205,9 @@ EOF;
 							<div  {$rel}>
 					    		<label for="{$param['label']}"  >{$param['title']}</label>
 						    	<div class="form-control-wrs">
-						    		<input type="text" name="{$param['label']}" {$length} class=" {$class}" value="{$param['value']}" id="{$param['label']}" placeholder="{$param['title']}">
+						    		<input type="{$type_input}" name="{$param['label']}" {$length} {$mask} class=" {$class}" value="{$param['value']}" id="{$param['label']}" placeholder="{$param['title']}">
 						    	</div>
+						    	{$extra_html}
 					    	</div>
 EOF;
 
@@ -198,7 +221,7 @@ EOF;
 	
 					$length			=	"";
 					$class			=	"";
-					$param_select	=	!is_array($param['is_select'])? $this->manage_param->$param['is_select']() : '';
+					$param_select	=	!is_array($param['is_select'])? $this->manage_param->getMetodoTabela($param['is_select']) : '';
 					$where			=	$param['value'];
 					$option			=	'';
 					if(!empty($param['length']))

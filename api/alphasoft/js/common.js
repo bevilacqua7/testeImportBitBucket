@@ -1463,7 +1463,32 @@ function bloqueia_chars(obj,chars){
 	}).val(obj.val().replaceComArray(_chars,_chars_verso));
 }
 
+function trata_campos_senha(){
+	$('.show_pass_field').unbind('change').bind('change',function(){ 
+		var cpo_senha = $(this).parents('div:first').find('div.form-control-wrs input.input_type_password');
+		var novo_cpo  = cpo_senha.clone();
+		novo_cpo.prop('type',($(this).prop('checked')?'text':'password')).insertAfter(cpo_senha).prev().remove();
+		bloqueia_chars(novo_cpo);
+	});
+}
 
+function trata_campos_int(){
+	$('.input_type_int_only').keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A, Command+A
+            (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
+             // Allow: home, end, left, right, down, up
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });	
+}
 
 
 

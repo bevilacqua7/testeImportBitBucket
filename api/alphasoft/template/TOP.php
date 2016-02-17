@@ -21,27 +21,22 @@
 					<span style="font-size:11px;vertical-align:middle"><?php echo LNG('TITLE_LINGUA')?>: </span><?php echo $SELECT_IDOMA;?>
 				</div>
 				<div class="menu_administrativo_itens" style="display:none;position:absolute;top:3px">
-					<?php 
-					$bts_adm = array(
-						"ATT_WRS_CUSTOMER"		=> "Clientes",
-						"ATT_WRS_USER"			=> "Usuários",
-						"ATT_WRS_DATABASE"		=> "Databases",
-						"ATT_WRS_CUBE"			=> "Cubos",
-						"ATT_WRS_PERFIL"		=> "Perfis",
-						"REL_WRS_CUBE_USER"		=> "Cubo por Usuário",
-						"ATT_WRS_DOWNLOAD"		=> "Downloads",
-						"ATT_WRS_LOG"			=> "LOG"						
-					);
-					foreach($bts_adm as $tabela=>$label)
-					{					
-						$html = <<<HTML
+					<?php 					
+					includeQUERY('WRS_MANAGE_PARAM');
+					$classes_menu = WRS_MANAGE_PARAM::GET_CONFIG_TABLE();
+					$html='';
+					foreach($classes_menu as $nome_tabela=>$info_tabelas){
+						if($info_tabelas['acesso_via_menu']==true){
+							$tabela = $nome_tabela;
+							$label  = LNG($info_tabelas['nome_menu_LNG']);
+							$html .= <<<HTML
 							<button type="button" class="menu_cadastro btn btn-default btn-xs" tabela="{$tabela}">
 							  <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span> {$label}
 							</button>
 HTML;
-						echo $html;
+						}
 					}
-					
+					echo $html;					
 					?>
 				</div>	
 				

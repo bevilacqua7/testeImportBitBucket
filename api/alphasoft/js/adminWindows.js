@@ -7,9 +7,8 @@ function callback_load_admin_generic_modal(arg,tabela)
 	var param			=	 _data.param_original;
 	var option						=	 [];
 		option['wrs_type_grid']		=	'form';
-		option[param['primary']]	=	arg.ROW_ID;
+		option[param['primary']]	=	$(arg[param['primary']]).text();
 		option['param_request']			=	param;
-
 
 		var funCallBackVision = function()
 		{
@@ -241,7 +240,7 @@ function btn_window_grid_event_admin(data)
 								index			=	$('.modal-content-grid #'+table+' .k-grid-content tr').index(this);
 							}
 							objDados 			= 	dadosKendo[index];							
-							arrRegisterIds.push(objDados[chave_primaria]);
+							arrRegisterIds.push($(objDados[chave_primaria]).text());
 							arrObjetosSelecionados.push(objDados);
 														
 					});

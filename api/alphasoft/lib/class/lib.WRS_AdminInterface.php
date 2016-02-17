@@ -26,6 +26,24 @@ class WRS_AdminInterface  extends WRS_BASE
 		return $param;
 	}
 	
+	public function retornaMsgAcaoTelaAdmin($boolStatus,$msg,$tabela_cadastro='',$query=''){
+ 		$typeMsg = $boolStatus?'success':'error'; 		
+		$callback='function(){}';
+ 		if($tabela_cadastro!=''){
+ 			$callback="function(){ $('.menu_cadastro[tabela=".$tabela_cadastro."]').trigger('click'); }";
+ 		}
+		
+ 		$JS=<<<HTML
+	 		$('#myModal').modal('hide'); // #myModalGenericConfig
+			WRS_ALERT('{$msg}','{$typeMsg}',{$callback}); 
+HTML;
+ 		if($query!=''){
+ 			$JS.="WRS_CONSOLE(".json_encode(array('query'=>$query),1).")";
+ 		}
+ 		echo fwrs_javascript($JS); 		
+ 		exit();
+	}
+	
 	public function SetObject($Object)
 	{
 		$this->OBJECT=$Object;
@@ -36,9 +54,13 @@ class WRS_AdminInterface  extends WRS_BASE
 		if(!is_dir(PATH_FILE.$this->classname.DS.'exportFiles')){
 			mkdir(PATH_FILE.$this->classname.DS.'exportFiles', 0777, true);
 		}
+		
+		// funcoes JS para tratamento dos formularios administrativos
 		$scr_field_bloq = <<<HTML
 		<script>
-			$('input[type=text]').each(function(){ bloqueia_chars($(this)); });
+			$('input[type=text], input[type=password]').each(function(){ bloqueia_chars($(this)); });
+			trata_campos_senha();
+			trata_campos_int();
 		</script>
 HTML;
 		echo $scr_field_bloq;

@@ -2,13 +2,13 @@
 
 /**
  * Contem as querys para a construção do Administrativo
- * @author msdantas
+ * @author msdantas, fbevilacqua
  *
  */
 
 class WRS_MANAGE_PARAM
 {
-	var $array_retorno_padrao = array(	 'title'				=>	'',
+	private $array_retorno_padrao = array(	 'title'				=>	'',
 										 'button'				=>	'',
 										 'field'				=>	'',
 										 'table'				=>	'',
@@ -27,31 +27,125 @@ class WRS_MANAGE_PARAM
 										 'aplicaClassLinhas'	=>	true,		// [false,true,ClassEspecifica] se o parametro classDataLine sera aplicado nas linhas da grid do KendoUi
 						 				 'aplicaClassHeaders'	=>	false		// [false,true,ClassEspecifica] se o parametro classDataHeader sera aplicado nas headers da grid do KendoUi
 		 );
+
+	private static $array_configuracao_padrao = 	array(
+			'tabela_bd'				=>	'',
+			'acesso_requisicao'		=>	true,
+			'acesso_via_menu'		=>	true,
+			'metodo_classe_param'	=>	''
+	);
+	
+	
+	private static $array_configuracao_tabelas = 	array(
+			'ATT_WRS_CUSTOMER'				=> 	array(
+					'tabela_bd'				=>	'ATT_WRS_CUSTOMER_TESTE',
+					'metodo_classe_param'	=>	'ATT_WRS_CUSTOMER',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_CUSTOMER'
+			),
+			'ATT_WRS_USER'					=> 	array(
+					'tabela_bd'				=>	'ATT_WRS_USER',
+					'metodo_classe_param'	=>	'ATT_WRS_USER',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_USER'
+			),
+			'ATT_WRS_DATABASE'				=> 	array(
+					'tabela_bd'				=>	'ATT_WRS_DATABASE',
+					'metodo_classe_param'	=>	'ATT_WRS_DATABASE',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_DATABASE'
+			),
+			'ATT_WRS_CUBE'					=> 	array(
+					'tabela_bd'				=>	'ATT_WRS_CUBE',
+					'metodo_classe_param'	=>	'ATT_WRS_CUBE',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE'
+			),
+			'ATT_WRS_HIERARCHY'				=> 	array(
+					'tabela_bd'				=>	'ATT_WRS_HIERARCHY',
+					'metodo_classe_param'	=>	'ATT_WRS_HIERARCHY',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_HIERARCHY'
+			),
+			'ATT_WRS_PERFIL'				=> 	array(
+					'tabela_bd'				=>	'ATT_WRS_PERFIL',
+					'metodo_classe_param'	=>	'ATT_WRS_PERFIL',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_PERFIL'
+			),
+			'REL_WRS_CUBE_USER'				=> 	array(
+					'tabela_bd'				=>	'REL_WRS_CUBE_USER',
+					'metodo_classe_param'	=>	'REL_WRS_CUBE_USER',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE_USER'
+			),
+			'ATT_WRS_REPORT'				=> 	array(
+					'tabela_bd'				=>	'ATT_WRS_REPORT',
+					'metodo_classe_param'	=>	'ATT_WRS_REPORT',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_REPORT'
+			),
+			'ATT_WRS_DOWNLOAD'				=> 	array(
+					'tabela_bd'				=>	'ATT_WRS_DOWNLOAD',
+					'metodo_classe_param'	=>	'ATT_WRS_DOWNLOAD',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_DOWNLOAD'
+			),
+			'ATT_WRS_LOG'					=> 	array(
+					'tabela_bd'				=>	'ATT_WRS_LOG',
+					'metodo_classe_param'	=>	'ATT_WRS_LOG',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_LOG'
+			),
+			'GET_SSAS_REPORT'				=> 	array(
+					'tabela_bd'				=>	'GET_SSAS_REPORT',
+					'metodo_classe_param'	=>	'GET_SSAS_REPORT',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_SSAS_REPORT',
+					'acesso_via_menu'		=>	false
+			),
+			'GET_SSAS_LAYOUTS'				=> 	array(
+					'tabela_bd'				=>	'GET_SSAS_LAYOUTS',
+					'metodo_classe_param'	=>	'GET_SSAS_LAYOUTS',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_SSAS_LAYOUTS',
+					'acesso_via_menu'		=>	false
+			)
+			
+	);
+	
+	public static function GET_CONFIG_TABLE($tabela=NULL){
+		$arr_todos = array();
+		foreach(self::$array_configuracao_tabelas as $tabela_name=>$config){
+			$arr_todos[$tabela_name] = array_merge(self::$array_configuracao_padrao,self::$array_configuracao_tabelas[$tabela_name]);
+		}
+		if($tabela==NULL){
+			return $arr_todos;
+		}
+		if(!is_string($tabela) || !array_key_exists($tabela, $arr_todos)){
+			// se for passado o nome de uma tabela diferente do padrao só porque o nome da tabela é um teste ou porque mudou,
+			// procura nos nomes das tabelas configurados para retornar o objeto correto e prosseguir com o fucnionamento do sistema
+			$dados_contem_tabela_parametro=array();
+			foreach($arr_todos as $nome_tabela=>$dados){
+				if($dados['tabela_bd']==$tabela){
+					$dados_contem_tabela_parametro = $dados;
+					break;
+				}
+			}
+			if(count($dados_contem_tabela_parametro)==0){
+				return false;
+			}else{
+				return $dados_contem_tabela_parametro;
+			}
+		}
+		return $arr_todos[$tabela];
+	}
+
+	public function getDadosTabelaConfig($tabela=NULL){
+		return self::GET_CONFIG_TABLE($tabela);
+	}
+	
+	public function getMetodoTabela($tabela){
+		$dados_tabela = $this->getDadosTabelaConfig($tabela);
+		return $this->$dados_tabela['metodo_classe_param']();
+	}
 	
 	public function load($_event)
 	{
-		$functions	=	array();
-
-		/*
-		 * Funções liberadas para ter acesso via requisição
-		 */
-		$functions['ATT_WRS_CUSTOMER']	=	true;
-		$functions['ATT_WRS_USER']		=	true;
-		$functions['ATT_WRS_DATABASE']	=	true;
-		$functions['ATT_WRS_CUBE']		=	true;
-		$functions['ATT_WRS_HIERARCHY']	=	true;
-		$functions['ATT_WRS_PERFIL']	=	true;
-		$functions['REL_WRS_CUBE_USER']	=	true;
-		$functions['ATT_WRS_PERFIL']	=	true;
-		$functions['ATT_WRS_REPORT']	=	true;
-		$functions['ATT_WRS_DOWNLOAD']	=	true;
-		$functions['ATT_WRS_LOG']		=	true;
-		$functions['GET_SSAS_REPORT']	=	true;
-		$functions['GET_SSAS_LAYOUTS']	=	true;
 		
-		//Verificando se o eventos está a disposição
-		if(isset($functions[$_event])) return true;
-		
+		$dados_tabela_evento = $this->getDadosTabelaConfig($_event);
+		if($dados_tabela_evento!=false && $dados_tabela_evento['acesso_requisicao']){
+			return true;
+		}
+				
 		return false;
 	}
 	
@@ -91,6 +185,10 @@ class WRS_MANAGE_PARAM
 		//return ' SELECT '.$columns.' FROM '.$table.' '.$where.' ORDER BY '.$orderBy.' '.$orderByPOS;
 	}
 	
+	public function ATT_WRS_CUSTOMER_TESTE(){
+		return $this->ATT_WRS_CUSTOMER();
+	}
+	
 	//Classe de Cliente ADMINISTRATIVO
 	public function ATT_WRS_CUSTOMER()
 	{
@@ -112,8 +210,10 @@ class WRS_MANAGE_PARAM
 		$button_icon['update']	=	'fa fa-floppy-o';
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
-				
-		$table	=	'ATT_WRS_CUSTOMER';
+
+		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_CUSTOMER');
+		$table	=	$dados_tabela_evento['tabela_bd'];
+		
 		$order	=	array('order_by'=>'CUSTOMER_ID' ,'order_type'=>'ASC');
 		$fields	=	array();
 		
@@ -122,7 +222,7 @@ class WRS_MANAGE_PARAM
 		$extend 	= 	array('class'=>'ATT_WRS_CUSTOMER' 	,'file'=>'ATT_WRS_CUSTOMER');
 		
 		$fields['WRS_ICON']			=	array('title'=>'Icone'				,   'width'=>50,     'basic'=>true, 'grid'=>true, 'is_upload'=>true);
-		$fields['CUSTOMER_ID']		=	array('title'=>'ID'					,   'primary'=>true, 'type'=>'int', 'class'=>'hide');
+		$fields['CUSTOMER_ID']		=	array('title'=>'ID'					,   'primary'=>true, 'class'=>'hide');
 		$fields['CUSTOMER_CODE']	=	array('title'=>'Código'				,	'length'=>15,    'list'=>true,	'basic'=>true,  'grid'=>true);
 		$fields['CUSTOMER_DESC']	=	array('title'=>'Nome'				,	'length'=>180,   'list'=>true,	'basic'=>true , 'grid'=>true);
 		$fields['CUSTOMER_GROUP']	=	array('title'=>'Corporação'			,	'length'=>180);
@@ -171,8 +271,9 @@ class WRS_MANAGE_PARAM
 		$button_icon['update']	=	'fa fa-floppy-o';
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
-		
-		$table	=	'ATT_WRS_USER';
+
+		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_USER');
+		$table	=	$dados_tabela_evento['tabela_bd'];
 		
 		//return $this-> ATT_WRS_CUSTOMER();
 		//return $this-> ATT_WRS_DATABASE();
@@ -191,7 +292,7 @@ class WRS_MANAGE_PARAM
 		$fields['WRS_ICON']				=	array('title'=>'Icone'					, 'width'=>60,     'basic'=>true, 'grid'=>true, 'is_upload'=>true);
 		$fields['USER_ID']				=	array('title'=>'ID'						, 'primary'=>true, 'type'=>'int', 'class'=>'hide');
 		$fields['USER_CODE']			=	array('title'=>'Usuário'				, 'length'=>200,   'basic'=>true, 'list'=>true,  'grid'=>true);
-		$fields['USER_PWD']				=	array('title'=>'Senha'					, 'length'=>30);
+		$fields['USER_PWD']				=	array('title'=>'Senha'					, 'length'=>30, 	'type'=>'password');
 		$fields['USER_DESC']			=	array('title'=>'Nome'					, 'length'=>200,   'basic'=>true, 'list'=>true,  'grid'=>true);
 		$fields['USER_EMAIL']			=	array('title'=>'Email'					, 'length'=>200);
 		$fields['USER_TYPE']			=	array('title'=>'Cargo'					, 'length'=>80);
@@ -248,8 +349,10 @@ class WRS_MANAGE_PARAM
 		$button_icon['update']	=	'fa fa-floppy-o';
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
+
+		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_DATABASE');
+		$table	=	$dados_tabela_evento['tabela_bd'];
 		
-		$table	=	'ATT_WRS_DATABASE';
 		$order	=	array('order_by'=>'DATABASE_ID' ,'order_type'=>'ASC');
 		$extend	= 	array('class'=>'ATT_WRS_DATABASE' 	,'file'=>'ATT_WRS_DATABASE');
 		$fields	=	array();
@@ -320,8 +423,10 @@ class WRS_MANAGE_PARAM
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 		
 		
+
+		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_CUBE');
+		$table	=	$dados_tabela_evento['tabela_bd'];
 		
-		$table	=	'ATT_WRS_CUBE';
 		$order	=	array('order_by'=>'CUBE_ID' ,'order_type'=>'ASC');
 		
 		//Extend para classe que irá executar a query diferente do GeneridWindow
@@ -365,7 +470,10 @@ class WRS_MANAGE_PARAM
 	/*public function ATT_WRS_HIERARCHY()
 	{
 		$button	=	array('new'=>'');
-		$table	=	'ATT_WRS_CUSTOMER';
+		
+		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_HIERARCHY');
+		$table	=	$dados_tabela_evento['tabela_bd'];
+
 		$order	=	array('order_by'=>'CUSTOMER_ID' ,'order_type'=>'ASC');
 		$fields	=	array();
 		
@@ -408,8 +516,10 @@ class WRS_MANAGE_PARAM
 		$button_icon['update']	=	'fa fa-floppy-o';
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
-				
-		$table	=	'ATT_WRS_PERFIL';
+
+		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_PERFIL');
+		$table	=	$dados_tabela_evento['tabela_bd'];
+		
 		$order	=	array('order_by'=>'PERFIL_ID' ,'order_type'=>'ASC');
 		$extend	= 	array('class'=>'ATT_WRS_PERFIL' 	,'file'=>'ATT_WRS_PERFIL');
 		$fields	=	array();
@@ -464,8 +574,10 @@ class WRS_MANAGE_PARAM
 		$button_icon['update']	=	'fa fa-floppy-o';
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
-				
-		$table	=	'REL_WRS_CUBE_USER';
+
+		$dados_tabela_evento = $this->getDadosTabelaConfig('REL_WRS_CUBE_USER');
+		$table	=	$dados_tabela_evento['tabela_bd'];
+		
 		$order	=	array('order_by'=>'CUBE_ID' ,'order_type'=>'ASC');
 		$extend	= 	array('class'=>'REL_WRS_CUBE_USER' 	,'file'=>'REL_WRS_CUBE_USER');
 		
@@ -503,7 +615,10 @@ class WRS_MANAGE_PARAM
 	public function ATT_WRS_REPORT()
 	{
 		$button	=	array('new'=>'');
-		$table	=	'ATT_WRS_REPORT';
+		
+		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_REPORT');
+		$table	=	$dados_tabela_evento['tabela_bd'];
+		
 		$order	=	array('order_by'=>'REPORT_ID' ,'order_type'=>'ASC');
 		$fields	=	array();
 		
@@ -552,8 +667,10 @@ class WRS_MANAGE_PARAM
 		$button_icon['update']	=	'fa fa-floppy-o';
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
-				
-		$table	=	'ATT_WRS_DOWNLOAD';
+
+		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_DOWNLOAD');
+		$table	=	$dados_tabela_evento['tabela_bd'];
+		
 		$order	=	array('order_by'=>'DOWNLOAD_ID' ,'order_type'=>'ASC');
 		$extend	= 	array('class'=>'ATT_WRS_DOWNLOAD' 	,'file'=>'ATT_WRS_DOWNLOAD');
 		$fields	=	array();
@@ -608,8 +725,10 @@ class WRS_MANAGE_PARAM
 		$button_icon['update']	=	'fa fa-floppy-o';
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
-				
-		$table	=	'ATT_WRS_LOG';
+
+		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_LOG');
+		$table	=	$dados_tabela_evento['tabela_bd'];
+		
 		$order	=	array('order_by'=>'DATE_ID' ,'order_type'=>'DESC');
 		$extend	= 	array('class'=>'ATT_WRS_LOG' 	,'file'=>'ATT_WRS_LOG');
 		$fields	=	array();
@@ -647,7 +766,9 @@ class WRS_MANAGE_PARAM
 	
 	public function GET_SSAS_REPORT()
 	{
-		$table		=	'GET_SSAS_REPORT';
+		$dados_tabela_evento = $this->getDadosTabelaConfig('GET_SSAS_REPORT');
+		$table	=	$dados_tabela_evento['tabela_bd'];
+		
 		$order		=	array();
 		$fields		=	array();
 		$button		=	array();
@@ -709,7 +830,9 @@ class WRS_MANAGE_PARAM
 	
 	public function GET_SSAS_LAYOUTS()
 	{
-		$table		=	'GET_SSAS_LAYOUTS';
+		$dados_tabela_evento = $this->getDadosTabelaConfig('GET_SSAS_LAYOUTS');
+		$table	=	$dados_tabela_evento['tabela_bd'];
+		
 		$order		=	array();
 		$fields		=	array();
 		$button		=	array();
