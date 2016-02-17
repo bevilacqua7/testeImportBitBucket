@@ -97,14 +97,13 @@ class WindowGrid extends FORM
 			$param['html']	=	fwrs_error(LNG('ERROR_NOT_EVENT'));
 			$param['button']= 	array();
 		}else{		
-
+			//exit("<pre>".print_r($_REQUEST,1));
 			if($this->manage_param->load($event))
 			{
 				$form_event		=	fwrs_request('form_event');
 				
 				//CHamando o Eventos
-				$param			=	$this->manage_param->$event();
-				
+				$param			=	$this->manage_param->getMetodoTabela($event);
 				$p_request		=	fwrs_request('param_request');
 				
 				if(is_array($p_request) && count($p_request)>0)
@@ -592,7 +591,7 @@ EOF;
 		$pageSize			=	$request['pageSize'];
 		$table				=	 fwrs_request('table');
 		$type_convert		=	NULL;	 
-		$param				=	$this->manage_param->$table();
+		$param				=	$this->manage_param->getMetodoTabela($table);
 		$is_icon			=	false;
 		$is_select			=	NULL;
 		$checkbox_exist		=	false;
@@ -600,7 +599,6 @@ EOF;
 		
 		//Extend o Evento
 		$this->extendException($param,'runGrid');
-		
 		if(array_key_exists('checkbox', $param))
 		{
 			if($param['checkbox'])
@@ -634,7 +632,6 @@ EOF;
 			$query	=	$this->manage_param->select('*', $table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
 		}
 		
-
 		$query	=	 $this->query($query);
 		
 		
@@ -708,7 +705,7 @@ EOF;
 
 						$rows_tmp[$sel_label]=	@$sel_value[$rows_tmp[$sel_label]];						
 					}else{
-						$param_select	=	$this->manage_param->$sel_value();
+						$param_select	=	$this->manage_param->getMetodoTabela($sel_value);
 						
 						$where_box		=	$param_select['primary']."=''".$rows_tmp[$sel_label]."''";
 

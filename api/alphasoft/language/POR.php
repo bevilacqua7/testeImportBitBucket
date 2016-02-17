@@ -6,17 +6,30 @@
 	/*
 	 * Mensagem de Privilegios
 	 */
-	$language ['USUARIO_SEM_PRIVILEGIOS'] 				= "Usuário sem privilégios";
-	$language ['USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS'] 	= "Usuário sem privilégios para visualizar a grid, ela contém mais de 65 mil registros";
-	$language ['ERROR_NOT_ROWS'] 						= "Erro interno ao executar a Consulta";
-	$language ['ERROR_DRILL_LINE_RESULT'] 				= "Erro interno ao processar a criação do DRILL LINHA, se o erro persistir entre em contato com o suporte";
-	$language ['MSG_ERROR_TABLE_CACHE'] 				= "Consulta não pode ser executada, favor modificar o Layout dos Atributos selecionados";
-	$language ['VALOR'] 								= "Valor";
+	$language['USUARIO_SEM_PRIVILEGIOS'] 				= "Usuário sem privilégios";
+	$language['USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS'] 	= "Usuário sem privilégios para visualizar a grid, ela contém mais de 65 mil registros";
+	$language['ERROR_NOT_ROWS'] 						= "Erro interno ao executar a Consulta";
+	$language['ERROR_DRILL_LINE_RESULT'] 				= "Erro interno ao processar a criação do DRILL LINHA, se o erro persistir entre em contato com o suporte";
+	$language['MSG_ERROR_TABLE_CACHE'] 				= "Consulta não pode ser executada, favor modificar o Layout dos Atributos selecionados";
+	$language['VALOR'] 								= "Valor";
 	
 	
-	$language ['ERROR_CANT_CREATE_JOB'] 						= "Ops.. Favor reenviar a consulta, não foi possível criar um job, se o erro persistir favor entrar em contato com o suporte";
+	$language['ERROR_CANT_CREATE_JOB'] 						= "Ops.. Favor reenviar a consulta, não foi possível criar um job, se o erro persistir favor entrar em contato com o suporte";
 	
-	
+
+	$language['MENU_ADMIN_CUSTOMER']		=	'Clientes';
+	$language['MENU_ADMIN_USER']			=	'Usuários';
+	$language['MENU_ADMIN_DATABASE']		=	'Databases';
+	$language['MENU_ADMIN_CUBE']			=	'Cubos';
+	$language['MENU_ADMIN_HIERARCHY']		=	'Hierarquias';
+	$language['MENU_ADMIN_PERFIL']			=	'Perfis';
+	$language['MENU_ADMIN_CUBE_USER']		=	'Associações';
+	$language['MENU_ADMIN_REPORT']			=	'Relatórios';
+	$language['MENU_ADMIN_DOWNLOAD']		=	'Downloads';
+	$language['MENU_ADMIN_LOG']				=	'Logs';
+	$language['MENU_ADMIN_SSAS_REPORT']		=	'Relatórios';
+	$language['MENU_ADMIN_SSAS_LAYOUTS']	=	'Layouts';
+		
 	
 	$language['NO_RESULTS_QUERY']	=	'sem resultados para a consulta: ';
 	$language['NAME_REPORT_EMPTY']	=	'Escolha um nome para o relatório';
@@ -404,7 +417,14 @@
 	// EXPORT ADMIN OPTIONS
 	$language['ADMIN_EXPORT_OPTION_ERROR'] 	= 	'Não há registros para serem exportados';
 	$language['ADMIN_EXPORT_OPTION_OK'] 	= 	'Iniciando o download...';
+
+	$language['ADMIN_REG_INSERTED'] 		= 	'Registro incluído com sucesso';
+	$language['ADMIN_REG_UPDATED'] 			= 	'Registro alterado com sucesso';
+	$language['ADMIN_REG_DELETED'] 			= 	'Registro%s excluído%s com sucesso';
+	$language['ADMIN_NO_REG'] 				= 	'Sem registro para ação';
 	
+	
+	$language['FORM_TYPE_PASSWORD_SHOW'] 	= 	'ver senha';
 	
 	
 ?>
