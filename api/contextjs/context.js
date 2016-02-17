@@ -239,14 +239,13 @@ var context = context || (function () {
 //		if(empty(layout)) return false;
 		$('.dropdown-menu li').show();
 		
-		
 		for(x in layout)
 			{
 				var layout_inside	=	layout[x];
 				
 				for(i in layout_inside)
 					{
-						var object	=	$('.dropdown-menu  .'+replace_attr(layout_inside[i]));
+						var object	=	$('.dropdown-menu  .'+layout_inside[i]);
 						
 							object.hide();
 							//object.addClass('hide');
@@ -310,9 +309,6 @@ var context = context || (function () {
 			 * by Marcelo Santos
 			 */
 			$('.dropdown-menu li a').unbind('hover').hover(function(event){
-				
-				
-				
 				var dropdown_menu		=	$(this);				
 				var offset 				= 	dropdown_menu.offset();
 				var mainHeight			=	dropdown_menu.outerHeight()+8;
@@ -361,7 +357,15 @@ var context = context || (function () {
 		var esconde			=	false;			
 
 		$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
+		
+		
+	 
 
+		 
+		 //Responsável por gravar na variável global as informações do drill que será usado para manipular o drill
+		 $('body').WrsGlobal('setJS',{type:'drill', data:{'parent':$(this), 'type':table_parents.attr('type')}});
+		 
+		 
 		if(table_parents.attr('type')=='linha_header')
 			{	
 					table_parents		=	table_parents.find('table:first').find('tr');
@@ -472,7 +476,8 @@ var context = context || (function () {
 		var _layout	=	wrsKendoUiContextMenu($('#'+get_aba_active_kendoUi().REPORT_ID));
 		
 
-			hideContextMenu(type,_layout.layout_clean);
+
+		hideContextMenu(type,_layout.layout_clean);
 		
 		if(empty($wrsEventMain.html())) return true;
 		
@@ -501,7 +506,7 @@ var context = context || (function () {
 			$dd.attr('wrs_event','true');
 			
 			$dd.find('li a').each(function(){
-				
+
 				$(document).on('click', '#' + $(this).attr('id'), function(event)
 																	{ 
 																			var json	=	$(this).attr('json');
@@ -514,7 +519,7 @@ var context = context || (function () {
 																				}
 
 																			var events		=	 {'json':json,'event':$(this),'parent':$wrsEventMain, 'type':type,'kendoId':whoEventRequest.attr('id'), 'layout':_layout.layout_full};
-																			
+
 
 																			return eventAction(events);
 																	}

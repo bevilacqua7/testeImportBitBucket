@@ -419,6 +419,7 @@ EOF;
 		$query = <<<EOF
 					EXEC Get_SSAS_Reports {$USER_CUSTOMER_ID}, '{$USER_CODE}', '{$USER_TYPE}', '{$DATABASE_ID}', '{$CUBE_ID}', {$CREATE_TABLE}
 EOF;
+
 		return $query;
 	}
 	

@@ -285,10 +285,19 @@ function addTargetDisableContext(kendoUi,report_id)
 		 * 
 		 * 
 		 */
-    	function drill_click_option(e)
+    	function drill_click_option(_e)
     	{
 			
 			_START('WrsDrill::drill_click_option');
+			var e				=	_e;
+			
+			//Recuperando os eventos do click do mouse
+			//Correção devido a melhorias na estrutura do drilll
+			var _drillGLobal	=	$('body').WrsGlobal('getJS','drill');
+			
+				e.type			=	_drillGLobal.type;
+				e.parent		=	_drillGLobal.parent;
+			//END
 			
     		var IDName			=	'#'+e.kendoId;
     		var kendoUi			=	$(IDName).data('kendoGrid');
@@ -329,7 +338,7 @@ function addTargetDisableContext(kendoUi,report_id)
     		
     		$('.'+e.kendoId).wrsAbaData('setKendoUi',{STOP_RUN:false, 'TYPE_RUN':TYPE_RUN[e.type]});
     		
-
+    		console.log('type',e.type);
     		
     		switch(e.type)
     		{
@@ -341,6 +350,7 @@ function addTargetDisableContext(kendoUi,report_id)
 													//if(proxTd!=null && proxTd!='undefined' && !proxTd.is(":visible") && proxTd.text().trim()!='') -- esse foi o felipe || Estava equivocado
 													if(e.event.parent().attr('class')=='VER_MAPA')
 													{
+
 														$('a[wrs-data=grid_map]').last().trigger('click');														
 														var _explode		=	 explode('|',str_replace(' ','',proxTd.text()));
 														//centraliza o mapa no ponto em questao
@@ -359,6 +369,8 @@ function addTargetDisableContext(kendoUi,report_id)
 														
 													    
 													}else{
+														
+														
 														value_select	=	strip_tags(_data[indexTR][name_column[indexTD]]);
 														rows_current_full_name				=	_layout['LAYOUT_ROWS'][indexParent];
 														
@@ -367,8 +379,6 @@ function addTargetDisableContext(kendoUi,report_id)
 														
 														
 														filter_add							=	[['__'+replace_attr(rows_current_full_name),'',rows_current_full_name+'.['+value_select+']']];
-														
-
 														
 														changeWithDrillFilter(_layout,filter_add);
 													}
@@ -483,8 +493,6 @@ function addTargetDisableContext(kendoUi,report_id)
 											column			=	explode(',',e.layout['LAYOUT_COLUMNS']);
 											value_select	=	strip_tags(_data[indexTR][name_column[indexTD]]);
 											
-
-											
 										var _layout		=	[];
 										var _filter		=	[];
 										var _value		=	'';
@@ -493,7 +501,11 @@ function addTargetDisableContext(kendoUi,report_id)
 												for(x in rows)
 													{
 														_value					=	strip_tags(_data[indexTR][name_column[parseInt(x)+1]]);
-														_filter[_filter.length]	=	['__'+replace_attr(rows[x]),'',rows[x]+'.['+_value+']'];
+														
+														if(!isEmpty(_value))//Se na coluna não tiver dados não apresenta
+														{
+															_filter[_filter.length]	=	['__'+replace_attr(rows[x]),'',rows[x]+'.['+_value+']'];
+														}
 													}
 												
 										header_size	=	$event.find('.k-grid-header-wrap tr').length;

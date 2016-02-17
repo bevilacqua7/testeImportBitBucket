@@ -317,8 +317,10 @@ function get_all_jobs()
 			var __load_complete	=	 function(options)
 			{
 				_START('managerJOB::__load_complete');
+				
 				var _report_id	=	 options.report_id;
 				var _data		= 	GetData();
+				var _kendoActive=	get_aba_active_kendoUi();
 				
 					setMensagens(_report_id,undefined);
 					setJobRender(_report_id,undefined);
@@ -327,10 +329,13 @@ function get_all_jobs()
 					setNotTitle(false);
 					
 					
-					if(_data.report_id_active==_report_id)
+					if(_kendoActive.REPORT_ID==_report_id)
 					{
 						$(_data.modal).addClass('hide');
 					}
+					
+					
+					
 					
 				delete _data;
 				_END('managerJOB::__load_complete');
@@ -396,6 +401,7 @@ function get_all_jobs()
 							{
 								$(_data.close_modal).removeClass('hide');
 								$(_data.modal).addClass('hide');
+								
 							}
 							
 					delete _data;
@@ -462,7 +468,9 @@ function get_all_jobs()
 					$(_data.cancel_job).removeClass('hide');
 				}catch(e){}
 				
-				$('.modal-manager-job').removeClass('hide');
+				
+				$(_data.modal).removeClass('hide');
+				
 			}
 			
 			
@@ -503,6 +511,14 @@ function get_all_jobs()
 					var _report_id	=	_data.report_id_active;
 					var kendoActive	=	get_aba_active_kendoUi();
 					
+						//Faz com que o cancelamento seja efetivado se for a mesma aba corrente
+						if(kendoActive.REPORT_ID!=_report_id)
+						{
+							return false;
+						}
+						
+						
+						
 					
 					var setElementsLocal	=	 function(_report_id,_data)
 					{
@@ -545,9 +561,10 @@ function get_all_jobs()
 						
 						//show grid
 						$('#'+_report_id+'Main').removeClass('hide');
+						$(_data.modal).addClass('hide');
 						
 						$('.'+_report_id).wrsAbaData('setKendoUi',{STOP_QUERY:true});
-						$(_data.modal).addClass('hide');
+						
 						
 						//Se não existir job então não permite o cancelamento
 						if(ExistRealJob(_report_id,_data.job)==false)
@@ -674,7 +691,6 @@ function get_all_jobs()
 				var _data			=	GetData();
 				
 					$(_data.modal).removeClass('hide');
-					
 					$(_data.cancel_job).addClass('hide');
 					$(_data.close_modal).removeClass('hide');
 					

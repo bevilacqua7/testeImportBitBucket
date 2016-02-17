@@ -35,6 +35,7 @@
 	$language['NAME_REPORT_EMPTY']	=	'Escolha um nome para o relatório';
 
 	$language['DATABASE_NOT_CONECTED']	=	"Sem conexão com o banco de dados, tente desconectar e logar no sistema novamente";
+	$language['DATABASE_NOT_FOUND']		=	"Ops!!! Sem conexão com o banco de dados";
 	/*
 	 * CUBO ERRO
 	 */

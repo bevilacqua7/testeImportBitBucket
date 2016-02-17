@@ -278,8 +278,9 @@ class WRS_PANEL  extends WRS_USER
 		echo fwrs_javascript('WRSKendoGridRefresh("'.WRS::GET_REPORT_HISTORY_CURRENT($CUBE,true).'")');
 
 		if(is_array($FILTER_FIXED) && count($FILTER_FIXED)>0){
+			
 			// alimenta as informacoes de filtros fixos do usuario
-			echo fwrs_javascript('set_userinfo_filter_fixed('.json_encode($FILTER_FIXED,1).')');
+			echo fwrs_javascript('$("body").filterFixed("init",'.json_encode($FILTER_FIXED,1).');');
 		}
 		
 		$this->load_reports_autoload();
