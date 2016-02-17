@@ -1,4 +1,7 @@
-
+.modal-backdrop.in {
+    filter: alpha(opacity=50)!important;
+    opacity: .5!important;
+}
 
 fieldset {
 	border: 1px solid #c0c0c0;
