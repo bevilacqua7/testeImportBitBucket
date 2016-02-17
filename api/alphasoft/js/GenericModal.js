@@ -95,6 +95,7 @@ $.fn.extend({
 		var _callback = function(data)
 			{	
 				_ONLY('modalGeneric::_callback');
+
 				janela_modal_body.html(data);
 			}
 		
@@ -107,6 +108,8 @@ $.fn.extend({
 				_options	=	$.extend( {}, _options, _options.extraParam );
 				janela_modal_body.html('Carregando...');				
 				runCall(_options,_options.file,_options.classe,_options.event,_callback,'modal');
+				
+
 				_END('modalGeneric::_runCalll');
 			}
 		
@@ -123,11 +126,15 @@ $.fn.extend({
 
 
 				var _continue=true;
+				
 					if(_options.bt_salvar_extra_action_validator!=null)
 					{
+
 						_continue = _options.bt_salvar_extra_action_validator(_param);
 					}
 				
+
+					
 					if(_continue)
 					{
 						_runCalll(_param);	

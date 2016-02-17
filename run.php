@@ -24,6 +24,9 @@
 	$data		=	array($name_file, 'event', 'class');
 	
 	$data		=	fwrs_request($data);
+	
+	//WRS_DEBUG_QUERY($_REQUEST,'dd.log');
+
 
 	
 	

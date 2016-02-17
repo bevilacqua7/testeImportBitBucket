@@ -33,7 +33,7 @@
 											js					:	{
 																	//drill : {'parent':event, 'type':'linha'}
 												
-											}//Variáveis do JS
+											},//Variáveis do JS
 											
 										}
 				
@@ -70,6 +70,8 @@
 				
 			$('body').data(dataWrsGlobal,get_data);
     	}
+    	
+    	
     	
     	
     	var __setPHP		=	 function(_data)

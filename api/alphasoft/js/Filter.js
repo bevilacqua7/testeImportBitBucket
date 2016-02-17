@@ -116,7 +116,7 @@ function set_css_negado(tag_class,aba_active)
 	var status		=	aba_active.wrsAbaData('getFilterNegado',tag_class); 
 	var css_tag_table		=	'.wrs-filter-'+tag_class;
 	
-	if(status==true)
+	if(status.data==true)
 	{
 		$(css_tag_table).addClass('filter_nagedo');
 	}else{
@@ -773,7 +773,9 @@ function tagFilterWRS(typeReturn)
 		 		var _filter				=	[];
 				var _explode			=	explode(',',filters);
 				var _explode_to_add		=	aba_active.wrsAbaData('getNewFilter',{tag:tag_class});
-		 			
+		 		
+				
+				
 		 		
 				//Para o add o Filreo no Drill
 				var atributo	=	$(this).attr('atributo');
@@ -788,9 +790,24 @@ function tagFilterWRS(typeReturn)
 						}
 						
 							
+						
+						
+						
+						
+						var get_filter_negado	=	get_aba_active_object().wrsAbaData('getFilterNegado',tag_class);
+						
+						var class_exec			=	{ico:'fa-eye',css:'filter-exec'};
+
+						//Filtro Negado
+						if(get_filter_negado.data==true)
+							{
+								class_exec			=	{ico:'fa-times',css:'filter-negado'};
+							}
+						
+						
 	
 		 					//Filtros Que já está em uso
-		 			 		var in_use	=	makeDesck(_explode,tmp_width,_width,{'_class_i':'fa-eye','_class':'filter-exec'},_explode_to_add);
+		 			 		var in_use	=	makeDesck(_explode,tmp_width,_width,{'_class_i':class_exec.ico,'_class':class_exec.css},_explode_to_add);
 		 						html+=in_use.html;
 		 						_width=in_use.width;
 		 						
@@ -917,7 +934,7 @@ function wrsFilterClickFalse(filter_hide)
     {
     	var that				=	 this;
     	var G_MSG_FILTER_CLEAN	=	'';
-		
+    	
     	//Esconde o ACordion para a busca do Filtro
     	
 
@@ -1111,12 +1128,24 @@ function wrsFilterClickFalse(filter_hide)
 					         
 					         
 					         
-					         
+					         //Aplicação do Filtro
 							if(!empty(_data_filter))
 							{
 									_json_filter						=	_data_filter;
 									_index.push(_json_filter);		
-									filters_up[filters_up.length]	=	'{'+_json_filter+'}';	
+									
+									//Obtendo filtros negado
+									var get_filter_negado	=	get_aba_active_object().wrsAbaData('getFilterNegado',md5(level_full));
+
+									if(get_filter_negado.data==true)
+										{
+											//Aplica a regra do filtro negado
+											filters_up[filters_up.length]	=	str_replace(['{LEVEL_FULL}','{DATA}'],[level_full,_json_filter], words_restrict.filter_negado);	
+										}
+										else
+										{
+											filters_up[filters_up.length]	=	'{'+_json_filter+'}';	
+										}
 									
 							}
 							
@@ -1168,6 +1197,9 @@ function wrsFilterClickFalse(filter_hide)
 			{
 					_ONLY('WrsFilter::__getAllFiltersToRun');
 					return getFiltersLevelUP('','all');
+					
+					
+					
 			}
 		
 		 
@@ -1192,7 +1224,7 @@ function wrsFilterClickFalse(filter_hide)
 			html	+=  '    <div class="input-group">'
 			html	+=  '      <input type="text" class="form-control wrs_element btn_event_filtro_search_input" value="'+searchText+'" index-data="'+index_data+'" placeholder="'+LNG('WHAT_SEARCH')+'">'
 			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_search" 	index-data="'+index_data+'"><i class="fa fa-search"></i></div>'
-			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_negado" 	index-data="'+index_data+'"><i class="fa fa-dot-circle-o"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_negado" 	index-data="'+index_data+'"><i class="fa fa-times-circle"></i></div>'
 			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_clean" 	index-data="'+index_data+'"><i class="fa fa-eraser"></i></div>'
 			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_remove" 	index-data="'+index_data+'"><i class="fa fa-trash-o"></i></div>'
 			html	+=  '    </div>'
@@ -1309,6 +1341,7 @@ function wrsFilterClickFalse(filter_hide)
 		 	
 		 	var btn_event_filtro_search_input_up=	 function(e)
 		 	{
+		 		
 		 		if(!empty($(this).val()))
 		 			{
 		 				$(this).parent().find('.btn_event_filtro_clean').show();
@@ -1338,10 +1371,11 @@ function wrsFilterClickFalse(filter_hide)
 	    		//var json				=	$.parseJSON(base64_decode(main.attr('json')));	
 	    		var json				=	main.data('wrs-data');	
 	    		var aba_active			=	get_aba_active_object();
+	    		
 
 	    		var status		=	aba_active.wrsAbaData('getFilterNegado',json.tag_class); 
 	    		
-	    			aba_active.wrsAbaData('enableFilterNegado',{type:json.tag_class, data: !status});
+	    			aba_active.wrsAbaData('enableFilterNegado',{type:json.tag_class, data: !status.data, level_full:json.LEVEL_FULL});
 	    		
 	    			set_css_negado(json.tag_class,aba_active);
 		 	}
@@ -1363,6 +1397,7 @@ function wrsFilterClickFalse(filter_hide)
 				 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_remove').unbind('click').click(btn_event_filtro_remove);
 			 	}else{
 			 		$(nameID).find('.btn_event_filtro_remove').hide();
+			 		$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_negado').remove();
 			 	}
 
 

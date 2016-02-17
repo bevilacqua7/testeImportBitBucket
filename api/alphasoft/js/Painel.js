@@ -1912,7 +1912,7 @@ function wrs_run_filter()
 		
 		
 		clean_filters();
-
+		//console.log('_param_request',_param_request);
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 		
 		//AUTO LOAD
@@ -2095,7 +2095,13 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	 */
 	var remove_report	=	 $('<div/>',{html:str_replace('script','',data)}).find('.container_panel_relatorio_rows').attr('id'); 
 	var _report_id		=	 str_replace('Main','',remove_report);
-	var aba_ativa		=	$('.WRS_ABA ul').find('li.active').attr('id-aba');
+	
+	var aba_active		=	get_aba_active_kendoUi();
+	var aba_ativa		=	aba_active.REPORT_ID;
+	
+	
+	
+	
 	
 		if(_report_id!=undefined && _report_id!='undefined')
 		{
@@ -2162,6 +2168,12 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		}else{
 			//Se o retorno for do mesmo ID que estiver ativo então fecha a janela
 			$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
+			
+			var aba_active		=	get_aba_active_kendoUi();
+			var aba_ativa		=	aba_active.REPORT_ID;
+
+			changeIDWindowDRag(aba_ativa,aba_active.TITLE_ABA);
+			
 		}	
 		
 		

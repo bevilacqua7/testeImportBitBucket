@@ -4,6 +4,10 @@
  * MIT License
  */
 
+
+
+ 
+
 var context = context || (function () {
     
 	var options = {
@@ -276,7 +280,7 @@ var context = context || (function () {
 	
 	function addContextWRS(selector, data,whoEventRequest,type,IdWrs) {
 		
-
+		//IdWrs
 		
 		destroyContext(selector);
 
@@ -341,13 +345,14 @@ var context = context || (function () {
 			var eventAction	=	data[0].action;
 			
 
+	//console.log('selector',selector);
 	
-	$(document).on('contextmenu', selector, function (e) 
+    var contextMenuFunction		=	  function (e) 
 	{
 		e.preventDefault();
 		
 		e.stopPropagation();
-				
+	
 		/*
 		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
 		 */		
@@ -358,9 +363,6 @@ var context = context || (function () {
 
 		$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
 		
-		
-	 
-
 		 
 		 //Responsável por gravar na variável global as informações do drill que será usado para manipular o drill
 		 $('body').WrsGlobal('setJS',{type:'drill', data:{'parent':$(this), 'type':table_parents.attr('type')}});
@@ -564,15 +566,22 @@ var context = context || (function () {
 				}).fadeIn(options.fadeSpeed);
 			}
 		}
-	});
+	};
+	
+	
+	
+	$(document).on('contextmenu', selector,contextMenuFunction);
 }
 	
 	function destroyContext(selector) {
 		$(document).off('contextmenu', selector).off('click', '.context-event');
 	}
 	
+	
+	
 	function removeBox(id)
 	{
+			
 			$('.'+id+'ContextMenu').remove();
 	}
 	

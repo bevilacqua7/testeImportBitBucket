@@ -15,7 +15,8 @@ var IS_EXCEPTION	=	false;
 
 var words_restrict	=	
 {
-		other: '*Others*'
+		other			: 	'*Others*',
+		filter_negado	:	"{EXCEPT({LEVEL_FULL}.Members,{{LEVEL_FULL}.[(All)],{DATA}})}" //{LEVEL_FULL} {DATA}
 };
 
 
@@ -1126,11 +1127,14 @@ function add_filtro_simples_composto()
 		 if(class_is!='placeholder')
 		 {
 			var atributo	=	$(this).attr('atributo');
+			var tag_class	=	 $(this).attr('tag-class');
 			
 			$(this).find('.icon_atributo').remove();
 			
 			if(atributo=='simples')
 			{
+				get_aba_active_object().wrsAbaData('delFilterNegado',tag_class);
+				
 				$(this).prepend(add_filtro_simples_composto_btn(true));
 			}
 			else
