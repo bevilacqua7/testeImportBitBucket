@@ -318,7 +318,7 @@ function getFisrtChartValue(ChartDefault)
 function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal) 
 	    {	
 			_START('WRSKendoUiChart');
-
+			
 			var onlyDefault		=	empty(_onlyDefault) ? false : _onlyDefault; //Apenas quando for configurações Default
 			var idName			=	KendoUi.element.attr('id');
 			var GRID			=	$('#'+idName);
@@ -340,12 +340,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			var ChartDefault				=	$.parseJSON(base64_decode(kendoUiTools.CHART)); 
 			var DRILL_HIERARQUIA_LINHA		=	kendoUiTools.DRILL_HIERARQUIA_LINHA;
 			
-			var DRILL_COLUMN_TITLE		=	'';
-			var DRILL_FROZEN			=	'';
+			var DRILL_COLUMN_TITLE			=	'';
+			var DRILL_FROZEN				=	'';
 			
-			
-			
-
 			//Apenas garante que exista o drill Nullo
 			try{
 			
@@ -366,7 +363,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 			
 			
-			
+
 			var typeChart		=	[];
 						
 			var _data			=	telerikGrid._data;
@@ -385,6 +382,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			var tmpTotalLine	=	[];
 			
 			
+			
+
+
 
 			var gaugeOptions	=	{data: [],min:0,max:0};
 			
@@ -419,6 +419,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					
 				}
 			}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
+			
 			
 			
 			if(empty(kendoUiTools.GAUGE_COLOR)){
@@ -662,7 +663,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 			
 			ChartDefault		=	$.extend( {}, ChartDefaultOnject, ChartDefault );
 
-			
+
 			
 			
 			//Flag para saber quando se está usando algumas das opções de DONUT , PIE , RADAR ou Polar
@@ -900,21 +901,27 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					var columnCustomerClick	=	kendoUiTools.ORDER_BY_COLUMN;
 					var firstFullName		=	'';
 					
-					if(!empty(columnCustomerClick))
+					/*
+					 * TODO: Removido em 16/02/2016 por marcelo Santos
+					 * Esse IF estava impactando o Histórico
+					 */
+					/*if(!empty(columnCustomerClick))
 					{
 						var cLevelFull				=	headerIndex.field[columnCustomerClick].LEVEL_FULL;
+
 							chartData				=	[];
 							chartData[cLevelFull]	=	tmpCustomer[cLevelFull];
+							console.log('cLevelFull',cLevelFull);
 						
-					}else{
+					}else{*/
 						for(flf in chartData)	if(empty(firstFullName))	firstFullName=flf
 						chartData					=	[];
 						//chartData[cLevelFull]
-						
+	
 						if(!empty(infoFirst)){
 							chartData[infoFirst.name]	=	tmpCustomer[firstFullName];
 						}
-					}
+					//}
 					
 					//Garante as configurações básica para funcionar
 					
@@ -922,6 +929,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 					{
 						legendChart	=	{position :'bottom',visible: false};
 					}
+					
+					
 					
 					ChartDefault			=	[];
 					ChartDefault['data']	=	[];
@@ -1710,7 +1719,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						var _param		=	[];
 						var tmp_param	=	[];
 						
-							for(lineChartData in chartData)
+							for(var lineChartData in chartData)
 								{
 										tmp_param	=	chartData[lineChartData];
 										
@@ -1731,7 +1740,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				{
 						var	_param	=	[];
 						
-						for(lineMeasure in chartData)
+						for(var lineMeasure in chartData)
 							{
 								_param[lineMeasure]	=	[];
 							}
@@ -1750,7 +1759,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				 * Verificando qual o tipo de Gráfico que o usuário escolhe 
 				 * e se é a configuração inicial escolho um gráfico padão 
 				 */
-				for(ocd in chartData)
+
+				for(var ocd in chartData)
 					{
 						posTypeCHart[posTypeCHart.length]	=	ocd;
 						if(array_find_data(ChartDefault['data'],ocd))
@@ -1779,6 +1789,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 									var getDataFlag			=	false;
 									var loadDataRows		=	[];	
 									    
+
 									
 									var bodyConfigChart			=	$('.chart-config-body');
 									var measures_receive		=	bodyConfigChart.find('.wrs-measures-receive');
@@ -1924,13 +1935,14 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 									/*
 									 * Preenchendo o array default das measures 
 									 */
-									for(lineAxis in chartData)
+									for(var lineAxis in chartData)
 									{
 										axisTmp[lineAxis]	=	{name: "",wrs_title:'', volume:'', title: { text: "" }, labels: {template:''},/*minorGridLines: {visible: true}*/ /*,min: 900,max: 0*/};
 									}
 										
 									
 									
+
 									
 									if(typeGauge.active)
 										{
@@ -1941,10 +1953,11 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 												}
 										}
 									
+
 										/*
 										 * Lendo todos os dados que contem na GRID
 										 */
-										for(lineData in _data)
+										for(var lineData in _data)
 											{
 
 												if(FlagLoad[_data[lineData]['C000']]) continue;
@@ -2012,10 +2025,10 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 													if(bubble)	getData			=	[];
 													
 													
+													 
 													
 													
-													
-													for(lineDataMeasure in chartData)
+													for(var lineDataMeasure in chartData)
 														{
 																													//Carregando com as informações de cada linha 
 															//Carregando a linha do array inicial
@@ -2211,8 +2224,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 																							color: palletCol[lineData]
 																						};
 																
-
-
+																
+																
 																//renderizando gráficos convêncionais
 																if(!pie_donut && !bubble)
 																{	
@@ -2408,7 +2421,9 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 										/*
 										 * Ajustando as legendas das Categorias
 										 */
-										for(lineAxis in axisTmp)
+										 
+										
+										for(var lineAxis in axisTmp)
 										{
 											axisTmp[lineAxis].name				=	axisArray[lineAxis];
 											axisTmp[lineAxis].title.text		=	axisArray[lineAxis];
@@ -2808,6 +2823,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 														toMergerRADAR	=	toMergerRADARTmp[lineChart];
 													}
 											
+		//									console.log('paramChart',paramChart);
+											
 											var _paramKendoChart	=	{
 																		  	theme		: 	CHART_THEME, 
 															                title		: 	{text: title, color:'#222'},
@@ -2879,7 +2896,8 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 												if(bubble)
 												{
 													kendoChartOptions	=	$.extend( true, {}, ChartBubble, chartSeries[0] );
-													var _left	=	'-25px';
+													var _left			=	'-25px';
+													
 													pathChart.removeClass('hide-before-after');
 													pathChart.addClass('buble-container-chart');
 

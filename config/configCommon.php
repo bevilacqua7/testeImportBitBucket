@@ -22,6 +22,10 @@ define('PATH_INI',PATH_MAIN.'WRS.ini');
 include_once(dirname(__DIR__).DS.'api'.DS.'alphasoft'.DS.'config.php');
 
 includeSTATIC('WRS');
+includeCLASS('Global');
+
+
+
 
 include_once(PATH_DEFINE.DS.'common.php');
 
