@@ -234,6 +234,7 @@ class WRS_MANAGE_PARAM
 				'button'	=>	$button,
 				'field'		=>	$fields,
 				'table'		=>	$table,
+
 				'order'		=>	$order,
 				'icon'		=>	'user.png',
 				'primary'	=>	'CUSTOMER_ID',

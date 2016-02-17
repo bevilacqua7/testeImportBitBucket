@@ -110,6 +110,24 @@ function findFilterMergeLoad(filterMerge,levelFull)
 	return '';
 }
 
+function set_css_negado(tag_class,aba_active)
+	{
+
+	var status		=	aba_active.wrsAbaData('getFilterNegado',tag_class); 
+	var css_tag_table		=	'.wrs-filter-'+tag_class;
+	
+	if(status==true)
+	{
+		$(css_tag_table).addClass('filter_nagedo');
+	}else{
+		$(css_tag_table).removeClass('filter_nagedo');
+	}
+		
+		
+	}
+	
+
+
 
 function filterMergeLoad(filter_current,filterMerge)
 {
@@ -954,7 +972,9 @@ function wrsFilterClickFalse(filter_hide)
     						json[label[obj]]				=	_value;
     				}
     			
-    			}else{
+    			}
+    			else
+    			{
     					json[label]				=	value;
     			}
     		
@@ -962,8 +982,7 @@ function wrsFilterClickFalse(filter_hide)
     		{
     			json['PG_CURRENT']				=	0;
     		}
-    		
- //   		main.attr('json',base64_encode(json_encode(json,true)));
+
     		main.data('wrs-data',json);
     		
     		if(!noLoad)
@@ -1172,9 +1191,10 @@ function wrsFilterClickFalse(filter_hide)
 			html	+=  '  <div class="form-group">'
 			html	+=  '    <div class="input-group">'
 			html	+=  '      <input type="text" class="form-control wrs_element btn_event_filtro_search_input" value="'+searchText+'" index-data="'+index_data+'" placeholder="'+LNG('WHAT_SEARCH')+'">'
-			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_search" index-data="'+index_data+'"><i class="fa fa-search"></i></div>'
-			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_clean" index-data="'+index_data+'"><i class="fa fa-eraser"></i></div>'
-			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_remove" index-data="'+index_data+'"><i class="fa fa-trash-o"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_search" 	index-data="'+index_data+'"><i class="fa fa-search"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_negado" 	index-data="'+index_data+'"><i class="fa fa-dot-circle-o"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_clean" 	index-data="'+index_data+'"><i class="fa fa-eraser"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_remove" 	index-data="'+index_data+'"><i class="fa fa-trash-o"></i></div>'
 			html	+=  '    </div>'
 			html	+=  '  </div>'
 			html	+=  '</div>';
@@ -1207,7 +1227,7 @@ function wrsFilterClickFalse(filter_hide)
 				;break;
 			}
 			
-
+			$('.btn_event_filtro_search').hide();
 			
 			//configurando a borracha
 			
@@ -1227,6 +1247,8 @@ function wrsFilterClickFalse(filter_hide)
 		 		setJsonEncodeDecode(input,'LIKE',input.val(),true);
 			}	
 		 	
+
+		 
 		 	
 		 	var btn_event_filtro_remove=	 function(){
 
@@ -1258,7 +1280,32 @@ function wrsFilterClickFalse(filter_hide)
 		 		{
 		 			setJsonEncodeDecode($(this),'LIKE',$(this).val(),true);
 		 		}
-		 	}	
+		 		
+		  	}	
+		 
+		 	
+		 	var btn_event_filtro_search_input_click	=	 function(e)
+		 	{
+				//@Link http://stackoverflow.com/questions/152975/how-to-detect-a-click-outside-an-element
+				 		
+				 		if($('.btn_event_filtro_negado').is(":visible")==true)
+				 		{ 
+				 			//Processando o Evento do click fora para mudar os tipos de bottons
+							$('html').one('click',function() 
+							{
+								//Desabilita o negação e habilita o button search
+						 		$('.btn_event_filtro_negado').show();
+						 		$('.btn_event_filtro_search').hide();
+						 		$('.btn_event_filtro_clean').hide();
+							});
+					e.stopPropagation();
+		 		}
+					  
+					  
+		 		//Desabilita o negação e habilita o button search
+		 		$('.btn_event_filtro_negado').hide();
+		 		$('.btn_event_filtro_search').show()
+		 	}
 		 	
 		 	var btn_event_filtro_search_input_up=	 function(e)
 		 	{
@@ -1268,6 +1315,9 @@ function wrsFilterClickFalse(filter_hide)
 		 			}else{
 		 				$(this).parent().find('.btn_event_filtro_clean').hide();
 		 			}
+		 		
+		 		
+		 		
 		 	}	
 		 	
 
@@ -1278,14 +1328,35 @@ function wrsFilterClickFalse(filter_hide)
 		 	}
 		 	
 		 	
+		 
+		 	//Botão Evento Negação
+		 	var btn_event_filtro_negado	=	 function()
+		 	{
+		 		//Obtendo informações de quem dever ser carregado
+		   		var index_data			=	 $(this).attr('index-data');
+	    		var main				=	$('#wrs_header_filter_main_'+index_data);
+	    		//var json				=	$.parseJSON(base64_decode(main.attr('json')));	
+	    		var json				=	main.data('wrs-data');	
+	    		var aba_active			=	get_aba_active_object();
+
+	    		var status		=	aba_active.wrsAbaData('getFilterNegado',json.tag_class); 
+	    		
+	    			aba_active.wrsAbaData('enableFilterNegado',{type:json.tag_class, data: !status});
+	    		
+	    			set_css_negado(json.tag_class,aba_active);
+		 	}
+		 	
 		 	/*
 		 	 * Apenas implementa o evento quando terminar de carregar
 		 	 */
 		 	
 			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_search').unbind('click').click(btn_event_filtro_search);
 			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_search_input').unbind('keypress').keypress(btn_event_filtro_search_input).focus();
+			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_search_input').unbind('click').click(btn_event_filtro_search_input_click);
 			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_search_input').unbind('keyup').keyup(btn_event_filtro_search_input_up);
 			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_clean').unbind('click').click(btn_event_filtro_clean);
+			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_negado').unbind('click').click(btn_event_filtro_negado);
+			 	
 			 	
 			 	if(atributo_simples_composto!='simples')
 			 	{
@@ -1392,7 +1463,6 @@ function wrsFilterClickFalse(filter_hide)
      			json['json']		=	jsonMukltiple;	
      		}
      		
-        	 
 			 setLoading(body.find('.wrs_filter_body_container'));
 
 			 menuFilter(index_data,wrs_filter_body,'before',json['LIKE']);
@@ -1410,8 +1480,11 @@ function wrsFilterClickFalse(filter_hide)
      */
 	 var funCallBackRun	=	 function(data)
 	 	{
+		 
 			 _START('WrsFilter::funCallBackRun');
 		 	$(data.data.id).find('.wrs_filter_body_container').html(data.html);
+		 	
+		 	
 
 	 		var index_data			=	 data.data.index_data;
  			var _main				=	$('#wrs_header_filter_main_'+index_data);
@@ -1420,6 +1493,8 @@ function wrsFilterClickFalse(filter_hide)
 		 		_main.data('wrs-data',data.data);
 
 				
+		 		set_css_negado(data.data.tag_class,get_aba_active_object());	
+		 		
 		 
 		 	/*
 		 	 * Auto detect checkBox Main
