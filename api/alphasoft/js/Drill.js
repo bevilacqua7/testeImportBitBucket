@@ -259,7 +259,7 @@ function addTargetDisableContext(kendoUi,report_id)
     	$event					=	 this;
     	var TAG_REPORT_ID		=	'#'+$event.attr('id');
     
-    	
+	
     	//var kendoUi		=	$('#'+$event.attr('id')).data('kendoGrid');
 		
     //	wrsKendoUiFindColumnsDeep(kendoUi,1);
@@ -335,7 +335,7 @@ function addTargetDisableContext(kendoUi,report_id)
     			}
     		
 
-    		
+
     		$('.'+e.kendoId).wrsAbaData('setKendoUi',{STOP_RUN:false, 'TYPE_RUN':TYPE_RUN[e.type]});
     		
     		console.log('type',e.type);
@@ -684,6 +684,7 @@ function addTargetDisableContext(kendoUi,report_id)
     		
     	addTargetDisableContext(kendoUi.columns,TAG_REPORT_ID);
     	
+	
     	if(length==1)
     	{
     		$(TAG_REPORT_ID+" .k-grid-header .k-grid-header-wrap").attr('type','coluna_header').addClass('type_wrs_container');

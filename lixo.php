@@ -2,27 +2,53 @@
 <script type="text/javascript" src="api/alphasoft/js/Global.js?520751"></script>
 
 <body>
+
+
+<div id="msdantas" >
+	<div class="mainDefaiutl">
+		valor padrão
+	</div>
+</div>
+
+<button class="ad">add</button>
+
+<style>
+.mainDefaiutl{
+
+	display: block;
+	background: #ffc125;
+	cursor: pointer;
+
+}
+
+</style>
+ 
+
 <script>
 
-$('body').WrsGlobal('setJS',{type:'filter',data:{a:1,b:2,c:3}});
-$('body').WrsGlobal('setJS',{type:'drill',data:'dataFinal'});
+$('#msdantas').prop('id','teste');
+
+$('#teste .mainDefaiutl').data('wrs',{names:['marcelo','felipe'], datas:[1,2,3,4]});
+
+$('#teste .mainDefaiutl').click(function(e){
+
+	e.preventDefault();
+	
+	e.stopPropagation();
+	
+	console.log('click no ID');	
+});
+
+
+
+$('.ad').click(function(){
+	$('#teste .mainDefaiutl').html('mudando infos');
+	
+	$('#teste').prop('id','alterado');
+	
+	console.log('add');
+	
+}
+);
 </script>
-<?php 
-
-
-include_once 'config/configCommon.php';
-
-
-WRS_GLOBAL::setPHP(array('type'=>'measure','data'=>array(1,2,3,4,5,6)));
-WRS_GLOBAL::setPHP(array('type'=>'attr','data'=>array('ano'=>2012,'mes'=>11)));
-WRS_GLOBAL::setJS(array('type'=>'drill','data'=>array('col'=>'CANAL')));
-
-
-
-echo WRS_GLOBAL::loadGLobal();
-
-echo '<pre>';
-print_r(WRS_GLOBAL::getPHP('measure'));
-
-?>
 </body>

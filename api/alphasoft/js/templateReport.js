@@ -388,6 +388,27 @@ function getLoadReport(no_request)
 	
 	wrs_grid_options_default		=	wrs_clean_data(wrs_grid_options_default);
 	
+	//Salvando informação com Negação
+	var _explode		=	 explode(',',sortable_filtro.request);
+	var _data_filter	=	[];
+	
+		for(var lineExplode in _explode)
+			{
+				var tag_negation	=	'';
+				
+				var status		=	active_aba.wrsAbaData('getFilterNegado',md5(_explode[lineExplode])); 
+				
+				if(status.negado==true)	tag_negation = words_restrict.negacao;
+				
+				if(status.simples==true)	tag_negation = words_restrict.simples;
+				
+				_data_filter.push(tag_negation+_explode[lineExplode]);
+			}
+	sortable_filtro.request	=	implode(',',_data_filter);
+	
+	//END NEgação
+	
+
 	if(no_request)
 	{
 		
@@ -411,7 +432,6 @@ function getLoadReport(no_request)
 		}
 	}
 	
-
 	//Desabilita a janela
 	activeToGetAllFiltersRecover(_filter_hide);
 	_END('getLoadReport');

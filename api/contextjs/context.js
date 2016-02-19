@@ -4,6 +4,10 @@
  * MIT License
  */
 
+
+
+ var contextToRemove	=	{};
+
 var context = context || (function () {
     
 	var options = {
@@ -276,9 +280,18 @@ var context = context || (function () {
 	
 	function addContextWRS(selector, data,whoEventRequest,type,IdWrs) {
 		
-
+		//IdWrs
+		
+		try{
+			if(isEmpty(contextToRemove[IdWrs])) contextToRemove[IdWrs]	=	[];
+		}catch(e){}
+		
+		
+		contextToRemove[IdWrs].push(selector);
+		
 		
 		destroyContext(selector);
+		
 
 		var d 		= 	new Date();
 //			id 		= 	d.getTime();
@@ -341,13 +354,14 @@ var context = context || (function () {
 			var eventAction	=	data[0].action;
 			
 
+	//console.log('selector',selector);
 	
-	$(document).on('contextmenu', selector, function (e) 
+    var contextMenuFunction		=	  function (e) 
 	{
 		e.preventDefault();
 		
 		e.stopPropagation();
-				
+	
 		/*
 		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
 		 */		
@@ -358,9 +372,6 @@ var context = context || (function () {
 
 		$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
 		
-		
-	 
-
 		 
 		 //Responsável por gravar na variável global as informações do drill que será usado para manipular o drill
 		 $('body').WrsGlobal('setJS',{type:'drill', data:{'parent':$(this), 'type':table_parents.attr('type')}});
@@ -564,16 +575,45 @@ var context = context || (function () {
 				}).fadeIn(options.fadeSpeed);
 			}
 		}
-	});
+	};
+	
+	
+	
+	$(document).on('contextmenu', selector,contextMenuFunction);
 }
 	
-	function destroyContext(selector) {
+	function destroyContext(selector) 
+	{
 		$(document).off('contextmenu', selector).off('click', '.context-event');
 	}
 	
+	
+	
 	function removeBox(id)
 	{
-			$('.'+id+'ContextMenu').remove();
+		try{
+			delete contextToRemove[id];
+		}catch(e){}
+		
+		$('.'+id+'ContextMenu').remove();
+	}
+	
+	
+	function __destroyOld(report)
+	{
+		var reportRemove	=	contextToRemove[report];
+		
+		
+		for(var line in reportRemove)
+			{
+					var seletor	=	reportRemove[line];
+					destroyContext(seletor);
+			}
+		
+		delete contextToRemove[report];
+		removeBox(report);
+		
+		
 	}
 	
 	return {
@@ -582,6 +622,7 @@ var context = context || (function () {
 		attach		: addContext,
 		attachWRS	: addContextWRS,//Criado Por Marcelo Santos customização para o Dril WRS
 		destroy		: destroyContext,
-		remove		: removeBox
+		remove		: removeBox,
+		destroyOld	:	__destroyOld
 	};
 })();

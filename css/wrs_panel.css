@@ -26,7 +26,8 @@ body {
 }
 
 .filter_nagedo{
-	background:#eeeeee;
+	
+	color: red;
 
 }
 
@@ -1711,11 +1712,15 @@ border-radius: 3px;
 
 
 .filter-exec-slash{
-	color:#A94442;
+	color:#ccc;
 }
 
 .filter-fixed{
-	color: #8a6d3b;
+	color: #0082B9;
+}
+
+.filter-negado{
+	color: #A94442;
 }
 
 .filter-exec{
@@ -1790,5 +1795,6 @@ border-radius: 3px;
 .red{
 	color:red;
 	text-decoration:line-through;
+
 
 }

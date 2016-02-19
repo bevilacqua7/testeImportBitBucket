@@ -143,6 +143,7 @@ class KendoUi
 						'WINDOW'								=>	'grid',
 						'CHART'									=> 	NULL,
 						'GAUGE_COLOR'							=> 	NULL,
+						'filter'								=> 	array(),	//Contem informações de negação e simples 
 						'GAUGE_SIZE_BY_LINE'					=> 	NULL,
 						'DRILL_HIERARQUIA_LINHA'				=> 	NULL,
 						'DRILL_HIERARQUIA_LINHA_DATA'			=>	NULL,

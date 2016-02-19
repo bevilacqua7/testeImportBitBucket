@@ -45,6 +45,7 @@ function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi,load_direct)
 			_layout['load_direct']	=	true;
 		}
 
+
 		$(ABA_TAG_NAME).wrsAbas('refresh_F5',_layout);
 	
 		
@@ -180,7 +181,7 @@ function WRSKendoGridComplete(IDGrid)
 			
 			_paranKendoUi['load_direct']	=	true;	//Permite que seja executado o histórico
 			//load_direct
-
+			
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi,true);
 			delete _history;
 		_END('WRSKendoGridComplete::historyClick');

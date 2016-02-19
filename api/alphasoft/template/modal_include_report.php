@@ -105,10 +105,12 @@ $HTML	=	<<<HTML
 				<form id="insert_report" class="modal_report" name="insert_report">
 				
 								<label for="report_name">Nome</label><br>
-									<input type="text" id="report_name" name="report_name" value="{$nome_report}" style="width: 768px;">	
+									<input class="change_title_report" type="text" id="report_name" name="report_name" value="{$nome_report}" style="width: 768px;">	
 								<br>
 								<input type="checkbox" id="report_auto" name="report_auto" value="1"> <label for="report_auto">Carga Automática </label>  &nbsp; &nbsp; &nbsp; <input type="checkbox" id="report_share" name="report_share" value="1"> <label for="report_share">Compartilhado</label>	
 							{$DG_SELECT}						
 				</form>
+				
+			 
 HTML;
 
