@@ -63,30 +63,9 @@ function wrs_clean_data(input_default)
 
  
 
-// funcao recursiva para verificar e apagar todos os pais de um atributo
-function esconde_pais_drag_drop(json_bt_painel_dd)
-{
-	_START('esconde_pais_drag_drop');
-	
-	if(typeof json_bt_painel_dd == 'object' && json_bt_painel_dd.LEVEL_UP != null && json_bt_painel_dd.LEVEL_UP != '' && json_bt_painel_dd.LEVEL_UP != undefined)
-	{
-		var pais_bt_painel_dd = json_bt_painel_dd.LEVEL_UP.split(',');
-		if(pais_bt_painel_dd!='' && pais_bt_painel_dd.length>0)
-		{
-			for(var pos in pais_bt_painel_dd)
-			{
-				var bt_painel_dd = $('.WRS_DRAG_DROP li.box_wrs_panel.'+replace_attr(pais_bt_painel_dd[pos]));
-				if(!bt_painel_dd.hasClass('hide'))
-				{
-					bt_painel_dd.addClass('hide').attr('not-use',true);
-					var json_bt_painel_dd = $.parseJSON(base64_decode(bt_painel_dd.attr('json')));
-					esconde_pais_drag_drop(json_bt_painel_dd);
-				}
-			}
-		}
-	}
-	_END('esconde_pais_drag_drop');
-}
+
+
+
 
 function wrs_run_filter_unlocked()
 {
@@ -1229,11 +1208,8 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 						
 						//var object	=	$(where_find).find('li.'+_class);				 
 						var object	=	$(where_find).find("li:containClass('"+_class+"')"); // alterado para procurar nas classes do objeto (case insensitive)
-						
-						
-		
-						
-						
+						 
+
 						if(simples_composto)
 						{
 							object.attr('sc_load','simples');
@@ -1242,7 +1218,7 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 						{
 							object.attr('sc_load','');
 						}
-						
+				 
 		
 		  			if(!isEmpty(is_filter))
 						{
@@ -1335,6 +1311,8 @@ function set_value_box_relatorio(object,clean)
 	//Escondendo os atributos que estão no filtro fixo
 	$('body').filterFixed('hide');
 	
+	
+	check_filter_simple_composto();
 	_END('set_value_box_relatorio');
 }
 
@@ -1438,6 +1416,7 @@ function wrs_run_filter()
 		}
 	
 	
+	
 	var _filtro_size		=	$('.sortable_filtro').find('li');
 	
 	
@@ -1505,7 +1484,6 @@ function wrs_run_filter()
 			return true;
 		}
 	
-		
 		
 	$(this).attr('locked','locked');
 		
@@ -1692,7 +1670,13 @@ function wrs_run_filter()
 							if(isEmpty(report_KendoUi['DRILL_HIERARQUIA_LINHA_DATA'])) 
 							{
 								getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
-		
+								
+								
+								
+								
+								
+								
+								
 								wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
 								wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));
 								
@@ -1772,8 +1756,15 @@ function wrs_run_filter()
 						
 
 					}
+					
+					
+			 
+					
 
-					var is_wrs_change_to	=	is_wrs_change_to_run(_param_request,manager_aba,_param_request['REPORT_ID']);
+					var is_wrs_change_to	=	is_wrs_change_to_run(	_param_request,
+																		manager_aba,
+																		_param_request['REPORT_ID'],
+																		base64_encode(getAllFiltersToRun.only_compare));
 						_param_request		=	{};
 						_param_request		=	is_wrs_change_to.val;
 						
@@ -1902,6 +1893,8 @@ function wrs_run_filter()
 		}
 		
 		
+		
+		
 	
 		
 		if( _param_request['TYPE_RUN']!='DrillColuna')
@@ -1912,6 +1905,15 @@ function wrs_run_filter()
 		
 		
 		clean_filters();
+		
+		//Apenas éexecutando quando existe atributo simples
+		if($('.wrs_run_filter').attr('is_atributo_simples')=='true')
+		{
+			$(".WRS_DRAG_DROP_FILTER").attr('is_atributo_simples',false);
+			$('.wrs_run_filter').attr('is_atributo_simples',false);
+		}
+		
+		
 		//console.log('_param_request',_param_request);
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 		
@@ -2193,12 +2195,7 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		
 	
 	
-	//Apenas éexecutando quando existe atributo simples
-	if($('.wrs_run_filter').attr('is_atributo_simples')=='true')
-	{
-		$(".WRS_DRAG_DROP_FILTER").attr('is_atributo_simples',true);
-		$('.wrs_run_filter').attr('is_atributo_simples',false);
-	}
+	
 	
 	$('.wrs_run_filter').attr('locked','false').attr('flag_load','false');
 	

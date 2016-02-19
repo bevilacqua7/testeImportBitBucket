@@ -90,6 +90,10 @@ class WRS_REPORT  extends  WRS_USER
  		$FILTERS 			= $dadosJs->LAYOUT_FILTERS->request;
  		$FILTERS_VALUES 	= '';
  		 		
+		/*
+		 * TODO:Felipe refazer tem que receber com a formatação já pronta
+		 * PReste atenção quando for a formatação de negação (~) que não pode esá filtado 
+		 */
  		if(trim($FILTERS)!='')
  		{
  			$arr_filtros_sel	=	array();
@@ -101,7 +105,17 @@ class WRS_REPORT  extends  WRS_USER
  				{
  					if(count($dadosJs->filter_selected->full)>0 && trim($dadosJs->filter_selected->full[$pos]->data)!='')
  					{
- 						$arr_filtros_sel[]	=	$filtro.PARAMETERS_SEPARATORS('vir').$dadosJs->filter_selected->full[$pos]->data;
+ 						$_filtro	=	$filtro;
+ 						
+ 						//substr($d, 1, strlen($d))
+ 						
+ 						if(substr($_filtro, 0,1)==PARAMETERS_SEPARATORS('negacao') ||
+ 							substr($_filtro, 0,1)==PARAMETERS_SEPARATORS('simples')) $_filtro	=	substr($_filtro, 1, strlen($_filtro));
+ 						
+ 						
+ 						//
+ 						
+ 						$arr_filtros_sel[]	=	$_filtro.PARAMETERS_SEPARATORS('vir').$dadosJs->filter_selected->full[$pos]->data;
  					}
  				}
  				
@@ -109,7 +123,8 @@ class WRS_REPORT  extends  WRS_USER
  				
  			}
  		} 		
-
+		
+ 		
  		$ALL_ROWS 			= ($dadosJs->KendoUi->ALL_ROWS=="1")?1:0;
  		$ALL_COLS 			= ($dadosJs->KendoUi->ALL_COLS=="1")?1:0;
  		$COLS_ORDER 		= $dadosJs->KendoUi->ORDER_COLUMN;
@@ -149,10 +164,26 @@ class WRS_REPORT  extends  WRS_USER
  		$REPORT_OPTIONS 	= base64_encode(json_encode($dadosJs->KendoUi,true));
  		
  		
- 		$sql = QUERY_PANEL::SAVE_SSAS_REPORT($REPORT_DESC, $SERVER_ID, $DATABASE_ID, $CUBE_ID,
-                                      $ROWS, $COLUMNS, $MEASURES, $FILTERS, $FILTERS_VALUES, $ALL_ROWS, $ALL_COLS, $COLS_ORDER,
-									  $REPORT_OPTIONS, $REPORT_FORMULAS, $REPORT_FILTER, $REPORT_FLAG, 
-									  $LAYOUT_SHARE, $USER_TYPE, $REPORT_SHARE, $REPORT_AUTOLOAD);
+ 		$sql = QUERY_PANEL::SAVE_SSAS_REPORT(	$REPORT_DESC, 
+ 												$SERVER_ID, 
+ 												$DATABASE_ID, 
+								 				$CUBE_ID,
+								                $ROWS, 
+								 				$COLUMNS, 
+								 				$MEASURES, 
+								 				$FILTERS, 
+								 				$FILTERS_VALUES, 
+								 				$ALL_ROWS, 
+								 				$ALL_COLS, 
+								 				$COLS_ORDER,
+												$REPORT_OPTIONS, 
+								 				$REPORT_FORMULAS, 
+								 				$REPORT_FILTER, 
+								 				$REPORT_FLAG, 
+												$LAYOUT_SHARE, 
+								 				$USER_TYPE, 
+								 				$REPORT_SHARE, 
+								 				$REPORT_AUTOLOAD);
 		
  		$query			=	 $this->query($sql);
  		$res			=	 $this->fetch_array($query);

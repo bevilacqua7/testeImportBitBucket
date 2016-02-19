@@ -1078,7 +1078,7 @@ function get_all_jobs()
 
 				
 				
-				
+				 
 				$(_data.modal).find('.modal-title-wrs-job h3').html(_data.mktime[_data.report_id_active].title_aba);
 				
 				

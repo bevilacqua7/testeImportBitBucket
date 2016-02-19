@@ -398,7 +398,9 @@ function getLoadReport(no_request)
 				
 				var status		=	active_aba.wrsAbaData('getFilterNegado',md5(_explode[lineExplode])); 
 				
-				if(status.data==true)	tag_negation = '~';
+				if(status.negado==true)	tag_negation = words_restrict.negacao;
+				
+				if(status.simples==true)	tag_negation = words_restrict.simples;
 				
 				_data_filter.push(tag_negation+_explode[lineExplode]);
 			}
@@ -406,6 +408,7 @@ function getLoadReport(no_request)
 	
 	//END NEgação
 	
+
 	if(no_request)
 	{
 		
@@ -429,7 +432,6 @@ function getLoadReport(no_request)
 		}
 	}
 	
-
 	//Desabilita a janela
 	activeToGetAllFiltersRecover(_filter_hide);
 	_END('getLoadReport');

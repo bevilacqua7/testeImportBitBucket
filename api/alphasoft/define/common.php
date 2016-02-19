@@ -20,8 +20,10 @@ function PARAMETERS_SEPARATORS($key)
 
 	
 	$local = array(
-			'vir'	=>'(_,_)',
-			'pipe'	=>'(_|_)'
+			'vir'		=>'(_,_)',
+			'pipe'		=>'(_|_)',
+			'negacao'	=>'~',
+			'simples'	=>'*'
 	);
 	
 	
