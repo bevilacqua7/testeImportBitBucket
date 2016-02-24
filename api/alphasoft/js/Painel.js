@@ -709,6 +709,10 @@ function btn_right_remove()
 
 function cloneDragDrop(whoClone,toClone,cloneTAGWrsFlag,who_receive)
 {
+	
+ 
+	
+
 	_START('cloneDragDrop');
 	var buttonRemove		=	'<button type="button" class="btn btn-link btn-xs  btn-right"><span class=" glyphicon glyphicon-remove "></span></button>';
 
@@ -967,6 +971,8 @@ var droppableOptionsOl			=	{};
 
 
 var TMP_DEFAULT_OPTIONS_TOPS	=	null;
+
+
 function DROP_EVENT( event, ui ,eventReceive)
 {
 
@@ -1078,8 +1084,9 @@ function DROP_EVENT( event, ui ,eventReceive)
  	
 	if(insert)
 	{
+				
 				receiveEvent.find( ".placeholder" ).remove();
-    	  
+				
 				cloneDragDrop(toEvent,receiveEvent,cloneTAGWrs,who_receive);
 				
 				if(cloneTAGWrs=='true')
@@ -1165,50 +1172,61 @@ _END('setDraggable');
 }
 
 
-function find_relatorio_attributo_metrica(where_find,_values,_clone)
+function find_relatorio_attributo_metrica(where_find,_values,_clone,_clean)
 {
 	_START('find_relatorio_attributo_metrica');
 	
-	
-	$(_clone).html('');
+	if(_clean!=false)
+	{
+		$(_clone).html('');
+	}
 	/*
 	 * Aplicando quando vier com CLASS
 	 */
 	
 
-	
 	if(is_array(_values))
 	{
 		
-			for(x in _values)
+			for(var x in _values)
 			{
 				var _class				=	 '';
 				var simples_composto	=	false;
 				var is_filter			=	'';
 				
 				
+				
 				if(substr(_values[x],0,2)=='__')
 					{
+						
+						
+						
 						if(is_array(_values[x]))
 						{
 							
-							var value	=	_values[x]
+
+								var value	=	_values[x];
+							
 								_class	=	substr(value[0],2,value[0].length);
 							
 							if(value[1]=='simples') simples_composto=true;
 							
-								is_filter	=	 empty(value[2]) ? '' : value[2];
+
+							
+								is_filter	=	 isEmpty(value[2]) ? '' : value[2];
 							
 						}
 						else
 						{
 							_class	=	substr(_values[x],2,_values[x].length);
+							
+						//	console.log('_class',_class);
 						}
 						
 						
 						//var object	=	$(where_find).find('li.'+_class);				 
-						var object	=	$(where_find).find("li:containClass('"+_class+"')"); // alterado para procurar nas classes do objeto (case insensitive)
-						 
+						//var object	=	$(where_find).find("li:containClass('"+_class+"')"); // alterado para procurar nas classes do objeto (case insensitive)
+						var object	=	$(where_find).find("li."+_class); // alterado para procurar nas classes do objeto (case insensitive)
 
 						if(simples_composto)
 						{
@@ -1219,20 +1237,15 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 							object.attr('sc_load','');
 						}
 				 
-		
+
 		  			if(!isEmpty(is_filter))
 						{
 							var json 			=	object.data('wrs-data');
-							
-						
+
 							if(json!=null)
 							{
-							 
 								var _tmp_filter		=	typeof is_filter == "object" ? implode(',',is_filter) : is_filter;
 								
-									
-									json['FILTER']=_tmp_filter;
-		
 									object.data('wrs-data',json);
 		
 							}
@@ -1240,11 +1253,7 @@ function find_relatorio_attributo_metrica(where_find,_values,_clone)
 								
 						}
 		  			
-		  			
-		  			
-		  			
-		  			
-							DROP_EVENT( 'DIRECT', object,$(_clone));
+						DROP_EVENT( 'DIRECT', object,$(_clone));
 		
 					}
 			}
@@ -1283,36 +1292,45 @@ function set_value_box_relatorio(object,clean)
 			$('.WRS_DRAG_DROP_FILTER').html('');
 		}
 	
+
+	
 	if(isset(object.LAYOUT_ROWS))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options',object.LAYOUT_ROWS,'.sortable_linha');
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options',object.LAYOUT_ROWS,'.sortable_linha',clean);
 	}
 	
 	if(isset(object.LAYOUT_COLUMNS))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options',object.LAYOUT_COLUMNS,'.sortable_coluna');
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options',object.LAYOUT_COLUMNS,'.sortable_coluna',clean);
 	}
+	
 	
 	if(isset(object.LAYOUT_FILTERS))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options ',object.LAYOUT_FILTERS,'.sortable_filtro');
+		var _filtros		=	 object.LAYOUT_FILTERS;
 		
+		_filtros	=	$('body').filterFixed('filtro_fixed_check',_filtros);
+		
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options ',_filtros,'.sortable_filtro',clean);
 	}
+	
 	
 	if(isset(object.LAYOUT_MEASURES))
 	{
-		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_METRICA .wrs_panel_options',object.LAYOUT_MEASURES,'.sortable_metrica');
+		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_METRICA .wrs_panel_options',object.LAYOUT_MEASURES,'.sortable_metrica',clean);
 	}
 	
-	if(clean==undefined){
+	
+	if(clean==undefined)
+	{
 		$('.WRS_DRAG_DROP_FILTER').html(str_replace('li','h2',$('.sortable_filtro').html()));
 	}
 	
-	//Escondendo os atributos que estão no filtro fixo
-	$('body').filterFixed('hide');
-	
 	
 	check_filter_simple_composto();
+	
+
+	
 	_END('set_value_box_relatorio');
 }
 
@@ -1675,8 +1693,6 @@ function wrs_run_filter()
 								
 								
 								
-								
-								
 								wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
 								wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));
 								
@@ -1876,6 +1892,7 @@ function wrs_run_filter()
 																	JOB_RESULT							:	null 	//Apagando a estrutura de JOB Result caso seja selecionando,
 																}
 												);
+		
 		
 		
 		$('body').managerJOB('start_job',{report_id:_param_request['REPORT_ID'],title_aba:_param_request['TITLE_ABA'], 'mktime':mktime(), type_run: _param_request['TYPE_RUN'], KEYS : _param_request['KEYS']});
@@ -2153,12 +2170,13 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	find_and_hide_container(aba_ativa);
 	
 	 
-	if(_report_id!=undefined && _report_id!='undefined')
-	{
-		//Apagando os filtros a ser adicionados
-		$('.'+_report_id).wrsAbaData('setNewFilter',{tag:null});
+		if(_report_id!=undefined && _report_id!='undefined')
+		{
+			//Apagando os filtros a ser adicionados
+			$('.'+_report_id).wrsAbaData('setNewFilter',{tag:null});
+			
+		}
 		
-	}
 		
 		$('#'+aba_ativa+'Main').removeClass('hide');
 	

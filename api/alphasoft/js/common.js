@@ -1212,6 +1212,7 @@ function sortable_attr_simples_composto()
 {
 	var itemsElement	=	{};
 	
+
 	itemsElement[0]	=	{name:LNG('ATTRIBUTOS_SIMPLES')	,	icon : 'add', callback:function(){ $(this).attr('atributo','simples'); add_filtro_simples_composto(); }};
 	itemsElement[1]	=	{name:LNG('ATTRIBUTOS_COMPOSTO'),	icon : 'add', callback:function(){ $(this).attr('atributo','composto');add_filtro_simples_composto(); }};
 	itemsElement[2]	=	'---------';

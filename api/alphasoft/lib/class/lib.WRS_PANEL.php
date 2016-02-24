@@ -216,6 +216,8 @@ class WRS_PANEL  extends WRS_USER
 		$CUBE			=	$_cube['CUBE_ID'];
 		$USER_CODE      = 	WRS::USER_CODE();
 		
+		$cube_s		=	fwrs_request('cube_s');
+		
 		//Para mudar no multiplos cubos apenas insere o ID do CUBO nesse elemento
 		//Ou invoca apenas a criação do Elemento que está sendo solicitado
 		//$CUBE			=	'[SAN - MDTR_NEW]';
@@ -242,6 +244,9 @@ class WRS_PANEL  extends WRS_USER
 		
 		// puxando as restricoes de filtros fixos se houver
 		$FILTER_FIXED		= 	WRS::INFO_SSAS_LOGIN_FILTER_FIXED();
+
+		$FILTER_SUGEST_DATABASE	=	 WRS::getFiltersCube($cube_s);
+		
 		
 		$ATRIBUTOS_JSON		=	base64_encode(json_encode($ATRIBUTOS,true));
 		$HTML_ATRIBUTOS		=	$panelHTML->MENU_DRAG_DROP_DIREITO($this->_cube_pos_session,$ATRIBUTOS,array('LEVEL_NAME','LEVEL_NAME'));
@@ -277,11 +282,23 @@ class WRS_PANEL  extends WRS_USER
 		//Caso seja nulo ou executdo com F5 ou refresh executa o histórico
 		echo fwrs_javascript('WRSKendoGridRefresh("'.WRS::GET_REPORT_HISTORY_CURRENT($CUBE,true).'")');
 
-		if(is_array($FILTER_FIXED) && count($FILTER_FIXED)>0){
-			
+		if(is_array($FILTER_FIXED) && count($FILTER_FIXED)>0)
+		{
 			// alimenta as informacoes de filtros fixos do usuario
 			echo fwrs_javascript('$("body").filterFixed("init",'.json_encode($FILTER_FIXED,1).');');
 		}
+		
+		//Filtros Sugeridos pelo Banco de Dados
+		if(is_array($FILTER_SUGEST_DATABASE) && count($FILTER_SUGEST_DATABASE)>0){
+				
+			// alimenta as informacoes de filtros fixos do usuario
+			echo fwrs_javascript('$("body").filterFixed("filterSugestDatabase",'.json_encode($FILTER_SUGEST_DATABASE,1).');');
+		}
+		
+		
+		
+		
+		//filterSugestDatabase
 		
 		$this->load_reports_autoload();
 		

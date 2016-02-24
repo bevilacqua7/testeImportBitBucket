@@ -30,6 +30,7 @@
 					
 				var defaultData		=	{
 											php					:	{},//Variáveis do PHP
+											common				:	{},		
 											js					:	{
 																	//drill : {'parent':event, 'type':'linha'}
 												
@@ -47,7 +48,7 @@
     	var __init		=	 function(_jsonFilterFixed,type)
     	{
     		var jsonFilterFixed		=	 _jsonFilterFixed;
-    		_ONLY('filterFixed::__init');
+    		_ONLY('GetData::__init');
     		//variávelk global antiga userinfo_filter_fixed
     		
     		if(typeof jsonFilterFixed == 'object')
@@ -69,6 +70,30 @@
 				get_data.js[_data.type]	=	_data.data;
 				
 			$('body').data(dataWrsGlobal,get_data);
+    	}
+    	
+    	
+    	var __setCM		=	 function(_data)
+    	{
+    		var get_data				=	GetData();
+    		
+    		
+    		get_data.common	=	merge_objeto(get_data.common,_data);
+
+				
+			$('body').data(dataWrsGlobal,get_data);
+    	}
+    	
+    	
+    	
+    	
+    	var __getCM		=	 function()
+    	{
+    		var get_data				=	GetData();
+    		
+    		
+    		return get_data.common;
+
     	}
     	
     	
@@ -154,7 +179,9 @@
 		        getJS			:	__getJS,
 		        getPHP			:	__getPHP,
 		        getData			:	__getData,
-		        loadGLobal		:	__loadGLobal
+		        loadGLobal		:	__loadGLobal,
+		        setCM			:	__setCM,
+		        getCM			:	__getCM
 		};
 		
 		 

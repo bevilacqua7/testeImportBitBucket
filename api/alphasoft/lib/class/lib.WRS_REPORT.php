@@ -77,6 +77,8 @@ class WRS_REPORT  extends  WRS_USER
 		$layouts 			= fwrs_request('layouts');
 		$grupos 			= fwrs_request('grupos');		
 		$dadosJs			= json_decode(fwrs_utf8e(base64_decode(fwrs_request('dadosJs'))));
+		
+		 
 		$user				= WRS::INFO_SSAS_LOGIN();
 
 		$REPORT_DESC 		= fwrs_request('report_name');
@@ -94,6 +96,7 @@ class WRS_REPORT  extends  WRS_USER
 		 * TODO:Felipe refazer tem que receber com a formatação já pronta
 		 * PReste atenção quando for a formatação de negação (~) que não pode esá filtado 
 		 */
+ 		
  		if(trim($FILTERS)!='')
  		{
  			$arr_filtros_sel	=	array();
@@ -111,9 +114,6 @@ class WRS_REPORT  extends  WRS_USER
  						
  						if(substr($_filtro, 0,1)==PARAMETERS_SEPARATORS('negacao') ||
  							substr($_filtro, 0,1)==PARAMETERS_SEPARATORS('simples')) $_filtro	=	substr($_filtro, 1, strlen($_filtro));
- 						
- 						
- 						//
  						
  						$arr_filtros_sel[]	=	$_filtro.PARAMETERS_SEPARATORS('vir').$dadosJs->filter_selected->full[$pos]->data;
  					}

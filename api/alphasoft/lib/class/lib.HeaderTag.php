@@ -27,6 +27,8 @@ class HeaderTag
 	 	$tag		=	array();
 	 	
 		
+		$tag[]		=	array("host"=>"api/font-awesome-4.3.0/css/font-awesome.min.css",						"access"=>array("main","panel"));
+		
 	 	$tag[]		=	array("host"=>"api/font-awesome-4.3.0/css/font-awesome.min.css",						"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/bootstrap-3.3.0/dist/css/bootstrap.css",								"access"=>array("panel"));
 		$tag[]		=	array("host"=>"./api/bootstrap-3.3.0/dist/css/bootstrap-wrs.css",						"access"=>array("main"));			//Main
@@ -227,9 +229,10 @@ class HeaderTag
 	 public function link($tag,$type)
 	 {
 	 	 
-	 	$html		=	"";
+	 	 
 	 
-
+		$html='<link rel="shortcut icon" href="./imagens/favico/favicon.ico" type="image/x-icon">'.PHP_EOL;
+		
 	 	foreach($tag as $tag_html)
 	 	{
 	 		$host		=	$tag_html['host'];
