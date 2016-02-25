@@ -68,6 +68,7 @@ function multiple_cube_status_change(no_change)
 function event_cube_change_confirm(confirm)
 {
 	_START('event_cube_change_confirm');
+	
 	var wrs_multiple_cube_event_class	=	$('.wrs_multiple_cube_event');
 	var that							=	wrs_multiple_cube_event_class.find('option:selected');
 	var CUBE_ID							=	that.val();
@@ -145,7 +146,12 @@ function change_cube(CUBE_ID)
 	
 		ATRIBUTOS_JSON		=	 base64_encode(json_encode(_relationships,true));
 		METRICAS_JSON		=	 base64_encode(json_encode(_measures,true));	
+		
+		//Adicionando a sugestão de criação de cubo
+		$('body').filterFixed('init',measure_relation[CUBE_ID]['filter_sugest']);
+		
 	
+		
 	var htmlRelationships	=	MENU_DRAG_DROP_DIREITO(	_relationships	,['LEVEL_NAME','LEVEL_NAME']);
 	var measure				=	MENU_DRAG_DROP_DIREITO(	_measures		,['MEASURE_NAME','MEASURE_NAME'],'metrica');
 	
@@ -155,14 +161,10 @@ function change_cube(CUBE_ID)
 	
 	$('.wrs_relationships_menu_direiro').html(htmlRelationships);
 	$('.wrs_measure_menu_direiro').html(measure);
-	
  
-		SetElementDataWrs('.wrs_options_select');
+	SetElementDataWrs('.wrs_options_select');
 		
-	 wrs_panel_active_drag_drop();
-	 
-
-	
+	wrs_panel_active_drag_drop();
 
 	set_value_box_relatorio(optionsDataConvert(get_aba_active_wrs_param()));
 	
@@ -179,9 +181,9 @@ function change_cube(CUBE_ID)
 	};
 
 	
-	CLOSE_LOAD_RELATORIO();
-	
+	CLOSE_LOAD_RELATORIO();	
 	acoes_multiplas_menu_painel();
+	
 _END('change_cube');
 }
 
@@ -250,6 +252,7 @@ function MENU_DRAG_DROP_DIREITO(container,valueShow,_type)
 				if(param_json['DESCRIPTION']!=undefined){
 					param_json['DESCRIPTION'] = base64_encode(param_json['DESCRIPTION']);
 				}
+				
 				var lReplace	=	[
 				        	 	 	_ivalue[valueShow[0]],
 				        	 	 	_ivalue[valueShow[1]],

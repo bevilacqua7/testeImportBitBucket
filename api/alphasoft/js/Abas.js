@@ -41,8 +41,11 @@ function get_aba_active_kendoUi(get_id)
 	return event.wrsAbaData('getKendoUi');
 }
 
-function get_aba_active()
+function get_aba_active(reportID)
 {
+	if(reportID!=undefined)  		return $('.WRS_ABA').find('.'+reportID).wrsAbaData('getData');
+	
+		
 	return get_aba_active_object().wrsAbaData('getData');
 }
 
@@ -375,7 +378,13 @@ function optionsDataConvert(gridValue,with_decode)
 								
 								
 								
+								var load_aba_types	=		$('body').WrsGlobal('getCM');
 								
+								
+								if(load_aba_types.load_aba==true)
+									{
+										$('body').filterFixed('addFilterDB');
+									}
 								
 								delete getElement;
 					}
@@ -480,7 +489,6 @@ function optionsDataConvert(gridValue,with_decode)
 					//_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
 					//_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
 
-					
 					
 					try{
 						if(_aba_active.wrsAbaData('getKendoUi').new_aba==true)
@@ -608,7 +616,7 @@ function optionsDataConvert(gridValue,with_decode)
 				var data_array_aba	=	$(this).wrsAbaData('getData');				
 				var gridValue		=	$(this).wrsAbaData('getKendoUi');
 				
-				
+
 							
 
 				//Informa qual sera a Ativa no momento	
@@ -1055,12 +1063,12 @@ function optionsDataConvert(gridValue,with_decode)
 						{
 							_reportDetails	=	_full_data['reportDetails'];
 						}
+						
 						catch(e)
 						{
 							_reportDetails	=	{};
 							if(IS_EXCEPTION) console.warn(' exception');
 						}
-						
 
 						var aba_data	=	{
 								kendoUi			:	getJsonDecodeBase64(kendoUiTools), 
@@ -1209,7 +1217,7 @@ function optionsDataConvert(gridValue,with_decode)
 							//words_restrict.simples
 							if(_negado==true || _simples==true)
 							{
-								filter_negado[md5(fixed)]	=	{negado:_negado, level_full:fixed, simples:_simples};
+								filter_negado[md5(fixed)]	=	{negado:_negado, level_full:fixed, simples:false};
 							}
 							
 							_filters.push(fixed);
@@ -1240,7 +1248,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					if(!empty(noactive)) _noactive = noactive;
 					
-					
+					$('body').WrsGlobal('setCM',{load_aba:false});
 					
 					if(empty(options)) return false;
 					
@@ -1280,8 +1288,6 @@ function optionsDataConvert(gridValue,with_decode)
 								var fxNegado	=	 fixed_filter_negado(opts['LAYOUT_FILTERS']);
 								
 									opts['LAYOUT_FILTERS']	=	fxNegado.base64;
-								
-								//console.log('opts',base64_decode(opts['LAYOUT_FILTERS']))
 								
 								var _active			=	true;
 								var kendoUi			=	json_decode(base64_decode(opts.KendoUi));
@@ -1360,7 +1366,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					var optionsAba		=	optionsDataConvert(_object_open);
 
-					
+
 							open_configure_default(optionsAba);
 					
 					
@@ -1401,6 +1407,8 @@ function optionsDataConvert(gridValue,with_decode)
 						$('.wrs_run_filter').removeAttr('noactive');
 					}
 					
+					
+					$('body').WrsGlobal('setCM',{load_aba:true});
 					/*
 					 * TODO:A estrutura da aba parou de funcinar corretamente no requisito de autoload abrir e deixar as outras funcionando
 					 * Esse metodo é temporário 
@@ -1623,10 +1631,12 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				
 				var input	=	base64_json_decode(inputBase64);
+				
+				
+
 
 					if(input.length!=0)
 					{
-
 						__load_multiple(	input,
 											input.length==1 ? true : AUTO_LOAD_RUN,
 											input.length==1 ? undefined : true
@@ -1902,7 +1912,7 @@ function optionsDataConvert(gridValue,with_decode)
 					return false;
 				}
 				
-				
+
 		 		
 				
 				//Verificando se o index_filtro não está vazio e não pode ser a função com o evento de remover
@@ -1996,7 +2006,23 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				
 				if(exist_in_array(data_global.data.filter_tmp[filterName.tag],filterName.data)) return false;
-				data_global.data.filter_tmp[filterName.tag].push(filterName.data);
+				
+				
+				if(typeof filterName.data=='object')
+					{
+						var data_object	=	 filterName.data;
+						//add array
+						for(var line in data_object)
+							{
+									data_global.data.filter_tmp[filterName.tag].push(data_object[line]);
+							}
+						
+					
+					}else{
+						//Add single
+								data_global.data.filter_tmp[filterName.tag].push(filterName.data);
+					}
+				
 				that.data(wrsDataName,data_global);
 				
 			}
@@ -2164,6 +2190,12 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			var set_input_poolin		=	 function(input,key)
 			{
+			/*	
+				if(key=='data')
+					{
+						console.error('inputinput',input);
+					}*/
+				
 				_START('wrsAbaData::set_input_poolin');
 				for(var lineInput in input)
 				{
@@ -2370,6 +2402,7 @@ function optionsDataConvert(gridValue,with_decode)
 			var __enableFilterNegado	=	 function(data)
 			{
 				_START('__enableFilterNegado');		
+				
 				
 					if(typeof data_global.kendoUi.filter =="undefined") data_global.kendoUi.filter	=	{};
 

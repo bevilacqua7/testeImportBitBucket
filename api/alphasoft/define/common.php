@@ -17,7 +17,7 @@ define('WRS_TEMP_RAND',rand(0,99999999999999));
 
 function PARAMETERS_SEPARATORS($key)
 {
-
+	
 	
 	$local = array(
 			'vir'		=>'(_,_)',

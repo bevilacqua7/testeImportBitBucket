@@ -8,6 +8,9 @@
 <meta charset="utf-8" />
 <meta http-equiv="content-type" content="text/html;charset=utf-8;" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<link rel="shortcut icon" href="./imagens/favico/favicon.ico" type="image/x-icon">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WRS - Web Report System</title>
 <script type="text/javascript" src="js/jquery/jquery-1.8.2.min.js"></script>

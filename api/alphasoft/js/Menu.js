@@ -5,6 +5,9 @@ $(document).ready(function(){
 	_START('Menu.js');
 	$('.wrs_open_save').unbind('click').click(function() {
 		
+		_ONLY('click Menu.js .wrs_open_save');
+		
+		
 		var btn_salvar_extra_action_validator = function(data){ // validacoes extra antes da acao principal do botao padrao
 			
 			

@@ -148,8 +148,6 @@ class WRS_LOGIN extends WRS_BASE
 					//Permite apenas uma Database ID
 					if(isset($rule_database_id[$key_database])) continue;
 					$rule_database_id[$key_database] =	true;
-			
-					
 					
 					
 					$rules_session_tmp	=	$rows;
