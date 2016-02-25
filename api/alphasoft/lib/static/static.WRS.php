@@ -147,8 +147,8 @@ class WRS
 	public static function INFO_SSAS_LOGIN_FILTER_FIXED()
 	{
 		$filters 		= WRS::INFO_SSAS_LOGIN('USER_FILTER');
-		$filters_values = WRS::INFO_SSAS_LOGIN('USER_FILTER_VALUE');
 		
+		$filters_values = WRS::INFO_SSAS_LOGIN('USER_FILTER_VALUE');
 		
 		$arr_retorno	=	false;
 		
@@ -199,12 +199,23 @@ class WRS
 		
 	}
 	
-	public static function getFiltersCube($cube_id)
+	public static function getFiltersCube($cube_id,$_filters,$_filters_values)
 	{
 			$cube	=	self::GET_SSAS_USER();
 			
-			$filters			=	$cube[$cube_id]['CUBE_FILTER'];
-			$filters_values		=	$cube[$cube_id]['CUBE_FILTER_VALUE'];
+			$filters			=	$_filters;
+			$filters_values		=	$_filters_values;
+			
+			
+			if(empty($_filters))
+			{
+				$filters			=	$cube[$cube_id]['CUBE_FILTER'];
+			}	
+			
+			if(empty($_filters_values))
+			{
+				$filters_values		=	$cube[$cube_id]['CUBE_FILTER_VALUE'];
+			}
 			
 			return self::rules_generate_filters_fixed_login_dbase($filters, $filters_values);
 	}

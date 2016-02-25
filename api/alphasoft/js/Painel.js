@@ -1329,7 +1329,8 @@ function set_value_box_relatorio(object,clean)
 	
 	check_filter_simple_composto();
 	
-
+	//Remnovendo o draqg and drop right
+	$('body').filterFixed('hide_drag_drop');
 	
 	_END('set_value_box_relatorio');
 }

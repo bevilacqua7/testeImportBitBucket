@@ -1309,7 +1309,7 @@ function wrsFilterClickFalse(filter_hide)
 																							});
 				
 			
-				//HERE
+				
 				//Devolvendo os filtros fixos aplicados
 				filters_up					=	allFilterFixeds.filtersUP;
 				filters_up_only_Data		=	allFilterFixeds.onlyData;
@@ -2350,7 +2350,6 @@ function wrsFilterClickFalse(filter_hide)
 		//Carrega com as informações iniciais para o filtro fixo
     	var __init		=	 function(_jsonFilterFixed)
     	{
-
     		_ONLY('filterFixed::__init');
     		//variávelk global antiga userinfo_filter_fixed
     		__init_element({data:_jsonFilterFixed,column:'filter_fixed'});
@@ -2498,8 +2497,8 @@ function wrsFilterClickFalse(filter_hide)
     						
     						if(dimensao.checa_dimensao==true)
     							{
-    							
-    								dimensoes['__'+_class]=	true;
+    								var _key	=	dimensao.key==true ? '__' : '';
+    								dimensoes[_key+_class]=	true;
     							
     							}
     							else
@@ -2564,7 +2563,8 @@ function wrsFilterClickFalse(filter_hide)
 	    			actions_dimensions({
 	    															level_full		:	filter_east_json.LEVEL_FULL	/*"[PERIODO].[MES]"*/,
 	    															level_up		:	filter_east_json.LEVEL_UP  /*"[PERIODO].[ANO],[PERIODO].[MAT],[PERIODO].[SEMESTRE],[PERIODO].[TRIMESTRE],[PERIODO].[YTD]"*/,
-	    															checa_dimensao	:	false
+	    															checa_dimensao	:	false,
+	    															key				:	true
 	    													});
     			}
     			//END
@@ -2612,7 +2612,6 @@ function wrsFilterClickFalse(filter_hide)
     					
     					key_not_add['__'+lineFixed]	=	true;
 
-    					
 	    					if(!isEmpty(filter_east_json.LEVEL_UP))
 	    					{
 						    	var filter_pai_dimensao	=	actions_dimensions({
@@ -2623,24 +2622,108 @@ function wrsFilterClickFalse(filter_hide)
 						    	
 						    	key_not_add		=	join_dimensao(key_not_add,filter_pai_dimensao);
 	    					}
-    					
 				}
     	
+    		
+    		
     		
     		
     		//Removendo se existir algum filtro ou pai do filtro da mesma dimensal dos filtros fixos
     		for(var lineFilter in filter)
     			{
+    				//Removendo do lado equerdo todos os menus fixos
 					if(typeof key_not_add[filter[lineFilter][0]]=="boolean") 
 					{
-						delete filter[lineFilter];
+						//removendo do lado direito
+						delete filter[lineFilter];	//Removendo do array do filtro 
 					}
     			}
     		
-    		
-    	 
-    		
     		return filter;
+    	}
+    	
+    	
+    	//Removendo o Filtro de drag and drop
+    	var __hide_drag_drop	=	 function()
+    	{
+    		var _data		=	 GetData();
+    		var filter_fixo=	_data.filter_fixed;	
+    		
+    		
+    		if(isEmpty(filter_fixo))  return filter;
+    		
+    		var key_not_add		=	{};
+    		
+    		for(var lineFixed in filter_fixo)
+    			{
+    					var filter_east_json			=	$('.wrs_panel_options li.'+lineFixed).data('wrs-data');
+    					
+    					if(filter_east_json==undefined) continue; 
+    					
+    					key_not_add[lineFixed]	=	true;
+
+	    					if(!isEmpty(filter_east_json.LEVEL_UP))
+	    					{
+						    	var filter_pai_dimensao	=	actions_dimensions({
+															level_full		:	filter_east_json.LEVEL_FULL,
+															level_up		:	filter_east_json.LEVEL_UP,
+															checa_dimensao	:	true,
+															key				:	false
+													});
+						    	
+						    	key_not_add		=	join_dimensao(key_not_add,filter_pai_dimensao);
+	    					}
+				}
+    	
+    		var key_main	=	 {};
+    		
+    		//Removendo se existir algum filtro ou pai do filtro da mesma dimensal dos filtros fixos
+    		for(var line in key_not_add)
+    			{
+    				var __object	=	$('.wrs_panel_options li.'+line);
+    				var key_chan	=	__object.parent().parent().prev().addClass('wrs_manager_hide_dimension');
+    					__object.hide();
+    			}
+    		
+    		
+    		
+
+    				///Escondendo as dimensões
+    				//Se todos os conteúdos estiverem escondidos então esconde a dimensão
+    				$('.wrs_manager_hide_dimension').each(function(){
+    					
+    					var dimentsion	=	 $(this);
+    					var _next		=	 $(this).next();
+    					var _li			=	_next.find('li');
+    					
+    					
+    					if(dimentsion.attr('wrs-hide')!='show')
+    					{
+    						dimentsion.attr('wrs-hide','hide');
+    							_li.each(function()
+    									{
+		    									var wrs_search	=	 $(this).attr('vvalue');
+		    										if(wrs_search!='wrs_search')
+		    										{
+		    											if($(this).is(':hidden')==false) 
+		    											{
+		    												dimentsion.attr('wrs-hide','show');
+		    											}
+		    										}
+		    										
+		    										if($(this).index()==(_li.length-1))
+		    											{
+		    												if(dimentsion.attr('wrs-hide')=='hide')
+		    												{
+		    													dimentsion.hide();
+		    													_next.hide();
+		    												}
+		    											}
+    									});
+    					}
+    				});//.wrs_manager_hide_dimension
+    				$('.wrs_manager_hide_dimension').removeClass('wrs_manager_hide_dimension');
+    				
     	}
     	
     	
@@ -2742,18 +2825,7 @@ function wrsFilterClickFalse(filter_hide)
 									
 									
 									filter_key.push(string_type+layout_filters);
-									/*
-								
-								//Obtendo filtros negado
-								var _querys												=	inputs.fn(_negado,level_full,_json_filter);
-		
-									inputs.filtersUP.push(_querys.query);
-									inputs.onlyData.push(_querys.normal);	
-									
-									inputs.originalFilter.push({'class':'__'+replace_attr(level_full),data:_json_filter});
-									
-									inputs.FilterAdd.push([replace_attr(level_full),'',_json_filter]);
-									*/
+							
 		    					
 						}//END FOR
 		    		
@@ -2834,7 +2906,8 @@ function wrsFilterClickFalse(filter_hide)
 		        addFilterDB						:	__addFilterDB,
 		        filtro_fixed_check				:	__filtro_fixed_check,
 		        add_filtro_fixo_query			:	__add_filtro_fixo_query,
-		        add_filtro_fixo_query_save		:	__add_filtro_fixo_query_save
+		        add_filtro_fixo_query_save		:	__add_filtro_fixo_query_save,
+		        hide_drag_drop					:	__hide_drag_drop
 		};
 		
 		

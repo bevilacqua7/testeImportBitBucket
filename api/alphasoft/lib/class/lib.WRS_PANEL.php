@@ -247,7 +247,6 @@ class WRS_PANEL  extends WRS_USER
 
 		$FILTER_SUGEST_DATABASE	=	 WRS::getFiltersCube($cube_s);
 		
-		
 		$ATRIBUTOS_JSON		=	base64_encode(json_encode($ATRIBUTOS,true));
 		$HTML_ATRIBUTOS		=	$panelHTML->MENU_DRAG_DROP_DIREITO($this->_cube_pos_session,$ATRIBUTOS,array('LEVEL_NAME','LEVEL_NAME'));
 
@@ -263,9 +262,9 @@ class WRS_PANEL  extends WRS_USER
 		$METRICAS			=	WRS::GET_SSAS_MEASURES_BY_CUBE($CUBE);
 
 		
-		$METRICAS_JSON		=	base64_encode(json_encode($METRICAS,true));
-		$HTML_METICAS		=	 $panelHTML->MENU_DRAG_DROP_DIREITO($this->_cube_pos_session,$METRICAS,array('MEASURE_NAME','MEASURE_NAME'),'metrica');
-		$MEASURE_RELATIONSSHIPS		=	 $this->MEASURE_RELATIONSSHIPS;
+		$METRICAS_JSON			=	base64_encode(json_encode($METRICAS,true));
+		$HTML_METICAS			=	$panelHTML->MENU_DRAG_DROP_DIREITO($this->_cube_pos_session,$METRICAS,array('MEASURE_NAME','MEASURE_NAME'),'metrica');
+		$MEASURE_RELATIONSSHIPS	=	$this->MEASURE_RELATIONSSHIPS;
 		
 		if($changeCube)
 		{
@@ -285,14 +284,14 @@ class WRS_PANEL  extends WRS_USER
 		if(is_array($FILTER_FIXED) && count($FILTER_FIXED)>0)
 		{
 			// alimenta as informacoes de filtros fixos do usuario
-			echo fwrs_javascript('$("body").filterFixed("init",'.json_encode($FILTER_FIXED,1).');');
+			echo fwrs_javascript('$("body").filterFixed("init",'.json_encode($FILTER_FIXED,true).');');
 		}
 		
 		//Filtros Sugeridos pelo Banco de Dados
 		if(is_array($FILTER_SUGEST_DATABASE) && count($FILTER_SUGEST_DATABASE)>0){
 				
 			// alimenta as informacoes de filtros fixos do usuario
-			echo fwrs_javascript('$("body").filterFixed("filterSugestDatabase",'.json_encode($FILTER_SUGEST_DATABASE,1).');');
+			echo fwrs_javascript('$("body").filterFixed("filterSugestDatabase",'.json_encode($FILTER_SUGEST_DATABASE,true).');');
 		}
 		
 		
@@ -406,7 +405,7 @@ class WRS_PANEL  extends WRS_USER
 
 	
 	
-	protected function getMeasuteAttribute($SERVER, $DATABASE, $CUBE,$CUBE_USER_CURRENT=NULL,$getRequestKendoUi=NULL)
+	protected function getMeasuteAttribute($SERVER, $DATABASE, $CUBE,$CUBE_USER_CURRENT=NULL,$getRequestKendoUi=NULL,$multiple_cube=NULL)
 	{
 		WRS_TRACE('getMeasuteAttribute', __LINE__, __FILE__);
 		
@@ -445,6 +444,13 @@ class WRS_PANEL  extends WRS_USER
 			
 		}
 
+		
+		if(!empty($multiple_cube))
+		{
+			$wrs_measure_relationships['filter_sugest']=WRS::getFiltersCube(NULL, $multiple_cube['CUBE_FILTER'], $multiple_cube['CUBE_FILTER_VALUE']);
+		}
+		
+		
 		//caso ainda não tenha sido inserida na sessão faz a pesquisa
 		if(empty($relationships))
 		{	
@@ -786,12 +792,13 @@ class WRS_PANEL  extends WRS_USER
 		//processando os multiplos cubos
 		$get_multiple_SSAS_CUBE			=	 WRS::GET_SSAS_USER_MULTIPLE($DATABASE);
 		
+
 		if(count($get_multiple_SSAS_CUBE)>1)
 		{
 			//Multiplos cubos
 			foreach($get_multiple_SSAS_CUBE as $multiple_cube)
 			{
-				$MEASURE_RELATIONSSHIPS[$multiple_cube['CUBE_ID']]	=	$this->getMeasuteAttribute($SERVER, $DATABASE, $multiple_cube['CUBE_ID'],$CUBE,$getRequestKendoUi);
+				$MEASURE_RELATIONSSHIPS[$multiple_cube['CUBE_ID']]	=	$this->getMeasuteAttribute($SERVER, $DATABASE, $multiple_cube['CUBE_ID'],$CUBE,$getRequestKendoUi,$multiple_cube);
 			}
 			
 			$this->MEASURE_RELATIONSSHIPS		=	$MEASURE_RELATIONSSHIPS;
@@ -799,10 +806,9 @@ class WRS_PANEL  extends WRS_USER
 			//Cubo simples 
 			$this->getMeasuteAttribute($SERVER, $DATABASE, $CUBE,NULL,$getRequestKendoUi);
 		}
+
 		
-		
-		
-				//End processosmultiplos cubos
+		//End processosmultiplos cubos
 		
 		//Gravando as informações na Sessão ds Metricas e Atributos
 		
