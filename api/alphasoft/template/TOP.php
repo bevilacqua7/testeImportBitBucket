@@ -23,12 +23,32 @@
 				<div class="menu_administrativo_itens" style="display:none;position:absolute;top:3px">
 					<?php 					
 					includeQUERY('WRS_MANAGE_PARAM');
-					$classes_menu = WRS_MANAGE_PARAM::GET_CONFIG_TABLE();
-					$html='';
+					$classes_menu 		= WRS_MANAGE_PARAM::GET_CONFIG_TABLE();
+					$html				= '';
+					$perfil_logado 		= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
+					// regra de acesso perfil de usuario FACIOLI 20160226 - felipeb
+					$arr_perfil_access 	= array(
+							'MST' 	=>	'*',
+							'ADM'	=>	array(
+												'ATT_WRS_USER',
+												'REL_WRS_CUBE_USER',
+												'ATT_WRS_LOG'
+										)
+					);
 					foreach($classes_menu as $nome_tabela=>$info_tabelas){
-						if($info_tabelas['acesso_via_menu']==true){
+						
+						if(
+								$info_tabelas['acesso_via_menu']==true   &&
+								array_key_exists($perfil_logado,$arr_perfil_access) &&
+								(
+									$arr_perfil_access[$perfil_logado]=='*'  ||
+									in_array($nome_tabela, $arr_perfil_access[$perfil_logado])
+								)
+							){
+							
 							$tabela = $nome_tabela;
 							$label  = LNG($info_tabelas['nome_menu_LNG']);
+							
 							$html .= <<<HTML
 							<button type="button" class="menu_cadastro btn btn-default btn-xs" tabela="{$tabela}">
 							  <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span> {$label}
@@ -36,7 +56,8 @@
 HTML;
 						}
 					}
-					echo $html;					
+					
+					echo $html;
 					?>
 				</div>	
 				

@@ -1460,7 +1460,9 @@ function bloqueia_chars(obj,chars){
 	       event.preventDefault();
 	       return false;
 	    }
-	}).val(obj.val().replaceComArray(_chars,_chars_verso));
+	}).val(obj.val().replaceComArray(_chars,_chars_verso)).on('blur',function(){
+		bloqueia_chars($(this));
+	});
 }
 
 function trata_campos_senha(){
@@ -1475,7 +1477,7 @@ function trata_campos_senha(){
 function trata_campos_int(){
 	$('.input_type_int_only').keydown(function (e) {
         // Allow: backspace, delete, tab, escape, enter and .
-        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 ||
              // Allow: Ctrl+A, Command+A
             (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) || 
              // Allow: home, end, left, right, down, up

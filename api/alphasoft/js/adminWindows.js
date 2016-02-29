@@ -2,12 +2,19 @@
 
 function callback_load_admin_generic_modal(arg,tabela)
 {
+	
 	_START('callback_load_admin_generic_modal');
 	var _data			=	 $('#myModal, .modal-content-grid').data('wrsGrid');
 	var param			=	 _data.param_original;
 	var option						=	 [];
 		option['wrs_type_grid']		=	'form';
-		option[param['primary']]	=	$(arg[param['primary']]).text();
+		option[param['primary']]	=	'';
+		try{
+			option[param['primary']] = $(arg[param['primary']]).text()!=''?$(arg[param['primary']]).text():arg[param['primary']];
+		}catch(e){
+			option[param['primary']] = arg[param['primary']];
+		}
+		
 		option['param_request']			=	param;
 
 		var funCallBackVision = function()
@@ -153,8 +160,67 @@ function btn_window_grid_event_admin(data)
 	var _data					=	 $('#myModal, .body_grid_window').data('wrsGrid');
 	var dadosKendo				=	 (!$("#"+table).length)?_data:$("#"+table).data('wrsModal');
 
-	//console.log('dadosKendo',dadosKendo);
-
+	var validacao_update_admin 	= function(){
+		var valida_form = true;
+		if( $('form.grid_window_values_form').length > 0
+		){
+			
+			{ // validacao de campos obrigatorios
+				var falta=false;
+				$('form.grid_window_values_form .obrigatorio').each(function(){
+					$(this).removeClass('nao_validado validado');
+					if($(this).val()=='' || $(this).find(':selected').val()=='-1'){
+						falta=true;
+						valida_form=false;
+						$(this).addClass('nao_validado');
+					}
+				});
+				if(falta){
+						WRS_ALERT(LNG('JS_admin_preencha_obrigatorios'),'warning');
+						return false;												
+				}
+			}
+			
+			
+			{ // validacao de valores minimo e maximos
+				$('form.grid_window_values_form .valida_valor').each(function(){
+					$(this).removeClass('nao_validado validado');
+					var max_val 		= $(this).attr('max-value');
+					var min_val 		= $(this).attr('min-value');
+					var valor_campo 	= $(this).val();
+					var nome_campo		= $(this).attr('placeholder');
+					nome_campo			= nome_campo!=''?'('+nome_campo+')':'';
+					if (typeof max_val !== typeof undefined && max_val !== false && valor_campo > max_val) {
+						var campo = $(this);
+						valida_form=false;	
+						WRS_CONFIRM(LNG('JS_admin_preencha_maximo').replace('#NOMECAMPO#',nome_campo)+max_val+"<br>"+LNG('JS_admin_preencha_auto').replace('#VAL#',max_val),'warning',function(escolha){
+							if(escolha){
+								campo.val(max_val);
+							}else{
+								campo.addClass('nao_validado');											
+							}
+						});	
+						return false;					
+					}
+					
+					if (typeof min_val !== typeof undefined && min_val !== false && (valor_campo < min_val || valor_campo=='')) {
+						var campo = $(this);
+						valida_form=false;
+						WRS_CONFIRM(LNG('JS_admin_preencha_minimo').replace('#NOMECAMPO#',nome_campo)+min_val+"<br>"+LNG('JS_admin_preencha_auto').replace('#VAL#',min_val),'warning',function(escolha){
+							if(escolha){
+								campo.val(min_val);
+							}else{
+								campo.addClass('nao_validado');												
+							}
+						});
+						return false;	
+					}
+				});
+			}
+		}
+		return valida_form;
+	}
+	
 	var funCallBackVision = function(dados)
 	{
 		_START('btn_window_grid_event_admin::funCallBackVision');
@@ -182,6 +248,7 @@ function btn_window_grid_event_admin(data)
 	};
 		
 	var param					=	 _data.param_original;
+	var _extraValues 			= 	undefined;
 	
 	/*
 	 * Como esta funcao (btn_window_grid_event_admin) é chamada para centralizar e normalizar as acoes especificas do ADMIN
@@ -189,12 +256,29 @@ function btn_window_grid_event_admin(data)
 	 * se existem parametros selecionados (mais de um item), caso nao houver, executa a acao com os dados da tela (formulario) para um unico item
 	 */
 	if(param==undefined){
-		btn_window_grid_event(funCallBack,action_type,table);
+		if(_extraValues==undefined){
+			_extraValues=[];
+			_extraValues['extra_validation_on_update_admin']=validacao_update_admin;
+		}
+		btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 		_END('btn_window_grid_event_admin:0808');
 		return true;		
 	}
 	
 	var chave_primaria			=	param.primary;
+	
+	/*
+		podem existir mais de uma chave primaria para enviar à funcao de delecao
+		felipeb 20160229
+	 */
+	var chaves_primarias		=	[];
+	for(var pos in param.field){
+		if(param.field[pos].primary!=undefined && param.field[pos].primary){
+			chaves_primarias.push(pos);
+		}
+	}	
+	
+	
 	var visao					=	'grid';
 	
 	var qtde_linhas_selecionadas=	null;
@@ -239,16 +323,21 @@ function btn_window_grid_event_admin(data)
 							{
 								index			=	$('.modal-content-grid #'+table+' .k-grid-content tr').index(this);
 							}
-							objDados 			= 	dadosKendo[index];							
-							arrRegisterIds.push($(objDados[chave_primaria]).text());
+							objDados 			= 	dadosKendo[index];		
+							if(chaves_primarias.length>1){
+								var arrIds = [];
+								for(var pos in chaves_primarias){
+									arrIds.push({'chave':chaves_primarias[pos],'valor':objDados[chaves_primarias[pos]]});
+								}
+								arrRegisterIds.push(arrIds);
+							}else{
+								arrRegisterIds.push(objDados[chave_primaria]);
+							}
 							arrObjetosSelecionados.push(objDados);
 														
 					});
 		}
 	}
-	
-	var _extraValues = undefined;
-	
 	
 			switch(action_type)
 			{
@@ -256,7 +345,7 @@ function btn_window_grid_event_admin(data)
 										if(qtde_linhas_selecionadas>0){										
 											var retornoQuestion = function(escolha){
 												if(escolha){
-													_extraValues = {'objetosSelecionados':(escolha=='all')?'*':arrRegisterIds,'chave_primaria':chave_primaria};			
+													_extraValues = {'objetosSelecionados':(escolha=='all')?'*':arrRegisterIds,'chave_primaria':chave_primaria};
 													btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 												}
 											}
@@ -268,21 +357,121 @@ function btn_window_grid_event_admin(data)
 										return false;
 										break;
 									}
-				case 'export' 	: 	{				
+				case 'export' 	: 	{			
+
+										var LNG_caracter_delimitador 	= LNG('ADMIN_IMPORT_caracter_delimitador');
+										var LNG_compactar_resultados	= LNG('ADMIN_IMPORT_compactar_resultados');
+										var LNG_virgula 				= LNG('ADMIN_IMPORT_virgula');
+										var LNG_ponto_virgula 			= LNG('ADMIN_IMPORT_ponto_virgula');
+										var LNG_tabulacao 				= LNG('ADMIN_IMPORT_tabulacao');
+										var LNG_sim 					= LNG('BTN_SIM');
+										var LNG_nao 					= LNG('BTN_NAO');
+					
+										var div_export = 
+											$('<form/>').addClass('grid_window_values_form')
+											.append(
+												$('<div/>').addClass('container-fluid')
+													.append($('<div/>').addClass('row').html('<strong>'+LNG('JS_admin_confirm_export')+'</strong>'))
+													.append($('<div/>').addClass('row')
+															.append($('<table/>').addClass('table')
+																	.append($('<tr/>')
+																			.append($('<td/>')
+																					.append(LNG_caracter_delimitador)
+																			)
+																			.append($('<td/>')
+																					.append($('<input/>').prop({
+																						'type'		:'radio',
+																						'name'		:'caracter_d',
+																						'id'		:'caracter_d2',
+																						'value'		:'ponto_virgula',
+																						'checked'	:'checked'
+																						})
+																					)
+																					.append($('<label/>').attr({
+																						'for':'caracter_d2'
+																					}).html(LNG_ponto_virgula).css({'font-weight': 'normal'}))
+																			)
+																			.append($('<td/>')
+																					.append($('<input/>').prop({
+																						'type'		:'radio',
+																						'name'		:'caracter_d',
+																						'id'		:'caracter_d1',
+																						'value'		:'virgula'
+																						})
+																					)
+																					.append($('<label/>').attr({
+																						'for':'caracter_d1'
+																					}).html(LNG_virgula).css({'font-weight': 'normal'}))
+																			)
+																			.append($('<td/>')
+																					.append($('<input/>').prop({
+																						'type'		:'radio',
+																						'name'		:'caracter_d',
+																						'id'		:'caracter_d3',
+																						'value'		:'tabulacao'
+																						})
+																					)
+																					.append($('<label/>').attr({
+																						'for':'caracter_d3'
+																					}).html(LNG_tabulacao).css({'font-weight': 'normal'}))
+																			)
+																	)
+																	.append($('<tr/>')
+																			.append($('<td/>')
+																					.append(LNG_compactar_resultados)
+																			)
+																			.append($('<td/>')
+																					.append($('<input/>').prop({
+																						'type'		:'radio',
+																						'name'		:'caracter_c',
+																						'id'		:'caracter_c1',
+																						'value'		:'sim',
+																						'checked'	:'checked'
+																						})
+																					)
+																					.append($('<label/>').attr({
+																						'for':'caracter_c1'
+																					}).html(LNG_sim).css({'font-weight': 'normal'}))
+																			)
+																			.append($('<td/>')
+																					.prop({'colspan':'2'})
+																					.append($('<input/>').prop({
+																						'type'		:'radio',
+																						'name'		:'caracter_c',
+																						'id'		:'caracter_c2',
+																						'value'		:'nao'
+																						})
+																					)
+																					.append($('<label/>').attr({
+																						'for':'caracter_c2'
+																					}).html(LNG_nao).css({'font-weight': 'normal'}))
+																			)
+																	)
+															)															
+													)
+											)
+										;
+										
 										var retornoQuestion = function(escolha){
 											if(qtde_linhas_selecionadas==0 && escolha!='cancel' && escolha!='all' && escolha!=false){	
 												WRS_ALERT(LNG('JS_admin_select_one'),'warning');
 											}else{
 												if(escolha!='cancel' && escolha!=false){
 													//_extraValues = {'objetosSelecionados':(escolha=='all')?'*':arrObjetosSelecionados};	
-													_extraValues = {'objetosSelecionados':(escolha=='all')?'*':arrRegisterIds,'chave_primaria':chave_primaria};					
+													_extraValues = {
+															'objetosSelecionados'	:	(escolha=='all')?'*':arrRegisterIds,
+															'chave_primaria'		:	chave_primaria			
+													};					
 													btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 												}
 											}
 										}
 										var _s = (qtde_linhas_selecionadas>1)?'s':'';
+										
+
+										
 										WRS_CONFIRM(
-														LNG('JS_admin_confirm_export'),
+														div_export,
 														'warning',
 														retornoQuestion,
 														undefined,
@@ -291,15 +480,15 @@ function btn_window_grid_event_admin(data)
 														 	{
 														 		text : LNG('JS_admin_all_records'), 
 														 		val : "all", 
-														 		onClick:function(e){
-																		 				return true;
+														 		onClick:function(e){																	
+														 								return true;
 																		 			}
 														 	},
 														 	{
 														 		text : LNG_s('JS_admin_selecteds',_s), 
 														 		val : "sel", 
-														 		onClick:function(e){
-																		 				return true;
+														 		onClick:function(e){																	
+									 													return true;
 																		 			}
 														 	},
 														 	{
@@ -328,9 +517,14 @@ function btn_window_grid_event_admin(data)
 											}
 										}
 									}
+				case 'update' 	: 	{
+										var validacao = validacao_update_admin();
+										if(!validacao){
+											return false;
+										}
+									}
 				case 'back' 	: 
 				case 'new' 		: 
-				case 'update' 	: 
 						btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 						break;
 				

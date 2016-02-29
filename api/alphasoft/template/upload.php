@@ -112,13 +112,37 @@ $HTML =<<<HTML
 		    <ol class="indicator"></ol>
 		</div>
 
-		<script id="felipe-code">
+		<script id="felipe-code-test">
 		
 				$(function () {
-				
-						WRS_CONSOLE('extra param',{teste:""{$parameter_upload['upload_extra_options']} });
+				/*
+						console.log('extra param',{ url: '{$parameter_upload['upload_server']}' {$parameter_upload['upload_extra_options']} });
+				*/					
 					    $('#{$parameter_upload['id']}').fileupload({
-					        url: '{$parameter_upload['upload_server']}'{$parameter_upload['upload_extra_options']}
+					    
+					        url: '{$parameter_upload['upload_server']}'
+		        			{$parameter_upload['upload_extra_options']}
+		            		
+		            		
+				/* validacoes extra se necessario		        
+		        ,'add' 	:  function(e, data) {
+										var uploadErrors = [];
+										//var acceptFileTypes =  /(zip)|(csv)$/i;
+										//if(data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
+											//uploadErrors.push('Not an accepted file type: '+data.originalFiles[0]['type']);
+										//	console.log('extensao nao permitida');
+										//}
+										//if(data.originalFiles[0]['size'].length && data.originalFiles[0]['size'] > 5000000) {
+										//	uploadErrors.push('Filesize is too big');
+										//}
+										if(true || uploadErrors.length > 0) {
+											console.log(uploadErrors,data.originalFiles[0]);
+										} else {
+											data.submit();
+										}
+									}
+				*/
+					        		
 					    });
 				
 				        // Load existing files:

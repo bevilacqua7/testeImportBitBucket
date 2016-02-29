@@ -97,7 +97,6 @@ class WindowGrid extends FORM
 			$param['html']	=	fwrs_error(LNG('ERROR_NOT_EVENT'));
 			$param['button']= 	array();
 		}else{		
-			//exit("<pre>".print_r($_REQUEST,1));
 			if($this->manage_param->load($event))
 			{
 				$form_event		=	fwrs_request('form_event');
@@ -105,7 +104,7 @@ class WindowGrid extends FORM
 				//CHamando o Eventos
 				$param			=	$this->manage_param->getMetodoTabela($event);
 				$p_request		=	fwrs_request('param_request');
-				
+
 				if(is_array($p_request) && count($p_request)>0)
 					foreach($p_request as $k=>$v)
 						$param[$k]=$v;
@@ -177,9 +176,7 @@ class WindowGrid extends FORM
 			unset($param['button']['update']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
 			unset($param['button']['back']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
 		}
-		
-		
-		
+						
 		$this->setButton($param['button'],$param['table'],((array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false),((array_key_exists('button_icon',$param) && is_array($param['button_icon']) && count($param['button_icon'])>0)?$param['button_icon']:false));
 				
 		$TPL_BUTTON				=		$this->getButton();
@@ -550,14 +547,17 @@ EOF;
 							
 					
 					// novo tratamento para exibicao das colunas de acordo com o configurado na libQuery
-					if(($exec_vision=='list' && (
+					if(
+						(
+							($exec_vision=='list' && (
 							!isset($field['grid']) ||
 							!isset($field['basic']) ||
 							!isset($field['list'])
 							)) || // se a visao for list e nao tiver parametro, mostra
-						($exec_vision=='list' 		&& isset($field['grid']) 	&& $field['grid']=='1') || // se a visao for list e tiver o parametro list, mostra
-						($exec_vision=='details' 	&& isset($field['list']) 	&& $field['list']=='1') || // se a visao for details e tiver o parametro details (list), mostra
-						($exec_vision=='date' 		&& isset($field['basic']) 	&& $field['basic']=='1')   // se a visao for date(lista basica) e tiver o parametro lista basica (basic), mostra
+							($exec_vision=='list' 		&& isset($field['grid']) 	&& $field['grid']=='1') || // se a visao for list e tiver o parametro list, mostra
+							($exec_vision=='details' 	&& isset($field['list']) 	&& $field['list']=='1') || // se a visao for details e tiver o parametro details (list), mostra
+							($exec_vision=='date' 		&& isset($field['basic']) 	&& $field['basic']=='1')   // se a visao for date(lista basica) e tiver o parametro lista basica (basic), mostra
+						)
 					){
 								$columns[]				=	$_tmp_column;					
 					}
@@ -596,7 +596,7 @@ EOF;
 		$is_select			=	NULL;
 		$checkbox_exist		=	false;
 		$checkbox_val		=	'';
-		
+
 		//Extend o Evento
 		$this->extendException($param,'runGrid');
 		if(array_key_exists('checkbox', $param))
@@ -623,13 +623,24 @@ EOF;
 		}
 		
 
+		$where=NULL;
+
+		// excecao para usuarios NAO MST ou ADM, não visualizarem usuarios maiores que eles proprios
+		// felipeb 20160226
+		$perfil_logado 		= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
+		if($table=='ATT_WRS_USER'){
+			if($perfil_logado!='MST'){
+				$where="PERFIL_ID != ''MST''";
+			}
+		}
+		
 
 		if(!empty($this->exception))
 		{
-			$query	=	$this->exception->change_query_exception($table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
+			$query	=	$this->exception->change_query_exception($table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize'],$where);
 		}else{				
 			//		unset($_columns['WRS_ICON']);
-			$query	=	$this->manage_param->select('*', $table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize']);
+			$query	=	$this->manage_param->select('*', $table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize'],$where);
 		}
 		
 		$query	=	 $this->query($query);
@@ -709,6 +720,7 @@ EOF;
 						
 						$where_box		=	$param_select['primary']."=''".$rows_tmp[$sel_label]."''";
 
+						
 						if(!empty($this->exception))
 						{
 								

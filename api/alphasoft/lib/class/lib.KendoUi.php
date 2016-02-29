@@ -855,26 +855,32 @@ HTML;
 			$field			=	$col_param['field'];
 			$model[]		=	array_merge($col_param,array('field'=>$col_param['field'],'template'=>'#='.$field.'#'));
 			$val_model		=	array('field'=>$col_param['field'],'type'=>'string');
-			
-			
+
+
 			if(array_key_exists('width', $col_param)){
 				$val_model['width']=$col_param['width'];
+			}
+			
+			if(array_key_exists('class', $col_param) && strstr($col_param['class'],'hide')){
+				$val_model['class']=$col_param['class'];
 			}
 			
 			$modelField[]	=	$val_model;
 		}
 		
-		$model[0]['window_grid']		=	$param;
+		//$model[0]['window_grid']		=	$param;
 		$json_column		= 	json_encode($model,true);
 		$modelField			= 	json_encode($modelField,true);
 		$cube_s				=	fwrs_request('cube_s');
 	
+		
+		$windowGridShare	=	json_encode($param,true);
 		$grid	=	<<<HTML
 					<div id="{$table}"></div>
 		            <script>
 
 		                $(document).ready(function () {
-		                    $("#{$table}").kendoGrid({
+		                    $("#{$table}").data("wrsWindowGridShare",{$windowGridShare}).kendoGrid({
 		                    	columns: {$json_column},
 		                        dataSource: {
 		                        	pageSize	:	25,
@@ -910,6 +916,8 @@ HTML;
 								dataBound		:	function(arg){ return onDataBoundWindowGrid(arg);}
 		                        
 		                    });
+		                    		                    
+		                    
 		                }).loadParanGridWindow({$_column},{$_param});
 		            </script>		
 		            

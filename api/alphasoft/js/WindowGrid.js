@@ -52,6 +52,7 @@ function onDataBindingWindowGrid(arg)
 	return arg;
 }
 
+var wrsWindowGridShare			=	null;
 
 function onDataBoundWindowGrid(arg)
 {	
@@ -59,6 +60,8 @@ function onDataBoundWindowGrid(arg)
 	var tabela				=	arg.sender.element.attr('id');
 	var IDName				=	'#'+tabela;
 	
+	
+	wrsWindowGridShare		=	$(IDName).data('wrsWindowGridShare');
 	
 	
 	$(IDName).data('wrs-modal',arg.sender._data);
@@ -133,12 +136,38 @@ function onDataBoundWindowGrid(arg)
 			});
 		}
 	}
+
+	
+	// tratamento das classes por COLUNA no KendoGrid ADMIN
+	// felipeb 20160226
+	var WindowGridKendoAddColumnClass = function(idGrid,atributoColuna,classe){
+		var _idx_header		=	$('#'+idGrid+' .k-grid-header-wrap tr:last-child th[data-field="'+atributoColuna+'"]').index();	
+
+		$($('#'+idGrid+' .k-grid-header-wrap tr:last-child th')[_idx_header]).addClass(classe);
+		$('#'+idGrid+' .k-grid-content tr').each(function(){
+			$($(this).find('td')[_idx_header]).addClass(classe)
+		});	
+
+		$($('#'+idGrid+' .k-grid-header-wrap colgroup col')[_idx_header]).addClass(classe);
+		$($('#'+idGrid+' .k-grid-content colgroup col')[_idx_header]).each(function(){
+			$(this).addClass(classe)
+		});	
+	}
+	for(indx in arg.sender.wrs_grid.column){
+		if(arg.sender.wrs_grid.column[indx]['class']!=undefined){
+			var classeCOL 	= arg.sender.wrs_grid.column[indx]['class'];
+			WindowGridKendoAddColumnClass(tabela,arg.sender.wrs_grid.column[indx]['field'],classeCOL);
+		}
+	}
+	
 	
 	var HandleArg			=	arg;
+
+	
 	var KendoGridWindowTools	=	 function ()
 	{		
 			_START('onDataBoundWindowGrid::KendoGridWindowTools');
-		var param			=	HandleArg.sender.columns[0].window_grid
+		var param			=	wrsWindowGridShare;
 		var index			=	$(this).parent().index();
 		var table			=	param['table'];	
 		
@@ -146,8 +175,8 @@ function onDataBoundWindowGrid(arg)
 			var is_exception 	= ('exception' in param && (typeof param['exception'] == 'object' || param['exception']==true));
 			if(is_exception && param['actionDouble']){			
 				var toAction	=	param['actionDouble'];
-				window[toAction](HandleArg.sender._data[index],table);	
-				
+				HandleArg.sender._data[index]['indexClickTabela']	= 	index;
+				window[toAction](HandleArg.sender._data[index],table);					
 			}
 		}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 		
@@ -158,7 +187,8 @@ function onDataBoundWindowGrid(arg)
 
 		_START('onDataBoundWindowGrid::KendoGridWindowToolsAuxSingleClick');
 		
-		var param			=	HandleArg.sender.columns[0].window_grid
+		
+		var param			=	wrsWindowGridShare;
 		var parent			=	$(this).parent();
 		var index			=	$(this).parent().index();
 		var value_primary 	=	(strip_tags(HandleArg.sender._data[index][param['primary']]));
@@ -174,10 +204,14 @@ function onDataBoundWindowGrid(arg)
 
 			if(is_exception && param['actionSingle']){
 				var toAction	=	param['actionSingle'];
+				HandleArg.sender._data[index]['indexClickTabela']	= 	index;
 				window[toAction](HandleArg.sender._data[index],table);	
+				
 			}else{
 				grid_window_modal(option,table);
 			}
+			
+			
 		}catch(e){
 			if(IS_EXCEPTION) console.warn(' exception');
 			grid_window_modal(option,table);
@@ -186,16 +220,14 @@ function onDataBoundWindowGrid(arg)
 		
 			_END('onDataBoundWindowGrid::KendoGridWindowToolsAuxSingleClick');
 	}
-
 	$(IDName).find('.k-grid-content').find('td').unbind('dblclick').dblclick(KendoGridWindowTools);		
+	
 	$(IDName).find('.k-grid-content').find('td').unbind('click').click(KendoGridWindowToolsAuxSingleClick);	
 	$(IDName).find('.k-grid-content').addClass('wrsGrid border_color');
 	
 	// se houver checkbox como parametro da tabela remove o action da coluna do checkbox	
 	if(HandleArg.sender.columns[0].field=='checkbox_linha'){
 		$(IDName).find('[data-field=checkbox_linha]').unbind('click').find('input.checkline').change(function(){ trataCheckColuna($(this),tabela); });
-	}else{
-		
 	}
 
 	//Corrige Thema
@@ -280,13 +312,18 @@ function get_grid_window_values_form(_event)
 	form.find('input[type=hidden]').each(function(){
 		param[$(this).attr('name')]	=	$(this).val();
 	});
-	
-	
-	form.find('input[type=checkbox]').each(function(){
-		
-		var _value			=	$(this).prop('checked')==true ? $(this).val() : 0;
-		
+
+
+	form.find('input[type=checkbox]').each(function(){		
+		var _value			=	$(this).prop('checked')==true ? $(this).val() : 0;		
 		param[$(this).attr('name')]	=	_value;
+	});
+	
+	form.find('input[type=radio]').each(function(){		
+		if($(this).prop('checked')==true){
+			var _value			=	 $(this).val();		
+			param[$(this).attr('name')]	=	_value;
+		}
 	});
 	
 	
@@ -315,23 +352,26 @@ function btn_window_grid_event(_functionCallBack,_action_type,_table,_extraValue
 	}catch(e){
 		delete option['cube_s'];
 	}
-
-	
 	
 	var functionCallBack		=	_functionCallBack;
-	/*
-	var functionCallBack	=	 function(data){
-		console.log('data',data);
-	}	
-	*/
+
 	var extraValues				=	_extraValues;
 		values['wrs_type_grid']	=	'form';
-		
-		
+
 		switch(action_type)
 		{
 			case 'new' 		: values['form_event']='new'	;	break;
-			case 'update' 	: values['form_event']='update' ; 	break;
+			case 'update' 	: 
+								{
+									if(extraValues!=undefined && extraValues['extra_validation_on_update_admin']!=undefined && typeof extraValues['extra_validation_on_update_admin'] == 'function'){
+										$retorno = extraValues['extra_validation_on_update_admin']();
+										if(!$retorno){
+											return false;
+										}
+									}
+								}
+								values['form_event']='update' ; 	
+								break;
 			case 'remove' 	: values['form_event']='remove' ;	break;
 			case 'import' 	: values['form_event']='import' ;	break;
 			case 'export' 	: values['form_event']='export' ;	break;
@@ -344,7 +384,7 @@ function btn_window_grid_event(_functionCallBack,_action_type,_table,_extraValue
 		{
 			values = merge_objeto(values,{'extraValues':((typeof extraValues!='string')?json_encode(extraValues):extraValues)});
 		}
-		
+
 		grid_window_modal(values,table,functionCallBack);
 		
 		_END('btn_window_grid_event');	

@@ -166,7 +166,7 @@ $.fn.extend({
 				var o_param			=	janela_modal.data(_dataName);
 					o_param.event	=	'apagar';
 				var  _param			=	 $.extend( {}, o_param, get_inputs_val(janela_modal_body) );
-console.log('_param',_param);				
+
 				var _continue=true;
 				
 				if(_options.bt_apagar_extra_action_validator!=null){
@@ -216,7 +216,6 @@ function getValuesWindow(){
 function carrega_report_generic_modal(arg)
 {
 	_ONLY('carrega_report_generic_modal:Empty');
-	console.log('ARG',arg);
 }
 
 
@@ -272,7 +271,7 @@ function callback_check_line_generic_modal(data,tabela)
 		}
 		else if(typeof data == 'object' && tabela!=undefined && tabela!='')
 		{	
-			var linha=$('#'+tabela+' .k-grid-content table').find('tr')[parseInt(data.ROW_ID)-1];
+			var linha=$('#'+tabela+' .k-grid-content table').find('tr')[data.indexClickTabela];
 			var check = !$(linha).find('td input.checkline').prop('checked');
 			
 				$(linha).find('td input.checkline').prop('checked',check);

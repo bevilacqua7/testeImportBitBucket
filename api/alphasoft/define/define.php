@@ -122,7 +122,7 @@ define('PATH_SMARTY',PATH_API.'Smarty-3.1.20'.DIRECTORY_SEPARATOR);
 define('DS_URL',	'/');
 
 //Arquivos de UPLOADS
-define('PATH_FILE',			dirname(PATH_DEFAULT).DS.'files'.DS);
+define('PATH_FILE',			$WRS_DEFINE['WRS_DIRNAME_IMPORT']);
 
 define('PATH_FILE_URL',		'files'.DS_URL);
 

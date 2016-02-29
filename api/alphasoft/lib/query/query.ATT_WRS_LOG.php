@@ -7,22 +7,25 @@
 
 includeQUERY('ATT_WRS_AdminInterfaces');
 
-class QUERY_WRS_CUSTOMER extends QUERY_WRS_ADMIN
+class QUERY_WRS_LOG extends QUERY_WRS_ADMIN
 {
-	public function Get_procedure_remove_customer($tabela,$condicao){
 
+	public function Get_procedure_remove_log($tabela,$condicao){
+	
 		// por seguranca e testes
-		$tabela 		= 'ATT_WRS_CUSTOMER';
-				
+		$tabela 		= 'FAT_WRS_LOG';
+	
 		return $this->Get_procedure_remove($tabela, $condicao);
 	}
+	
 
-	public function Get_query_changetable_customer($tabela,$arr_campos_valores,$condicao,$operacao){
-
+	public function Get_query_changetable_log($tabela,$arr_campos_valores,$condicao,$operacao){
+	
 		// por seguranca e testes
-		$tabela 		= 'ATT_WRS_CUSTOMER';
-
+		$tabela 		= 'FAT_WRS_LOG';
+	
 		return $this->Get_query_changetable($tabela,$arr_campos_valores,$condicao,$operacao);
 	}
+	
 	
 }

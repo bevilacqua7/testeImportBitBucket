@@ -11,7 +11,16 @@ body {
 	
 }
 
-
+.class_layout_padrao{
+	background-color: #FBFBCF;
+    padding: 10px;
+    font-weight: bold;
+    overflow-x: scroll;
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    width: 100%;
+}
 
 .wrs_options_select h2 {
 	margin-bottom: 0px;
@@ -954,8 +963,20 @@ nav .dropdown-menu-configuration .btn-success{
 .body_grid_window{
 /*	min-height: 515px;*/
 }
+
+.obrigatorio.nao_validado{
+	background-color: #FBEEEE!important;
+}
+.obrigatorio.validado{
+	background-color: #EEFBEE!important;
+}
+
 .margin_fix_grid_window{
 	margin-bottom: 7px;
+    max-width: 130px!important;
+    max-height: 200px!important;
+    display: inline-block!important;
+    overflow: hidden!important;
 }
 .wrs_grid_icon_middle_custom:hover,
 .wrs_grid_icon_small_custom:hover,
@@ -1549,8 +1570,12 @@ border-radius: 0px;
 	color: #666;
 }
 
+th.checkline input.checkline{
+	margin-left: -1px;
+}
 
-div.k-grid-header thead tr th[data-field=checkbox_linha]
+div.k-grid-header thead tr th[data-field=checkbox_linha],
+div.k-grid-content tbody tr td:first-child
 {
     text-align: center !important;
 }

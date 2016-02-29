@@ -2,18 +2,18 @@
 
 includeCLASS('WRS_BASE');
 includeCLASS('WRS_AdminInterface'); // interface com funcoes para a area administrativa
-includeQUERY('ATT_WRS_USER');
+includeQUERY('ATT_WRS_SERVER');
 
-class ATT_WRS_USER extends WRS_BASE
+class ATT_WRS_SERVER extends WRS_BASE
 {
 	private $admin = NULL;
 	
 	public function __construct(){
 		$this->admin = new WRS_AdminInterface();
-		$this->admin->classname  = 'ATT_WRS_USER';
-		$this->queryClass		 = new QUERY_WRS_USER();
+		$this->admin->classname = 'ATT_WRS_SERVER';
+		$this->queryClass		 = new QUERY_WRS_SERVER();
 	}
-	
+
 	public function SetObject($Object)
 	{
 		$this->admin->SetObject($Object);
@@ -54,6 +54,7 @@ class ATT_WRS_USER extends WRS_BASE
 	
 	public function update($options)
 	{
+	
 		$_fields			= $options['field'];
 		$_request_original 	= $_REQUEST;
 		$_tabela			= $options['table'];
@@ -107,7 +108,7 @@ class ATT_WRS_USER extends WRS_BASE
 		unset($param['button']['export']);
 		unset($param['button']['remove']);
 	
-		$query_exec = $this->queryClass->Get_query_changetable_user($_tabela, $arr_campos_valores, $condicao_query, $acao_form);
+		$query_exec = $this->queryClass->Get_query_changetable_server($_tabela, $arr_campos_valores, $condicao_query, $acao_form);
 	
 		$this->admin->set_conn($this->admin->OBJECT->get_conn());
 		$status = $this->admin->query($query_exec);
@@ -143,17 +144,16 @@ class ATT_WRS_USER extends WRS_BASE
 		}
 	
 		//$condicao_query = $param['primary'].' in('.implode(',',$_regForDelete['objetosSelecionados']).') ';
-		
+	
 		/*
-		 * ATT_WRS_USER = Remove_SSAS_User( @USER_ID BIGINT, @CUSTOMER_ID BIGINT, @USER_CODE VARCHAR(100) )
+		 * ATT_WRS_SERVER = Remove_SSAS_Server( @SERVER_ID VARCHAR(100), @USER_CODE VARCHAR(100) )
 		 */
 		$USER_CODE 				= WRS::USER_CODE();
-		$CUTOMER_ID 			= WRS::CUSTOMER_ID();
 		$this->admin->set_conn($this->admin->OBJECT->get_conn());
 		$status=true;
 		foreach($_regForDelete['objetosSelecionados'] as $id_for_del){
-			$condicao_query = $id_for_del.",".$CUTOMER_ID.",".$USER_CODE;
-			$query_exec = $this->queryClass->Get_procedure_remove_user($_tabela, $condicao_query);
+			$condicao_query = $id_for_del.",".$USER_CODE;
+			$query_exec = $this->queryClass->Get_procedure_remove_server($_tabela, $condicao_query);
 			$query = $this->admin->query($query_exec);
 			if(!$this->num_rows($query) || !$query)
 			{
@@ -164,23 +164,19 @@ class ATT_WRS_USER extends WRS_BASE
 				$this->admin->retornaMsgAcaoTelaAdmin($query,$msg,$_tabela,$query_exec);
 				return false;
 				/*
-					}else{
-					$rows 	= $this->fetch_array($query);
-					if(array_key_exists('output', $rows)){
-					$msg = $rows['output'];
-					}else if(array_key_exists('ERROR_MESSAGE', $rows)){
-					$status=false;
-					$msg = $rows['ERROR_MESSAGE'];
-					}
-					*/
+				 }else{
+				 $rows 	= $this->fetch_array($query);
+				 if(array_key_exists('output', $rows)){
+				 $msg = $rows['output'];
+				 }else if(array_key_exists('ERROR_MESSAGE', $rows)){
+				 $status=false;
+				 $msg = $rows['ERROR_MESSAGE'];
+				 }
+				 */
 			}
 		}
 		$msg = LNG_S('ADMIN_REG_DELETED',((count($_regForDelete['objetosSelecionados'])>1)?'s':''));
 		$this->admin->retornaMsgAcaoTelaAdmin($status,$msg,$_tabela,$query_exec);
-		
-		
-		
-		
 		
 	
 	}
@@ -255,8 +251,6 @@ class ATT_WRS_USER extends WRS_BASE
 	
 		return $param;
 	}
-	
-	
 
 }
 
