@@ -200,6 +200,19 @@ class WRS_USER extends WRS_BASE
 			return $arrPerfil;
 		}else
 		{
+			
+			if(is_array($perfilTest))
+			{
+				$is_access		=	FALSE;
+				foreach($perfilTest as $value)
+				{
+					if(!empty($value) && in_array($value,$arrPerfil))	$is_access=TRUE;
+				}
+				
+				return $is_access;
+				
+			}
+			
 			/*
 			 * TODO: Felipe não pode usar '0' ou '1' apenas true our false
 			 * verifique onde tem que fazer as adequações

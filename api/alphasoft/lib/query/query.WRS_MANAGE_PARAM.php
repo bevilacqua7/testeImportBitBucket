@@ -8,6 +8,7 @@
 
 class WRS_MANAGE_PARAM
 {
+	
 	private $array_retorno_padrao = array(	 'title'				=>	'',
 										 'button'				=>	'',
 										 'field'				=>	'',
@@ -40,94 +41,139 @@ class WRS_MANAGE_PARAM
 			'ATT_WRS_CUSTOMER'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_CUSTOMER_TESTE',
 					'metodo_classe_param'	=>	'ATT_WRS_CUSTOMER',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_CUSTOMER'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_CUSTOMER',
+					'icon'					=>	'fa fa-users'
 			),
 			'ATT_WRS_USER'					=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_USER',
 					'metodo_classe_param'	=>	'ATT_WRS_USER',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_USER'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_USER',
+					'icon'					=>	'fa fa-user'
 			),
 			'ATT_WRS_DATABASE'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_DATABASE',
 					'metodo_classe_param'	=>	'ATT_WRS_DATABASE',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_DATABASE'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_DATABASE',
+					'icon'					=>	'fa fa-database'
 			),
 			'ATT_WRS_CUBE'					=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_CUBE',
 					'metodo_classe_param'	=>	'ATT_WRS_CUBE',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE',
+					'icon'					=>	'fa fa-cube'
 			),
 			'ATT_WRS_HIERARCHY'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_HIERARCHY',
 					'metodo_classe_param'	=>	'ATT_WRS_HIERARCHY',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_HIERARCHY'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_HIERARCHY',
+					'icon'					=>	'fa fa-sitemap'
 			),
 			'ATT_WRS_PERFIL'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_PERFIL',
 					'metodo_classe_param'	=>	'ATT_WRS_PERFIL',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_PERFIL'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_PERFIL',
+					'icon'					=>	'fa fa-male'
 			),
 			'REL_WRS_CUBE_USER'				=> 	array(
 					'tabela_bd'				=>	'REL_WRS_CUBE_USER',
 					'metodo_classe_param'	=>	'REL_WRS_CUBE_USER',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE_USER'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE_USER',
+					'icon'					=>	'fa fa-object-group'
 			),
 			'ATT_WRS_REPORT'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_REPORT',
 					'metodo_classe_param'	=>	'ATT_WRS_REPORT',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_REPORT'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_REPORT',
+					'icon'					=>	'fa fa-file-excel-o'
 			),
 			'ATT_WRS_DOWNLOAD'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_DOWNLOAD',
 					'metodo_classe_param'	=>	'ATT_WRS_DOWNLOAD',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_DOWNLOAD'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_DOWNLOAD',
+					'icon'					=>	'fa fa-download'
 			),
 			'ATT_WRS_LOG'					=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_LOG',
 					'metodo_classe_param'	=>	'ATT_WRS_LOG',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_LOG'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_LOG',
+					'icon'					=>	'fa fa-file-text-o'
 			),
 			'GET_SSAS_REPORT'				=> 	array(
 					'tabela_bd'				=>	'GET_SSAS_REPORT',
 					'metodo_classe_param'	=>	'GET_SSAS_REPORT',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_SSAS_REPORT',
-					'acesso_via_menu'		=>	false
+					'acesso_via_menu'		=>	false,
+					'icon'					=>	'fa fa-area-chart'
 			),
 			'GET_SSAS_LAYOUTS'				=> 	array(
 					'tabela_bd'				=>	'GET_SSAS_LAYOUTS',
 					'metodo_classe_param'	=>	'GET_SSAS_LAYOUTS',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_SSAS_LAYOUTS',
-					'acesso_via_menu'		=>	false
+					'acesso_via_menu'		=>	false,
+					'icon'					=>	'fa fa-desktop'
 			)
 			
 	);
 	
-	public static function GET_CONFIG_TABLE($tabela=NULL){
-		$arr_todos = array();
-		foreach(self::$array_configuracao_tabelas as $tabela_name=>$config){
-			$arr_todos[$tabela_name] = array_merge(self::$array_configuracao_padrao,self::$array_configuracao_tabelas[$tabela_name]);
+	public static function GET_CONFIG_TABLE($tabela=NULL)
+	{
+		$arr_todos 		=	array();
+		$html_menu		=	NULL;	
+
+		
+		foreach(self::$array_configuracao_tabelas as $tabela_name=>$config)
+		{
+			$info_tabelas = array_merge(self::$array_configuracao_padrao,self::$array_configuracao_tabelas[$tabela_name]);
+			
+			if($info_tabelas['acesso_via_menu']==true)
+			{
+				
+				$label  = LNG($info_tabelas['nome_menu_LNG']);
+				$html_menu .= <<<HTML
+							<li class=" menu_cadastro only-li" tabela="{$info_tabelas['tabela_bd']}">
+								 <div> <i class="{$info_tabelas['icon']}" aria-hidden="true"></i> {$label}</div>
+							</li>
+HTML;
+			}
+			
 		}
-		if($tabela==NULL){
-			return $arr_todos;
+		
+		if($tabela==NULL || $tabela=='menu')
+		{
+			return $html_menu;
 		}
-		if(!is_string($tabela) || !array_key_exists($tabela, $arr_todos)){
+		
+		
+		if(!is_string($tabela) || !array_key_exists($tabela, $arr_todos))
+		{
 			// se for passado o nome de uma tabela diferente do padrao só porque o nome da tabela é um teste ou porque mudou,
 			// procura nos nomes das tabelas configurados para retornar o objeto correto e prosseguir com o fucnionamento do sistema
 			$dados_contem_tabela_parametro=array();
-			foreach($arr_todos as $nome_tabela=>$dados){
-				if($dados['tabela_bd']==$tabela){
+			
+			foreach($arr_todos as $nome_tabela=>$dados)
+			{
+				if($dados['tabela_bd']==$tabela)
+				{
 					$dados_contem_tabela_parametro = $dados;
 					break;
 				}
 			}
-			if(count($dados_contem_tabela_parametro)==0){
+			
+			if(count($dados_contem_tabela_parametro)==0)
+			{
 				return false;
 			}else{
 				return $dados_contem_tabela_parametro;
 			}
+			
 		}
+		
+		
 		return $arr_todos[$tabela];
+		
 	}
+	
+	
 
 	public function getDadosTabelaConfig($tabela=NULL){
 		return self::GET_CONFIG_TABLE($tabela);
@@ -211,8 +257,8 @@ class WRS_MANAGE_PARAM
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 
-		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_CUSTOMER');
-		$table	=	$dados_tabela_evento['tabela_bd'];
+		$dados_tabela_evento 	=	 $this->getDadosTabelaConfig('ATT_WRS_CUSTOMER');
+		$table					=	$dados_tabela_evento['tabela_bd'];
 		
 		$order	=	array('order_by'=>'CUSTOMER_ID' ,'order_type'=>'ASC');
 		$fields	=	array();

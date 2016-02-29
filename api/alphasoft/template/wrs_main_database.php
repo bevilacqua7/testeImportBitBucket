@@ -32,25 +32,43 @@ $LINK_HTML	=	"";
 if(!$flag_cube_indisponivel){
 
 	$LINK_HTML=	<<<HTML
-		<div class="link-contianer">
-									<a href="{$LINK}" class="ui-widget-header changePage" title="{$TITLE_LINK}"><span
-										class="glyphicon glyphicon-file"></span></a>
+		 
+									<a href="{$LINK}" title="{$TITLE_LINK}" class="btn btn-info btn1 wrs-tooltip"><i class="fa fa-th"></i></a> 
 HTML;
 	
-	if(!$hide_layout_button){
+if(!$hide_layout_button){
 		$LINK_HTML.= <<<HTML
-									<a href="{$LINK_LAYOUT}" class="ui-widget-header changePage" title="{$TITLE_LINK_LAYOUT}"><span
-										class="glyphicon glyphicon-th"></span></a>
+									<a href="{$LINK_LAYOUT}" title="{$TITLE_LINK_LAYOUT}" class="btn btn-info btn2 wrs-tooltip">
+											<i
+										class="fa fa-file-o"></i></a>
 HTML;
 	}
 	
-	$LINK_HTML.= <<<HTML
-								</div>
-HTML;
+	 
 
 }
 
+
+$html	=<<<EOF
+				<li>
+					<figure>
+						
+						<img src="imagens/databases/{$DATABASE_IMAGE}" >
+						 <h1>{$DATABASE_DESC}</h1>
+						 <div class="descriptions">{$description}</div>
+						<figcaption>
+							<h3 class="h2-figure">{$DATABASE_DESC}</h3>
+							<span>{$DATABASE_COMMENT}</span>
 							
+							{$LINK_HTML}
+							
+						</figcaption>
+					</figure>
+				</li>
+EOF
+
+
+	/*						
 $html	=<<<EOF
 				<div class="ui-widget-content item wrs_audit-status wrs_item_santos" >
 						<div class="meida-holder">
@@ -68,4 +86,5 @@ $html	=<<<EOF
 						</div>
 				</div>
 EOF
+*/
 				?>

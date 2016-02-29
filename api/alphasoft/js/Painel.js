@@ -187,6 +187,7 @@ function wrs_west_onresize(pane, $Pane)
 // formatar textos muito longos nos filtros criando tooltip pra cada um
 function formata_texto_resultado_filtros(){	
 	var tamanho_letra = $("<div/>").text("W").textWidth();
+	
 	$('.wrs_filter_body_container').each(function(){
 		$(this).find('.pws_filter_text').each(function(){
 			var tamanho_espaco = parseInt($(this).css('width'))+10;//+10=ajuste até a borda
@@ -199,6 +200,8 @@ function formata_texto_resultado_filtros(){
 			}
 		});
 	});
+	
+	
 }
 
 function metricas_tool_tip()
@@ -1292,7 +1295,6 @@ function set_value_box_relatorio(object,clean)
 			$('.WRS_DRAG_DROP_FILTER').html('');
 		}
 	
-
 	
 	if(isset(object.LAYOUT_ROWS))
 	{
@@ -1308,8 +1310,9 @@ function set_value_box_relatorio(object,clean)
 	if(isset(object.LAYOUT_FILTERS))
 	{
 		var _filtros		=	 object.LAYOUT_FILTERS;
-		
 		_filtros	=	$('body').filterFixed('filtro_fixed_check',_filtros);
+
+		get_aba_active_object().wrsAbaData('setConvertFilter',object.LAYOUT_FILTERS);
 		
 		find_relatorio_attributo_metrica('.WRS_DRAG_DROP_ATTR .wrs_panel_options ',_filtros,'.sortable_filtro',clean);
 	}
@@ -1400,9 +1403,13 @@ function stop_job_timeout(report_id)
  * 
  * 
  */
+var TR_TR	= false;
 function wrs_run_filter()
 { 
 	_START('wrs_run_filter');
+	
+	
+	if(TR_TR==true) return false;
  
 	var manager_aba			=	$(this).attr('manager_aba');
 		manager_aba			=	empty(manager_aba) ? false : true;
@@ -1689,10 +1696,6 @@ function wrs_run_filter()
 							if(isEmpty(report_KendoUi['DRILL_HIERARQUIA_LINHA_DATA'])) 
 							{
 								getAllFiltersToRun				=	$.WrsFilter('getAllFiltersToRun');
-								
-								
-								
-								
 								
 								wrs_data_param.LAYOUT_FILTERS	=	base64_encode(getAllFiltersToRun.data);
 								wrs_data_param.FILTER_TMP		=	base64_encode(json_encode(getAllFiltersToRun.full));

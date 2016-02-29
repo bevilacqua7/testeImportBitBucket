@@ -291,6 +291,8 @@ function addTargetDisableContext(kendoUi,report_id)
 			_START('WrsDrill::drill_click_option');
 			var e				=	_e;
 			
+			
+			
 			//Recuperando os eventos do click do mouse
 			//Correção devido a melhorias na estrutura do drilll
 			var _drillGLobal	=	$('body').WrsGlobal('getJS','drill');
@@ -338,7 +340,7 @@ function addTargetDisableContext(kendoUi,report_id)
 
     		$('.'+e.kendoId).wrsAbaData('setKendoUi',{STOP_RUN:false, 'TYPE_RUN':TYPE_RUN[e.type]});
     		
-    		console.log('type',e.type);
+
     		
     		switch(e.type)
     		{
@@ -478,7 +480,7 @@ function addTargetDisableContext(kendoUi,report_id)
     															}
     															changeWithDrillColumnRows(column,'LAYOUT_COLUMNS');
     														}
-    													
+    													$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
     													return true;
     													
     													
@@ -540,8 +542,6 @@ function addTargetDisableContext(kendoUi,report_id)
 
 											var column_field	=	$(IDName).find('.k-grid-header-wrap tr:last-child th:eq(2)').attr('data-field');
 											
-											//console.log('_filter',_filter);
-											
 											
 											_layout['LAYOUT_COLUMNS']	=	['empty'];
 											_layout['LAYOUT_MEASURES']	=	[kendoUi.headerIndex.field[column_field].LEVEL_FULL];
@@ -554,7 +554,11 @@ function addTargetDisableContext(kendoUi,report_id)
     			};break;
     		}
 			
+    		$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
+    		
 			delete kendoUi,_data,keyName,layout,_layout;
+			
+			
 			_END('WrsDrill::drill_click_option');
     	}// EDN drill_click_option(e)
     	

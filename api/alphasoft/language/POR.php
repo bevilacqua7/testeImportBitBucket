@@ -14,6 +14,17 @@
 	$language['VALOR'] 								= "Valor";
 	
 	
+	/*TRANSLATE BUTTONS*/
+	
+	$language['TOOLTIP_BTN_RUN'] 				= 	"Executar relatório";
+	$language['TOOLTIP_BTN_CLEAN_FILTER']		=	"Limpar todos os filtros selecionados";
+	$language['TOOLTIP_BTN_CHANTE_FILTER_DROP']	=	"Faz a mudança de estado de: <br> DRAG and DROP para Seleção de filtro <br> Estado de filtro para DRAG and DROP";
+	$language['TOOLTIP_BTN_NEGADO']				=	"Negando os filtros selecionados, na consulta irá vir todos os filtros menos os selecionados.";
+	$language['TOOLTIP_BTN_CLEAN_FILTER_LOCAL']	=	"Limpar apenas os filtros dessa dimensão";
+	$language['TOOLTIP_BTN_ERASER_FILTER_LOCAL']=	"Limpa as pesquisas feita nos filtros pesquisados";
+	$language['TOOLTIP_BTN_CLEAR_ELEMENTS_BELLOW']	=	"Remove todos os elementos do container a baixo";
+	//END
+	
 	$language['ERROR_CANT_CREATE_JOB'] 						= "Ops.. Favor reenviar a consulta, não foi possível criar um job, se o erro persistir favor entrar em contato com o suporte";
 	
 
@@ -29,6 +40,10 @@
 	$language['MENU_ADMIN_LOG']				=	'Logs';
 	$language['MENU_ADMIN_SSAS_REPORT']		=	'Relatórios';
 	$language['MENU_ADMIN_SSAS_LAYOUTS']	=	'Layouts';
+	
+	$language['TITLE_OPTIONS']				=	'Options';
+	
+	$language['MENU_ALL_CATEGORY']			=	'Todas as categorias';
 		
 	
 	$language['NO_RESULTS_QUERY']	=	'sem resultados para a consulta: ';
@@ -75,10 +90,10 @@
 	 * TITULOS
 	 */
 	
-	$language ['TITLE_TEMA'] 			= "TEMA";
-	$language ['TITLE_LINGUA'] 			= "LINGUA";
-	$language ['TITLE_ALTER_SENHA'] 	= "ALTERAR SENHA";
-	$language ['TITLE_ADMINISTRATIVO'] 	= "ADMINISTRATIVO";
+	$language ['TITLE_TEMA'] 			= "Tema";
+	$language ['TITLE_LINGUA'] 			= "Lingua";
+	$language ['TITLE_ALTER_SENHA'] 	= "Alterar Seha";
+	$language ['TITLE_ADMINISTRATIVO'] 	= "Administrativo";
 	
 	$language ['TITLE_ATT_WRS_USER'] 	= "Usuários";
 	
