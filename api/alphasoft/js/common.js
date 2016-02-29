@@ -1150,11 +1150,9 @@ function add_filtro_simples_composto(type_load)
 		 
 		 //Aplicando o icone simples
 		 
-		 
+
 		 //Limpando todos os filtros
-	//	 aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null});
-		 aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null,remove:true});
-		 
+		 //aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null,remove:true});
 		 
 		 if(type_load==true)
 			 {

@@ -1995,7 +1995,6 @@ function optionsDataConvert(gridValue,with_decode)
 					
 				}//Fim da verificação da existencia no filtro já no registro
 				
-				
 			
 				
 				//Removendo todos os filtros a ser aplicado
@@ -2077,6 +2076,10 @@ function optionsDataConvert(gridValue,with_decode)
 				that.data(wrsDataName,data_global);
 				
 			}
+			
+			
+			
+			
 			
 			var __removeFilter	=	 function (keyRemove)
 			{
@@ -2537,7 +2540,7 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				if(typeof data_global.kendoUi.filter[data.tag_class].simples == undefined)	return {simples:false};
 				
-				return data_global.kendoUi.filter[data.tag_class].simples;
+				return {simples:data_global.kendoUi.filter[data.tag_class].simples};
 				
 			}
 			

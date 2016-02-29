@@ -37,10 +37,7 @@
 
 			</div><!-- /pusher -->
 		</div><!-- /container-main-version1 -->
-			<div class="rodape-main ui-widget-header ui-state-active no-border">
-					<span id="data_sistema" class="WRS_TIME" style="font-weight:bold;font-size:12px;"></span>
-			</div>
-			
+
 	 
 	  
 			

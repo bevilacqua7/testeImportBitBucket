@@ -47,7 +47,15 @@ html, body, .container-main-version1, .scroller {
 	position: relative;
 	left: 0;
 	height: 100%;
+	padding-top: 80px;
 }
+
+.mp-pusher .wrs_header_main{
+	position:fixed !important;
+	top:0px;
+	z-index:600;
+}
+
 
 .mp-menu {
 	position: absolute; /* we can't use fixed here :( */
@@ -61,6 +69,10 @@ html, body, .container-main-version1, .scroller {
 	transform: translate3d(-100%, 0, 0);
 	font-size: 10px;
 }
+
+
+
+
 
 .mp-level {
 	position: absolute;

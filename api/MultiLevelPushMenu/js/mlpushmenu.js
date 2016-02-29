@@ -66,6 +66,7 @@
 		if( this.support ) {
 			this._init();
 		}
+
 	}
 
 	mlPushMenu.prototype = {
@@ -112,6 +113,7 @@
 
 			// open (or close) the menu
 			this.trigger.addEventListener( this.eventtype, function( ev ) {
+				
 				ev.stopPropagation();
 				ev.preventDefault();
 				if( self.open ) {
@@ -123,6 +125,10 @@
 					document.addEventListener( self.eventtype, function( ev ) {
 						if( self.open && !hasParent( ev.target, self.el.id ) ) {
 							bodyClickFn( this );
+							//by Marcelo Santos
+							var time	=	 setTimeout(function(){
+								$('.mp-pusher').removeAttr('style');
+							},1000);
 						}
 					} );
 				}

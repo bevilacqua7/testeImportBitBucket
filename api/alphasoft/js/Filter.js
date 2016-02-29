@@ -1143,7 +1143,7 @@ function wrsFilterClickFalse(filter_hide)
 					///Para não permitir apagar filtro simples
 					var filters					=	aba_active.wrsAbaData('getFilterSimples',{'tag_class':tag_class});
 					
-						if(!not_use && filters==true) 
+						if(!not_use && filters.simples!=true) 
 						{
 							//Verificando se o Level Full exist no array passado
 							if(in_array(level_full, levelDown, true) || typeEvent=='all')
@@ -1156,14 +1156,13 @@ function wrsFilterClickFalse(filter_hide)
 								 */
 								var is_simples	=	typeEvent=='all' ? is_simples : ''; 
 								
-								console.log('is_simples',is_simples);
+								 
 								
 								if(is_simples!='simples' )
 								{	
 									/*
 									 * Se o filtro foi modificado então apaga os filhos
 									 */
-									
 									aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null});
 								}
 								
