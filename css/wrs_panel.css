@@ -30,6 +30,10 @@ body {
 	color: red;
 
 }
+.green{
+	color: #119646;	
+}
+
 
 /*
  * Controle do jquery Layout
@@ -1775,6 +1779,20 @@ border-radius: 3px;
   background-image: none;
 }
 
+
+.tooltip-wrs-container{
+
+	background: url("../imagens/tooltip.png") no-repeat top left;
+	padding-left:18px;
+	padding-top:1px;
+	padding-bottom:3px;
+	font-size:12px;
+	line-height:16px;
+	padding-right:15px;
+	color:#333;
+	max-width: 200px;
+	
+}
 
 .layout_container_custom h4{
 

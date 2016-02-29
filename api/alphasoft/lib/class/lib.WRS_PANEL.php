@@ -354,6 +354,7 @@ class WRS_PANEL  extends WRS_USER
 			}
 		}*/
 
+		WRS_DEBUG_QUERY($rows_REPORTS,'demo.log');
 		if(count($rows_REPORTS)>0 && fwrs_request('exec_reports')=='1')
 		{ // exec_reports!=1 para nao carregar relatorios quando é somente layout
 			echo fwrs_javascript('AUTO_LOAD = [];'.implode(';',$rows_REPORTS).';AUTO_LOAD=base64_json(AUTO_LOAD);');
@@ -593,6 +594,8 @@ class WRS_PANEL  extends WRS_USER
 		
 		$history		=	json_decode(base64_decode(WRS::GET_REPORT_HISTORY($cube_id, $report_id)),true);
 		
+		
+		
 		if(!is_array($history)) $history= array();
 		
 		$history_data	=	array(	
@@ -604,7 +607,12 @@ class WRS_PANEL  extends WRS_USER
 								);
 		
 	
-	
+		//Flag para poder saber se o histórico retornou para o filtro original
+		if(count($history)==0)
+		{
+			$history_data['consulta_oficial']	=	true;
+		}
+		
 		
 		if($history_data['type']!='DrillColuna') 
 		{
@@ -621,7 +629,6 @@ class WRS_PANEL  extends WRS_USER
 								$historyTMP[]	=	$dataHistory;
 							}
 						}
-						
 						$history	=	$historyTMP;
 					}
 				}
@@ -630,15 +637,15 @@ class WRS_PANEL  extends WRS_USER
 				if(count($history)>=10){
 					array_pop($history);
 				}
-				
-		
 				//Incrementa no histórico na primeira linha
 				array_unshift($history, $history_data);
-		
 		}
 		
 		
+		
 		$history		=	base64_encode(json_encode($history,true));
+		
+		
 		
 //		WRS_DEBUG_QUERY($history)
 		

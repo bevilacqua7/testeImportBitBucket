@@ -87,10 +87,16 @@
     	
     	
     	
-    	var __getCM		=	 function()
+    	var __getCM		=	 function(val)
     	{
     		var get_data				=	GetData();
     		
+    		
+    		if(val!=undefined)
+    		{
+    			if(typeof get_data.common[val]!=undefined) return get_data.common[val];
+    			
+    		}
     		
     		return get_data.common;
 

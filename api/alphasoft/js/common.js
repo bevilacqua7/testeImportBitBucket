@@ -69,8 +69,11 @@ function clone_jj(report)
 	$('.WRS_ABA .'+report).data('wrs_aba_data',_jj).attr('id-aba',_report).addClass(_report);
 }
 
+
+
 // substitui o LNG trocando os %s por s se existirem
-function LNG_s(str,_char,_recursiva){
+function LNG_s(str,_char,_recursiva)
+{
 	var char 		= _char==undefined?'s':_char;
 	var recursiva 	= _recursiva==undefined?false:true;
 	var string 		= recursiva?str:LNG(str);
@@ -80,6 +83,8 @@ function LNG_s(str,_char,_recursiva){
 		return string;
 	}
 }
+
+
 
 /*
  * Tipos de Execuções que o sistema opera para gerar uma novo Report
@@ -830,7 +835,7 @@ function _ONLY(input)
 
 function _END(input)
 {
-	TRACE('_END::'+input);
+	//TRACE('_END::'+input);
 }
 
 /**
@@ -1136,6 +1141,7 @@ function add_filtro_simples_composto(type_load)
 	_ONLY('add_filtro_simples_composto');
 	
 	$('.sortable_filtro li').each(function(){
+		
 		 var class_is		=	$(this).attr('class');
 		 var sc_load		=	$(this).attr('sc_load');
 		 var aba_active		=	get_aba_active_object();
@@ -1143,6 +1149,12 @@ function add_filtro_simples_composto(type_load)
 		 var val_attr		=	null;
 		 
 		 //Aplicando o icone simples
+		 
+		 
+		 //Limpando todos os filtros
+	//	 aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null});
+		 aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null,remove:true});
+		 
 		 
 		 if(type_load==true)
 			 {

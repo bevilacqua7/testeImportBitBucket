@@ -328,7 +328,11 @@ function changeWithDrillFilter(layout,filter_to_add)
 				aba_active.wrsAbaData('setNewFilter',opt_insert);
 		}
 	
+	
+	$('body').WrsGlobal('setCM',{'drill_click_change':true});
 	set_value_box_relatorio(changeLayout);
+	$('body').WrsGlobal('setCM',{'drill_click_change':false});
+	
 	
 	//Removendo qualquer informação de placeholder que é a mensagem de que não há valores na tela 
 	cleanPlaceholder();
@@ -1039,15 +1043,21 @@ function wrsFilterClickFalse(filter_hide)
     			//var json				=	$.parseJSON(base64_decode($(this).attr('json')));	   
     			var json				=	$(this).data('wrs-data');	   
 
-
-    			if(json['FILTER_TO_CLEAN']==true)
-    			  	{
-    			        if(compare_filter_change(json['FILTER_TO_COMPARE']))
-    			        	{
-    			        			setJsonEncodeDecode($(this),['FILTER','FILTER_TO_CLEAN','FILTER_CLICK','FILTER_TO_CLEAN'],['',false,'',false],true,true);
-    			        			flag_back	=	 true;
-    			        	}	 	
-    			       }
+    			
+    			if(json==undefined) return flag_back;
+    			
+    			
+    				if(typeof json['FILTER_TO_CLEAN']!=undefined)
+    				{
+		    			if(json['FILTER_TO_CLEAN']==true)
+		    			  	{
+		    			        if(compare_filter_change(json['FILTER_TO_COMPARE']))
+		    			        	{
+		    			        			setJsonEncodeDecode($(this),['FILTER','FILTER_TO_CLEAN','FILTER_CLICK','FILTER_TO_CLEAN'],['',false,'',false],true,true);
+		    			        			flag_back	=	 true;
+		    			        	}	 	
+		    			       }
+    				} 
     			
     		});
     		_END('WrsFilter::__wrs_filter_check_change_filter');	
@@ -1133,8 +1143,6 @@ function wrsFilterClickFalse(filter_hide)
 					///Para não permitir apagar filtro simples
 					var filters					=	aba_active.wrsAbaData('getFilterSimples',{'tag_class':tag_class});
 					
-					 
-					
 						if(!not_use && filters==true) 
 						{
 							//Verificando se o Level Full exist no array passado
@@ -1148,7 +1156,9 @@ function wrsFilterClickFalse(filter_hide)
 								 */
 								var is_simples	=	typeEvent=='all' ? is_simples : ''; 
 								
-								if(is_simples!='simples' || typeEvent=='all')
+								console.log('is_simples',is_simples);
+								
+								if(is_simples!='simples' )
 								{	
 									/*
 									 * Se o filtro foi modificado então apaga os filhos
@@ -1215,6 +1225,28 @@ function wrsFilterClickFalse(filter_hide)
 			}
 	
 			
+			var unique_data			=	 function(input)
+			{
+				var _input		=	 input;
+				
+				if(empty(_input)) return _input;
+				
+				
+				var _explode		=	 explode(',',_input);
+				var _tmp			=	[];
+				
+				
+				for(var line in _explode)
+				{
+						var _data	=	_explode[line];
+						
+						if(in_array(_data,_tmp)==false)
+						{
+							_tmp.push(_data);
+						}
+				}
+				return implode(',',_tmp);
+			}
 			
 			var find_filter		 =	function(level_full,tag_class,is_red)
 			{
@@ -1251,7 +1283,11 @@ function wrsFilterClickFalse(filter_hide)
 						        		 _data_filter=vir=	'';
 						        	 }
 						        	 
+						        	 
 						        	 _data_filter = _data_filter+vir+implode_wrs(getNewFilter);
+						        	 
+						        	 
+						        	 _data_filter	=	 unique_data(_data_filter);
 					        	 
 					         }
 					         
@@ -1275,6 +1311,8 @@ function wrsFilterClickFalse(filter_hide)
 							
 							FilterOriginal[FilterOriginal.length]	=	{'class':'__'+replace_attr(level_full),data:_json_filter};							
 							addFilter[addFilter.length]				=	[replace_attr(level_full),'',_json_filter];
+							
+
 						}
 					
 			};
@@ -1394,9 +1432,9 @@ function wrsFilterClickFalse(filter_hide)
 			html	+=  '    <div class="input-group">'
 			html	+=  '      <input type="text" class="form-control wrs_element btn_event_filtro_search_input" value="'+searchText+'" index-data="'+index_data+'" placeholder="'+LNG('WHAT_SEARCH')+'">'
 			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_search" 	index-data="'+index_data+'"><i class="fa fa-search"></i></div>'
-			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_negado" 	index-data="'+index_data+'"><i class="fa fa-times-circle"></i></div>'
-			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_clean" 	index-data="'+index_data+'"><i class="fa fa-eraser"></i></div>'
-			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_remove" 	index-data="'+index_data+'"><i class="fa fa-trash-o"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_negado wrs-tooltip" title="'+LNG('TOOLTIP_BTN_NEGADO')+'" 	index-data="'+index_data+'"><i class="fa fa-times-circle"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_clean wrs-tooltip"  title="'+LNG('TOOLTIP_BTN_ERASER_FILTER_LOCAL')+'" 	index-data="'+index_data+'"><i class="fa fa-eraser"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_remove wrs-tooltip" title="'+LNG('TOOLTIP_BTN_CLEAN_FILTER_LOCAL')+'" 	index-data="'+index_data+'"><i class="fa fa-trash-o"></i></div>'
 			html	+=  '    </div>'
 			html	+=  '  </div>'
 			html	+=  '</div>';
@@ -1597,6 +1635,7 @@ function wrsFilterClickFalse(filter_hide)
          var  clickHeaderFiltro	 = function (_event,type)
          {
 			 _START('WrsFilter::clickHeaderFiltro');
+			 
         	 var event				=	 _event;
         	 var pageHome			=	false;
         	 
@@ -1615,7 +1654,6 @@ function wrsFilterClickFalse(filter_hide)
         	 var wrs_filter_body	=	'#wrs_filter_body_'+index_data;
         	 var body				=	$(wrs_filter_body);
         	 
-        	 
 	        	 json['id']			=	wrs_filter_body;
 	        	 json['index_data']	=	index_data;
 	        	 json['FILTER_UP']	=	getFiltersLevelUP(json['LEVEL_UP']);
@@ -1625,11 +1663,19 @@ function wrsFilterClickFalse(filter_hide)
 	        	 json['tag_class']	=	tag_class;
 	         
 	        //filtro ativo na aba
-	         json['FILTER']	=	aba_active.wrsAbaData('getFilter',{tag:tag_class});
+	         json['FILTER']	=	aba_active.wrsAbaData('getAllFilters',{tag:tag_class});
+
+	         
+	         
+
+	         
+	         //get_aba_active_object().wrsAbaData('getAllFilters',{tag:'cdc3071e426fb8e753087179af2c8610'})
 	        	 
 	         var getNewFilter	=	aba_active.wrsAbaData('getNewFilter',{tag:tag_class});
 	         var vir			=	',';
-	         if(!isEmpty(getNewFilter)){
+	         
+	         if(!isEmpty(getNewFilter))
+	         {
 	        	 if(isEmpty(json['FILTER']))	vir	=	'';
 	        	 json['FILTER'] = json['FILTER']+vir+getNewFilter;
 	         }
@@ -1672,8 +1718,6 @@ function wrsFilterClickFalse(filter_hide)
 
 			 menuFilter(index_data,wrs_filter_body,'before',json['LIKE']);
 			 
-
-			 
         	 runCall(json,'WRS_FILTER','WRS_FILTER','filter_select_info',funCallBackRun,'modal','json');
 			 
         	    
@@ -1687,7 +1731,7 @@ function wrsFilterClickFalse(filter_hide)
      */
 	 var funCallBackRun	=	 function(data)
 	 	{
-		 
+		 	
 			 _START('WrsFilter::funCallBackRun');
 		 	$(data.data.id).find('.wrs_filter_body_container').html(data.html);
 		 	
@@ -1932,10 +1976,8 @@ function wrsFilterClickFalse(filter_hide)
 		 	}//End evento
 		 	
 		 	//É similar com a requisição acima mas apenas forma seleciona o primeiro elsemento sem processar a Grid
-		 	if(data.data.FORCE_ONLY_FIRST_CHECKBOX)
+		 	if(data.data.FORCE_ONLY_FIRST_CHECKBOX==true)
 		 		{
-		 		
-		 		
 			 		$(data.data.id).find('.wrs_filter_body_container').find('.wrs_input_filter_single:first').each(function(){
 			 			$(this).prop('checked',true);
 			 			$(this).triggerHandler('click');
@@ -2650,7 +2692,7 @@ function wrsFilterClickFalse(filter_hide)
     		var filter_fixo=	_data.filter_fixed;	
     		
     		
-    		if(isEmpty(filter_fixo))  return filter;
+    		if(isEmpty(filter_fixo))  return false;
     		
     		var key_not_add		=	{};
     		
@@ -2731,6 +2773,7 @@ function wrsFilterClickFalse(filter_hide)
     	
     	var __add_filtro_fixo_query		=	 function(_inputs)
     	{
+    		
     		var inputs		=	_inputs;
     		var _data		=	 GetData();
     		var filter_fixo	=	_data.filter_fixed;	

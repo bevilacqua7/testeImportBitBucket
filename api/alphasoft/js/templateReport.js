@@ -30,6 +30,9 @@ function reoprt_convert_load(inputArray)
 			
 			_tmp.push(_filters);
 		}
+		
+
+		
 		_END('reoprt_convert_load');
 		return _tmp;
 	
@@ -440,7 +443,8 @@ function getLoadReport(no_request)
 		
 		
 		
-		 
+		/*
+		 * Não salva mais os filtros fixos 
 			var get_filter_fixed_save		=			$('body').filterFixed('add_filtro_fixo_query_save',{
 																LAYOUT_FILTERS	: 	_param['LAYOUT_FILTERS'],
 																filter_selected	: 	_param['filter_selected']
@@ -448,6 +452,8 @@ function getLoadReport(no_request)
 			
 			_param.LAYOUT_FILTERS		=	get_filter_fixed_save.LAYOUT_FILTERS;
 			_param.filter_selected		=	get_filter_fixed_save.filter_selected;
+			
+		*/
 		 
 		
 	}

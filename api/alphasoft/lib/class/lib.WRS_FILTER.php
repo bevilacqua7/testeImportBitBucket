@@ -123,7 +123,7 @@ class WRS_FILTER  extends WRS_BASE
 		 * Identifica se o tipo de campo é checkBox ou Radio simples
 		 */
 		$atributo_simples_composto			=	 fwrs_request('atributo');
-		$atributo_simples_composto			=	 $atributo_simples_composto=='simples' ? false : true;
+		
 
 		$PG_CURRENT			=	fwrs_request('PG_CURRENT');
 		$PG_CURRENT			=	empty($PG_CURRENT) ? 0 : $PG_CURRENT;
@@ -195,7 +195,7 @@ class WRS_FILTER  extends WRS_BASE
 		$input			=	'<input type="checkbox" tag-class="'.$tag_class.'"  class="btn_event_filtro_checkbox"  index-data="'.$index_data.'">';
 		$input_type		=	'checkbox';
 		
-		if(!$atributo_simples_composto) 
+		if($atributo_simples_composto=='simples') 
 		{
 			$input		=	NULL;
 			$input_type	=	'radio';

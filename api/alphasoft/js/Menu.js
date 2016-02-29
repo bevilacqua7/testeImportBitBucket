@@ -64,16 +64,6 @@ $(document).ready(function(){
 	
 	
 	
-	
-	
-	$('.menuADM_link').click(function(){
-		if(window.location.href.indexOf('//alphaweb')>-1 || window.location.href.indexOf('//192.168.1.4')>-1){ // exibe o menu somente em ambiente de desenvolvimento
-			$('.menu_administrativo_itens, #fullwidth, #fullwidth_ds, .bt_config_templates').fadeToggle();
-		}
-	});
-
-	
-	
 	//Evento do menu Administrativo 
 	$('.menu_cadastro').click(function(){
 		carrega_grid_list_admin(undefined,$(this));
