@@ -25,20 +25,14 @@
 	
 	$data		=	fwrs_request($data);
 	
-	//WRS_DEBUG_QUERY($_REQUEST,'dd.log');
-
-
 	
-	
-	//WRS_TRACE('start run.php  \n'.print_r($_REQUEST,true) , __LINE__, __FILE__);
 	
 	
 	$is_js		=	 fwrs_request('is_js');
 	$login		=	 fwrs_request('login');
 	$pwd		=	 fwrs_request('pwd');
 	
-	
-	
+		
 	
 	/*
 	$exeption_by_event		=	array('threadJobManager','change_cube','save_history','stopjob','load_grid_header','logout');

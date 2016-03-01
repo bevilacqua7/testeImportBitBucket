@@ -113,7 +113,9 @@ _START('carrega_grid_list_admin');
 	
 	
 	var retorno ='';
-	if(options!='' && options!=null){
+	
+	if(options!='' && options!=null)
+	{
 		retorno = $.parseJSON(options);
 		if(retorno!= null && typeof retorno == 'object' && typeof retorno.relatorios_apagados != 'undefined'){
 			$('#myModalGenericConfig').modal('hide');	
@@ -124,7 +126,9 @@ _START('carrega_grid_list_admin');
 	
 	var tabela 		= ($(this).attr('tabela')==undefined && typeof obj == 'object' && obj.attr('tabela')!=undefined)?obj.attr('tabela'):(($(this).attr('tabela')==undefined && typeof options == 'object' && options['tabela']!=undefined)?options['tabela']:$(this).attr('tabela'));
 	
+	
 	var _options	=	((options!=null && options!='' && typeof options == 'object')?options:{wrs_type_grid:'list'});
+	
 	
 	
 	
