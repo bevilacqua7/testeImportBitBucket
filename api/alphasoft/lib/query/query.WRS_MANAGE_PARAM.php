@@ -86,7 +86,7 @@ class WRS_MANAGE_PARAM
 					'tabela_bd'				=>	'REL_WRS_CUBE_USER',
 					'metodo_classe_param'	=>	'REL_WRS_CUBE_USER',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE_USER',
-					'icon'					=>	'fa fa-sitemap',
+					'icon'					=>	'fa fa-object-group',
 					'nome_arquivo_import'	=>	'ASSOCIATION.CSV',
 					'colunas_import_export'	=>	'DATABASE_ID, CUBE_ID, [USER_CODE]',
 					'colunas_descricao'		=>	'DATABASE_ID (varchar[100]), CUBE_ID (varchar[100]), USER_CODE (varchar[100])',
@@ -96,6 +96,7 @@ class WRS_MANAGE_PARAM
 					'tabela_bd'				=>	'FAT_WRS_LOG',
 					'metodo_classe_param'	=>	'ATT_WRS_LOG',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_LOG',
+					'icon'					=>	'fa fa-file-text-o',
 					'nome_arquivo_import'	=>	'LOG.CSV',
 					'colunas_import_export'	=>	'DATE_ID, MODULE, PROCESS, OPERATION, MESSAGE, USER_MASTER, USER_CODE, USER_DESC, CUSTOMER_DESC',
 					'exibe_menu_ADM'		=>	true
@@ -108,12 +109,6 @@ class WRS_MANAGE_PARAM
 					'nome_arquivo_import'	=>	'PERFIL.CSV',
 					'colunas_import_export'	=>	'PERFIL_ID, PERFIL_DESC, PERFIL_LEVEL, PERFIL_FLAG, PERFIL_STATUS'
 			),
-			'REL_WRS_CUBE_USER'				=> 	array(
-					'tabela_bd'				=>	'REL_WRS_CUBE_USER',
-					'metodo_classe_param'	=>	'REL_WRS_CUBE_USER',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE_USER',
-					'icon'					=>	'fa fa-object-group'
-			),
 			'ATT_WRS_REPORT'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_REPORT',
 					'metodo_classe_param'	=>	'ATT_WRS_REPORT',
@@ -125,12 +120,6 @@ class WRS_MANAGE_PARAM
 					'metodo_classe_param'	=>	'ATT_WRS_DOWNLOAD',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_DOWNLOAD',
 					'icon'					=>	'fa fa-download'
-			),
-			'ATT_WRS_LOG'					=> 	array(
-					'tabela_bd'				=>	'ATT_WRS_LOG',
-					'metodo_classe_param'	=>	'ATT_WRS_LOG',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_LOG',
-					'icon'					=>	'fa fa-file-text-o'
 			),
 			'GET_SSAS_REPORT'				=> 	array(
 					'tabela_bd'				=>	'GET_SSAS_REPORT',
@@ -148,7 +137,7 @@ class WRS_MANAGE_PARAM
 			)
 	);
 	
-	public static function GET_CONFIG_TABLE($tabela=NULL)
+	public static function GET_CONFIG_TABLE($tabela=NULL,$perfil_type=NULL)
 	{
 		$arr_todos 		=	array();
 		$html_menu		=	NULL;	
@@ -157,8 +146,9 @@ class WRS_MANAGE_PARAM
 		foreach(self::$array_configuracao_tabelas as $tabela_name=>$config)
 		{
 			$info_tabelas = array_merge(self::$array_configuracao_padrao,self::$array_configuracao_tabelas[$tabela_name]);
+			$arr_todos[$tabela_name] = $info_tabelas;
 			
-			if($info_tabelas['acesso_via_menu']==true)
+			if($info_tabelas['acesso_via_menu']==true && ($perfil_type=='MST' || ($perfil_type=='ADM' && $info_tabelas['exibe_menu_ADM'])))
 			{
 				
 				$label  = LNG($info_tabelas['nome_menu_LNG']);
@@ -179,6 +169,7 @@ HTML;
 		
 		if(!is_string($tabela) || !array_key_exists($tabela, $arr_todos))
 		{
+		
 			// se for passado o nome de uma tabela diferente do padrao só porque o nome da tabela é um teste ou porque mudou,
 			// procura nos nomes das tabelas configurados para retornar o objeto correto e prosseguir com o fucnionamento do sistema
 			$dados_contem_tabela_parametro=array();
