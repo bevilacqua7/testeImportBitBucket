@@ -14,7 +14,7 @@
 							if($perfil_type=='MST' || $perfil_type=='ADM')
 							{
 								includeQUERY('WRS_MANAGE_PARAM');
-								echo WRS_MANAGE_PARAM::GET_CONFIG_TABLE('menu');
+								echo WRS_MANAGE_PARAM::GET_CONFIG_TABLE('menu',$perfil_type);
 							}
 							
 							?>
