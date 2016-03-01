@@ -7,7 +7,7 @@ class HeaderTag
 	 
 	 
 	 
-	 public function __construct($type)
+	 public function __construct()
 	 {
 	 	
 	 }
@@ -26,6 +26,8 @@ class HeaderTag
 	 {
 	 	$tag		=	array();
 	 	
+		
+		$tag[]		=	array("host"=>"api/font-awesome-4.3.0/css/font-awesome.min.css",						"access"=>array("main","panel"));
 		
 	 	$tag[]		=	array("host"=>"api/font-awesome-4.3.0/css/font-awesome.min.css",						"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/bootstrap-3.3.0/dist/css/bootstrap.css",								"access"=>array("panel"));
@@ -66,10 +68,23 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"css/wrs_main.css",														"access"=>array("main") );
 	 	
 
-	 	$tag[]		=	array("host"=>"api/assets/css/allWrs.css",											"access"=>array("main"));
+//	 	$tag[]		=	array("host"=>"api/assets/css/allWrs.css",											"access"=>array("main"));
 	 	$tag[]		=	array("host"=>"api/fonte/stylesheet.css",											"access"=>array("main"));
-	 	$tag[]		=	array("host"=>"api/assets/utilcarousel-files/utilcarousel/util.carousel.skins.css",	"access"=>array("main"));
+	 //	$tag[]		=	array("host"=>"api/assets/utilcarousel-files/utilcarousel/util.carousel.skins.css",	"access"=>array("main"));
 	 	
+	 	
+	 	
+	 	/*MENU OPTINOS */
+	 	$tag[]		=	array("host"=>"api/MultiLevelPushMenu/css/normalize.css",	"access"=>array("main"));
+	 	$tag[]		=	array("host"=>"api/MultiLevelPushMenu/css/demo.css",		"access"=>array("main"));
+	 	$tag[]		=	array("host"=>"api/MultiLevelPushMenu/css/icons.css",		"access"=>array("main"));
+	 	$tag[]		=	array("host"=>"api/MultiLevelPushMenu/css/component.css",	"access"=>array("main"));
+	 	
+	 	/* MENU CUBO */
+	 	$tag[]		=	array("host"=>"api/CaptionHoverEffects/css/default.css",	"access"=>array("main"));
+	 	$tag[]		=	array("host"=>"api/CaptionHoverEffects/css/component.css",	"access"=>array("main"));
+	 	
+
 	 	
 	 	if(wrs_get_user_browser()=='ie')
 	 	{
@@ -136,6 +151,9 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"api/gomap/jquery.gomap-1.3.3.js",			"access"=>array("panel"));
 
 	 	
+	 
+	 	$tag[]		=	array("host"=>JS_PATH_API."tooltipQtip.js",						"access"=>array("panel",'main'));
+	 	
 	 	//Developer AlphaSoft
 	 	$tag[]		=	array("host"=>JS_PATH_API."KendoUi.js",						"access"=>array("panel"));
 	 	$tag[]		=	array("host"=>JS_PATH_API."WindowGrid.js",					"access"=>array("main","panel"));	//Main
@@ -155,16 +173,25 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>JS_PATH_API."MultipleCube.js",				"access"=>array("panel"));
 	 	
 	 	
+	 	
 	 	$tag[]		=	array("host"=>"api/jquery.qtip.custom/jquery.qtip.min.js",	"access"=>array("main","panel"));//Main
 	 	$tag[]		=	array("host"=>"api/fakeLoader/fakeLoader.js",				"access"=>array("main","panel"));//Main
 	 	
 
-	 	$tag[]		=	array("host"=>"api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2",				"access"=>array("main"),'version'=>'no-use');//Main
+//	 	$tag[]		=	array("host"=>"api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2",				"access"=>array("main"),'version'=>'no-use');//Main
 	 	
-	 	$tag[]		=	array("host"=>"js/alphasoft/wrs_panel.js",				"access"=>array("panel"));
+	 	$tag[]		=	array("host"=>JS_PATH_API."Painel.js",				"access"=>array("panel"));
 	 	
 	 	
+	 	/* API modernizr */
+	 	$tag[]		=	array("host"=>"api/modernizr/modernizr-custom.js",	"access"=>array("main"));//Main
 	 	
+	 	$tag[]		=	array("host"=>"api/MultiLevelPushMenu/js/classie.js",	"access"=>array("main"));//Main
+	 	$tag[]		=	array("host"=>"api/MultiLevelPushMenu/js/mlpushmenu.js",	"access"=>array("main"));//Main
+	 	
+	 	$tag[]		=	array("host"=>"api/CaptionHoverEffects/js/toucheffects.js",	"access"=>array("main"));//Main
+	 	
+	 	$tag[]		=	array("host"=>JS_PATH_API."custonMain.js",				"access"=>array("main"));
 	 	
 	 	
 	 	return $this->script($tag,$type);
@@ -227,9 +254,10 @@ class HeaderTag
 	 public function link($tag,$type)
 	 {
 	 	 
-	 	$html		=	"";
+	 	 
 	 
-
+		$html='<link rel="shortcut icon" href="./imagens/favico/favicon.ico" type="image/x-icon">'.PHP_EOL;
+		
 	 	foreach($tag as $tag_html)
 	 	{
 	 		$host		=	$tag_html['host'];

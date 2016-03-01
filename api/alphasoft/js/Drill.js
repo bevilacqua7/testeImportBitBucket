@@ -259,7 +259,7 @@ function addTargetDisableContext(kendoUi,report_id)
     	$event					=	 this;
     	var TAG_REPORT_ID		=	'#'+$event.attr('id');
     
-    	
+	
     	//var kendoUi		=	$('#'+$event.attr('id')).data('kendoGrid');
 		
     //	wrsKendoUiFindColumnsDeep(kendoUi,1);
@@ -290,6 +290,8 @@ function addTargetDisableContext(kendoUi,report_id)
 			
 			_START('WrsDrill::drill_click_option');
 			var e				=	_e;
+			
+			
 			
 			//Recuperando os eventos do click do mouse
 			//Correção devido a melhorias na estrutura do drilll
@@ -335,10 +337,10 @@ function addTargetDisableContext(kendoUi,report_id)
     			}
     		
 
-    		
+
     		$('.'+e.kendoId).wrsAbaData('setKendoUi',{STOP_RUN:false, 'TYPE_RUN':TYPE_RUN[e.type]});
     		
-    		console.log('type',e.type);
+
     		
     		switch(e.type)
     		{
@@ -478,7 +480,7 @@ function addTargetDisableContext(kendoUi,report_id)
     															}
     															changeWithDrillColumnRows(column,'LAYOUT_COLUMNS');
     														}
-    													
+    													$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
     													return true;
     													
     													
@@ -540,8 +542,6 @@ function addTargetDisableContext(kendoUi,report_id)
 
 											var column_field	=	$(IDName).find('.k-grid-header-wrap tr:last-child th:eq(2)').attr('data-field');
 											
-											//console.log('_filter',_filter);
-											
 											
 											_layout['LAYOUT_COLUMNS']	=	['empty'];
 											_layout['LAYOUT_MEASURES']	=	[kendoUi.headerIndex.field[column_field].LEVEL_FULL];
@@ -554,7 +554,11 @@ function addTargetDisableContext(kendoUi,report_id)
     			};break;
     		}
 			
+    		$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
+    		
 			delete kendoUi,_data,keyName,layout,_layout;
+			
+			
 			_END('WrsDrill::drill_click_option');
     	}// EDN drill_click_option(e)
     	
@@ -684,6 +688,7 @@ function addTargetDisableContext(kendoUi,report_id)
     		
     	addTargetDisableContext(kendoUi.columns,TAG_REPORT_ID);
     	
+	
     	if(length==1)
     	{
     		$(TAG_REPORT_ID+" .k-grid-header .k-grid-header-wrap").attr('type','coluna_header').addClass('type_wrs_container');

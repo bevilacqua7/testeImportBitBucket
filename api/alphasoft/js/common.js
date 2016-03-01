@@ -15,7 +15,13 @@ var IS_EXCEPTION	=	false;
 
 var words_restrict	=	
 {
-		other: '*Others*'
+		other			: 	'*Others*',
+		filter_negado	:	"{EXCEPT({LEVEL_FULL}.Members,{{LEVEL_FULL}.[(All)],{DATA}})}", //{LEVEL_FULL} {DATA}
+		virgula_db		:	"(_,_)",
+		pipe_db			:	"(_|_)"	,
+		negacao			:	"~",
+		simples			:	"*"
+
 };
 
 
@@ -63,8 +69,11 @@ function clone_jj(report)
 	$('.WRS_ABA .'+report).data('wrs_aba_data',_jj).attr('id-aba',_report).addClass(_report);
 }
 
+
+
 // substitui o LNG trocando os %s por s se existirem
-function LNG_s(str,_char,_recursiva){
+function LNG_s(str,_char,_recursiva)
+{
 	var char 		= _char==undefined?'s':_char;
 	var recursiva 	= _recursiva==undefined?false:true;
 	var string 		= recursiva?str:LNG(str);
@@ -74,6 +83,8 @@ function LNG_s(str,_char,_recursiva){
 		return string;
 	}
 }
+
+
 
 /*
  * Tipos de Execuções que o sistema opera para gerar uma novo Report
@@ -403,7 +414,7 @@ function array_length(array)
 {
 	var cc	=	0;
 	
-	for(array_0 in array)
+	for(var array_0 in array)
 		{
 			cc++;
 		}
@@ -824,7 +835,7 @@ function _ONLY(input)
 
 function _END(input)
 {
-	TRACE('_END::'+input);
+	//TRACE('_END::'+input);
 }
 
 /**
@@ -1102,6 +1113,7 @@ function wrs_contex_menu_options_panel_metrica()
 
 function add_filtro_simples_composto_btn(type)
 {
+	_ONLY('add_filtro_simples_composto');
 	var btn_simple		=	'<span  class="icon_atributo glyphicon glyphicon-play-circle"></span>';
 	var btn_composto		=	'<span  class="icon_atributo"></span>';
 	
@@ -1111,11 +1123,51 @@ function add_filtro_simples_composto_btn(type)
 	return btn_composto;
 }
 
-function add_filtro_simples_composto()
+
+
+
+
+function check_filter_simple_composto()
 {
+	_ONLY('check_filter_simple_composto');
+}
+
+
+
+
+
+function add_filtro_simples_composto(type_load)
+{
+	_ONLY('add_filtro_simples_composto');
+	
 	$('.sortable_filtro li').each(function(){
-		 var class_is		=	 $(this).attr('class');
+		
+		 var class_is		=	$(this).attr('class');
 		 var sc_load		=	$(this).attr('sc_load');
+		 var aba_active		=	get_aba_active_object();
+		 var tag_class		=	$(this).attr('tag-class');
+		 var val_attr		=	null;
+		 
+		 //Aplicando o icone simples
+		 
+
+		 //Limpando todos os filtros
+		 //aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null,remove:true});
+		 
+		 if(type_load==true)
+			 {
+			 	var simples_Kendo	=		aba_active.wrsAbaData('getFilterNegado',tag_class);
+			 		
+			 	//console.log('simples_Kendo.simples',simples_Kendo.simples);
+			 	if(typeof simples_Kendo.simples!="undefined")
+			 		{
+			 			if(simples_Kendo.simples==true) 
+			 			{
+			 				val_attr	=	sc_load='simples';
+			 			}
+			 		}
+			}
+		 
 		 
 		 if(!empty(sc_load))
 			 {
@@ -1123,29 +1175,54 @@ function add_filtro_simples_composto()
 			 	$(this).attr('sc_load','');
 			 }
 		 
+		 
+
 		 if(class_is!='placeholder')
 		 {
-			var atributo	=	$(this).attr('atributo');
 			
+			
+			 var atributo	=	$(this).attr('atributo');
 			$(this).find('.icon_atributo').remove();
 			
+			if(val_attr!=null)atributo=val_attr;
+			
+
+			var class_tag			=	'.wrs_panel_options .'+tag_class;
+			var json				=	$(class_tag).data('wrs-data');
+				
+			var simple_data			=	{val: false, leve_full:json.LEVEL_FULL,  'tag_class':tag_class};
+
 			if(atributo=='simples')
 			{
+				aba_active.wrsAbaData('delFilterNegado',tag_class);
+				
+				simple_data.val	=	true;
+				
 				$(this).prepend(add_filtro_simples_composto_btn(true));
+				
 			}
 			else
 			{
 				$(this).prepend(add_filtro_simples_composto_btn(false));
+				
+				
 			}
+			
+			aba_active.wrsAbaData('setFilterSimples',simple_data);
 		 }
 	});
 }
+
+
+
+
 
 
 function sortable_attr_simples_composto()
 {
 	var itemsElement	=	{};
 	
+
 	itemsElement[0]	=	{name:LNG('ATTRIBUTOS_SIMPLES')	,	icon : 'add', callback:function(){ $(this).attr('atributo','simples'); add_filtro_simples_composto(); }};
 	itemsElement[1]	=	{name:LNG('ATTRIBUTOS_COMPOSTO'),	icon : 'add', callback:function(){ $(this).attr('atributo','composto');add_filtro_simples_composto(); }};
 	itemsElement[2]	=	'---------';
@@ -1153,7 +1230,7 @@ function sortable_attr_simples_composto()
 	
 	buttonClickRightRelatorios('.sortable_filtro li',itemsElement);
 	
-	add_filtro_simples_composto();
+	add_filtro_simples_composto(true);
 	
 	
 	

@@ -30,6 +30,9 @@ function reoprt_convert_load(inputArray)
 			
 			_tmp.push(_filters);
 		}
+		
+
+		
 		_END('reoprt_convert_load');
 		return _tmp;
 	
@@ -369,13 +372,14 @@ function getLoadReport(no_request)
 {
 	_START('getLoadReport');
 	
-	
 	var active_aba	=	get_aba_active_object();
 	
 		active_aba.wrsAbas('save_info_aba_current',active_aba,false);
 		
 		
 
+
+		
 	var _param						=	{};
 	var sortable_metrica			=	rows_by_metrica_attr_base64('.sortable_metrica','metrica');
 	var sortable_linha				=	rows_by_metrica_attr_base64('.sortable_linha','attr');
@@ -384,9 +388,36 @@ function getLoadReport(no_request)
 	var wrs_grid_options_default	=	get_aba_active_kendoUi();
 	
 	var _filter_hide				=	activeToGetAllFilters();
+	
+	
+	
 	var filter_selected				=	$.WrsFilter('getAllFiltersToRun');
 	
 	wrs_grid_options_default		=	wrs_clean_data(wrs_grid_options_default);
+	
+	//Salvando informação com Negação
+	var _explode		=	 explode(',',sortable_filtro.request);
+	var _data_filter	=	[];
+	
+		for(var lineExplode in _explode)
+			{
+				var tag_negation	=	'';
+				
+				var status		=	active_aba.wrsAbaData('getFilterNegado',md5(_explode[lineExplode])); 
+				
+				if(status.negado==true)	tag_negation = words_restrict.negacao;
+				
+				if(status.simples==true)	tag_negation = words_restrict.simples;
+				
+				_data_filter.push(tag_negation+_explode[lineExplode]);
+			}
+		
+		
+	sortable_filtro.request	=	implode(',',_data_filter);
+	
+	//END NEgação
+	
+	
 	
 	if(no_request)
 	{
@@ -409,11 +440,29 @@ function getLoadReport(no_request)
 						'KendoUi'				:	wrs_grid_options_default,
 						'filter_selected'		:	filter_selected
 		}
+		
+		
+		
+		/*
+		 * Não salva mais os filtros fixos 
+			var get_filter_fixed_save		=			$('body').filterFixed('add_filtro_fixo_query_save',{
+																LAYOUT_FILTERS	: 	_param['LAYOUT_FILTERS'],
+																filter_selected	: 	_param['filter_selected']
+															});
+			
+			_param.LAYOUT_FILTERS		=	get_filter_fixed_save.LAYOUT_FILTERS;
+			_param.filter_selected		=	get_filter_fixed_save.filter_selected;
+			
+		*/
+		 
+		
 	}
 	
-
+	
+	
 	//Desabilita a janela
 	activeToGetAllFiltersRecover(_filter_hide);
+
 	_END('getLoadReport');
 	return _param;
 	

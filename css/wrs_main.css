@@ -21,6 +21,48 @@ body {
     white-space: nowrap;
     width: 100%;
 }
+.width_100{
+	 color: #fff;
+}
+
+.width_100 .btn-link
+{
+	color: #fff !important;	
+}
+
+.tooltip-wrs-container{
+
+	background: url("../imagens/tooltip.png") no-repeat top left;
+	padding-left:18px;
+	padding-top:1px;
+	padding-bottom:3px;
+	font-size:12px;
+	line-height:16px;
+	padding-right:15px;
+	color:#333;
+}
+
+
+.width_100 .btn-link:hover
+{
+	text-decoration: none;
+	font-weight: bold;
+	background: rgba(0,0,0,0.2);
+}
+
+.aling-right{
+	text-align: right;
+}
+
+.aling-center{
+	text-align: center;
+}
+
+.no_border_background {
+	border: none !important;
+	background:none !important ;
+	margin: 0px;
+}
 
 .wrs_options_select h2 {
 	margin-bottom: 0px;
@@ -1783,9 +1825,14 @@ border-radius: 3px;
 .btn-layout-aply-custom{
 	color: #FFF !Important;
 }
+
+
+
 .modal_report select{
 	padding: 5px !Important;
 }
+
+
 /* ESTILOS DE CORES*/
 
 .box_wrs_panel:hover{ border: 1px solid #58BCE7; background: #2191C0 url("theme-azul/images/ui-bg_diagonals-small_50_2191C0_40x40.png") 50% 50% repeat ; font-weight: bold; color: #ffffff;  color: #ffffff; text-decoration: none; }

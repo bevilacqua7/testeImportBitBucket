@@ -1,21 +1,28 @@
+ 
+
 $(document).ready(function(){
 	
 	_START('Menu.js');
 	$('.wrs_open_save').unbind('click').click(function() {
+		
+		_ONLY('click Menu.js .wrs_open_save');
+		
 		
 		var btn_salvar_extra_action_validator = function(data){ // validacoes extra antes da acao principal do botao padrao
 			
 			
 		_START('btn_salvar_extra_action_validator');
 			var retorno_padrao = true;
-			if(typeof data=='object' && data.event=='save'){ 
+			
+			if(typeof data=='object' && data.event=='save'){
+				
 				if(data.report_name.trim()==''){
 					retorno_padrao = false;
 					WRS_ALERT(LNG('NAME_REPORT_EMPTY'),'warning'); 
 				}
 				
 				
-			  	var aba_ativa	=	get_aba_active_kendoUi();
+				var aba_ativa	=	get_aba_active_kendoUi();
 
 			  	$('#'+aba_ativa.REPORT_ID+'Main').find('.report_title').html(data.report_name);
 			  	
@@ -23,10 +30,8 @@ $(document).ready(function(){
 				$('.wrs_panel_center_body_container').find('.report_title').html(data.report_name).trigger('keyup');
 				
 				
-
-			  	
-			  	
 			}
+			
 			
 			
 			

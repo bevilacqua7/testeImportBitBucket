@@ -8,25 +8,26 @@
 
 class WRS_MANAGE_PARAM
 {
-	private $array_retorno_padrao = array(	'title'					=>	'',
-											'button'				=>	'',
-											'field'					=>	'',
-											'table'					=>	'',
-											'order'					=>	'',
-											'icon'					=>	'',	
-											'primary'				=>	'',
-											'button_force_label'	=>	false, 		// forca o label dos icones na visualizacao de ICON de acordo com o array abaixo
-											'button_icon'			=>	'',			// altera o icone padrao de cada botao na WindowGrid
-											'exception'				=>	'', 		// quando houver exceptions (uma view ao inves de tabela) utilizar um array com o nome da classe em questão para esta excecao 
-											'checkbox'				=>	false,		// se existe checkbox por linha na visualizacao de grid
-											'label_icon_custom'		=>	false,		// se existir labels personalizados por visao de icone
-											'use_auto_width'		=>	true, 		// usar o calculo de largura para a coluna de acordo com o nome do titulo da mesma
-											'callback_btn_events'	=>	'', 		// se as acoes padrao dos botoes será alterada, adicionar o nome da acao de callback
-											'actionSingle'			=>	'', 		// se a acao do clique simples sera alterada, adicionar o nome da acao de callback
-											'actionDouble'			=>	'',			// se a acao do clique duplo sera alterada, adicionar o nome da acao de callback
-											'aplicaClassLinhas'		=>	true,		// [false,true,ClassEspecifica] se o parametro classDataLine sera aplicado nas linhas da grid do KendoUi
-											'aplicaClassHeaders'	=>	false		// [false,true,ClassEspecifica] se o parametro classDataHeader sera aplicado nas headers da grid do KendoUi
-			);
+	
+	private $array_retorno_padrao = array(	 'title'				=>	'',
+										 'button'				=>	'',
+										 'field'				=>	'',
+										 'table'				=>	'',
+										 'order'				=>	'',
+										 'icon'					=>	'',	
+										 'primary'				=>	'',
+										 'button_force_label'	=>	false, 		// forca o label dos icones na visualizacao de ICON de acordo com o array abaixo
+						 				 'button_icon'			=>	'',			// altera o icone padrao de cada botao na WindowGrid
+										 'exception'			=>	'', 		// quando houver exceptions (uma view ao inves de tabela) utilizar um array com o nome da classe em questão para esta excecao 
+										 'checkbox'				=>	false,		// se existe checkbox por linha na visualizacao de grid
+										 'label_icon_custom'	=>	false,		// se existir labels personalizados por visao de icone
+ 										 'use_auto_width'		=>	true, 		// usar o calculo de largura para a coluna de acordo com o nome do titulo da mesma
+						 				 'callback_btn_events'	=>	'', 		// se as acoes padrao dos botoes será alterada, adicionar o nome da acao de callback
+										 'actionSingle'			=>	'', 		// se a acao do clique simples sera alterada, adicionar o nome da acao de callback
+										 'actionDouble'			=>	'',			// se a acao do clique duplo sera alterada, adicionar o nome da acao de callback
+										 'aplicaClassLinhas'	=>	true,		// [false,true,ClassEspecifica] se o parametro classDataLine sera aplicado nas linhas da grid do KendoUi
+						 				 'aplicaClassHeaders'	=>	false		// [false,true,ClassEspecifica] se o parametro classDataHeader sera aplicado nas headers da grid do KendoUi
+		 );
 
 	private static $array_configuracao_padrao = 	array(
 			'tabela_bd'				=>	'',
@@ -41,6 +42,7 @@ class WRS_MANAGE_PARAM
 					'metodo_classe_param'	=>	'ATT_WRS_CUSTOMER',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_CUSTOMER',
 					'nome_arquivo_import'	=>	'CUSTOMER.CSV',
+					'icon'					=>	'fa fa-users',
 					'colunas_import_export'	=>	'CUSTOMER_CODE, CUSTOMER_DESC, CUSTOMER_EXPIRY, CUSTOMER_FLAG, CUSTOMER_STATUS, CUSTOMER_GROUP',
 					'colunas_descricao'		=>	'CUSTOMER_CODE(varchar[50]), CUSTOMER_DESC(varchar[100]), CUSTOMER_EXPIRY(Int), CUSTOMER_FLAG(text), CUSTOMER_STATUS(Int), CUSTOMER_GROUP(varchar[100])'
 			),
@@ -49,8 +51,10 @@ class WRS_MANAGE_PARAM
 					'metodo_classe_param'	=>	'ATT_WRS_USER',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_USER',
 					'nome_arquivo_import'	=>	'USER.CSV',
+					'icon'					=>	'fa fa-users',
 					'colunas_import_export'	=>	'USER_CODE, USER_DESC, USER_EMAIL, USER_TYPE, USER_FILTER, USER_FILTER_VALUE, USER_INTERNAL, USER_STATUS, USER_FORMAT, LANGUAGE_ID, PERFIL_ID',
-					'colunas_descricao'		=>	'USER_CODE(varchar[50]), USER_DESC(varchar[100]), USER_EMAIL(varchar[200]), USER_TYPE(varchar[100]), USER_FILTER(text), USER_FILTER_VALUE(text), USER_INTERNAL(varchar[50]), USER_STATUS(smallint), USER_FORMAT(varchar[15]), LANGUAGE_ID(varchar[3]), PERFIL_ID(varchar[50])'
+					'colunas_descricao'		=>	'USER_CODE(varchar[50]), USER_DESC(varchar[100]), USER_EMAIL(varchar[200]), USER_TYPE(varchar[100]), USER_FILTER(text), USER_FILTER_VALUE(text), USER_INTERNAL(varchar[50]), USER_STATUS(smallint), USER_FORMAT(varchar[15]), LANGUAGE_ID(varchar[3]), PERFIL_ID(varchar[50])',
+					'exibe_menu_ADM'		=>	true
 			),
 			'ATT_WRS_SERVER'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_SERVER',
@@ -64,6 +68,7 @@ class WRS_MANAGE_PARAM
 					'tabela_bd'				=>	'ATT_WRS_DATABASE',
 					'metodo_classe_param'	=>	'ATT_WRS_DATABASE',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_DATABASE',
+					'icon'					=>	'fa fa-database',
 					'nome_arquivo_import'	=>	'DATABASE.CSV',
 					'colunas_import_export'	=>	'DATABASE_ID, DATABASE_DESC, DATABASE_COMMENT, DATABASE_LINK, DATABASE_IMAGE, DATABASE_ORDER, DATABASE_POOL, DATABASE_STATUS, DATABASE_BALANCE, SERVER_ID',
 					'colunas_descricao'		=>	'DATABASE_ID(varchar[100]), DATABASE_DESC(varchar[100]), DATABASE_COMMENT(varchar[1000]), DATABASE_LINK(varchar[1000]), DATABASE_IMAGE(varchar[100]), DATABASE_ORDER(smallint), DATABASE_POOL(smallint), DATABASE_STATUS(smallint), DATABASE_BALANCE(bigint), SERVER_ID(varchar[100])'
@@ -72,6 +77,7 @@ class WRS_MANAGE_PARAM
 					'tabela_bd'				=>	'ATT_WRS_CUBE',
 					'metodo_classe_param'	=>	'ATT_WRS_CUBE',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE',
+					'icon'					=>	'fa fa-cube',
 					'nome_arquivo_import'	=>	'CUBE.CSV',
 					'colunas_import_export'	=>	'CUBE_ID, CUBE_DESC, CUBE_FILTER, CUBE_FILTER_VALUE, CUBE_STATUS, DATABASE_ID, SERVER_ID',
 					'colunas_descricao'		=>	'CUBE_ID(varchar[100]), CUBE_DESC(varchar[100]), CUBE_FILTER(text), CUBE_FILTER_VALUE(text), CUBE_STATUS(smallint), DATABASE_ID(varchar[100]), SERVER_ID(varchar[100])'
@@ -80,80 +86,128 @@ class WRS_MANAGE_PARAM
 					'tabela_bd'				=>	'REL_WRS_CUBE_USER',
 					'metodo_classe_param'	=>	'REL_WRS_CUBE_USER',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE_USER',
+					'icon'					=>	'fa fa-sitemap',
 					'nome_arquivo_import'	=>	'ASSOCIATION.CSV',
 					'colunas_import_export'	=>	'DATABASE_ID, CUBE_ID, [USER_CODE]',
-					'colunas_descricao'		=>	'DATABASE_ID (varchar[100]), CUBE_ID (varchar[100]), USER_CODE (varchar[100])'
+					'colunas_descricao'		=>	'DATABASE_ID (varchar[100]), CUBE_ID (varchar[100]), USER_CODE (varchar[100])',
+					'exibe_menu_ADM'		=>	true
 			),
 			'ATT_WRS_LOG'					=> 	array(
 					'tabela_bd'				=>	'FAT_WRS_LOG',
 					'metodo_classe_param'	=>	'ATT_WRS_LOG',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_LOG',
 					'nome_arquivo_import'	=>	'LOG.CSV',
-					'colunas_import_export'	=>	'DATE_ID, MODULE, PROCESS, OPERATION, MESSAGE, USER_MASTER, USER_CODE, USER_DESC, CUSTOMER_DESC'
+					'colunas_import_export'	=>	'DATE_ID, MODULE, PROCESS, OPERATION, MESSAGE, USER_MASTER, USER_CODE, USER_DESC, CUSTOMER_DESC',
+					'exibe_menu_ADM'		=>	true
 			),
 			'ATT_WRS_PERFIL'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_PERFIL',
 					'metodo_classe_param'	=>	'ATT_WRS_PERFIL',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_PERFIL',
+					'icon'					=>	'fa fa-male',
 					'nome_arquivo_import'	=>	'PERFIL.CSV',
 					'colunas_import_export'	=>	'PERFIL_ID, PERFIL_DESC, PERFIL_LEVEL, PERFIL_FLAG, PERFIL_STATUS'
 			),
-			'ATT_WRS_HIERARCHY'				=> 	array(
-					'tabela_bd'				=>	'ATT_WRS_HIERARCHY',
-					'metodo_classe_param'	=>	'ATT_WRS_HIERARCHY',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_HIERARCHY'
+			'REL_WRS_CUBE_USER'				=> 	array(
+					'tabela_bd'				=>	'REL_WRS_CUBE_USER',
+					'metodo_classe_param'	=>	'REL_WRS_CUBE_USER',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE_USER',
+					'icon'					=>	'fa fa-object-group'
 			),
 			'ATT_WRS_REPORT'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_REPORT',
 					'metodo_classe_param'	=>	'ATT_WRS_REPORT',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_REPORT'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_REPORT',
+					'icon'					=>	'fa fa-file-excel-o'
 			),
 			'ATT_WRS_DOWNLOAD'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_DOWNLOAD',
 					'metodo_classe_param'	=>	'ATT_WRS_DOWNLOAD',
-					'nome_menu_LNG'			=>	'MENU_ADMIN_DOWNLOAD'
+					'nome_menu_LNG'			=>	'MENU_ADMIN_DOWNLOAD',
+					'icon'					=>	'fa fa-download'
+			),
+			'ATT_WRS_LOG'					=> 	array(
+					'tabela_bd'				=>	'ATT_WRS_LOG',
+					'metodo_classe_param'	=>	'ATT_WRS_LOG',
+					'nome_menu_LNG'			=>	'MENU_ADMIN_LOG',
+					'icon'					=>	'fa fa-file-text-o'
 			),
 			'GET_SSAS_REPORT'				=> 	array(
 					'tabela_bd'				=>	'GET_SSAS_REPORT',
 					'metodo_classe_param'	=>	'GET_SSAS_REPORT',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_SSAS_REPORT',
-					'acesso_via_menu'		=>	false
+					'acesso_via_menu'		=>	false,
+					'icon'					=>	'fa fa-area-chart'
 			),
 			'GET_SSAS_LAYOUTS'				=> 	array(
 					'tabela_bd'				=>	'GET_SSAS_LAYOUTS',
 					'metodo_classe_param'	=>	'GET_SSAS_LAYOUTS',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_SSAS_LAYOUTS',
-					'acesso_via_menu'		=>	false
+					'acesso_via_menu'		=>	false,
+					'icon'					=>	'fa fa-desktop'
 			)
 	);
 	
-	public static function GET_CONFIG_TABLE($tabela=NULL){
-		$arr_todos = array();
-		foreach(self::$array_configuracao_tabelas as $tabela_name=>$config){
-			$arr_todos[$tabela_name] = array_merge(self::$array_configuracao_padrao,self::$array_configuracao_tabelas[$tabela_name]);
+	public static function GET_CONFIG_TABLE($tabela=NULL)
+	{
+		$arr_todos 		=	array();
+		$html_menu		=	NULL;	
+
+		
+		foreach(self::$array_configuracao_tabelas as $tabela_name=>$config)
+		{
+			$info_tabelas = array_merge(self::$array_configuracao_padrao,self::$array_configuracao_tabelas[$tabela_name]);
+			
+			if($info_tabelas['acesso_via_menu']==true)
+			{
+				
+				$label  = LNG($info_tabelas['nome_menu_LNG']);
+				$html_menu .= <<<HTML
+							<li class=" menu_cadastro only-li" tabela="{$info_tabelas['tabela_bd']}">
+								 <div> <i class="{$info_tabelas['icon']}" aria-hidden="true"></i> {$label}</div>
+							</li>
+HTML;
+			}
+			
 		}
-		if($tabela==NULL){
-			return $arr_todos;
+		
+		if($tabela==NULL || $tabela=='menu')
+		{
+			return $html_menu;
 		}
-		if(!is_string($tabela) || !array_key_exists($tabela, $arr_todos)){
+		
+		
+		if(!is_string($tabela) || !array_key_exists($tabela, $arr_todos))
+		{
 			// se for passado o nome de uma tabela diferente do padrao só porque o nome da tabela é um teste ou porque mudou,
 			// procura nos nomes das tabelas configurados para retornar o objeto correto e prosseguir com o fucnionamento do sistema
 			$dados_contem_tabela_parametro=array();
-			foreach($arr_todos as $nome_tabela=>$dados){
-				if($dados['tabela_bd']==$tabela){
+			
+			foreach($arr_todos as $nome_tabela=>$dados)
+			{
+				if($dados['tabela_bd']==$tabela)
+				{
 					$dados['nome_tabela_correto']	= $nome_tabela;
 					$dados_contem_tabela_parametro	= $dados;
 					break;
 				}
 			}
-			if(count($dados_contem_tabela_parametro)==0){
+			
+			if(count($dados_contem_tabela_parametro)==0)
+			{
 				return false;
 			}else{
 				return $dados_contem_tabela_parametro;
 			}
+			
 		}
+		
+		
 		return $arr_todos[$tabela];
+		
 	}
+	
+	
 
 	public static function confereTabelaCadastroRetorno($nome_tabela){ // se o nome da tabela estiver diferente do padrao, retorna sempre o nome correto do sistema
 		$dadosTabela = self::GET_CONFIG_TABLE($nome_tabela);
@@ -266,9 +320,8 @@ class WRS_MANAGE_PARAM
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
 		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
 
-		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_CUSTOMER');
-		
-		$table	=	$dados_tabela_evento['tabela_bd'];
+		$dados_tabela_evento 	=	 $this->getDadosTabelaConfig('ATT_WRS_CUSTOMER');
+		$table					=	$dados_tabela_evento['tabela_bd'];
 		$order	=	array('order_by'=>'CUSTOMER_DESC' ,'order_type'=>'ASC');
 		$extend = 	array('class'=>'ATT_WRS_CUSTOMER' 	,'file'=>'ATT_WRS_CUSTOMER');
 		$fields	=	array();
@@ -300,6 +353,7 @@ class WRS_MANAGE_PARAM
 				'button'	=>	$button,
 				'field'		=>	$fields,
 				'table'		=>	$table,
+
 				'order'		=>	$order,
 				'icon'		=>	'user.png',
 				'primary'	=>	'CUSTOMER_ID',

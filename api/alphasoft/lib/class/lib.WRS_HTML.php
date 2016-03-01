@@ -40,12 +40,13 @@ class WRS_HTML
 		
 		$html		=	NULL;
 		$WHAT_SEARCH		=	 LNG('WHAT_SEARCH');
+
 		$liFindGroup		=	<<<EOF
 							<li class="wrs_drag_direita_find" vvalue="wrs_search" >
 								<div class="form-group">
 									<div class="input-group ">
 										<input type="text" class="form-control wrs_search_drag_drop_direita_eventos"  placeholder="{$WHAT_SEARCH}">
-										<span class="input-group-addon span_sub wrs_remove_searcg_drag cursor"><i class="fa fa-search"></i><i class="fa fa-eraser"></i></span>
+										<span class="input-group-addon span_sub wrs_remove_searcg_drag cursor " ><i class="fa fa-search"></i><i class="fa fa-eraser"></i></span>
 									</div>
 								</div>
 							</li>

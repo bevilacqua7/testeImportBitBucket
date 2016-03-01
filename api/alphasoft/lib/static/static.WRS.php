@@ -147,32 +147,145 @@ class WRS
 	public static function INFO_SSAS_LOGIN_FILTER_FIXED()
 	{
 		$filters 		= WRS::INFO_SSAS_LOGIN('USER_FILTER');
+		
 		$filters_values = WRS::INFO_SSAS_LOGIN('USER_FILTER_VALUE');
 		
 		$arr_retorno	=	false;
 		
 		if(trim($filters)!='' && trim($filters_values)!='')
 		{
-			$qtde_filters 						= 	explode(',',$filters);
-			$qtde_filters_values 				= 	explode(',',$filter_values);
+			$qtde_filters 						= 	explode(PARAMETERS_SEPARATORS('vir'),$filters);
+			$qtde_filters_values 				= 	explode(PARAMETERS_SEPARATORS('pipe'),$filters_values);
 			
 			if(count($qtde_filters)>1 && count($qtde_filters_values)>1)
 			{
-				foreach($qtde_filters as $key => $filtro)
+				foreach($qtde_filters as $key => $_filtro)
 				{
-					$arr_retorno[md5($filtro)]		=	array('class'=>$filtro , 'data'=>explode(',',str_replace(array('[',']'),'',$qtde_filters_values[$key])));
-				}
+					
+					$filtro		=	$_filtro;
+					$types		=	NULL;
+					
+					if(substr($filtro, 0,1)==PARAMETERS_SEPARATORS('negacao'))
+					{
+						$filtro	=	substr($filtro, 1, strlen($filtro));
+						$types	=	'negado';
+					}
+						
+						
+					if(substr($filtro, 0,1)==PARAMETERS_SEPARATORS('simples'))
+					{
+						$filtro	=	substr($filtro, 1, strlen($filtro));
+						$types	='simples';
+					}
+					
+					
+					
+					$arr_retorno[fwrs_replace_attr($filtro)]		=	array(	'class'	=>	$filtro , 
+																				'data'	=>	explode(	PARAMETERS_SEPARATORS('vir'),str_replace(array('[',']'),'',$qtde_filters_values[$key])),
+																				'type'	=>	$types
+																			  );
+				}				
 			}
 			else
 			{
-				$arr_retorno[md5(trim($filters))] 	= 	array('class'=>$filters , 'data'=> array(trim($filters_values)));
+				$arr_retorno[fwrs_replace_attr(trim($filters))] 	= 	array('class'=>$filters , 'data'=> array(trim($filters_values)));
 			}
-			
-			
+		
+		
 		}
 		
 		return $arr_retorno;
+		
+		
 	}
+	
+	public static function getFiltersCube($cube_id,$_filters,$_filters_values)
+	{
+			$cube	=	self::GET_SSAS_USER();
+			
+			$filters			=	$_filters;
+			$filters_values		=	$_filters_values;
+			
+			
+			if(empty($_filters))
+			{
+				$filters			=	$cube[$cube_id]['CUBE_FILTER'];
+			}	
+			
+			if(empty($_filters_values))
+			{
+				$filters_values		=	$cube[$cube_id]['CUBE_FILTER_VALUE'];
+			}
+			
+			return self::rules_generate_filters_fixed_login_dbase($filters, $filters_values);
+	}
+		
+	
+	private static function generate_filter($filter,$fullName)
+	{
+		$tmp_filter_value		=	array();
+		
+		if(empty($filter)) return $filter;
+		
+		foreach($filter as $value)
+		{
+			$tmp_filter_value[]	=	 $fullName.'.['.$value.']';
+		}		
+		
+		return $tmp_filter_value;
+		
+	}
+	
+		private static function rules_generate_filters_fixed_login_dbase($filters,$filters_values)
+		{
+			$param	=	 array();
+			
+			if(trim($filters)!='' && trim($filters_values)!='')
+			{
+				
+				$data_filters 						= 	explode(PARAMETERS_SEPARATORS('vir'),$filters);
+				$data_filters_values 				= 	explode(PARAMETERS_SEPARATORS('pipe'),$filters_values);
+				
+				
+				
+
+				foreach($data_filters as $label => $value)
+				{
+					
+					$val			=	trim($value);
+					$_simples		=	"";
+					$negado			=	false;
+					
+					if(substr($val, 0,1)==PARAMETERS_SEPARATORS('negacao'))
+					{
+						$val	=	substr($val, 1, strlen($val));
+						$negado	=	true;						
+					}
+					
+					
+					if(substr($val, 0,1)==PARAMETERS_SEPARATORS('simples'))	
+					{
+						$val	=	substr($val, 1, strlen($val));
+						$_simples='simples';
+					}
+					
+					
+					$md5		=	md5($val);
+					
+					self::generate_filter($filter,$fullName);
+					
+					$param[]	=	 array(	'__'.$md5,
+											$_simples,
+											self::generate_filter(explode(PARAMETERS_SEPARATORS('vir'),$data_filters_values[$label]),$val),
+											$negado
+											);
+				}
+				
+				
+			}
+			
+			return $param;
+		}
 	
 	
 	/**

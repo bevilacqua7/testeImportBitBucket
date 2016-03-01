@@ -8,6 +8,9 @@
 <meta charset="utf-8" />
 <meta http-equiv="content-type" content="text/html;charset=utf-8;" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<link rel="shortcut icon" href="./imagens/favico/favicon.ico" type="image/x-icon">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WRS - Web Report System</title>
 <script type="text/javascript" src="js/jquery/jquery-1.8.2.min.js"></script>
@@ -89,6 +92,11 @@ src='imagens/wrs_background.jpg', sizingMethod='scale')";
     margin-left: 45px;
 }
 
+body{
+	min-height: 500px;
+	min-width: 500px;
+}
+
 </style>
 
 
@@ -106,6 +114,11 @@ function WRS_RESIZE()
 			$('BODY').css('background-size','100% auto');
 		}
 
+	//Ajusta aa tela de login
+		if(height<500)
+		{
+			$('.form-signin').css({margin:'0px', padding:'0px', position:"relative"});
+		}
 
 		$('body').width(width);
 //		$('body').height(height);
@@ -114,6 +127,12 @@ function WRS_RESIZE()
 		
 		//var posX	=	height/2;
 		var pos	=	($(window).height()/2)-(($('.form-signin').height()+50)/2);
+
+		var min_top		=	100;
+
+
+		
+		if(pos<=min_top) pos =min_top;
 		
 		$('.form-signin').css('top',pos);
 

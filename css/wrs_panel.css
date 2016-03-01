@@ -25,6 +25,16 @@ body {
 	margin-right: 5px;
 }
 
+.filter_nagedo{
+	
+	color: red;
+
+}
+.green{
+	color: #119646;	
+}
+
+
 /*
  * Controle do jquery Layout
  */
@@ -1706,11 +1716,15 @@ border-radius: 3px;
 
 
 .filter-exec-slash{
-	color:#A94442;
+	color:#ccc;
 }
 
 .filter-fixed{
-	color: #8a6d3b;
+	color: #0082B9;
+}
+
+.filter-negado{
+	color: #A94442;
 }
 
 .filter-exec{
@@ -1746,6 +1760,39 @@ border-radius: 3px;
 	font-weight:100;
 	padding:10px;
 }
+.btn_event_filtro_negado{
+	 color: #c9302c !important;
+  background-color: #FFE8E7;
+
+}
+
+
+.btn_event_filtro_negado:hover,
+.btn_event_filtro_negado:focus,
+.btn_event_filtro_negado.focus,
+.btn_event_filtro_negado:active,
+.btn_event_filtro_negado.active{
+  color: #fff !important;
+  background-color: #c9302c;
+}
+.btn_event_filtro_negado:active {
+  background-image: none;
+}
+
+
+.tooltip-wrs-container{
+
+	background: url("../imagens/tooltip.png") no-repeat top left;
+	padding-left:18px;
+	padding-top:1px;
+	padding-bottom:3px;
+	font-size:12px;
+	line-height:16px;
+	padding-right:15px;
+	color:#333;
+	max-width: 200px;
+	
+}
 
 .layout_container_custom h4{
 
@@ -1766,5 +1813,6 @@ border-radius: 3px;
 .red{
 	color:red;
 	text-decoration:line-through;
+
 
 }

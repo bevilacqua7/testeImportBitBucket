@@ -45,6 +45,7 @@ function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi,load_direct)
 			_layout['load_direct']	=	true;
 		}
 
+
 		$(ABA_TAG_NAME).wrsAbas('refresh_F5',_layout);
 	
 		
@@ -143,17 +144,32 @@ function WRSKendoGridComplete(IDGrid)
 
 	
 	var html		=	'';
-	var li 			=	'<li><a href="#" json="{json}" wrs-id="'+IDGrid+'" mktime="{mktime}" ><i class="fa fa-history"></i> <span class="label label-default span-label-history">{type}</span> {data}  </a></li>';
-	var liSubmit	=	['{data}','{type}','{json}','{mktime}'];
+	
+	
+	
+	
+	var li 			=	'<li><a href="#" json="{json}" wrs-id="'+IDGrid+'" mktime="{mktime}" ><i class="fa fa-history {color}" ></i> <span class="label label-default span-label-history">{type}</span> {data}  </a></li>';
+	var liSubmit	=	['{data}','{type}','{json}','{mktime}','{color}'];
 
 	for(lineHistory in history)
 		{
 
+			var type_consulta_oficial	=	'';
+			
+			
+			//Verificando se é a primeira consulta
+			if(typeof history[lineHistory]['consulta_oficial']!=undefined)
+				{
+					if(history[lineHistory]['consulta_oficial']==true)
+						{
+							type_consulta_oficial	=	'green';
+						}
+				}
 			
 			var json 	= 	base64_encode(json_encode(history[lineHistory]));
 			var type	=	history[lineHistory]['type'];  
 				type	=	empty(type) ? TYPE_RUN.direct : type;
-			var liVal	=	[history[lineHistory]['date'],type,json,history[lineHistory]['mktime']];
+			var liVal	=	[history[lineHistory]['date'],type,json,history[lineHistory]['mktime'],type_consulta_oficial];
 			
 				html	=	html+str_replace(liSubmit,liVal,li);
 				delete json;
@@ -180,8 +196,22 @@ function WRSKendoGridComplete(IDGrid)
 			
 			_paranKendoUi['load_direct']	=	true;	//Permite que seja executado o histórico
 			//load_direct
-
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi,true);
+			
+			
+			var history_oficial		=	 true;
+			//Verificando se é a primeira consulta gerada
+			if(typeof _history['consulta_oficial']!=undefined)
+			{
+				if(_history['consulta_oficial']==true)
+					{
+						history_oficial	=	false;
+					}
+			}
+			
+			get_aba_active_object().wrsAbaData('history_change_status',history_oficial);
+			
+			
 			delete _history;
 		_END('WRSKendoGridComplete::historyClick');
 	}

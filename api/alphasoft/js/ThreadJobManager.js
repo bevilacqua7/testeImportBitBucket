@@ -706,6 +706,9 @@ function get_all_jobs()
 			var __resize			=	 function(options)
 			{
 				_START('managerJOB::__resize');
+				
+				formata_texto_resultado_filtros();
+				
 				$('.ui-layout-center').css({overflow: 'visible'})
 					var _data		=	 GetData();
 					var _options	=	options;
@@ -1078,7 +1081,7 @@ function get_all_jobs()
 
 				
 				
-				
+				 
 				$(_data.modal).find('.modal-title-wrs-job h3').html(_data.mktime[_data.report_id_active].title_aba);
 				
 				

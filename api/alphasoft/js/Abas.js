@@ -19,13 +19,17 @@ function wrsABAAddValue(grid,_kendoUi)
 
 
 
-
+function changeIDWindowDRag(reportID,title)
+{
+	
+	$('.NAV_CONFIG_WRS').attr('id-tag',reportID).find('.report_title').html(title);
+	
+}
 
 
 
 function get_aba_active_kendoUi(get_id)
 {
-	_START('get_aba_active_kendoUi');
 	var event		=	null;
 	if(get_id!=undefined && get_id!=null)
 	{
@@ -33,14 +37,15 @@ function get_aba_active_kendoUi(get_id)
 	}else{
 		event	=	$('.WRS_ABA').find('.active');
 	}
-	_END('get_aba_active_kendoUi');
 	
 	return event.wrsAbaData('getKendoUi');
 }
 
-function get_aba_active()
+function get_aba_active(reportID)
 {
-	_ONLY('get_aba_active');
+	if(reportID!=undefined)  		return $('.WRS_ABA').find('.'+reportID).wrsAbaData('getData');
+	
+		
 	return get_aba_active_object().wrsAbaData('getData');
 }
 
@@ -49,20 +54,17 @@ function get_aba_active()
 function get_aba_active_wrs_param()
 {
 	
-	_ONLY('get_aba_active_wrs_param');
 	return get_aba_active_object().wrsAbaData('getWrsData');
 	
 }
 
 function get_aba_active_kendoUi()
 {
-	_ONLY('get_aba_active_kendoUi');
 	return get_aba_active_object().wrsAbaData('getKendoUi');	
 }
 
 function get_aba_active_object()
 {
-	_ONLY('get_aba_active_object');
 	return $('.WRS_ABA').find('.active');
 	
 }
@@ -222,7 +224,9 @@ function optionsDataConvert(gridValue,with_decode)
 									$('.wrs_panel_filter_measure').hide();
 									
 									$(window).resize();		
+									
 									resize_container_grid(report_id);
+									
 									delete history;
 								return true;
 								
@@ -374,7 +378,13 @@ function optionsDataConvert(gridValue,with_decode)
 								
 								
 								
+								var load_aba_types	=		$('body').WrsGlobal('getCM');
 								
+								
+								if(load_aba_types.load_aba==true)
+									{
+										$('body').filterFixed('addFilterDB');
+									}
 								
 								delete getElement;
 					}
@@ -435,7 +445,7 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				
 				//habilita a janela
-				var _filter_hide=activeToGetAllFilters();
+				var _filter_hide	=	activeToGetAllFilters();
 					
 				
 				var report_id			=	'.'+aba_active.attr('id-aba');
@@ -457,7 +467,6 @@ function optionsDataConvert(gridValue,with_decode)
 				
 					if(empty(_param_request) || _param_request=='null') _param_request	=	{};
 					
-
  				
 				var sortable_metrica	=	 rows_by_metrica_attr_base64('.sortable_metrica','metrica');
 				var sortable_linha		=	 rows_by_metrica_attr_base64('.sortable_linha','attr');
@@ -475,23 +484,25 @@ function optionsDataConvert(gridValue,with_decode)
 					_param_request['LAYOUT_ROWS']		=	base64_encode(implode(',',request_linha));
 					_param_request['LAYOUT_COLUMNS']	=	base64_encode(implode(',',request_coluna));
 					_param_request['LAYOUT_MEASURES']	=	base64_encode(implode(',',request_metrica));
+					
 					//_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
 					//_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
 
 					
-					
 					try{
+						
 						if(_aba_active.wrsAbaData('getKendoUi').new_aba==true)
 							{
 								_aba_active.wrsAbaData('setKendoUi',{new_aba:false});
 								delete aba_active,_filter_hide,_param_request,sortable_metrica,sortable_linha,sortable_coluna,sortable_filtro,getAllFiltersToRun,request_metrica,request_linha,request_coluna,request_filtro;
 								return true;
 							}
+						
 				}catch(e){ 
 					if(IS_EXCEPTION) console.warn(' exception');
 				}
 				
-				
+
 				
 					aba_active.wrsAbaData('setWrsData',_param_request);
 					
@@ -561,6 +572,11 @@ function optionsDataConvert(gridValue,with_decode)
 				var IDCurrent		=	'#'+_report_id;
 				var current			=	 $(IDCurrent+'Main');
 				
+				
+				//Flag para não deixar replicar o Filtro
+				$('body').WrsGlobal('setCM',{'dblclick_open_aba':true});
+				
+				
 				/*
 				 * Garante que se a Aba estiver ativa não permita o clicque
 				 */
@@ -569,9 +585,11 @@ function optionsDataConvert(gridValue,with_decode)
 					if(!current.hasClass('hide'))
 					{
 						_END('wrsAbas::dblclick_open_aba');
+						$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
 						return true;
 					}
 				}
+				
 				
 				wrsConfigGridDefaultManagerTopOptions();
 				
@@ -586,7 +604,7 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				
 					
-				//Tultimo carregado
+				//ultimo carregado
 				var last_active		=	$('#'+aba_active.attr('id-aba')+'Main')	;				
 				
 				if(last_active.length>0)
@@ -605,7 +623,7 @@ function optionsDataConvert(gridValue,with_decode)
 				var data_array_aba	=	$(this).wrsAbaData('getData');				
 				var gridValue		=	$(this).wrsAbaData('getKendoUi');
 				
-				
+
 							
 
 				//Informa qual sera a Ativa no momento	
@@ -616,9 +634,10 @@ function optionsDataConvert(gridValue,with_decode)
 					$(this).addClass('active');
 					
 					var wrsConfigGridDefault		=	$('#wrsConfigGridDefault').data({}); //Zera a estrutura inicial
-					
+
 					$('.wrsGrid').removeClass('wrsGrid');
-					$('.NAV_CONFIG_WRS').attr('id-tag',$(this).attr('id-aba')).find('.report_title').html($(this).find('.title').html());
+					
+					changeIDWindowDRag($(this).attr('id-aba'),$(this).find('.title').html());
 
 					
 				//Pegando os dados salvo nessa aba
@@ -634,6 +653,7 @@ function optionsDataConvert(gridValue,with_decode)
 							//$(window).resize();
 							delete data_array_aba,_isLoad,gridValue,mensagem_window;
 							_END('wrsAbas::dblclick_open_aba');
+							$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
 							return true;
 						}
 				}
@@ -710,6 +730,9 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					delete data_array_aba,_isLoad,gridValue,mensagem_window,optionsAba;
 					_END('wrsAbas::dblclick_open_aba');
+					
+					
+					$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
 			}
 			
 			
@@ -1051,12 +1074,12 @@ function optionsDataConvert(gridValue,with_decode)
 						{
 							_reportDetails	=	_full_data['reportDetails'];
 						}
+						
 						catch(e)
 						{
 							_reportDetails	=	{};
 							if(IS_EXCEPTION) console.warn(' exception');
 						}
-						
 
 						var aba_data	=	{
 								kendoUi			:	getJsonDecodeBase64(kendoUiTools), 
@@ -1174,6 +1197,60 @@ function optionsDataConvert(gridValue,with_decode)
 			}
 
 			
+			var fixed_filter_negado	=	 function(filter)
+			{
+				var _explode		= 	explode(',',base64_decode(filter));
+				var _filters		=	[];
+				var filter_negado	=	{};
+				
+				for(var line in _explode)
+					{
+							var fixed		=	_explode[line];
+							var _negado		=	false;
+							var _simples	=	false;
+							var word		=	fixed.substring(0,1);
+
+							
+							//Filter negado	
+							if(word==words_restrict.negacao)
+							{
+								fixed	=	fixed.substring(1,fixed.length);
+								_negado	=	true;
+							}
+							
+							
+							if(word==words_restrict.simples)
+							{
+								fixed	=	fixed.substring(1,fixed.length);
+								_simples	=	true;
+								
+							}
+
+							//words_restrict.simples
+							if(_negado==true || _simples==true)
+							{
+								filter_negado[md5(fixed)]	=	{negado:_negado, level_full:fixed, simples:_simples};
+							}
+							
+							_filters.push(fixed);
+					
+					}
+				
+				
+				return {base64 : base64_encode(implode(',',_filters)), data:_explode, negado:filter_negado};
+			}
+			
+			
+			var kendoUiCorrecaoLoad	=	 function(_kendoUi,fxNegado)
+			{
+					var kendoUi	=_kendoUi;
+					
+					kendoUi['filter']	=	fxNegado.negado;
+				
+					
+				return kendoUi;
+			}
+			
 			
 			
 			var __load_multiple		=	 function(options,noactive,auto_load)
@@ -1182,6 +1259,8 @@ function optionsDataConvert(gridValue,with_decode)
 					var _noactive	= false;
 					
 					if(!empty(noactive)) _noactive = noactive;
+					
+					$('body').WrsGlobal('setCM',{load_aba:false});
 					
 					
 					
@@ -1218,16 +1297,28 @@ function optionsDataConvert(gridValue,with_decode)
 								
 								var	opts 			= 	options[lineOptions];
 								
+
+								
+								//Carga inicial para filtros negado
+								var fxNegado	=	 fixed_filter_negado(opts['LAYOUT_FILTERS']);
+								
+									opts['LAYOUT_FILTERS']	=	fxNegado.base64;
 								
 								var _active			=	true;
 								var kendoUi			=	json_decode(base64_decode(opts.KendoUi));
 									be_loaded		=	false;
 									
+									
 									if(empty(kendoUi)) continue;
 									
 									if(empty(_report_id))	_report_id	=	kendoUi['REPORT_ID'];
-
-									 
+									
+									
+									if(auto_load!='fns-negado')
+									{
+										opts.KendoUi	=	base64_encode(json_encode(kendoUiCorrecaoLoad(kendoUi,fxNegado)));
+									}
+									
 									
 									
 									try{
@@ -1288,7 +1379,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					var optionsAba		=	optionsDataConvert(_object_open);
 
-					
+
 							open_configure_default(optionsAba);
 					
 					
@@ -1329,6 +1420,8 @@ function optionsDataConvert(gridValue,with_decode)
 						$('.wrs_run_filter').removeAttr('noactive');
 					}
 					
+					
+					$('body').WrsGlobal('setCM',{load_aba:true});
 					/*
 					 * TODO:A estrutura da aba parou de funcinar corretamente no requisito de autoload abrir e deixar as outras funcionando
 					 * Esse metodo é temporário 
@@ -1479,10 +1572,12 @@ function optionsDataConvert(gridValue,with_decode)
 							if(IS_EXCEPTION) console.warn(' exception');
 						}
 						
-						//console.log('opts_encode',opts_encode);
 						
+						$('body').WrsGlobal('setCM',{'dblclick_open_aba':true});
 						
-						__load_multiple([opts_encode],true);
+						__load_multiple([opts_encode],true,'fns-negado');
+						
+						$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
 						
 						delete optionsAba,opts,opts_encode;
 						
@@ -1549,17 +1644,22 @@ function optionsDataConvert(gridValue,with_decode)
 				_START('wrsAbas::__show_grid');
 				var aba_active	=	 tagABA.find('.active');
 				
-				
 				if(empty(inputBase64)) return false;
-
 				
 				var input	=	base64_json_decode(inputBase64);
-
+				
 					if(input.length!=0)
 					{
-
+						//Garante que não irá apagar os filtros
+						$('body').WrsGlobal('setCM',{'dblclick_open_aba':true});
 						
-						__load_multiple(input,input.length==1 ? true : AUTO_LOAD_RUN,true);
+						__load_multiple(	input,
+											input.length==1 ? true : AUTO_LOAD_RUN,
+											input.length==1 ? undefined : true
+										);
+						
+						$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});//LIbera o sistema para utilizar os filtros
+						
 						
 						$('.wrs_run_filter').data('auto_load_data',base64_encode(json_encode(slice_top(input))));
 						$('.wrs_run_filter').attr('auto_load','true');
@@ -1641,7 +1741,6 @@ function optionsDataConvert(gridValue,with_decode)
 		 */
 		$.fn.wrsAbaData = function(methodOrOptions) 
 		{
-	
 			var that			=	 this;
 			var wrsDataName		=	'wrs_aba_data';
 			var data_global		=	this.data(wrsDataName);
@@ -1662,7 +1761,7 @@ function optionsDataConvert(gridValue,with_decode)
 										history			:	null,
 										first_line_total:	{}, 
 										change_aba		:	false,
-										enable_change	:	false	 //Habilita para iniciar a detectar se existe modificações no sistema
+										enable_change	:	false,	 //Habilita para iniciar a detectar se existe modificações no sistema
 									};
 				
 				
@@ -1723,7 +1822,39 @@ function optionsDataConvert(gridValue,with_decode)
 						if(get_filter[lineFilter]['class']	==	'__'+options.tag) return get_filter[lineFilter]['data'];
 					}
 				
+				
 				return '';
+				
+			}
+			
+			
+			
+			
+			
+			
+			var __getAllFilters	=	 function (options)
+			{
+				var filter_selected	=	__getFilter(options);
+				var filter_tmp		=	__getNewFilter(options);
+				
+				var _filters		=	[];
+				
+				
+				if(!isEmpty(filter_selected))
+				{
+					_filters.push(filter_selected);
+				}
+				
+				
+				if(!isEmpty(filter_tmp))
+				{
+					_filters.push(implode(',',filter_tmp));					
+				}
+				
+				return implode(',',_filters);
+				
+				
+				
 			}
 			
 			var delete_filter_selected	=	 function(options)
@@ -1768,6 +1899,28 @@ function optionsDataConvert(gridValue,with_decode)
 				return filter_o;
 				
 			}
+			
+			
+			var __setConvertFilter		=	 function (filter)
+			{
+				
+				
+				if($('body').WrsGlobal('getCM','drill_click_change')==true)
+				{
+
+					$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
+						for(var line in filter)
+							{
+									var _datas	=	filter[line];
+									var _tag	=	str_replace('__','',_datas[0]);
+									__setNewFilter({tag:_tag, data:_datas[2]});
+									
+							}
+						
+						$('body').WrsGlobal('setCM',{'dblclick_open_aba':true});
+				}	
+				
+			}
 			/**
 			 * Filtros temporários executados
 			 * tag
@@ -1776,9 +1929,18 @@ function optionsDataConvert(gridValue,with_decode)
 			 */
 			var __setNewFilter	=	 function(filterName)
 			{
-				_ONLY('__setNewFilter');
 				
+				_ONLY('__setNewFilter');
+
 				if(data_global==undefined) return false;
+
+				//Faz com que não permita processar se for na troca de aba 
+				if($('body').WrsGlobal('getCM','dblclick_open_aba')==true)
+				{
+					return true;
+				}
+				
+				
 				
 				
 				try{
@@ -1791,6 +1953,8 @@ function optionsDataConvert(gridValue,with_decode)
 					data_global.data['filter_tmp']	=	{};
 				}
 				
+				
+				
 				//Removendo todos os filtros a ser aplicado
 				if(filterName.tag==null)
 				{
@@ -1799,15 +1963,16 @@ function optionsDataConvert(gridValue,with_decode)
 					return false;
 				}
 				
-				
 
-				
+		 		
 				
 				//Verificando se o index_filtro não está vazio e não pode ser a função com o evento de remover
 				if(!isEmpty(data_global.data.FILTER_TMP) && filterName.remove!=true)
 				{
 					//Verificando se ele ainda não existe na estrutura
 					var filter	=	json_decode(base64_decode(data_global.data.FILTER_TMP));
+					
+
 					//Lendo toda a estrutura
 					for(var lineFilter in filter)
 						{
@@ -1815,7 +1980,6 @@ function optionsDataConvert(gridValue,with_decode)
 								var _class		=	 $.trim(str_replace('__','',filter[lineFilter]['class']));
 								if($.trim(filterName.tag)== _class)
 											{
-												
 												var _explode_data	=	 explode(',',filter[lineFilter].data);
 												//Lendo os filtros
 												for(var lineExplode in _explode_data)
@@ -1831,6 +1995,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 				}//Fim da verificação da existencia no filtro já no registro
 				
+			
 				
 				//Removendo todos os filtros a ser aplicado
 				if(filterName.data==null)
@@ -1890,14 +2055,31 @@ function optionsDataConvert(gridValue,with_decode)
 				}
 				
 				
-				
 				if(exist_in_array(data_global.data.filter_tmp[filterName.tag],filterName.data)) return false;
 				
 				
-				data_global.data.filter_tmp[filterName.tag].push(filterName.data);
+				if(typeof filterName.data=='object')
+					{
+						var data_object	=	 filterName.data;
+						//add array
+						for(var line in data_object)
+							{
+									data_global.data.filter_tmp[filterName.tag].push(data_object[line]);
+							}
+					
+					}else{
+						//Add single
+								data_global.data.filter_tmp[filterName.tag].push(filterName.data);
+					}
+				
+				
 				that.data(wrsDataName,data_global);
 				
 			}
+			
+			
+			
+			
 			
 			var __removeFilter	=	 function (keyRemove)
 			{
@@ -1984,8 +2166,28 @@ function optionsDataConvert(gridValue,with_decode)
 					
 				}
 				
+			}
+			
+			
+			var __history_change_status	=	 function(type)
+			{
+				_ONLY('history_change_status');
+				
+				if(type==true)	
+						__aba_detect_change();
+				else{
+					that.find('.wrs_is_change_aba').remove();
+				}
+				
+				
 				
 			}
+			
+			
+			
+			
+			
+			
 			
 			
 			/**
@@ -2062,6 +2264,12 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			var set_input_poolin		=	 function(input,key)
 			{
+			/*	
+				if(key=='data')
+					{
+						console.error('inputinput',input);
+					}*/
+				
 				_START('wrsAbaData::set_input_poolin');
 				for(var lineInput in input)
 				{
@@ -2112,18 +2320,30 @@ function optionsDataConvert(gridValue,with_decode)
 				//input.old
 				//input.id
 				
+				
 				//that
 				//Mudando o ID antigo do Container para o Novo isso se o ID Existir
 				if($('#'+input.old).length==1)
 				{
-					$('#'+input.old).attr("id",input.id);
+					//var soap		=	options.chart.detach();
 					
-					$('#'+input.old+'Main').attr("id",input.id+'Main');
-					$('#'+input.old+'Elements').attr("id",input.id+'Elements');
+					$('#'+input.old).prop("id",input.id);
+					
+									
+					$('#'+input.old+'Main').prop("id",input.id+'Main');
+					$('#'+input.old+'Elements').prop("id",input.id+'Elements');
+					
+
 					
 					$('.'+input.old+'BOX').addClass(input.id+'BOX').removeClass(input.old+'BOX');
+					
+					context.destroyOld(input.old);//Apagando os vestigios do Drill Antigo
+
+					$('#'+input.id).WrsDrill();		//Recriando o novo Drill
+					
+					
 				}
-				
+			
 				// atualizando o nome da aba no class da aba
 				that.removeClass(that.attr('id-aba')).addClass(input.id);
 				// atualizando o nome da aba no atributo id-aba da aba
@@ -2137,9 +2357,6 @@ function optionsDataConvert(gridValue,with_decode)
 				//Ou pode forçar o click para ativar a aba
 				var gridValue		=	that.wrsAbaData('getKendoUi');
 					$('body').managerJOB('setActiveAba',{report_id:input.id,kendoUi:gridValue});
-					
-					
-				
 				
 				
 			}
@@ -2253,8 +2470,141 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			
 			
-		
+			/**
+			 * Habilitando a negação para o menu principal
+			 */
+			var __enableFilterNegado	=	 function(data)
+			{
+				_START('__enableFilterNegado');		
+				
+				
+					if(typeof data_global.kendoUi.filter =="undefined") data_global.kendoUi.filter	=	{};
+
+				
+					if(data.data==false)
+						{
+							try{
+								delete data_global.kendoUi.filter[data.type].negado;
+							}catch(e){}
+							
+						}else{
+							if(typeof data_global.kendoUi.filter[data.type]=="undefined")
+							{
+								data_global.kendoUi.filter[data.type]	=	{negado: data.data, level_full: data.level_full} ;
+							}else{
+								data_global.kendoUi.filter[data.type]['negado']=data.data;
+								data_global.kendoUi.filter[data.type]['level_full']= data.level_full ;
+							}
+						}
+					
+					that.data(wrsDataName,data_global);
+					
+					_END('__enableFilterNegado');
+			}
 			
+			
+			
+			
+			
+			var __setFilterSimples	=	 function(data)
+			{
+				
+				if(typeof data_global.kendoUi.filter[data.tag_class]== "undefined")
+					{
+						if(data.val==false) return true;
+						data_global.kendoUi.filter[data.tag_class]=	{simples:data.val, negado:false, level_full:data.leve_full};
+					}else{
+						data_global.kendoUi.filter[data.tag_class]['simples']	=	data.val;
+					}
+				
+					
+				if(data.val==false) delete data_global.kendoUi.filter[data.tag_class]['simples'];
+				
+				that.data(wrsDataName,data_global);
+				
+			}
+			
+			
+			
+			
+			var __getFilterSimples	=	 function(data)
+			{
+				
+				if(data=='all')	return data_global.kendoUi.filter;
+				
+				
+				if(typeof data_global.kendoUi.filter[data.tag_class]== "undefined")
+				{
+					return {simples:false};
+				}
+				
+				if(typeof data_global.kendoUi.filter[data.tag_class].simples == undefined)	return {simples:false};
+				
+				return {simples:data_global.kendoUi.filter[data.tag_class].simples};
+				
+			}
+			
+			
+			var __delFilterNegado	=	 function(type)
+			{
+				_START('__delFilterNegado');		
+				
+				var is_simple		=	 false;
+				
+				
+				//Usamos o mesmo tag para genenciar os filtros negado e simples
+				try{
+					is_simple	=	data_global.kendoUi.filter[type].simples;
+				}catch(e){
+					is_simple	=	 false;
+				}
+				
+
+				//Remonedo mas verificnado se existe filtro simples ou composto
+				try{
+					if(is_simple==true)
+					{
+						delete data_global.kendoUi.filter[type].negado;
+					}else{
+						data_global.kendoUi.filter[type].negado	=	 false;
+					}
+				}catch(e){}
+				 
+					_END('__delFilterNegado');
+			}
+			
+			
+			//Verificando o Status do Filter 
+			var __getFilterNegado	=	 function(type)
+			{
+				_START('__getFilterNegado');		
+				
+
+				
+				if(type=='all')	return data_global.kendoUi.filter;	
+				
+				
+							try{
+								var _data	=	data_global.kendoUi.filter[type];
+								
+								if(_data.negado==true || _data.negado=="true") {
+									_data.negado	=	 true;
+									return _data;
+								}else{
+									_data.negado	=	 false;
+									
+									
+									return _data;
+								}
+								
+							}catch(e){
+								return {negado:false};
+							}
+							
+					return {negado:false};
+					
+					_END('__getFilterNegado');
+			}
 			
 			
 			
@@ -2282,12 +2632,24 @@ function optionsDataConvert(gridValue,with_decode)
 			        aba_detect_change	:	__aba_detect_change,
 			        remove_asterisk		:	__remove_asterisk,
 			        setNewFilter		: 	__setNewFilter,
+			        setConvertFilter	:	__setConvertFilter,
 			        getNewFilter		:	__getNewFilter,
+			        getAllFilters		:	__getAllFilters,
 			        getFilter			:	__getFilter,
 			        change_div_elements	:	__change_div_elements,
 			        set_first_MLC		:	__set_first_MLC,
 			        get_first_MLC		:	__get_first_MLC,
-			        removeFilter		:	__removeFilter
+			        removeFilter		:	__removeFilter,
+			        
+			        //Filtro Negado
+			        
+			        enableFilterNegado	:	__enableFilterNegado,
+			        getFilterNegado		:	__getFilterNegado,
+			        delFilterNegado		:	__delFilterNegado,			        
+			        setFilterSimples	:	__setFilterSimples,
+			        getFilterSimples	:	__getFilterSimples,
+			        
+			        history_change_status	:	__history_change_status
 			};
 			
 				/*
@@ -2308,7 +2670,7 @@ function optionsDataConvert(gridValue,with_decode)
 			    }
 			    else
 			    {
-			            $.error( 'Method ' +  methodOrOptions + ' does not exist on jQuery.tooltip' );
+			            $.error( 'Method ' +  methodOrOptions + ' does not exist on Abas.tooltip' );
 			    }    	
 		}// END $.fn.wrsAbas = function(methodOrOptions)
 		

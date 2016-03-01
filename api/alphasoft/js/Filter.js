@@ -9,6 +9,8 @@
  */
 
 
+
+
 	 /*
 	  * Configurações para aplicar a visualização das Titles do qTipe
 	  */
@@ -78,7 +80,38 @@ function clean_filters()
 	
 	_END('clean_filters');
 }
-        
+
+
+
+
+function filtro_simples_aba_ataual()
+{
+	
+	var aba_active		=	get_aba_active_object();
+	var filters			=	aba_active.wrsAbaData('getFilterSimples','all');
+	
+	for(var line in filters)
+		{
+				var simplesFilter	=	filters[line];
+				
+				
+				if( typeof simplesFilter.simples	!=	undefined)
+					{
+						if(simplesFilter.simples==true)
+							{
+								return true;
+							}
+					}
+		
+		}
+	
+	return false;
+	
+}
+
+
+
+
 function convert_to_class(array)
 {
 	 _START('convert_to_class');
@@ -110,6 +143,24 @@ function findFilterMergeLoad(filterMerge,levelFull)
 	return '';
 }
 
+function set_css_negado(tag_class,aba_active)
+	{
+
+	var status		=	aba_active.wrsAbaData('getFilterNegado',tag_class); 
+	var css_tag_table		=	'.wrs-filter-'+tag_class;
+	
+	if(status.negado==true)
+	{
+		$(css_tag_table).addClass('filter_nagedo');
+	}else{
+		$(css_tag_table).removeClass('filter_nagedo');
+	}
+		
+		
+	}
+	
+
+
 
 function filterMergeLoad(filter_current,filterMerge)
 {
@@ -119,8 +170,7 @@ function filterMergeLoad(filter_current,filterMerge)
 	var filters_add		=	[];//INforma quais atributos já foram utilizados para não repetir
 
 	
-	
-	for(x in filter_current)
+	for(var x in filter_current)
 		{
 	
 			var levelFullEmpty	=filter_current[x][0];
@@ -131,12 +181,7 @@ function filterMergeLoad(filter_current,filterMerge)
 			var filter			= 	!isset(filter_current[x][2]) ? 'a' : filter_current[x][2];
 			
 			
-			
-        	 //	var filter_fixed	=	$('body').filterFixed('hideTooltipe',levelFullEmpty);
-
-        	 /*
-			if(filter_fixed==false)
-			{*/
+        	  
 				if(!empty(replace_filter))
 				{
 					if(empty(filter))
@@ -149,11 +194,7 @@ function filterMergeLoad(filter_current,filterMerge)
 				
 				}
 			 
-				/*
-			}else{
-				//Acrescenta o filtro fixo
-				filter		=	 filter_fixed.filter;
-			}*/
+				
 			//garante que não se repita as informações no array principal
 			array_user[array_user.length]	=	[levelFull,filter_current[x][1],filter];
 		}
@@ -197,7 +238,6 @@ function changeWithDrillColumnRows(column,columnName)
 	
 		_column[columnName]	=	 convert_to_class(column);
 		
-//		console.log('_column',_column);
 		set_value_box_relatorio(_column);
 		cleanPlaceholder();
 		$('.wrs_panel_filter_icon').attr('filter_hide','false');
@@ -288,7 +328,11 @@ function changeWithDrillFilter(layout,filter_to_add)
 				aba_active.wrsAbaData('setNewFilter',opt_insert);
 		}
 	
+	
+	$('body').WrsGlobal('setCM',{'drill_click_change':true});
 	set_value_box_relatorio(changeLayout);
+	$('body').WrsGlobal('setCM',{'drill_click_change':false});
+	
 	
 	//Removendo qualquer informação de placeholder que é a mensagem de que não há valores na tela 
 	cleanPlaceholder();
@@ -397,11 +441,62 @@ function convert_to_compare_filter(inputHistory)
 	return base64_encode(tmp.join(','));
 	
 }
+function compare_filter_negado_simple(historio,current)
+{
+	//true é diferente false é igual
+	
 
+	var h_length	=	array_length(historio);
+	var c_length	=	array_length(current);
+	
+		if(c_length!=h_length) {
+			return true;
+		}
+	
+	var data_higt	=	c_length;
+	var to_compare	=	h_length;
+	
+		if(h_length	> c_length)
+			{
+				data_higt	=	h_length;
+				to_compare	=	c_length;
+			}
+	
+	
+	for(var line in data_higt)
+		{
+				
+					if(typeof to_compare[line]=="undefined") {
+						return true;
+					}
+					
+
+					if(typeof data_higt[line].negado!= typeof to_compare[line].negado)
+					{
+							return true;
+					}
+					
+					if(typeof data_higt[line].level_full!= typeof to_compare[line].level_full)
+					{
+							return true;
+					}
+					
+					
+					if(typeof data_higt[line].simples!= typeof to_compare[line].simples)
+					{
+							return true;
+					}
+		
+		}
+	
+	
+	
+	return false;
+}
 /**
  * Verificando se existe alteração nas vertentes para a pesquisa
  */
-function is_wrs_change_to_run(_param_request,manager_aba,report_id)
+function is_wrs_change_to_run(_param_request,manager_aba,report_id,compare_filter)
 {
 	
 	_START('is_wrs_change_to_run');
@@ -419,8 +514,6 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 	var eastonclose		=	$('.wrs_run_filter').attr('eastonclose');
 	var loadStart		=	 true;
 
-
-
 	if(empty(history))
 	{
 		
@@ -437,7 +530,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 		
 		var base64						=	base64_encode(json_encode(histoty_param,true));
 		
-
+		
 		if(eastonclose=='true')
 		{
 			//MODAL_LOADING_WRS_PANEL();
@@ -459,6 +552,9 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 	histoty_param	=	$.parseJSON(base64_decode(history));
 	
 	
+	
+
+	
 	var _compare	= ['LAYOUT_ROWS','LAYOUT_COLUMNS','LAYOUT_MEASURES','LAYOUT_FILTERS','ORDER_COLUMN','ALL_COLS','ALL_ROWS','DRILL_HIERARQUIA_LINHA','SUMARIZA'];
 
 		if(empty(param_request.ALL_COLS)) param_request.ALL_COLS='';
@@ -472,15 +568,29 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 		{
 			var __key				=	_compare[lineCompare];
 			var _history_compare	=	_trim(histoty_param[__key]);
+			var request_current	=	param_request[__key];
 			
 				if(__key=='LAYOUT_FILTERS')
 				{
 					_history_compare	=	convert_to_compare_filter(getJsonDecodeBase64(histoty_param['FILTER_TMP']));
+
+					request_current	=	compare_filter;
 				}
 				
-				if(empty_wrs_defaults(_history_compare)!=empty_wrs_defaults(_trim(param_request[__key]))) flag=false;
+				if(empty_wrs_defaults(_history_compare)!=empty_wrs_defaults(_trim(request_current	))) 
+				{
+					flag=false;
+				}
 		}
+		//DEVELOPE:
+		//VErifica se o filtro simples ou composto teve alteração filtro negado
 		
+		
+		if(compare_filter_negado_simple(histoty_param['filter'],param_request['filter'])==true)
+			{
+			 	flag=false;
+			}
+
 		
 		//Apenas para quando for o Drill Lile				
 		if(param_request['DRILL_HIERARQUIA_LINHA_DATA_MINUS']!=null || param_request['DRILL_HIERARQUIA_LINHA_DATA']!=null)
@@ -506,7 +616,6 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id)
 		
 		}
 
-	
 	
 	
 	
@@ -571,8 +680,10 @@ _END('is_wrs_change_to_run');
 			
 			
 
+			var base64_add	=	base64_encode(json_encode(histoty_param,true));
 			
-			aba_active.wrsAbaData('setHistory',base64_encode(json_encode(histoty_param,true)));
+			
+			aba_active.wrsAbaData('setHistory',base64_add);
 			
 			
 	}
@@ -755,7 +866,9 @@ function tagFilterWRS(typeReturn)
 		 		var _filter				=	[];
 				var _explode			=	explode(',',filters);
 				var _explode_to_add		=	aba_active.wrsAbaData('getNewFilter',{tag:tag_class});
-		 			
+		 		
+				
+				
 		 		
 				//Para o add o Filreo no Drill
 				var atributo	=	$(this).attr('atributo');
@@ -770,9 +883,24 @@ function tagFilterWRS(typeReturn)
 						}
 						
 							
-	
+						
+						
+						
+						
+						var get_filter_negado	=	get_aba_active_object().wrsAbaData('getFilterNegado',tag_class);
+						
+						var class_exec			=	{ico:'fa-eye',css:'filter-exec'};
+
+						//Filtro Negado
+						if(get_filter_negado.negado==true)
+							{
+								class_exec			=	{ico:'fa-times',css:'filter-negado'};
+							}
+						
+						
+						
 		 					//Filtros Que já está em uso
-		 			 		var in_use	=	makeDesck(_explode,tmp_width,_width,{'_class_i':'fa-eye','_class':'filter-exec'},_explode_to_add);
+		 			 		var in_use	=	makeDesck(_explode,tmp_width,_width,{'_class_i':class_exec.ico,'_class':class_exec.css},_explode_to_add);
 		 						html+=in_use.html;
 		 						_width=in_use.width;
 		 						
@@ -791,11 +919,12 @@ function tagFilterWRS(typeReturn)
 		}//END IF RED	
  	});
 	
-	
-	var get_filter_fixed		=	 $('body').filterFixed('hideTooltipe');
+
+	var get_filter_fixed		=	 $('body').filterFixed('tooltipeFixed');
 	
 		if(get_filter_fixed!=false){
 	
+
 			for(var lineFixed in get_filter_fixed)
 			{
 				var tmp_width	=	0;
@@ -803,15 +932,18 @@ function tagFilterWRS(typeReturn)
 				var get_object	=	$('.ui-layout-pane-east ul').find('.'+lineFixed);
 				var json		=	get_object.data('wrs-data');
 				
+				if(json==undefined) continue;
+				
 				//Title
 				var _title	=	makeTitle(json.LEVEL_NAME,tmp_width,_width,'filter-fixed');
-					html+=_title.html;
+					html	+=	_title.html;
+					
 					_width	=	_title.width;
 				
 				//Verificando para adicionar na lista dos filtros fixos
-					var to_add	=	makeDesck(get_filter_fixed[lineFixed].filter,tmp_width,_width,{'_class_i':'fa-puzzle-piece','_class':'filter-fixed'},undefined);
-						html+=to_add.html;
-						_width=to_add.width;
+					var to_add	=	makeDesck(get_filter_fixed[lineFixed].filter,tmp_width,_width,{'_class_i':'fa-user','_class':'filter-fixed'},undefined);
+						html	+=	to_add.html;
+						_width	=	to_add.width;
 					
 			}
 		}
@@ -899,7 +1031,7 @@ function wrsFilterClickFalse(filter_hide)
     {
     	var that				=	 this;
     	var G_MSG_FILTER_CLEAN	=	'';
-		
+    	
     	//Esconde o ACordion para a busca do Filtro
     	
 
@@ -911,15 +1043,21 @@ function wrsFilterClickFalse(filter_hide)
     			//var json				=	$.parseJSON(base64_decode($(this).attr('json')));	   
     			var json				=	$(this).data('wrs-data');	   
 
-
-    			if(json['FILTER_TO_CLEAN']==true)
-    			  	{
-    			        if(compare_filter_change(json['FILTER_TO_COMPARE']))
-    			        	{
-    			        			setJsonEncodeDecode($(this),['FILTER','FILTER_TO_CLEAN','FILTER_CLICK','FILTER_TO_CLEAN'],['',false,'',false],true,true);
-    			        			flag_back	=	 true;
-    			        	}	 	
-    			       }
+    			
+    			if(json==undefined) return flag_back;
+    			
+    			
+    				if(typeof json['FILTER_TO_CLEAN']!=undefined)
+    				{
+		    			if(json['FILTER_TO_CLEAN']==true)
+		    			  	{
+		    			        if(compare_filter_change(json['FILTER_TO_COMPARE']))
+		    			        	{
+		    			        			setJsonEncodeDecode($(this),['FILTER','FILTER_TO_CLEAN','FILTER_CLICK','FILTER_TO_CLEAN'],['',false,'',false],true,true);
+		    			        			flag_back	=	 true;
+		    			        	}	 	
+		    			       }
+    				} 
     			
     		});
     		_END('WrsFilter::__wrs_filter_check_change_filter');	
@@ -954,7 +1092,9 @@ function wrsFilterClickFalse(filter_hide)
     						json[label[obj]]				=	_value;
     				}
     			
-    			}else{
+    			}
+    			else
+    			{
     					json[label]				=	value;
     			}
     		
@@ -962,8 +1102,7 @@ function wrsFilterClickFalse(filter_hide)
     		{
     			json['PG_CURRENT']				=	0;
     		}
-    		
- //   		main.attr('json',base64_encode(json_encode(json,true)));
+
     		main.data('wrs-data',json);
     		
     		if(!noLoad)
@@ -998,10 +1137,13 @@ function wrsFilterClickFalse(filter_hide)
 					//var json						=	$.parseJSON(base64_decode($(this).attr('json')));	
 					var json						=	$(this).data('wrs-data');	
 					var not_use						=	$(this).hasClass('hide');
-					var tag_class					=	 $(this).attr('tag-class');
-					var aba_active					=			get_aba_active_object();
-
-						if(!not_use) 
+					var tag_class					=	$(this).attr('tag-class');
+					var aba_active					=	get_aba_active_object();
+					
+					///Para não permitir apagar filtro simples
+					var filters					=	aba_active.wrsAbaData('getFilterSimples',{'tag_class':tag_class});
+					
+						if(!not_use && filters.simples!=true) 
 						{
 							//Verificando se o Level Full exist no array passado
 							if(in_array(level_full, levelDown, true) || typeEvent=='all')
@@ -1014,12 +1156,13 @@ function wrsFilterClickFalse(filter_hide)
 								 */
 								var is_simples	=	typeEvent=='all' ? is_simples : ''; 
 								
-								if(is_simples!='simples' || typeEvent=='all')
+								 
+								
+								if(is_simples!='simples' )
 								{	
 									/*
 									 * Se o filtro foi modificado então apaga os filhos
 									 */
-									
 									aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null});
 								}
 								
@@ -1035,23 +1178,42 @@ function wrsFilterClickFalse(filter_hide)
     	}
     	
 
+    	var rules_filter_tags	=	 function(_negado,level_full,_json_filter)
+    	{
+    		var _query		=	null;
+    		var _type_tag	=	'{'+_json_filter+'}';
+    			
+		    		if(_negado==true)
+					{
+						//Aplica a regra do filtro negado
+		    			_query	=	str_replace(['{LEVEL_FULL}','{DATA}'],[level_full,_json_filter], words_restrict.filter_negado);	
+					}
+					else
+					{
+						_query	=	_type_tag;	
+					}
+				
+				
+				return { query:_query , normal:  _type_tag };	
 		
+    	}
+    	
 		/**
 		 * Pegando os Filtros pais 
 		 */
 		var getFiltersLevelUP =	function(level_up,typeEvent)
 		{
-			
-			
 			_START('WrsFilter::getFiltersLevelUP');	
 			var levelUP			=	[];
 			var filters_up		=	[];
+			var filters_up_only_Data=	[];
 			var empty_filter	=	false;
 			var tagQuery		=	'';
 			var FilterOriginal	=	[];
 			var addFilter		=	[];
 			var _index			=	[];
 			var aba_active			=			get_aba_active_object();
+			var add_filter_fixed	=	{};
 			
 				levelUP			=	 explode(',',level_up);			
 			
@@ -1060,57 +1222,143 @@ function wrsFilterClickFalse(filter_hide)
 				_END('WrsFilter::getFiltersLevelUP');	
 				return '';
 			}
+	
+			
+			var unique_data			=	 function(input)
+			{
+				var _input		=	 input;
 				
-			$('.WRS_DRAG_DROP_FILTER h2').each(function(){
-					var level_full					=	$(this).attr('level-full');	
-					var tag_class					=	$(this).attr('tag-class');
+				if(empty(_input)) return _input;
+				
+				
+				var _explode		=	 explode(',',_input);
+				var _tmp			=	[];
+				
+				
+				for(var line in _explode)
+				{
+						var _data	=	_explode[line];
+						
+						if(in_array(_data,_tmp)==false)
+						{
+							_tmp.push(_data);
+						}
+				}
+				return implode(',',_tmp);
+			}
+			
+			var find_filter		 =	function(level_full,tag_class,is_red)
+			{
 					var _data_filter				=	'';
-					
-
 					
 					var _json_filter				=	'';
 						//Verificando se o Level Full exist no array passado
 						if(in_array(level_full, levelUP, true) || typeEvent=='all')
-						{
-						  
+						{						  
 							_data_filter		=	aba_active.wrsAbaData('getFilter',{tag:tag_class});
 					         var getNewFilter	=	aba_active.wrsAbaData('getNewFilter',{tag:tag_class});
+					        
 					         
-					         if($(this).hasClass('red'))
-					        	{
-					        	 	var filter_fixed	=	$('body').filterFixed('hideTooltipe',tag_class);
-					        	 		_data_filter		=	 implode(',',filter_fixed.filter);
+					         
+					         var get_filter_negado	=	aba_active.wrsAbaData('getFilterNegado',md5(level_full));
+					         
+					         //Regra para não permitir duplicidade para o Filtro simples
+					         var processa_silples	=	 true;
+					         if(typeof get_filter_negado.simples!=undefined)
+					        	 {
+					        	 	if(get_filter_negado.simples==true) processa_silples=false;
 					        	 }
 					         
-
+					         
 					         var vir			=	',';
+					         
 					         if(!isEmpty(getNewFilter))
 					         {
-					        	 if(isEmpty(_data_filter) || isEmpty(getNewFilter))	vir	=	'';
-					        	 _data_filter = _data_filter+vir+implode_wrs(getNewFilter);
+						        	 if(isEmpty(_data_filter) || isEmpty(getNewFilter))	vir	=	'';
+						        	 
+						        	 //Faz com que o filtro simples não seja duplicado
+						        	 if(processa_silples==false)
+						        	 {
+						        		 _data_filter=vir=	'';
+						        	 }
+						        	 
+						        	 
+						        	 _data_filter = _data_filter+vir+implode_wrs(getNewFilter);
+						        	 
+						        	 
+						        	 _data_filter	=	 unique_data(_data_filter);
+					        	 
 					         }
 					         
 					         
 					         
 					         
+					         //Aplicação do Filtro
 							if(!empty(_data_filter))
 							{
 									_json_filter						=	_data_filter;
 									_index.push(_json_filter);		
-									filters_up[filters_up.length]	=	'{'+_json_filter+'}';	
-									
+									//Obtendo filtros negado
+
+									var _querys												=	rules_filter_tags(get_filter_negado.negado,level_full,_json_filter);
+										filters_up.push(_querys.query);
+										filters_up_only_Data.push(_querys.normal);	
+										
 							}
 							
 							
-
-							FilterOriginal[FilterOriginal.length]	=	{'class':'__'+replace_attr(level_full),data:_json_filter};
 							
-							addFilter[addFilter.length]	=	[replace_attr(level_full),'',_json_filter];
+							FilterOriginal[FilterOriginal.length]	=	{'class':'__'+replace_attr(level_full),data:_json_filter};							
+							addFilter[addFilter.length]				=	[replace_attr(level_full),'',_json_filter];
+							
+
 						}
 					
-			});
+			};
+			
+			
+			$('.WRS_DRAG_DROP_FILTER h2').each(function()
+					{
+										var level_full					=	$(this).attr('level-full');	
+										var tag_class					=	$(this).attr('tag-class');
+										var is_red						=	$(this).hasClass('red');
+										
+										if(is_red==true)
+										{
+											add_filter_fixed[tag_class]=	true;
+										}
+										
+										find_filter(level_full,tag_class,is_red);
+										
+
+					});
+			
+			
+			//HERE
+			//Adicionando Filtros fixos
+				var allFilterFixeds		=		$('body').filterFixed('add_filtro_fixo_query',{
+																								fn 				:	rules_filter_tags,
+																								filtersUP		:	filters_up,
+																								originalFilter	:	FilterOriginal,
+																								onlyData		:	filters_up_only_Data,
+																								FilterAdd		:	addFilter,
+																								index			:	_index
+																							});
+				
+			
+				
+				//Devolvendo os filtros fixos aplicados
+				filters_up					=	allFilterFixeds.filtersUP;
+				filters_up_only_Data		=	allFilterFixeds.onlyData;
+				addFilter					=	allFilterFixeds.FilterAdd;
+				FilterOriginal				=	allFilterFixeds.originalFilter;
+				_index						=	allFilterFixeds._index;
+				//END
+				
+			
 			
 
+			
 			
 			if(is_array(filters_up)) 
 				{
@@ -1120,9 +1368,16 @@ function wrsFilterClickFalse(filter_hide)
 				}
 			
 			
+
 			if(typeEvent=='all') {
 				_END('WrsFilter::getFiltersLevelUP');
-				return {data:tagQuery,full:FilterOriginal,filter:addFilter, index:implode(',',_index)};
+				return {
+							data:tagQuery,
+							full:FilterOriginal,
+							filter:addFilter, 
+							index:implode(',',_index),
+							only_compare	:	implode(',',filters_up_only_Data)
+						};
 			}
 			_END('WrsFilter::getFiltersLevelUP');
  			return tagQuery; 			
@@ -1149,6 +1404,9 @@ function wrsFilterClickFalse(filter_hide)
 			{
 					_ONLY('WrsFilter::__getAllFiltersToRun');
 					return getFiltersLevelUP('','all');
+					
+					
+					
 			}
 		
 		 
@@ -1172,9 +1430,10 @@ function wrsFilterClickFalse(filter_hide)
 			html	+=  '  <div class="form-group">'
 			html	+=  '    <div class="input-group">'
 			html	+=  '      <input type="text" class="form-control wrs_element btn_event_filtro_search_input" value="'+searchText+'" index-data="'+index_data+'" placeholder="'+LNG('WHAT_SEARCH')+'">'
-			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_search" index-data="'+index_data+'"><i class="fa fa-search"></i></div>'
-			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_clean" index-data="'+index_data+'"><i class="fa fa-eraser"></i></div>'
-			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_remove" index-data="'+index_data+'"><i class="fa fa-trash-o"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_search" 	index-data="'+index_data+'"><i class="fa fa-search"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_negado wrs-tooltip" title="'+LNG('TOOLTIP_BTN_NEGADO')+'" 	index-data="'+index_data+'"><i class="fa fa-times-circle"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_clean wrs-tooltip"  title="'+LNG('TOOLTIP_BTN_ERASER_FILTER_LOCAL')+'" 	index-data="'+index_data+'"><i class="fa fa-eraser"></i></div>'
+			html	+=  '      <div class="input-group-addon btn wrs_element btn_event_filtro_remove wrs-tooltip" title="'+LNG('TOOLTIP_BTN_CLEAN_FILTER_LOCAL')+'" 	index-data="'+index_data+'"><i class="fa fa-trash-o"></i></div>'
 			html	+=  '    </div>'
 			html	+=  '  </div>'
 			html	+=  '</div>';
@@ -1207,7 +1466,7 @@ function wrsFilterClickFalse(filter_hide)
 				;break;
 			}
 			
-
+			$('.btn_event_filtro_search').hide();
 			
 			//configurando a borracha
 			
@@ -1227,6 +1486,8 @@ function wrsFilterClickFalse(filter_hide)
 		 		setJsonEncodeDecode(input,'LIKE',input.val(),true);
 			}	
 		 	
+
+		 
 		 	
 		 	var btn_event_filtro_remove=	 function(){
 
@@ -1258,16 +1519,45 @@ function wrsFilterClickFalse(filter_hide)
 		 		{
 		 			setJsonEncodeDecode($(this),'LIKE',$(this).val(),true);
 		 		}
-		 	}	
+		 		
+		  	}	
+		 
+		 	
+		 	var btn_event_filtro_search_input_click	=	 function(e)
+		 	{
+				//@Link http://stackoverflow.com/questions/152975/how-to-detect-a-click-outside-an-element
+				 		
+				 		if($('.btn_event_filtro_negado').is(":visible")==true)
+				 		{ 
+				 			//Processando o Evento do click fora para mudar os tipos de bottons
+							$('html').one('click',function() 
+							{
+								//Desabilita o negação e habilita o button search
+						 		$('.btn_event_filtro_negado').show();
+						 		$('.btn_event_filtro_search').hide();
+						 		$('.btn_event_filtro_clean').hide();
+							});
+					e.stopPropagation();
+		 		}
+					  
+					  
+		 		//Desabilita o negação e habilita o button search
+		 		$('.btn_event_filtro_negado').hide();
+		 		$('.btn_event_filtro_search').show();
+		 	}
 		 	
 		 	var btn_event_filtro_search_input_up=	 function(e)
 		 	{
+		 		
 		 		if(!empty($(this).val()))
 		 			{
 		 				$(this).parent().find('.btn_event_filtro_clean').show();
 		 			}else{
 		 				$(this).parent().find('.btn_event_filtro_clean').hide();
 		 			}
+		 		
+		 		
+		 		
 		 	}	
 		 	
 
@@ -1278,20 +1568,43 @@ function wrsFilterClickFalse(filter_hide)
 		 	}
 		 	
 		 	
+		 
+		 	//Botão Evento Negação
+		 	var btn_event_filtro_negado	=	 function()
+		 	{
+		 		//Obtendo informações de quem dever ser carregado
+		   		var index_data			=	 $(this).attr('index-data');
+	    		var main				=	$('#wrs_header_filter_main_'+index_data);
+	    		//var json				=	$.parseJSON(base64_decode(main.attr('json')));	
+	    		var json				=	main.data('wrs-data');	
+	    		var aba_active			=	get_aba_active_object();
+	    		
+
+	    		var status		=	aba_active.wrsAbaData('getFilterNegado',json.tag_class); 
+	    		
+	    			aba_active.wrsAbaData('enableFilterNegado',{type:json.tag_class, data: !status.negado, level_full:json.LEVEL_FULL});
+	    		
+	    			set_css_negado(json.tag_class,aba_active);
+		 	}
+		 	
 		 	/*
 		 	 * Apenas implementa o evento quando terminar de carregar
 		 	 */
 		 	
 			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_search').unbind('click').click(btn_event_filtro_search);
 			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_search_input').unbind('keypress').keypress(btn_event_filtro_search_input).focus();
+			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_search_input').unbind('click').click(btn_event_filtro_search_input_click);
 			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_search_input').unbind('keyup').keyup(btn_event_filtro_search_input_up);
 			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_clean').unbind('click').click(btn_event_filtro_clean);
+			 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_negado').unbind('click').click(btn_event_filtro_negado);
+			 	
 			 	
 			 	if(atributo_simples_composto!='simples')
 			 	{
 				 	$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_remove').unbind('click').click(btn_event_filtro_remove);
 			 	}else{
 			 		$(nameID).find('.btn_event_filtro_remove').hide();
+			 		$(nameID).find('.wrs_filter_body_container').find('.btn_event_filtro_negado').remove();
 			 	}
 
 
@@ -1321,6 +1634,7 @@ function wrsFilterClickFalse(filter_hide)
          var  clickHeaderFiltro	 = function (_event,type)
          {
 			 _START('WrsFilter::clickHeaderFiltro');
+			 
         	 var event				=	 _event;
         	 var pageHome			=	false;
         	 
@@ -1339,21 +1653,28 @@ function wrsFilterClickFalse(filter_hide)
         	 var wrs_filter_body	=	'#wrs_filter_body_'+index_data;
         	 var body				=	$(wrs_filter_body);
         	 
-        	 
 	        	 json['id']			=	wrs_filter_body;
 	        	 json['index_data']	=	index_data;
 	        	 json['FILTER_UP']	=	getFiltersLevelUP(json['LEVEL_UP']);
 	        	 json['atributo']	=	event.attr('atributo');
-	         
+	         	         
 	        	 
 	        	 json['tag_class']	=	tag_class;
 	         
 	        //filtro ativo na aba
-	         json['FILTER']	=	aba_active.wrsAbaData('getFilter',{tag:tag_class});
+	         json['FILTER']	=	aba_active.wrsAbaData('getAllFilters',{tag:tag_class});
+
+	         
+	         
+
+	         
+	         //get_aba_active_object().wrsAbaData('getAllFilters',{tag:'cdc3071e426fb8e753087179af2c8610'})
 	        	 
 	         var getNewFilter	=	aba_active.wrsAbaData('getNewFilter',{tag:tag_class});
 	         var vir			=	',';
-	         if(!isEmpty(getNewFilter)){
+	         
+	         if(!isEmpty(getNewFilter))
+	         {
 	        	 if(isEmpty(json['FILTER']))	vir	=	'';
 	        	 json['FILTER'] = json['FILTER']+vir+getNewFilter;
 	         }
@@ -1392,7 +1713,6 @@ function wrsFilterClickFalse(filter_hide)
      			json['json']		=	jsonMukltiple;	
      		}
      		
-        	 
 			 setLoading(body.find('.wrs_filter_body_container'));
 
 			 menuFilter(index_data,wrs_filter_body,'before',json['LIKE']);
@@ -1410,8 +1730,11 @@ function wrsFilterClickFalse(filter_hide)
      */
 	 var funCallBackRun	=	 function(data)
 	 	{
+		 	
 			 _START('WrsFilter::funCallBackRun');
 		 	$(data.data.id).find('.wrs_filter_body_container').html(data.html);
+		 	
+		 	
 
 	 		var index_data			=	 data.data.index_data;
  			var _main				=	$('#wrs_header_filter_main_'+index_data);
@@ -1420,6 +1743,8 @@ function wrsFilterClickFalse(filter_hide)
 		 		_main.data('wrs-data',data.data);
 
 				
+		 		set_css_negado(data.data.tag_class,get_aba_active_object());	
+		 		
 		 
 		 	/*
 		 	 * Auto detect checkBox Main
@@ -1547,15 +1872,18 @@ function wrsFilterClickFalse(filter_hide)
 	 			var checked		=	$(this).prop('checked');
 	 			var value 		=	$(this).val();
 	 			
-	 			 var aba_active	=			get_aba_active_object();
+	 			 var aba_active	=	get_aba_active_object();
 	 			 var tag_class	=	$(this).attr('tag-class');
 	 			
 	 			if(type_input!='radio')
 					{
 	 					var _val		=	$(this).val();
 	 					aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:_val,remove:checked? false: true});
+
 					}else{
-						aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:$(this).val(),only_data:true});
+
+	 					aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null});//Limpa todos os filtros e adicinoa apenas o escolhidp
+	 					aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:$(this).val(),only_data:true});
 					}
 	 			
 	 			cleanFiltersDown(json['LEVEL_DOWN'],'',nameTag);
@@ -1569,7 +1897,7 @@ function wrsFilterClickFalse(filter_hide)
 		 	 */
 		 	var pws_click_triger_single =  function()
 		 	{
-				_START('WrsFilter::funCallBackRun::pws_click_triger_single');
+//				_START('WrsFilter::funCallBackRun::pws_click_triger_single');
 		 		var index	=	 $(this).index();
 		 		
 		 		if(index==1)
@@ -1647,7 +1975,7 @@ function wrsFilterClickFalse(filter_hide)
 		 	}//End evento
 		 	
 		 	//É similar com a requisição acima mas apenas forma seleciona o primeiro elsemento sem processar a Grid
-		 	if(data.data.FORCE_ONLY_FIRST_CHECKBOX)
+		 	if(data.data.FORCE_ONLY_FIRST_CHECKBOX==true)
 		 		{
 			 		$(data.data.id).find('.wrs_filter_body_container').find('.wrs_input_filter_single:first').each(function(){
 			 			$(this).prop('checked',true);
@@ -1722,7 +2050,7 @@ function wrsFilterClickFalse(filter_hide)
 	 }
 	 
 	 
-   	 var  setWRSFilterCommon = function()
+   	 var  setWRSFilterCommon = function(typeExec)
 							 {
 								 
 								 _START('WrsFilter::setWRSFilterCommon');
@@ -1827,10 +2155,9 @@ function wrsFilterClickFalse(filter_hide)
 									//http://api.jqueryui.com/accordion/#method-destroy
 									$( ".WRS_DRAG_DROP_FILTER" ).accordion( "option","active",false ).accordion( "refresh");
 									
-									
-									//Bloqueia o drag and drop
-									$('body').filterFixed('hide',true);
-									 
+									//Bloqueia o drag and drop dos filtros fixos
+//									$('body').filterFixed('hide',{filter:true, exec:typeExec});
+
 									_END('WrsFilter::setWRSFilterCommon'); 
 							 } //End setWRSFilterCommon
    	 
@@ -1844,7 +2171,7 @@ function wrsFilterClickFalse(filter_hide)
 				   		_START('WrsFilter::__click_wrs_panel_filter_icon');
 				   		
 				   		var event	=	 $('.wrs_panel_filter_icon');
-
+				   		
 				   		
 				   		var filter_hide		=	event.attr('filter_hide'); //Flag armazenada no botão para saber se já foi pressionado
 				
@@ -1852,7 +2179,7 @@ function wrsFilterClickFalse(filter_hide)
 				
 						if(filter_hide=='false')
 						{	
-							setWRSFilterCommon();
+							setWRSFilterCommon(true);
 					 		filter_hide	=	true;
 						}else{
 							$('.WRS_DRAG_DROP_RECEIVER_FILTER').show(); // Ativando o Drag And Drop 
@@ -1879,16 +2206,23 @@ function wrsFilterClickFalse(filter_hide)
 					var filter					=	$(".WRS_DRAG_DROP_FILTER");
 					var is_atributo_simples		=	filter.attr('is_atributo_simples');
 					var no_simple				=	true;
+					var aba_ativa				=	 get_aba_active_object();
 
-					if(is_atributo_simples=='false') {
+					if(is_atributo_simples=='false') 
+					{
 						_END('WrsFilter::__wrs_check_filter_simples');
-						return true;}
+						return true;
+					}
 					
 					filter.find("h2").each(function(){
 						var atributo	=	$(this).attr('atributo');		
 						var json		=	'';
+						var tag_class	=	 $(this).attr('tag-class');
 						
-						if(atributo=='simples')
+						
+						
+						
+						if(atributo=='simples' && isEmpty(aba_ativa.wrsAbaData('getAllFilters',{tag:tag_class})))
 							{
 //					 				json	=	 	$.parseJSON(base64_decode($(this).attr('json')));
 					 				json	=	 	$(this).data('wrs-data');
@@ -2037,7 +2371,8 @@ function wrsFilterClickFalse(filter_hide)
 						data_body		=	data_body==undefined || data_body==null || data_body=='' ? {} : data_body;
 						
 					var defaultData		=	{
-												filter_fixed					:	[]//Contem toda a estrutuda do filtro fixo
+												filter_fixed					:	[],//Contem toda a estrutuda do filtro fixo
+												filter_fixed_base				:	[]
 											}
 					
 					return $.extend({}, defaultData,data_body);
@@ -2046,12 +2381,106 @@ function wrsFilterClickFalse(filter_hide)
 		
 		
 		
+		var __getData	=	 function()
+		{
+			return GetData();
+		}
+		
+		
 		
 		//Carrega com as informações iniciais para o filtro fixo
     	var __init		=	 function(_jsonFilterFixed)
     	{
-    		var jsonFilterFixed		=	 _jsonFilterFixed;
     		_ONLY('filterFixed::__init');
+    		//variávelk global antiga userinfo_filter_fixed
+    		__init_element({data:_jsonFilterFixed,column:'filter_fixed'});
+    	}
+    	
+    	
+    	
+    	var __filterSugestDatabase		=	 function(_jsonFilterFixed)
+    	{
+    		_ONLY('filterFixed::__filterSugestDatabase');
+
+    		var jsonFilterFixed			=	_jsonFilterFixed;
+    		var get_data				=	GetData();
+    		var filtrer_fixed_login		=	 get_data.filter_fixed;
+    		var json					=	[];
+    		
+    		
+	    		for(var key in jsonFilterFixed)
+	    			{
+	    				var exist_data	=	false;
+	    				 try{
+	    					 
+	    					 	if(filtrer_fixed_login[str_replace('__','',(jsonFilterFixed[key][0]))])
+	    					 		{
+	    					 			exist_data	=	true;
+	    					 		}
+	    				 }catch(e){
+	    					 exist_data	=	false;
+	    				 }
+	    				
+	    				 if(exist_data!=true)
+	    				 {
+	    					 json[json.length]	=	jsonFilterFixed[key];
+	    				 }
+	    			}
+    		
+    		
+			get_data.filter_fixed_base	=	json;
+			
+		$('body').data(dataFilterFixed,get_data);
+		
+		
+    	}
+    	
+    	
+    	var __addFilterDB	=	 function()
+    	{
+    		var get_data				=	GetData();
+    		
+    		
+    		if(!isEmpty(get_data.filter_fixed_base))
+    			{
+    					set_value_box_relatorio({LAYOUT_FILTERS:get_data.filter_fixed_base});
+    					
+    					var filter		=	get_data.filter_fixed_base;
+    					var aba_active	=	get_aba_active_object();
+    					
+    					for(var line in filter)
+    						{
+    							var tag_class		=	str_replace('__','',filter[line][0]);
+
+    							var opt_insert		=	{tag:tag_class,data:filter[line][2]};
+    							
+    							aba_active.wrsAbaData('setNewFilter',opt_insert);
+    								
+
+    								
+    								if(filter[line][3]==true)
+    								{
+    						    		var filter_east					=	$('.wrs_panel_options ul .'+tag_class);
+    					    			var filter_east_json			=	filter_east.data('wrs-data');
+    						    		
+    									aba_active.wrsAbaData('enableFilterNegado',{type:tag_class, data:true, level_full:filter_east_json.LEVEL_FULL});
+    								}
+    								
+    								
+    								
+    							}
+    					
+    			}
+    		
+    	}
+    	
+    	
+    	
+    	
+     	var __init_element		=	 function(element)
+    	{
+    		var jsonFilterFixed		=	 element.data;
+    		_ONLY('filterFixed::__init_element');
     		//variávelk global antiga userinfo_filter_fixed
     		
     		if(typeof jsonFilterFixed == 'object')
@@ -2075,23 +2504,80 @@ function wrsFilterClickFalse(filter_hide)
 	    		
 	    		
 	    		
-	    		var get_data				=	GetData();
-	    			get_data.filter_fixed	=	jsonFilterFixed;
-	    			 
-	    			
-	    		$('body').data(dataFilterFixed,get_data);
+	    		var get_data					=	GetData();
+	    			get_data[element.column]	=	jsonFilterFixed;
+
+	    			$('body').data(dataFilterFixed,get_data);
     		}
+    	}
+     	
+     	
+    	
+    
+    	/*
+    	 * Falta validar remover todos dos pais e o title
+    	 */
+    	var actions_dimensions	=	 function(dimensao)
+    	{
+    		if(isEmpty(dimensao.level_up)) return true;
+    		
+    		if(isEmpty(dimensao.level_full)) return true;
+    		
+
+    		var dimensao_data		=	dimensao.level_full.split(']');
+    		var dimensal_level		=	dimensao_data[0]+']';
+    		var level_up			=	dimensao.level_up.split(',');
+    		var dimensoes			=	{};
+    		
+    		
+    		for(var line in level_up)
+    			{
+    				if(level_up[line].substring(0,dimensal_level.length)==dimensal_level)
+    					{
+    						var _class	=	md5(level_up[line]);
+    						
+    						if(dimensao.checa_dimensao==true)
+    							{
+    								var _key	=	dimensao.key==true ? '__' : '';
+    								dimensoes[_key+_class]=	true;
+    							
+    							}
+    							else
+    							{
+		    						//Remove o Filtro se ele for uns dos pais da dimensão e se não estiver no fixo
+		    						if(!array_find_data(dimensao.filter_fixed,_class))
+		    						{
+		    							$('.wrs_panel_options li.'+_class).remove();
+									}
+		    						
+		    						$('.wrs_panel_options li.'+_class).addClass('hide');
+    							}
+    						
+    					}
+    			}
+    		
+    		
+	    		if(dimensao.checa_dimensao==true)
+				{
+						return dimensoes;
+				}
+
     	}
     	
     	
     	
-    	
-    	
     	//Essa função é chamada em apenas dois lugares
-    	var __hide	=	 function(setFilter)
+    	var __hide	=	 function(_setFilter)
     	{
     		_START('filterFixed::__hide');
     		var _data		=	 GetData();
+    		
+    		var setFilter	=	_setFilter;
+    		
+    		if(_setFilter==undefined)
+    			{
+    				setFilter	=	{filter:false, exec:false};
+    			}
     		
     		//Verificando se o array está vazio
     		if(isEmpty(_data.filter_fixed)==true) 
@@ -2102,60 +2588,313 @@ function wrsFilterClickFalse(filter_hide)
     		
     		var	filter				=	_data.filter_fixed;
     		var add_filter_fixed	=	{};	
-    		 
+    		
+
     		//Escondendo os valores para drag and drop
     		for(var _class in filter)
     		{
-
-    			//Área das Métricas e Filtros mas apenas o DRAG
-    			$('.wrs_panel_options li.'+_class).addClass('hide');
-    			//Deixando apenas nas measures
-    			$('.wrs_panel_filter_measure').find('.'+_class).removeClass('hide');
-    			//Insere a classe de identificação de não se aplica e  remove o click
-    			
-	    		$('.WRS-'+_class).addClass('red').unbind('click');
+	    		//Removendo os pais e dos filtros do lado direiro e esquerdo
 	    		
-	    		if($('.WRS-'+_class).length==0)
-	    		{
-	    			add_filter_fixed[_class]=	filter[_class];
-	    		}
+	    		var filter_east					=	$('.wrs_panel_options ul .'+_class);
+    			var filter_east_json			=	filter_east.data('wrs-data');
+    			 
+    			if(filter_east_json!=undefined)
+    			{                                                                                                                                                                                                                                                  
+	    			//Removendo as dimensões dos elementos direito e esquerdo
+	    			actions_dimensions({
+	    															level_full		:	filter_east_json.LEVEL_FULL	/*"[PERIODO].[MES]"*/,
+	    															level_up		:	filter_east_json.LEVEL_UP  /*"[PERIODO].[ANO],[PERIODO].[MAT],[PERIODO].[SEMESTRE],[PERIODO].[TRIMESTRE],[PERIODO].[YTD]"*/,
+	    															checa_dimensao	:	false,
+	    															key				:	true
+	    													});
+    			}
+    			//END
     			
     		}
     		
-    		
-    		//Fazendo a validação para poder inserir o filtro se ele não existir
-    		if(setFilter==true)
-    			{
-    				
-	    			if(!isEmpty(add_filter_fixed,true))
-	    				{
-	    					//console.log('add_filter_fixed',add_filter_fixed);
-	    					
-	    					for(var lineADDFilter in add_filter_fixed)
-	    						{
-	    							var _m_filter		=	{LAYOUT_FILTERS: ['__'+lineADDFilter, "", add_filter_fixed[lineADDFilter].filter]};
-	    								//Adicionando o Filtro Apenas para ficar visível na tela
-	    								set_value_box_relatorio(_m_filter,false);
-	    								$.WrsFilter('wrs_panel_filter_icon'); //Apenas Eventro do trigger click para o icone aparecer
 
-
-	    						}
-	    				}
-    				
-    			}
-    		
+    		 
     		
     		_END('filterFixed::__hide');
     	}
     	
+    	var join_dimensao	=	 function(receive,to_add)
+    	{
+    		var start_receive	=	 receive;
+    		
+    		for(var line in to_add)
+    			{
+    				start_receive[line]=	to_add[line];
+    			}
+    		
+    		return start_receive;
+    	}
     	
+    	
+    	
+    	var __filtro_fixed_check		=	 function(_filters)
+    	{
+    		if(isEmpty(_filters)) return _filters;
+    		
+    		var filter		=	_filters;
+    		var _data		=	 GetData();
+    		var filter_fixo=	_data.filter_fixed;	
+    		
+    		
+    		if(isEmpty(filter_fixo))  return filter;
+    		
+    		var key_not_add		=	{};
+    		
+    		for(var lineFixed in filter_fixo)
+    			{
+    					var filter_east_json			=	$('.wrs_panel_options li.'+lineFixed).data('wrs-data');
+    					
+    					if(filter_east_json==undefined) continue; 
+    					
+    					key_not_add['__'+lineFixed]	=	true;
+
+	    					if(!isEmpty(filter_east_json.LEVEL_UP))
+	    					{
+						    	var filter_pai_dimensao	=	actions_dimensions({
+															level_full		:	filter_east_json.LEVEL_FULL,
+															level_up		:	filter_east_json.LEVEL_UP,
+															checa_dimensao	:	true
+													});
+						    	
+						    	key_not_add		=	join_dimensao(key_not_add,filter_pai_dimensao);
+	    					}
+				}
+    	
+    		
+    		
+    		
+    		
+    		//Removendo se existir algum filtro ou pai do filtro da mesma dimensal dos filtros fixos
+    		for(var lineFilter in filter)
+    			{
+    				//Removendo do lado equerdo todos os menus fixos
+					if(typeof key_not_add[filter[lineFilter][0]]=="boolean") 
+					{
+						//removendo do lado direito
+						delete filter[lineFilter];	//Removendo do array do filtro 
+					}
+    			}
+    		
+    		return filter;
+    	}
+    	
+    	
+    	//Removendo o Filtro de drag and drop
+    	var __hide_drag_drop	=	 function()
+    	{
+    		var _data		=	 GetData();
+    		var filter_fixo=	_data.filter_fixed;	
+    		
+    		
+    		if(isEmpty(filter_fixo))  return false;
+    		
+    		var key_not_add		=	{};
+    		
+    		for(var lineFixed in filter_fixo)
+    			{
+    					var filter_east_json			=	$('.wrs_panel_options li.'+lineFixed).data('wrs-data');
+    					
+    					if(filter_east_json==undefined) continue; 
+    					
+    					key_not_add[lineFixed]	=	true;
+
+	    					if(!isEmpty(filter_east_json.LEVEL_UP))
+	    					{
+						    	var filter_pai_dimensao	=	actions_dimensions({
+															level_full		:	filter_east_json.LEVEL_FULL,
+															level_up		:	filter_east_json.LEVEL_UP,
+															checa_dimensao	:	true,
+															key				:	false
+													});
+						    	
+						    	key_not_add		=	join_dimensao(key_not_add,filter_pai_dimensao);
+	    					}
+				}
+    	
+    		var key_main	=	 {};
+    		
+    		//Removendo se existir algum filtro ou pai do filtro da mesma dimensal dos filtros fixos
+    		for(var line in key_not_add)
+    			{
+    				var __object	=	$('.wrs_panel_options li.'+line);
+    				var key_chan	=	__object.parent().parent().prev().addClass('wrs_manager_hide_dimension');
+    					__object.hide();
+    			}
+    		
+    		
+    		
+
+    				///Escondendo as dimensões
+    				//Se todos os conteúdos estiverem escondidos então esconde a dimensão
+    				$('.wrs_manager_hide_dimension').each(function(){
+    					
+    					var dimentsion	=	 $(this);
+    					var _next		=	 $(this).next();
+    					var _li			=	_next.find('li');
+    					
+    					
+    					if(dimentsion.attr('wrs-hide')!='show')
+    					{
+    						dimentsion.attr('wrs-hide','hide');
+    							_li.each(function()
+    									{
+		    									var wrs_search	=	 $(this).attr('vvalue');
+		    										if(wrs_search!='wrs_search')
+		    										{
+		    											if($(this).is(':hidden')==false) 
+		    											{
+		    												dimentsion.attr('wrs-hide','show');
+		    											}
+		    										}
+		    										
+		    										if($(this).index()==(_li.length-1))
+		    											{
+		    												if(dimentsion.attr('wrs-hide')=='hide')
+		    												{
+		    													dimentsion.hide();
+		    													_next.hide();
+		    												}
+		    											}
+    									});
+    					}
+    				});//.wrs_manager_hide_dimension
+    				$('.wrs_manager_hide_dimension').removeClass('wrs_manager_hide_dimension');
+    				
+    	}
+    	
+    	
+    	
+    	
+    	var __add_filtro_fixo_query		=	 function(_inputs)
+    	{
+    		
+    		var inputs		=	_inputs;
+    		var _data		=	 GetData();
+    		var filter_fixo	=	_data.filter_fixed;	
+    		
+    		
+    		if(isEmpty(filter_fixo))  return _inputs;
+    		
+    		var key_not_add		=	{};
+    		var filters_up		=	[];
+    		
+    		/**
+    		 * Essa regra do código é a mesma que é utilizada antes de chamar a função __add_filtro_fixo_query
+    		 */
+    		if(!isEmpty(filter_fixo))
+    		{	
+		    		for(var tag_class in filter_fixo)
+		    			{
+		    					var filter_east_json			=	$('.wrs_panel_options li.'+tag_class).data('wrs-data');
+		    					
+		
+		    					if(isEmpty(filter_east_json)) continue;
+		    					
+		    					
+		    					var level_full					=	filter_east_json['LEVEL_FULL'];	
+								var type						=	filter_fixo[tag_class].type;	//negado/simples
+								var _negado						=	false;
+								var _json_filter				=	implode(',',filter_fixo[tag_class].filter);
+								
+									if(type=='negado')
+									{
+										_negado=	true;
+									}
+									
+									inputs.index.push(_json_filter);		
+								
+								//Obtendo filtros negado
+								var _querys												=	inputs.fn(_negado,level_full,_json_filter);
+		
+									inputs.filtersUP.push(_querys.query);
+									inputs.onlyData.push(_querys.normal);	
+									
+									inputs.originalFilter.push({'class':'__'+replace_attr(level_full),data:_json_filter});
+									
+									inputs.FilterAdd.push([replace_attr(level_full),'',_json_filter]);
+		    					
+						}//END FOR
+    		}
+    		
+    		return inputs;
+    		
+    	}
+    	
+    	
+    	var __add_filtro_fixo_query_save		=	 function(_inputs)	//LAYOUT_FILTERS, filter_selected
+    	{
+    		var inputs		=	_inputs;
+    		var _data		=	 GetData();
+    		var filter_fixo	=	_data.filter_fixed;	
+    		
+    		
+    		
+    		if(isEmpty(filter_fixo))  return _inputs;
+    		
+    		var key_not_add		=	{};
+    		var filters_up		=	[];
+    		
+    		
+    		 // Essa regra do código é a mesma que é utilizada antes de chamar a função __add_filtro_fixo_query
+    		 
+    		if(!isEmpty(filter_fixo))
+    		{	
+    			
+    				var filter_key		=	[];
+    				
+		    		for(var tag_class in filter_fixo)
+		    			{
+		    					
+
+								var type						=	filter_fixo[tag_class].type;	//negado/simples
+								var _json_filter				=	implode(',',filter_fixo[tag_class].filter);
+								var string_type					=	'';
+								var layout_filters				=	filter_fixo[tag_class]['class'];
+									if(type=='negado')
+									{
+										string_type	=	'~';
+									}
+									
+									if(type=='simples')
+									{
+										string_type	=	'*';
+									}
+									
+									
+									filter_key.push(string_type+layout_filters);
+							
+		    					
+						}//END FOR
+		    		
+		    		var vir = ',';
+		    			if(isEmpty(inputs.LAYOUT_FILTERS)){
+		    				vir	='';
+		    			}
+		    			
+		    			
+		    			inputs.LAYOUT_FILTERS.request	=	inputs.LAYOUT_FILTERS.request+vir+implode(',',filter_key);
+		    			
+    		}
+    		
+    		return inputs;
+    		
+    		
+    	}
+    	
+    	
+    
     	
     	
     	
     	
     	//Apenas devolve o array para ser tratado
     	//È trabalhado também no perfil onde é manipulado para mandar para o filtro
-    	var __hideTooltipe	=	 function(index)
+    	var __tooltipeFixed	=	 function(index)
     	{
     		
     		_START('filterFixed::__tagFilterWRS');
@@ -2193,15 +2932,7 @@ function wrsFilterClickFalse(filter_hide)
     	}
     	
 
-    	
-    	var __joinFilter	=	 function(data)
-    	{
-    		
-    			_START('filterFixed::__joinFilter');
-    			
-    			
-    		
-    	}
+    	 
     	
     	/*
 		 * Metodos de funções
@@ -2211,10 +2942,18 @@ function wrsFilterClickFalse(filter_hide)
 		{
 		        init 							: 	__init,
 		        hide							:	__hide,
-		        hideTooltipe					:	__hideTooltipe,
-		        joinFilter						:	__joinFilter	
+		        tooltipeFixed					:	__tooltipeFixed,
+		        filterSugestDatabase			:	__filterSugestDatabase,
+		        getData							:	__getData,
+		        addFilterDB						:	__addFilterDB,
+		        filtro_fixed_check				:	__filtro_fixed_check,
+		        add_filtro_fixo_query			:	__add_filtro_fixo_query,
+		        add_filtro_fixo_query_save		:	__add_filtro_fixo_query_save,
+		        hide_drag_drop					:	__hide_drag_drop
 		};
 		
+		
+		 //console.log('fixed',methodOrOptions);
 		 
 		/*
 		 * 

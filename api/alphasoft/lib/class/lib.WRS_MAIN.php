@@ -197,7 +197,7 @@ class WRS_MAIN  extends WRS_BASE
 		}
 		
 		//Comentado temporariamente
-		/*
+		
 		$perfil_type	=	 WRS::INFO_SSAS_LOGIN('PERFIL_ID');
 		if($perfil_type == 'MST' || $perfil_type == 'ADM' )
 		{
@@ -210,7 +210,7 @@ class WRS_MAIN  extends WRS_BASE
 			include(PATH_TEMPLATE.'wrs_main_database.php');
 			$dashboard.=$html;
 			
-		}*/
+		}
 		
 		
 		return array('database'=>$html_body,'dashboard'=>$dashboard);

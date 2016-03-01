@@ -39,6 +39,7 @@ print_r(WRS_GLOBAL::getPHP('measure'));
 ?>
 </body>
 */
+
 class WRS_GLOBAL
 {
 	/*
