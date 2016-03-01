@@ -367,10 +367,11 @@ var context = context || (function () {
 		 */		
 		//var table_parents	=	$(this).parents('div');
 		var table_parents	=	find_parent_class($(this),'type_wrs_container');
-		
 		var esconde			=	false;			
 
 		$('#dropdown-' + id).find('.REMOVE_LINE_HEADER').removeClass('hide');
+		
+		var report_id	=	'#'+$(this).parents('.wrs_grid_container').attr('id');
 		
 		 
 		 //Responsável por gravar na variável global as informações do drill que será usado para manipular o drill
@@ -446,13 +447,14 @@ var context = context || (function () {
 		//END
 		
 		//Verificando se é linha de total
-		if($(this).hasClass('tag_total') || $(this).parent().hasClass('tag_total')) {
+		if($(this).hasClass('tag_total') || $(this).parent().hasClass('tag_total')){
 			return true;
 		}
+		
 		//Verificando linha de total mas da locked para o content 
 		if($(this).parent().parent().parent().parent().hasClass('k-grid-content-locked'))
 		{
-			if($('.k-grid-content tr:eq('+$(this).parent().index()+')').hasClass('tag_total'))
+			if($(report_id+' .k-grid-content tr:eq('+$(this).parent().index()+')').hasClass('tag_total'))
 				{
 					return true;
 				}

@@ -389,7 +389,7 @@ class KendoUi
 						<div class="wrs_box {$idTag}BOX">
 									{$WRS_PANEL_HEADER_TABLE}
 								
-									<div id="{$idTag}" class="wrsGrid table_border border_bottom hide"  ></div>
+									<div id="{$idTag}" class="wrsGrid table_border border_bottom hide wrs_grid_container"  ></div>
 									
 									<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
 							
