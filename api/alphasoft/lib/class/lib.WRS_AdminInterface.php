@@ -123,6 +123,8 @@ HTML;
 				$this->apagarArquivoGerado($this->temp_folder.$temp_filename_zip);
 			}
 			exit();
+			
+			
 				
 		}else{
 			return false;

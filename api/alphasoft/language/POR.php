@@ -27,7 +27,12 @@
 	
 	$language['ERROR_CANT_CREATE_JOB'] 						= "Ops.. Favor reenviar a consulta, não foi possível criar um job, se o erro persistir favor entrar em contato com o suporte";
 	
+	$language['CSV_ERROR_TABLE_EMPTY']			="Ops, ainda não foi gerado nenhum relatório para essa  consulta, ou falta informaçõe da tabela para ser gerada.";
+	$language['CSV_NOT_GENERATE']			=	'Não está sendo possivel gerar o CSV, erro interno no banco';
 
+	$language['CSV_GENERATE_ZIP']		=	'Gerando %s arquivos CSV';
+	
+	
 	$language['MENU_ADMIN_CUSTOMER']		=	'Clientes';
 	$language['MENU_ADMIN_USER']			=	'Usuários';
 	$language['MENU_ADMIN_DATABASE']		=	'Databases';

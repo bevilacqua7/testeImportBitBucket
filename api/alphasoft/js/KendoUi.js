@@ -29,6 +29,137 @@ include_js('Menu');
 include_js('templateReport');
 include_js('Abas'); */
 
+
+function set_remove_csv_manager(report_id,type)
+{
+	
+	var wrs_csv_zip	=	$('body').data('wrs_csv_zip');
+
+	if(isEmpty(wrs_csv_zip)) wrs_csv_zip = {};
+	
+	
+	if(type=='remove')
+	{
+		delete wrs_csv_zip[report_id];
+	}else{
+		wrs_csv_zip[report_id]	=	true;
+	}
+	
+	var arquivos_sendo_gerado	=	array_length(wrs_csv_zip);
+	
+	if(arquivos_sendo_gerado==0)
+	{
+		$('.wrs_generate_csv_zip').remove();
+	}else{
+		
+		$('.wrs_generate_csv_zip span').html(sprintf(LNG('CSV_GENERATE_ZIP'),arquivos_sendo_gerado));
+	}
+	
+	
+	
+	$('body').data('wrs_csv_zip',wrs_csv_zip);
+	
+	
+	
+	
+}
+
+function generate_csv_zip_request(data)
+{
+	var download 	=	 false;
+	
+	if(typeof data.download!=null)
+		{
+			download	=	data.download;
+		}
+	
+	
+	if(download!=false )
+	{
+		if(!isEmpty(download))
+		{
+			window.location.href = download;
+		}
+	}
+	
+	
+	set_remove_csv_manager(data.report_id,'remove');
+	
+	
+	if(!isEmpty(data['error']))
+	{
+		WRS_ALERT(data['error'],'error');
+		return false;
+	}
+	
+	
+	
+	
+	
+}
+
+function generate_csv_zip()
+{
+	//WrsGridKendoUiControlColumnPlusMinus::wrs_export_event
+	
+	
+	var html		=	'<div class="progress wrs_generate_csv_zip">'+
+						  '<div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span></span>'+
+						 '</div>'+
+						'</div>';
+	
+	
+	var get_table		=	 get_aba_active_object().wrsAbaData('getKendoUi');
+	var report_wrs		=	get_aba_active_kendoUi();
+	var title_aba		=	date('Y_m_d_')+report_wrs.REPORT_ID+'_'+str_replace(' ','_',report_wrs.TITLE_ABA);
+	
+
+	
+	if(!isEmpty(get_table))
+		{
+				if(typeof get_table.TABLE_CAHCE !=undefined)
+				{
+					//Adicionando a tela
+					if($('.wrs_generate_csv_zip').length==0)
+					{
+						$('body').append(html);
+					}
+					
+					
+					set_remove_csv_manager(report_wrs.REPORT_ID,'add');//Gerando o CSV
+					
+					var	param_request	=	{
+										table		:	get_table.TABLE_CAHCE,
+										title		:	title_aba,
+										report_id	:	report_wrs.REPORT_ID
+									};
+					
+						
+					
+					param_request['file']	=	param_request['class']	=	'WRS_REPORT';
+					param_request['event']	=	'csv_zip';
+					
+
+				TRACE('Enviando parametro para o run.php mas sem esperar resposta file:common.js csv_zip');
+				
+				$.post('run.php',param_request,generate_csv_zip_request,'json').fail(function() {
+							set_remove_csv_manager(report_wrs.REPORT_ID,'remove');
+							WRS_ALERT(LNG('ERRO_FILE_PROCCESS'),'error');
+				  });
+				
+				
+							
+					
+					return true;
+				}
+		}
+	
+	
+	WRS_ALERT(LNG('CSV_ERROR_TABLE_EMPTY'),'error');
+	return false;
+	
+}
+
 function WRSKendoGridCompleteRun(_wrs_id,layout,_paranKendoUi,load_direct)
 {
 	_START('WRSKendoGridCompleteRun');
@@ -1261,10 +1392,18 @@ function  themeSUM(nameID,arg,wrsParam)
 														var getClass	=	 $(this).attr('rel');
 														var report_id	=	 $(this).attr('id-tag');
 														
+															
+															//Gerando CSV
+															if(getClass=='k-grid-excel') 
+															{
+																generate_csv_zip();
+																return true;
+															}
 														
 															//Faz com que o sistema não execute opções nativas quando for export
 															$('.'+report_id).wrsAbaData('setKendoUi',{EXPORT:true});
 														
+															
 															if(getClass=='k-grid-pdf')
 															{
 																//Renderiza a tela para que possa ser manipupada quando for o PDF
@@ -1277,6 +1416,9 @@ function  themeSUM(nameID,arg,wrsParam)
 																	$(IDName).css({height:'auto'});
 																//Finaliza
 															}
+															
+															
+															
 															
 															if(!empty(getClass))
 																{

@@ -7,6 +7,12 @@
 	width:100%;
 }
 
+
+
+
+
+
+
 .grid li {
 	display: inline-block;
 	width: 300px;
@@ -14,23 +20,39 @@
 	padding: 20px;
 	text-align: left;
 	position: relative;
-	
-	
-
 }
 
+
+@media (min-width: 1700px) and (max-width: 5000px) {
+	.grid li {
+		width: 450px;
+	}
+}
+
+
+@media (min-width: 0px) and (max-width: 500px) {
+	.grid li {
+		width: 100%;
+	}
+}
+
+@media (min-width: 501px) and (max-width: 1699px) {
+	.grid li {
+		width: 300px;
+	}
+}
 
 
 .grid figure {
 	margin: 0;
 	position: relative;
 	
-	-webkit-border-radius: 3px !important;
-	-moz-border-radius: 3px !important;
-	border-radius: 3px !important;
-		-webkit-box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, 0.36);
-	-moz-box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, 0.36);
-	box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, 0.36);
+
+	
+-webkit-box-shadow: 4px 5px 10px 0px rgba(50, 50, 50, 0.7);
+-moz-box-shadow:    4px 5px 10px 0px rgba(50, 50, 50, 0.7);
+box-shadow:         4px 5px 10px 0px rgba(50, 50, 50, 0.7);
+
 
 }
 
@@ -98,18 +120,24 @@
 	color: #fff;
 }
 
-.grid figcaption span:before {
-	content: 'by ';
-}
+
 
 .grid figcaption a {
 	text-align: center;
-	padding: 5px 10px;
 	cursor:pointer;
-/*	display: inline-block;*/
 	color: #fff !important;
-	margin: 5px;
-	bottom: 10px;
+
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+
+	width:45px;
+	padding:8px !important;
+	font-size:20px;
+	top: 10px;
+	position: absolute;
+		margin: 5px;
 }
 
 
@@ -117,22 +145,16 @@
 	text-align: center;
 	padding: 5px 10px;
 	cursor:pointer;
-	margin: 5px;
-	bottom: 10px;
-	position: absolute;
-	right: 0px;
+	right: 5px;
 }
 
 
 .grid figcaption a.btn2 {
 	text-align: center;
-	padding: 5px 10px;
 	cursor:pointer;
-	margin: 5px;
-	bottom: 10px;
-	position: absolute;
-	right: 40px;
+	left: 5px;
 }
+
 
 
 
@@ -472,8 +494,5 @@
 	.grid {
 		padding: 10px 10px 100px 10px;
 	}
-	.grid li {
-		width: 100%;
-		min-width: 300px;
-	}
+
 }
