@@ -117,29 +117,32 @@ class WRSUpload extends WRS_BASE
 
 	public function Handler()
 	{
-		$this->ruleFileName();
+		$this->ruleFileName(); 
 		$UploadHandler = new UploadHandler($this->parameter);
 	}
 
 
 	public function listFiles()
 	{
-		$files=array();
-		if(trim($this->nameFile)!=''){
-			$files = array_diff(scandir(PATH_FILE.$this->nameFile), array('..', '.','thumbnail')); // gerado pela visualizacao do windows [thumbnail]
-		}
+		$files = array_diff(glob(PATH_FILE.$this->nameFile.'{,.}*', GLOB_BRACE), array(PATH_FILE.$this->nameFile.'..',PATH_FILE.$this->nameFile.'.')); // gerado pela visualizacao do windows [thumbnail]
 		return $files;
 	}
 
 	public function removeAllFiles()
 	{
 		$files=$this->listFiles();
+		$status=true;
 		if(is_array($files) && count($files)>0){
-			foreach($files as $file){
-				$this->removeFile($file);
+			foreach($files as $file){			
+				$s=$this->removeFile($file);
+				if($status && !$s){
+					$status=$s;
+				}
 			}
+			return $status;
+		}else{
+			return true;
 		}
-		return true;
 	}
 
 	public function getFileContent($file){
@@ -152,14 +155,37 @@ class WRSUpload extends WRS_BASE
 	}
 	
 	public function removeFile($file){
-		$arq = PATH_FILE.$this->nameFile.$file;
+		$arq = is_file($file)?$file:(is_file(PATH_FILE.$this->nameFile.$file)?PATH_FILE.$this->nameFile.$file:$file);
 		if(is_file($arq)){
 			return unlink($arq);
+		}else if(is_dir($arq)){
+			return $this->removeFolder($arq);
 		}else{
 			return false;
 		}
 	}
- 
+	
+	public function removeFolder($path){
+		$path = is_dir($path)?$path:PATH_FILE.$path.'*';
+		try{
+			$iterator = new DirectoryIterator($path);
+			foreach ( $iterator as $fileinfo ) {
+				if($fileinfo->isDot())continue;
+				if($fileinfo->isDir()){
+					if($this->removeFolder($fileinfo->getPathname()))
+						@rmdir($fileinfo->getPathname());
+				}
+				if($fileinfo->isFile()){
+					@unlink($fileinfo->getPathname());
+				}
+			}
+		} catch ( Exception $e ){
+			// write log
+			return false;
+		}
+		return true;
+	}
+	
 	
 	
 	

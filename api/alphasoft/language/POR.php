@@ -30,6 +30,7 @@
 
 	$language['MENU_ADMIN_CUSTOMER']		=	'Clientes';
 	$language['MENU_ADMIN_USER']			=	'Usuários';
+	$language['MENU_ADMIN_SERVER']			=	'Servidores';
 	$language['MENU_ADMIN_DATABASE']		=	'Databases';
 	$language['MENU_ADMIN_CUBE']			=	'Cubos';
 	$language['MENU_ADMIN_HIERARCHY']		=	'Hierarquias';
@@ -40,6 +41,14 @@
 	$language['MENU_ADMIN_LOG']				=	'Logs';
 	$language['MENU_ADMIN_SSAS_REPORT']		=	'Relatórios';
 	$language['MENU_ADMIN_SSAS_LAYOUTS']	=	'Layouts';
+	
+	$language['file_not_validated']			=	'Arquivo não validado';	
+	$language['file_not_unziped']			=	'Arquivo não descompactado';
+	
+	
+	
+	
+	$language['ADMIN_AVISO_IMPORT']			=	'- importe apenas arquivos no formato CSV ou ZIP<br>- certifique-se que o nome do arquivo seja: #NAME_FILE#, ou que o ZIP contenha este arquivo<br>- Layout padrão:<br><span class="class_layout_padrao">#DEFAULT_LAYOUT#</span>';
 	
 	$language['TITLE_OPTIONS']				=	'Options';
 	
@@ -94,9 +103,8 @@
 	$language ['TITLE_LINGUA'] 			= "Lingua";
 	$language ['TITLE_ALTER_SENHA'] 	= "Alterar Seha";
 	$language ['TITLE_ADMINISTRATIVO'] 	= "Administrativo";
-	
-	$language ['TITLE_ATT_WRS_USER'] 	= "Usuários";
-	
+	$language ['TITLE_ADMINISTRATIVO_MENU'] 	= "MENU PRINCIPAL";
+		
 	$language ['TITLE_GRID_WINDOW_MENU_MANAGER'] 		= "Visão";
 	$language ['TITLE_GRID_WINDOW_MENU_LIST'] 			= "Grid";
 	$language ['TITLE_GRID_WINDOW_MENU_DETAILS'] 		= "Detalhes";
@@ -336,9 +344,9 @@
 	$language['PAGINATION_PAGE']		=	"Elementos";
 	$language['PAGINATION_PAGE_INSIDE']	=	"até";
 	
-	
 	//ADMINISTRATIVO
 	$language ['TITLE_ATT_WRS_CUSTOMER'] 	=  "Gerenciamento de Clientes";
+	$language ['TITLE_ATT_WRS_SERVER'] 		=  "Gerenciamento de Servidores";
 	$language ['TITLE_ATT_WRS_USER'] 		=  "Gerenciamento de Usuários";
 	$language ['TITLE_ATT_WRS_DATABASE'] 	=  "Gerenciamento de Databases";
 	$language ['TITLE_ATT_WRS_CUBE'] 		=  "Gerenciamento de Cubos";
@@ -347,6 +355,7 @@
 	$language ['TITLE_REL_WRS_CUBE_USER'] 	=  "Gerenciamento de Associações";
 	$language ['TITLE_ATT_WRS_REPORT'] 		=  "Gerenciamento de Relatórios";
 	$language ['TITLE_ATT_WRS_DOWNLOAD'] 	=  "Gerenciamento de Arquivos";
+	$language ['TITLE_ATT_WRS_PERFIL'] 		=  "Gerenciamento de Perfis";
 	$language ['TITLE_ATT_WRS_LOG'] 		=  "Gerenciamento de Logs";
 	
 	$language['LINE_TOTAL']					=	'TOTAL';
@@ -357,8 +366,10 @@
 	// UPLOAD FORM
 	$language['msg_maxNumberOfFiles']					=	'Número maximo de arquivos excedido';
 	$language['msg_acceptFileTypes']					=	'Arquivo de extensão nao permitida';
-	$language['msg_acceptFileTypes']					=	'Arquivo de tamanho excedido';
+	$language['msg_maxFileSize']						=	'Arquivo de tamanho excedido';
 	$language['msg_minFileSize']						=	'Arquivo de tamanho mínimo não alcancado';
+	$language['msg_nao_existe_file_in_zip']				=	'Não existe o arquivo permitido dentro deste ZIP: ';
+	$language['msg_nome_obrigatorio_necessario']		=	'É obrigatório o uso de um nome específico para este upload: ';
 	$language['upload_form_selecionar']					=	'Selecionar';
 	$language['upload_form_enviar']						=	'Enviar';
 	$language['upload_form_cancelar']					=	'Cancelar';
@@ -374,6 +385,8 @@
 	$language['upload_files_error_sing']				=	' registro importado com erro';
 	$language['upload_files_error_plur']				=	' registros importados com erro';
 	
+	$language['upload_files_success_file']				=	'Arquivo importado com sucesso';
+	
 	// MODAL GENERICA
 	$language['MODAL_GENERICA_SALVAR']		=	'Salvar';
 	$language['MODAL_GENERICA_ATUALIZAR']	=	'Atualizar';
@@ -388,6 +401,7 @@
 	
 	
 	// ADMIN MANAGE PARAM
+	$language['obrigatorio'] 				= 'obrigatório';
 	$language['bt_back'] 					= 'Voltar';
 	$language['bt_new'] 					= 'Novo';
 	$language['bt_update'] 					= 'Salvar';
@@ -398,18 +412,33 @@
 	$language['bt_import_user'] 			= $language['bt_import'].' Usuários';
 	$language['bt_export_customer'] 		= $language['bt_export'].' Clientes';
 	$language['bt_import_customer'] 		= $language['bt_import'].' Clientes';
+	$language['bt_export_server'] 			= $language['bt_export'].' Servidores';
+	$language['bt_import_server'] 			= $language['bt_import'].' Servidores';
 	$language['bt_export_database'] 		= $language['bt_export'].' Databases';
 	$language['bt_import_database'] 		= $language['bt_import'].' Databases';
 	$language['bt_export_cube'] 			= $language['bt_export'].' Cubos';
 	$language['bt_import_cube'] 			= $language['bt_import'].' Cubos';
 	$language['bt_export_profile'] 			= $language['bt_export'].' Perfis';
 	$language['bt_import_profile'] 			= $language['bt_import'].' Perfis';
-	$language['bt_export_cube_user'] 		= $language['bt_export'].' Cubo/Usuários';
-	$language['bt_import_cube_user'] 		= $language['bt_import'].' Cubo/Usuários';
+	$language['bt_export_cube_user'] 		= $language['bt_export'].' Associações';
+	$language['bt_import_cube_user'] 		= $language['bt_import'].' Associações';
 	$language['bt_export_download'] 		= $language['bt_export'].' Downloads';
 	$language['bt_import_download'] 		= $language['bt_import'].' Downloads';
 	$language['bt_export_log'] 				= $language['bt_export'].' Logs';
 	$language['bt_import_log'] 				= $language['bt_import'].' Logs';
+	
+
+
+	$language['ADMIN_IMPORT_caracter_delimitador']			=	'Caracter delimitador: ';
+	$language['ADMIN_IMPORT_tipo_importacao']				=	'Tipo de importação: ';
+	$language['ADMIN_IMPORT_virgula']						=	'Vírgula';
+	$language['ADMIN_IMPORT_ponto_virgula']					=	'Ponto e vírgula';
+	$language['ADMIN_IMPORT_tabulacao']						=	'Tabulação';
+	$language['ADMIN_IMPORT_remover']						=	'Remover os registros anteriores';
+	$language['ADMIN_IMPORT_atualizar']						=	'Atualizar e adicionar novos';
+	$language['ADMIN_IMPORT_compactar_resultados']			=	'Compactar resultados: ';
+	
+	
 
 	
 	// JSs de MENU, ADMIN e REPORTS
@@ -427,7 +456,11 @@
 	$language['JS_report_confirm_remove'] 	= 	'Deseja apagar este%s relatório%s?';
 	$language['JS_report_select_one'] 		= 	'Selecione ao menos um relatório';
 	$language['JS_report_removed'] 			= 	'Relatório%s removido%s com sucesso';
-	
+
+	$language['JS_admin_preencha_obrigatorios'] 	= 	'Por favor preencha todos os campos obrigatórios';
+	$language['JS_admin_preencha_minimo'] 	= 	'O valor mínimo para este campo #NOMECAMPO# é: ';
+	$language['JS_admin_preencha_maximo'] 	= 	'O valor máximo para este campo #NOMECAMPO# é: ';
+	$language['JS_admin_preencha_auto'] 	= 	'Deseja corrigir este valor para #VAL# ?';
 	
 	// EXPORT ADMIN OPTIONS
 	$language['ADMIN_EXPORT_OPTION_ERROR'] 	= 	'Não há registros para serem exportados';
@@ -441,5 +474,109 @@
 	
 	$language['FORM_TYPE_PASSWORD_SHOW'] 	= 	'ver senha';
 	
+
+	$language['IMPORT_EXPORT_MESSAGES_STATUS'] 	= 	'Status:';
+	$language['IMPORT_EXPORT_MESSAGES_DETAIL'] 	= 	'Detalhes:';
 	
+	
+	/*
+	 * GERADO COM O SQL:
+	 * felipeb 20160225
+		select 
+		{fn CONCAT(
+			'	$language[''',{fn CONCAT(
+									coluna,{fn CONCAT(
+														'''] 	= 	''',{fn CONCAT(
+																			coluna,
+																			''';'
+													)}
+								)}
+			)}
+		)}
+		from
+		(
+		select distinct COLUMN_NAME as coluna
+			from INFORMATION_SCHEMA.COLUMNS
+		WHERE TABLE_NAME in ('ATT_WRS_CUSTOMER','ATT_WRS_USER','ATT_WRS_SERVER','ATT_WRS_DATABASE','ATT_WRS_CUBE','ATT_WRS_PERFIL','REL_WRS_CUBE_USER','ATT_WRS_REPORT','ATT_WRS_DOWNLOAD','FAT_WRS_LOG','ATT_WRS_HIERARCHY')
+		) as f
+		order by coluna
+	 */
+	
+	 $language['CUBE_DESC']  =  'Descrição do Cubo';
+	 $language['CUBE_FILTER']  =  'Atributos com Filtro';
+	 $language['CUBE_FILTER_VALUE']  =  'Valores dos Atributos com Filtros';
+	 $language['CUBE_FLAG']  =  'Flag do Cubo';
+	 $language['CUBE_ID']  =  'Código do Cubo';
+	 $language['CUBE_STATUS']  =  'Situação do Cubo';
+	 $language['CUSTOMER_CODE']  =  'Código do Cliente';
+	 $language['CUSTOMER_DESC']  =  'Descrição do Cliente';
+	 $language['CUSTOMER_EXPIRY']  =  'Expiração da Senha';
+	 $language['CUSTOMER_FLAG']  =  'Flag do Cliente';
+	 $language['CUSTOMER_GROUP']  =  'Grupo do Cliente';
+	 $language['CUSTOMER_ID']  =  'Código Interno do Cliente';
+	 $language['CUSTOMER_STATUS']  =  'Situação do Cliente';
+	 $language['DATABASE_BALANCE']  =  'Base Balanceada';
+	 $language['DATABASE_COMMENT']  =  'Comentário sobre a Base';
+	 $language['DATABASE_DESC']  =  'Descrição da Base';
+	 $language['DATABASE_FLAG']  =  'Situação da Base';
+	 $language['DATABASE_ID']  =  'Código da Base';
+	 $language['DATABASE_IMAGE']  =  'Imagem da Base';
+	 $language['DATABASE_LINK']  =  'Link de acesso Externo';
+	 $language['DATABASE_ORDER']  =  'Ordem de Exibição';
+	 $language['DATABASE_POOL']  =  'Base Compartilhado';
+	 $language['DATABASE_STATUS']  =  'Situação da Base';
+	 $language['DATE_ID']  =  'Período';
+	 $language['DOWNLOAD_ID']  =  'Código do Download';
+	 $language['FILE_DATE']  =  'Data do Arquivo';
+	 $language['FILE_DESC']  =  'Descrição do Arquivo';
+	 $language['FILE_FLAG']  =  'Flag do Arquivo';
+	 $language['FILE_NAME']  =  'Nome do Arquivo';
+	 $language['FILE_SIZE']  =  'Tamanho do Arquivo';
+	 $language['LANGUAGE_ID']  =  'Lingua';
+	 $language['MESSAGE']  =  'Mensagem';
+	 $language['MODULE']  =  'Módulo';
+	 $language['OPERATION']  =  'Operação';
+	 $language['PERFIL_DESC']  =  'Descrição do Perfil';
+	 $language['PERFIL_FLAG']  =  'Flag do Perfil';
+	 $language['PERFIL_ID']  =  'Código do Perfil';
+	 $language['PERFIL_LEVEL']  =  'Nível do Perfil';
+	 $language['PERFIL_STATUS']  =  'Situação do Perfil';
+	 $language['PROCESS']  =  'Processo';
+	 $language['REPORT_AUTOLOAD']  =  'Carga Automática';
+	 $language['REPORT_DATE']  =  'Data do Relatório';
+	 $language['REPORT_DESC']  =  'Descrição do Relatório';
+	 $language['REPORT_FILTER']  =  'Filtro do Relatório';
+	 $language['REPORT_FLAG']  =  'Flag do Relatório';
+	 $language['REPORT_FORMULAS']  =  'Fórmulas do Relatório';
+	 $language['REPORT_ID']  =  'Código do Relatório';
+	 $language['REPORT_OPTIONS']  =  'Opções do Relatório';
+	 $language['REPORT_SHARE']  =  'Relatório Compartilhado';
+	 $language['REPORT_STATUS']  =  'Situação do Relatório';
+	 $language['REPORT_UPDATE']  =  'Atualização do Relatório';
+	 $language['SERVER_COMMENT']  =  'Comentário do Servidor';
+	 $language['SERVER_DESC']  =  'Descrição do Servidor';
+	 $language['SERVER_FLAG']  =  'Flag do Servidor';
+	 $language['SERVER_ID']  =  'Código do Servidor';
+	 $language['SERVER_PWD']  =  'Senha do Usuário';
+	 $language['SERVER_STATUS']  =  'Situação do Servidor';
+	 $language['SERVER_USER']  =  'Usuário de Conexão';
+	 $language['TRANSACTION_ID']  =  'Código da Transação';
+	 $language['USER_CODE']  =  'Código do Usuário';
+	 $language['USER_DESC']  =  'Descrição do Usuário';
+	 $language['USER_EMAIL']  =  'Email do Usuário';
+	 $language['USER_EXPIRY']  =  'Expiração da Senha';
+	 $language['USER_FILTER']  =  'Atributos com Filtro';
+	 $language['USER_FILTER_VALUE']  =  'Valores dos Atributos com Filtros';
+	 $language['USER_FLAG']  =  'Flag de Usuário';
+	 $language['USER_FORMAT']  =  'Formato do Layout';
+	 $language['USER_FVD']  =  'Flag Interna';
+	 $language['USER_ID']  =  'Código Interno do Usuário';
+	 $language['USER_INTERNAL']  =  'Código Interno';
+	 $language['USER_MASTER']  =  'Usuário MASTER';
+	 $language['USER_PWD']  =  'Senha do Usuário';
+	 $language['USER_PWD_OLD']  =  'Senha Anterior';
+	 $language['USER_SALT']  =  'Código Interno';
+	 $language['USER_STATUS']  =  'Situação do Usuário';
+	 $language['USER_TYPE']  =  'Tipo do Usuário';
+
 ?>

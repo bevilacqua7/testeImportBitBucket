@@ -85,19 +85,31 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 						if(array_key_exists('type', $param['field'][$nome_campo]) && $param['field'][$nome_campo]['type']=='int'){
 							$separador='';
 						}
-						$arr_campos_valores[$nome_campo]=$separador.$_request_original[$nome_campo].$separador;
+						$arr_campos_valores[$nome_campo]=$_request_original[$nome_campo]==''?'NULL':$separador.$_request_original[$nome_campo].$separador;
 					}
 				}
 			}
 		}
 		
-		$condicao_query = ($acao_form=='UPDATE')?$param['primary'].' = '.$_request_original[$param['primary']]:'';
+
+		/**
+		 * REGRA ADMINISTRATIVO para tabelas com chaves compostas - FACIOLI 20160226 - felipeb
+		 * varre todos os fields e verifica quem possui o atributo PRIMARY, com isso, pode mandar mais de uma coluna primary como parametro para a query
+		 */
+		$primaries=array();
+		foreach($param['field'] as $nomeField => $colunaAtual){
+			if(array_key_exists('primary',$colunaAtual) && $colunaAtual['primary']){
+				$primaries[] = $nomeField.' = '."''".$_request_original[$nomeField]."''";
+			}
+		}
+		
+		$condicao_query = ($acao_form=='UPDATE')?((count($primaries)>0)?implode(' and ',$primaries):''):'';
 
 		unset($param['button']['import']);
 		unset($param['button']['export']);
 		unset($param['button']['remove']);
 				
-		$query_exec = $this->queryClass->Get_query_changetable($_tabela, $arr_campos_valores, $condicao_query, $acao_form);
+		$query_exec = $this->queryClass->Get_query_changetable_customer($_tabela, $arr_campos_valores, $condicao_query, $acao_form);
 
 		$this->admin->set_conn($this->admin->OBJECT->get_conn());
 		$status = $this->admin->query($query_exec);
@@ -132,44 +144,63 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 			$this->admin->retornaMsgAcaoTelaAdmin(false,$msg,$_tabela,'');
 		}
 		
-		$condicao_query = $param['primary'].' in('.implode(',',$_regForDelete['objetosSelecionados']).') ';
+		//$condicao_query = $param['primary'].' in('.implode(',',$_regForDelete['objetosSelecionados']).') ';
 
-		$query_exec = $this->queryClass->Get_procedure_remove_customer($_tabela, $condicao_query);
+		/*
+		 * ATT_WRS_CUSTOMER = Remove_SSAS_Customer( @CUSTOMER_ID BIGINT, @USER_CODE VARCHAR(100) )
+		 */
+		$USER_CODE 				= WRS::USER_CODE();
 		$this->admin->set_conn($this->admin->OBJECT->get_conn());
-		$status = $this->admin->query($query_exec);
+		$status=true;
+		foreach($_regForDelete['objetosSelecionados'] as $id_for_del){
+			$condicao_query = $id_for_del.",".$USER_CODE;
+			$query_exec = $this->queryClass->Get_procedure_remove_customer($_tabela, $condicao_query);
+			$query = $this->admin->query($query_exec);
+			if(!$this->num_rows($query) || !$query)
+			{
+				$status=false;
+				$st = sqlsrv_errors();
+				$DATA_BASE_ERROR		=	LNG('DATA_BASE_ERROR');
+				$msg					=	$DATA_BASE_ERROR.$st[0]['message'];
+				$this->admin->retornaMsgAcaoTelaAdmin($query,$msg,$_tabela,$query_exec);
+				return false;
+/*				
+			}else{
+				$rows 	= $this->fetch_array($query);
+				if(array_key_exists('output', $rows)){
+					$msg = $rows['output'];
+				}else if(array_key_exists('ERROR_MESSAGE', $rows)){
+					$status=false;
+					$msg = $rows['ERROR_MESSAGE'];
+				}
+*/				
+			}
+		}		
 		$msg = LNG_S('ADMIN_REG_DELETED',((count($_regForDelete['objetosSelecionados'])>1)?'s':''));
-		if(!$status){
-			$st = sqlsrv_errors();	 			
-	 		$DATA_BASE_ERROR		=	LNG('DATA_BASE_ERROR');	
-	 		$msg					=	$DATA_BASE_ERROR.$st[0]['message'];
-		}
-
 		$this->admin->retornaMsgAcaoTelaAdmin($status,$msg,$_tabela,$query_exec);
+		
 		
 	}
 	
 	public function import($options)
 	{
 		
-		$_fields			= $options['field'];
-		$_request_original 	= $_REQUEST;
-		$_tabela			= $options['table'];
-		$arr_campos_request = array();
+		$_fields						= $options['field'];
+		$_request_original 				= $_REQUEST;
+		$_tabela						= $options['table'];
+		$_request_original['campo_id'] 	= $options['primary'];
+		$_request_original['_param'] 	= $options;
 		
-		foreach($_fields as $nome_campo => $valores){
-			if(array_key_exists($nome_campo, $_request_original)){
-				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
-			}
-		}
-
 		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));	
 
 		unset($param['button']['update']);
 		unset($param['button']['remove']);
 		unset($param['button']['export']);
 
+		$nome_arquivo = 'uploads/'.WRS::CUSTOMER_ID().'/';
+		
 		// criacao do HTML para exibir o form de upload ou realizar a importacao se houverem arquivos enviados
-		$param['html'] = $this->admin->importarDadosEmMassa('importCustomers',$_request_original);		
+		$param['html'] = $this->admin->importarDadosEmMassa($nome_arquivo,$_request_original);		
 		
 		return $param;
 	}
@@ -180,6 +211,9 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 		$_request_original 	= $_REQUEST;
 		$_tabela			= $options['table'];
 		$_regForExport		= json_decode($_request_original['extraValues'],1);
+		$_regForExport['caracter_separacao'] = $_request_original['caracter_d'];
+		$_regForExport['efetua_compactacao'] = $_request_original['caracter_c']!='nao'?true:false;
+	
 		$arr_campos_request = array();
 		foreach($_fields as $nome_campo => $valores){
 			if(array_key_exists($nome_campo, $_request_original)){
@@ -192,6 +226,17 @@ class ATT_WRS_CUSTOMER extends WRS_BASE
 		unset($param['button']['update']);
 		unset($param['button']['remove']);
 		unset($param['button']['import']);
+		
+		$event_form						= WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_request_original['event']);
+		$_request_original['event'] 	= $event_form;
+
+		$param['tabela_export']			= $event_form;
+		$param['caracter_separacao']	= $_regForExport['caracter_separacao'];
+		$param['efetua_compactacao']	= $_regForExport['efetua_compactacao'];
+
+		$nome_diretorio = 'uploads/'.WRS::CUSTOMER_ID().'/';
+		$param['nome_diretorio']	= $nome_diretorio;
+		
 		
 		include PATH_TEMPLATE.'export_file_window.php';
 		$link_download = $this->admin->downloadLink($_regForExport['objetosSelecionados'],$_regForExport['chave_primaria'],$param);

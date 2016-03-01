@@ -28,7 +28,6 @@ class FORM  extends WRS_USER
 	protected  function create_form($_param,$visao,$actions_fiels)
 	{
 		
-
 		$param				=	$_param;
 				
 		$html				=	NULL;
@@ -62,6 +61,7 @@ class FORM  extends WRS_USER
 		}
 
 		$this->obj_atual	=	array('table'=>$param['table'],'id'=>$rows_select[$param['primary']]);
+
 		
 		foreach($param['field'] as $label =>$tools)
 		{
@@ -149,7 +149,12 @@ class FORM  extends WRS_USER
 		
 	private function input($param)
 	{
-		
+				//Verificando se é key com valor
+				if((isset($param['primary']) || isset($param['key'])) && $param['value']!='')
+				{
+					return $this->is_key_with_value($param);	
+				}
+				
 				//Verificando se é select
 				if(isset($param['is_select']))
 				{
@@ -198,14 +203,40 @@ EOF;
 					$class =' input_type_password ';
 				}
 				
-				$rels		=	 array('class'=>'form-group form-control-wrs_color');
+				$classHide = (isset($param['class']) && strstr($param['class'],'hide'))?' hide':'';
+				
+				$rels		=	 array('class'=>'form-group form-control-wrs_color'.$classHide);
 				$rel		=	 $this->getParamFormInput($this->merge_array_value($param,$rels));
+
+				$param['title_placeholder']	=$param['title'];
+				$param['label_title']		=$param['title'];
+				//Verificando se é obrigatorio
+				if(isset($param['obrigatorio']) && $param['obrigatorio'] && $classHide=='')
+				{
+					$class.=' obrigatorio';
+					$param['title'].='  *';
+					$param['label_title'].='  ('.LNG('obrigatorio').')';
+				}
+				
+				$max_min_value='';
+				$aplicou_class_min_max=false;
+				if(array_key_exists('max-value', $param) && (int)$param['max-value']>0){
+					$max_min_value.=" max-value='".(int)$param['max-value']."' ";
+					$class.=' valida_valor';
+					$aplicou_class_min_max=true;
+				}
+				if(array_key_exists('min-value', $param) && (int)$param['min-value']>=0){
+					$max_min_value.=" min-value='".(int)$param['min-value']."' ";
+					if(!$aplicou_class_min_max){
+						$class.=' valida_valor';
+					}
+				}
 				
 				$html 	=	<<<EOF
-							<div  {$rel}>
-					    		<label for="{$param['label']}"  >{$param['title']}</label>
-						    	<div class="form-control-wrs">
-						    		<input type="{$type_input}" name="{$param['label']}" {$length} {$mask} class=" {$class}" value="{$param['value']}" id="{$param['label']}" placeholder="{$param['title']}">
+							<div  {$rel} title="{$param['label_title']}">
+					    		<label for="{$param['label']}" title="{$param['label_title']}" >{$param['title']}</label>
+						    	<div class="form-control-wrs" title="{$param['label_title']}">
+						    		<input type="{$type_input}" {$max_min_value} title="{$param['label_title']}" name="{$param['label']}" {$length} {$mask} class=" {$class}" value="{$param['value']}" id="{$param['label']}" placeholder="{$param['title_placeholder']}">
 						    	</div>
 						    	{$extra_html}
 					    	</div>
@@ -252,7 +283,19 @@ EOF;
 						}
 						
 					}else{
-							$_query		=	$this->manage_param->select($param_select['field'], $param_select['table'], $param_select['order']['order_by'], $param_select['order']['order_type'], 1, 100);
+
+							// excecao para usuarios NAO MST ou ADM, não visualizarem usuarios maiores que eles proprios
+							// felipeb 20160226
+							$perfil_logado 		= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
+							if($param_select['table']=='ATT_WRS_USER' || $param_select['table']=='ATT_WRS_PERFIL'){
+								if($perfil_logado!='MST'){									
+									$where_query="PERFIL_ID != ''MST''";
+								}
+							}
+							
+							
+							$_query		=	$this->manage_param->select($param_select['field'], $param_select['table'], $param_select['order']['order_by'], $param_select['order']['order_type'], 1, 100,$where_query);
+							
 							$query		=	 $this->query($_query);
 							
 							if($this->num_rows($query))
@@ -294,12 +337,22 @@ EOF;
 							}
 					}
 					//$param['value']
-					
+
+					//Verificando se é obrigatorio
+					$param['title_placeholder']=$param['title'];
+					$param['label_title']		=$param['title'];
+					if(isset($param['obrigatorio']) && $param['obrigatorio'])
+					{
+						$class.=' obrigatorio';
+						$param['title'].='  *';
+						$param['label_title'].='  ('.LNG('obrigatorio').')';
+					}
+
 					$html 	=	<<<EOF
-								<div  {$rel}>
-						    		<label for="{$param['label']}"  >{$param['title']}</label>
-							    	<div class="form-control-wrs">
-							    		<select name="{$param['label']}" {$length} class=" {$class}" id="{$param['label']}" placeholder="{$param['title']}">
+								<div  {$rel}  title="{$param['label_title']}">
+						    		<label for="{$param['label']}"  title="{$param['label_title']}" >{$param['title']}</label>
+							    	<div class="form-control-wrs" title="{$param['label_title']}" >
+							    		<select name="{$param['label']}" title="{$param['label_title']}" {$length} class=" {$class}" id="{$param['label']}" placeholder="{$param['title']}">
 							    		{$option}
 							    		</select>
 							    	</div>
@@ -311,6 +364,23 @@ EOF;
 			}
  
 	 
+	
+		private function is_key_with_value($param)
+		{
+
+			$rels				=	 array('class'=>'form-group form-control-wrs_color');
+			$rel				=	 $this->getParamFormInput($this->merge_array_value($param,$rels));
+			$html 	=	<<<EOF
+								<div  {$rel}>
+						    		<label for="{$param['label']}"  >{$param['title']}</label>
+							    	<div class="form-control-wrs h4">
+							    		{$param['value']}
+							    		<input type="hidden" name="{$param['label']}" value="{$param['value']}" id="{$param['label']}">
+							    	</div>
+						    	</div>
+EOF;
+			return $html;
+		}
 	
 		private function upload_field($param,$_extra_params=NULL)
 		{

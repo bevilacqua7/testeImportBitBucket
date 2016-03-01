@@ -178,9 +178,15 @@ class UploadHandler
             ),
             'print_response' => true
         );
+        
         if ($options) {
             $this->options = $options + $this->options;
         }
+        
+        if(!$error_messages && $options['messages']!=undefined){
+            $error_messages = (array)$options['messages'];
+        }
+        
         if ($error_messages) {
             $this->error_messages = $error_messages + $this->error_messages;
         }
@@ -409,6 +415,31 @@ class UploadHandler
         } else {
             $file_size = $content_length;
         }
+        
+        
+		// felipebevi.com.br 20160219 - validacoes extra para jqueryupload
+        if ($this->options['valida_nome_dentro_zip'] && preg_match("/(zip)$/i", $file->name)) { // validacao extra para conferir nome de arquivos dentro de um ZIP
+			$zip = new ZipArchive();
+			if ($zip->open($uploaded_file)){
+				$existe_in_zip = false;
+				for($i = 0; $i < $zip->numFiles; $i++) {
+					if(strtoupper($zip->getNameIndex($i)) == strtoupper($this->options['nome_obrigatorio_zip'])){
+						$existe_in_zip = true;
+					}
+				}			    
+				if(!$existe_in_zip){
+		            $file->error = $this->get_error_message('nao_existe_arquivo_zip');
+		            return false; 
+				}
+			}
+        }else if($this->options['valida_nome_obrigatorio'] && strtoupper($file->name) != strtoupper($this->options['nome_obrigatorio_zip'])){
+            $file->error = $this->get_error_message('nome_obrigatorio_necessario');
+            return false; 
+        }
+        // felipeb
+        
+        
+        
         if ($this->options['max_file_size'] && (
                 $file_size > $this->options['max_file_size'] ||
                 $file->size > $this->options['max_file_size'])
@@ -1094,6 +1125,7 @@ class UploadHandler
             $file_path = $this->get_upload_path($file->name);
             $append_file = $content_range && is_file($file_path) &&
                 $file->size > $this->get_file_size($file_path);
+//exit($uploaded_file ." -> ". $file_path);            
             if ($uploaded_file && is_uploaded_file($uploaded_file)) {
                 // multipart/formdata uploads (POST method uploads)
                 if ($append_file) {

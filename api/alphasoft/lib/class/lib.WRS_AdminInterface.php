@@ -1,9 +1,11 @@
 <?php
-/*
+/**
+ * Contem Metodos Genericos para a area Administrativa
+ * @author fbevilacqua
  * interface com funcoes para a area administrativa
  * felipebevi.com.br 20160118
  */
-includeClass('WRS_BASE');
+includeQuery('ATT_WRS_AdminInterfaces');
 
 class WRS_AdminInterface  extends WRS_BASE
 {
@@ -12,7 +14,11 @@ class WRS_AdminInterface  extends WRS_BASE
 	public $OBJECT	= NULL;
 	private $manage_param = NULL;
 	public $temp_folder;
+	private $queryClass = NULL;
 	
+	public function __construct(){
+		$this->queryClass = new QUERY_WRS_ADMIN();
+	}
 
 	// atualizar o atributo data dentro da variavel param para que se mantenha nas WindowGrids navegadas,
 	// possibilitando ler o atributo "param_original" de qualquer tela navegada, o qual por sua vez são
@@ -30,9 +36,9 @@ class WRS_AdminInterface  extends WRS_BASE
  		$typeMsg = $boolStatus?'success':'error'; 		
 		$callback='function(){}';
  		if($tabela_cadastro!=''){
- 			$callback="function(){ $('.menu_cadastro[tabela=".$tabela_cadastro."]').trigger('click'); }";
+ 			$callback="function(){ $('.menu_cadastro[tabela=".WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($tabela_cadastro)."]').trigger('click'); }";
  		}
-		
+		$msg = addslashes($msg);
  		$JS=<<<HTML
 	 		$('#myModal').modal('hide'); // #myModalGenericConfig
 			WRS_ALERT('{$msg}','{$typeMsg}',{$callback}); 
@@ -44,16 +50,36 @@ HTML;
  		exit();
 	}
 	
+	/**
+	 * Confere se existe um diretorio completo, porém somente a partir da segunda posicao, uma vez que considero que a primeira é sempre a base do sistema e/ou o diretorio inicial, Ex.: C:/ ou /var/, por isso nunca vou criar o primeiro diretorio passado
+	 * @param string $dir - deve ser passado o diretorio COMPLETO, desde a raiz
+	 */
+	public function confere_criacao_diretorio($dir,$testa_outro_replace=false){
+		$dir = $testa_outro_replace?$dir:str_replace("/","\\",$dir);
+		if(!is_dir($dir)){
+			$diretorios = explode("\\",$dir);
+			if(count($diretorios)>1){
+				$dir_atual = $diretorios[0];
+				for($p=1;$p<count($diretorios);$p++){
+					if(trim($diretorios[$p])!=''){
+						$diretorio = $dir_atual.DS.$diretorios[$p];
+						if(!is_dir($diretorio)){
+							mkdir($diretorio, 0777, true);
+						}
+						$dir_atual.=DS.$diretorios[$p];
+					}
+				}
+			}else{
+				$this->confere_criacao_diretorio(str_replace("\\",'/',$dir),true);
+			}
+		}
+	}
+	
 	public function SetObject($Object)
 	{
 		$this->OBJECT=$Object;
 		$this->temp_folder = PATH_FILE.$this->classname.DS.'exportFiles'.DS;//sys_get_temp_dir().DIRECTORY_SEPARATOR;
-		if(!is_dir(PATH_FILE.$this->classname)){
-			mkdir(PATH_FILE.$this->classname, 0777, true);
-		}
-		if(!is_dir(PATH_FILE.$this->classname.DS.'exportFiles')){
-			mkdir(PATH_FILE.$this->classname.DS.'exportFiles', 0777, true);
-		}
+		$this->confere_criacao_diretorio($this->temp_folder);
 		
 		// funcoes JS para tratamento dos formularios administrativos
 		$scr_field_bloq = <<<HTML
@@ -67,60 +93,117 @@ HTML;
 	}
 	
 	public function downloadLink($_registros,$_chavePrimaria,$_param){
-		$registros = $_registros;
-		$chavePrimaria = $_chavePrimaria;
-		$param = $_param;
-		if(is_array($registros)){
-			foreach($registros as $k=>$v){
-				$registros[$k]=(int)strip_tags($v);
-			}
-			$registros = implode(',',$registros);
+
+		$compacta 		= $_param['efetua_compactacao']; // bool
+		$regIds			= $_registros;
+		$primary		= $_chavePrimaria;
+		$nome_diretorio	= $_param['nome_diretorio'];			
+		$WRS_DEFINE		= WRS_INI::WRS_DEFINE();
+		$nome_diretorio	= $WRS_DEFINE['WRS_DIRNAME_EXPORT'].$nome_diretorio;
+		$this->confere_criacao_diretorio($nome_diretorio);
+		
+		$_param['tabela_export'] = WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_param['tabela_export']);
+		$return_export 	= $this->queryClass->getQueryExportarTabela(array(
+																'tabela'	=> WRS_MANAGE_PARAM::getAtributoTabelaConfig($_param['tabela_export'],'tabela_bd'),
+																'colunas'	=> WRS_MANAGE_PARAM::getAtributoTabelaConfig($_param['tabela_export'],'colunas_import_export'),
+																'filtros'	=> (is_array($regIds) && count($regIds)>0)?$primary.' in ('.implode(',',$regIds).')':'',
+																'separador' => $_param['caracter_separacao'],
+																'diretorio'	=> $nome_diretorio
+													));
+		
+		$query_export 	= $return_export['query'];
+		$file_export 	= $return_export['file'];
+		$file_original 	= $return_export['file_ori'];
+		
+		$this->set_conn($this->OBJECT->get_conn());
+		$query			= 	$this->query($query_export);
+		
+		
+		/*
+		 * Verificando se existe resultado
+		*/
+		$processo=false;
+		if(!$this->num_rows($query))
+		{
+			return false;
+		}else{		
+			$rows 	= $this->fetch_array($query);
+			
+			$output	= $rows['output'];
+
+			if(substr($output,0,6)=='SUCESS'){
+				if($compacta){
+					$file_export_inv	= str_replace('/','\\',$file_export); // troca barras normais por invertidas para processo no SQL server/ windows
+					$new_file_export	= substr($file_export,0,-4).'.ZIP';
+					$new_file_export_inv= str_replace('/','\\',$new_file_export); // troca barras normais por invertidas para processo no SQL server/ windows
+					$return_compact 	= $this->queryClass->getQueryCompreessFile('ZIP', $file_export_inv, $new_file_export_inv);
+					$query			= 	$this->query($return_compact);
+					if(!$this->num_rows($query))
+					{
+						return false;
+					}else{
+						$rows 	= $this->fetch_array($query);
+						$output	= $rows['output'];
+					
+						if(substr($output,0,10)=='Compressed'){
+							$processo=true;
+							$file_export = $new_file_export;
+						}
+						
+					}
+					
+				}else{
+					$processo=true;
+				}			
+			}			
 		}
-	
-		$arr_dados = $this->exportarDadosEmMassa($registros,$chavePrimaria,$param);
-		if($arr_dados){
-			$unique					=rand(0,99).date('YmdHis');
-			$temp_filename_header	="export_".$this->classname."_".$unique."_cabecalhos.csv";
-			$temp_filename_body		="export_".$this->classname."_".$unique."_registros.csv";
-			$temp_filename_zip		="export_".$this->classname."_".$unique.".zip";
-	
-			$this->gerarArquivoCSVExport($temp_filename_header,array($arr_dados['titulos']));
-			$this->gerarArquivoCSVExport($temp_filename_body,$arr_dados['dados']);
-			$this->gerarArquivoZIPExport($temp_filename_zip,array($temp_filename_header,$temp_filename_body));
-				
-			$this->apagarArquivoGerado($this->temp_folder.$temp_filename_header);
-			$this->apagarArquivoGerado($this->temp_folder.$temp_filename_body);
-	
-			$url = "run.php?file=".$this->classname."&class=".$this->classname."&event=downloadFile&fileDownload=".$temp_filename_zip;
+		
+		if($processo){
+					
+			$url = "run.php?file=".$this->classname."&class=".$this->classname."&event=downloadFile&fileDownload=".$file_export."&nameFileUser=".$file_original;
 			return $url;
+			
 		}else{
 			return false;
 		}
-	
+			
 	}
 	
 	public function downloadFile(){
-	
-		$temp_filename_zip = trim($_REQUEST['fileDownload']);
+
+		$temp_filename_zip 	= trim($_REQUEST['fileDownload']); // somente a variavel chama zip, pode ser outro arquivo...
+		$name_file_user 	= trim($_REQUEST['nameFileUser']); // variavel para definir um  nome de arquivo diferente do original para o usuario final
+		
 		$this->SetObject(NULL);
 	
-		if(is_file($this->temp_folder.$temp_filename_zip)){
-				
+		if(is_file($temp_filename_zip)){ // $this->temp_folder.
+			
+			// se existe nome alternativo para o usuario final, utiliza eeste nome
+			$nome_arq = (($name_file_user!='')?$name_file_user:basename($temp_filename_zip));
+			
+			// confere se a extensao do nome definido pro arquivo do usuario final é a mesma do arquivo original.  Se nao for, aplica a extensao correta
+			if(strtoupper(substr($temp_filename_zip,-4)) != strtoupper(substr($nome_arq,-4))){
+				$nome_arq = substr($nome_arq,0,-4).substr($temp_filename_zip,-4);
+			}
+			
 			header("Pragma: public");
 			header("Expires: 0");
 			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 			header("Cache-Control: public");
 			header("Content-Description: File Transfer");
 			header("Content-type: application/octet-stream");
-			header("Content-Disposition: attachment; filename=\"".$temp_filename_zip."\"");
+			header("Content-Disposition: attachment; filename=\"".$nome_arq."\"");
 			header("Content-Transfer-Encoding: binary");
-			header("Content-Length: ".filesize($this->temp_folder.$temp_filename_zip));
+			header("Content-Length: ".filesize($temp_filename_zip)); // $this->temp_folder.
 			ob_clean();
 			flush();
 			ignore_user_abort(true);
-			if(readfile($this->temp_folder.$temp_filename_zip))
+			if(readfile($temp_filename_zip)) // $this->temp_folder.
 			{
-				$this->apagarArquivoGerado($this->temp_folder.$temp_filename_zip);
+				$this->apagarArquivoGerado($temp_filename_zip); // $this->temp_folder.
+				//if(is_file()){
+					
+				//}
 			}
 			exit();
 				
@@ -174,133 +257,186 @@ HTML;
 		}
 		fclose($fp);
 	}
-	
-	public function exportarDadosEmMassa($_registros,$_chavePrimaria,$_param){
-		$registros = $_registros;
-		$chavePrimaria = $_chavePrimaria;
-		$param = $_param;
-	
-		/*
-		 * Eventos do Banco
-		 * @var WRS_MANAGE_PARAM
-		 */
-		$this->manage_param	= new WRS_MANAGE_PARAM();
-	
-		$page_current	=	fwrs_request('page_current');
-		$page_current	=	 empty($page_current) ? 1 : $page_current;
-	
-		$page_size		=	fwrs_request('page_size');
-		$page_size		=  	empty($page_size) ? 100000 : $page_size;
-			
-		if(!array_key_exists('order_by', $param['order'])){
-			$param['order']['order_by']='';
-		}
-		if(!array_key_exists('order_type', $param['order'])){
-			$param['order']['order_type']='';
-		}
-	
-		if($registros=='*'){
-			$sql			=	$this->manage_param->select('*', $this->classname, $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
-		}else{
-			/*
-			 * TODO: query com where dos IDs dos registros selecionados no array $_type_reg
-			 */
-			//$sql			=	$this->manage_param->select('*', $this->classname, $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
-			$sql			=	$this->manage_param->select('*', $this->classname, $param['order']['order_by'], $param['order']['order_type'], $page_current, $page_size);
-			
-		}
-	
-		$this->set_conn($this->OBJECT->get_conn());
-		$query			= 	$this->query($sql);
-		/*
-		 * Verificando se existe resultado
-		*/
-		if(!$this->num_rows($query))
-		{
-			return false;
-		}else{
-	
-			$arr_result=$arr_titles=array();
-			while($rows = $this->fetch_array($query))
-			{
-				if(count($arr_titles)==0){
-					foreach($rows as $title=>$val){
-						$arr_titles[]=$title;
-					}
-				}
-	
-				// trata o que nao é string do retorno do banco de dados
-				foreach($rows as $k=>$v){
-					if(!is_string($v)){
-						switch ($v){
-							case @is_object($v):
-								if(get_class($v)=='DateTime'){
-									$rows[$k] = $v->format('d/m/Y H:i:s');
-								}
-						}
-					}
-				}
-	
-				$arr_result[]=$rows;
-			}
-				
-			return array('titulos'=>$arr_titles,'dados'=>$arr_result);
-		}
-	
-	
-	}
-	
+		
 	public function importarDadosEmMassa($name,$_request_original=NULL){
 		
+		// bool se ja enviou um arquivo (true) ou esta na primeira tela (false)
 		$form_send			= (is_array($_request_original) && array_key_exists('envio_de_arquivo', $_request_original) && $_request_original['envio_de_arquivo']==1);
-		$event_form			= $_request_original['event'];
+			
+		$event_form			= WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_request_original['event']);	
 		
-		$upload_dir_key 	= 	array($_tabela,0,$name); // chave consiste em usuario logado + formulario em questao (ex. ATT_WRS_USER) + valor da chave da tabela (ex. USER_ID = 3)
+		$upload_dir_key 	= 	$name;
 	
+		$WRS_DEFINE	= WRS_INI::WRS_DEFINE();
+		$diretorio 	= $WRS_DEFINE['WRS_DIRNAME_IMPORT'];
+
+		$name_file_import 		= WRS_MANAGE_PARAM::getAtributoTabelaConfig($event_form,'nome_arquivo_import');
+		$columns_description 	= WRS_MANAGE_PARAM::getAtributoTabelaConfig($event_form,'colunas_descricao');
+		$columns_description	= (!$columns_description || $columns_description=='')?'':$columns_description;
+		if($name_file_import!=''){
+			$avisos = str_replace('#NAME_FILE#',$name_file_import,LNG('ADMIN_AVISO_IMPORT'));
+			$avisos = str_replace('#DEFAULT_LAYOUT#',$columns_description,$avisos);
+		}
+
+
+		$msg_erro_tamanho 					= LNG('msg_maxFileSize');
+		$msg_erro_tipo 						= LNG('msg_acceptFileTypes');
+		$msg_erro_nao_existe_file_in_zip	= LNG('msg_nao_existe_file_in_zip').$parameter_upload['nome_obrigatorio_zip'];
+		$msg_nome_obrigatorio_necessario	= LNG('msg_nome_obrigatorio_necessario').$parameter_upload['nome_obrigatorio_zip'];
+		
 		$extra_params		=	array(
-				'autoUpload'		=> 	true,
-				//'acceptFileTypes'	=>	"/(\.|\/)(gif|jpe?g|png)$/i",
-				'maxFileSize'		=> 	3000000, // 3 MB,
-				'maxNumberOfFiles'	=> 	1,
-				'botao_selecionar'	=>	true,
-				'botao_enviar'		=>	false,
-				'botao_cancelar'	=>	false,
-				'botao_apagar'		=>	false,
-				'barra_status'		=>	false
+				'upload_dir'				=>  $diretorio,
+				'autoUpload'				=> 	true,
+				'maxFileSize'				=> 	10000000, // 10 MB,
+				'maxNumberOfFiles'			=> 	1,
+				'botao_selecionar'			=>	true,
+				'botao_enviar'				=>	false,
+				'botao_cancelar'			=>	false,
+				'botao_apagar'				=>	false,
+				'barra_status'				=>	false,
+				'image_versions' 			=>  false,
+				'restricaoCsvZip'			=>  true,
+				'nome_obrigatorio_zip' 		=> 	$name_file_import,
+				'valida_nome_dentro_zip' 	=> 	true,
+				'valida_nome_obrigatorio' 	=> 	true,
+				'accept_file_types'			=>  "/(zip)|(csv)$/i",
+				'messages'					=>  array(
+													'maxFileSize'					=> $msg_erro_tamanho,
+													'acceptFileTypes'				=> $msg_erro_tipo,
+													'nao_existe_arquivo_zip'		=> $msg_erro_nao_existe_file_in_zip,
+													'nome_obrigatorio_necessario'	=> $msg_nome_obrigatorio_necessario
+												)
+            	//,'print_response' 	=>  false
 		);
-	
-		// validacao se existir arquivos par a realizacao da importacao dos dados em massa
+			
+		
 		include PATH_TEMPLATE.'import_file_window.php';
-		$arquivos_existentes = $upload->listFiles();
-		//exit('<pre>'.print_r($arquivos_existentes,1));
+		$arquivos_existentes = $form_send?$upload->listFiles():$upload->removeAllFiles();
+				
+		$colunas_import_export = WRS_MANAGE_PARAM::getAtributoTabelaConfig($event_form,'colunas_import_export');
+		
+		$output_geral='';
 		if($form_send && is_array($arquivos_existentes) && count($arquivos_existentes)>0){
+			$caracter_delimitador	 = ($_request_original['caracter_d']!='ponto_virgula')?'virgula':'ponto_virgula';
+			$tipo_importacao		 = ($_request_original['tipo_importacao']!='atualizar')?'remover':'atualizar';
+			$colunas				 = ($colunas_import_export)?$colunas_import_export:'';
+			$campo_id				 = $_request_original['campo_id'];
 			$cont = 0;
-			$msgs_erros = array();
+			$msgs_erros = $msgs_erros_detalhes = array();
 			foreach($arquivos_existentes as $arq){
-				$ret = $this->trataDadosImportados($upload->getFileContent($arq));
-				$upload->removeFile($arq);
-				if($ret!==true){
-					$msgs_erros[]="<b>".$arq."</b> - ".$ret;
+				$nome_arquivo=false;
+				if(strtoupper(substr($arq,-3))=='ZIP'){
+			
+					$file_zip_to_import	= str_replace('/','\\',$arq); // troca barras normais por invertidas para processo no SQL server/ windows
+					$file_to_unzip		= str_replace('/','\\',$diretorio.$upload_dir_key.$name_file_import); // troca barras normais por invertidas para processo no SQL server/ windows
+					$return_compact 	= $this->queryClass->getQueryCompreessFile('UNZIP', $file_zip_to_import, $file_to_unzip);
+
+					$this->set_conn($this->OBJECT->get_conn());
+					$query			= 	$this->query($return_compact);
+					
+					if(!$this->num_rows($query))
+					{
+						$msgs_erros[]="<b>".$arq."</b> ".LNG('file_not_unziped');						
+					}else{
+						$rows 	= $this->fetch_array($query);
+						if(array_key_exists('output', $rows)){
+							$output	= $rows['output'];
+							
+							if(substr($output,0,9)=='Extracted'){
+								$nome_arquivo = $diretorio.$upload_dir_key.$name_file_import;
+								$output_geral.=addslashes($output)."<br>";
+							}else{
+								$msgs_erros[]=$output;
+							}
+						}
+
+						if(array_key_exists('ERROR_MESSAGE', $rows) && $rows['ERROR_MESSAGE']!=''){
+							$msgs_erros_detalhes[]=$rows['ERROR_MESSAGE'];
+						}
+						if(array_key_exists('REMOVE_MESSAGE', $rows) && $rows['REMOVE_MESSAGE']!=''){
+							$msgs_erros_detalhes[]=$rows['REMOVE_MESSAGE'];
+						}
+			
+					}								
+					
+					
 				}else{
-					$cont++;
+					$nome_arquivo = $arq;
+				}
+				
+				if($nome_arquivo){
+					
+					// verifica se existem campos KEY para formar a chave para a tabela em importacao
+					$primary = $campo_id;
+					if(array_key_exists('_param', $_request_original)){
+						$obj = $_request_original['_param'];
+						$keys = array();
+						foreach($obj['field'] as $atributo=>$dados_campo){
+							if(array_key_exists('key', $dados_campo)){
+								$keys[]=$atributo;
+							}
+						}
+						unset($obj);
+						if(count($keys)>0){
+							$primary = implode(',',$keys);
+						}
+					}
+
+					$ret = $this->trataDadosImportados($nome_arquivo,array(
+																	'delimitador'		=>$caracter_delimitador,
+																	'tipo_importacao'	=>$tipo_importacao,
+																	'tabela_import'		=>WRS_MANAGE_PARAM::getAtributoTabelaConfig($event_form,'tabela_bd'),
+																	'campo_id'			=>$primary,
+																	'colunas'			=>$colunas
+															));
+
+					if(is_array($ret)){
+
+						if(array_key_exists('output', $ret)){
+							$output	= $ret['output'];
+							if(substr($output,0,6)!='SUCESS'){								
+								$msgs_erros[]=$output;
+							}else{
+								$output_geral.=addslashes($output)."<br>";
+							}
+						}
+						
+						if(array_key_exists('ERROR_MESSAGE', $ret) && $ret['ERROR_MESSAGE']!=''){
+							$msgs_erros_detalhes[]=$ret['ERROR_MESSAGE'];
+						}
+						if(array_key_exists('REMOVE_MESSAGE', $ret) && $ret['REMOVE_MESSAGE']!=''){
+							$msgs_erros_detalhes[]=$ret['REMOVE_MESSAGE'];
+						}
+							
+					}else{
+						$msgs_erros[]="<b>".$arq."</b> ".LNG('file_not_validated');
+					}
+				
+				}else{
+					$msgs_erros[]="<b>".$arq."</b> ".LNG('file_not_validated');
 				}
 			}
-			$upload->removeAllFiles();
-			$cont_err 		= count($arquivos_existentes)-$cont;
 	
-			$mensagem_success		= $cont . ($cont>1?LNG('upload_files_success_plur'):LNG('upload_files_success_sing'));
-			$tipo_mensagem_success	= 'success';
+			$mensagem_success		= LNG('upload_files_success_file');
+			$tipo_mensagem_success	= 'success';				
+			$tipo_mensagem_error	= 'error';
 				
-			$mensagem_error			= $cont_err . ($cont_err>1?LNG('upload_files_error_plur'):LNG('upload_files_error_sing'));
-			$tipo_mensagem_error	= 'warning';
-				
-			if($cont_err>0){
-				$mensagem 			= $mensagem_error."<br>".$mensagem_success.(count($msgs_erros)>0?"<br><br>".implode("<br>",$msgs_erros):'');
+			if(count($msgs_erros)>0){
+				$mensagem			= '<b>'.LNG('IMPORT_EXPORT_MESSAGES_STATUS').'</b><br>'.implode('<br>',$msgs_erros);
+				if(count($msgs_erros_detalhes)>0){
+					$mensagem			.= '<br><b>'.LNG('IMPORT_EXPORT_MESSAGES_DETAIL').'</b><br>'.implode('<br>',$msgs_erros_detalhes);
+				}
 				$tipo_mensagem 		= $tipo_mensagem_error;
 			}else{
 				$mensagem 			= $mensagem_success;
+				$mensagem			.= '<br><b>'.LNG('IMPORT_EXPORT_MESSAGES_STATUS').'</b><br>'.$output_geral;
+				if(count($msgs_erros_detalhes)>0){
+					$mensagem			.= '<br><b>'.LNG('IMPORT_EXPORT_MESSAGES_DETAIL').'</b><br>'.implode('<br>',$msgs_erros_detalhes);
+				}
 				$tipo_mensagem 		= $tipo_mensagem_success;
 			}
+			
+			$upload->removeAllFiles();
 				
 			return str_replace(array('{MENSAGEM}','{TIPOMENSAGEM}'),array($mensagem,$tipo_mensagem),$HTML_OK);
 		}else{
@@ -309,12 +445,41 @@ HTML;
 		}
 	}
 	
-	public function trataDadosImportados($conteudoFile){
-		WRS_DEBUG_QUERY("===========================DADOS IMPORTADOS INICIO===========================");
-		WRS_DEBUG_QUERY($conteudoFile);
-		WRS_DEBUG_QUERY("===========================DADOS IMPORTADOS FIM==============================");
-		return true;// true; // else return mensagem de erro
+	
+	public function trataDadosImportados($nameFile,$options){
+		$delimitador 			= $options['delimitador']=='virgula'?',':(($options['delimitador']=='ponto_virgula')?';':'\t');
+		$tipoImport	 			= $options['tipo_importacao']=='atualizar'?1:0;
+		$tabelaImport	 		= $options['tabela_import'];
+		$colunas	 			= $options['colunas'];
+		$campo_id	 			= $options['campo_id'];
+		$nome_apenas_arquivo 	= basename($nameFile);
+		$query_import			= $this->queryClass->getQueryImportarTabela(array(
+											'tabela'		=>$tabelaImport,
+											'campo_id'		=>$campo_id,
+											'colunas'		=>$colunas,
+											'filtros'		=>'',
+											'separador'		=>$delimitador,
+											'diretorio'		=>$nameFile,
+											'tipoImport'	=>$tipoImport
+								));
+
+		$this->set_conn($this->OBJECT->get_conn());
+		$query			= 	$this->query($query_import);
+		
+		/*
+		 * Verificando se existe resultado
+		*/		
+		if(!$this->num_rows($query))
+		{
+			return false;
+		}else{
+			return $this->fetch_array($query);
+		}		
+		
+		return false;
+		
 	}
+	
 	
 	
 }
