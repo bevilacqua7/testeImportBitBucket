@@ -794,8 +794,6 @@ function tagFilterWRS(typeReturn)
 	var _width		=	250;	
 	var aba_active	=	get_aba_active_object();
 	
-	
-	
 	var makeTitle	=	 function(title,tmp_width,width,_class)
 	{
 		var _width	=	width;
@@ -867,8 +865,6 @@ function tagFilterWRS(typeReturn)
 				var _explode			=	explode(',',filters);
 				var _explode_to_add		=	aba_active.wrsAbaData('getNewFilter',{tag:tag_class});
 		 		
-				
-				
 		 		
 				//Para o add o Filreo no Drill
 				var atributo	=	$(this).attr('atributo');
