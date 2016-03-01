@@ -65,7 +65,7 @@ $(function(){
 </script>
 
 <!-- MODAL WINDOW GRID -->
-<div class="modal fade" id="myModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" >
     <div class="modal-content modal-content-grid"></div>
   </div>

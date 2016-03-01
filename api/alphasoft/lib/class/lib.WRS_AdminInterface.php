@@ -10,11 +10,12 @@ includeQuery('ATT_WRS_AdminInterfaces');
 class WRS_AdminInterface  extends WRS_BASE
 {
 
-	public $classname = NULL;
-	public $OBJECT	= NULL;
-	private $manage_param = NULL;
+	public $classname 		= NULL;
+	public $OBJECT			= NULL;
+	private $manage_param 	= NULL;
 	public $temp_folder;
-	private $queryClass = NULL;
+	private $queryClass 	= NULL;
+	private $current_action	= NULL;
 	
 	public function __construct(){
 		$this->queryClass = new QUERY_WRS_ADMIN();
@@ -28,7 +29,20 @@ class WRS_AdminInterface  extends WRS_BASE
 		$data=array();
 		$param['visao_atual']	=	'list';
 		$data['param_original'] = 	$param;
-		$param['data']	=	json_encode($data);
+		$param['data']	=	json_encode($data);		
+		return $this->ajustaBotoesModalConformeAction($param);
+	}
+	
+	public function setCurrentAction($action){
+			$this->current_action = $action;
+	}
+	
+	public function ajustaBotoesModalConformeAction($param){
+		if(in_array($this->current_action,array('INSERT','UPDATE'))){
+			unset($param['button']['import']);
+			unset($param['button']['export']);
+			unset($param['button']['remove']);
+		}
 		return $param;
 	}
 	
@@ -90,6 +104,114 @@ HTML;
 		</script>
 HTML;
 		echo $scr_field_bloq;
+	}
+	
+	public function getCurrentActionForm(){
+		return $this->current_action;
+	}
+	
+	public function montaArrayCamposValoresDoRequest($_fields,$_request_original,$param){
+		$arr_campos_request = array();
+		$arr_campos_valores = array();
+		$arr_campos_request_classe = array(
+				'class',
+				'file',
+				'event',
+				'wrs_type_grid',
+				'form_event'
+		);
+		$this->setCurrentAction('UPDATE');
+		foreach($_fields as $nome_campo => $valores){
+			if(array_key_exists($nome_campo, $_request_original)){
+				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
+				if(!in_array($nome_campo,$arr_campos_request_classe)){
+					if($nome_campo==$param['primary']){
+						if(trim($_request_original[$nome_campo])==''){
+							$this->setCurrentAction('INSERT');
+						}
+					}else{
+						$separador = "''";
+						if(array_key_exists('type', $param['field'][$nome_campo]) && $param['field'][$nome_campo]['type']=='int'){
+							$separador='';
+						}
+						$arr_campos_valores[$nome_campo]=$_request_original[$nome_campo]==''?'NULL':$separador.$_request_original[$nome_campo].$separador;
+					}
+				}
+			}
+		}
+		return $arr_campos_valores;
+	}
+	
+	public function retornaPrimariesPreenchidasDosFields($param,$_request_original){
+		/**
+		 * REGRA ADMINISTRATIVO para tabelas com chaves compostas - FACIOLI 20160226 - felipeb
+		 * varre todos os fields e verifica quem possui o atributo PRIMARY, com isso, pode mandar mais de uma coluna primary como parametro para a query
+		 */
+		$primaries=array();
+		foreach($param['field'] as $nomeField => $colunaAtual){
+			if(array_key_exists('primary',$colunaAtual) && $colunaAtual['primary']){
+				if(array_key_exists($nomeField, $_request_original) && $_request_original[$nomeField]!=''){
+					$primaries[] = $nomeField.' = '."''".$_request_original[$nomeField]."''";
+				}
+			}
+		}
+		return $primaries;
+	}
+	
+	public function execInsertUpdate($query_exec,$_tabela){
+
+		$this->set_conn($this->OBJECT->get_conn());
+		$query			= 	$this->query($query_exec);
+		
+		$msgs_erros = $msgs_erros_detalhes = array();
+		$output_geral='';
+		if(!$this->num_rows($query))
+		{
+			/* -- na ausencia de mensagens, considero como OK - facioli 20160301 - felipeb
+			$st = sqlsrv_errors();
+			$DATA_BASE_ERROR		=	LNG('DATA_BASE_ERROR');
+			$msgs_erros[]			=	$DATA_BASE_ERROR.$st[0]['message'];
+			*/
+		}else{
+			$rows 	= $this->fetch_array($query);
+		
+			if(array_key_exists('ERROR', $rows) && $rows['ERROR']!=''){
+				$msgs_erros[]=$rows['ERROR'];
+			}
+			if(array_key_exists('ERROR_MESSAGE', $rows) && $rows['ERROR_MESSAGE']!=''){
+				$msgs_erros[]=$rows['ERROR_MESSAGE'];
+			}
+			if(array_key_exists('REMOVE_MESSAGE', $rows) && $rows['REMOVE_MESSAGE']!=''){
+				$msgs_erros[]=$rows['REMOVE_MESSAGE'];
+			}
+		
+		}
+		
+		
+		$mensagem_success		= ($this->current_action=='UPDATE')?LNG('ADMIN_REG_UPDATED'):LNG('ADMIN_REG_INSERTED');
+		$tipo_mensagem_success	= 'success';
+		$tipo_mensagem_error	= 'error';
+		
+		if(count($msgs_erros)>0){
+			$mensagem			= '<b>'.LNG('IMPORT_EXPORT_MESSAGES_STATUS').'</b><br>'.implode('<br>',$msgs_erros);
+			if(count($msgs_erros_detalhes)>0){
+				$mensagem			.= '<br><b>'.LNG('IMPORT_EXPORT_MESSAGES_DETAIL').'</b><br>'.implode('<br>',$msgs_erros_detalhes);
+			}
+			$tipo_mensagem 		= $tipo_mensagem_error;
+		}else{
+			$mensagem 			= $mensagem_success;
+			if($output_geral!=''){
+				$mensagem			.= '<br><b>'.LNG('IMPORT_EXPORT_MESSAGES_STATUS').'</b><br>'.$output_geral;
+			}
+			if(count($msgs_erros_detalhes)>0){
+				$mensagem			.= '<br><b>'.LNG('IMPORT_EXPORT_MESSAGES_DETAIL').'</b><br>'.implode('<br>',$msgs_erros_detalhes);
+			}
+			$tipo_mensagem 		= $tipo_mensagem_success;
+		}
+			
+		
+		
+		$this->retornaMsgAcaoTelaAdmin((!(count($msgs_erros)>0)),$mensagem,$_tabela,$query_exec);
 	}
 	
 	public function downloadLink($_registros,$_chavePrimaria,$_param){

@@ -48,7 +48,7 @@ function callback_load_admin_generic_modal(arg,tabela)
 			_START('carrega_grid_list_admin::funCallBack');
 			
 				$('.modal-content-grid').html(data);
-				
+				aplicaMascaraSeExiste();
 				wrs_window_grid_events_tools({btn:btn_window_grid_event_admin, visao: funCallBackVision});
 				
 			_END('carrega_grid_list_admin::funCallBack');	
@@ -62,6 +62,33 @@ function callback_load_admin_generic_modal(arg,tabela)
 	_END('callback_load_admin_generic_modal');
 }
 
+function aplicaMascaraSeExiste(){
+	
+	// mascara de valores - mask - felipeb 20160301
+	$('input.hasMask').focus(function(){
+		var mascara 			= $(this).attr('maskfield');
+		var mascaraPlaceHolder 	= $(this).attr('maskfieldPlaceHolder');
+		console.log('aplicando a mascara ',$(this),mascara);
+		if(mascaraPlaceHolder!=undefined && mascaraPlaceHolder!=''){
+			$(this).mask(mascara, {placeholder: mascaraPlaceHolder});
+		}else{
+			$(this).mask(mascara);			
+		}
+		$(this).trigger('keyup'); // froca mostrar valor de acordo com mascara configurada
+		$(this).blur(function(){
+			$(this).val($(this).cleanVal());
+		});
+	});
+
+	// quando o foco esta no input de um formulario, o keyaction é aplicado ao input e nao mais ao document, tendo assim de controlar novamente a acao do ESC dentro dos inputs
+	$('form input').keydown(function(event){
+	    if(event.keyCode == 27) {
+	      event.preventDefault();
+	      return false;
+	    }
+	});
+	
+}
 
 function carrega_grid_list_admin(options,obj)
 {
@@ -159,7 +186,6 @@ function btn_window_grid_event_admin(data)
 
 	var _data					=	 $('#myModal, .body_grid_window').data('wrsGrid');
 	var dadosKendo				=	 (!$("#"+table).length)?_data:$("#"+table).data('wrsModal');
-
 	var validacao_update_admin 	= function(){
 		var valida_form = true;
 		if( $('form.grid_window_values_form').length > 0
@@ -243,6 +269,7 @@ function btn_window_grid_event_admin(data)
 	{
 		_START('btn_window_grid_event_admin::funCallBack');
 			$('.modal-content-grid').html(data);
+			aplicaMascaraSeExiste();
 			wrs_window_grid_events_tools({btn:btn_window_grid_event_admin, visao: funCallBackVision});
 		_END('btn_window_grid_event_admin::funCallBack');	
 	};

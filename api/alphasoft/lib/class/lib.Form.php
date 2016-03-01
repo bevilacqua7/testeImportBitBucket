@@ -181,14 +181,6 @@ EOF;
 					$class ='form-control-wrs-auto';
 				}
 
-				$mask	=	"";
-				if(array_key_exists('mask',$param) && $param['mask']!='')
-				{
-					$mask =	<<<EOF
-								maskfield="{$param['mask']}" 
-EOF;
-				}
-
 				if(array_key_exists('type',$param) && $param['type']=='int')
 				{
 					$class =' input_type_int_only ';
@@ -210,14 +202,30 @@ EOF;
 
 				$param['title_placeholder']	=$param['title'];
 				$param['label_title']		=$param['title'];
-				//Verificando se é obrigatorio
-				if(isset($param['obrigatorio']) && $param['obrigatorio'] && $classHide=='')
+				
+				
+				
+				$mask	=	"";
+				if(array_key_exists('mask',$param) && $param['mask']!='')
 				{
-					$class.=' obrigatorio';
+					$class.=' hasMask';
+					$mask =	<<<EOF
+								maskfield="{$param['mask']}" 
+EOF;
+				}
+				
+				//Verificando se é obrigatorio
+				/*
+				 * TODO: verificar que macumba é essa de nao reconhecer TRUE com booleano deste parametro!!! felipeb 20160301
+				 */
+				if(array_key_exists('obrigatorio', $param) && $param['obrigatorio']=='true' && $classHide=='')
+				{
+					$class.=' obrigatorio ';
 					$param['title'].='  *';
 					$param['label_title'].='  ('.LNG('obrigatorio').')';
 				}
-				
+								
+				// valores minimo e maximo se existirem
 				$max_min_value='';
 				$aplicou_class_min_max=false;
 				if(array_key_exists('max-value', $param) && (int)$param['max-value']>0){
@@ -286,6 +294,7 @@ EOF;
 
 							// excecao para usuarios NAO MST ou ADM, não visualizarem usuarios maiores que eles proprios
 							// felipeb 20160226
+							$where_query='';
 							$perfil_logado 		= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
 							if($param_select['table']=='ATT_WRS_USER' || $param_select['table']=='ATT_WRS_PERFIL'){
 								if($perfil_logado!='MST'){									
@@ -341,9 +350,10 @@ EOF;
 					//Verificando se é obrigatorio
 					$param['title_placeholder']=$param['title'];
 					$param['label_title']		=$param['title'];
-					if(isset($param['obrigatorio']) && $param['obrigatorio'])
+					
+					if(array_key_exists('obrigatorio', $param) && $param['obrigatorio']=='true')
 					{
-						$class.=' obrigatorio';
+						$class.=' obrigatorio ';
 						$param['title'].='  *';
 						$param['label_title'].='  ('.LNG('obrigatorio').')';
 					}
