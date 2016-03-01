@@ -42,7 +42,7 @@ class WRS_MANAGE_PARAM
 					'metodo_classe_param'	=>	'ATT_WRS_CUSTOMER',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_CUSTOMER',
 					'nome_arquivo_import'	=>	'CUSTOMER.CSV',
-					'icon'					=>	'fa fa-users',
+					'icon'					=>	'fa fa-user',
 					'colunas_import_export'	=>	'CUSTOMER_CODE, CUSTOMER_DESC, CUSTOMER_EXPIRY, CUSTOMER_FLAG, CUSTOMER_STATUS, CUSTOMER_GROUP',
 					'colunas_descricao'		=>	'CUSTOMER_CODE(varchar[50]), CUSTOMER_DESC(varchar[100]), CUSTOMER_EXPIRY(Int), CUSTOMER_FLAG(text), CUSTOMER_STATUS(Int), CUSTOMER_GROUP(varchar[100])'
 			),
@@ -60,6 +60,7 @@ class WRS_MANAGE_PARAM
 					'tabela_bd'				=>	'ATT_WRS_SERVER',
 					'metodo_classe_param'	=>	'ATT_WRS_SERVER',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_SERVER',
+					'icon'					=>	'fa fa-server',
 					'nome_arquivo_import'	=>	'SERVER.CSV',
 					'colunas_import_export'	=>	'SERVER_ID, SERVER_DESC, SERVER_COMMENT, SERVER_USER, SERVER_PWD, SERVER_FLAG, SERVER_STATUS',
 					'colunas_descricao'		=>	'SERVER_ID(varchar[50]), SERVER_DESC(varchar[100]), SERVER_COMMENT(varchar[1000]), SERVER_USER(varchar[100]), SERVER_PWD(varchar[100]), SERVER_STATUS(smallint))'
