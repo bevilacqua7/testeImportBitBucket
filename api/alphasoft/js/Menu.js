@@ -81,14 +81,22 @@ $(document).ready(function(){
 	
 	
 	//Evento do menu Administrativo 
-	$('.menu_cadastro').click(function()
-			{
-				carrega_grid_list_admin(undefined,$(this));
-				$('#myModal').modal('show');
-			}
-	);
+	$('.menu_cadastro').click(function(){
+		carrega_grid_list_admin(undefined,$(this));
+		$('#myModal').modal({
+			  backdrop: 'static',
+			  keyboard: true
+			}).modal('show');
+	});
 		
-	
+
+	// previne os actions com a tecla ESC no sistema (evita fechar janelas, etc)
+	$(document).keyup(function(e) {
+		  if(e.keyCode == 27){
+			  e.preventDefault();
+			  return false;
+		  }
+	});
 	
 	
 	_END('Menu.js');

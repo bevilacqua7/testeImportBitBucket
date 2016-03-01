@@ -134,6 +134,8 @@ class HeaderTag
 	 	
 	 	$tag[]		=	array("host"=>"api/alertify/src/alertify.js",			"access"=>array("main","panel"));		//Main
 	 	
+	 	//http://igorescobar.github.io/jQuery-Mask-Plugin/
+	 	$tag[]		=	array("host"=>"api/jQuery-Mask-Plugin-535b4e4/jquery.mask.min.js",			"access"=>array("main"));		//Main
 	 	
 	 	$tag[]		=	array("host"=>"api/contextjs/context.js",					"access"=>array("panel"));
 	 	
