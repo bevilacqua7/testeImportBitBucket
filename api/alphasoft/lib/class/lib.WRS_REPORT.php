@@ -8,7 +8,6 @@
  */
 
 
-
 includeCLASS('WRS_USER');
 includeQUERY('WRS_PANEL');
 includeQUERY('WRS_REPORT');
@@ -48,12 +47,126 @@ class WRS_REPORT  extends  WRS_USER
 		{
 			switch ($this->event)
 			{
-				case 'openModalSave' 	: return $this->openModalSave(); break;
-				case 'save' 			: return $this->save(); break;
-				case 'delete' 			: return $this->delete(); break;
+				case 'openModalSave' 	: 	return $this->openModalSave(); break;
+				case 'save' 			: 	return $this->save(); break;
+				case 'delete' 			: 	return $this->delete(); break;
+				case 'csv_zip'			:	return $this->csv_zip(); break;
 				
 			}
 		}
+	}
+	
+	
+	
+	/**
+	 * Gerando o CSV e o ZIP e depois inicia o download
+	 * modeo de chamada 
+	 * run.php?file=WRS_REPORT&class=WRS_REPORT&event=csv_zip&table=_MDX_D1AAEF9AB22344D7AE435E0F13F37580_F&zip=name_zip&csv=name_csv
+	 * 
+	 */
+	
+	private function csv_zip()
+	{
+		$info_table		=	  array(
+										'table',	//Nome da tabela
+										'title',	//TITLE
+										'error',
+										'report_id'
+									);
+
+		$param			=	fwrs_request($info_table);
+		$ini			=	WRS_INI::WRS_DEFINE();
+		
+		
+		
+		$info_user		=	array(
+							'db'		=>	array(	
+														'path'	=>	$ini['PATH_DB_CSV_ZIP']				, 
+														'ds' 	=>	$ini['DB_DIRECTORY_SEPARATOR']
+													),
+							'user'		=>	array(	
+														'path'		=>	'', 
+														'ds'		=>	DS, 
+														'user_id'	=>	WRS::USER_ID())
+							
+		);
+		
+		
+		
+		
+		
+		header('Content-Type: application/json');
+		
+		
+		if(empty($param['table']) ||empty($param['title']))
+		{
+			$param['error']				=	 LNG('CSV_ERROR_TABLE_EMPTY');
+		}else{
+		
+			$info_user['user']['path']		=	str_replace(
+															$info_user['db']['ds'], 
+															$info_user['user']['ds'], 
+															$info_user['db']['path']
+														);
+			
+			
+			
+			//Cria a pasta files
+			if(!is_dir($info_user['user']['path']))
+			{
+				mkdir($info_user['user']['path'], 0700);
+			}
+			
+			
+			
+			$directory	=	$info_user['user']['path'].$info_user['user']['user_id'];
+			
+			//Criando a pasta do usuário
+			if(!is_dir($directory)) 
+			{
+					mkdir($directory, 0700);
+			}
+			
+			//Atualza o usuário com o novo diretório atualizado
+			$info_user['user']['path']		=	$directory.DS;
+			
+			$name_zip						=	$info_user['user']['path'].$param['title'].'.zip';
+			$name_csv						=	$info_user['user']['path'].$param['title'].'.csv';
+			
+			
+			//Removendo os arquivo remanecentes
+			if(file_exists($name_zip))  unlink($name_zip);
+			
+			if(file_exists($name_csv))  unlink($name_csv);
+				
+			$path_db_csv	=	str_replace(DS, $info_user['db']['ds'], $name_csv);
+			$path_db_zip	=	str_replace(DS, $info_user['db']['ds'], $name_zip);
+			
+
+			$query_genretare	=	$this->query($this->_query->csv_generate($param['table'], $path_db_csv));
+
+			
+			if(file_exists($name_csv))
+			{
+					
+				$this->query($this->_query->zip_generate($path_db_csv, $path_db_zip));
+				
+				if(file_exists($name_zip))
+				{
+					//Permite o Download do ZIP
+					$param['download']	=	str_replace(DS,'/',str_replace(PATH_MAIN, '', $name_zip));
+				}else{
+					$param['error']		=LNG('CSV_NOT_GENERATE');
+				}
+			}else{
+				$param['error']		=LNG('CSV_NOT_GENERATE');
+			}
+		}
+		
+
+		
+		 echo json_encode($param,true);
+		 
 	}
 	
 

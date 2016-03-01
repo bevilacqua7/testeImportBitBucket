@@ -216,8 +216,9 @@ class WRS_PANEL  extends WRS_USER
 		$CUBE			=	$_cube['CUBE_ID'];
 		$USER_CODE      = 	WRS::USER_CODE();
 		
-		$cube_s		=	fwrs_request('cube_s');
+		$cube_s			=	fwrs_request('cube_s');
 		
+
 		//Para mudar no multiplos cubos apenas insere o ID do CUBO nesse elemento
 		//Ou invoca apenas a criação do Elemento que está sendo solicitado
 		//$CUBE			=	'[SAN - MDTR_NEW]';
@@ -354,7 +355,7 @@ class WRS_PANEL  extends WRS_USER
 			}
 		}*/
 
-		WRS_DEBUG_QUERY($rows_REPORTS,'demo.log');
+
 		if(count($rows_REPORTS)>0 && fwrs_request('exec_reports')=='1')
 		{ // exec_reports!=1 para nao carregar relatorios quando é somente layout
 			echo fwrs_javascript('AUTO_LOAD = [];'.implode(';',$rows_REPORTS).';AUTO_LOAD=base64_json(AUTO_LOAD);');
@@ -1321,7 +1322,12 @@ HTML;
 		$HTML	=	 $TelerikUi->render(	$this->param_encode($this->_param_ssas_reports),
 											$getRequestWrsExceptions,
 											$getRequestKendoUi['REPORT_ID'],
-											$getRequestKendoUi);
+											$getRequestKendoUi,
+											$cube['TABLE_CACHE']);
+		
+		
+		
+		 
 		
 		
 		

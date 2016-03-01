@@ -140,7 +140,9 @@ _START('carrega_grid_list_admin');
 	
 	
 	var retorno ='';
-	if(options!='' && options!=null){
+	
+	if(options!='' && options!=null)
+	{
 		retorno = $.parseJSON(options);
 		if(retorno!= null && typeof retorno == 'object' && typeof retorno.relatorios_apagados != 'undefined'){
 			$('#myModalGenericConfig').modal('hide');	
@@ -151,7 +153,9 @@ _START('carrega_grid_list_admin');
 	
 	var tabela 		= ($(this).attr('tabela')==undefined && typeof obj == 'object' && obj.attr('tabela')!=undefined)?obj.attr('tabela'):(($(this).attr('tabela')==undefined && typeof options == 'object' && options['tabela']!=undefined)?options['tabela']:$(this).attr('tabela'));
 	
+	
 	var _options	=	((options!=null && options!='' && typeof options == 'object')?options:{wrs_type_grid:'list'});
+	
 	
 	
 	
@@ -211,9 +215,9 @@ function btn_window_grid_event_admin(data)
 			{ // validacao de valores minimo e maximos
 				$('form.grid_window_values_form .valida_valor').each(function(){
 					$(this).removeClass('nao_validado validado');
-					var max_val 		= $(this).attr('max-value');
-					var min_val 		= $(this).attr('min-value');
-					var valor_campo 	= $(this).val();
+					var max_val 		= parseInt($(this).attr('max-value'));
+					var min_val 		= parseInt($(this).attr('min-value'));
+					var valor_campo 	= parseInt($(this).val());
 					var nome_campo		= $(this).attr('placeholder');
 					nome_campo			= nome_campo!=''?'('+nome_campo+')':'';
 					if (typeof max_val !== typeof undefined && max_val !== false && valor_campo > max_val) {

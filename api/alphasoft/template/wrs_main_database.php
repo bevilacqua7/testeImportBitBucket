@@ -33,14 +33,14 @@ if(!$flag_cube_indisponivel){
 
 	$LINK_HTML=	<<<HTML
 		 
-									<a href="{$LINK}" title="{$TITLE_LINK}" class="btn btn-info btn1 wrs-tooltip"><i class="fa fa-th"></i></a> 
+									<a href="{$LINK}" title="{$TITLE_LINK}" class="btn btn-info btn2 wrs-tooltip"><i class="fa fa-file-o"></i></a> 
 HTML;
 	
 if(!$hide_layout_button){
 		$LINK_HTML.= <<<HTML
-									<a href="{$LINK_LAYOUT}" title="{$TITLE_LINK_LAYOUT}" class="btn btn-info btn2 wrs-tooltip">
+									<a href="{$LINK_LAYOUT}" title="{$TITLE_LINK_LAYOUT}" class="btn btn-info btn1 wrs-tooltip">
 											<i
-										class="fa fa-file-o"></i></a>
+										class="fa fa-th"></i></a>
 HTML;
 	}
 	

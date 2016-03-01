@@ -158,7 +158,8 @@ class KendoUi
 						'IS_REFRESH'							=>	NULL,		//identifica se foi executado o F5 e ou o frefresh na tela
 						'TOP_CONFIG'							=>	NULL,		//COnfigurações dos tipos de TOPS e onde
 						'MULTIPLE_CUBE_ID'						=>	NULL,		//Caso exista multiple cubos ele é preenchido com o ID_do CUBO
-						'EXPORT'								=>	FALSE		//Flag true or false para exportação de PDF excel entre outros
+						'EXPORT'								=>	FALSE,		//Flag true or false para exportação de PDF excel entre outros
+						'TABLE_CACHE'							=>	''		//table acache em uso
 					);	
 
 		
@@ -329,7 +330,7 @@ class KendoUi
 	 * @param string $type
 	 * @return string
 	 */
-	public function render($_element,$getRequestWrsExceptions,$report_id,$getRequestKendoUi)
+	public function render($_element,$getRequestWrsExceptions,$report_id,$getRequestKendoUi,$table_cache)
 	{
 		//Pegando os padrões das páginas
 		$this->pageScheme();
@@ -388,7 +389,7 @@ class KendoUi
 						<div class="wrs_box {$idTag}BOX">
 									{$WRS_PANEL_HEADER_TABLE}
 								
-									<div id="{$idTag}" class="wrsGrid table_border border_bottom hide"  ></div>
+									<div id="{$idTag}" class="wrsGrid table_border border_bottom hide wrs_grid_container"  ></div>
 									
 									<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
 							
@@ -421,7 +422,8 @@ class KendoUi
 													
 													$(".{$this->getId()}").wrsAbaData('setKendoUi',
 																{
-																	TOTAL_COLUMN	:	{$getRequestKendoUi['TOTAL_COLUMN']}
+																	TOTAL_COLUMN	:	{$getRequestKendoUi['TOTAL_COLUMN']},
+																	TABLE_CAHCE		:	'{$table_cache}'
 																}
 																);
 																		
