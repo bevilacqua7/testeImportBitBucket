@@ -24,6 +24,22 @@ var words_restrict	=
 
 };
 
+function quebra_carachteres_especiais()
+{
+	var caracter	='"!@#$%¨&*()|<>:?}^{`/*-+.\,.;/]~[´=-]}"'+"'";
+	var _tmp_array	=	[];
+	
+	for(var i=0; i<caracter.length;i++)
+		{
+		
+			_tmp_array.push(caracter[i]);
+		}
+	return _tmp_array;
+	
+}
+var global_especial_caracteres		=	quebra_carachteres_especiais();
+
+//'|',',',"\",'/','*','=','.',':','?','}','{',')','(','>','<','!','@','#','$','%','¨','&','|','<','>',':','?','^','}','Ç','`','{','\',',','.',';','/',']','~','[','´','-','+'
 
 //funcao recursiva para encontrar o pai
 function find_parent_class(object,_class)

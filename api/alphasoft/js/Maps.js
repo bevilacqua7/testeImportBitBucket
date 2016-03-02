@@ -78,9 +78,16 @@ function WRSMaps(KendoUi)
 		
 		_END('WRSMaps::searchMainLatitudeRecursive');
 		
-		if(empty(RELATIONSHIPS_FULL[field]['LATITUDE']))
+		
+
+		var __latitude		=	 typeof RELATIONSHIPS_FULL[field]=='undefined' ? false : true;
+		
+			if(__latitude==true)	if(isEmpty(RELATIONSHIPS_FULL[field]['LATITUDE']))	__latitude	=	true;
+			
+		if(__latitude)
 		{
 			return searchMainLatitudeRecursive(headerIndex[column.c_parent],LEVEL_FULL,FIELD);
+			
 		}else{
 			return _dataDeep['title'];
 		}

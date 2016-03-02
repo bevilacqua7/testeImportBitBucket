@@ -91,12 +91,9 @@ function generate_csv_zip_request(data)
 		WRS_ALERT(data['error'],'error');
 		return false;
 	}
-	
-	
-	
-	
-	
 }
+
+
 
 function generate_csv_zip()
 {
@@ -111,7 +108,8 @@ function generate_csv_zip()
 	
 	var get_table		=	 get_aba_active_object().wrsAbaData('getKendoUi');
 	var report_wrs		=	get_aba_active_kendoUi();
-	var title_aba		=	date('Y_m_d_')+report_wrs.REPORT_ID+'_'+str_replace(' ','_',report_wrs.TITLE_ABA);
+	/* TODO:Limpar os carcteres epeciais */ 
+	var title_aba		=	str_replace(global_especial_caracteres,'',str_replace(' ','_',report_wrs.TITLE_ABA))+date('_Y_m_d_H_i_s');
 	
 
 	
