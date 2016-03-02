@@ -2180,7 +2180,8 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 		if(_report_id!=undefined && _report_id!='undefined')
 		{
 			//Apagando os filtros a ser adicionados
-			$('.'+_report_id).wrsAbaData('setNewFilter',{tag:null});
+			
+			$('.'+_report_id).wrsAbaData('setNewFilter',{tag:null},true);
 			
 		}
 		

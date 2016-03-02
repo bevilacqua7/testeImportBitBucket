@@ -1927,15 +1927,17 @@ function optionsDataConvert(gridValue,with_decode)
 			 * data
 			 * only_data
 			 */
-			var __setNewFilter	=	 function(filterName)
+			var __setNewFilter	=	 function(filterName,only_dbl)
 			{
 				
 				_ONLY('__setNewFilter');
 
 				if(data_global==undefined) return false;
 
+				
+				
 				//Faz com que não permita processar se for na troca de aba 
-				if($('body').WrsGlobal('getCM','dblclick_open_aba')==true)
+				if($('body').WrsGlobal('getCM','dblclick_open_aba')==true && typeof only_dbl==undefined)
 				{
 					return true;
 				}
