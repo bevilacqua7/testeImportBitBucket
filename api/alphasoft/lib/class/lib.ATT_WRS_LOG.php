@@ -31,95 +31,25 @@ class ATT_WRS_LOG extends WRS_BASE
 	public function downloadFile(){
 		$this->admin->downloadFile();
 	}
-	
+
 	public function insert($options)
 	{
-		$_fields			= $options['field'];
-		$_request_original 	= $_REQUEST;
-		$_tabela			= $options['table'];
-		$arr_campos_request = array();
-	
-		foreach($_fields as $nome_campo => $valores){
-			if(array_key_exists($nome_campo, $_request_original)){
-				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
-			}
-		}
-	
-		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
-		unset($param['button']['import']);
-		unset($param['button']['export']);
-		unset($param['button']['remove']);
-		return $param;
+		return $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
 	}
 	
 	public function update($options)
 	{
-	
 		$_fields			= $options['field'];
 		$_request_original 	= $_REQUEST;
 		$_tabela			= $options['table'];
-		$arr_campos_request = array();
-		$arr_campos_valores = array();
-		$arr_campos_request_classe = array(
-				'class',
-				'file',
-				'event',
-				'wrs_type_grid',
-				'form_event'
-		);
-		$acao_form			= 'UPDATE'; // como utilizo o mesmo botao salvar para insert e update, virifico se chegou registro com ID ($param['primary']), se nao tiver ID, é insert, se não, update
 	
-		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
+		$param				=	$this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
+		$arr_campos_valores	=	$this->admin->montaArrayCamposValoresDoRequest($_fields,$_request_original,$param);		// por utilizar o mesmo metodo para insert ou update, valido se existe uma chave já criada dentro do metodo $this->admin->montaArrayCamposValoresDoRequest
+		$primaries			=	$this->admin->retornaPrimariesPreenchidasDosFields($param,$_request_original);
+		$acao_form			=	$this->admin->getCurrentActionForm();
 	
-		foreach($_fields as $nome_campo => $valores){
-			if(array_key_exists($nome_campo, $_request_original)){
-				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
-				if(!in_array($nome_campo,$arr_campos_request_classe)){
-					if($nome_campo==$param['primary']){
-						if(trim($_request_original[$nome_campo])==''){
-							$acao_form = 'INSERT';
-						}
-					}else{
-						$separador = "''";
-						if(array_key_exists('type', $param['field'][$nome_campo]) && $param['field'][$nome_campo]['type']=='int'){
-							$separador='';
-						}
-						$arr_campos_valores[$nome_campo]=$_request_original[$nome_campo]==''?'NULL':$separador.$_request_original[$nome_campo].$separador;
-					}
-				}
-			}
-		}
-	
-
-		/**
-		 * REGRA ADMINISTRATIVO para tabelas com chaves compostas - FACIOLI 20160226 - felipeb
-		 * varre todos os fields e verifica quem possui o atributo PRIMARY, com isso, pode mandar mais de uma coluna primary como parametro para a query
-		 */
-		$primaries=array();
-		foreach($param['field'] as $nomeField => $colunaAtual){
-			if(array_key_exists('primary',$colunaAtual) && $colunaAtual['primary']){
-				$primaries[] = $nomeField.' = '."''".$_request_original[$nomeField]."''";
-			}
-		}
-		
-		$condicao_query = ($acao_form=='UPDATE')?((count($primaries)>0)?implode(' and ',$primaries):''):'';
-	
-		unset($param['button']['import']);
-		unset($param['button']['export']);
-		unset($param['button']['remove']);
-	
-		$query_exec = $this->queryClass->Get_query_changetable_log($_tabela, $arr_campos_valores, $condicao_query, $acao_form);
-	
-		$this->admin->set_conn($this->admin->OBJECT->get_conn());
-		$status = $this->admin->query($query_exec);
-		$msg = ($acao_form=='UPDATE')?LNG('ADMIN_REG_UPDATED'):LNG('ADMIN_REG_INSERTED');
-		if(!$status){
-			$st = sqlsrv_errors();
-			$DATA_BASE_ERROR		=	LNG('DATA_BASE_ERROR');
-			$msg					=	$DATA_BASE_ERROR.$st[0]['message'];
-		}
-	
-		$this->admin->retornaMsgAcaoTelaAdmin($status,$msg,$_tabela,$query_exec);
+		$query_exec = $this->queryClass->Get_query_changetable_log($_tabela, $arr_campos_valores, implode(' and ',$primaries), $acao_form);
+		$this->admin->execInsertUpdate($query_exec,$_tabela);
 	
 	}
 	

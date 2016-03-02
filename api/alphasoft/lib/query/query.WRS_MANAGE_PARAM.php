@@ -114,12 +114,14 @@ class WRS_MANAGE_PARAM
 					'tabela_bd'				=>	'ATT_WRS_REPORT',
 					'metodo_classe_param'	=>	'ATT_WRS_REPORT',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_REPORT',
+					'acesso_via_menu'		=>	false,
 					'icon'					=>	'fa fa-file-excel-o'
 			),
 			'ATT_WRS_DOWNLOAD'				=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_DOWNLOAD',
 					'metodo_classe_param'	=>	'ATT_WRS_DOWNLOAD',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_DOWNLOAD',
+					'acesso_via_menu'		=>	false,
 					'icon'					=>	'fa fa-download'
 			),
 			'GET_SSAS_REPORT'				=> 	array(
@@ -414,6 +416,12 @@ HTML;
 		/**
 		 * TODO: jogar no language os valores dos IS_SELECT
 		 */
+		
+		// MASK PLUGIN examples - felipeb20160301
+		// http://igorescobar.github.io/jQuery-Mask-Plugin/
+		// utilizar , 'mask'=>'00/00/0000', 'maskPlaceHolder'=>'__/__/____'
+		// ATENCAO: JS aplicado somente no ambiente administrativo!!!
+		// se for utilizar no panel, incluir JS no header e as chamadas para aplicar mascara de acordo com o evento (focus) no input desejado
 		
 		// Atributos gerados com base na tabela ATT_WRS_USER automaticamente de acordo com script SQL ao final deste arquivo
 		$fields['USER_ID']   			= array('title'=>LNG('USER_ID')    			, 'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
