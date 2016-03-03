@@ -497,27 +497,7 @@ function getWrsKendoColumn(data)
 		
 }// END getWrsKendoColumn
 												
-												
-  function foreach(array,type){
 
-		IS_TRACE	=	true;
-		
-		TRACE('---foreach--------');
-		
-		if(!is_array(array))TRACE('STRING::|::'+array);
-		for(obj in array)
-		{
-			if(empty(type)){
-				TRACE(obj+'   ||   '+array[obj]);
-			}else{
-				
-			TRACE(obj+':');
-			}
-		}
-		
-			IS_TRACE	=	false;
-  }
-  
   
   /*
    * MErge Array 

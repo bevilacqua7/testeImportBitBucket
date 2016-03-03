@@ -49,6 +49,12 @@ $(function(){
 
 
 		function toggleClass( elem, c ) {
+			
+			
+			$( elem).find('h1,.descriptions').toggle();
+			/*
+			foreach(elem);
+			TRACE_DEBUG($(elem).html())*/
 			var fn = hasClass( elem, c ) ? removeClass : addClass;
 			fn( elem, c );
 		}

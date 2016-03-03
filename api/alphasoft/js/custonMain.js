@@ -8,6 +8,7 @@
 				type : 'cover'
 			} );
 			
+			if(Modernizr.touch!=true){
 			//Menu hover
 			$( ".grid > li" ).hover(
 				function(e) {
@@ -17,8 +18,9 @@
 				$( this).find('h1,.descriptions').removeClass('hide');
 			  }
 			);
+			}
 		
-		
+		/*
 			//Menu click
 		$( ".grid li" ).click(
 			function(e) {
@@ -45,7 +47,7 @@
 				
 				$(this).attr('_hide',type);
 		  }
-		);
+		);*/
 		
 		
 	
