@@ -13,6 +13,29 @@ var IS_TRACE		=	false;
 var IS_EXCEPTION	=	false;
 
 
+
+function foreach(array,type){
+
+
+		
+		TRACE('---foreach--------');
+		
+		if(!is_array(array))TRACE('STRING::|::'+array);
+		for(obj in array)
+		{
+			if(empty(type)){
+				TRACE_DEBUG(obj+'   ||   '+array[obj]);
+			}else{
+				
+				TRACE_DEBUG(obj+':');
+			}
+		}
+		
+			IS_TRACE	=	false;
+}
+
+
+
 var words_restrict	=	
 {
 		other			: 	'*Others*',
