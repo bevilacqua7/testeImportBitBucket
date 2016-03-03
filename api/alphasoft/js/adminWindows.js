@@ -1,4 +1,9 @@
-
+function confere_botao_touch(){
+	if(Modernizr.touch && $('.modal-content-grid .modal-body div.k-grid').length>0){
+		var botoes = $('.modal-content-grid .modal-footer button[action_type]');
+		botoes.parent().prepend(botoes.first().clone().attr('class','').addClass('btn btn-primary btn-color-write btn_window_grid_event').attr('action_type','dbl_click_btn').html('<li class="fa fa-pencil"></li> '+LNG('BTN_UPDATE')));
+	}
+}
 
 function callback_load_admin_generic_modal(arg,tabela)
 {
@@ -53,8 +58,6 @@ function callback_load_admin_generic_modal(arg,tabela)
 				
 			_END('carrega_grid_list_admin::funCallBack');	
 		};
-		
-		
 		
 
 	grid_window_modal(option,tabela,funCallBack);
@@ -128,7 +131,9 @@ _START('carrega_grid_list_admin');
 		_START('carrega_grid_list_admin::funCallBack');
 		
 			$('.modal-content-grid').html(data);
-			
+
+			confere_botao_touch();
+			 
 			wrs_window_grid_events_tools({btn:btn_window_grid_event_admin, visao: funCallBackVision});
 			
 		_END('carrega_grid_list_admin::funCallBack');	
@@ -274,6 +279,9 @@ function btn_window_grid_event_admin(data)
 		_START('btn_window_grid_event_admin::funCallBack');
 			$('.modal-content-grid').html(data);
 			aplicaMascaraSeExiste();
+
+			confere_botao_touch();
+			 
 			wrs_window_grid_events_tools({btn:btn_window_grid_event_admin, visao: funCallBackVision});
 		_END('btn_window_grid_event_admin::funCallBack');	
 	};
@@ -558,7 +566,20 @@ function btn_window_grid_event_admin(data)
 				case 'new' 		: 
 						btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 						break;
-				
+
+				case 'dbl_click_btn'	: {
+											if(qtde_linhas_selecionadas>0){			
+												if(qtde_linhas_selecionadas==1){			
+													callback_load_admin_generic_modal(arrObjetosSelecionados.shift());
+												}else{
+													WRS_ALERT(LNG('JS_admin_select_just_one'),'warning');
+												}
+											}else{
+												WRS_ALERT(LNG('JS_admin_select_one'),'warning');
+											}
+											return false;
+											break;
+										};
 			}
 	
 	_END('btn_window_grid_event_admin');

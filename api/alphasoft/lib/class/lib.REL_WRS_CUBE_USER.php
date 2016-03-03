@@ -48,7 +48,7 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 		$primaries			=	$this->admin->retornaPrimariesPreenchidasDosFields($param,$_request_original);
 		$acao_form			=	$this->admin->getCurrentActionForm();
 	
-		$query_exec = $this->queryClass->Get_query_changetable_cube_user($_tabela, $arr_campos_valores, implode(' and ',$primaries), $acao_form);
+		$query_exec = $this->queryClass->Get_query_changetable_cube_user($_tabela, $arr_campos_valores, ($acao_form=='UPDATE'?implode(' and ',$primaries):''), $acao_form);
 		$this->admin->execInsertUpdate($query_exec,$_tabela);
 	
 	}

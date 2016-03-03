@@ -55,7 +55,9 @@ class QUERY_WRS_ADMIN
 		$arr_operacoes = array('INSERT','UPDATE');
 		
 		if(in_array($operacao,$arr_operacoes) && $tabela!='' && is_array($arr_campos_valores) && count($arr_campos_valores)>0){
-	
+			if($operacao=='INSERT'){ // certifica que inserts nao recebam condicoes
+				$condicao='';
+			}
 			
 			$query			=	"EXEC Change_Table '".$tabela."',
 				                  '".implode(",",array_keys($arr_campos_valores))."',

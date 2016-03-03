@@ -63,10 +63,10 @@ class SQL_SERVER
 	 * @param string $query
 	 * @return sqlsrv_query;
 	 */
-	public function query($query,$make_login=true)
+	public function query($query,$make_login=true,$log=true)
 	{
 		//session_write_close();//Para a escrita da Sessão
-		if(IS_WRS_DEBUG)
+		if(IS_WRS_DEBUG && $log)
 		{
 			if($make_login) $this->query_debug($query);
 		}

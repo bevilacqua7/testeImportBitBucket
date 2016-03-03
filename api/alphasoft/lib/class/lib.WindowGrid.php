@@ -628,9 +628,13 @@ EOF;
 		// excecao para usuarios NAO MST ou ADM, não visualizarem usuarios maiores que eles proprios
 		// felipeb 20160226
 		$perfil_logado 		= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
-		if($table=='ATT_WRS_USER'){
-			if($perfil_logado!='MST'){
-				$where="PERFIL_ID != ''MST''";
+		if($perfil_logado!='MST' || $perfil_logado=='ADM'){
+			$CUTOMER_ID 			= WRS::CUSTOMER_ID();
+			if($table=='ATT_WRS_USER'){
+				$where="PERFIL_ID != ''MST'' and CUSTOMER_ID = ".$CUTOMER_ID;
+			}
+			if(WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($table)=='ATT_WRS_LOG'){
+				$where="CUSTOMER_ID = ".$CUTOMER_ID;
 			}
 		}
 		
@@ -734,7 +738,7 @@ EOF;
 						
 						
 						
-						$query_box			=	$this->query($query_box);
+						$query_box			=	$this->query($query_box,true,false);
 						$html_option		=	'';
 						if($this->num_rows($query_box))
 						{
