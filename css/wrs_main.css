@@ -749,7 +749,7 @@ td{
  
 .border_color tr td
 {	
-	border-color:var(--color-border);
+	border-color:#ffc125;
 }
 
 .table_border{
@@ -1109,13 +1109,13 @@ color: #fff !important;
 .form-control-wrs select {
  
 	
-	
+	font-weight: bold;
   display: block;
   height: 34px;
   padding: 6px 12px;
   font-size: 14px;
   line-height: 1.42857143;
-  color: #555;
+  color: #000;
   background-color: #fff;
   background-image: none;
   border: 1px solid #ccc;

@@ -24,13 +24,13 @@
 	color: #b3b9bf;
 }
 
-a {
+.grid a {
 	color: #888;
 	text-decoration: none;
 }
 
-a:hover,
-a:active {
+.grid a:hover,
+.grid a:active {
 	color: #333;
 }
 

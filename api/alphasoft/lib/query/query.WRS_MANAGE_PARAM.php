@@ -202,7 +202,9 @@ HTML;
 	}
 	
 	
-
+	/**
+	 * Retorna o nome correto da tabela configurada no banco de dados, baseado no nome da tabela pro sistema, ex.: DE ATT_WRS_LOG para FAT_WRS_LOG
+	 */
 	public static function confereTabelaCadastroRetorno($nome_tabela){ // se o nome da tabela estiver diferente do padrao, retorna sempre o nome correto do sistema
 		$dadosTabela = self::GET_CONFIG_TABLE($nome_tabela);
 		if(array_key_exists('nome_tabela_correto', $dadosTabela)){
@@ -334,11 +336,11 @@ HTML;
 		*/
 	
 		// Atributos gerados com base na tabela ATT_WRS_CUSTOMER automaticamente de acordo com script SQL ao final deste arquivo
-		$fields['WRS_ICON']			= array('title'=>'Icone'					, 'width'=>50,     'basic'=>true, 'grid'=>true, 'is_upload'=>true, 'sortable'=>false); // sortable é nativo do KendoUi e impede a ordenacao na GRID quando renderizado, evitando quebra de SQL por coluna que nao existe
+		$fields['WRS_ICON']			= array('title'=>'Icone'					, 'width'=>70,     'basic'=>true, 'grid'=>true, 'is_upload'=>true, 'sortable'=>false); // sortable é nativo do KendoUi e impede a ordenacao na GRID quando renderizado, evitando quebra de SQL por coluna que nao existe
 		$fields['CUSTOMER_ID']   	= array('title'=>LNG('CUSTOMER_ID')    		, 'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
 		$fields['CUSTOMER_CODE']   	= array('title'=>LNG('CUSTOMER_CODE')    	, 'key'=>true,   'length'=>10,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['CUSTOMER_DESC']   	= array('title'=>LNG('CUSTOMER_DESC')    	, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['CUSTOMER_EXPIRY']	= array('title'=>LNG('CUSTOMER_EXPIRY') 	, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'max-value'=>365, 'min-value'=>1); // existe tambem 'min-value'=>1
+		$fields['CUSTOMER_EXPIRY']	= array('title'=>LNG('CUSTOMER_EXPIRY') 	, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'max-value'=>365, 'min-value'=>0); // existe tambem 'min-value'=>1
 		$fields['CUSTOMER_FLAG'] 	= array('title'=>LNG('CUSTOMER_FLAG')    	, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500, 'class'=>'hide', 'list'=>true, 'basic'=>true , 'grid'=>true, 'obrigatorio' => false);
 		$fields['CUSTOMER_STATUS']	= array('title'=>LNG('CUSTOMER_STATUS')		, 'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','0'=>'Inativo'),   'type'=>'int',   'length' => 5,  'list'=>true, 'basic'=>true , 'grid'=>true, 'obrigatorio' => true);
 		$fields['CUSTOMER_GROUP']	= array('title'=>LNG('CUSTOMER_GROUP')    	, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);		
@@ -584,12 +586,12 @@ HTML;
 		$fields['DATABASE_FLAG']   		= array('title'=>LNG('DATABASE_FLAG')    	, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1', 'class'=>'hide',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['DATABASE_LINK']   		= array('title'=>LNG('DATABASE_LINK')    	, 'length'=>1000,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['DATABASE_IMAGE']   	= array('title'=>LNG('DATABASE_IMAGE')    	, 'length'=>100,   'list'=>true, 'basic'=>true , 'class'=>'hide', 'obrigatorio' => false);
-		$fields['DATABASE_ORDER']   	= array('title'=>LNG('DATABASE_ORDER')    	, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['DATABASE_POOL']   		= array('title'=>LNG('DATABASE_POOL')    	, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['DATABASE_ORDER']   	= array('title'=>LNG('DATABASE_ORDER')    	, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'min-value'=>1);
+		$fields['DATABASE_POOL']   		= array('title'=>LNG('DATABASE_POOL')    	, 'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','0'=>'Inativo'), 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['DATABASE_STATUS']   	= array('title'=>LNG('DATABASE_STATUS')   	, 'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','2'=>'Bloqueado','3'=>'Inativo') ,   'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['DATABASE_BALANCE']   	= array('title'=>LNG('DATABASE_BALANCE')    , 'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['SERVER_ID']   			= array('title'=>LNG('SERVER_ID')    		, 'length'=>100,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
-		$fields['CUSTOMER_ID']   		= array('title'=>LNG('CUSTOMER_ID')    		, 'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['DATABASE_BALANCE']   	= array('title'=>LNG('DATABASE_BALANCE')    , 'class'=>'hide', 'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['SERVER_ID']   			= array('title'=>LNG('SERVER_ID')    		, 'is_select'=>'ATT_WRS_SERVER', 'select_fields_in_table'=>array('SERVER_ID','SERVER_DESC'), 'length'=>100,   'primary' => true,   'obrigatorio' => true);
+		$fields['CUSTOMER_ID']   		= array('title'=>LNG('CUSTOMER_ID')    		, 'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_CODE','CUSTOMER_DESC'),'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 				
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_DATABASE'), 
 				'button'	=>	$button,
@@ -659,8 +661,8 @@ HTML;
 		$fields['CUBE_FILTER']   		= array('title'=>LNG('CUBE_FILTER')    		, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'grid'=>true,   'obrigatorio' => false);
 		$fields['CUBE_FILTER_VALUE'] 	= array('title'=>LNG('CUBE_FILTER_VALUE') 	, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'grid'=>true,   'obrigatorio' => false);
 		$fields['CUBE_STATUS'] 			= array('title'=>LNG('CUBE_STATUS')    		, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['DATABASE_ID'] 			= array('title'=>LNG('DATABASE_ID')    		, 'length'=>100,   'primary' => true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['SERVER_ID'] 			= array('title'=>LNG('SERVER_ID')    		, 'length'=>100,   'primary' => true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['DATABASE_ID'] 			= array('title'=>LNG('DATABASE_ID')    		, 'is_select'=>'ATT_WRS_DATABASE', 'select_fields_in_table'=>array('DATABASE_ID','DATABASE_DESC'), 'length'=>100,   'primary' => true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true); // colocar server_desc junto da descricao do database
+		$fields['SERVER_ID'] 			= array('title'=>LNG('SERVER_ID')    		, 'is_select'=>'ATT_WRS_SERVER', 'select_fields_in_table'=>array('SERVER_ID','SERVER_DESC'), 'length'=>100,   'primary' => true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['CUSTOMER_ID']   		= array('title'=>LNG('CUSTOMER_ID')    		, 'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_CODE','CUSTOMER_DESC'), 'type'=>'int',   'length' => 19, 'basic'=>true, 'grid'=>true,   'obrigatorio' => true);
 
 		//Atributos de execuções e Eventos
@@ -822,6 +824,16 @@ HTML;
 		$fields['DATABASE_ID']   = array('title'=>LNG('DATABASE_ID')    ,   'length'=>100,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
 		$fields['CUBE_ID']   = array('title'=>LNG('CUBE_ID')    ,   'length'=>100,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
 		$fields['USER_ID']   = array('title'=>LNG('USER_ID')    ,   'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
+		
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// sempre filtrando quando ADM o customer_ID
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		// USER_ID -> usercode (usuario)
+		// CUBE_ID => cube_desc (customer_code) - join 3 tabelas (cubo,customer)
+		
+		// quando editar, ao clicar no usuario, bloqueia o usuario em questao e permite mudar os cubos
+		// quando clicar nos cubos, fazer igual 
 		
 		return array(	'title'		=>	LNG('TITLE_REL_WRS_CUBE_USER'), 
 						'button'	=>	$button,

@@ -126,7 +126,7 @@ HTML;
 				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
 				if(!in_array($nome_campo,$arr_campos_request_classe)){
 					if($nome_campo==$param['primary']){
-						if(trim($_request_original[$nome_campo])==''){
+						if(trim($_request_original[$nome_campo])=='' || array_key_exists('novo_registro', $_request_original)){
 							$this->setCurrentAction('INSERT');
 						}
 					}else{
@@ -381,6 +381,7 @@ HTML;
 		}
 		fclose($fp);
 	}
+	
 		
 	public function importarDadosEmMassa($name,$_request_original=NULL){
 		

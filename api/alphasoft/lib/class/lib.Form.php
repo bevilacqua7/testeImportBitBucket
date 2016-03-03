@@ -191,7 +191,7 @@ EOF;
 				if(array_key_exists('type',$param) && $param['type']=='password')
 				{
 					$type_input ='password';
-					$extra_html ='<input type="checkbox" class="show_pass_field"> '.LNG('FORM_TYPE_PASSWORD_SHOW');
+					$extra_html .='<input type="checkbox" class="show_pass_field"> '.LNG('FORM_TYPE_PASSWORD_SHOW');
 					$class =' input_type_password ';
 				}
 				
@@ -203,7 +203,9 @@ EOF;
 				$param['title_placeholder']	=$param['title'];
 				$param['label_title']		=$param['title'];
 				
-				
+				if(array_key_exists('primary',$param) && $param['primary']=='true' && (!isset($param['value']) || $param['value']=='')){
+					$extra_html .='<input type="hidden" name="novo_registro" value="1">';
+				}
 				
 				$mask	=	"";
 				if(array_key_exists('mask',$param) && $param['mask']!='')
