@@ -1035,6 +1035,7 @@ function wrsFilterClickFalse(filter_hide)
     	{
 			_START('WrsFilter::__wrs_filter_check_change_filter');	
     		var flag_back		=	false;
+
     		$(".WRS_DRAG_DROP_FILTER").find('h2').each(function(){
     			//var json				=	$.parseJSON(base64_decode($(this).attr('json')));	   
     			var json				=	$(this).data('wrs-data');	   
@@ -1139,7 +1140,7 @@ function wrsFilterClickFalse(filter_hide)
 					///Para não permitir apagar filtro simples
 					var filters					=	aba_active.wrsAbaData('getFilterSimples',{'tag_class':tag_class});
 					
-						if(!not_use && filters.simples!=true) 
+						if(!not_use && filters.simples!=true || $('body').WrsGlobal('getCM','clean_filter_simples')==true) 
 						{
 							//Verificando se o Level Full exist no array passado
 							if(in_array(level_full, levelDown, true) || typeEvent=='all')
@@ -1152,9 +1153,11 @@ function wrsFilterClickFalse(filter_hide)
 								 */
 								var is_simples	=	typeEvent=='all' ? is_simples : ''; 
 								
-								 
 								
-								if(is_simples!='simples' )
+							 
+								
+								
+								if(is_simples!='simples' || $('body').WrsGlobal('getCM','clean_filter_simples')==true )
 								{	
 									/*
 									 * Se o filtro foi modificado então apaga os filhos
@@ -1882,7 +1885,11 @@ function wrsFilterClickFalse(filter_hide)
 	 					aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:$(this).val(),only_data:true});
 					}
 	 			
+	 			$('body').WrsGlobal('setCM',{'clean_filter_simples':true});
+	 			
 	 			cleanFiltersDown(json['LEVEL_DOWN'],'',nameTag);
+	 			
+	 			$('body').WrsGlobal('setCM',{'clean_filter_simples':false});
 				
 				_END('WrsFilter::funCallBackRun::wrs_input_filter_single');
 		 	}
@@ -2172,7 +2179,7 @@ function wrsFilterClickFalse(filter_hide)
 				   		var filter_hide		=	event.attr('filter_hide'); //Flag armazenada no botão para saber se já foi pressionado
 				
 						if(filter_hide!='true' && filter_hide!='false') filter_hide='false';
-				
+						
 						if(filter_hide=='false')
 						{	
 							setWRSFilterCommon(true);

@@ -1103,7 +1103,7 @@ function onDataBound(arg)
 	 */
 	 function WRSSresize(gridId,idx, width,sizeFrozen,nameCol,column_frozem_fixed) 
 	 {
-		 _START('WRSSresize');
+		// _START('WRSSresize');
 		 
 		var _idx		=	idx;
 		var tableCols	=	{header:null,data:null};
@@ -1150,7 +1150,7 @@ function onDataBound(arg)
 		   
 		   
 		
-		_END('WRSSresize');
+	//	_END('WRSSresize');
 
       }
 		

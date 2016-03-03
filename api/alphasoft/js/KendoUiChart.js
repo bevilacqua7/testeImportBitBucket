@@ -2499,10 +2499,13 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 									
 									
 									
-									
-									if(!empty(headerIndex[headerIndex.field[infoFirst.value].c_parent]))
+									if(typeof headerIndex.field[infoFirst.value]!='undefined')
 									{
-											_titleSubNivel	=	" ("+headerIndex[headerIndex.field[infoFirst.value].c_parent].title+")";
+										
+										if(!empty(headerIndex[headerIndex.field[infoFirst.value].c_parent]))
+										{
+												_titleSubNivel	=	" ("+headerIndex[headerIndex.field[infoFirst.value].c_parent].title+")";
+										}
 									}
 
 									

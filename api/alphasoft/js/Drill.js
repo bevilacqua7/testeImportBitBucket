@@ -341,6 +341,7 @@ function addTargetDisableContext(kendoUi,report_id)
     		$('.'+e.kendoId).wrsAbaData('setKendoUi',{STOP_RUN:false, 'TYPE_RUN':TYPE_RUN[e.type]});
     		
 
+
     		
     		switch(e.type)
     		{
@@ -486,6 +487,11 @@ function addTargetDisableContext(kendoUi,report_id)
     													
     			};break;
     			case 'data'				:	{
+    				
+    				
+    								$('.'+e.kendoId).wrsAbaData('setKendoUi',{DRILL_HIERARQUIA_LINHA:false});
+    				
+    				
     								/*
     								 * Esta opção é mais complexa pois mudar as colunas e header para fazer a integração correta
     								 */
