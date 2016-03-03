@@ -1,13 +1,20 @@
 /** Used Only For Touch Devices **/
-( function( window ) {
+//( function( window ) {
 	
+$(function(){
+	
+
+
+
 	// for touch devices: add class cs-hover to the figures when touching the items
-	if( Modernizr.touch ) {
+//	if( Modernizr.touch ) 
+	//{
 
 		// classie.js https://github.com/desandro/classie/blob/master/classie.js
 		// class helper functions from bonzo https://github.com/ded/bonzo
 
-		function classReg( className ) {
+		function classReg( className ) 
+		{
 			return new RegExp("(^|\\s+)" + className + "(\\s+|$)");
 		}
 
@@ -40,6 +47,7 @@
 			};
 		}
 
+
 		function toggleClass( elem, c ) {
 			var fn = hasClass( elem, c ) ? removeClass : addClass;
 			fn( elem, c );
@@ -67,15 +75,24 @@
 			window.classie = classie;
 		}
 
-		[].slice.call( document.querySelectorAll( 'ul.grid > li > figure' ) ).forEach( function( el, i ) {
+		var __slide	=	[];
+		__slide.slice.call( document.querySelectorAll( '.container-menu-animation ul.grid > li > figure' ) ).forEach( function( el, i ) {
+			
+
+			try{
 			el.querySelector( 'figcaption > a' ).addEventListener( 'touchstart', function(e) {
 				e.stopPropagation();
 			}, false );
+			
 			el.addEventListener( 'touchstart', function(e) {
 				classie.toggle( this, 'cs-hover' );
 			}, false );
+			
+			}catch(e){}
 		} );
+		
 
-	}
+//	}
 
-})( window );
+});
+//})( window );

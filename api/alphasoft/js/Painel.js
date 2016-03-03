@@ -1429,6 +1429,11 @@ function wrs_run_filter()
 	var get_active_aba_data	=	get_aba_active();
 	
 	
+	//Se estiver vazio então força carregar os filtros
+	if(isEmpty($('.WRS_DRAG_DROP_FILTER').html())){
+		activeToGetAllFilters();
+	}
+	
 	//Verificando se existe informações nas linhas se não existir informações nas linhas assumo que seja uma nova aba que está sendo executada
 	//Ao detectar insere o * para informar que a aba falta ser salva
 	if(isEmpty(get_active_aba_data.history))

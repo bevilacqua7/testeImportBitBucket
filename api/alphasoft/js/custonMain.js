@@ -1,9 +1,9 @@
  
-		
+
 		
 		$(function(){
-	 
-		
+ 
+
 			new mlPushMenu( document.getElementById( 'mp-menu' ), document.getElementById( 'wrs-button-options' ), {
 				type : 'cover'
 			} );
@@ -23,6 +23,7 @@
 		$( ".grid li" ).click(
 			function(e) {
 				var 	type 	=	$(this).attr('_hide');
+			 
 				
 				e.stopPropagation();
 				switch(type)
@@ -33,6 +34,8 @@
 					case '0': type=1; break;
 					default : type=0; break;
 				}
+				
+				
 				
 				if(type==0)
 					$( this).find('h1,.descriptions').addClass('hide');
