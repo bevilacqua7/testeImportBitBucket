@@ -10,6 +10,7 @@
 includeQUERY('WRS_PANEL');
 includeCLASS('WRS_USER');
 
+
 /*
  * Incluindo a thread Manager JOB
  */
@@ -327,9 +328,9 @@ class WRS_PANEL  extends WRS_USER
 			while($report	=	$this->fetch_array($queryGrid_exec))
 			{
 				
-
-				if(trim($report['REPORT_AUTOLOAD'])=='1'){
-					$rows_REPORTS[] 	=	'AUTO_LOAD.push(callback_load_report_generic_modal('.json_encode($report,1).',true))';
+				if(trim($report['REPORT_AUTOLOAD'])=='1')
+				{
+					$rows_REPORTS[] 	=	'AUTO_LOAD.push(callback_load_report_generic_modal('.json_encode($report,true).',true))';
 				}			
 			}
 		}

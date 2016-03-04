@@ -441,6 +441,8 @@ function convert_to_compare_filter(inputHistory)
 	return base64_encode(tmp.join(','));
 	
 }
+
+
 function compare_filter_negado_simple(historio,current)
 {
 	//true é diferente false é igual
@@ -1251,6 +1253,7 @@ function wrsFilterClickFalse(filter_hide)
 					var _data_filter				=	'';
 					
 					var _json_filter				=	'';
+
 						//Verificando se o Level Full exist no array passado
 						if(in_array(level_full, levelUP, true) || typeEvent=='all')
 						{						  
@@ -1307,6 +1310,7 @@ function wrsFilterClickFalse(filter_hide)
 							
 							
 							
+							
 							FilterOriginal[FilterOriginal.length]	=	{'class':'__'+replace_attr(level_full),data:_json_filter};							
 							addFilter[addFilter.length]				=	[replace_attr(level_full),'',_json_filter];
 							
@@ -1345,6 +1349,8 @@ function wrsFilterClickFalse(filter_hide)
 																							});
 				
 			
+
+
 				
 				//Devolvendo os filtros fixos aplicados
 				filters_up					=	allFilterFixeds.filtersUP;
@@ -1355,7 +1361,7 @@ function wrsFilterClickFalse(filter_hide)
 				//END
 				
 			
-			
+				 
 
 			
 			
@@ -1366,7 +1372,7 @@ function wrsFilterClickFalse(filter_hide)
 					tagQuery	=	'';
 				}
 			
-			
+			 
 
 			if(typeEvent=='all') {
 				_END('WrsFilter::getFiltersLevelUP');
@@ -1863,6 +1869,7 @@ function wrsFilterClickFalse(filter_hide)
 		 	var wrs_input_filter_single	=	 function()
 		 	{
 				_START('WrsFilter::funCallBackRun::wrs_input_filter_single');
+				
 				var index_data	=	$(this).attr('index-data');
 				var nameTag		=	'wrs_header_filter_main_'+index_data;
 	 			var main		=	$('#'+nameTag);
@@ -1873,15 +1880,17 @@ function wrsFilterClickFalse(filter_hide)
 	 			
 	 			 var aba_active	=	get_aba_active_object();
 	 			 var tag_class	=	$(this).attr('tag-class');
+	 			 
 	 			
 	 			if(type_input!='radio')
 					{
 	 					var _val		=	$(this).val();
+
 	 					aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:_val,remove:checked? false: true});
 
 					}else{
 
-	 					aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null});//Limpa todos os filtros e adicinoa apenas o escolhidp
+	 					aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null});//Limpa todos os filtros e adicinoa apenas o escolhido
 	 					aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:$(this).val(),only_data:true});
 					}
 	 			
@@ -2775,7 +2784,7 @@ function wrsFilterClickFalse(filter_hide)
     	
     	var __add_filtro_fixo_query		=	 function(_inputs)
     	{
-    		
+
     		var inputs		=	_inputs;
     		var _data		=	 GetData();
     		var filter_fixo	=	_data.filter_fixed;	
@@ -2785,7 +2794,7 @@ function wrsFilterClickFalse(filter_hide)
     		
     		var key_not_add		=	{};
     		var filters_up		=	[];
-    		
+
     		/**
     		 * Essa regra do código é a mesma que é utilizada antes de chamar a função __add_filtro_fixo_query
     		 */

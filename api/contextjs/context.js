@@ -361,6 +361,10 @@ var context = context || (function () {
 		e.preventDefault();
 		
 		e.stopPropagation();
+		
+		//Se não existir dados então 
+		if($(this).html()=='-') return false;
+		
 	
 		/*
 		 * Evento para linha e coluna de total - deixa ou remove o menu REMOVE
