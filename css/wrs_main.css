@@ -10,6 +10,23 @@ body {
 	margin-bottom: 20px;
 	
 }
+	
+	/* START*/
+.modal-body,
+.modal-body table{
+	font-size:12 !important;
+	font-family:Arial !important;
+}
+
+ .modal-body .k-pager-wrap{
+	font-size:12px;
+}
+
+ 
+
+/* END */
+	
+ 
 
 .class_layout_padrao{
 	background-color: #FBFBCF;
@@ -1826,7 +1843,9 @@ border-radius: 3px;
 	color: #FFF !Important;
 }
 
-
+.modal{
+	font-size: 8px !important;
+}
 
 .modal_report select{
 	padding: 5px !Important;

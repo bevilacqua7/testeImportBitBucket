@@ -1310,7 +1310,7 @@ function set_value_box_relatorio(object,clean)
 	if(isset(object.LAYOUT_FILTERS))
 	{
 		var _filtros		=	 object.LAYOUT_FILTERS;
-		_filtros	=	$('body').filterFixed('filtro_fixed_check',_filtros);
+			_filtros		=	$('body').filterFixed('filtro_fixed_check',_filtros);
 
 		get_aba_active_object().wrsAbaData('setConvertFilter',object.LAYOUT_FILTERS);
 		
@@ -1403,14 +1403,11 @@ function stop_job_timeout(report_id)
  * 
  * 
  */
-var TR_TR	= false;
+
 function wrs_run_filter()
 { 
 	_START('wrs_run_filter');
-	
-	
-	if(TR_TR==true) return false;
- 
+
 	var manager_aba			=	$(this).attr('manager_aba');
 		manager_aba			=	empty(manager_aba) ? false : true;
 		$(this).removeAttr('manager_aba');

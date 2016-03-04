@@ -26,16 +26,24 @@ class HeaderTag
 	 {
 	 	$tag		=	array();
 	 	
-		
-		$tag[]		=	array("host"=>"api/font-awesome-4.3.0/css/font-awesome.min.css",						"access"=>array("main","panel"));
-		
 	 	$tag[]		=	array("host"=>"api/font-awesome-4.3.0/css/font-awesome.min.css",						"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/bootstrap-3.3.0/dist/css/bootstrap.css",								"access"=>array("panel"));
-		$tag[]		=	array("host"=>"./api/bootstrap-3.3.0/dist/css/bootstrap-wrs.css",						"access"=>array("main"));			//Main
-		$tag[]		=	array("host"=>"./api/bootstrap-3.3.0/dist/css/bootstrap-theme.min.css",					"access"=>array("main"));			//Main
+	 	$tag[]		=	array("host"=>"api/bootstrap-3.3.0/dist/css/bootstrap.css",								"access"=>array("panel","main"));
+//		$tag[]		=	array("host"=>"./api/bootstrap-3.3.0/dist/css/bootstrap-wrs.css",						"access"=>array("main"));			//Main
+//		$tag[]		=	array("host"=>"./api/bootstrap-3.3.0/dist/css/bootstrap-theme.min.css",					"access"=>array("main"));			//Main
 		$tag[]		=	array("host"=>"./css/wrs_config.css",													"access"=>array("main"));			//Main
 	 	$tag[]		=	array("host"=>"css/jquery/jquery-ui.css",												"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/contextMenu/src/jquery.contextMenu.css",								"access"=>array("main","panel"));
+	 	
+	 	
+	 	//Kendo Ui
+	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.common.min.css",								"access"=>array("main","panel"));
+	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.default.min.css",								"access"=>array("main","panel"));
+	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.rtl.min.css",									"access"=>array("main","panel"));
+	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.min.css",								"access"=>array("main","panel"));
+	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.blueopal.min.css",								"access"=>array("main","panel"));
+	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.default.min.css",						"access"=>array("main","panel"));
+	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.mobile.all.min.css",							"access"=>array("main","panel"));
+	 	
 	 	
 	 	//Jquery Modal
 	 	$tag[]		=	array("host"=>"api/jquery.modal-1.2/css/jquery.modal.wrs.job.css",						"access"=>array("main","panel"));
@@ -50,14 +58,7 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"api/contextjs/context.standalone.css",									"access"=>array("panel"));
 	 	$tag[]		=	array("host"=>"api/silviomoreto-bootstrap-select/dist/css/bootstrap-select.min.css",	"access"=>array("panel"));
 	 	
-	 	//Kendo Ui
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.common.min.css",								"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.default.min.css",								"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.rtl.min.css",									"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.min.css",								"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.blueopal.min.css",								"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.default.min.css",						"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.mobile.all.min.css",							"access"=>array("main","panel"));
+	
 	 	
 	 	
 	 	$tag[]		=	array("host"=>"api/jquery.qtip.custom/jquery.qtip.css",									"access"=>array("main","panel"));
@@ -74,17 +75,20 @@ class HeaderTag
 	 	
 	 	
 	 	
-	 	/*MENU OPTINOS */
+	 	//MENU OPTINOS 
 	 	$tag[]		=	array("host"=>"api/MultiLevelPushMenu/css/normalize.css",	"access"=>array("main"));
 	 	$tag[]		=	array("host"=>"api/MultiLevelPushMenu/css/demo.css",		"access"=>array("main"));
 	 	$tag[]		=	array("host"=>"api/MultiLevelPushMenu/css/icons.css",		"access"=>array("main"));
 	 	$tag[]		=	array("host"=>"api/MultiLevelPushMenu/css/component.css",	"access"=>array("main"));
 	 	
-	 	/* MENU CUBO */
+	 	// MENU CUBO 
 	 	$tag[]		=	array("host"=>"api/CaptionHoverEffects/css/default.css",	"access"=>array("main"));
 	 	$tag[]		=	array("host"=>"api/CaptionHoverEffects/css/component.css",	"access"=>array("main"));
 	 	
 
+	 	
+
+	 	
 	 	
 	 	if(wrs_get_user_browser()=='ie')
 	 	{

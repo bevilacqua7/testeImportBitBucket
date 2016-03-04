@@ -1009,19 +1009,33 @@ function onDataBound(arg)
 
 					}
 				
-			 
+				var __consolidado		=	get_aba_active_object().wrsAbaData('getKendoUi').DRILL_HIERARQUIA_LINHA;
+				
 				for(var lineNameCol in columns_width_data)
 					{
+					
+							
 					
 							var _width		=	columns_width_data[lineNameCol];
 								_width		=	(_width*colElement.size_word)+colElement.padding_left;						
 						
+								if(__consolidado==true){
+									
+									if((colElement.count_column<frozen) && colElement.count_column!=0)
+									{
+										_width	=	_width+10;
+									}
+								}
+								
+								
 								WRSSresize(	nameID,
 											colElement.count_column, 
 											_width,
 											frozen,
 											lineNameCol,
 											column_frozem_fixed); 
+								
+								
 							colElement.count_column++;
 							
 					}

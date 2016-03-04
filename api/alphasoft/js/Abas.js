@@ -83,6 +83,7 @@ function optionsDataConvert(gridValue,with_decode)
 	_START('optionsDataConvert');
 	if(with_decode)
 	{
+		
 		var optionsAba		=	{
 				LAYOUT_ROWS			:	filter_array_convert(gridValue['LAYOUT_ROWS']),
 				LAYOUT_COLUMNS		:	filter_array_convert(gridValue['LAYOUT_COLUMNS']),
@@ -91,6 +92,7 @@ function optionsDataConvert(gridValue,with_decode)
 			};
 		
 	}else{
+
 		var optionsAba		=	{
 				LAYOUT_ROWS			:	filter_array_convert(base64_decode(gridValue['LAYOUT_ROWS'])),
 				LAYOUT_COLUMNS		:	filter_array_convert(base64_decode(gridValue['LAYOUT_COLUMNS'])),
@@ -99,6 +101,7 @@ function optionsDataConvert(gridValue,with_decode)
 			};
 	}
 	
+
 	_END('optionsDataConvert');
 	return optionsAba;
 }
@@ -135,6 +138,7 @@ function optionsDataConvert(gridValue,with_decode)
 			 */
 			var open_configure_default		=	 function(options)
 			{
+//				console.error('call');
 				_START('wrsAbas::open_configure_default');
 				
 				var optionsAba		=	{
@@ -144,7 +148,6 @@ function optionsDataConvert(gridValue,with_decode)
 											LAYOUT_FILTERS		:[]
 										};
 				var	opts 			= 	$.extend( {}, optionsAba, options );
-				
 				
 					set_value_box_relatorio(opts);
 					filter_configure_window();
@@ -485,8 +488,8 @@ function optionsDataConvert(gridValue,with_decode)
 					_param_request['LAYOUT_COLUMNS']	=	base64_encode(implode(',',request_coluna));
 					_param_request['LAYOUT_MEASURES']	=	base64_encode(implode(',',request_metrica));
 					
-					//_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
-					//_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
+					_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
+					_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
 
 					
 					try{
@@ -535,7 +538,6 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					if(multiple_cube_id!=null || multiple_cube_id!='' || multiple_cube_id!=undefined)
 					{
-					//	TRACE_DEBUG('send click');
 						
 						
 						if(wrs_multiple_cube_event_class.find('option:selected').val() != multiple_cube_id)
@@ -571,7 +573,6 @@ function optionsDataConvert(gridValue,with_decode)
 				var _report_id		=	$(this).attr('id-aba');
 				var IDCurrent		=	'#'+_report_id;
 				var current			=	 $(IDCurrent+'Main');
-				
 				
 				//Flag para não deixar replicar o Filtro
 				$('body').WrsGlobal('setCM',{'dblclick_open_aba':true});
@@ -707,6 +708,8 @@ function optionsDataConvert(gridValue,with_decode)
 						only_aba	=	true;
 					}
 				
+
+					
 					var optionsAba		=	optionsDataConvert(data_array_aba.data);
 					
 					open_configure_default(optionsAba);
@@ -1237,6 +1240,7 @@ function optionsDataConvert(gridValue,with_decode)
 					}
 				
 				
+				
 				return {base64 : base64_encode(implode(',',_filters)), data:_explode, negado:filter_negado};
 			}
 			
@@ -1256,12 +1260,12 @@ function optionsDataConvert(gridValue,with_decode)
 			var __load_multiple		=	 function(options,noactive,auto_load)
 			{
 				_START('wrsAbas::__load_multiple');
+				
 					var _noactive	= false;
 					
 					if(!empty(noactive)) _noactive = noactive;
 					
 					$('body').WrsGlobal('setCM',{load_aba:false});
-					
 					
 					
 					if(empty(options)) return false;
@@ -1297,13 +1301,14 @@ function optionsDataConvert(gridValue,with_decode)
 								
 								var	opts 			= 	options[lineOptions];
 								
-
 								
 								//Carga inicial para filtros negado
 								var fxNegado	=	 fixed_filter_negado(opts['LAYOUT_FILTERS']);
+									
+								opts['LAYOUT_FILTERS']	=	fxNegado.base64;
 								
-									opts['LAYOUT_FILTERS']	=	fxNegado.base64;
-								
+									
+									
 								var _active			=	true;
 								var kendoUi			=	json_decode(base64_decode(opts.KendoUi));
 									be_loaded		=	false;
@@ -1355,8 +1360,13 @@ function optionsDataConvert(gridValue,with_decode)
 									
 									_kenoUiWindow[kendoUi['REPORT_ID']]	=	kendoUi;
 									_kendoUiLast						=	kendoUi;
+
+									if(isEmpty(_object_open))
+									{
+										_object_open	=	opts;
+									}
 									
-									_object_open	=	opts;
+										
 										add_aba_html(	kendoUi['TITLE_ABA'], 
 												kendoUi['REPORT_ID'],
 														_active,
@@ -1367,6 +1377,7 @@ function optionsDataConvert(gridValue,with_decode)
 						}
 					
 					
+
 					
 					if(be_loaded)
 					{
@@ -1376,12 +1387,10 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					btn_add_new_aba();
 					
-					
 					var optionsAba		=	optionsDataConvert(_object_open);
-
-
-							open_configure_default(optionsAba);
 					
+					
+							open_configure_default(optionsAba);
 					
 
 					$('.NAV_CONFIG_WRS').attr('is-event',true);
@@ -1476,6 +1485,7 @@ function optionsDataConvert(gridValue,with_decode)
 						
 							var s_opts		=	opts[lineOptions];
 							
+								
 								for(var lineFull in s_opts)
 									{
 									
@@ -1483,7 +1493,8 @@ function optionsDataConvert(gridValue,with_decode)
 										
 										if(is_filter)
 										{
-											_tmp_opts		=	s_opts[lineFull][0];
+											_tmp_opts						=	s_opts[lineFull][0];
+											
 											FILTER_TMP.push({'class':_tmp_opts, 'data': s_opts[lineFull][2].join(',')});
 										}
 										
@@ -1641,12 +1652,15 @@ function optionsDataConvert(gridValue,with_decode)
 			
 			var __auto_load		=	 function (inputBase64,event)
 			{
+				//IS_TRACE=true;
 				_START('wrsAbas::__show_grid');
+				
 				var aba_active	=	 tagABA.find('.active');
 				
 				if(empty(inputBase64)) return false;
 				
 				var input	=	base64_json_decode(inputBase64);
+				
 				
 					if(input.length!=0)
 					{
@@ -2016,17 +2030,18 @@ function optionsDataConvert(gridValue,with_decode)
 						{
 							//verificando se existe filtro a ser removido do temporário	
 							var _tmp_remove	=	data_global.data.filter_tmp[filterName.tag];
-							var is_temp		=	true;
+	//						var is_temp		=	true;
 								for(var line in _tmp_remove)
 									{
 											if(_tmp_remove[line]==filterName.data)
 												{
 													delete data_global.data.filter_tmp[filterName.tag][line];
-													is_temp	=	 false;
+													//is_temp	=	 true;
 												}
 									}
 								
-								if(is_temp==true)	data_global.data.FILTER_TMP	= delete_filter_selected(filterName);
+//								if(is_temp==true)	
+									data_global.data.FILTER_TMP	= delete_filter_selected(filterName);
 							
 							that.data(wrsDataName,data_global);
 							return false;

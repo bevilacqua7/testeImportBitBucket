@@ -1179,6 +1179,7 @@ function add_filtro_simples_composto(type_load)
 {
 	_ONLY('add_filtro_simples_composto');
 	
+
 	$('.sortable_filtro li').each(function(){
 		
 		 var class_is		=	$(this).attr('class');
@@ -1270,9 +1271,6 @@ function sortable_attr_simples_composto()
 	buttonClickRightRelatorios('.sortable_filtro li',itemsElement);
 	
 	add_filtro_simples_composto(true);
-	
-	
-	
 
 }
 

@@ -10,7 +10,7 @@
 		url('../fonts/codropsicons/codropsicons.svg#codropsicons') format('svg');
 }
 
-body {
+.mp-pusher {
 	background: #fff;
 	font-weight: 300;
 	font-family: 'Lato', Calibri, Arial, sans-serif;
@@ -68,13 +68,13 @@ border-radius: 3px;
 
 
 
-a {
+.mp-pusher a {
 	text-decoration: none;
 	color: #f7f7f7;
 	outline: none;
 }
 
-a:hover, a:focus {
+.mp-pusher a:hover, .mp-pusher a:focus {
 	color: #fff;
 	outline: none;
 }
@@ -89,7 +89,7 @@ a:hover, a:focus {
 
 @media screen and (max-width: 25em) {
 
-	body {
+	.mp-pusher {
 		font-size: 80%;
 	}
 
