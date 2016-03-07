@@ -183,6 +183,27 @@ class SQL_SERVER
 		}
 	}
 	
+	
+	public function cleanTMP()
+	{
+			$ini			=	WRS_INI::tmp();
+			$_tables		=	json_decode($ini['TABLES'],true);
+		
+			foreach($_tables as $info_tables)
+			{
+				$param			=	array('(company)','(user)');
+				
+				$info_tables['table']		=	 str_replace(	$param, 
+																array(WRS::CUSTOMER_ID(),WRS::USER_ID()), 
+																$info_tables['table']
+															);
+				
+				$table	=	$info_tables['table'];
+				
+				$this->query("IF OBJECT_ID('dbo.".$table."', 'U') IS NOT NULL DROP TABLE ".$table);
+			
+			}
+	}	
 }
 
 ?>

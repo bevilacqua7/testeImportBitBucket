@@ -1894,6 +1894,9 @@ function  themeSUM(nameID,arg,wrsParam)
 
 $(function(){
 	addKendoUiColorJQueryGrid();
+	
+	$('.click_logout_wrs').click(function(){wrs_logout();});
+	//
 });
 
 

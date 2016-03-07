@@ -41,6 +41,14 @@ class WRS_INI
 		return self::$ini_var[$input];
 	}
 	
+	public static function tmp()
+	{
+	
+		return self::$full_ini['tmp'];
+	
+	}
+	
+	
 	public static function WRS_DEFINE()
 	{
 		

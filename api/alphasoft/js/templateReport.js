@@ -53,6 +53,8 @@ function add_find_filter(_array,key,value)
 	for(var line in _tmp)
 		{
 				var _lineK		=	_tmp[line];
+				//replace_attr
+//				console.log('add','__'+replace_attr(key),',==',_lineK['class']);
 				
 				if('__'+key==_lineK['class'])
 				{
@@ -85,11 +87,13 @@ function formata_filters_tmp(_FILTERS,_FILTERS_VALUES)
 					key_full.splice(-1,1);
 					
 				var key					=	implode('.',key_full);	
-			
-				_FILTERS_TMP	=	add_find_filter(_FILTERS_TMP,key,value.join(','));
+
+					//console.log('key',key,'||',key_full);
+					_FILTERS_TMP	=	add_find_filter(_FILTERS_TMP,replace_attr(key),value.join(','));
 									
 			}		
 		
+	
 	}
 	
 	
@@ -125,7 +129,9 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 							'KendoUi'				:	base64_json(_kendoui),
 							'FILTER_TMP'			:	formata_filters_tmp(_FILTERS,_FILTERS_VALUES)//wrs_base64encode(_filter_selected)
 						}
-		
+	
+
+	
 	if(return_params)
 	{
 

@@ -52,6 +52,7 @@ class WRS_MAIN  extends WRS_BASE
 	{
 		includeQUERY('WRS_LOGIN');
 		//Fazendo o Logout
+		$this->cleanTMP();
 		$this->query(QUERY_LOGIN::LOGOUT_SSAS(WRS::LOGIN_ID()));
 		session_destroy();
 		header('Location: login.php');

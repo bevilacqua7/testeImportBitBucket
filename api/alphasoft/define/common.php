@@ -39,7 +39,43 @@ function PARAMETERS_SEPARATORS($key)
 
 
 
+/**
+ * 
+ * Salvando tablela temporária para salvar
+ * 
+ * @param string $table_name
+ * 
+ */
+function table_tmp($table_name)
+{
+	if(empty($table_name)) return false;
+	
+	//PATH_TABLE_TMP
+	//DB_DIRECTORY_SEPARATOR
+	
+	
+}
 
+
+/*
+ * CRiando o diretório
+ */
+function create_directory($path,$ds,$raiz)
+{
+	$_dir		=	str_replace($ds, DS, $raiz);
+	$_path		=	str_replace($raiz, '', $path);
+	$l_path		=	explode($ds, $_path);
+	
+	foreach($l_path as $val)
+	{
+		$_dir = $_dir.$val.DS;
+		if(!is_dir($_dir))
+		{
+			mkdir($_dir, 0700);
+		}
+	}
+
+}
 
 
 /**

@@ -92,6 +92,8 @@ class WRS_REPORT  extends  WRS_USER
 		);
 		
 		
+		//CRiando a pasta de destino		
+		create_directory($ini['PATH_DB_CSV_ZIP'].WRS::USER_ID(),$ini['DB_DIRECTORY_SEPARATOR'],$ini['PATH_RAIZ']);
 		
 		
 		
@@ -110,22 +112,11 @@ class WRS_REPORT  extends  WRS_USER
 														);
 			
 			
-			
-			//Cria a pasta files
-			if(!is_dir($info_user['user']['path']))
-			{
-				mkdir($info_user['user']['path'], 0700);
-			}
-			
-			
+		 
 			
 			$directory	=	$info_user['user']['path'].$info_user['user']['user_id'];
 			
-			//Criando a pasta do usuário
-			if(!is_dir($directory)) 
-			{
-					mkdir($directory, 0700);
-			}
+		
 			
 			//Atualza o usuário com o novo diretório atualizado
 			$info_user['user']['path']		=	$directory.DS;
@@ -142,19 +133,33 @@ class WRS_REPORT  extends  WRS_USER
 			$path_db_csv	=	str_replace(DS, $info_user['db']['ds'], $name_csv);
 			$path_db_zip	=	str_replace(DS, $info_user['db']['ds'], $name_zip);
 			
-
 			$query_genretare	=	$this->query($this->_query->csv_generate($param['table'], $path_db_csv));
-
 			
-			if(file_exists($name_csv))
+			
+			if(!$this->num_rows($query_genretare))
+			{
+				$fetch_array_g	= array('status'=>0);
+			}else{
+				$fetch_array_g		=	$this->fetch_array($query_genretare);	
+			}
+			
+			if($fetch_array_g['status']==1)//if(file_exists($name_csv))
 			{
 					
-				$this->query($this->_query->zip_generate($path_db_csv, $path_db_zip));
+				$query_zip	=	$this->query($this->_query->zip_generate($path_db_csv, $path_db_zip));
 				
-				if(file_exists($name_zip))
+				if(!$this->num_rows($query_zip))
+				{
+					$fetch_zip	= array('status'=>0);
+				}else{				
+					$fetch_zip	=	 $this->fetch_array($query_zip);
+				}
+				
+				if($fetch_zip['status']==1)//if(file_exists($name_zip))
 				{
 					//Permite o Download do ZIP
 					$param['download']	=	str_replace(DS,'/',str_replace(PATH_MAIN, '', $name_zip));
+					if(file_exists($name_csv))  unlink($name_csv);
 				}else{
 					$param['error']		=LNG('CSV_NOT_GENERATE');
 				}

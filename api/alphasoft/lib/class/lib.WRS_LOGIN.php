@@ -116,8 +116,9 @@ class WRS_LOGIN extends WRS_BASE
 		}else{
 			$query		=	 QUERY_LOGIN::LOGIN_SSAS( $USER_PWD, '', $USER_CODE, $ADDRESS, $SESSION, $BROWSER, $SYSTEM );
 		}
+		
 		$query			=	 $this->query($query);
-
+		
 		if($query)
 		{
 			if($this->num_rows($query))
@@ -177,6 +178,8 @@ class WRS_LOGIN extends WRS_BASE
 				
 				if($this->num_rows($query_get_login))
 				{
+					
+					
 					$rows	=	 $this->fetch_array($query_get_login);
 					WRS::SET_INFO_SSAS_LOGIN($rows);
 					WRS::SET_CUSTOMER_ID($rows['CUSTOMER_ID']);
@@ -188,6 +191,9 @@ class WRS_LOGIN extends WRS_BASE
 					if(fwrs_request('isCookie')==1){
 						fwrs_set_cookie(json_encode($user_cookie), 'WRS_LOGIN');
 					}
+					
+					//Limpando tabelas temporárias
+					$this->cleanTMP();
 										
 					WRS_TRACE('Usuário logado com sucesso', __LINE__, __FILE__);
 					WRS_TRACE('END setLogin()', __LINE__, __FILE__);

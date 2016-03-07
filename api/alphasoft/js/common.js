@@ -12,8 +12,19 @@
 var IS_TRACE		=	false;
 var IS_EXCEPTION	=	false;
 
-
-
+function filter_mouse_hover_details()
+{
+	if($('.tooltip_info_wrs_panel_details').is(':hidden')==false)
+	{
+		$('.tooltip_info_wrs_panel').trigger('mouseout').trigger('mouseover');
+	}
+	
+}
+function wrs_logout()
+ {
+	 $('.spinner6').width(400).prepend(LNG('LOGOUT')).resize();
+		$("#fakeloader").show();
+ }
 function foreach(array,type){
 
 

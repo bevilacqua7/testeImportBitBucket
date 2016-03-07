@@ -4,7 +4,16 @@
 $(function(){
 	
 
-
+	
+	//Menu click
+	/*
+$( ".btn-wrs-link" ).click(
+	function(e) {
+		alert('click');
+//		return false;
+	
+  }
+);*/
 
 	// for touch devices: add class cs-hover to the figures when touching the items
 //	if( Modernizr.touch ) 
@@ -49,12 +58,26 @@ $(function(){
 
 
 		function toggleClass( elem, c ) {
+
+
 			
+			$( elem).find('h1,.descriptions').each(function(){
+					var el		=	$(this);
+					var figcaption	=	el.parent().find('figcaption');
+					
+					if(el.hasClass( "hide")==true)
+					{
+						el.removeClass('hide');s
+						figcaption.css('z-index','10');
+					}
+					else
+					{
+						el.addClass('hide');
+						figcaption.css('z-index','400');
+					}
+					
+			});
 			
-			$( elem).find('h1,.descriptions').toggle();
-			/*
-			foreach(elem);
-			TRACE_DEBUG($(elem).html())*/
 			var fn = hasClass( elem, c ) ? removeClass : addClass;
 			fn( elem, c );
 		}
@@ -82,13 +105,17 @@ $(function(){
 		}
 
 		var __slide	=	[];
+		
 		__slide.slice.call( document.querySelectorAll( '.container-menu-animation ul.grid > li > figure' ) ).forEach( function( el, i ) {
 			
 
 			try{
+				/*
 			el.querySelector( 'figcaption > a' ).addEventListener( 'touchstart', function(e) {
 				e.stopPropagation();
+				
 			}, false );
+			*/
 			
 			el.addEventListener( 'touchstart', function(e) {
 				classie.toggle( this, 'cs-hover' );

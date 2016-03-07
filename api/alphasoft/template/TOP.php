@@ -39,7 +39,7 @@
 								</button>
 					</div>
 					  <div class="col-md-2 col-sm-2 col-xs-2 aling-right">
-					  			<a class="btn btn-link " href="run.php?file=WRS_MAIN&class=WRS_MAIN&event=logout"> 
+					  			<a class="btn btn-link logout_wrs " href="run.php?file=WRS_MAIN&class=WRS_MAIN&event=logout"> 
 					  				<img src="imagens/exit.png" height="22" style="cursor:pointer;vertical-align:middle;" title="<?php echo LNG('BTN_SAIR')?>" />
 					  			</a>
 					  </div>
