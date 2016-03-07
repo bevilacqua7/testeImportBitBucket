@@ -21,7 +21,7 @@
         	         content: {
 								text: function(event, api) 
 										{
-											return $('<div class="container "> '+tagFilterWRS()+'</div>');
+											return $('<div class="container tooltip_info_wrs_panel_details"> '+tagFilterWRS()+'</div>');
 										},
 								title : 'Filtros'
             	         },

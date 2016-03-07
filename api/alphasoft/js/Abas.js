@@ -488,8 +488,8 @@ function optionsDataConvert(gridValue,with_decode)
 					_param_request['LAYOUT_COLUMNS']	=	base64_encode(implode(',',request_coluna));
 					_param_request['LAYOUT_MEASURES']	=	base64_encode(implode(',',request_metrica));
 					
-					_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
-					_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
+//					_param_request['LAYOUT_FILTERS']	=	base64_encode(getAllFiltersToRun.data);
+	//				_param_request['FILTER_TMP']		=	base64_encode(json_encode(getAllFiltersToRun.full));
 
 					
 					try{
@@ -1265,11 +1265,9 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					if(!empty(noactive)) _noactive = noactive;
 					
-					$('body').WrsGlobal('setCM',{load_aba:false});
-					
+						$('body').WrsGlobal('setCM',{load_aba:false});
 					
 					if(empty(options)) return false;
-					
 					
 					var _report_id			=	'';
 					var is_load_direct		=	false;

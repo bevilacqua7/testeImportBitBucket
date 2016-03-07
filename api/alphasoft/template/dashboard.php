@@ -218,7 +218,7 @@ $(function(){
                     <?php }else{?>
                     		<img id="img_download" src="../imagens/download.png" height="22" style="cursor:pointer;vertical-align:middle" title="<?php echo traduzTexto('DOWNLOAD ARQUIVOS',NULL,'M')?>" onClick="abrePagina('gerenciamento_arquivos_download','div_lista_de_layouts_relatorios');" onMouseOver="this.height='30';this.style.margin='-4px'" onMouseOut="this.height='22';this.style.margin='0px'"/>&nbsp;&nbsp;<span style="font-size:20px;color:#666666;;vertical-align:middle">|</span>
 					<?php }?>-->
-                   <a href="#" > <img src="../imagens/exit.png?<?php echo WRS_TEMP_RAND;?>"  style="cursor:pointer;vertical-align:middle" title="<?php echo traduzTexto('SAIR',NULL,'M')?>" onClick="fazLogout();" /></a>
+                   <a href="#" > <img src="../imagens/exit.png?<?php echo WRS_TEMP_RAND;?>"  style="cursor:pointer;vertical-align:middle" title="<?php echo traduzTexto('SAIR',NULL,'M')?>"  /></a>
 	</div>
 	</div>
 	

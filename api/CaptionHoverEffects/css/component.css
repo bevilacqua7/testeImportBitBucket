@@ -65,27 +65,29 @@
 	margin: 0;
 	position: relative;
 	
-    -webkit-box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.30);
-    -moz-box-shadow:    5px 5px 10px 0px rgba(0, 0, 0, 0.30);
-    box-shadow:         5px 5px 10px 0px rgba(0, 0, 0, 0.30);
-
+-webkit-box-shadow: 3px 3px 10px 0px rgba(50, 50, 50, 0.93);
+-moz-box-shadow:    3px 3px 10px 0px rgba(50, 50, 50, 0.93);
+box-shadow:         3px 3px 10px 0px rgba(50, 50, 50, 0.93);
+    
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
+    
+	background: #444;
 }
 
 .grid figure img {
 	max-width: 100%;
 	display: block;
 	position: relative;
-
-    -webkit-box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.7);
-    -moz-box-shadow:    5px 5px 10px 0px rgba(0, 0, 0, 0.7);
-    box-shadow:         5px 5px 10px 0px rgba(0, 0, 0, 0.7);
-
+	
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
+    z-index: 100 !important;
+    
+   
+    
 }
 
 .grid  li  h1{
@@ -121,28 +123,30 @@
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 	background:rgba(0, 0, 0, 0.40);
 	width:100%;
-	z-index: 500;
-
+	z-index:100;
 	-webkit-border-radius: 0px 0px 10px 10px;
 	-moz-border-radius: 0px 0px 10px 10px;
 	border-radius: 0px 0px 10px 10px;
 }
 
+ 
 
 .grid figcaption {
 	position: absolute;
 	top: 0px;
 	left: 0px;
 	padding: 20px;
-	background: #444;
 	color: #fff;
-
    	font-family: sans-serif;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 	
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
+	
+	
+
+
 }
 
 .h2-figure{
@@ -162,12 +166,11 @@
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
-
+ 
 .grid figcaption a {
 	text-align: center;
 	cursor:pointer;
 	color: #fff !important;
-
 	width: 45px;
 	padding: 10px !important;
 	font-size: 20px;
@@ -178,6 +181,7 @@
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+
 }
 
 
@@ -197,7 +201,7 @@
 	text-align: center;
 	cursor: pointer;
 	left: 5px;
-
+	
     -webkit-box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.5);
     -moz-box-shadow:    3px 3px 3px 0px rgba(0, 0, 0, 0.5);
     box-shadow:         3px 3px 3px 0px rgba(0, 0, 0, 0.5);
@@ -300,6 +304,7 @@
 	-moz-transform: translateY(100%);
 	-ms-transform: translateY(100%);
 	transform: translateY(100%);
+	
 	-webkit-transition: -webkit-transform 0.4s, opacity 0.1s 0.3s;
 	-moz-transition: -moz-transform 0.4s, opacity 0.1s 0.3s;
 	transition: transform 0.4s, opacity 0.1s 0.3s;
@@ -449,6 +454,7 @@
 
 .no-touch .cs-style-6 figure:hover img,
 .cs-style-6 figure.cs-hover img {
+	
 	-webkit-transform: translateY(50px) scale(0.5);
 	-moz-transform: translateY(50px) scale(0.5);
 	-ms-transform: translateY(50px) scale(0.5);
@@ -486,6 +492,7 @@
 	-webkit-backface-visibility: hidden;
 	-moz-backface-visibility: hidden;
 	backface-visibility: hidden;
+	
 	-webkit-transition: opacity 0.3s, height 0.3s, box-shadow 0.3s;
 	-moz-transition: opacity 0.3s, height 0.3s, box-shadow 0.3s;
 	transition: opacity 0.3s, height 0.3s, box-shadow 0.3s;

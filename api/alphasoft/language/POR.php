@@ -32,6 +32,7 @@
 
 	$language['CSV_GENERATE_ZIP']		=	'Gerando %s arquivos CSV';
 	
+	$language['LOGOUT']						=	'Aguarde um instante estamos saindo do sistema..<br><br><br>';
 	
 	$language['MENU_ADMIN_CUSTOMER']		=	'Clientes';
 	$language['MENU_ADMIN_USER']			=	'Usuários';
@@ -276,6 +277,7 @@
 	
 	$language ['TITLE_TOP'] 		= "Opções Top";
 	$language ['BTN_SAIR'] 		= "Sair";
+	$language ['BTN_SAIR_MENU'] 		= "Fechar menu";
 	$language ['BTN_SIM'] 		= "Sim";
 	$language ['BTN_NAO'] 		= "Não";
 	$language ['BTN_CONFIRM'] 	= "Confirmado";

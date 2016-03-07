@@ -110,12 +110,12 @@
 				self._resetMenu();
 				el.removeEventListener( self.eventtype, bodyClickFn );
 			};
-
-			// open (or close) the menu
-			this.trigger.addEventListener( this.eventtype, function( ev ) {
-				
+			
+			var close_menu		=	 function(ev)
+			{
 				ev.stopPropagation();
 				ev.preventDefault();
+				 
 				if( self.open ) {
 					self._resetMenu();
 				}
@@ -132,6 +132,56 @@
 						}
 					} );
 				}
+			}
+			
+			// open (or close) the menu
+			$('.out_main_menu').click(function(ev){
+				
+			//	self._openMenu();
+				// the menu should close if clicking somewhere on the body (excluding clicks on the menu)
+				//document.addEventListener( self.eventtype, function( ev ) {
+//					if( self.open && !hasParent( ev.target, self.el.id ) ) {
+						bodyClickFn( this );
+						//by Marcelo Santos
+						var time	=	 setTimeout(function(){
+							$('.mp-pusher').removeAttr('style');
+						},1000);
+	//				}
+			//	} );
+				
+				
+				
+					
+					
+			});
+
+			//out_main_menu
+			//this.trigger.addEventListener( this.eventtype, function( ev ) {
+			this.trigger.addEventListener( this.eventtype, function( ev ) {
+				
+				ev.stopPropagation();
+				ev.preventDefault();
+				 
+				if( self.open ) {
+					self._resetMenu();
+				}
+				else {
+					self._openMenu();
+					// the menu should close if clicking somewhere on the body (excluding clicks on the menu)
+					/*document.addEventListener( self.eventtype, function( ev ) {
+						if( self.open && !hasParent( ev.target, self.el.id ) ) {
+							bodyClickFn( this );
+							//by Marcelo Santos
+							var time	=	 setTimeout(function(){
+								$('.mp-pusher').removeAttr('style');
+							},1000);
+						}
+					} );
+					
+					
+					*/
+				}
+				
 			} );
 
 			// opening a sub level menu

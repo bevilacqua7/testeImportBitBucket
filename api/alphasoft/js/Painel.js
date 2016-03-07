@@ -2230,6 +2230,9 @@ function MOUNT_LAYOUT_GRID_HEADER(data,is_job_call)
 	
 	$(window).resize();
 	
+	//Realoca informações dos filtros detalhes
+	filter_mouse_hover_details();
+	
 	delete remove_report;
 	delete data;
 	delete aba_ativa;

@@ -32,7 +32,7 @@
 	  </ul>
 <?php } ?>	  
 	  </li>
-  <li role="presentation"><a href="run.php?file=WRS_MAIN&class=WRS_MAIN&event=logout"><i class="fa default_bk_button_menu" style="
+  <li role="presentation"><a href="run.php?file=WRS_MAIN&class=WRS_MAIN&event=logout" class="click_logout_wrs"><i class="fa default_bk_button_menu" style="
 													    background-image: url(imagens/icons/exit.png);
 													"></i></a></li> 
   <style>

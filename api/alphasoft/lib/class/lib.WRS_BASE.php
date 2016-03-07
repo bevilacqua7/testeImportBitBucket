@@ -13,6 +13,7 @@
  * Chama a Query
  */
 
+
 includeClass('SqlServer');
 
 class WRS_BASE extends SQL_SERVER

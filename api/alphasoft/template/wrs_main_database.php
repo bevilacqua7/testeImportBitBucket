@@ -33,14 +33,12 @@ if(!$flag_cube_indisponivel){
 
 	$LINK_HTML=	<<<HTML
 		 
-									<a href="{$LINK}" title="{$TITLE_LINK}" class="btn btn-info btn2 wrs-tooltip"><i class="fa fa-file-o"></i></a> 
+									<a href="{$LINK}" title="{$TITLE_LINK}" class="btn btn-info btn2 wrs-tooltip btn-wrs-link"><i class="fa fa-file-o"></i></a> 
 HTML;
 	
 if(!$hide_layout_button){
 		$LINK_HTML.= <<<HTML
-									<a href="{$LINK_LAYOUT}" title="{$TITLE_LINK_LAYOUT}" class="btn btn-info btn1 wrs-tooltip">
-											<i
-										class="fa fa-th"></i></a>
+									<a href="{$LINK_LAYOUT}" title="{$TITLE_LINK_LAYOUT}" class="btn btn-info btn1 wrs-tooltip btn-wrs-link"><i class="fa fa-th"></i></a>
 HTML;
 	}
 	
@@ -53,16 +51,18 @@ $html	=<<<EOF
 				<li>
 					<figure>
 						
-						<img src="imagens/databases/{$DATABASE_IMAGE}" >
-						 <h1>{$DATABASE_DESC}</h1>
-						 <div class="descriptions">{$description}</div>
-						<figcaption>
+					<figcaption>
 							<h3 class="h2-figure">{$DATABASE_DESC}</h3>
 							<span>{$DATABASE_COMMENT}</span>
 							
 							{$LINK_HTML}
 							
 						</figcaption>
+						
+						<img src="imagens/databases/{$DATABASE_IMAGE}" >
+						 <h1>{$DATABASE_DESC}</h1>
+						 <div class="descriptions">{$description}</div>
+						
 					</figure>
 				</li>
 EOF

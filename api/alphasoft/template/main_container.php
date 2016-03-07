@@ -27,6 +27,11 @@
 									<div><i class=" fa fa-language" ></i><span><?php echo LNG('TITLE_LINGUA')?>: </span><?php echo $SELECT_IDOMA;?></div>
 							</li>
 							
+							<li class="out_main_menu only-li" >
+								 <div> <i class="fa fa-sign-out" ></i> <?php echo LNG('BTN_SAIR_MENU')?></div>
+							</li>
+							
+							
 						</ul>
 							
 					</div>
