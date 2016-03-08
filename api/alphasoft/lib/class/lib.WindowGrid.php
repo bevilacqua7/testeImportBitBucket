@@ -649,7 +649,6 @@ EOF;
 		
 		$query	=	 $this->query($query);
 		
-		
 		if(isset($param['field']['WRS_ICON']))
 		{
 			$is_icon	=	 true;

@@ -504,7 +504,7 @@ HTML;
 		$fields['SERVER_DESC']   	= array('title'=>LNG('SERVER_DESC')    	, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['SERVER_COMMENT']   = array('title'=>LNG('SERVER_COMMENT') 	, 'length'=>1000,   'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['SERVER_USER']   	= array('title'=>LNG('SERVER_USER')    	, 'length'=>100,   'grid'=>true,   'obrigatorio' => true);
-		$fields['SERVER_PWD']   	= array('title'=>LNG('SERVER_PWD')    	, 'length'=>100,   'obrigatorio' => true);
+		$fields['SERVER_PWD']   	= array('title'=>LNG('SERVER_PWD')    	, 	'type'=>'password' , 'length'=>100,   'obrigatorio' => true,   'grid'=>false, 'list'=>false, 'basic'=>false);
 		$fields['SERVER_FLAG']   	= array('title'=>LNG('SERVER_FLAG')    	, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500, 'class'=>'hide',  'obrigatorio' => false);
 		$fields['SERVER_STATUS']   	= array('title'=>LNG('SERVER_STATUS') 	, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 
@@ -808,8 +808,9 @@ HTML;
 		$dados_tabela_evento = $this->getDadosTabelaConfig('REL_WRS_CUBE_USER');
 		
 		$table	=	$dados_tabela_evento['tabela_bd'];
-		$order	=	array('order_by'=>'CUBE_ID' ,'order_type'=>'ASC');
+		$order	=	array('order_by'=>'USER_CODE' ,'order_type'=>'ASC');
 		$extend	= 	array('class'=>'REL_WRS_CUBE_USER' 	,'file'=>'REL_WRS_CUBE_USER');
+		$exceptions	=	array('file'=>'REL_WRS_CUBE_USER', 'class'=>'REL_WRS_CUBE_USER','type'=>'');
 		
 		$fields							=	array();
 		
@@ -820,14 +821,28 @@ HTML;
 		*/
 		
 		// atributos gerados com base na tabela REL_WRS_CUBE_USER automaticamente de acordo com script SQL ao final deste arquivo
-		$fields['SERVER_ID']   = array('title'=>LNG('SERVER_ID')    ,   'length'=>100,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
-		$fields['DATABASE_ID']   = array('title'=>LNG('DATABASE_ID')    ,   'length'=>100,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
-		$fields['CUBE_ID']   = array('title'=>LNG('CUBE_ID')    ,   'length'=>100,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
-		$fields['USER_ID']   = array('title'=>LNG('USER_ID')    ,   'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
+		$fields['USER_ID']   		= array('title'=>LNG('USER_ID')    		, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true);
+		$fields['CUBE_ID']   		= array('title'=>LNG('CUBE_ID')    		, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true);
+		$fields['DATABASE_ID']   	= array('title'=>LNG('DATABASE_ID')   	, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true);
+		$fields['SERVER_ID']   		= array('title'=>LNG('SERVER_ID')   	, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true);
+		
+		$fields['USER_CODE']   		= array('title'=>LNG('MENU_ADMIN_USER') ,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
+		$fields['CUBE_DESC']   		= array('title'=>LNG('MENU_ADMIN_CUBE')	,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
+		
 		
 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		// sempre filtrando quando ADM o customer_ID
 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		/*
+			select
+			u.USER_ID,c.CUBE_ID,
+			u.USER_CODE,c.CUBE_DESC,cs.CUSTOMER_CODE
+			from REL_WRS_CUBE_USER r
+			inner join ATT_WRS_CUBE c on r.CUBE_ID = c.CUBE_ID
+			inner join ATT_WRS_CUSTOMER cs on c.CUSTOMER_ID = cs.CUSTOMER_ID
+			inner join ATT_WRS_USER u on r.USER_ID = u.USER_ID
+		 */
 		
 		// USER_ID -> usercode (usuario)
 		// CUBE_ID => cube_desc (customer_code) - join 3 tabelas (cubo,customer)
@@ -848,8 +863,8 @@ HTML;
 						'button_force_label'	=>	true, 			  									// NEW
 		 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
 						'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
-						'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
-						'exception'				=>	true, 												// NEW
+						'actionDouble'			=>	'callback_load_admin_generic_modal_associations',	// NEW
+						'exception'				=>	$exceptions, 										// NEW
 						'aplicaClassLinhas'		=>	true,												// NEW
 						'aplicaClassHeaders'	=>	'text-center'										// NEW
 					);

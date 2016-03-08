@@ -3,6 +3,13 @@ body {
 	font-family: Arial, sans-serif;
 }
 
+.association-container label{
+    font-size: 18px;
+    font-weight: 400;
+}
+.association-container select{
+    height: 130px;
+}
 
 .not-allowed     { cursor: not-allowed; }
 
@@ -525,7 +532,7 @@ h4{
 
 .modal-content,
 .modal-content-grid{
-	max-width: 800px;
+	/*max-width: 800px;*/
 	margin: 0px auto;
 	
 }

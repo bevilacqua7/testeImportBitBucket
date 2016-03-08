@@ -335,6 +335,14 @@
 	
 	$language ['TITLE_MENU_DASHBOARD'] 	= "('Visões Consolidadas com Relatórios de Diferentes Bases Segmentadas em Quadrantes Independentes')";
 	
+
+	$language['tpl_association_save_sucess'] 				= "Associação salva com sucesso";
+	$language['tpl_association_save_error'] 				= "Erro na associação";
+	$language['tpl_association_remove_error'] 				= "Erro na remoção de associação";
+
+	$language['tpl_association_title'] 						= "Associacao individual por ";
+	$language['tpl_association_title_cube'] 				= "Cubo";
+	$language['tpl_association_title_user'] 				= "Usuário";
 	
 	
 	/*
@@ -396,7 +404,8 @@
 	$language['MODAL_GENERICA_SALVAR']		=	'Salvar';
 	$language['MODAL_GENERICA_ATUALIZAR']	=	'Atualizar';
 	$language['MODAL_GENERICA_APAGAR']		=	'Apagar';
-	$language['MODAL_GENERICA_CANCELAR']	=	'Sair';
+	$language['MODAL_GENERICA_CANCELAR']	=	'Fechar';
+	$language['MODAL_GENERICA_VOLTAR']		=	'Voltar';
 
 
 	// MODAL CONFIRM
@@ -413,24 +422,24 @@
 	$language['bt_remove'] 					= 'Apagar';
 	$language['bt_export'] 					= 'Exportar';
 	$language['bt_import'] 					= 'Importar';
-	$language['bt_export_user'] 			= $language['bt_export'].' Usuários';
-	$language['bt_import_user'] 			= $language['bt_import'].' Usuários';
-	$language['bt_export_customer'] 		= $language['bt_export'].' Clientes';
-	$language['bt_import_customer'] 		= $language['bt_import'].' Clientes';
-	$language['bt_export_server'] 			= $language['bt_export'].' Servidores';
-	$language['bt_import_server'] 			= $language['bt_import'].' Servidores';
-	$language['bt_export_database'] 		= $language['bt_export'].' Databases';
-	$language['bt_import_database'] 		= $language['bt_import'].' Databases';
-	$language['bt_export_cube'] 			= $language['bt_export'].' Cubos';
-	$language['bt_import_cube'] 			= $language['bt_import'].' Cubos';
-	$language['bt_export_profile'] 			= $language['bt_export'].' Perfis';
-	$language['bt_import_profile'] 			= $language['bt_import'].' Perfis';
-	$language['bt_export_cube_user'] 		= $language['bt_export'].' Associações';
-	$language['bt_import_cube_user'] 		= $language['bt_import'].' Associações';
-	$language['bt_export_download'] 		= $language['bt_export'].' Downloads';
-	$language['bt_import_download'] 		= $language['bt_import'].' Downloads';
-	$language['bt_export_log'] 				= $language['bt_export'].' Logs';
-	$language['bt_import_log'] 				= $language['bt_import'].' Logs';
+	$language['bt_export_user'] 			= $language['bt_export'];//.' Usuários';
+	$language['bt_import_user'] 			= $language['bt_import'];//.' Usuários';
+	$language['bt_export_customer'] 		= $language['bt_export'];//.' Clientes';
+	$language['bt_import_customer'] 		= $language['bt_import'];//.' Clientes';
+	$language['bt_export_server'] 			= $language['bt_export'];//.' Servidores';
+	$language['bt_import_server'] 			= $language['bt_import'];//.' Servidores';
+	$language['bt_export_database'] 		= $language['bt_export'];//.' Databases';
+	$language['bt_import_database'] 		= $language['bt_import'];//.' Databases';
+	$language['bt_export_cube'] 			= $language['bt_export'];//.' Cubos';
+	$language['bt_import_cube'] 			= $language['bt_import'];//.' Cubos';
+	$language['bt_export_profile'] 			= $language['bt_export'];//.' Perfis';
+	$language['bt_import_profile'] 			= $language['bt_import'];//.' Perfis';
+	$language['bt_export_cube_user'] 		= $language['bt_export'];//.' Associações';
+	$language['bt_import_cube_user'] 		= $language['bt_import'];//.' Associações';
+	$language['bt_export_download'] 		= $language['bt_export'];//.' Downloads';
+	$language['bt_import_download'] 		= $language['bt_import'];//.' Downloads';
+	$language['bt_export_log'] 				= $language['bt_export'];//.' Logs';
+	$language['bt_import_log'] 				= $language['bt_import'];//.' Logs';
 	
 
 

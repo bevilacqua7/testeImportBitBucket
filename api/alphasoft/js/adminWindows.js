@@ -5,11 +5,86 @@ function confere_botao_touch(){
 	}
 }
 
-function callback_load_admin_generic_modal(arg,tabela)
+function callback_load_admin_generic_modal_associations(arg,tabela)
+{
+	_START('callback_load_admin_generic_modal_associations');
+	var coluna_clicada = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[arg.dadosHandlerEvento.target.cellIndex]).attr('data-field');
+	var opcoes={};
+	var dados_registro = {};
+	/**
+	 * TODO: apos alterar para procedure ao inves de query, verificar o indice do WRS_DATA do kendoUi e pegar os valores direto do indice dele, e nao fazer o for abaixo para pegar os valores da linha!
+	 */
+	$(arg.dadosHandlerEvento.target).parent().find('td').each(function(){ 
+		var indx = $(this).index();
+		var nome = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[indx]).attr('data-field');			
+		var valor= $($(arg.dadosHandlerEvento.target).parent().find('td')[indx]).text();
+		dados_registro[nome]=valor;
+	});
+
+	opcoes['coluna_clicada']	=coluna_clicada;
+	opcoes['valores_linha']		=dados_registro;
+	
+	var association_save_button	=	 function(content)
+	{
+		var _content = content;
+		if(!isEmpty(_content)){
+			
+			_START('association_save_button');
+			
+			var Ofile				=	'REL_WRS_CUBE_USER';
+			var Oclass				=	'REL_WRS_CUBE_USER';
+			var Oevent				=	'save_association';	
+			_content['event']		=	Oevent;
+			
+			var funCallBackSaveButton	=	 function(data)
+			{
+				console.log('callback',data);
+				WRS_ALERT(data.mensagem,data.type,function(){ $('#myModalGenericConfig .bt-cancelar').trigger('click'); });				
+			}
+			
+			runCall(_content,Ofile,Oclass,Oevent,funCallBackSaveButton,'modal','json');
+			
+			_END('association_save_button');
+			
+		}
+	}
+
+	var _title = LNG('tpl_association_title')+((coluna_clicada=='USER_CODE')?LNG('tpl_association_title_user'):LNG('tpl_association_title_cube'));
+	
+	var optionsDefault			= {
+											'file'									:	'REL_WRS_CUBE_USER', 
+											'classe'								:	'REL_WRS_CUBE_USER',
+											'event'									:	'form_association_html',
+											'title'									:	_title,
+											'bt_voltar'								:	false,
+											'bt_salvar'								:	true,
+											'bt_atualizar'							:	false,
+											'bt_apagar'								:	false,
+											'bt_salvar_extra_action_validator'		:	association_save_button,
+											'bt_atualizar_extra_action_validator'	:	null,
+											'bt_apagar_extra_action_validator'		:	null,
+											'bt_cancelar'							:	true,
+											'returnModal'							:	false,
+											'btn_events'							:	null, //function(){ return true; },
+											'extraParam'							:	opcoes
+										};
+	
+	$(this).modalGeneric(optionsDefault);
+	
+	_END('callback_load_admin_generic_modal_associations');
+}
+
+
+
+
+
+function callback_load_admin_generic_modal(arg,tabela,opcoes)
 {
 	
 	_START('callback_load_admin_generic_modal');
 	var _data			=	 $('#myModal, .modal-content-grid').data('wrsGrid');
+	
+	var options_extra	=	 opcoes==undefined?false:opcoes;
 	var param			=	 _data.param_original;
 	var option						=	 [];
 		option['wrs_type_grid']		=	'form';
@@ -19,9 +94,10 @@ function callback_load_admin_generic_modal(arg,tabela)
 		}catch(e){
 			option[param['primary']] = arg[param['primary']];
 		}
-		
-		option['param_request']			=	param;
 
+		option['options_extra']			=	options_extra;
+		option['param_request']			=	param;
+		
 		var funCallBackVision = function()
 		{
 			_START('callback_load_admin_generic_modal::funCallBackVision');
@@ -59,7 +135,10 @@ function callback_load_admin_generic_modal(arg,tabela)
 			_END('carrega_grid_list_admin::funCallBack');	
 		};
 		
-
+		if(options_extra['callback']!=undefined){
+			funCallBack = options_extra['callback'];
+		}
+		
 	grid_window_modal(option,tabela,funCallBack);
 		
 	_END('callback_load_admin_generic_modal');
@@ -186,11 +265,11 @@ _START('carrega_grid_list_admin');
 
 
 
-function btn_window_grid_event_admin(data)
+function btn_window_grid_event_admin(data,_action_type,_table)
 {
 	_START('btn_window_grid_event_admin:0808');
-	var action_type				=	 $(this).attr('action_type');
-	var table					=	 $(this).attr('table');
+	var action_type				=	 _action_type!=undefined?_action_type:$(this).attr('action_type');
+	var table					=	 _table!=undefined?_table:$(this).attr('table');
 	var values					=	 get_grid_window_values_form();
 
 	var _data					=	 $('#myModal, .body_grid_window').data('wrsGrid');
@@ -225,7 +304,7 @@ function btn_window_grid_event_admin(data)
 					var valor_campo 	= parseInt($(this).val());
 					var nome_campo		= $(this).attr('placeholder');
 					nome_campo			= nome_campo!=''?'('+nome_campo+')':'';
-					if (typeof max_val !== typeof undefined && max_val !== false && valor_campo > max_val) {
+					if (typeof max_val !== typeof undefined && max_val !== false && valor_campo >= max_val) {
 						var campo = $(this);
 						valida_form=false;	
 						WRS_CONFIRM(LNG('JS_admin_preencha_maximo').replace('#NOMECAMPO#',nome_campo)+max_val+"<br>"+LNG('JS_admin_preencha_auto').replace('#VAL#',max_val),'warning',function(escolha){
@@ -238,7 +317,7 @@ function btn_window_grid_event_admin(data)
 						return false;					
 					}
 					
-					if (typeof min_val !== typeof undefined && min_val !== false && (valor_campo < min_val || valor_campo=='')) {
+					if (typeof min_val !== typeof undefined && min_val !== false && (valor_campo <= min_val || valor_campo=='')) {
 						var campo = $(this);
 						valida_form=false;
 						WRS_CONFIRM(LNG('JS_admin_preencha_minimo').replace('#NOMECAMPO#',nome_campo)+min_val+"<br>"+LNG('JS_admin_preencha_auto').replace('#VAL#',min_val),'warning',function(escolha){
@@ -580,12 +659,66 @@ function btn_window_grid_event_admin(data)
 											return false;
 											break;
 										};
+				default: 	btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 			}
 	
 	_END('btn_window_grid_event_admin');
 }
 
 
+/*
+ * Faz o funcionamento de duas selects e trata inclusive valores que estao do lado selecionado para que nao aparecam no campo como disponivel
+ */
+function select_work_generic(obj, enabled){
+	var _enabled = enabled==undefined?true:enabled;
+	if(typeof obj!='object'){
+		obj = $('#'+obj).length>0?$('#'+obj):$('.'+obj);
+		if(typeof obj!='object') return false;
+	}	
+		
+	if(!_enabled){
+		obj.find('.toActive').unbind('click').click(function(){
+			obj.find('.wrs-select :selected').each(function(i, selected){ 
+				$(this).remove().appendTo(obj.find('.wrs-select-receive'));
+			});
+			obj.find('.wrs-select-receive :selected').removeAttr("selected");
+		});
+		obj.find('.toAllActive').unbind('click').click(function(){
+			obj.find('.wrs-select option').each(function(i, selected){ 
+				$(this).remove().appendTo(obj.find('.wrs-select-receive'));
+			});
+			obj.find('.wrs-select-receive :selected').removeAttr("selected");
+		});
+		obj.find('.toBack').unbind('click').click(function(){
+			obj.find('.wrs-select-receive :selected').each(function(i, selected){ 
+				$(this).remove().appendTo(obj.find('.wrs-select'));
+			});
+			obj.find('.wrs-select :selected').removeAttr("selected");
+		});
+		obj.find('.toAllBack').unbind('click').click(function(){
+			obj.find('.wrs-select-receive option').each(function(i, selected){ 
+				$(this).remove().appendTo(obj.find('.wrs-select'));
+			});
+			obj.find('.wrs-select :selected').removeAttr("selected");
+		});
+		obj.find('.wrs-select').unbind('dblclick').bind('dblclick',function(){
+			$("option:selected", this).remove().appendTo(obj.find('.wrs-select-receive'));
+			obj.find('.wrs-select-receive :selected').removeAttr("selected");
+		});
+		obj.find('.wrs-select-receive').unbind('dblclick').bind('dblclick',function(){
+			$("option:selected", this).remove().appendTo(obj.find('.wrs-select'));
+			obj.find('.wrs-select :selected').removeAttr("selected");
+		});
+	}
+	obj.find('.wrs-select, .wrs-select-receive').prop( "disabled", _enabled );	
+	
+	obj.find('.wrs-select-receive option').each(function(){
+		var inx = obj.find(".wrs-select option[value='"+$(this).val()+"']").index();
+		if(inx>=0){
+			$(obj.find(".wrs-select option")[inx]).remove();
+		}
+	});
+}
 
 
 

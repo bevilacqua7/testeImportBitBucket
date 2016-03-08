@@ -11,6 +11,10 @@
 				</div>
 				<div class="modal-footer">
 					<div class="btn-group" role="group" aria-label="...">
+						<button type="button" class="bt-voltar btn btn-default" data-dismiss="modal">
+							<span class="glyphicon glyphicon-chevron-left"></span>
+							<label style="font-weight: normal !important;"><?php echo LNG('MODAL_GENERICA_VOLTAR');?></label>							
+						</button>
 						<button type="button" class="bt-salvar btn btn-success color_write">
 							<span class="fa fa-floppy-o"></span>
 							<label style="font-weight: normal !important;"><?php echo LNG('MODAL_GENERICA_SALVAR');?></label>

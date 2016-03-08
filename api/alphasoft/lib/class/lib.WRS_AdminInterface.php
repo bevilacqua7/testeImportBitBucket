@@ -37,6 +37,118 @@ class WRS_AdminInterface  extends WRS_BASE
 			$this->current_action = $action;
 	}
 	
+	
+	// monta indice para trabalhar chaves compostas baseada em uma query
+	// se houver campo descricao, retorna um combo ja preenchido com os valores relacionados ao indice
+	public function criaIndicesComQueryParaCubos($query,$arr_chaves,$campo_descricao=null,$forca_indice_fixo_nos_options=null){
+		if(is_array($arr_chaves) && count($arr_chaves)>0){
+			$pre_value		=	'indice_';
+			$indices		=	array();		
+			$_select		=	$this->query($query);
+			$cont			=	0;
+
+			$option			=	'<option value="{value}" >{label}</option>'.PHP_EOL;
+			$option_array	=	array('{value}','{label}');
+			$combo			=	'';
+			
+			if($this->num_rows($_select))
+			{
+				while($row = $this->fetch_array($_select))
+				{
+					foreach($arr_chaves as $chave){
+						if(array_key_exists($chave, $row)){
+							$indices[$pre_value.$cont][$chave] = $row[$chave];
+						}
+					}		
+
+					if($campo_descricao!=null && $campo_descricao!='' && array_key_exists($campo_descricao, $row)){
+						$codigo 	= $forca_indice_fixo_nos_options!=null?$forca_indice_fixo_nos_options:$pre_value.$cont;
+						$descricao	= $row[$campo_descricao];
+						$combo		.=str_replace($option_array, array($codigo, $descricao), $option);
+					}
+					
+					$cont++;
+				}		
+			}
+			return ($campo_descricao!=null && $campo_descricao!='')?array('indices'=>$indices,'combo'=>$combo):$indices;
+		}else{
+			return false;
+		}
+	}
+		
+	public function findIndexInarrayByMultipleValues($arr_valores,$arr_indices_a_buscar){
+		$indice=null;
+		foreach($arr_valores as $k=>$v){
+			if($indice!=null) continue; // pula o laco se o indice ja tenha sido encontrado
+			if(is_array($v) && count($v)>0){
+				$match=true;
+				foreach($arr_indices_a_buscar as $chave=>$valor){
+					if(!array_key_exists($chave, $v) || $v[$chave]!=$valor){
+						//echo "<hr><br>Indice [".$chave."] nao existe no array [".print_r($v,1)."] ou valor [".$v[$chave]."] é diferente de [".$valor."]";
+						$match=false;
+					}
+				}
+				if($match){
+					//echo "<hr><br>PEGOU - valor [".print_r($v,1)."] de [".$k."]";
+					$indice = $k;
+					break;
+				}
+			}
+		}
+		//if($indice==null){
+		//	echo '<hr>Array_indices: '.print_r($arr_indices_a_buscar,1);
+		//	exit('<pre>>>>'.print_r($arr_valores,1));
+		//}
+		return $indice;
+	}
+	
+	// monta options baseado em query, codigo e descricao
+	public function preencheCombosComQuery($query,$campo_codigo,$campo_descricao,$baseado_em_indices=null){
+
+		$option			=	'<option value="{value}" >{label}</option>'.PHP_EOL;
+		$option_array	=	array('{value}','{label}');
+		$combo			=	'';
+		$arr_indices_chaves_a_buscar = array();
+		if($baseado_em_indices!=null && is_array($baseado_em_indices)){
+			$_copia = $baseado_em_indices;
+			$arr_indices_chaves_a_buscar = array_keys(array_shift($_copia));
+			if(in_array('SERVER_ID',$arr_indices_chaves_a_buscar)){ // remove o server id para nao entrar na comparacao, pois o servidor será automatico - facioli 20160307 - felipeb
+				unset($arr_indices_chaves_a_buscar[array_search('SERVER_ID',$arr_indices_chaves_a_buscar)]);
+			}
+		}
+		
+		$_select		=	$this->query($query);
+		if($this->num_rows($_select))
+		{
+			while($row = $this->fetch_array($_select))
+			{
+				if(array_key_exists($campo_codigo, $row) && array_key_exists($campo_descricao, $row)){
+					if($baseado_em_indices!=null && is_array($baseado_em_indices)){
+						$arr_indices_a_buscar = array();
+						foreach($arr_indices_chaves_a_buscar as $chave){
+							$arr_indices_a_buscar[$chave] = $row[$chave];
+						}
+						//if(count($arr_indices_a_buscar)==0){
+						//	echo "<pre>";
+						//	exit(print_r($arr_indices_chaves_a_buscar,1)."<hr>".print_r($row,1));
+						//}
+						$codigo = $this->findIndexInarrayByMultipleValues($baseado_em_indices,$arr_indices_a_buscar);
+					}else{
+						$codigo = $row[$campo_codigo];
+					}
+					if($codigo==''){ // pode nao achar indice se for baseado em indices
+						$codigo = $row[$campo_codigo];
+						$row[$campo_descricao] .= ' - nao achou: '.print_r($arr_indices_a_buscar,1);
+					}
+						$descricao	= $row[$campo_descricao];
+						$combo		.=str_replace($option_array, array($codigo, $descricao), $option);
+				}			 	
+			}		
+		}
+		return $combo;
+		
+	}
+	
 	public function ajustaBotoesModalConformeAction($param){
 		if(in_array($this->current_action,array('INSERT','UPDATE'))){
 			unset($param['button']['import']);
