@@ -164,7 +164,7 @@ function onDataBoundWindowGrid(arg)
 	var HandleArg			=	arg;
 
 	
-	var KendoGridWindowTools	=	 function ()
+	var KendoGridWindowTools	=	 function (evento)
 	{		
 			_START('onDataBoundWindowGrid::KendoGridWindowTools');
 		var param			=	wrsWindowGridShare;
@@ -176,6 +176,7 @@ function onDataBoundWindowGrid(arg)
 			if(is_exception && param['actionDouble']){			
 				var toAction	=	param['actionDouble'];
 				HandleArg.sender._data[index]['indexClickTabela']	= 	index;
+				HandleArg.sender._data[index]['dadosHandlerEvento']	= 	evento;
 				window[toAction](HandleArg.sender._data[index],table);					
 			}
 		}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
@@ -183,7 +184,7 @@ function onDataBoundWindowGrid(arg)
 			_END('onDataBoundWindowGrid::KendoGridWindowTools');
 	}
 	
-	var KendoGridWindowToolsAuxSingleClick	=	 function(){
+	var KendoGridWindowToolsAuxSingleClick	=	 function(evento){
 
 		_START('onDataBoundWindowGrid::KendoGridWindowToolsAuxSingleClick');
 		
@@ -205,6 +206,7 @@ function onDataBoundWindowGrid(arg)
 			if(is_exception && param['actionSingle']){
 				var toAction	=	param['actionSingle'];
 				HandleArg.sender._data[index]['indexClickTabela']	= 	index;
+				HandleArg.sender._data[index]['dadosHandlerEvento']	= 	evento;
 				window[toAction](HandleArg.sender._data[index],table);	
 				
 			}else{
@@ -356,7 +358,7 @@ function btn_window_grid_event(_functionCallBack,_action_type,_table,_extraValue
 	var functionCallBack		=	_functionCallBack;
 
 	var extraValues				=	_extraValues;
-		values['wrs_type_grid']	=	'form';
+		values['wrs_type_grid']	=	(extraValues!=undefined && extraValues['wrs_type_grid']!=undefined)?extraValues['wrs_type_grid']:'form';
 
 		switch(action_type)
 		{

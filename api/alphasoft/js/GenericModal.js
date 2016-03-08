@@ -75,6 +75,7 @@ $.fn.extend({
 										'classe'								:	null,
 										'event'									:	'default',
 										'title'									:	null,
+										'bt_voltar'								:	false,
 										'bt_salvar'								:	true,
 										'bt_atualizar'							:	false,
 										'bt_apagar'								:	false,
@@ -84,7 +85,8 @@ $.fn.extend({
 										'bt_cancelar'							:	true,
 										'returnModal'							:	false,
 										'extraParam'							:	null,
-										'btn_events'							:	null
+										'btn_events'							:	null,
+										'callback'								:	null
 									};
 		
 		
@@ -98,7 +100,7 @@ $.fn.extend({
 
 				janela_modal_body.html(data);
 			}
-		
+		_callback = _options['callback']==null?_callback:_options['callback'];
 		
 			
 		var _runCalll	=	 function(_options)
@@ -114,8 +116,19 @@ $.fn.extend({
 			}
 		
 		
+
 		
-			
+		var bt_voltar	=	 function()
+			{
+				_START('modalGeneric::bt_voltar');
+				var o_param			=	janela_modal.data(_dataName);
+					o_param.event	=	'back';		
+				var  _param			=	 $.extend( {}, o_param, get_inputs_val(janela_modal_body) );
+				_runCalll(_param);						
+				_END('modalGeneric::bt_voltar');							
+			}	
+
+		
 		var bt_salvar	=	 function()
 			{
 				_START('modalGeneric::bt_salvar');
@@ -189,7 +202,8 @@ $.fn.extend({
 		
 			
 			janela_modal.data(_dataName,_options);		
-						
+
+			janela_modal.find('.bt-voltar').toggle(_options.bt_voltar);
 			janela_modal.find('.bt-salvar').toggle(_options.bt_salvar);
 			janela_modal.find('.bt-atualizar').toggle(_options.bt_atualizar);
 			janela_modal.find('.bt-apagar').toggle(_options.bt_apagar);
@@ -197,7 +211,8 @@ $.fn.extend({
 			janela_title.html(_options.title);
 					
 			janela_modal.modal('show');
-			
+
+			janela_modal.find('.bt-voltar').unbind('click').click(bt_voltar);
 			janela_modal.find('.bt-salvar').unbind('click').click(bt_salvar);
 			janela_modal.find('.bt-atualizar').unbind('click').click(bt_atualizar);
 			janela_modal.find('.bt-apagar').unbind('click').click(bt_apagar);

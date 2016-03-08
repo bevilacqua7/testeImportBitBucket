@@ -76,9 +76,7 @@ class QUERY_WRS_ADMIN
 	{
 
 		if($tabela!=''){
-			
-			$condicao 			= $condicao_tabela!=''?$condicao_tabela:$condicao;
-			
+						
 			if($condicao!=''){
 				
 				$query			=	"EXEC Change_Table '".$tabela."',
