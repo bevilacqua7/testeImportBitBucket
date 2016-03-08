@@ -2221,6 +2221,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 																							data: getData, 
 																							name: _data_wrs[lineData][columnToLabel],
 																							axis: axisArray[lineDataMeasure],
+																							measure: axisArray[lineDataMeasure],
 																							color: palletCol[lineData]
 																						};
 																
@@ -2826,8 +2827,12 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 														toMergerRADAR	=	toMergerRADARTmp[lineChart];
 													}
 											
-		//									console.log('paramChart',paramChart);
-											
+												
+												var __template		=	"#= category #: #= series.name #: #= "+LABEL_FORMAT+"  # (#=series.measure #)";
+												
+												if(pie_donut || radar_polar) __template		=	"#= category #: #= series.name #: #= "+LABEL_FORMAT+" #";
+												
+												
 											var _paramKendoChart	=	{
 																		  	theme		: 	CHART_THEME, 
 															                title		: 	{text: title, color:'#222'},
@@ -2837,7 +2842,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 															                tooltip		: 	{
 																			                    visible		: true,
 																			                    format		: "{0}%",
-																			                    template	: "#= category #: #= series.name #: #= "+LABEL_FORMAT+" #"
+																			                    template	: __template
 																			                },
 															                categoryAxis: 	{
 																			                    categories			: paramChart['categories'],

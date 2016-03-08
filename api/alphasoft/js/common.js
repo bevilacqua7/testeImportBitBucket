@@ -14,17 +14,51 @@ var IS_EXCEPTION	=	false;
 
 function filter_mouse_hover_details()
 {
-	if($('.tooltip_info_wrs_panel_details').is(':hidden')==false)
+	if($('.tooltip_info_wrs_panel_details').length>0)
 	{
-		$('.tooltip_info_wrs_panel').trigger('mouseout').trigger('mouseover');
+		if($('.tooltip_info_wrs_panel_details').is(':hidden')==false)
+		{
+			$('.tooltip_info_wrs_panel').trigger('mouseout').trigger('mouseover');
+		}
 	}
 	
 }
+
+
+
 function wrs_logout()
  {
+	
+	
+
+
+	var aba_data	=	abas_to_save()
+	
+	if(aba_data.type==true)
+	{
+		var godbay = confirm(LNG('NOT_CLOSE_WINDOW_LOGOUT')+aba_data.data);
+	
+		if(godbay==true)
+			{
+				SYSTEM_OFF	=	true;
+			}else{
+				return false;
+			}
+	}
+	
+	
+	
 	 $('.spinner6').width(400).prepend(LNG('LOGOUT')).resize();
 		$("#fakeloader").show();
+		
+	
+		setTimeout(function(){
+			window.location	=	"run.php?file=WRS_MAIN&class=WRS_MAIN&event=logout";
+		},250);
+		
  }
+
+
 function foreach(array,type){
 
 
@@ -156,33 +190,49 @@ var TYPE_RUN	=	{
 var ABA_TAG_NAME		=	'.WRSAbas ul';
 var SYSTEM_OFF			=	false; //Não é preciso validar se existe modificação isso se deve a erro interno de banco
 
+
+function abas_to_save()
+{
+	var _save			=	 false;
+	var aba_data		=	 '';
+	
+	$('.WRS_ABA').find('a').each(function(){
+		if($(this).find('.wrs_is_change_aba').length>=1)
+		{
+			aba_data		+=	"\n"+$(this).find('.title').html();
+			report_id		=	$(this).attr('id-aba');
+			_save			=	true;
+		}
+		
+	});
+	
+	
+	return {type:_save, data:aba_data};
+	
+}
+
+
+
+
+
 function not_close_save_info()
 {
 
-	
-	
 	//http://www.codigosnaweb.com/forum/viewtopic.php?t=5465
 	//http://stackoverflow.com/questions/1889404/jquery-ui-dialog-onbeforeunload
 	$(window).bind('beforeunload', function() {
 			
-		
-		var aba_data		=	 '';
+		 
+		var aba_data		=	 abas_to_save();
 		var report_id		=	0;
 		var kendoUi			=	get_aba_active_kendoUi();
 
 		if(SYSTEM_OFF==true) return null;
 		
-		$('.WRS_ABA').find('a').each(function(){
-			if($(this).find('.wrs_is_change_aba').length>=1)
-			{
-				aba_data		+=	"\n"+$(this).find('.title').html();
-				report_id		=	$(this).attr('id-aba');
-			}
-			
-		});
+		 
 		
 
-		if(aba_data=='') return null;
+		if(aba_data.data=='') return null;
 		
 		//Ativa a aba
 		if(kendoUi['REPORT_ID']!=report_id)
@@ -190,7 +240,7 @@ function not_close_save_info()
 			$('.'+report_id).trigger('click'); //Active Aba
 		}
 		
-	  var message = LNG('NOT_CLOSE_WINDOW')+aba_data;
+	  var message = LNG('NOT_CLOSE_WINDOW')+aba_data.data;
 	  
 
 	  

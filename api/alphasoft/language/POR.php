@@ -94,6 +94,7 @@
 	$language ['RUN_GRID_CHANGE_NOT'] 			= "Não há modificações para gerar uma nova Consulta..";
 	
 	$language ['NOT_CLOSE_WINDOW'] 			= "As abas listadas a baixo não estão salvas:";
+	$language ['NOT_CLOSE_WINDOW_LOGOUT'] 	= "As abas listadas a baixo não estão salvas, deseja sair mesmo sem salvar?";
 	$language ['ABA_TITLE_EMPTY'] 			= "É necessário digitar um <b>título</b> para o report";
 	
 	$language['SEE_IN_MAP']					=	'VER NO MAPA';

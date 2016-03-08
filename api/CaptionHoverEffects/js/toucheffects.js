@@ -6,14 +6,38 @@ $(function(){
 
 	
 	//Menu click
-	/*
+	
 $( ".btn-wrs-link" ).click(
 	function(e) {
-		alert('click');
-//		return false;
+	
+		$("#fakeloader").show();
+		
+		
+		
+		var title_is_time	=	null;
+		 
+		var is_title_empty = {
+				  that    		: 	$(this),
+				  resize		: 	function( event ) 
+				  {
+					  
+					  		clearTimeout(title_is_time);
+					  		window.location	=	this.that.attr('href');
+					  		
+					  		
+				  }
+				};
+		
+		var time_out 	= $.proxy( is_title_empty.resize, is_title_empty );
+		
+		
+		title_is_time		=	setTimeout(time_out,200);
+		
+		
+		return false;
 	
   }
-);*/
+);
 
 	// for touch devices: add class cs-hover to the figures when touching the items
 //	if( Modernizr.touch ) 
@@ -65,16 +89,44 @@ $( ".btn-wrs-link" ).click(
 					var el		=	$(this);
 					var figcaption	=	el.parent().find('figcaption');
 					
-					if(el.hasClass( "hide")==true)
-					{
-						el.removeClass('hide');s
-						figcaption.css('z-index','10');
-					}
-					else
-					{
-						el.addClass('hide');
-						figcaption.css('z-index','400');
-					}
+						el.parent().find('a').removeClass('wrs-tooltip');
+						
+					
+						var title_is_time	=	null;
+						 
+						var is_title_empty = {
+								  that    		: 	el,
+								  _figcaption	:	figcaption,
+								  resize		: 	function( event ) 
+								  {
+									  
+										  if(this.that.is(':hidden')==false)
+											{
+											  this._figcaption.css('z-index','1400');
+											  this.that.toggle();
+											}
+											else
+											{
+												this._figcaption.css('z-index','10');
+												this.that.toggle();
+											}
+										  
+									  		clearTimeout(title_is_time);
+									  		
+									  		
+								  }
+								};
+						
+						var time_out 	= $.proxy( is_title_empty.resize, is_title_empty );
+						
+						
+						title_is_time		=	setTimeout(time_out,el.is(':hidden')==false? 0 : 500);
+						
+						
+						
+					
+					
+						
 					
 			});
 			
