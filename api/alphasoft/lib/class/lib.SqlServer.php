@@ -199,8 +199,8 @@ class SQL_SERVER
 															);
 				
 				$table	=	$info_tables['table'];
-				
-				$this->query("IF OBJECT_ID('dbo.".$table."', 'U') IS NOT NULL DROP TABLE ".$table);
+				//$this->query("IF OBJECT_ID('dbo.".$table."', 'U') IS NOT NULL DROP TABLE ".$table);
+				$this->query("EXEC DROP_TABLE '".$table."'");
 			
 			}
 	}	

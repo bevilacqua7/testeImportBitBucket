@@ -626,6 +626,9 @@ function optionsDataConvert(gridValue,with_decode)
 				
 
 							
+ 
+				
+				
 
 				//Informa qual sera a Ativa no momento	
 				var mensagem_window	=	$('body').managerJOB('setActiveAba',{report_id:_report_id,kendoUi:gridValue});
@@ -655,6 +658,7 @@ function optionsDataConvert(gridValue,with_decode)
 							delete data_array_aba,_isLoad,gridValue,mensagem_window;
 							_END('wrsAbas::dblclick_open_aba');
 							$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
+							
 							return true;
 						}
 				}
@@ -732,6 +736,18 @@ function optionsDataConvert(gridValue,with_decode)
 					__manager_vision_grid_edit($(this),_report_id,noactive,_isLoad,mensagem_window);
 					
 					delete data_array_aba,_isLoad,gridValue,mensagem_window,optionsAba;
+					
+					
+					//Forcçando o resize das colunas eda kendo Ui
+					var _kendo		=	$(IDCurrent).data('kendoGrid');
+					
+					if(_kendo!='undefined' && !isEmpty(_kendo))
+					{
+						columns_resize_grid(_kendo,IDCurrent);
+						resize_common();
+					}
+					
+					
 					_END('wrsAbas::dblclick_open_aba');
 					
 					
