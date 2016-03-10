@@ -128,6 +128,8 @@ define('PATH_FILE_URL',		'files'.DS_URL);
 
 define('DEBUG_TRACE'		, $WRS_DEFINE['DEBUG_TRACE']);
 
+define('LOGIN_EXPIRED',-1);
+
 	//Chama o script com funÃ§Ãµes gerais de banco de dados
 
 /**

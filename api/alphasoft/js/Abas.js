@@ -737,14 +737,15 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					delete data_array_aba,_isLoad,gridValue,mensagem_window,optionsAba;
 					
-					
 					//Forcçando o resize das colunas eda kendo Ui
 					var _kendo		=	$(IDCurrent).data('kendoGrid');
+					
 					
 					if(_kendo!='undefined' && !isEmpty(_kendo))
 					{
 						columns_resize_grid(_kendo,IDCurrent);
-						resize_common();
+						
+						setTimeout(function(){resize_common()}, 500);
 					}
 					
 					
@@ -1374,11 +1375,11 @@ function optionsDataConvert(gridValue,with_decode)
 									
 									_kenoUiWindow[kendoUi['REPORT_ID']]	=	kendoUi;
 									_kendoUiLast						=	kendoUi;
-
+/*
 									if(isEmpty(_object_open))
-									{
+									{*/
 										_object_open	=	opts;
-									}
+								//	}
 									
 										
 										add_aba_html(	kendoUi['TITLE_ABA'], 
@@ -1674,7 +1675,6 @@ function optionsDataConvert(gridValue,with_decode)
 				if(empty(inputBase64)) return false;
 				
 				var input	=	base64_json_decode(inputBase64);
-				
 				
 					if(input.length!=0)
 					{
@@ -2473,6 +2473,8 @@ function optionsDataConvert(gridValue,with_decode)
 				return data_global.first_line_total;
 			}
 			
+			
+			
 			var __setFirstLineTotal		=	 function(input)
 			{
 				_START('wrsAbaData::__setFirstLineTotal');
@@ -2482,6 +2484,7 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				_END('wrsAbaData::__setFirstLineTotal');
 			}
+			
 			
 			
 			var __get_change_aba		=	 function()

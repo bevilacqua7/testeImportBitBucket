@@ -68,4 +68,46 @@ EOF;
 		return $query;
 	}
 	
+	/**
+	 * Efetua a Troca de Senha do Usuário
+	 *
+	 * @param string $USER_CODE
+	 * @param string $USER_MASTER
+	 * @param string $USER_PWD
+	 * @param string $PWD_RESET
+	 * @param string $CUSTOMER_ID
+	 *
+	 * @return <string>
+	 */
+	public static function CHANGE_SSAS_PASSWORD( $USER_CODE, $USER_MASTER, $USER_PWD, $PWD_RESET, $CUSTOMER_ID )
+	{
+		// Exemplo: EXEC Change_SSAS_Password 'mfacioli','','12345','abcde',0
+		$query = <<<EOF
+					EXEC Change_SSAS_Password '{$USER_CODE}',
+					                          '{$USER_MASTER}',
+											  '{$USER_PWD}',
+											  '{$PWD_RESET}',
+											  '{$CUSTOMER_ID}'
+EOF;
+		return $query;
+	}
+
+	/**
+	 * Solicita o Codigo de Troca de Senha do Usuário
+	 *
+	 * @param string $USER_CODE
+	 *
+	 * @return <string>
+	 */
+	public static function RESET_SSAS_PASSWORD( $USER_CODE )
+	{
+		// Exemplo: EXEC Reset_SSAS_Password 'mfacioli'
+		$query = <<<EOF
+					EXEC Reset_SSAS_Password '{$USER_CODE}'
+EOF;
+		return $query;
+	}
+
 }
+
+?>

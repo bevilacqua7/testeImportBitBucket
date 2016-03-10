@@ -88,14 +88,18 @@ class WRS_LOGIN extends WRS_BASE
 	{
 		WRS_TRACE('setLogin()', __LINE__, __FILE__);
 		
+		header('Content-Type: application/json');
 		
 		$user_cookie	=	json_decode($_COOKIE['WRS_LOGIN'],true);
-		//fwrs_set_cookie_clean('WRS_LOGIN');
+
 		
 		WRS_TRACE('Iniciando o WRS_LOGIN na função setLogin ', __LINE__, __FILE__);
 		
 		$rules_session_tmp		=	 NULL;
 		$multiple_cube			=	array();
+		
+		 
+		
 		
 		session_destroy();		//Apaga qualquer sessão
 		session_start();		// Inicia uma nova sessão
@@ -118,6 +122,7 @@ class WRS_LOGIN extends WRS_BASE
 		}
 		
 		$query			=	 $this->query($query);
+	
 		
 		if($query)
 		{
@@ -127,13 +132,24 @@ class WRS_LOGIN extends WRS_BASE
 				WRS_TRACE('Obtendo o resultado da query  QUERY_LOGIN::LOGIN_SSAS  ', __LINE__, __FILE__);
 				$rule_database_id	=	array(); //Se já existir uma database não permite a inserção de outra
 				
+				
+				
+				
+				
 				while($rows = $this->fetch_array($query) )
 				{
 					$login_id			=	$rows['LOGIN_ID'];
 					
+					
+					
+					if($login_id==LOGIN_EXPIRED)
+					{
+						$_param_call	=	array('html'=>fwrs_warning(LNG('PASSWORD_EXPIRED')),'data'=>array('expired'=>true,'login'=>false));
+						return json_encode($_param_call,true);
+
+					}
+					
 					$key_database		=	$rows['DATABASE_ID'].$rows['SERVER_ID'];
-					
-					
 						
 					//Inserindo os multiplos cubos
 						//if(!isset($multiple_cube[$rows['DATABASE_ID']]))
@@ -197,7 +213,8 @@ class WRS_LOGIN extends WRS_BASE
 										
 					WRS_TRACE('Usuário logado com sucesso', __LINE__, __FILE__);
 					WRS_TRACE('END setLogin()', __LINE__, __FILE__);
-					return 'true';
+					$_param_call	=	array('html'=>fwrs_success(LNG('LOGIN_OK')),'data'=>array('login'=>true,'expired'=>false));
+					return json_encode($_param_call,true);
 				}
 				
 			}
@@ -206,7 +223,11 @@ class WRS_LOGIN extends WRS_BASE
 		
 		WRS_TRACE('Senha inválida ', __LINE__, __FILE__);
 		WRS_TRACE('END setLogin()', __LINE__, __FILE__);
-		return fwrs_error('Usuário ou senha inválida ');
+		
+		$_param_call	=	array('html'=>fwrs_error(LNG('LOGIN_PASSWORD_ERROR')),'data'=>array('login'=>false));
+		return json_encode($_param_call,true);
+		
+		 
 	}
 	
 	

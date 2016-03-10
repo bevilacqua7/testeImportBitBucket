@@ -445,6 +445,22 @@
 	$language['bt_import_log'] 				= $language['bt_import'];//.' Logs';
 	
 
+	//Login
+	$language['LOGIN_USER']			=	'Usuários';
+	$language['LOGIN_REMOVE']		=	'Remover';
+	$language['LOGIN_PASSWORD_RECOVER']		=	'Recuperar Senha';
+	$language['LOGIN_BUTTON']				=	'Login';
+	$language['LOGIN_HISTORY']		='Histórico de Usuários';
+	
+	$language['LOGIN_OTHER_PERFIL']		='Outro Perfil';
+	$language['LOGIN_ARMAZENA']			='Armazenar dados de Usuário ?';
+	$language['LOGIN_PASSWORD']			='Password';
+	$language['LOGIN_USER_SYSTEM']		='Usuário';
+	$language['LOGIN_TITLE']			='WRS System';
+	
+	$language['LOGIN_NEW_PASSWORD']			='Nova senha';
+	$language['LOGIN_NEW_PASSWORD_CONFIRM']	='Confirme a nova senha';
+	
 
 	$language['ADMIN_IMPORT_caracter_delimitador']			=	'Caracter delimitador: ';
 	$language['ADMIN_IMPORT_tipo_importacao']				=	'Tipo de importação: ';
@@ -456,6 +472,9 @@
 	$language['ADMIN_IMPORT_compactar_resultados']			=	'Compactar resultados: ';
 	
 	
+	$language['PASSWORD_EXPIRED']			=	'Senha expirada, é necessário criar uma nova senha. <br> Preencha o formulário com a nova senha.';
+	$language['LOGIN_OK']					=	'Redirecionando para a tela principal';
+	$language['LOGIN_PASSWORD_ERROR']		=	'Usuário ou senha inválidos';
 
 	
 	// JSs de MENU, ADMIN e REPORTS

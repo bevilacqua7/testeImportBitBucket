@@ -1401,7 +1401,6 @@ function stop_job_timeout(report_id)
  * 
  * Evento do click do Botão para executar o Relatório
  * 
- * 
  */
 
 function wrs_run_filter()
@@ -1425,6 +1424,9 @@ function wrs_run_filter()
 	var _report_id			=	report_KendoUi['REPORT_ID'];
 	var get_active_aba_data	=	get_aba_active();
 	
+
+	//Remove o tooltip
+	$('.wrs_run_filter').trigger('mouseout');
 	
 	//Se estiver vazio então força carregar os filtros
 	if(isEmpty($('.WRS_DRAG_DROP_FILTER').html())){
