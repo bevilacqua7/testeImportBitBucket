@@ -308,7 +308,8 @@ function getFisrtChartValue(ChartDefault)
 	
 		for(lineData in _data)	_line_name=lineData;
 		
-	_END('getFisrtChartValue');
+
+//	console.error('chart',_data[_line_name].value);
 	return _data[_line_name].value;
 }
 /*
@@ -317,8 +318,7 @@ function getFisrtChartValue(ChartDefault)
 
 function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal) 
 	    {	
-			_START('WRSKendoUiChart');
-			
+	
 			var onlyDefault		=	empty(_onlyDefault) ? false : _onlyDefault; //Apenas quando for configurações Default
 			var idName			=	KendoUi.element.attr('id');
 			var GRID			=	$('#'+idName);
@@ -1097,7 +1097,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							
 							
 							
-							for(lineTypeChart in typeChart)
+							for(var lineTypeChart in typeChart)
 								{
 										icon		=	typeChart[lineTypeChart].icon;
 										types		=	typeChart[lineTypeChart].types;
@@ -1750,7 +1750,6 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 				
 				
 				var chartToUseUnic	=	[];
-				var flagUserToChart	=	false;
 				var posTypeCHart	=	[];
 
 				
@@ -1767,7 +1766,7 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 							{
 								typeChart[ocd]		=	ChartDefault['data'][ocd];
 								chartToUseUnic[ocd]	=	chartData[ocd];
-								flagUserToChart		=	 true;
+						
 							}else{
 								typeChart[ocd]		=	{type	:	ActiveDefault};
 								chartToUseUnic[ocd]	=	chartData[ocd];

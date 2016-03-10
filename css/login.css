@@ -1,0 +1,58 @@
+
+body {
+	background: transparent;
+	margin:0px;
+	text-align: center;
+}
+
+.full {
+  background: url(../imagens/wrs_background.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+	margin: 0px;
+
+
+	text-align: center;
+	
+	background-position: top center;
+	background-color: #BADAFF;
+	
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( 
+src='imagens/wrs_background.jpg', sizingMethod='scale');
+	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader( 
+src='imagens/wrs_background.jpg', sizingMethod='scale')";
+}
+
+
+
+.wrs_logo_left, .wrs_logo_right {
+	position: fixed;
+	top: 30px;
+	display: block;
+}
+
+.wrs_logo_left {
+	left: 40PX;
+}
+
+.wrs_logo_right {
+	top: 40px;
+	right: 40px !important;
+}
+
+.wrs_remove_user_temp {
+	color: red;
+	margin: 3px 2px;
+}
+
+#label_chk_remote{
+    margin-left: 45px;
+}
+
+body{
+	min-height: 500px;
+	min-width: 500px;
+}

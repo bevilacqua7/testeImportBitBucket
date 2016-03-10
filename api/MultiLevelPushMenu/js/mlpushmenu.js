@@ -162,6 +162,7 @@
 				ev.stopPropagation();
 				ev.preventDefault();
 				 
+				
 				if( self.open ) {
 					self._resetMenu();
 				}

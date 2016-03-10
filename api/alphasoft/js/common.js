@@ -1003,27 +1003,84 @@ function wrsCheckLogin(login,pwd,event,perfil)
 	
 	
 	TRACE('Enviando parametro para o Post run.php wrsCheckLogin na common.js');
-	$.post('run.php',{'login':login,'pwd':pwd,'perfil':((perfil!=undefined && perfil!='')?perfil:''),'file':'WRS_LOGIN','class':'WRS_LOGIN','event':event,'isCookie':isCookie},function(data){
+	
+	
+	var function_call_login	=	 function(data){
 
-				TRACE('recebendo parametro do Post run.php wrsCheckLogin na common.js');
+		TRACE('recebendo parametro do Post run.php wrsCheckLogin na common.js');
+
+		 
 		
-				$('.wrs_login').html('Login');
+		$('.wrs_login').html('Login');
+		
+		if(typeof data.data!='undefined')
+		{
+			//Senha expired
+			if(data.data.expired==true)
+			{
+				var _param	=	{ 
+						type	:	"password",
+						id		:	"newpassword",
+						name	:	"newpassword",
+						'class'	:	"form-control",
+						placeholder	:	LNG('LOGIN_NEW_PASSWORD'),
+						required:true
+					};
 				
-				if(data=='true'){
-					window.location	=	'run.php?file=WRS_MAIN&class=WRS_MAIN&ncon';
-				}else{
-					$('.mensagens').html(data);
-				}
 				
+				$('#newpassword,#new_confirm_password').remove();
+				$('.new_password').append($('<input/>',_param));
+				$('#newpassword').focus();
 				
-				if(empty(data)){
-					$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
-				}
-				
-				TRACE('O post da run.php wrsCheckLogin da common.js foi concluido');
-	}).fail(function() {
+				var _param_du	=	{ 
+						type	:	"password",
+						id		:	"new_confirm_password",
+						name	:	"new_confirm_password",
+						'class'	:	"form-control",
+						placeholder	:	LNG('LOGIN_NEW_PASSWORD_CONFIRM'),
+						required:true
+					};
+				$('.new_password').append($('<input/>',_param_du));
+				 
+			}
+			
+			//Valida login 
+			if(data.data.login==true)
+			{
+				$('.mensagens').html(data.html);
+				window.location	=	'run.php?file=WRS_MAIN&class=WRS_MAIN&ncon';
+			}
+		}
+			
+		
+		
+		$('.mensagens').html(data.html);
+		
+		
+		
+		if(empty(data.html))
+		{
+			$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
+		}
+		
+		TRACE('O post da run.php wrsCheckLogin da common.js foi concluido');
+};
+
+	var _param	=	{
+			'login'		:	login,
+			'pwd'		:	pwd,
+			'perfil'	:	((perfil!=undefined && perfil!='')?perfil:''),
+			'file'		:	'WRS_LOGIN',
+			'class'		:	'WRS_LOGIN',
+			'event'		:	event,
+			'isCookie'	:	isCookie
+		};
+
+	$.post('run.php',_param,function_call_login,"json").fail(function() {
 		$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
 	  });
+	
+
 }
 
 

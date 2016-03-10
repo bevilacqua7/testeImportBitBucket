@@ -27,7 +27,7 @@ class HeaderTag
 	 	$tag		=	array();
 	 	
 	 	$tag[]		=	array("host"=>"api/font-awesome-4.3.0/css/font-awesome.min.css",						"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/bootstrap-3.3.0/dist/css/bootstrap.css",								"access"=>array("panel","main"));
+	 	$tag[]		=	array("host"=>"api/bootstrap-3.3.0/dist/css/bootstrap.css",								"access"=>array("panel","main",'login'));
 //		$tag[]		=	array("host"=>"./api/bootstrap-3.3.0/dist/css/bootstrap-wrs.css",						"access"=>array("main"));			//Main
 //		$tag[]		=	array("host"=>"./api/bootstrap-3.3.0/dist/css/bootstrap-theme.min.css",					"access"=>array("main"));			//Main
 		$tag[]		=	array("host"=>"./css/wrs_config.css",													"access"=>array("main"));			//Main
@@ -62,7 +62,7 @@ class HeaderTag
 	 	
 	 	
 	 	$tag[]		=	array("host"=>"api/jquery.qtip.custom/jquery.qtip.css",									"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/fakeLoader/fakeLoader.css",											"access"=>array("main","panel"));//Main
+	 	$tag[]		=	array("host"=>"api/fakeLoader/fakeLoader.css",											"access"=>array("main","panel",'login'));//Main
 	 	$tag[]		=	array("host"=>"css/".WRS::INFO_SSAS_LOGIN('USER_FORMAT')."/jquery-ui-1.8.22.custom.css",								"access"=>array("main","panel"), 'add_tags'=>' id="themeHost" host="./css/{host}/jquery-ui-1.8.22.custom.css?v=1.0"');
 	 	$tag[]		=	array("host"=>"css/wrs_common.css",														"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"css/wrs_panel.css",														"access"=>array("panel") );
@@ -88,7 +88,9 @@ class HeaderTag
 
 	 	
 
-	 	
+	 	//LOGIN
+	 	$tag[]		=	array("host"=>"api/bootstrap-3.3.0/signin.css",											"access"=>array("login"));
+	 	$tag[]		=	array("host"=>"css/login.css",											"access"=>array("login"));
 	 	
 	 	if(wrs_get_user_browser()=='ie')
 	 	{
@@ -111,20 +113,20 @@ class HeaderTag
 	 {
 	 	$tag		=	 array();
 	 	
-	 	$tag[]		=	array("host"=>"js/jquery-ui/jquery-latest.js",				"access"=>array("main","panel"));  //Main
-	 	$tag[]		=	array("host"=>"js/jquery/jquery-1.8.2.min.js",				"access"=>array("main","panel"));	//Main
+	 	$tag[]		=	array("host"=>"js/jquery-ui/jquery-latest.js",				"access"=>array("main","panel","login"));  //Main
+	 	$tag[]		=	array("host"=>"js/jquery/jquery-1.8.2.min.js",				"access"=>array("main","panel",'login'));	//Main
 	 	
 	 	
 	 	$tag[]		=	array("host"=>"api/bootstrap-3.3.0/js/dropdown.js",			"access"=>array("main","panel"));
 	 	
-	 	$tag[]		=	array("host"=>JS_PATH_API."php_js.js",						"access"=>array("main","panel"));	//Main
+	 	$tag[]		=	array("host"=>JS_PATH_API."php_js.js",						"access"=>array("main","panel",'login'));	//Main
 	 	$tag[]		=	array("host"=>"js/jquery-ui/jquery-ui.js",					"access"=>array("main","panel"));	//Main
 	 	$tag[]		=	array("host"=>"js/jquery-ui/jquery.ui.touch-punch.min.js",	"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"js/jquery-ui/jquery.layout-latest.js",		"access"=>array("main","panel"));	//Main
 	 	
 	 	$tag[]		=	array("host"=>JS_PATH_API."Global.js",						"access"=>array("main","panel"));	//Main
-	 	$tag[]		=	array("host"=>JS_PATH_API."common.js",						"access"=>array("main","panel"));	//Main
-	 	$tag[]		=	array("host"=>"language_javascript.php",				"access"=>array("main","panel"));			//Main
+	 	$tag[]		=	array("host"=>JS_PATH_API."common.js",						"access"=>array("main","panel","login"));	//Main
+	 	$tag[]		=	array("host"=>"language_javascript.php",				"access"=>array("main","panel",'login'));			//Main
 	 	
 	 	$tag[]		=	array("host"=>JS_PATH_API."ThreadJobManager.js",			"access"=>array("panel"));
 	 	
@@ -181,7 +183,7 @@ class HeaderTag
 	 	
 	 	
 	 	$tag[]		=	array("host"=>"api/jquery.qtip.custom/jquery.qtip.min.js",	"access"=>array("main","panel"));//Main
-	 	$tag[]		=	array("host"=>"api/fakeLoader/fakeLoader.js",				"access"=>array("main","panel"));//Main
+	 	$tag[]		=	array("host"=>"api/fakeLoader/fakeLoader.js",				"access"=>array("main","panel",'login'));//Main
 	 	
 
 //	 	$tag[]		=	array("host"=>"api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2",				"access"=>array("main"),'version'=>'no-use');//Main
@@ -199,6 +201,9 @@ class HeaderTag
 	 	
 	 	$tag[]		=	array("host"=>JS_PATH_API."custonMain.js",				"access"=>array("main"));
 	 	
+	 	
+	 	//Login
+	 	$tag[]		=	array("host"=>JS_PATH_API."login.js",						"access"=>array("login"));	//Main
 	 	
 	 	return $this->script($tag,$type);
 	 	

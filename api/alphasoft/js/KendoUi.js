@@ -325,6 +325,14 @@ function WRSKendoGridComplete(IDGrid)
 			
 			_paranKendoUi['load_direct']	=	true;	//Permite que seja executado o histórico
 			//load_direct
+			
+			var _chart	=	getFisrtChartValue(json_decode(base64_decode(_paranKendoUi.CHART)));
+			
+			if(_chart=='bubble_total')
+			{
+				_paranKendoUi.PAGE_CURRENT=1;
+			}
+			
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi,true);
 			
 			

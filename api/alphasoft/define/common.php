@@ -223,6 +223,11 @@ function LNG($string)
 	return ($language[$string]);
 }
 
+function eLNG($string)
+{
+	echo LNG($string);
+}
+
 // substitui o LNG trocando os %s por s se existirem
 function LNG_S($string,$char=false,$recursiva=false)
 {

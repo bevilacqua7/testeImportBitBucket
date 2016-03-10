@@ -1,153 +1,47 @@
 <?php
 	$wrs_cookie = json_decode ( $_COOKIE ['WRS_LOGIN'], true );
-
 ?>
+
 <!DOCTYPE html>
 <HTML xmlns="http://www.w3.org/1999/xhtml" class="full" xml:lang="pt-br" lang="pt-br">
 <HEAD>
 <meta charset="utf-8" />
 <meta http-equiv="content-type" content="text/html;charset=utf-8;" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
 <link rel="shortcut icon" href="./imagens/favico/favicon.ico" type="image/x-icon">
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WRS - Web Report System</title>
-<script type="text/javascript" src="js/jquery/jquery-1.8.2.min.js"></script>
-<script type="text/javascript" src="./api/alphasoft/js/php_js.js?<?php echo rand(0,99999);?>"></script>
-	
-<script type="text/javascript" src="language_javascript.php"></script>
 <script>
-var SERVER_REQUEST_URI	=	'login';
-
+	var SERVER_REQUEST_URI	=	'login';
 </script>
-<script type="text/javascript" src="./api/alphasoft/js/common.js?<?php echo rand(0,99999);?>"></script>
 
+<?php 
+	
+	include_once 'config/configCommon.php';
+	includeCLASS('HeaderTag');
+	$HeaderTag		=	 new HeaderTag();
+	echo $HeaderTag->header('login');
 
+?>
 <!-- Bootstrap core CSS -->
-<link href="api/bootstrap-3.3.0/dist/css/bootstrap.min.css?v=1.0 "
-	rel="stylesheet">
 
-<!-- Custom styles for this template -->
-<link href="api/bootstrap-3.3.0/signin.css?v=1.0 " rel="stylesheet">
 
 <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-<script
-	src="api/bootstrap-3.3.0/assets/js/ie-emulation-modes-warning.js"></script>
-
-<!--Importa CSS-->
-<style type="text/css">
-<!--
-body {
-	background: transparent;
-	margin:0px;
-	text-align: center;
-}
-
-.full {
-  background: url(imagens/wrs_background.jpg) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-
-	margin: 0px;
+<script src="api/bootstrap-3.3.0/assets/js/ie-emulation-modes-warning.js"></script>
 
 
-	text-align: center;
-	
-	background-position: top center;
-	background-color: #BADAFF;
-	
-	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( 
-src='imagens/wrs_background.jpg', sizingMethod='scale');
-	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader( 
-src='imagens/wrs_background.jpg', sizingMethod='scale')";
-}
+ 
 
 
 
-.wrs_logo_left, .wrs_logo_right {
-	position: fixed;
-	top: 30px;
-	display: block;
-}
-
-.wrs_logo_left {
-	left: 40PX;
-}
-
-.wrs_logo_right {
-	top: 40px;
-	right: 40px !important;
-}
-
-.wrs_remove_user_temp {
-	color: red;
-	margin: 3px 2px;
-}
-
-#label_chk_remote{
-    margin-left: 45px;
-}
-
-body{
-	min-height: 500px;
-	min-width: 500px;
-}
-
-</style>
-
-
-
-<script type="text/javascript">
-
-function WRS_RESIZE()
-{
-		var width	=	 $(window).width();
-		var height	=	 $(window).height();
-		
-		if(width<=800){
-			$('BODY').css('background-size','auto 100%');
-		}else{
-			$('BODY').css('background-size','100% auto');
-		}
-
-	//Ajusta aa tela de login
-		if(height<500)
-		{
-			$('.form-signin').css({margin:'0px', padding:'0px', position:"relative"});
-		}
-
-		$('body').width(width);
-//		$('body').height(height);
-		
-		var posX	=	($(window).width()/2)-(($('.form-signin').width())/2);
-		
-		//var posX	=	height/2;
-		var pos	=	($(window).height()/2)-(($('.form-signin').height()+50)/2);
-
-		var min_top		=	100;
-
-
-		
-		if(pos<=min_top) pos =min_top;
-		
-		$('.form-signin').css('top',pos);
-
-		$('.form-signin').css('left',posX);
-			
-}
-
-$( window ).resize(WRS_RESIZE);
-$(function(){ WRS_RESIZE();});
-</script>
+ 
 
 </HEAD>
 
 <BODY style="margin-top: 0px;">
-
+<div id="fakeloader"></div><script type="text/javascript">$("#fakeloader").fakeLoader();</script>
+ 
 	<div class="container">
 
 		<img class="wrs_logo_left" style="margin-left: 5px;"
@@ -156,153 +50,87 @@ $(function(){ WRS_RESIZE();});
 			height="40" />
 
 		<form class="form-signin" role="form">
-			<h2 class="form-signin-heading">System Access</h2>
+		
+			<h2 class="form-signin-heading"><?php eLNG('LOGIN_TITLE');?></h2>
 			<div class="sub_container">
 				<input type="text" id="user" name="user" class="form-control"
-					placeholder="Username"
+					placeholder="<?php eLNG('LOGIN_USER_SYSTEM');?>"
 					value="<?php echo $wrs_cookie['LAST_USER']['user']; ?>" required
 					autofocus> <input type="password" id="password" name="password"
-					class="form-control" placeholder="Password"
+					class="form-control" placeholder="<?php eLNG('LOGIN_PASSWORD');?>"
 					value="<?php echo $wrs_cookie['LAST_USER']['pwd']; ?>" required>
 					<input type="text" id="user_remote" name="user_remote" class="form-control"
 					placeholder="Perfil">
 
+				<div class="new_password"></div>
 				<div class="checkbox">
 					<div class="mensagens"></div>
 					<label><input
 						<?php if(!empty($wrs_cookie['LAST_USER']['pwd'])){echo "checked='checked'";} ?>
 						type="checkbox" name="chk_lembrar" id="chk_lembrar" value="1">
-						Armazenar dados de Usuário ?</label>
+						<?php eLNG('LOGIN_ARMAZENA');?></label>
 					<label id="label_chk_remote"><input
 						<?php if(!empty($wrs_cookie['LAST_USER']['remote'])){echo "checked='checked'";} ?>
 						type="checkbox" name="chk_remote" id="chk_remote" value="1">
-						Outro Perfil</label>
+						<?php eLNG('LOGIN_OTHER_PERFIL');?></label>
 				</div>
 
 
 				<div class="row container wrs_info" style="padding: 0px">
 					<div style="padding-right: 0px;" class="col-md-1 list_user">
-						<span class="glyphicon glyphicon-user"></span> Usuários
+						<span class="glyphicon glyphicon-user"></span> <?php eLNG('LOGIN_USER');?>
 					</div>
 					<div class="col-md-1 remove_user"
 						style="text-align: center; width: 144px">
-						<span class="glyphicon glyphicon-trash"></span> Remover
+						<span class="glyphicon glyphicon-trash"></span> <?php eLNG('LOGIN_REMOVE');?>
 					</div>
 					<div class="col-md-2 recover_password"
 						style="text-align: left; padding: 0px">
-						<span class="glyphicon glyphicon-send"></span> Recuperar Senha
+						<span class="glyphicon glyphicon-send"></span> <?php eLNG('LOGIN_PASSWORD_RECOVER');?> 
 					</div>
 				</div>
 
 				<div class="container-user">
-					<h4>Histórico de Usuários</h4>
-					<div class="ulUser">
-						<ul class="list-user">
+					<h4><?php eLNG('LOGIN_HISTORY');?></h4>
+						<div class="ulUser">
+							<ul class="list-user">
 					<?php
 					
 					$count = 0;
-					foreach ( $wrs_cookie as $user => $value ) {
-						if ($user == 'LAST_USER')
-							continue;
+					foreach ( $wrs_cookie as $user => $value ) 
+					{
+						
+						if ($user == 'LAST_USER') continue;
+						
 						$color = (($count ++) % 2 == 0) ? '#EEE9E9' : '#FFFFFF';
-						echo "<li style='background:" . $color . "'><span class='wrs_click_user' user='" . $user . "' pwd='" . $value ['pwd'] . "' > " . $user . "</span> <span  user='" . $user . "' pwd='" . $value ['pwd'] . "' class='wrs_remove_user_temp  glyphicon glyphicon-remove pull-right'  ></span> </li>";
+						
+						$HTML	=	<<<HTML
+													<li style='background:{$color}'>
+																	<span class='wrs_click_user' user='{$user}' pwd='{$value['pwd']}' >{$user}</span>
+																	<span  user='{$user}' pwd='{$value['pwd']}' class='wrs_remove_user_temp  glyphicon glyphicon-remove pull-right' ></span>
+													</li>
+
+HTML;
+						
+						echo $HTML;
+
 					}
 					?> 
-				</ul>
-					</div>
+							</ul>
+						</div>
 				</div>
 
-				<button class="btn btn-lg btn-primary btn-block wrs_login"
-					type="button">Login</button>
-		
+				<button class="btn btn-lg btn-primary btn-block wrs_login" type="button"> <?php eLNG('LOGIN_BUTTON');?> </button>
+				
 		</form>
 	</div>
 	</div>
 	<!-- /container -->
 
 
-	<script type="text/javascript">
-
-function valida_usuario()
-{
-	wrsCheckLogin($('#user').val(), $('#password').val(),'login', $('#user_remote').val());
-}
-
-function wrs_click_user()
-{
-	var login =	 $(this).attr('user');
-	var pwd =	 $(this).attr('pwd');
-
-	$('#user').val(login);
-	$('#password').val(pwd);
-}
-
-function wrs_remove_user_temp()
-{
-	var getUser	=	$(this).attr('user');
-	var confirm	=	 window.confirm('Tem certeza que deseja remover o usuário do histórico de acesso?');
-
-
-	if(confirm){
-		$(this).parent().remove();
-		wrsCheckLogin(getUser, '','remove');
-		
-	}
-	
-}
-
-$(function(){
-
-
-	//By Marcelo Santos
-	$('.wrs_remove_user_temp').click(wrs_remove_user_temp);
-
-	$('.wrs_click_user').click(wrs_click_user);
-
-	$('.remove_user').click(function(){});
-	$('.wrs_login').click(function(){
-		valida_usuario();
-	});
-
-
-	$('.container-user, #user_remote').css('visibility','visible');
-	$('.container-user, #user_remote').css('display','block');
-	$('.container-user, #user_remote').toggle();
-	
-	$('.list_user').click(function(){
-		$('.container-user').toggle('show');
-	})
-	
-	$('.remove_user').click(function(){
-		limpaCookies();
-	});
-
-	$('.recover_password').click(function(){
-		enviaEmailSenha($('#user').val());
-	})
-	
-	$( "#user,#password,#user_remote" ).keypress(function( event ) {
-		  if ( event.which == 13 ) {			  
-			  valida_usuario();
-		  }
-		 
-	});
-
-	$("#chk_remote").change(function(){
-		if($(this).is(":checked")){
-			$('#password').css({ 'border-bottom-right-radius': '0', 'border-bottom-left-radius': '0' });
-			$('#user_remote').show(200);
-		}else{
-			$('#password').css({ 'border-bottom-right-radius': '4px', 'border-bottom-left-radius': '4px' });
-			$('#user_remote').hide(200);
-		}
-	});
-	
-});
-</script>
+ 
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-	<script
-		src="api/bootstrap-3.3.0/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<script	src="api/bootstrap-3.3.0/assets/js/ie10-viewport-bug-workaround.js"></script>
 
 </BODY>
 </HTML>
