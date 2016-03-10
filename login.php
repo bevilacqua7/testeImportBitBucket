@@ -10,14 +10,27 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="shortcut icon" href="./imagens/favico/favicon.ico" type="image/x-icon">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WRS - Web Report System</title>
+
+<?php include_once 'config/configCommon.php';?>
+
+<title><?php eLNG('LOGIN_HTML_TITLE'); ?></title>
 <script>
 	var SERVER_REQUEST_URI	=	'login';
+
+
+	<?php 
+	
+		$recover		=	 fwrs_request('recover');
+	
+	?>
+	var RECOVER='<?php echo $recover;?>';
 </script>
 
 <?php 
 	
-	include_once 'config/configCommon.php';
+	
+
+	
 	includeCLASS('HeaderTag');
 	$HeaderTag		=	 new HeaderTag();
 	echo $HeaderTag->header('login');
@@ -53,6 +66,8 @@
 		
 			<h2 class="form-signin-heading"><?php eLNG('LOGIN_TITLE');?></h2>
 			<div class="sub_container">
+			
+				
 				<input type="text" id="user" name="user" class="form-control"
 					placeholder="<?php eLNG('LOGIN_USER_SYSTEM');?>"
 					value="<?php echo $wrs_cookie['LAST_USER']['user']; ?>" required
@@ -63,16 +78,29 @@
 					placeholder="Perfil">
 
 				<div class="new_password"></div>
+				<div class="mensagens" style="margin-top: 10px;">
+					<?php 
+						$msg	=	 fwrs_request('msg');
+						if(!empty($msg)) echo fwrs_success(LNG($msg));
+						
+					?>
+				</div>
+				
+				
 				<div class="checkbox">
-					<div class="mensagens"></div>
+					
 					<label><input
 						<?php if(!empty($wrs_cookie['LAST_USER']['pwd'])){echo "checked='checked'";} ?>
 						type="checkbox" name="chk_lembrar" id="chk_lembrar" value="1">
 						<?php eLNG('LOGIN_ARMAZENA');?></label>
-					<label id="label_chk_remote"><input
+					<label id="label_chk_remote">
+					
+					<input
 						<?php if(!empty($wrs_cookie['LAST_USER']['remote'])){echo "checked='checked'";} ?>
 						type="checkbox" name="chk_remote" id="chk_remote" value="1">
-						<?php eLNG('LOGIN_OTHER_PERFIL');?></label>
+						<?php eLNG('LOGIN_OTHER_PERFIL');?>
+						
+						</label>
 				</div>
 
 
@@ -127,7 +155,16 @@ HTML;
 	</div>
 	<!-- /container -->
 
+	<script>
 
+	<?php 
+	
+		if(!empty($recover))
+		{
+			echo '$(function(){wrs_login_recover()});';
+		}
+	?>
+	</script>
  
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 	<script	src="api/bootstrap-3.3.0/assets/js/ie10-viewport-bug-workaround.js"></script>

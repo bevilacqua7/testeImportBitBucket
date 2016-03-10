@@ -22,9 +22,11 @@ class WRS_LOGIN extends WRS_BASE
 		
 		switch($event)
 		{
-			case 'login' 		:{echo $this->setLogin($login, $pwd, $perfil);};break;
-			case 'remove'		:{ $this->remove($login);	}; break;
-			case 'userIsLogged'	:{ $this->userIsLogged() ;	}; break;
+			case 'login' 		:	{	echo $this->setLogin($login, $pwd, $perfil);};break;
+			case 'remove'		:	{ 	$this->remove($login);	}; break;
+			case 'userIsLogged'	:	{ 	$this->userIsLogged() ;	}; break;
+			case 'recover_login':	{	echo $this->recover_login();}; break;
+			case 'recover_email'		:	{	echo $this->recover_email();}; break;
 		}
 
 		
@@ -32,6 +34,171 @@ class WRS_LOGIN extends WRS_BASE
 		
 	}
 	
+	
+	private function recover_email()
+	{
+		header('Content-Type: application/json');
+		
+		$param		=	array(
+				'html'=>	fwrs_error(LNG('LOGIN_CHANGE_SQL_ERRO')),
+				'data'=>	array(
+						'expired'=>false,
+						'login'=>false,
+						'change'=>false,
+				)
+					
+		);
+		
+		$USER_PWD 		=	 fwrs_request('new_password');
+		$PWD_RESET		=	fwrs_request('login');
+		
+		
+		if(empty($USER_PWD))
+		{
+			$param['html']	=	fwrs_error(LNG('LOGIN_PASSWORD_EMPTY_NEW'));
+			
+			return json_encode($param);
+		}
+		
+		if(empty($PWD_RESET))
+		{
+			$param['html']	=	fwrs_error(LNG('LOGIN_TAG_EMPTY'));
+				
+			return json_encode($param);
+		}
+		
+		
+		
+		$query	=	 $this->query(QUERY_LOGIN::CHANGE_SSAS_PASSWORD('', '', $USER_PWD, $PWD_RESET, 0));
+		
+		
+		
+		if($this->num_rows($query))
+		{
+			$rows	=	 $this->fetch_array($query);
+			
+			
+			if($rows['STATUS']==1){
+				$param['html']	=	 fwrs_success(LNG('LOGIN_RECOVER_SUCCESS_TIME'));
+				$param['data']['recover']	=true;
+			}else{
+				$param['html']	=	 fwrs_error($rows['CHANGE_MESSAGE']);
+						
+			}
+			
+		}
+			
+		
+		return json_encode($param);
+	}
+	
+	private function recover_login()
+	{
+		header('Content-Type: application/json');
+		$USER_CODE	=	 fwrs_request('login');
+		
+		
+		$param		=	array(
+				'html'=>	fwrs_error(LNG('LOGIN_CHANGE_SQL_ERRO_RECOVER')),
+				'data'=>	array(
+						'expired'=>false,
+						'login'=>false,
+						'change'=>false,
+							)
+					
+		);
+		
+		$query	=	$this->query(QUERY_LOGIN::RESET_SSAS_PASSWORD($USER_CODE));
+		
+		if(!$this->num_rows($query))return json_encode($param);
+		
+		$rows	=	 $this->fetch_array($query);
+		
+		
+		if($rows['STATUS']==1)
+		{
+			$param		=	 $this->send_recover($param,$USER_CODE,$rows['LINK_CODE']);
+		}
+		
+
+		return json_encode($param);
+	}
+	
+	
+	private function send_recover($_param,$USER_CODE,$linkCode)
+	{
+		$param			=	$_param;
+		
+		
+		
+			
+		$query_login	=	 $this->query(QUERY_LOGIN::SELECT_EMAIL($USER_CODE));
+		
+		if(!$query_login)
+		{
+			$param['html']	=	 fwrs_error(LNG('LOGIN_CHANGE_SQL_ERRO'));
+		}
+		
+		if(!$this->num_rows($query_login))
+		{
+			$param['html']	=	fwrs_error(sprintf(LNG('LOGIN_RECOVER_NOT_FOUND'),$USER_CODE));
+		}else{
+			//Encontrado dados
+			
+			$rows		=	 $this->fetch_array($query_login);
+			$mail		=	$rows['USER_EMAIL'];
+			$user_desc	=	$rows['USER_DESC'];
+			
+			
+			if(empty($mail))
+			{
+				$param['html']	=	 fwrs_warning(sprintf(LNG('LOGIN_NOT_EMAIL'),$USER_CODE));			
+			}else{
+				//Existe email para o usuário
+				$param['html']		= $this->sendMail($mail,$linkCode);
+
+				
+			}
+		}
+		
+		
+		
+		
+		
+		return $param;
+		
+	}
+	
+	
+	
+	private function sendMail($mail,$tag)
+	{
+
+		$param['mail']		=	$mail;
+		$param['subject']	=	LNG('LOGIN_SUBJECT');
+	
+		$url			=	dirname($_SERVER['HTTP_REFERER']);
+		
+		
+		$TITLE		=LNG('HTML_LOGIN_RECOVER_TITLE');
+		$BODY		=LNG('HTML_LOGIN_RECOVER');
+		$LINK		=$url.'/login.php?recover='.$tag;
+		$TITLE_BUTTON	=LNG('HTML_LOGIN_RECOVER_BTN');
+		$LOGO		=$url.'/imagens/logo-wrs.png';
+
+		include PATH_TEMPLATE.'recover_password.php';
+		
+		$param['body']	=	$HTML;
+		
+		if(SendMail::send($param))
+		{
+			return fwrs_success(LNG('LOGIN_RECOVER_SUCCESS'));
+		}
+		
+		return fwrs_error(LNG('LOGIN_RECOVER_ERROR'));
+		
+		
+	}
 	
 	
 	
@@ -76,6 +243,46 @@ class WRS_LOGIN extends WRS_BASE
 		WRS_TRACE('END remove($login)', __LINE__, __FILE__);
 	}
 	
+	
+	private function change_password($USER_CODE,$PWD_RESET,$USER_PWD)
+	{
+		
+		$param		=	array(
+										'html'=>	fwrs_error(LNG('LOGIN_CHANGE_SQL_ERRO')),
+										'data'=>	array(	
+															'expired'=>false,
+															'login'=>false,
+															'change'=>false)
+					
+		);
+		
+		
+		$this->remove($USER_CODE);
+		
+
+		$query	=	$this->query(QUERY_LOGIN::CHANGE_SSAS_PASSWORD($USER_CODE, '', $PWD_RESET,$USER_PWD, 0));
+		
+		if(!$this->num_rows($query))	return json_encode($param);
+		
+		$rows		=	 $this->fetch_array($query);
+		
+		if(isset($rows['STATUS']))
+		{
+			if($rows['STATUS']==1)
+			{
+				$param['html']				=		fwrs_success(LNG('LOGIN_CHANGE_OK'));
+				$param['data']['change']	=	true;
+			}else{
+				$param['html']				=		fwrs_warning($rows['CHANGE_MESSAGE']);
+				$param['data']['change']	=	false;
+			}
+		}
+		
+		return json_encode($param);
+		
+		
+	}
+	
 	/**
 	 * 
 	 * Fazendo a query de Login
@@ -97,15 +304,23 @@ class WRS_LOGIN extends WRS_BASE
 		
 		$rules_session_tmp		=	 NULL;
 		$multiple_cube			=	array();
-		
+		$PWD_RESET			=	 fwrs_request('new_password');
 		 
-		
+	 
 		
 		session_destroy();		//Apaga qualquer sessão
 		session_start();		// Inicia uma nova sessão
 		
-		if(empty($USER_CODE)) return fwrs_error('É necessário digitar um usuário');
-		if(empty($USER_PWD)) return fwrs_error('É necessário digitar uma senha');
+		if(empty($USER_CODE)) 
+		{
+			return json_encode(array('html'=>fwrs_error(sprintf(LNG('LOGIN_PASSWORD_EMPTY'),LNG('LOGIN_USER_SYSTEM'))),'data'=>array('expired'=>false,'login'=>false)),true);
+		}
+		
+		if(empty($USER_PWD)) 
+		{
+			return json_encode(array('html'=>fwrs_error(sprintf(LNG('LOGIN_PASSWORD_EMPTY'),LNG('LOGIN_PASSWORD'))),'data'=>array('expired'=>false,'login'=>false)),true);
+		}
+		
 		
 		$browserInfo	=	 $this->getBrowser();
 		$ADDRESS		=	 $_SERVER['REMOTE_ADDR'];
@@ -115,6 +330,7 @@ class WRS_LOGIN extends WRS_BASE
 		$rules_session	=	array();
 
 		WRS_TRACE('Executando a query QUERY_LOGIN::LOGIN_SSAS ', __LINE__, __FILE__);
+		
 		if ($USER_PERFIL != ''){
 			$query		=	 QUERY_LOGIN::LOGIN_SSAS( $USER_PWD, $USER_CODE, $USER_PERFIL, $ADDRESS, $SESSION, $BROWSER, $SYSTEM );
 		}else{
@@ -132,20 +348,21 @@ class WRS_LOGIN extends WRS_BASE
 				WRS_TRACE('Obtendo o resultado da query  QUERY_LOGIN::LOGIN_SSAS  ', __LINE__, __FILE__);
 				$rule_database_id	=	array(); //Se já existir uma database não permite a inserção de outra
 				
-				
-				
-				
-				
 				while($rows = $this->fetch_array($query) )
 				{
 					$login_id			=	$rows['LOGIN_ID'];
 					
 					
-					
+					//Verificando a senha expirada e ou salvando a nova senha
 					if($login_id==LOGIN_EXPIRED)
 					{
-						$_param_call	=	array('html'=>fwrs_warning(LNG('PASSWORD_EXPIRED')),'data'=>array('expired'=>true,'login'=>false));
-						return json_encode($_param_call,true);
+						if(empty($PWD_RESET))
+						{
+							$_param_call	=	array('html'=>fwrs_warning(LNG('PASSWORD_EXPIRED')),'data'=>array('expired'=>true,'login'=>false));
+							return json_encode($_param_call,true);
+						}else{
+								return $this->change_password($USER_CODE,$PWD_RESET,$USER_PWD);
+						}
 
 					}
 					

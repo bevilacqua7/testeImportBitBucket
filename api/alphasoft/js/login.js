@@ -58,7 +58,7 @@ function wrs_click_user()
 function wrs_remove_user_temp()
 {
 	var getUser	=	$(this).attr('user');
-	var confirm	=	 window.confirm('Tem certeza que deseja remover o usuário do histórico de acesso?');
+	var confirm	=	 window.confirm(LNG('REMOVE_LOGIN_COOKIE'));
 
 
 	if(confirm)
@@ -69,6 +69,240 @@ function wrs_remove_user_temp()
 	}
 	
 }
+
+
+
+var _TIME_RELOAD		=	11;
+
+function start_time_reload_login()
+{
+	_TIME_RELOAD--;
+	
+	$('.logtime').html(_TIME_RELOAD);
+	
+	if(_TIME_RELOAD==0)
+	{
+		$("#fakeloader").show();
+		window.location	='login.php?msg=LOGIN_ADD_NEW_RECOVER';
+		return false;
+	}
+	setTimeout(start_time_reload_login,1000);
+	
+	
+}
+
+var function_call_login	=	 function(data){
+
+	TRACE('recebendo parametro do Post run.php wrsCheckLogin na common.js');
+	
+	
+	
+	$('.wrs_login').html('Login');
+	
+	if(typeof data.data!='undefined')
+	{
+		if(typeof data.data.change!='undefined')
+		{
+			if(data.data.change==true)
+			{
+				$( "#password_new,#password_new_confirm" ).remove();
+				$('#password').val(null).focus();
+			}
+		}
+		
+		
+		if(typeof data.data.recover!='undefined')
+		{
+			if(data.data.recover==true)
+			{
+				start_time_reload_login();
+			}
+		}
+		
+		//Senha expired
+		if(data.data.expired==true)
+		{
+			create_new_pass();
+			 
+		}//Senha expirada
+		
+		//Valida login 
+		if(data.data.login==true)
+		{
+			$('.mensagens').html(data.html);
+			
+			$("#fakeloader").show();
+			window.location	=	'run.php?file=WRS_MAIN&class=WRS_MAIN&ncon';
+		}
+	}
+		
+	
+	
+	$('.mensagens').html(data.html);
+	
+	
+	
+	if(empty(data.html))
+	{
+		$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
+	}
+	
+	TRACE('O post da run.php wrsCheckLogin da common.js foi concluido');
+};
+
+
+
+
+function password_recover()
+{
+	wrsCheckLogin($('#user').val(), '','recover_login', '');
+}
+
+function wrs_login_recover()
+{
+	//RECOVER
+	create_new_pass();
+	$('#password,#user').remove();
+	$('.mensagens').html(fwrs_success(LNG('LOGIN_RECOVER_NEW')));
+	$('.checkbox,.wrs_info').hide();
+
+}
+
+
+function create_new_pass()
+{
+	var _param	=	{ 
+			type	:	"password",
+			id		:	"password_new",
+			name	:	"password_new",
+			'class'	:	"form-control",
+			placeholder	:	LNG('LOGIN_NEW_PASSWORD'),
+			required:true
+		};
+	
+	var _param_du	=	{ 
+			type	:	"password",
+			id		:	"password_new_confirm",
+			name	:	"password_new_confirm",
+			'class'	:	"form-control",
+			placeholder	:	LNG('LOGIN_NEW_PASSWORD_CONFIRM'),
+			required:true
+		};
+	
+	$('#password_new,#password_new_confirm').remove();
+	$('.new_password').append($('<input/>',_param)).append($('<input/>',_param_du));
+	$('#password_new').focus();
+	
+	//ENTER nos formularios
+	$( "#password_new,#password_new_confirm" ).unbind('keypress').keypress(function( event ) {if ( event.which == 13 ) valida_usuario();});
+	
+}
+
+function wrsCheckLogin(login,pwd,event,perfil)
+{
+	TRACE('Iniciando wrsCheckLogin na common.js');
+	
+	var isCookie	=	 $('#chk_lembrar:checked').val() == 1 ? 1 : 0;	
+	
+	var _load		=	' <img src="./imagens/wrs_loading.gif"/>';
+	var mensagem	=	fwrs_warning(LNG('LOGIN_CHECK')+_load);
+	
+	TRACE('Enviando parametro para o Post run.php wrsCheckLogin na common.js');
+
+	if(event!='recover_login' && isEmpty(RECOVER))
+	{
+		//Senha empty
+		if(isEmpty(login)) 
+		{
+			mensagem	=	sprintf(LNG('LOGIN_PASSWORD_EMPTY'),LNG('LOGIN_USER_SYSTEM'));
+			$('.mensagens').html(fwrs_error(mensagem));
+			
+			return false;
+		}
+	
+		if(isEmpty(pwd)) {
+			mensagem	=	sprintf(LNG('LOGIN_PASSWORD_EMPTY'),LNG('LOGIN_PASSWORD'));
+			$('.mensagens').html(fwrs_error(mensagem));
+			return false;
+		}
+	//end empty
+	}else{
+		mensagem	=	fwrs_success(LNG('LOGIN_SEND_CHANGE')+_load);
+	}
+	
+	
+	var _param	=	{
+			'login'		:	login,
+			'pwd'		:	pwd,
+			'perfil'	:	((perfil!=undefined && perfil!='')?perfil:''),
+			'file'		:	'WRS_LOGIN',
+			'class'		:	'WRS_LOGIN',
+			'event'		:	event,
+			'isCookie'	:	isCookie
+		};
+	
+	
+	if(!isEmpty(RECOVER))
+		{
+			_param['login']	=	RECOVER;
+			_param['event']	=	'recover_email';
+		}
+	
+	
+	//Regras para os clicks 
+	
+	//Troca de senha
+	if($('#password_new').length>0)
+	{
+		
+		var password_new			=	$('#password_new').val();
+		var password_new_confirm	=	$('#password_new_confirm').val();
+		
+		//Verificando se é vazio
+		if(isEmpty(password_new))
+		{
+			var _placeholder	=	$('#password_new').attr('placeholder');
+			$('.mensagens').html(fwrs_error(sprintf(LNG('LOGIN_PASSWORD_EMPTY'),_placeholder)));
+			return false
+		}
+		
+		
+		if(isEmpty(password_new_confirm))
+		{
+			var _placeholder	=	$('#password_new_confirm').attr('placeholder');
+			$('.mensagens').html(fwrs_error(sprintf(LNG('LOGIN_PASSWORD_EMPTY'),_placeholder)));
+			return false
+		}
+		
+		
+		
+		//verificando se é igual
+		if(password_new_confirm!=password_new)
+		{
+			$('.mensagens').html(fwrs_error(LNG('LOGIN_NEW_PASSWORD_CONFIRM_ERROR')));
+			return false
+		}
+		
+		_param['new_password']	=	password_new;
+		
+		 mensagem	=	fwrs_warning(LNG('LOGIN_CHECK_NEW')+_load);
+		 
+	}
+	
+	
+	$('.mensagens').html(mensagem);
+	
+	$.post('run.php',_param,function_call_login,"json").fail(function() {
+		$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
+	  });
+	
+
+}
+
+
+
+
+
 
 
 
@@ -99,7 +333,7 @@ $(function(){
 	});
 
 	$('.recover_password').click(function(){
-		enviaEmailSenha($('#user').val());
+		password_recover();
 	})
 	
 	
