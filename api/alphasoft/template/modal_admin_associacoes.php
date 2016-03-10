@@ -1,7 +1,7 @@
 <?php
 
-$ASSOCIACOES 		=	<<<HTML
-
+$HTML 		=	<<<HTML
+<form class='grid_window_values_form'>
 <div class="association-container">
 
 			<label for="select_cubes">Cubos</label>
@@ -47,9 +47,8 @@ $ASSOCIACOES 		=	<<<HTML
 	  		</script>
 
 </div>	
-
+</form>
 HTML;
 
-echo $ASSOCIACOES;
 						  					
 ?>

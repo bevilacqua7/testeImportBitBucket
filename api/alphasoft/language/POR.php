@@ -341,6 +341,7 @@
 
 	$language['tpl_association_save_sucess'] 				= "Associação salva com sucesso";
 	$language['tpl_association_save_error'] 				= "Erro na associação";
+	$language['tpl_association_remove_sucess'] 				= "Associação do%s ite%ns removida com sucesso";
 	$language['tpl_association_remove_error'] 				= "Erro na remoção de associação";
 
 	$language['tpl_association_title'] 						= "Associacao individual por ";

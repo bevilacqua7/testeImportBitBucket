@@ -9,7 +9,8 @@
 class WRS_MANAGE_PARAM
 {
 	
-	private $array_retorno_padrao = array(	 'title'				=>	'',
+	private $array_retorno_padrao = array(
+										 'title'				=>	'',
 										 'button'				=>	'',
 										 'field'				=>	'',
 										 'table'				=>	'',
@@ -31,9 +32,18 @@ class WRS_MANAGE_PARAM
 
 	private static $array_configuracao_padrao = 	array(
 			'tabela_bd'				=>	'',
+			'tabela_bd_export'		=>	'',
 			'acesso_requisicao'		=>	true,
 			'acesso_via_menu'		=>	true,
-			'metodo_classe_param'	=>	''
+			'metodo_classe_param'	=>	'',
+			'menu_visao_modal'		=>	array( // pode ser false, onde esconde o menu todo na modal da tabela em questao
+												'list'			=> true, // GRID
+												'date'			=> true, // LISTA BASICA
+												'details'		=> true, // DETALHES
+												'icon_big'		=> true,
+												'icon_middle'	=> true,
+												'icon_small'	=> true
+											)
 	);
 	
 	private static $array_configuracao_tabelas = 	array(
@@ -89,9 +99,17 @@ class WRS_MANAGE_PARAM
 					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE_USER',
 					'icon'					=>	'fa fa-object-group',
 					'nome_arquivo_import'	=>	'ASSOCIATION.CSV',
-					'colunas_import_export'	=>	'DATABASE_ID, CUBE_ID, [USER_CODE]',
-					'colunas_descricao'		=>	'DATABASE_ID (varchar[100]), CUBE_ID (varchar[100]), USER_CODE (varchar[100])',
-					'exibe_menu_ADM'		=>	true
+					'colunas_import_export'	=>	'DATABASE_ID, CUBE_ID, USER_ID',
+					'colunas_descricao'		=>	'DATABASE_ID(varchar[100]), CUBE_ID(varchar[100]), USER_ID(varchar[50])',
+					'exibe_menu_ADM'		=>	true,
+					'menu_visao_modal'		=>	false /*array( // pode ser false, onde esconde o menu todo na modal da tabela em questao
+														'list'			=> true, // GRID
+														'date'			=> true, // LISTA BASICA
+														'details'		=> false, // DETALHES
+														'icon_big'		=> false,
+														'icon_middle'	=> false,
+														'icon_small'	=> false
+													)*/
 			),
 			'ATT_WRS_LOG'					=> 	array(
 					'tabela_bd'				=>	'FAT_WRS_LOG',
@@ -201,6 +219,24 @@ HTML;
 		
 	}
 	
+	public static function confereVisaoDisponivel($tabela,$item=null,$retorna_class_hide=false){
+		$dadosTabela 	= self::GET_CONFIG_TABLE($tabela);
+		$retorno_true	= $retorna_class_hide?'':true;
+		$retorno_false	= $retorna_class_hide?' hide ':false;
+		if($dadosTabela['menu_visao_modal']){
+			if($item!=null){
+				if(array_key_exists($item, $dadosTabela['menu_visao_modal']) && $dadosTabela['menu_visao_modal'][$item]){
+					return $retorno_true;	
+				}else{
+					return $retorno_false;
+				}				
+			}else{
+				return $retorno_true;
+			}
+		}else{
+			return $retorno_false;
+		}
+	}
 	
 	/**
 	 * Retorna o nome correto da tabela configurada no banco de dados, baseado no nome da tabela pro sistema, ex.: DE ATT_WRS_LOG para FAT_WRS_LOG
@@ -441,7 +477,7 @@ HTML;
 		$fields['USER_FLAG']   			= array('title'=>LNG('USER_FLAG')    		, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['USER_STATUS']   		= array('title'=>LNG('USER_STATUS')   		, 'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','0'=>'Inativo'),   'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_FORMAT']   		= array('title'=>LNG('USER_FORMAT')    		, 'is_select'=>array('-1'=>'Selecionar','azul'=>'Azul','cinza'=>'Cinza','laranja'=>'Laranja','verde'=>'Verde','vermelho'=>'Vermelho'),   'length'=>15,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_EXPIRY']   		= array('title'=>LNG('USER_EXPIRY')    		, 'type'=>'date_object' ,'format'=>'d/m/Y H:i:s', 'class'=>'hide', 'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
+		$fields['USER_EXPIRY']   		= array('title'=>LNG('USER_EXPIRY')    		, 'type'=>'date_object' ,'format'=>'Y/m/d H:i:s', 'class'=>'hide', 'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['LANGUAGE_ID']   		= array('title'=>LNG('LANGUAGE_ID')    		, 'is_select'=>array('-1'=>'Selecionar','ENG'=>'Inglês','ESP'=>'Espanhol','POR'=>'Português'),   'length'=>3,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['PERFIL_ID']   			= array('title'=>LNG('PERFIL_ID')    		, 'is_select'=>'ATT_WRS_PERFIL', 'select_fields_in_table'=>array('PERFIL_ID','PERFIL_DESC'),   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['CUSTOMER_ID']   		= array('title'=>LNG('CUSTOMER_ID')    		, 'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_CODE','CUSTOMER_DESC'),   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
@@ -821,10 +857,10 @@ HTML;
 		*/
 		
 		// atributos gerados com base na tabela REL_WRS_CUBE_USER automaticamente de acordo com script SQL ao final deste arquivo
-		$fields['USER_ID']   		= array('title'=>LNG('USER_ID')    		, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true);
-		$fields['CUBE_ID']   		= array('title'=>LNG('CUBE_ID')    		, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true);
-		$fields['DATABASE_ID']   	= array('title'=>LNG('DATABASE_ID')   	, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true);
-		$fields['SERVER_ID']   		= array('title'=>LNG('SERVER_ID')   	, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true);
+		$fields['USER_ID']   		= array('title'=>LNG('USER_ID')    		, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true,   'primary' => true);
+		$fields['CUBE_ID']   		= array('title'=>LNG('CUBE_ID')    		, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true,   'primary' => true);
+		$fields['DATABASE_ID']   	= array('title'=>LNG('DATABASE_ID')   	, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true,   'primary' => true);
+		$fields['SERVER_ID']   		= array('title'=>LNG('SERVER_ID')   	, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true,   'primary' => true);
 		
 		$fields['USER_CODE']   		= array('title'=>LNG('MENU_ADMIN_USER') ,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
 		$fields['CUBE_DESC']   		= array('title'=>LNG('MENU_ADMIN_CUBE')	,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
@@ -904,8 +940,8 @@ HTML;
 		  $fields['REPORT_ID']   = array('title'=>LNG('REPORT_ID')    ,   'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
 		  $fields['REPORT_DESC']   = array('title'=>LNG('REPORT_DESC')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		  $fields['REPORT_SHARE']   = array('title'=>LNG('REPORT_SHARE')    ,   'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
-		  $fields['REPORT_DATE']   = array('title'=>LNG('REPORT_DATE')    ,'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		  $fields['REPORT_UPDATE']   = array('title'=>LNG('REPORT_UPDATE')    ,'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
+		  $fields['REPORT_DATE']   = array('title'=>LNG('REPORT_DATE')    ,'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		  $fields['REPORT_UPDATE']   = array('title'=>LNG('REPORT_UPDATE')    ,'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		  $fields['REPORT_OPTIONS']   = array('title'=>LNG('REPORT_OPTIONS')    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		  $fields['REPORT_FORMULAS']   = array('title'=>LNG('REPORT_FORMULAS')    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		  $fields['REPORT_FILTER']   = array('title'=>LNG('REPORT_FILTER')    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
@@ -975,7 +1011,7 @@ HTML;
 		$fields['DATABASE_ID']   = array('title'=>LNG('DATABASE_ID')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['FILE_NAME']   = array('title'=>LNG('FILE_NAME')    ,   'length'=>250,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['FILE_DESC']   = array('title'=>LNG('FILE_DESC')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['FILE_DATE']   = array('title'=>LNG('FILE_DATE')    ,'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['FILE_DATE']   = array('title'=>LNG('FILE_DATE')    ,'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['FILE_SIZE']   = array('title'=>LNG('FILE_SIZE')    ,   'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['FILE_FLAG']   = array('title'=>LNG('FILE_FLAG')    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		
@@ -1021,7 +1057,7 @@ HTML;
 		/*
 		$fields['WRS_ICON']			=	array('title'=>'#',    		'width'=>50,	  'grid'=>true);
 		$fields['TRANSACTION_ID']	=	array('title'=>'ID',   		'primary'=>true,  'list'=>true,  'grid'=>true,  'class'=>'hide');
-		$fields['DATE_ID']			=	array('title'=>'Data', 		'list'=>true,	 'grid'=>true,  'class'=>'hide', 'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true);
+		$fields['DATE_ID']			=	array('title'=>'Data', 		'list'=>true,	 'grid'=>true,  'class'=>'hide', 'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true);
 		$fields['PROCESS']			=	array('title'=>'Processo',	'list'=>true,	  'grid'=>true,  'class'=>'hide');
 		$fields['OPERATION']		=	array('title'=>'Operação',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
 		$fields['MESSAGE']			=	array('title'=>'Mensagem',	'list'=>true, 	  'grid'=>true,  'class'=>'hide');
@@ -1031,16 +1067,16 @@ HTML;
 		
 		// Atributos gerados com base na tabela FAT_WRS_LOG automaticamente de acordo com script SQL ao final deste arquivo
 		$fields['TRANSACTION_ID']   = array('title'=>LNG('TRANSACTION_ID')    ,   'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
-		$fields['DATE_ID']   = array('title'=>LNG('DATE_ID')    ,'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['DATE_ID']   = array('title'=>LNG('DATE_ID')    ,'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['MODULE']   = array('title'=>LNG('MODULE')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['PROCESS']   = array('title'=>LNG('PROCESS')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['OPERATION']   = array('title'=>LNG('OPERATION')    ,   'length'=>250,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['MESSAGE']   = array('title'=>LNG('MESSAGE')    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_MASTER']   = array('title'=>LNG('USER_MASTER')    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_ID']   = array('title'=>LNG('USER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_ID']   = array('title'=>LNG('USER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
 		$fields['USER_CODE']   = array('title'=>LNG('USER_CODE')    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_DESC']   = array('title'=>LNG('USER_DESC')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['CUSTOMER_ID']   = array('title'=>LNG('CUSTOMER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['CUSTOMER_ID']   = array('title'=>LNG('CUSTOMER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
 		$fields['CUSTOMER_DESC']   = array('title'=>LNG('CUSTOMER_DESC')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_LOG'),
@@ -1051,7 +1087,7 @@ HTML;
 				'icon'		=>	'user.png',
 				'primary'	=>	'TRANSACTION_ID',
 				'extend'				=>	$extend,											// NEW
-				'checkbox'				=>	true, 												// NEW
+				'checkbox'				=>	false, 												// NEW
 				'button_icon'			=>	$button_icon,										// NEW
 				'button_force_label'	=>	true, 			  									// NEW
  				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
@@ -1089,8 +1125,8 @@ HTML;
 		$exceptions	=	array('file'=>'WRS_REPORT', 'class'=>'WRS_REPORT','type'=>'');
 				
 		$fields['REPORT_DESC']		=	array('title'=>'Nome', 				'width'=>250,	'classDataLine'=>'text-left',	'label_icon_small'=>true,	'label_icon_middle'=>true,	'label_icon_big'=>true,		'list'=>true,	'basic'=>true,  'grid'=>true);
-		$fields['REPORT_SHARE']	=	array('title'=>'Compartilhado', 	'width'=>100,	'classDataLine'=>'text-center', 																					'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
-		$fields['REPORT_DATE']		=	array('title'=>'Data', 				'width'=>130,	'classDataLine'=>'text-center',															'label_icon_big'=>true,		'list'=>true,	'basic'=>true,  'grid'=>true, 		'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true);
+		$fields['REPORT_SHARE']		=	array('title'=>'Compartilhado', 	'width'=>100,	'classDataLine'=>'text-center', 																					'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
+		$fields['REPORT_DATE']		=	array('title'=>'Data', 				'width'=>130,	'classDataLine'=>'text-center',															'label_icon_big'=>true,		'list'=>true,	'basic'=>true,  'grid'=>true, 		'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true);
 		$fields['REPORT_AUTOLOAD']	=	array('title'=>'Carga', 			'width'=>80,	'classDataLine'=>'text-center', 																					'list'=>true, 	'basic'=>true, 	'grid'=>false,'is_select'=>array('-1'=>'Selecionar','1'=>'Sim','0'=>'Não'));
 		$fields['USER_DESC']		=	array('title'=>'Criador', 			'width'=>150,	'classDataLine'=>'text-left',								'label_icon_middle'=>true,	'label_icon_big'=>true,		'list'=>true,	'basic'=>true,  'grid'=>true);
 		$fields['LAYOUT_ROWS']		=	array('title'=>'Linhas', 			'width'=>200,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
@@ -1152,8 +1188,8 @@ HTML;
 		$fields['LAYOUT_COLUMNS']	=	array('title'=>LNG('ATTRIBUTOS_COLUNA')		, 	'width'=>150,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
 		$fields['LAYOUT_MEASURES']	=	array('title'=>LNG('ATTRIBUTOS_METRICA')	, 	'width'=>150,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
 		$fields['LAYOUT_FILTERS']	=	array('title'=>LNG('ATTRIBUTOS_FILTRO')		, 	'width'=>150,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false);
-		$fields['LAYOUT_DATE']		=	array('title'=>'Data'						, 	'width'=>100,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false ,'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true);
-		$fields['LAYOUT_UPDATE']	=	array('title'=>'Update'						, 	'width'=>100,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false, 'type'=>'date_object' ,'format'=>'d/m/Y H:i:s' ,'type_convert'=>true);
+		$fields['LAYOUT_DATE']		=	array('title'=>'Data'						, 	'width'=>100,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false ,'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true);
+		$fields['LAYOUT_UPDATE']	=	array('title'=>'Update'						, 	'width'=>100,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false, 'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true);
 		$fields['LAYOUT_FLAG']		=	array('title'=>'Flag'						, 	'width'=>60,	'classDataLine'=>'text-left',	'list'=>true,	'basic'=>false, 'grid'=>false ,'is_select'=>array(''=>'Sem opção','1'=>'Sim','0'=>'Não'));
 		$fields['LAYOUT_STATUS']	=	array('title'=>'Status'						,	'list'=>false,	'basic'=>false, 'grid'=>false);
 		$fields['SERVER_ID']		=	array('title'=>'Server ID'					,	'list'=>false,	'basic'=>false, 'grid'=>false);
@@ -1234,7 +1270,7 @@ RETURN
 					)
 				},
 				(CASE CONVERT(varchar,  ISNULL(ic.CHARACTER_MAXIMUM_LENGTH,0)) WHEN '0' THEN 
-																							(CASE ic.DATA_TYPE WHEN 'datetime' THEN ',''type''=>''date_object'' ,''format''=>''d/m/Y H:i:s'' ,''type_convert''=>true' ELSE {fn CONCAT(',   ''type''=>''int'',   ''length'' => ',CONVERT(varchar,  ic.NUMERIC_PRECISION))} END)
+																							(CASE ic.DATA_TYPE WHEN 'datetime' THEN ',''type''=>''date_object'' ,''format''=>''Y/m/d H:i:s'' ,''type_convert''=>true' ELSE {fn CONCAT(',   ''type''=>''int'',   ''length'' => ',CONVERT(varchar,  ic.NUMERIC_PRECISION))} END)
 																				WHEN '-1' THEN 
 																																	{fn CONCAT(
 																																				',   ''datatype_original_bd''=>''',

@@ -1,6 +1,6 @@
 <?php
 
-$event_form = $_request_original['event'];
+$event_form = (!isset($event_form) || $event_form==null || $event_form=='')?$_request_original['event']:$event_form;
 
 $HTML	= <<<EOF
 		<script>			
