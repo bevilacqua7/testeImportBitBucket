@@ -229,14 +229,16 @@ function eLNG($string)
 }
 
 // substitui o LNG trocando os %s por s se existirem
-function LNG_S($string,$char=false,$recursiva=false)
+// aceita outros caracteres para buscar e substituir (para plurais de outras palavras sem que seja somente S no final)
+function LNG_S($string,$char=false,$char_to_find=false,$recursiva=false)
 {
 	$_char 			= $char===false?'s':$char;
+	$_char_to_find 	= $char_to_find===false?'%s':$char_to_find;
 	$_recursiva 	= !$recursiva?false:true;
 	$_string 		= $_recursiva?$string:LNG($string);
 	
-	if(strpos($_string,'%s')){
-		return LNG_S(str_replace('%s',$_char,$_string),$_char,true);
+	if(strpos($_string,$_char_to_find)){
+		return LNG_S(str_replace($_char_to_find,$_char,$_string),$_char,$_char_to_find,true);
 	}else{
 		return $_string;
 	}

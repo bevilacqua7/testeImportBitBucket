@@ -79,7 +79,6 @@ class WindowGrid extends FORM
 		 */
 		$this->manage_param	= new WRS_MANAGE_PARAM();
 		
-		
 		/*
 		 *	Executando as ROWS das GRIDS
 		 */
@@ -91,6 +90,7 @@ class WindowGrid extends FORM
 			}
 		}
 
+		
 		if(empty($event))
 		{
 			$param['title']	=	LNG('ERROR_TITLE');
@@ -115,32 +115,41 @@ class WindowGrid extends FORM
 				/*
 				 * extend 
 				 */
-				if(array_key_exists('extend', $param) && count($param['extend'])>0){
+				
+
+				if(array_key_exists('extend', $param) && count($param['extend'])>0)
+				{
 					$extend			=	 $param['extend'];
 					includeCLASS($extend['file']);
-					$class			=	$extend['class'];
+					$class			=	$extend['class'];					
 					$objExtend		=	new $class();
 					$objExtend->SetObject($this);
-					$LocalEvents	=	$objExtend;
+					$LocalEvents	=	$objExtend;				
 				}
 				
 				switch($form_event)
 				{
-					case 'remove' 	: 	$param	=	$LocalEvents->delete($param) ; break;
-					case 'update'	:	$param	=	$LocalEvents->update($param) ; break;
-					case 'new'		:	$param	=	$LocalEvents->insert($param); break;
-					case 'import'	:	$param	=	$LocalEvents->import($param); break;
-					case 'export'	:	$param	=	$LocalEvents->export($param); break;
-					case 'back'		:	{
-											$_REQUEST['wrs_type_grid'] = $wrs_type_grid = 'list';
-										}
-					default			:	$param	=	$this->build_grid_form($param); break;
+					case 'remove' 			: 	$param	=	$LocalEvents->delete($param) ; break;
+					case 'update'			:	$param	=	$LocalEvents->update($param) ; break;
+					case 'new'				:	$param	=	$LocalEvents->insert($param); break;
+					case 'import'			:	$param	=	$LocalEvents->import($param); break;
+					case 'export'			:	$param	=	$LocalEvents->export($param); break;
+					case 'form_exception'	:	{
+													$param			=	$this->build_grid_form($param);
+													$LocalEvents->build_grid_form_exception($param); // felipeb 20160310 - NAO SEI o motivo da classe nao retornar o $param completo, já fiz tudo que é teste possível mas não há mais tempo para investigação, acrescentei em uma variavel da classe e resgato logo abaixo se ela existir para substituir apenas o HTML do param
+													break;
+												}
+					case 'back'				:	{
+													$_REQUEST['wrs_type_grid'] = $wrs_type_grid = 'list';
+												}
+					default					:	$param	=	$this->build_grid_form($param);
 				}
 
-				//$param['html']="<pre>>>>".print_r($form_event,1)."</pre>".$param['html'];
+				if(isset($LocalEvents->html_param_form_exception) && $LocalEvents->html_param_form_exception!=''){
+					$param['html'] = $LocalEvents->html_param_form_exception;
+				}
 				
 				$this->extendException($param,$wrs_type_grid);
-				
 				
 				
 			}else{
@@ -633,12 +642,14 @@ EOF;
 			if($table=='ATT_WRS_USER'){
 				$where="PERFIL_ID != ''MST'' and CUSTOMER_ID = ".$CUTOMER_ID;
 			}
+			if($table=='ATT_WRS_CUSTOMER'){
+				$where="PERFIL_ID != ''MST'' and CUSTOMER_ID = ".$CUTOMER_ID;
+			}
 			if(WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($table)=='ATT_WRS_LOG'){
 				$where="CUSTOMER_ID = ".$CUTOMER_ID;
 			}
 		}
 		
-
 		if(!empty($this->exception))
 		{
 			$query	=	$this->exception->change_query_exception($table, $sort['field'], $sort['dir'], $request['page'], $request['pageSize'],$where);
@@ -863,28 +874,36 @@ EOF;
 	
 	private function navMenu($table)
 	{
-		$TITLE_GRID_WINDOW_MENU_MANAGER		=	LNG('TITLE_GRID_WINDOW_MENU_MANAGER');
-		$TITLE_GRID_WINDOW_MENU_LIST		=	LNG('TITLE_GRID_WINDOW_MENU_LIST');
-		$TITLE_GRID_WINDOW_MENU_DETAILS		=	LNG('TITLE_GRID_WINDOW_MENU_DETAILS');
-		$TITLE_GRID_WINDOW_MENU_BIG_ICON	=	LNG('TITLE_GRID_WINDOW_MENU_BIG_ICON');
-		$TITLE_GRID_WINDOW_MENU_MEDIUM_ICON	=	LNG('TITLE_GRID_WINDOW_MENU_MEDIUM_ICON');
-		$TITLE_GRID_WINDOW_MENU_SMALL_ICON	=	LNG('TITLE_GRID_WINDOW_MENU_SMALL_ICON');
-		$TITLE_GRID_WINDOW_MENU_LIST_INFO	=	LNG('TITLE_GRID_WINDOW_MENU_LIST_INFO');
+		$TITLE_GRID_WINDOW_MENU_MANAGER					=	LNG('TITLE_GRID_WINDOW_MENU_MANAGER');
+		$TITLE_GRID_WINDOW_MENU_LIST					=	LNG('TITLE_GRID_WINDOW_MENU_LIST');
+		$TITLE_GRID_WINDOW_MENU_DETAILS					=	LNG('TITLE_GRID_WINDOW_MENU_DETAILS');
+		$TITLE_GRID_WINDOW_MENU_BIG_ICON				=	LNG('TITLE_GRID_WINDOW_MENU_BIG_ICON');
+		$TITLE_GRID_WINDOW_MENU_MEDIUM_ICON				=	LNG('TITLE_GRID_WINDOW_MENU_MEDIUM_ICON');
+		$TITLE_GRID_WINDOW_MENU_SMALL_ICON				=	LNG('TITLE_GRID_WINDOW_MENU_SMALL_ICON');
+		$TITLE_GRID_WINDOW_MENU_LIST_INFO				=	LNG('TITLE_GRID_WINDOW_MENU_LIST_INFO');
+
+		$permite_menu_visao_tabela_class				=	WRS_MANAGE_PARAM::confereVisaoDisponivel($table,null,true);
+		$permite_menu_visao_tabela_list_class			=	WRS_MANAGE_PARAM::confereVisaoDisponivel($table,'list',true);
+		$permite_menu_visao_tabela_date_class			=	WRS_MANAGE_PARAM::confereVisaoDisponivel($table,'date',true);
+		$permite_menu_visao_tabela_details_class		=	WRS_MANAGE_PARAM::confereVisaoDisponivel($table,'details',true);
+		$permite_menu_visao_tabela_icon_big_class		=	WRS_MANAGE_PARAM::confereVisaoDisponivel($table,'icon_big',true);
+		$permite_menu_visao_tabela_icon_middle_class	=	WRS_MANAGE_PARAM::confereVisaoDisponivel($table,'icon_middle',true);
+		$permite_menu_visao_tabela_icon_small_class		=	WRS_MANAGE_PARAM::confereVisaoDisponivel($table,'icon_small',true);
 		
  		$navMemnu	=	<<<EOF
-									  <ul class="nav navbar-nav navbar-right wrs_grid_window_custum_tools_menu">
+									  <ul class="nav navbar-nav navbar-right wrs_grid_window_custum_tools_menu {$permite_menu_visao_tabela_class}">
 								            <li class="dropdown liin">
 								              <a id="drop1" href="#" class="dropdown-toggle liin" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="true">
 								                <i class="fa fa-eye"></i> {$TITLE_GRID_WINDOW_MENU_MANAGER}
 								                <span class="caret"></span>
 								              </a>
 								              <ul class="dropdown-menu wrs_grid_window_event" role="menu" aria-labelledby="drop1">
-								                <li role="presentation"><a role="menuitem" rel="list"			tabindex="-1" table="{$table}" href="#"><i class="fa fa-table"></i> {$TITLE_GRID_WINDOW_MENU_LIST}</a></li>
-												<li role="presentation"><a role="menuitem" rel="date"			tabindex="-1" table="{$table}" href="#"><i class="fa fa-bars"></i> {$TITLE_GRID_WINDOW_MENU_LIST_INFO}</a></li>
-								                <li role="presentation"><a role="menuitem" rel="details"		tabindex="-1" table="{$table}" href="#"><i class="fa fa-list"></i> {$TITLE_GRID_WINDOW_MENU_DETAILS}</a></li>
-								                <li role="presentation"><a role="menuitem" rel="icon_big" 		tabindex="-1" table="{$table}" href="#"><i class="fa fa-th-large"></i> {$TITLE_GRID_WINDOW_MENU_BIG_ICON}</a></li>
-								                <li role="presentation"><a role="menuitem" rel="icon_middle" 	tabindex="-1" table="{$table}" href="#"><i class="fa fa-th"></i> {$TITLE_GRID_WINDOW_MENU_MEDIUM_ICON}</a></li>
-								                <li role="presentation"><a role="menuitem" rel="icon_small" 	tabindex="-1" table="{$table}" href="#"><i class="fa fa-ellipsis-h"></i> {$TITLE_GRID_WINDOW_MENU_SMALL_ICON}</a></li>
+								                <li role="presentation" class="{$permite_menu_visao_tabela_list_class}">		<a role="menuitem" rel="list"			tabindex="-1" table="{$table}" href="#"><i class="fa fa-table"></i> {$TITLE_GRID_WINDOW_MENU_LIST}</a></li>
+												<li role="presentation" class="{$permite_menu_visao_tabela_date_class}">		<a role="menuitem" rel="date"			tabindex="-1" table="{$table}" href="#"><i class="fa fa-bars"></i> {$TITLE_GRID_WINDOW_MENU_LIST_INFO}</a></li>
+								                <li role="presentation" class="{$permite_menu_visao_tabela_details_class}">		<a role="menuitem" rel="details"		tabindex="-1" table="{$table}" href="#"><i class="fa fa-list"></i> {$TITLE_GRID_WINDOW_MENU_DETAILS}</a></li>
+								                <li role="presentation" class="{$permite_menu_visao_tabela_icon_big_class}">	<a role="menuitem" rel="icon_big" 		tabindex="-1" table="{$table}" href="#"><i class="fa fa-th-large"></i> {$TITLE_GRID_WINDOW_MENU_BIG_ICON}</a></li>
+								                <li role="presentation" class="{$permite_menu_visao_tabela_icon_middle_class}">	<a role="menuitem" rel="icon_middle" 	tabindex="-1" table="{$table}" href="#"><i class="fa fa-th"></i> {$TITLE_GRID_WINDOW_MENU_MEDIUM_ICON}</a></li>
+								                <li role="presentation" class="{$permite_menu_visao_tabela_icon_small_class}">	<a role="menuitem" rel="icon_small" 	tabindex="-1" table="{$table}" href="#"><i class="fa fa-ellipsis-h"></i> {$TITLE_GRID_WINDOW_MENU_SMALL_ICON}</a></li>
 								               </ul>
 								            </li>
 								         </ul>

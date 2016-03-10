@@ -336,9 +336,15 @@ HTML;
 		$nome_diretorio	= $WRS_DEFINE['WRS_DIRNAME_EXPORT'].$nome_diretorio;
 		$this->confere_criacao_diretorio($nome_diretorio);
 		
-		$_param['tabela_export'] = WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_param['tabela_export']);
+		$_param['tabela_export'] 		= WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_param['tabela_export']);
+		$tabela_para_query 				= WRS_MANAGE_PARAM::getAtributoTabelaConfig($_param['tabela_export'],'tabela_bd');
+
+		// verifica se existe uma tabela especifica para fazer o export
+		$tabela_export_alternativa		= WRS_MANAGE_PARAM::getAtributoTabelaConfig($_param['tabela_export'],'tabela_bd_export');
+		$tabela_para_query				= $tabela_export_alternativa!=''?$tabela_export_alternativa:$tabela_para_query;
+		
 		$return_export 	= $this->queryClass->getQueryExportarTabela(array(
-																'tabela'	=> WRS_MANAGE_PARAM::getAtributoTabelaConfig($_param['tabela_export'],'tabela_bd'),
+																'tabela'	=> $tabela_para_query,
 																'colunas'	=> WRS_MANAGE_PARAM::getAtributoTabelaConfig($_param['tabela_export'],'colunas_import_export'),
 																'filtros'	=> (is_array($regIds) && count($regIds)>0)?$primary.' in ('.implode(',',$regIds).')':'',
 																'separador' => $_param['caracter_separacao'],
@@ -393,8 +399,8 @@ HTML;
 		}
 		
 		if($processo){
-					
-			$url = "run.php?file=".$this->classname."&class=".$this->classname."&event=downloadFile&fileDownload=".$file_export."&nameFileUser=".$file_original;
+			$file_export 	= str_replace('\\','/',$file_export);
+			$url 			= "run.php?file=".$this->classname."&class=".$this->classname."&event=downloadFile&fileDownload=".$file_export."&nameFileUser=".$file_original;
 			return $url;
 			
 		}else{

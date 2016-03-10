@@ -7,71 +7,79 @@ function confere_botao_touch(){
 
 function callback_load_admin_generic_modal_associations(arg,tabela)
 {
-	_START('callback_load_admin_generic_modal_associations');
-	var coluna_clicada = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[arg.dadosHandlerEvento.target.cellIndex]).attr('data-field');
-	var opcoes={};
-	var dados_registro = {};
-	/**
-	 * TODO: apos alterar para procedure ao inves de query, verificar o indice do WRS_DATA do kendoUi e pegar os valores direto do indice dele, e nao fazer o for abaixo para pegar os valores da linha!
-	 */
-	$(arg.dadosHandlerEvento.target).parent().find('td').each(function(){ 
-		var indx = $(this).index();
-		var nome = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[indx]).attr('data-field');			
-		var valor= $($(arg.dadosHandlerEvento.target).parent().find('td')[indx]).text();
-		dados_registro[nome]=valor;
-	});
+	var indexClique = arg.dadosHandlerEvento.target.cellIndex;
+	var coluna_clicada = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[indexClique]).attr('data-field');	
+	if(coluna_clicada=='USER_CODE' || coluna_clicada=='CUBE_DESC'){
+		_START('callback_load_admin_generic_modal_associations');
+		
+		callback_load_admin_generic_modal(arg,tabela,{'coluna_clicada':coluna_clicada,'form_event':'form_exception'});
+		
+		/*
+		var opcoes={};
+		var dados_registro = {};
+		
+		$(arg.dadosHandlerEvento.target).parent().find('td').each(function(){ 
+			var indx = $(this).index();
+			var nome = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[indx]).attr('data-field');			
+			var valor= $($(arg.dadosHandlerEvento.target).parent().find('td')[indx]).text();
+			dados_registro[nome]=valor;
+		});
 
-	opcoes['coluna_clicada']	=coluna_clicada;
-	opcoes['valores_linha']		=dados_registro;
-	
-	var association_save_button	=	 function(content)
-	{
-		var _content = content;
-		if(!isEmpty(_content)){
-			
-			_START('association_save_button');
-			
-			var Ofile				=	'REL_WRS_CUBE_USER';
-			var Oclass				=	'REL_WRS_CUBE_USER';
-			var Oevent				=	'save_association';	
-			_content['event']		=	Oevent;
-			
-			var funCallBackSaveButton	=	 function(data)
-			{
-				console.log('callback',data);
-				WRS_ALERT(data.mensagem,data.type,function(){ $('#myModalGenericConfig .bt-cancelar').trigger('click'); });				
+		opcoes['coluna_clicada']	=coluna_clicada;
+		opcoes['valores_linha']		=dados_registro;
+		
+		var association_save_button	=	 function(content)
+		{
+			var _content = content;
+			if(!isEmpty(_content)){
+				
+				_START('association_save_button');
+				
+				var Ofile				=	'REL_WRS_CUBE_USER';
+				var Oclass				=	'REL_WRS_CUBE_USER';
+				var Oevent				=	'save_association';	
+				_content['event']		=	Oevent;
+				
+				var funCallBackSaveButton	=	 function(data)
+				{
+					$('#'+tabela).data('kendoGrid').dataSource.read();
+					WRS_ALERT(data.mensagem,data.type,function(){ 
+																	$('#myModalGenericConfig .bt-cancelar').trigger('click'); 
+																	$('#myModalGenericConfig  .modal-body').html(''); 
+																});	
+				}
+				
+				runCall(_content,Ofile,Oclass,Oevent,funCallBackSaveButton,'modal','json');
+				
+				_END('association_save_button');
+				
 			}
-			
-			runCall(_content,Ofile,Oclass,Oevent,funCallBackSaveButton,'modal','json');
-			
-			_END('association_save_button');
-			
 		}
+	
+		var _title = LNG('tpl_association_title')+((coluna_clicada=='USER_CODE')?LNG('tpl_association_title_user'):LNG('tpl_association_title_cube'));
+		
+		var optionsDefault			= {
+												'file'									:	'REL_WRS_CUBE_USER', 
+												'classe'								:	'REL_WRS_CUBE_USER',
+												'event'									:	'form_association_html',
+												'title'									:	_title,
+												'bt_voltar'								:	false,
+												'bt_salvar'								:	true,
+												'bt_atualizar'							:	false,
+												'bt_apagar'								:	false,
+												'bt_salvar_extra_action_validator'		:	association_save_button,
+												'bt_atualizar_extra_action_validator'	:	null,
+												'bt_apagar_extra_action_validator'		:	null,
+												'bt_cancelar'							:	true,
+												'returnModal'							:	false,
+												'btn_events'							:	null, //function(){ return true; },
+												'extraParam'							:	opcoes
+											};
+		
+		$(this).modalGeneric(optionsDefault);
+		*/
+		_END('callback_load_admin_generic_modal_associations');
 	}
-
-	var _title = LNG('tpl_association_title')+((coluna_clicada=='USER_CODE')?LNG('tpl_association_title_user'):LNG('tpl_association_title_cube'));
-	
-	var optionsDefault			= {
-											'file'									:	'REL_WRS_CUBE_USER', 
-											'classe'								:	'REL_WRS_CUBE_USER',
-											'event'									:	'form_association_html',
-											'title'									:	_title,
-											'bt_voltar'								:	false,
-											'bt_salvar'								:	true,
-											'bt_atualizar'							:	false,
-											'bt_apagar'								:	false,
-											'bt_salvar_extra_action_validator'		:	association_save_button,
-											'bt_atualizar_extra_action_validator'	:	null,
-											'bt_apagar_extra_action_validator'		:	null,
-											'bt_cancelar'							:	true,
-											'returnModal'							:	false,
-											'btn_events'							:	null, //function(){ return true; },
-											'extraParam'							:	opcoes
-										};
-	
-	$(this).modalGeneric(optionsDefault);
-	
-	_END('callback_load_admin_generic_modal_associations');
 }
 
 
@@ -82,22 +90,31 @@ function callback_load_admin_generic_modal(arg,tabela,opcoes)
 {
 	
 	_START('callback_load_admin_generic_modal');
-	var _data			=	 $('#myModal, .modal-content-grid').data('wrsGrid');
+	var _data			=	$('#myModal, .modal-content-grid').data('wrsGrid');
+	var options_extra	=	opcoes==undefined?{}:opcoes;
+	var param			=	_data.param_original;
+	var primaries 		= 	{};
 	
-	var options_extra	=	 opcoes==undefined?false:opcoes;
-	var param			=	 _data.param_original;
-	var option						=	 [];
+	for(var coluna in param.field){
+		if(param.field[coluna]['primary']!=undefined && param.field[coluna]['primary']){
+			primaries[coluna]=arg[coluna];
+		}
+	}
+
+	var option						=	{};
 		option['wrs_type_grid']		=	'form';
 		option[param['primary']]	=	'';
+		option['primaries']			=	primaries;
+		
 		try{
 			option[param['primary']] = $(arg[param['primary']]).text()!=''?$(arg[param['primary']]).text():arg[param['primary']];
 		}catch(e){
 			option[param['primary']] = arg[param['primary']];
 		}
 
-		option['options_extra']			=	options_extra;
 		option['param_request']			=	param;
-		
+		option							=	merge_objeto(option,options_extra); // merge
+
 		var funCallBackVision = function()
 		{
 			_START('callback_load_admin_generic_modal::funCallBackVision');
@@ -150,7 +167,7 @@ function aplicaMascaraSeExiste(){
 	$('input.hasMask').focus(function(){
 		var mascara 			= $(this).attr('maskfield');
 		var mascaraPlaceHolder 	= $(this).attr('maskfieldPlaceHolder');
-		console.log('aplicando a mascara ',$(this),mascara);
+
 		if(mascaraPlaceHolder!=undefined && mascaraPlaceHolder!=''){
 			$(this).mask(mascara, {placeholder: mascaraPlaceHolder});
 		}else{
@@ -464,6 +481,19 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 											var retornoQuestion = function(escolha){
 												if(escolha){
 													_extraValues = {'objetosSelecionados':(escolha=='all')?'*':arrRegisterIds,'chave_primaria':chave_primaria};
+													if(table=='REL_WRS_CUBE_USER'){ // excecao para esta tela pois utiliza chaves compostas
+														var opcoes={};
+														var dados_registro = {};
+														/**
+														 * TODO: apos alterar para procedure ao inves de query, verificar o indice do WRS_DATA do kendoUi e pegar os valores direto do indice dele, e nao fazer o for abaixo para pegar os valores da linha!
+														 */
+														//$(arg.dadosHandlerEvento.target).parent().find('td').each(function(){ 
+														//	var indx = $(this).index();
+														//	var nome = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[indx]).attr('data-field');			
+														//	var valor= $($(arg.dadosHandlerEvento.target).parent().find('td')[indx]).text();
+														//	dados_registro[nome]=valor;
+														//});
+													}
 													btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 												}
 											}

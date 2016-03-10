@@ -305,7 +305,7 @@ function get_grid_window_values_form(_event)
 	
 	if(!empty(_event))	form	=	_event;
 	
-	var param		=	[];
+	var param		=	{};
 
 	form.find('input[type=text]').each(function(){
 		param[$(this).attr('name')]	=	$(this).val();
@@ -327,12 +327,22 @@ function get_grid_window_values_form(_event)
 			param[$(this).attr('name')]	=	_value;
 		}
 	});
-	
-	
-	form.find('select').each(function(){
+		
+	form.find('select').not('.multiple').each(function(){
 		param[$(this).attr('name')]	=	$(this).val();
 	});
-	
+
+	form.find('select.multiple').each(function(){
+		var val = {}; 
+		var nome = $(this).attr('name');
+		$(this).find('option').each(function(){ 
+			if($(this).text()!='' && $(this).val()!=''){
+				val[$(this).val()] = $(this).text();
+			}
+		});
+		param[nome]	=	val;
+	});
+
 	_END('get_grid_window_values_form');
 	return param;
 	
