@@ -1,8 +1,9 @@
 <?php
 	$language = array ();
 	
-	$language['IDIOMA'] 				= "POR";
+	$language['IDIOMA'] 				= 	"POR";
 	$language['TITLE']					=	"WRS - ".WRS::VERSION();
+	$language['CharSet']		  		= 	'utf-8';		//por enqtanto está implementado apenas no  sendmail
 	/*
 	 * Mensagem de Privilegios
 	 */
@@ -452,14 +453,54 @@
 	$language['LOGIN_BUTTON']				=	'Login';
 	$language['LOGIN_HISTORY']		='Histórico de Usuários';
 	
+	
+	$language['LOGIN_SUBJECT']		=	'Recuperação de senha';
+	
+	$language['LOGIN_RECOVER_NOT_FOUND']		=	'Ops... Não foi encontrado o usuário <b>%s</b> para enviar a recuperação de senha.';
+	$language['LOGIN_NOT_EMAIL']		=	'Ops.. Não foi encontrado email para ser enviado para o usuário <b>%s</b>. <br>Favor entrar em contato com o suporte para a recuperação da senha.<br>Obrigado.';
+	
+	$language['LOGIN_RECOVER_NEW']		=	'<h4>Alteração de senha</h4> Digite a nova senha para ter acesso ao sistema.';
+	
 	$language['LOGIN_OTHER_PERFIL']		='Outro Perfil';
 	$language['LOGIN_ARMAZENA']			='Armazenar dados de Usuário ?';
 	$language['LOGIN_PASSWORD']			='Password';
 	$language['LOGIN_USER_SYSTEM']		='Usuário';
 	$language['LOGIN_TITLE']			='WRS System';
 	
+	$language['LOGIN_ADD_NEW_RECOVER']			=	'Entre com a nova senha para acessar o sistema';
+	$language['LOGIN_RECOVER_SUCCESS']			='Recuperação de senha enviada para o email do usuário';
+	
+	$language['LOGIN_RECOVER_ERROR']			='Ops.. Não foi possível enviar o email. Favor entrar em contato com o suporte para poder recuperar a senha. Obrigado';
+	
+	$language['HTML_LOGIN_RECOVER_BTN']		=	"TROCAR SENHA";
+	$language['HTML_LOGIN_RECOVER_TITLE']="Recuperação de senha";
+	$language['HTML_LOGIN_RECOVER']			=	<<<HTML
+									Solicitação de recuperação de senha para acesso ao WRS System, caso não tenha solicitado favor desconsiderar esse email. <br><br>
+									Clique no botão abaixo para ser redirecionado a troca de senha.	<br><br>
+									Caso não não funcione o click copie o linque e cole no  navegador para efetuar a troca.
+HTML;
+
+	
 	$language['LOGIN_NEW_PASSWORD']			='Nova senha';
 	$language['LOGIN_NEW_PASSWORD_CONFIRM']	='Confirme a nova senha';
+	$language['LOGIN_CHECK']				='Verificando senha...';
+	$language['LOGIN_CHECK_NEW']			='Salvando nova senha ...';
+	$language['LOGIN_PASSWORD_EMPTY']		='É necessário preencher o campo <b>%s</b> ';
+	$language['LOGIN_PASSWORD_EMPTY_NEW']		='Não está sendo passado a nova senha.';
+	$language['LOGIN_TAG_EMPTY']		='O código para reset da senha está em branco';
+	$language['LOGIN_NEW_PASSWORD_CONFIRM_ERROR']		='A confirmação da nova senha não confere';
+	$language['LOGIN_CHANGE_SQL_ERRO']		='Ops.. erro ao executar query do login, favor tentar novamente.';
+	
+	$language['LOGIN_RECOVER_SUCCESS_TIME']		=	'Senha gerada com sucesso.<br> Aguarde <b class="logtime">10</b> segundos para conectar com a nova senha.';
+	
+	
+	$language['LOGIN_CHANGE_SQL_ERRO_RECOVER']		='Ops.. erro ao executar query do login, para a recuperação da senha.';
+	
+	$language['LOGIN_CHANGE_OK']			='Senha alterada com sucesso, agora efetue o login com a nova senha';
+	$language['REMOVE_LOGIN_COOKIE']		=	"Tem certeza que deseja remover o usuário do histórico de acesso?";
+	
+	$language['LOGIN_HTML_TITLE']			=	"WRS - Web Report System";
+	
 	
 
 	$language['ADMIN_IMPORT_caracter_delimitador']			=	'Caracter delimitador: ';
@@ -475,8 +516,8 @@
 	$language['PASSWORD_EXPIRED']			=	'Senha expirada, é necessário criar uma nova senha. <br> Preencha o formulário com a nova senha.';
 	$language['LOGIN_OK']					=	'Redirecionando para a tela principal';
 	$language['LOGIN_PASSWORD_ERROR']		=	'Usuário ou senha inválidos';
-
-	
+	$language['LOGIN_SEND_CHANGE']			=	'Processando a recuperação da senha..';
+		
 	// JSs de MENU, ADMIN e REPORTS
 	$language['JS_menu_report_include'] 	= 	'Inclusão de Relatório';
 	$language['JS_menu_report_name'] 		= 	'Escolha um nome para o relatório';

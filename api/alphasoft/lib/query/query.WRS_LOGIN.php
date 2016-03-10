@@ -107,7 +107,21 @@ EOF;
 EOF;
 		return $query;
 	}
+	
+	/**
+	 * Apenas para pegar o email do usuário
+	 * @param string $USER_CODE
+	 * 
+	 * @return string
+	 */
+	public static function SELECT_EMAIL($USER_CODE)
+	{
+		$query		=	<<<EOF
+				SELECT USER_EMAIL,USER_DESC from ATT_WRS_USER WHERE USER_CODE='{$USER_CODE}'
+EOF;
 
+		return $query;
+	}
 }
 
 ?>

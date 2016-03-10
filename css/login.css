@@ -5,6 +5,11 @@ body {
 	text-align: center;
 }
 
+.topNegativo{
+	top: -500px;	
+	position: fixed;
+}
+
 .full {
   background: url(../imagens/wrs_background.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -24,6 +29,14 @@ body {
 src='imagens/wrs_background.jpg', sizingMethod='scale');
 	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader( 
 src='imagens/wrs_background.jpg', sizingMethod='scale')";
+}
+
+
+
+.checkbox input{
+	
+	margin-top: 2px;
+	
 }
 
 

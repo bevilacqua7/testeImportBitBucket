@@ -1,0 +1,6 @@
+[10-Mar-2016 12:13:32 America/Sao_Paulo] PHP Warning:  require_once(Mail.php): failed to open stream: No such file or directory in E:\WEB\_root\DEV\SANTOS\WRS\api\PHPMailer\index.php on line 6
+[10-Mar-2016 12:13:32 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'Mail.php' (include_path='.;C:\php\pear') in E:\WEB\_root\DEV\SANTOS\WRS\api\PHPMailer\index.php on line 6
+[10-Mar-2016 12:13:35 America/Sao_Paulo] PHP Warning:  require_once(Mail.php): failed to open stream: No such file or directory in E:\WEB\_root\DEV\SANTOS\WRS\api\PHPMailer\index.php on line 6
+[10-Mar-2016 12:13:35 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'Mail.php' (include_path='.;C:\php\pear') in E:\WEB\_root\DEV\SANTOS\WRS\api\PHPMailer\index.php on line 6
+[10-Mar-2016 12:13:43 America/Sao_Paulo] PHP Warning:  require_once(Mail.php): failed to open stream: No such file or directory in E:\WEB\_root\DEV\SANTOS\WRS\api\PHPMailer\index.php on line 6
+[10-Mar-2016 12:13:43 America/Sao_Paulo] PHP Fatal error:  require_once(): Failed opening required 'Mail.php' (include_path='.;C:\php\pear') in E:\WEB\_root\DEV\SANTOS\WRS\api\PHPMailer\index.php on line 6
