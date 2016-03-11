@@ -3,6 +3,15 @@
 
 	$language	=	 array();
 	
+	
+	$language['DESCONECTED_TITLE']		=	"UNPLUGGED USER";
+	$language['DESCONECTED_DESCRIPT']	=	"User disconnected from the system for several reasons:";
+	$language['DESCONECTED_BUTTON']		=	"BACK TO LOGIN";
+	$language['DESCONECTED_REASONS']	=	array('Inactivity in session,','Change password,','Database connectionless,','password expired,','Among others.');
+	
+	
+	
+	
 	/*
 	 * INFO AgendaExport.php
 	 */

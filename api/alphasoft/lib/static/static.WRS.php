@@ -333,7 +333,7 @@ class WRS
 	 */
 	public static function GET_LOGIN_ID()
 	{
-		return $_SESSION['LOGIN_ID'];
+		return trim($_SESSION['LOGIN_ID']);
 	}
 	
 	/**
