@@ -23,6 +23,7 @@ include_once(dirname(__DIR__).DS.'api'.DS.'alphasoft'.DS.'config.php');
 
 includeSTATIC('WRS');
 includeCLASS('Global');
+includeCLASS('SendMail');
 
 
 

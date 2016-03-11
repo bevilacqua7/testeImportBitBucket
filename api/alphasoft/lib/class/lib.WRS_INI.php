@@ -45,7 +45,13 @@ class WRS_INI
 	{
 	
 		return self::$full_ini['tmp'];
+	}
 	
+	
+	public static function mail()
+	{
+	
+		return self::$full_ini['mail'];
 	}
 	
 	

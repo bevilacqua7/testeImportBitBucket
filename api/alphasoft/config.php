@@ -96,6 +96,25 @@ function includeAJAX($filename)
 }
 
 /**
+ * Incluindo API do siste
+
+ * @param include $fileName
+ */
+function includeAPI($fileName)
+{
+
+	$filename_configure	=	PATH_API.$fileName.'.php';
+
+	if(@file_exists($filename_configure)){
+		include_once $filename_configure;
+	}else{
+		echo 'Arquivo includeCLASS <b>'.$filename_configure.'</b> Não encontrado';
+		exit();
+	}
+	
+}
+
+/**
  * Inlcui o arquivo da pasta QUERY
  *
  * @param string $filename
