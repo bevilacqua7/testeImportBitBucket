@@ -380,6 +380,7 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 		
 
 	var arrObjetosSelecionados 	= 	[];
+	var objObjetosSelecionados 	= 	{};
 	var arrRegisterIds 			= 	[];
 	if(qtde_linhas_selecionadas>0)
 	{
@@ -410,7 +411,10 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 								arrRegisterIds.push(objDados[chave_primaria]);
 							}
 							arrObjetosSelecionados.push(objDados);
-														
+
+							if(table=='ATT_WRS_USER'){
+								objObjetosSelecionados[objDados['USER_ID']]	= objDados['USER_CODE'];
+							}
 					});
 		}
 	}
@@ -676,9 +680,8 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 																var Oevent				=	'changePassUser';	
 
 																var options				=	{
-																									'qtde'				:	qtde_linhas_selecionadas,
 																									'operacao'			:	operacao,
-																									'ids_registros'		:	arrRegisterIds,
+																									'objSelecionados'	:	objObjetosSelecionados,
 																									'senha'				:	nova_senha
 																							};
 																runCall(options,Ofile,Oclass,Oevent,funCallBackData,'modal','json');

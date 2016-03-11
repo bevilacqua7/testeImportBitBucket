@@ -196,9 +196,14 @@ EOF;
 				}
 				
 				$classHide = (isset($param['class']) && strstr($param['class'],'hide'))?' hide':'';
-				
+
 				$rels		=	 array('class'=>'form-group form-control-wrs_color'.$classHide);
 				$rel		=	 $this->getParamFormInput($this->merge_array_value($param,$rels));
+				
+				// felipeb 20160311 - por ser dinamico a montagem dos class ao inves de respeitar o padrao do form, trato o que vier antes de gravar no HTML para permitir que um campo HIDE porem com edit_on_new=true apareca no formulario para sua inclusao durante a criacao do registro
+				if(isset($param['edit_on_new']) && $param['edit_on_new']==true && (!isset($param['value']) || $param['value']=='')){
+					$rel = str_replace('hide','',$rel);
+				}
 
 				$param['title_placeholder']	=$param['title'];
 				$param['label_title']		=$param['title'];
@@ -301,6 +306,12 @@ EOF;
 							if($param_select['table']=='ATT_WRS_USER' || $param_select['table']=='ATT_WRS_PERFIL'){
 								if($perfil_logado!='MST'){									
 									$where_query="PERFIL_ID != ''MST''";
+								}
+							}
+							if($param_select['table']=='ATT_WRS_CUSTOMER'){
+								$CUSTOMER_ID 			= 	WRS::CUSTOMER_ID();
+								if($perfil_logado!='MST'){									
+									$where_query		=	"CUSTOMER_ID = ".$CUSTOMER_ID;
 								}
 							}
 							

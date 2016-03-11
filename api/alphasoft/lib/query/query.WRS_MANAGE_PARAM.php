@@ -465,7 +465,7 @@ HTML;
 		$fields['USER_ID']   			= array('title'=>LNG('USER_ID')    			, 'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
 		$fields['USER_CODE']   			= array('title'=>LNG('USER_CODE')    		, 'key'=>true ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_DESC']   			= array('title'=>LNG('USER_DESC')    		, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_PWD']   			= array('title'=>LNG('USER_PWD')    		, 'length'=>32, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
+		$fields['USER_PWD']   			= array('title'=>LNG('USER_PWD')    		, 'type'=>'password', 'length'=>32, 'class'=>'hide', 'edit_on_new'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['USER_SALT']   			= array('title'=>LNG('USER_SALT')    		, 'length'=>32, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['USER_PWD_OLD']  	 	= array('title'=>LNG('USER_PWD_OLD')    	, 'length'=>32, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['USER_EMAIL']  			= array('title'=>LNG('USER_EMAIL')    		, 'length'=>200,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
