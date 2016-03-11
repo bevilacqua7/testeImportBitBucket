@@ -124,7 +124,7 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"js/jquery-ui/jquery.ui.touch-punch.min.js",	"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"js/jquery-ui/jquery.layout-latest.js",		"access"=>array("main","panel"));	//Main
 	 	
-	 	$tag[]		=	array("host"=>JS_PATH_API."Global.js",						"access"=>array("main","panel"));	//Main
+	 	$tag[]		=	array("host"=>JS_PATH_API."Global.js",						"access"=>array("main","panel",'login'));	//Main
 	 	$tag[]		=	array("host"=>JS_PATH_API."common.js",						"access"=>array("main","panel","login"));	//Main
 	 	$tag[]		=	array("host"=>"language_javascript.php",				"access"=>array("main","panel",'login'));			//Main
 	 	

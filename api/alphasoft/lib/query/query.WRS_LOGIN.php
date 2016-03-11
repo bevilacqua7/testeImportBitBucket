@@ -39,6 +39,9 @@ EOF;
 	/**
 	 * Verifica se o usuário encontra-se logado
 	 *
+	 *	Utilizar o 
+	 *	WRS::GET_LOGIN_ID()
+	 *
 	 * @param string $LOGIN_ID
 	 *
 	 * @return <string>

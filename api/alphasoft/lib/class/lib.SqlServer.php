@@ -20,6 +20,15 @@ class SQL_SERVER
 		$this->conn	= $conn;
 	}
 	
+	
+	public function isConnect($that)
+	{
+		includeCLASS('WRS_LOGIN');
+		$login	=	 new WRS_LOGIN();
+		$login->set_conn($this->get_conn());
+		$login->isUserConnect(false);
+	}
+	
 	/**
 	 * Retorna a Conexão do banco
 	 *
@@ -182,6 +191,53 @@ class SQL_SERVER
 			rename($file_path, $file_path.'_1');
 		}
 	}
+	
+	
+	public function logout($tag=false)
+	{
+		includeQUERY('WRS_LOGIN');
+		//Fazendo o Logout
+		$this->cleanTMP();
+		$this->query(QUERY_LOGIN::LOGOUT_SSAS(WRS::LOGIN_ID()));
+		session_destroy();
+	
+		if(!$tag) header('Location: login.php');
+	
+	}
+	
+	
+	/**
+	 * Verificando se o usuário está registrado no sistema
+	 *
+	 * @param boolean $tag
+	 * @return array
+	 */
+	public function isUserConnect($tag=false)
+	{
+		$login_id 	= 	WRS::GET_LOGIN_ID();
+		$param		=	 array('data'=>array('isUserConnect'=>false));
+	
+		//Foi chamado pelo Java script
+		if($tag)	header('Content-Type: application/json');
+	
+		if(!empty($login_id))
+		{
+			if($this->num_rows($this->query(QUERY_LOGIN::GET_SSAS_LOGIN($login_id))))
+				$param['data']['isUserConnect']	=	 true;
+			else
+				$param['data']['isUserConnect']	=	 false;
+		}
+	
+		if($tag)	return json_encode($param,true);
+	
+		if($param['data']['isUserConnect']==false)
+		{
+			$this->logout(true);
+			if(!$tag) header('Location: desconected.php?charset='.LNG('IDIOMA'));
+				
+		}
+	}
+	
 	
 	
 	public function cleanTMP()

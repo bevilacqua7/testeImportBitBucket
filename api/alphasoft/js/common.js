@@ -11,6 +11,7 @@
 
 var IS_TRACE		=	false;
 var IS_EXCEPTION	=	false;
+var TIME_CHECK_USER_CONECT		=	1;
 
 function filter_mouse_hover_details()
 {
@@ -23,6 +24,7 @@ function filter_mouse_hover_details()
 	}
 	
 }
+
 
 
 
@@ -296,90 +298,6 @@ function WRS_CONSOLE(){
 	}
 }
 
-function WRS_IS_LOGGED_IN(){
-	var loggedin	=	false;
-	
-	$.ajax({
-			  type		: 'POST',
-			  url		: 'run.php',
-			  data		: {'file':'WRS_LOGIN','class':'WRS_LOGIN','event':'userIsLogged','is_js':true},
-			  success	: 	function(data){
-				  
-				  						loggedin	=	data.is_loged;
-								//WRS_CONSOLE('LOGGED IN?',data,loggedin);	
-							},
-			dataType	:	'json',
-			async		:false  // este é o segredo de aguardar o retorno do ajax antes de retornar a funcao
-		});
-	
-	
-//	alert(loggedin);
-	
-	return loggedin;
-}
-	
-function verifica_loggedin_periodico(){
-	var periodicidade 	= 	60;//em segundos
-	var logado 			= 	WRS_IS_LOGGED_IN(); // retorna o loginsessionID ou false caso nao esteja logado
-/*
-	var confCookie		= 'WRS_session_cookie';
-	
-	if(wrsCookies.hasItem(confCookie) && wrsCookies.getItem(confCookie)){
-		
-	}	
-	
-	wrsCookies.setItem('name',admin);
-
-	if (wrsCookies.getItem('name')=='admin'){alert('Welcome Admin.')}else{alert('You are Not User')}
-
-*/
-	if(logado===false){
-		if(window.location.href.substr(-9,9)!='login.php'){
-			var logoff = function(){ 
-					window.location	= "run.php?file=WRS_MAIN&class=WRS_MAIN&event=logout";
-			}
-
-			var MODAL_JOB			=	'.modal-window-wrs';
-			var MODAL_LOGOFF		=	'.modal-window-wrs-logoff';
-			var _html	=	'<!--  Modal LOGOFF -->'+
-							'		<div class="modal-window-wrs-logoff modal-window-wrs hide" >'+
-							'			<div class="modal-box-wrs  modal-type-primary modal-size-normal" style="position: absolute; top: 50%; margin-top: -72px; ">'+
-							'				<div class="modal-inner-wrs">'+
-							'						<div class="modal-title-wrs-job">'+
-							'							<h3><!-- Primary -->&nbsp;</h3> '+
-							'						</div>'+
-							'						<div class="modal-text-wrs-job">'+
-							'							<i class="fa fa-exclamation-triangle"></i> '+LNG('MSG_FORCE_LOGOFF')+
-							'						</div>'+
-							'						<div class="modal-buttons-wrs-job" report_id="">'+
-							'							<button class="btn btn-warning modal-btn-padding modal-btn-job-wrs   action_logoff modal-btn-job-wrs_btn"> <span class="title"> <i class="glyphicon glyphicon-off color_white"></i> '+LNG('BTN_CLOSE')+' </span> </button>'+
-							'						</div>'+
-							'				</div>'+
-							'			</div>'+
-							'		</div>'+
-							'<!--  END Modal LOGOFF -->';
-
-			//Garante que não exista outra janela
-			$('body').find(MODAL_JOB).each(function(){$(this).remove()});
-
-			//Adiciona a estrutura da JANELA
-			$('body').append(_html);
-
-			$(MODAL_LOGOFF).width($(window).width()).height($(window).height()).removeClass('hide');				
-			$('.action_logoff').unbind('click').click(logoff);				
-		}
-	}else{
-		setTimeout(function(){
-			verifica_loggedin_periodico();
-		},periodicidade*1000);
-	}
-
-}
-
-
-if(SERVER_REQUEST_URI!='login'){
-	//verifica_loggedin_periodico();
-}
 
 
 function changeTypeRun(IDGrid,typeRun)
@@ -1032,7 +950,9 @@ function runCall(param_request,Ofile,Oclass,Oevent,funCallBack,typeAlert,typeDat
 	var param	=	{'class':Oclass,'file':Ofile,'event':Oevent};
 		param	=	merge_objeto(param,param_request);
 
-
+	$('body').WrsGlobal('setCM',{isDesconected:countTimeCheck()});
+	
+		
 	TRACE('Enviando parametro para o run.php mas sem esperar resposta file:common.js');	
 	$.post('run.php',param,funCallBack,typeData).fail(function() {
 			if(typeAlert=='modal')
@@ -1045,6 +965,56 @@ function runCall(param_request,Ofile,Oclass,Oevent,funCallBack,typeAlert,typeDat
 			
 	  });
 	TRACE('runCall finalizado');
+}
+
+
+function countTimeCheck()
+{
+	var __time		=	parseInt(date('i'))+TIME_CHECK_USER_CONECT;
+	return mktime (date('H') , __time , date('s') ,date('m'),date('d'),date('Y'));
+}
+
+function getDataDisconectUser(data)
+{
+	_ONLY('getDataDisconectUser');
+	if(data.data.isUserConnect==false)
+	{
+		SYSTEM_OFF	=	true;
+		$('#fakeloader').show();
+		window.location='desconected.php?charset='+LNG('IDIOMA');
+	}
+}
+
+function isDesconected()
+{
+	
+	var _isDesconected	=	$('body').WrsGlobal('getCM','isDesconected');
+	
+	if(isEmpty(_isDesconected))
+	{
+		$('body').WrsGlobal('setCM',{isDesconected:countTimeCheck()});
+	}
+	
+	
+	if(_isDesconected<=mktime())
+	{
+			var _file	=	'WRS_LOGIN';
+		var _class	=	'WRS_LOGIN';
+		var _event	=	'isUserConnect';
+
+		var _param_request	=	{};
+		
+		//Remove o report ID
+		runCall(_param_request,_file,_class,_event,getDataDisconectUser,'modal');
+		
+		
+		//Ajusta novamente a validação
+		$('body').WrsGlobal('setCM',{isDesconected:countTimeCheck()});
+	}
+	
+	setTimeout(isDesconected,1000*30);//60 Segundos
+	
+	
 }
 
 
@@ -1669,3 +1639,12 @@ function addKendoUiColorJQueryGrid()
 	
 	 _END('addKendoUiColorJQueryGrid');
 }
+
+//CheckPassword
+$(function(){
+	
+	
+	if(typeof NOT_CHECK_LOGIN=='undefined'){
+		isDesconected();
+	}
+	});

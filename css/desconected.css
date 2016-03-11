@@ -1,0 +1,101 @@
+@import
+	url(https://fonts.googleapis.com/css?family=Ubuntu:400,700,400italic,700italic)
+	;
+
+body {
+	font-size: 16px;
+	line-height: 24px;
+	font-family: Ubuntu, sans-serif;
+	margin: 0;
+	padding: 0;
+	-webkit-text-size-adjust: 100%;
+	background-color: #f0f0f0;
+}
+
+.button {
+	border-radius: 4px;
+	display: inline-block;
+	font-weight: bold;
+	text-align: center;
+	text-decoration: none !important;
+	transition: opacity 0.1s ease-in;
+	color: #fff;
+	background-color: #80bf2e;
+	font-family: Ubuntu, sans-serif;
+	font-size: 14px;
+	line-height: 24px;
+	padding: 12px 35px;
+	margin-top: 30px;
+}
+
+.button:hover {
+	background-color: #80b000;
+}
+
+ul, li {
+	list-style: none;
+}
+
+p {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.textCenter {
+	text-align: center;
+}
+
+a {
+	text-decoration: underline;
+	transition: opacity 0.1s ease-in;
+	color: #80bf2e
+}
+
+h1 {
+	font-size: 35px;
+	line-height: 43px;
+	text-align: left;
+	Margin-top: 0;
+	Margin-bottom: 0;
+	font-style: normal;
+	font-weight: normal;
+	color: #565656;
+	line-height: 34px;
+	text-align: center;
+	color: red;
+}
+
+.container {
+	Margin-left: 20px;
+	Margin-right: 20px;
+	padding: 35px 20px 35px 20px;;
+}
+
+.container_center, .header {
+	border-collapse: collapse;
+	table-layout: fixed;
+	margin-left: auto;
+	margin-right: auto;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	word-break: break-word;
+	background-color: #ffffff;
+	text-align: left;
+	max-width: 600px;
+}
+
+.header {
+	background: none;
+	text-align: center;
+	margin-top: 70px;
+	margin-bottom: 30px;
+}
+
+.container_center {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.21);
+	-moz-box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.21);
+	box-shadow: 2px 2px 3px 0px rgba(50, 50, 50, 0.21);
+}

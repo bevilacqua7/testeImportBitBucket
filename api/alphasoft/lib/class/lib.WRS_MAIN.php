@@ -21,7 +21,7 @@ class WRS_MAIN  extends WRS_BASE
 		{
 			case 'updateTheme'  : $this->updateTheme(); break;
 			case 'updateIdioma' : $this->updateIdioma(); break;
-			case 'logout' 		: $this->logout(); break;
+			case 'logout' 		: return $this->logout(); break;
 		}
 		
 		if(!empty($event))  exit();
@@ -29,6 +29,10 @@ class WRS_MAIN  extends WRS_BASE
 		// ao entrar na pagina inicial do sistema, apaga os historicos existentes para nao interferir na criacao de novos relatorios
 		WRS::DEL_ALL_REPORT_HISTORY();
 		
+		//Verifica se o usuário está conectado
+		//HEARE		
+		
+		$this->isConnect($this);
 		
 		WRS_TRACE('Pegando as variáveis para montar o template', __LINE__, __FILE__);
 		$SELECT_THEME		=	$this->getTheme();
@@ -48,16 +52,6 @@ class WRS_MAIN  extends WRS_BASE
 		
 	}
 	
-	private function logout()
-	{
-		includeQUERY('WRS_LOGIN');
-		//Fazendo o Logout
-		$this->cleanTMP();
-		$this->query(QUERY_LOGIN::LOGOUT_SSAS(WRS::LOGIN_ID()));
-		session_destroy();
-		header('Location: login.php');
-		exit();
-	}
 	
 	private function updateTheme()
 	{

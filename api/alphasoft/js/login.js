@@ -44,13 +44,20 @@ function valida_usuario()
 	wrsCheckLogin($('#user').val(), $('#password').val(),'login', $('#user_remote').val());
 }
 
-
+function LoginMensagen(string)
+{
+	$('.mensagens').html(string);
+}
 
 function wrs_click_user()
 {
+	
 	var login =	 $(this).attr('user');
 	var pwd =	 $(this).attr('pwd');
+	LoginMensagen('');
 
+		remove_new_password();
+	
 	$('#user').val(login);
 	$('#password').val(pwd);
 }
@@ -63,6 +70,7 @@ function wrs_remove_user_temp()
 
 	if(confirm)
 	{
+		$('body').WrsGlobal('setCM',{remove:true});
 		$(this).parent().remove();
 		wrsCheckLogin(getUser, '','remove');
 		
@@ -72,23 +80,13 @@ function wrs_remove_user_temp()
 
 
 
-var _TIME_RELOAD		=	11;
 
 function start_time_reload_login()
 {
-	_TIME_RELOAD--;
 	
-	$('.logtime').html(_TIME_RELOAD);
-	
-	if(_TIME_RELOAD==0)
-	{
 		$("#fakeloader").show();
 		window.location	='login.php?msg=LOGIN_ADD_NEW_RECOVER';
 		return false;
-	}
-	setTimeout(start_time_reload_login,1000);
-	
-	
 }
 
 var function_call_login	=	 function(data){
@@ -105,8 +103,8 @@ var function_call_login	=	 function(data){
 		{
 			if(data.data.change==true)
 			{
-				$( "#password_new,#password_new_confirm" ).remove();
-				$('#password').val(null).focus();
+				$('#password').val($('#password_new').val());
+				valida_usuario();
 			}
 		}
 		
@@ -129,7 +127,7 @@ var function_call_login	=	 function(data){
 		//Valida login 
 		if(data.data.login==true)
 		{
-			$('.mensagens').html(data.html);
+			LoginMensagen(data.html);
 			
 			$("#fakeloader").show();
 			window.location	=	'run.php?file=WRS_MAIN&class=WRS_MAIN&ncon';
@@ -138,23 +136,27 @@ var function_call_login	=	 function(data){
 		
 	
 	
-	$('.mensagens').html(data.html);
+	LoginMensagen(data.html);
 	
 	
 	
 	if(empty(data.html))
 	{
-		$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
+		LoginMensagen(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
 	}
 	
 	TRACE('O post da run.php wrsCheckLogin da common.js foi concluido');
 };
 
-
+function remove_new_password()
+{
+	$('#password_new,#password_new_confirm').remove();
+}
 
 
 function password_recover()
 {
+	remove_new_password();
 	wrsCheckLogin($('#user').val(), '','recover_login', '');
 }
 
@@ -163,7 +165,7 @@ function wrs_login_recover()
 	//RECOVER
 	create_new_pass();
 	$('#password,#user').remove();
-	$('.mensagens').html(fwrs_success(LNG('LOGIN_RECOVER_NEW')));
+	LoginMensagen(fwrs_success(LNG('LOGIN_RECOVER_NEW')));
 	$('.checkbox,.wrs_info').hide();
 
 }
@@ -189,7 +191,7 @@ function create_new_pass()
 			required:true
 		};
 	
-	$('#password_new,#password_new_confirm').remove();
+	remove_new_password()
 	$('.new_password').append($('<input/>',_param)).append($('<input/>',_param_du));
 	$('#password_new').focus();
 	
@@ -215,14 +217,14 @@ function wrsCheckLogin(login,pwd,event,perfil)
 		if(isEmpty(login)) 
 		{
 			mensagem	=	sprintf(LNG('LOGIN_PASSWORD_EMPTY'),LNG('LOGIN_USER_SYSTEM'));
-			$('.mensagens').html(fwrs_error(mensagem));
+			LoginMensagen(fwrs_error(mensagem));
 			
 			return false;
 		}
 	
-		if(isEmpty(pwd)) {
+		if(isEmpty(pwd) && !$('body').WrsGlobal('getCM','remove')) {
 			mensagem	=	sprintf(LNG('LOGIN_PASSWORD_EMPTY'),LNG('LOGIN_PASSWORD'));
-			$('.mensagens').html(fwrs_error(mensagem));
+			LoginMensagen(fwrs_error(mensagem));
 			return false;
 		}
 	//end empty
@@ -262,7 +264,7 @@ function wrsCheckLogin(login,pwd,event,perfil)
 		if(isEmpty(password_new))
 		{
 			var _placeholder	=	$('#password_new').attr('placeholder');
-			$('.mensagens').html(fwrs_error(sprintf(LNG('LOGIN_PASSWORD_EMPTY'),_placeholder)));
+			LoginMensagen(fwrs_error(sprintf(LNG('LOGIN_PASSWORD_EMPTY'),_placeholder)));
 			return false
 		}
 		
@@ -270,7 +272,7 @@ function wrsCheckLogin(login,pwd,event,perfil)
 		if(isEmpty(password_new_confirm))
 		{
 			var _placeholder	=	$('#password_new_confirm').attr('placeholder');
-			$('.mensagens').html(fwrs_error(sprintf(LNG('LOGIN_PASSWORD_EMPTY'),_placeholder)));
+			LoginMensagen(fwrs_error(sprintf(LNG('LOGIN_PASSWORD_EMPTY'),_placeholder)));
 			return false
 		}
 		
@@ -279,7 +281,7 @@ function wrsCheckLogin(login,pwd,event,perfil)
 		//verificando se é igual
 		if(password_new_confirm!=password_new)
 		{
-			$('.mensagens').html(fwrs_error(LNG('LOGIN_NEW_PASSWORD_CONFIRM_ERROR')));
+			LoginMensagen(fwrs_error(LNG('LOGIN_NEW_PASSWORD_CONFIRM_ERROR')));
 			return false
 		}
 		
@@ -290,10 +292,10 @@ function wrsCheckLogin(login,pwd,event,perfil)
 	}
 	
 	
-	$('.mensagens').html(mensagem);
+	LoginMensagen(mensagem);
 	
 	$.post('run.php',_param,function_call_login,"json").fail(function() {
-		$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
+		LoginMensagen(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
 	  });
 	
 
