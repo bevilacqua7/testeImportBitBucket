@@ -1,7 +1,19 @@
+function scripts_ini_after_load_modal_admin(){
+	confere_botao_touch();
+	bt_reset_senha_user();
+}
+
 function confere_botao_touch(){
 	if(Modernizr.touch && $('.modal-content-grid .modal-body div.k-grid').length>0){
 		var botoes = $('.modal-content-grid .modal-footer button[action_type]');
-		botoes.parent().prepend(botoes.first().clone().attr('class','').addClass('btn btn-primary btn-color-write btn_window_grid_event').attr('action_type','dbl_click_btn').html('<li class="fa fa-pencil"></li> '+LNG('BTN_UPDATE')));
+		$( botoes.first().clone().attr('class','').addClass('btn btn-primary btn-color-write btn_window_grid_event').attr('action_type','dbl_click_btn').html('<li class="fa fa-pencil"></li> '+LNG('BTN_UPDATE')) ).insertAfter( botoes.parent().children().first() );
+	}
+}
+
+function bt_reset_senha_user(){
+	if($('.modal-content-grid .wrs_window_grid .k-grid').attr('id')=="ATT_WRS_USER"){ // validar perfil logado para MST E ADM apenas
+		var botoes = $('.modal-content-grid .modal-footer button[action_type]');
+		$( botoes.first().clone().attr('class','').addClass('btn btn-warning btn-color-write btn_window_grid_event').attr('action_type','reset_password').html('<li class="fa fa-exclamation-triangle"></li> '+LNG('TITLE_ALTER_SENHA')) ).insertBefore( botoes.parent().children().last() );
 	}
 }
 
@@ -10,81 +22,9 @@ function callback_load_admin_generic_modal_associations(arg,tabela)
 	var indexClique = arg.dadosHandlerEvento.target.cellIndex;
 	var coluna_clicada = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[indexClique]).attr('data-field');	
 	if(coluna_clicada=='USER_CODE' || coluna_clicada=='CUBE_DESC'){
-		_START('callback_load_admin_generic_modal_associations');
-		
-		callback_load_admin_generic_modal(arg,tabela,{'coluna_clicada':coluna_clicada,'form_event':'form_exception'});
-		
-		/*
-		var opcoes={};
-		var dados_registro = {};
-		
-		$(arg.dadosHandlerEvento.target).parent().find('td').each(function(){ 
-			var indx = $(this).index();
-			var nome = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[indx]).attr('data-field');			
-			var valor= $($(arg.dadosHandlerEvento.target).parent().find('td')[indx]).text();
-			dados_registro[nome]=valor;
-		});
-
-		opcoes['coluna_clicada']	=coluna_clicada;
-		opcoes['valores_linha']		=dados_registro;
-		
-		var association_save_button	=	 function(content)
-		{
-			var _content = content;
-			if(!isEmpty(_content)){
-				
-				_START('association_save_button');
-				
-				var Ofile				=	'REL_WRS_CUBE_USER';
-				var Oclass				=	'REL_WRS_CUBE_USER';
-				var Oevent				=	'save_association';	
-				_content['event']		=	Oevent;
-				
-				var funCallBackSaveButton	=	 function(data)
-				{
-					$('#'+tabela).data('kendoGrid').dataSource.read();
-					WRS_ALERT(data.mensagem,data.type,function(){ 
-																	$('#myModalGenericConfig .bt-cancelar').trigger('click'); 
-																	$('#myModalGenericConfig  .modal-body').html(''); 
-																});	
-				}
-				
-				runCall(_content,Ofile,Oclass,Oevent,funCallBackSaveButton,'modal','json');
-				
-				_END('association_save_button');
-				
-			}
-		}
-	
-		var _title = LNG('tpl_association_title')+((coluna_clicada=='USER_CODE')?LNG('tpl_association_title_user'):LNG('tpl_association_title_cube'));
-		
-		var optionsDefault			= {
-												'file'									:	'REL_WRS_CUBE_USER', 
-												'classe'								:	'REL_WRS_CUBE_USER',
-												'event'									:	'form_association_html',
-												'title'									:	_title,
-												'bt_voltar'								:	false,
-												'bt_salvar'								:	true,
-												'bt_atualizar'							:	false,
-												'bt_apagar'								:	false,
-												'bt_salvar_extra_action_validator'		:	association_save_button,
-												'bt_atualizar_extra_action_validator'	:	null,
-												'bt_apagar_extra_action_validator'		:	null,
-												'bt_cancelar'							:	true,
-												'returnModal'							:	false,
-												'btn_events'							:	null, //function(){ return true; },
-												'extraParam'							:	opcoes
-											};
-		
-		$(this).modalGeneric(optionsDefault);
-		*/
-		_END('callback_load_admin_generic_modal_associations');
+		callback_load_admin_generic_modal(arg,tabela,{'coluna_clicada':coluna_clicada,'form_event':'form_exception'});	
 	}
 }
-
-
-
-
 
 function callback_load_admin_generic_modal(arg,tabela,opcoes)
 {
@@ -228,7 +168,7 @@ _START('carrega_grid_list_admin');
 		
 			$('.modal-content-grid').html(data);
 
-			confere_botao_touch();
+			scripts_ini_after_load_modal_admin();
 			 
 			wrs_window_grid_events_tools({btn:btn_window_grid_event_admin, visao: funCallBackVision});
 			
@@ -284,6 +224,7 @@ _START('carrega_grid_list_admin');
 
 function btn_window_grid_event_admin(data,_action_type,_table)
 {
+
 	_START('btn_window_grid_event_admin:0808');
 	var action_type				=	 _action_type!=undefined?_action_type:$(this).attr('action_type');
 	var table					=	 _table!=undefined?_table:$(this).attr('table');
@@ -321,7 +262,7 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 					var valor_campo 	= parseInt($(this).val());
 					var nome_campo		= $(this).attr('placeholder');
 					nome_campo			= nome_campo!=''?'('+nome_campo+')':'';
-					if (typeof max_val !== typeof undefined && max_val !== false && valor_campo >= max_val) {
+					if (typeof max_val !== typeof undefined && max_val !== false && valor_campo > max_val) {
 						var campo = $(this);
 						valida_form=false;	
 						WRS_CONFIRM(LNG('JS_admin_preencha_maximo').replace('#NOMECAMPO#',nome_campo)+max_val+"<br>"+LNG('JS_admin_preencha_auto').replace('#VAL#',max_val),'warning',function(escolha){
@@ -334,7 +275,7 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 						return false;					
 					}
 					
-					if (typeof min_val !== typeof undefined && min_val !== false && (valor_campo <= min_val || valor_campo=='')) {
+					if (typeof min_val !== typeof undefined && min_val !== false && (valor_campo < min_val || valor_campo==='')) {
 						var campo = $(this);
 						valida_form=false;
 						WRS_CONFIRM(LNG('JS_admin_preencha_minimo').replace('#NOMECAMPO#',nome_campo)+min_val+"<br>"+LNG('JS_admin_preencha_auto').replace('#VAL#',min_val),'warning',function(escolha){
@@ -376,7 +317,7 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 			$('.modal-content-grid').html(data);
 			aplicaMascaraSeExiste();
 
-			confere_botao_touch();
+			scripts_ini_after_load_modal_admin();
 			 
 			wrs_window_grid_events_tools({btn:btn_window_grid_event_admin, visao: funCallBackVision});
 		_END('btn_window_grid_event_admin::funCallBack');	
@@ -439,6 +380,7 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 		
 
 	var arrObjetosSelecionados 	= 	[];
+	var objObjetosSelecionados 	= 	{};
 	var arrRegisterIds 			= 	[];
 	if(qtde_linhas_selecionadas>0)
 	{
@@ -469,7 +411,10 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 								arrRegisterIds.push(objDados[chave_primaria]);
 							}
 							arrObjetosSelecionados.push(objDados);
-														
+
+							if(table=='ATT_WRS_USER'){
+								objObjetosSelecionados[objDados['USER_ID']]	= objDados['USER_CODE'];
+							}
 					});
 		}
 	}
@@ -481,19 +426,6 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 											var retornoQuestion = function(escolha){
 												if(escolha){
 													_extraValues = {'objetosSelecionados':(escolha=='all')?'*':arrRegisterIds,'chave_primaria':chave_primaria};
-													if(table=='REL_WRS_CUBE_USER'){ // excecao para esta tela pois utiliza chaves compostas
-														var opcoes={};
-														var dados_registro = {};
-														/**
-														 * TODO: apos alterar para procedure ao inves de query, verificar o indice do WRS_DATA do kendoUi e pegar os valores direto do indice dele, e nao fazer o for abaixo para pegar os valores da linha!
-														 */
-														//$(arg.dadosHandlerEvento.target).parent().find('td').each(function(){ 
-														//	var indx = $(this).index();
-														//	var nome = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[indx]).attr('data-field');			
-														//	var valor= $($(arg.dadosHandlerEvento.target).parent().find('td')[indx]).text();
-														//	dados_registro[nome]=valor;
-														//});
-													}
 													btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 												}
 											}
@@ -675,11 +607,186 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 				case 'new' 		: 
 						btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 						break;
+						
+				case 'reset_password'	: {
+												var div_reset = 
+												$('<form/>').addClass('grid_window_values_form grid_alterar_senha')
+												.append(
+														$('<div/>').addClass('container-fluid')
+														.append(
+																$('<div/>').addClass('row form-group')
+																.append(
+																		$('<label/>').attr({'for':'caracter_d3'})
+																		.html(LNG('js_admin_new_pass')).css({'font-weight': 'normal'})  
+																		)
+																.append(
+																		$('<div/>').addClass('row form-control-wrs')
+																		.append(
+																				$('<input/>').prop({
+																				'type'			:'password',
+																				'name'			:'nova_senha',
+																				'id'			:'nova_senha',
+																				'placeholder'	: LNG('js_admin_new_pass_placeholder') 
+																				}).addClass('form-control-wrs-auto form-control')
+																				.css({'padding':'6px 12px !important'})
+																				.on('focus',function(){ $('.alerta_senha_igual').hide(); })
+																				)
+																		)
+																)
+														.append(
+																$('<div/>').addClass('row form-group')
+																.append(
+																		$('<label/>').attr({'for':'caracter_d3'})
+																		.html(LNG('js_admin_confirm_pass')).css({'font-weight': 'normal'}) 
+																		)
+																.append(
+																		$('<div/>').addClass('row form-control-wrs')
+																		.append(
+																				$('<input/>').prop({
+																				'type'			:'password',
+																				'name'			:'confirmar_senha',
+																				'id'			:'confirmar_senha',
+																				'placeholder'	:LNG('js_admin_new_pass_placeholder')
+																				}).addClass('form-control-wrs-auto form-control')
+																				.css({'padding':'6px 12px !important'})
+																				.on('focus',function(){ $('.alerta_senha_igual').hide(); })
+																				)
+																		)
+																)
+														.append( 
+																$('<div/>').addClass('row small').html(LNG('js_admin_observation'))
+																)
+														);
+											
+												var retornoQuestion = function(retorno_escolha){
+													if(retorno_escolha!='cancel'){
+														var s = qtde_linhas_selecionadas==1?'':'s';
+														var qtde = qtde_linhas_selecionadas>0?qtde_linhas_selecionadas:LNG('js_admin_pass_sintax_d');
+														var nova_senha 		= $('.grid_alterar_senha #nova_senha').val().trim();
+														var confirmar_senha = $('.grid_alterar_senha #confirmar_senha').val().trim();
+														var operacao = (nova_senha=='' && confirmar_senha=='')?'expirar':'definir';											
+														var op = operacao == 'definir'?LNG('js_admin_pass_sintax_a'):LNG('js_admin_pass_sintax_b'); 														
+														
+														var retornoQuestion2 = function(escolha){
+															if(escolha!=false){
+																
+																var funCallBackData			=	 function(data)
+																{
+																	WRS_ALERT(data.mensagem,data.type);
+																}
+																
+																var Ofile				=	'ATT_WRS_USER';
+																var Oclass				=	'ATT_WRS_USER';
+																var Oevent				=	'changePassUser';	
+
+																var options				=	{
+																									'operacao'			:	operacao,
+																									'objSelecionados'	:	objObjetosSelecionados,
+																									'senha'				:	nova_senha
+																							};
+																runCall(options,Ofile,Oclass,Oevent,funCallBackData,'modal','json');
+																
+															}
+														}
+														
+														var msg = op+qtde+LNG_s('js_admin_pass_sintax_c',((qtde_linhas_selecionadas>1)?'s':''));
+														WRS_CONFIRM(msg,'warning',retornoQuestion2);
+													}
+												}
+
+												WRS_CONFIRM(
+																div_reset,
+																'warning',
+																retornoQuestion,
+																undefined,
+																'custom',
+																[
+																 	{ 
+																 		text : LNG('BTN_SAVE'), 
+																 		addClass: 'btn-light-blue',
+																 		val : true, 
+																 		onClick:function(e){		
+																					 			var nova_senha 		= $('.grid_alterar_senha #nova_senha').val().trim();
+																					 			var confirmar_senha = $('.grid_alterar_senha #confirmar_senha').val().trim();
+																					 			if(nova_senha!='' || confirmar_senha!=''){
+																									if(nova_senha!=confirmar_senha){
+																										if($('.alerta_senha_igual').length>0) $('.alerta_senha_igual').remove(); 
+																										$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_same')+'</div>');
+																										return false;
+																									}
+																									if(nova_senha.length < 3 || confirmar_senha.length < 3){
+																										if($('.alerta_senha_igual').length>0) $('.alerta_senha_igual').remove(); 
+																										$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_min')+'</div>');
+																										return false;
+																									}
+																								}					
+																 								return true;
+																				 			}
+																 	},
+																 	{
+																 		text : LNG('MODAL_CONFIRM_BT_CANCEL'), 
+																 		val : 'cancel', 
+																 		onClick:function(e){																	
+											 													return true;
+																				 			}
+																 	}
+																]
+															);
+												
+											return false;
+											break;
+										};
 
 				case 'dbl_click_btn'	: {
 											if(qtde_linhas_selecionadas>0){			
-												if(qtde_linhas_selecionadas==1){			
-													callback_load_admin_generic_modal(arrObjetosSelecionados.shift());
+												if(qtde_linhas_selecionadas==1){													
+													var obj_linha_sel = arrObjetosSelecionados.shift();
+													if(table=='REL_WRS_CUBE_USER'){ // excecao para esta tela pois utiliza chaves compostas e tem de saber qual coluna deseja editar
+														
+														var retornoQuestion = function(coluna){															
+															if(coluna!='cancel' && coluna!=false){
+																callback_load_admin_generic_modal(obj_linha_sel,table,{'coluna_clicada':coluna,'form_event':'form_exception'});	
+															}else{
+																return false;
+															}
+														}
+														
+														WRS_CONFIRM(
+																		LNG('JS_admin_choice_column'),
+																		'warning',
+																		retornoQuestion,
+																		undefined,
+																		'custom',
+																		[
+																		 	{
+																		 		text : LNG('JS_admin_choice_column_user'), 
+																		 		val : "USER_CODE", 
+																		 		onClick:function(e){																	
+																		 								return true;
+																						 			}
+																		 	},
+																		 	{
+																		 		text : LNG('JS_admin_choice_column_cube'), 
+																		 		val : "CUBE_DESC", 
+																		 		onClick:function(e){																	
+													 													return true;
+																						 			}
+																		 	}/*, // se quiser colocar botao de cancelar...
+																		 	{
+																		 		text : LNG('MODAL_CONFIRM_BT_CANCEL'), 
+																		 		val : "cancel", 
+																		 		onClick:function(e){																	
+													 													return true;
+																						 			}
+																		 	}*/
+																		]
+																	);
+
+														break;
+														
+													}else{													
+														callback_load_admin_generic_modal(obj_linha_sel);
+													}
 												}else{
 													WRS_ALERT(LNG('JS_admin_select_just_one'),'warning');
 												}

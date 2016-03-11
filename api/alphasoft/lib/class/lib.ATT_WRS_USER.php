@@ -24,7 +24,8 @@ class ATT_WRS_USER extends WRS_BASE
 		$event	=	 fwrs_request('event');
 		switch($event)
 		{
-			case 'downloadFile' : $this->downloadFile(); break;
+			case 'downloadFile' 	: $this->downloadFile(); break;
+			case 'changePassUser' 	: $this->changePassUser(); break;
 		}
 	}
 	
@@ -32,6 +33,64 @@ class ATT_WRS_USER extends WRS_BASE
 		$this->admin->downloadFile();
 	}
 
+	public function changePassUser(){
+
+		header('Content-Type: application/json');
+		
+		$options		=	 array(
+				'operacao',
+				'objSelecionados',
+				'senha'
+		);
+
+		$parameter		=	 fwrs_request($options);
+		
+		includeQUERY('WRS_LOGIN');
+		$class_query_login = new QUERY_LOGIN();
+		
+		$arr_operacoes = array('expirar','definir');
+		if(in_array($parameter['operacao'],$arr_operacoes)){
+				
+			$query = array();
+			if($parameter['operacao']=='expirar'){
+				foreach($parameter['objSelecionados'] as $user_id=>$user_code){
+					$query[] = $class_query_login->RESET_SSAS_PASSWORD($user_code);
+				}
+			}else{
+				$CUSTOMER_ID 			= 	WRS::CUSTOMER_ID();
+				/*
+				 * TODO: se for todos os usuarios, varrer usuarios do customer e setar a query abaixo
+				 */
+				foreach($parameter['objSelecionados'] as $user_id=>$user_code){
+					$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( $user_code, '', $parameter['senha'], '', $CUSTOMER_ID ); // TODO: tratar $USER_MASTER - gravar no statis WRS 343, depois no WRS_LOGIN pra ser recuperado no sistema
+				}
+			}
+			
+			/*
+			 * TODO: implementar no language, a descricao dos campos no banco
+			 */
+			
+			/*
+			 }else{
+			 $rows 	= $this->fetch_array($query);
+			 if(array_key_exists('output', $rows)){
+			 $msg = $rows['output'];
+			 }else if(array_key_exists('ERROR_MESSAGE', $rows)){
+			 $status=false;
+			 $msg = $rows['ERROR_MESSAGE'];
+			 }
+			 */
+			
+			$mensagems['mensagem']	=	"<pre>".print_r($query,1)."</pre>";//'PHP OK - registros: '.$parameter['qtde'].' - Operacao: '.$parameter['operacao'].' - Senha: '.$parameter['senha'].' - Objetos: <pre>'.print_r($parameter['objSelecionados'],1).'</pre>' ;
+			$mensagems['type']		=	'success';
+					
+			echo json_encode($mensagems);
+			
+		}else{
+			return false;
+		}
+	}
+	
 	public function insert($options)
 	{
 		return $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
@@ -93,16 +152,6 @@ class ATT_WRS_USER extends WRS_BASE
 				$msg					=	$DATA_BASE_ERROR.$st[0]['message'];
 				$this->admin->retornaMsgAcaoTelaAdmin($query,$msg,$_tabela,$query_exec);
 				return false;
-				/*
-					}else{
-					$rows 	= $this->fetch_array($query);
-					if(array_key_exists('output', $rows)){
-					$msg = $rows['output'];
-					}else if(array_key_exists('ERROR_MESSAGE', $rows)){
-					$status=false;
-					$msg = $rows['ERROR_MESSAGE'];
-					}
-					*/
 			}
 		}
 		$msg = LNG_S('ADMIN_REG_DELETED',((count($_regForDelete['objetosSelecionados'])>1)?'s':''));

@@ -638,15 +638,18 @@ EOF;
 		// felipeb 20160226
 		$perfil_logado 		= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
 		if($perfil_logado!='MST' || $perfil_logado=='ADM'){
-			$CUTOMER_ID 			= WRS::CUSTOMER_ID();
+			$CUSTOMER_ID 			= WRS::CUSTOMER_ID();
 			if($table=='ATT_WRS_USER'){
-				$where="PERFIL_ID != ''MST'' and CUSTOMER_ID = ".$CUTOMER_ID;
+				$where="PERFIL_ID != ''MST'' and CUSTOMER_ID = ".$CUSTOMER_ID;
 			}
 			if($table=='ATT_WRS_CUSTOMER'){
-				$where="PERFIL_ID != ''MST'' and CUSTOMER_ID = ".$CUTOMER_ID;
+				$where="CUSTOMER_ID = ".$CUSTOMER_ID;
+			}
+			if($table=='REL_WRS_CUBE_USER'){
+				$where="CUSTOMER_ID = ".$CUSTOMER_ID;
 			}
 			if(WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($table)=='ATT_WRS_LOG'){
-				$where="CUSTOMER_ID = ".$CUTOMER_ID;
+				$where="CUSTOMER_ID = ".$CUSTOMER_ID;
 			}
 		}
 		
