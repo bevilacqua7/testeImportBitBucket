@@ -482,6 +482,21 @@
 	$language['JS_menu_report_include'] 	= 	'Inclusão de Relatório';
 	$language['JS_menu_report_name'] 		= 	'Escolha um nome para o relatório';
 
+	$language['JS_admin_choice_column'] 	= 	'Qual coluna deseja editar?';
+	$language['JS_admin_choice_column_user']= 	'Usuário';
+	$language['JS_admin_choice_column_cube']= 	'Cubo';
+	
+	$language['js_admin_pass_sintax_a']		=	'Deseja realmente definir uma nova senha para ';
+	$language['js_admin_pass_sintax_b']		=	'Deseja realmente expirar a senha para ';
+	$language['js_admin_pass_sintax_c']		=	' usuário%s';
+	$language['js_admin_pass_sintax_d']		=	'todos os';
+	$language['js_admin_pass_same']			=	'A senha e a confirmação de senha precisam ser iguais.';
+	$language['js_admin_pass_min']			=	'A senha e a confirmação de senha não podem ter menos de 3 caracteres.';
+	$language['js_admin_observation']		=	'* deixe os campos em branco para expirar a senha';
+	$language['js_admin_new_pass_placeholder']=	'mínimo de 3 caracteres';
+	$language['js_admin_new_pass']			=	'Nova Senha: ';
+	$language['js_admin_confirm_pass']		=	'Confirmar Senha: ';
+	
 	$language['JS_admin_confirm_export'] 	= 	'Deseja exportar quais registros?';
 	$language['JS_admin_all_records'] 		= 	'Todos os registros';
 	$language['JS_admin_selecteds'] 		= 	'Somente o%s selecionado%s';

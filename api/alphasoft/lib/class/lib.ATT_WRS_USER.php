@@ -24,7 +24,8 @@ class ATT_WRS_USER extends WRS_BASE
 		$event	=	 fwrs_request('event');
 		switch($event)
 		{
-			case 'downloadFile' : $this->downloadFile(); break;
+			case 'downloadFile' 	: $this->downloadFile(); break;
+			case 'changePassUser' 	: $this->changePassUser(); break;
 		}
 	}
 	
@@ -32,6 +33,26 @@ class ATT_WRS_USER extends WRS_BASE
 		$this->admin->downloadFile();
 	}
 
+	public function changePassUser(){
+
+		header('Content-Type: application/json');
+		
+		$options		=	 array(
+				'qtde',
+				'operacao',
+				'ids_registros',
+				'senha'
+		);
+				
+		$parameter		=	 fwrs_request($options);
+		
+		$mensagems['mensagem']	=	'PHP OK - registros: '.$parameter['qtde'].' - Operacao: '.$parameter['operacao'].' - Senha: '.$parameter['senha'] ;
+		$mensagems['type']		=	'success';
+				
+		echo json_encode($mensagems);
+		
+	}
+	
 	public function insert($options)
 	{
 		return $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
