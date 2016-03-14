@@ -847,7 +847,7 @@ HTML;
 		$table				=	$param['table'];
 		$model				=	array();
 		$modelField			=	array();	
-		
+		$filterable 		=	isset($param['filterable'])?$param['filterable']:false;
 		
 		$_column		=	 json_encode($column,true);
 		$_param			=	 json_encode($param,true);
@@ -909,6 +909,7 @@ HTML;
                        				sortable:true,
 									resizable:true,
 									scrollable:true,
+									filterable:{$filterable},
 									pageable:	{
 													refresh		:false,
 													pageSizes	:[10,25,50,100,200,500,1000],
@@ -927,6 +928,7 @@ HTML;
 		            
 HTML;
 
+		
 		return $grid;	
 		
 	}

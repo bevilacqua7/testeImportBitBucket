@@ -517,8 +517,9 @@ EOF;
 				'basic'		=> 	1,
 				'grid' 		=> 	1,
 				'field' 	=> 	'checkbox_linha',//chamada muito importante 
-				'width' 	=> 	25/*,
-				'template'	=>	'#=checkbox_linha#'*/
+				'width' 	=> 	25,
+				'filterable'=>	false
+				/*,'template'	=>	'#=checkbox_linha#'*/
 		);
 	}
 	
@@ -545,6 +546,8 @@ EOF;
 					}
 					$_tmp_column			=	$field;
 					$_tmp_column['field']	=	$label;
+					
+					$_tmp_column['filterable'] = (array_key_exists('filterable',$field) && $field['filterable']) ?true:false;
 					
 					/*
 					 * TODO: Analisar o porquê do KendoUi não respeitar o tamanho das colunas enviadas para o script.  A coluna está sendo tratada corretamente de acordo com seu conteúdo e sua exceção (use_auto_width), porém o KendoUi parece espremer as colunas pela quantidade existente quando há muitas colunas a serem exibidas (tabela de usuarios por exmeplo)
@@ -579,7 +582,8 @@ EOF;
 
 		
 		$kendoUI					=	new KendoUi();
-
+		$param['filterable'] 		= 	'true';
+		
 		$data['param_original'] 	= 	$param;
 		$param['data']				=	json_encode($data);
 		
