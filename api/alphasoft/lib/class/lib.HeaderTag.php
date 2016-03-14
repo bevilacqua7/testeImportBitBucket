@@ -182,8 +182,14 @@ class HeaderTag
 	 	
 	 	
 	 	
+	 	
+	 	
+	 	
+	 	
 	 	$tag[]		=	array("host"=>"api/jquery.qtip.custom/jquery.qtip.min.js",	"access"=>array("main","panel"));//Main
 	 	$tag[]		=	array("host"=>"api/fakeLoader/fakeLoader.js",				"access"=>array("main","panel",'login'));//Main
+	 	
+	 	$tag[]		=	array("host"=>"api/html2canvas/dist/html2canvas.js",				"access"=>array("panel"));//Main
 	 	
 
 //	 	$tag[]		=	array("host"=>"api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2",				"access"=>array("main"),'version'=>'no-use');//Main
