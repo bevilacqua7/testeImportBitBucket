@@ -98,6 +98,7 @@ class ATT_WRS_USER extends WRS_BASE
 					if($status!=1){
 						$status=false;
 						$msg = ($nova_senha=='')?LNG('php_admin_msg_exp_erro'):LNG('php_admin_msg_red_erro');
+						$msg.= "<br><b>".$rows['MESSAGE']."</b>";
 					}
 				}
 				
