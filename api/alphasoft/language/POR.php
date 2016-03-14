@@ -551,10 +551,13 @@ HTML;
 	$language['js_admin_pass_same']			=	'A senha e a confirmação de senha precisam ser iguais.';
 	$language['js_admin_pass_blank']		=	'A senha e a confirmação de senha não podem ser em branco.';
 	$language['js_admin_pass_min']			=	'A senha e a confirmação de senha não podem ter menos de 3 caracteres.';
+	$language['js_admin_pass_equals']		=	'A nova senha e a confirmação de senha devem ser diferentes da senha atual.';
 	$language['js_admin_observation']		=	' expirar a senha';
 	$language['js_admin_new_pass_placeholder']=	'mínimo de 3 caracteres';
+	$language['js_admin_old_pass_placeholder']=	'entre com sua senha atual';
 	$language['js_admin_new_pass']			=	'Nova Senha: ';
 	$language['js_admin_confirm_pass']		=	'Confirmar Senha: ';
+	$language['js_admin_old_pass']			=	'Senha Atual: ';
 	$language['js_admin_confirm_question']	=	'?';
 	
 
