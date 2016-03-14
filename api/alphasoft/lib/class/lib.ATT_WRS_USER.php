@@ -39,11 +39,13 @@ class ATT_WRS_USER extends WRS_BASE
 		
 		$options		=	 array(
 				'objSelecionados',
-				'senha'
+				'senha',
+				'old_senha'
 		);
 		
 		$parameter		=	fwrs_request($options);
 		$nova_senha 	= 	$parameter['senha'];
+		$old_senha 		= 	$nova_senha!='' && $parameter['old_senha']!=''?$parameter['old_senha']:''; // garante que haja uma nova senha para utilizar controles com a senha antiga
 		$objSelecionados=	$parameter['objSelecionados'];
 		
 		includeQUERY('WRS_LOGIN');
@@ -52,31 +54,32 @@ class ATT_WRS_USER extends WRS_BASE
 		$qtde_user = (is_array($objSelecionados) && count($objSelecionados)>0)?count($objSelecionados):0;
 			
 		$query = array();
-		$USER_ID_LOGADO			= 	WRS::USER_ID();
-		$CUSTOMER_ID 			= 	WRS::CUSTOMER_ID();
+		
+		// se houver senha antiga, não pode passar user_id e customer_id
+		$USER_MASTER			= 	WRS::USER_MASTER();
+		$USER_ID_LOGADO			= 	$old_senha!=''?0:WRS::USER_ID();
+		$CUSTOMER_ID 			= 	$old_senha!=''?0:WRS::CUSTOMER_ID();
+		
 		if($qtde_user){
 			foreach($objSelecionados as $user_id=>$user_code){
-				$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( $user_code, '', $nova_senha, '', $USER_ID_LOGADO, $CUSTOMER_ID ); 
-				// TODO: tratar $USER_MASTER - gravar no statis WRS 343, depois no WRS_LOGIN pra ser recuperado no sistema
+				$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( $user_code, $USER_MASTER, $nova_senha, $old_senha, $CUSTOMER_ID, $USER_ID_LOGADO ); 
 			}
 		}else{
-				$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( '', '', $nova_senha, '', $USER_ID_LOGADO, $CUSTOMER_ID ); 					
+				$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( '', $USER_MASTER, $nova_senha, $old_senha, $CUSTOMER_ID, $USER_ID_LOGADO ); 					
 		}
 		
-		/*
-		 * TODO: implementar no language, a descricao dos campos no banco
-		 */
-
 		$this->admin->set_conn($this->get_conn());
 		$status=true;
 		$op = '';
-		if($parameter['operacao']=='expirar'){
-			$op = $qtde_user==0?LNG('js_admin_pass_sintax_d'):$qtde_user;
-			$op.= LNG_s('js_admin_pass_sintax_c',(($qtde_user>1)?'s':''));
-			$op.= ' '.LNG_s('php_admin_msg_exp_success',(($qtde_user>1)?'s':''));
+		$qtde_op = $qtde_user==0?LNG('js_admin_pass_sintax_d'):$qtde_user;
+		$qtde_op = ($old_senha!='')?LNG('js_admin_pass_sintax_e'):$qtde_op;		
+		if($nova_senha==''){		
+			$op 	 = $qtde_op;
+			$op		.= LNG_s('js_admin_pass_sintax_c',(($qtde_user>1)?'s':''));
+			$op		.= ' '.LNG_s('php_admin_msg_exp_success',(($qtde_user>1)?'s':''));
 		}else{
 			$op = LNG('php_admin_msg_red_success');
-			$op.= $qtde_user==0?LNG('js_admin_pass_sintax_d'):$qtde_user;
+			$op.= $qtde_op;
 			$op.= LNG_s('js_admin_pass_sintax_c',(($qtde_user>1)?'s':''));
 			$op.= LNG('php_admin_msg_red_success2');
 		}

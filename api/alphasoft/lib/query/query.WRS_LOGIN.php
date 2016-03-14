@@ -82,7 +82,7 @@ EOF;
 	 *
 	 * @return <string>
 	 */
-	public static function CHANGE_SSAS_PASSWORD( $USER_CODE, $USER_MASTER, $USER_PWD, $PWD_RESET, $USER_ID = 0, $CUSTOMER_ID = 0 )
+	public static function CHANGE_SSAS_PASSWORD( $USER_CODE, $USER_MASTER, $USER_PWD, $PWD_RESET, $CUSTOMER_ID = 0, $USER_ID = 0 )
 	{
 		// Exemplo: EXEC Change_SSAS_Password 'mfacioli','','12345','abcde',0
 		$query = <<<EOF

@@ -1667,12 +1667,35 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 	
 	var div_reset = 
 	$('<form/>').addClass('grid_window_values_form grid_alterar_senha')
-	.append(
-			$('<div/>').addClass('container-fluid')
-			.append(
+	.append( $('<div/>').addClass('container-fluid') );
+
+	if(!isAdm){
+		div_reset.find('div.container-fluid').append(
+				$('<div/>').addClass('row form-group')
+				.append(
+						$('<label/>').attr({'for':'old_senha'})
+						.html(LNG('js_admin_old_pass')).css({'font-weight': 'normal'})  
+						)
+				.append(
+						$('<div/>').addClass('row form-control-wrs')
+						.append(
+								$('<input/>').prop({
+								'type'			:'password',
+								'name'			:'old_senha',
+								'id'			:'old_senha',
+								'placeholder'	: LNG('js_admin_old_pass_placeholder') 
+								}).addClass('form-control-wrs-auto form-control')
+								.css({'padding':'6px 12px !important'})
+								.on('focus',function(){ $('.alerta_senha_igual').hide(); })
+								)
+						)
+				);
+	}
+
+	div_reset.find('div.container-fluid').append(
 					$('<div/>').addClass('row form-group')
 					.append(
-							$('<label/>').attr({'for':'caracter_d3'})
+							$('<label/>').attr({'for':'nova_senha'})
 							.html(LNG('js_admin_new_pass')).css({'font-weight': 'normal'})  
 							)
 					.append(
@@ -1692,7 +1715,7 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 			.append(
 					$('<div/>').addClass('row form-group')
 					.append(
-							$('<label/>').attr({'for':'caracter_d3'})
+							$('<label/>').attr({'for':'confirmar_senha'})
 							.html(LNG('js_admin_confirm_pass')).css({'font-weight': 'normal'}) 
 							)
 					.append(
@@ -1708,8 +1731,7 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 									.on('focus',function(){ $('.alerta_senha_igual').hide(); })
 									)
 							)
-					)
-			);
+					);
 			
 	if(isAdm){
 		div_reset.find('div.container-fluid').append( 
@@ -1737,7 +1759,8 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 			qtde 				= !isAdm?LNG('js_admin_pass_sintax_e'):qtde;
 			var nova_senha 		= $('.grid_alterar_senha #nova_senha').val().trim();
 			var confirmar_senha = $('.grid_alterar_senha #confirmar_senha').val().trim();
-			var operacao 		= (nova_senha=='' && confirmar_senha=='')?'expirar':'definir';											
+			var old_senha 		= $('.grid_alterar_senha #old_senha').length?$('.grid_alterar_senha #old_senha').val().trim():'';
+ 			var operacao 		= (nova_senha=='' && confirmar_senha=='')?'expirar':'definir';											
 			var op 				= operacao == 'definir'?LNG('js_admin_pass_sintax_a'):LNG('js_admin_pass_sintax_b'); 														
 			
 			var retornoQuestion2 = function(escolha){
@@ -1754,7 +1777,8 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 
 					var options				=	{
 														'objSelecionados'	:	objObjetosSelecionados,
-														'senha'				:	nova_senha
+														'senha'				:	nova_senha,
+														'old_senha'			:	old_senha
 												};
 					runCall(options,Ofile,Oclass,Oevent,funCallBackData,'modal','json');
 					
@@ -1778,6 +1802,7 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 					 		addClass: 'btn-light-blue',
 					 		val : true, 
 					 		onClick:function(e){		
+										 			var old_senha 		= $('.grid_alterar_senha #old_senha').length?$('.grid_alterar_senha #old_senha').val().trim():false;
 										 			var nova_senha 		= $('.grid_alterar_senha #nova_senha').val().trim();
 										 			var confirmar_senha = $('.grid_alterar_senha #confirmar_senha').val().trim();
 													if($('.alerta_senha_igual').length>0) $('.alerta_senha_igual').remove(); 
@@ -1788,6 +1813,10 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 														}
 														if(nova_senha.length < 3 || confirmar_senha.length < 3){
 															$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_min')+'</div>');
+															return false;
+														}
+														if(old_senha && nova_senha == old_senha){
+															$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_equals')+'</div>');
 															return false;
 														}
 													}else if(!isAdm){
