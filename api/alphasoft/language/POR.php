@@ -546,12 +546,17 @@ HTML;
 	$language['js_admin_pass_sintax_b']		=	'Deseja realmente expirar a senha para ';
 	$language['js_admin_pass_sintax_c']		=	' usuário%s';
 	$language['js_admin_pass_sintax_d']		=	'todos os';
+	$language['js_admin_pass_sintax_e']		=	'seu próprio';
+	$language['js_admin_pass_self']			=	'Você precisa definir sua nova senha';
 	$language['js_admin_pass_same']			=	'A senha e a confirmação de senha precisam ser iguais.';
+	$language['js_admin_pass_blank']		=	'A senha e a confirmação de senha não podem ser em branco.';
 	$language['js_admin_pass_min']			=	'A senha e a confirmação de senha não podem ter menos de 3 caracteres.';
-	$language['js_admin_observation']		=	'* deixe os campos em branco para expirar a senha';
+	$language['js_admin_observation']		=	' expirar a senha';
 	$language['js_admin_new_pass_placeholder']=	'mínimo de 3 caracteres';
 	$language['js_admin_new_pass']			=	'Nova Senha: ';
 	$language['js_admin_confirm_pass']		=	'Confirmar Senha: ';
+	$language['js_admin_confirm_question']	=	'?';
+	
 
 	$language['php_admin_msg_exp_success']	=	'expirado%s com sucesso';
 	$language['php_admin_msg_red_success']	=	'Redefinição de senha para ';

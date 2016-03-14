@@ -1709,19 +1709,36 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 									)
 							)
 					)
-			.append( 
-					$('<div/>').addClass('row small').html(LNG('js_admin_observation'))
-					)
 			);
-
+			
+	if(isAdm){
+		div_reset.find('div.container-fluid').append( 
+			$('<div/>').addClass('row')
+			.append(
+					$('<input/>').prop({
+					'type'			:'checkbox',
+					'name'			:'expira_senha',
+					'id'			:'expira_senha'
+					}).on('change',function(){
+						$('.grid_alterar_senha #nova_senha, .grid_alterar_senha #confirmar_senha').val('').prop('disabled',$(this).is(':checked'));
+					})
+					)
+			.append(
+					$('<label/>').attr({'for':'expira_senha'})
+					.html(LNG('js_admin_observation')).css({'font-weight': 'normal'}) 
+					)
+		);
+	}
+	
 	var retornoQuestion = function(retorno_escolha){
 		if(retorno_escolha!='cancel'){
-			var s = qtde_linhas_selecionadas==1?'':'s';
-			var qtde = qtde_linhas_selecionadas>0?qtde_linhas_selecionadas:LNG('js_admin_pass_sintax_d');
+			var _s 				= qtde_linhas_selecionadas==1?'':'s';
+			var qtde 			= qtde_linhas_selecionadas>0?qtde_linhas_selecionadas:LNG('js_admin_pass_sintax_d');
+			qtde 				= !isAdm?LNG('js_admin_pass_sintax_e'):qtde;
 			var nova_senha 		= $('.grid_alterar_senha #nova_senha').val().trim();
 			var confirmar_senha = $('.grid_alterar_senha #confirmar_senha').val().trim();
-			var operacao = (nova_senha=='' && confirmar_senha=='')?'expirar':'definir';											
-			var op = operacao == 'definir'?LNG('js_admin_pass_sintax_a'):LNG('js_admin_pass_sintax_b'); 														
+			var operacao 		= (nova_senha=='' && confirmar_senha=='')?'expirar':'definir';											
+			var op 				= operacao == 'definir'?LNG('js_admin_pass_sintax_a'):LNG('js_admin_pass_sintax_b'); 														
 			
 			var retornoQuestion2 = function(escolha){
 				if(escolha!=false){
@@ -1744,7 +1761,7 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 				}
 			}
 			
-			var msg = op+qtde+LNG_s('js_admin_pass_sintax_c',((qtde_linhas_selecionadas>1)?'s':''));
+			var msg = op+qtde+LNG_s('js_admin_pass_sintax_c',_s)+LNG('js_admin_confirm_question');
 			WRS_CONFIRM(msg,'warning',retornoQuestion2);
 		}
 	}
@@ -1763,18 +1780,23 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 					 		onClick:function(e){		
 										 			var nova_senha 		= $('.grid_alterar_senha #nova_senha').val().trim();
 										 			var confirmar_senha = $('.grid_alterar_senha #confirmar_senha').val().trim();
+													if($('.alerta_senha_igual').length>0) $('.alerta_senha_igual').remove(); 
 										 			if(nova_senha!='' || confirmar_senha!=''){
 														if(nova_senha!=confirmar_senha){
-															if($('.alerta_senha_igual').length>0) $('.alerta_senha_igual').remove(); 
 															$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_same')+'</div>');
 															return false;
 														}
 														if(nova_senha.length < 3 || confirmar_senha.length < 3){
-															if($('.alerta_senha_igual').length>0) $('.alerta_senha_igual').remove(); 
 															$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_min')+'</div>');
 															return false;
 														}
-													}					
+													}else if(!isAdm){
+														$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_self')+'</div>');
+														return false;
+													}else if(isAdm && $('#expira_senha').length>0 && nova_senha=='' && confirmar_senha=='' && !$('#expira_senha').is(':checked')){
+														$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_blank')+'</div>');
+														return false;														
+													}
 					 								return true;
 									 			}
 					 	},
