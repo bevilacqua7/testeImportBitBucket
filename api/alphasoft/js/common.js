@@ -1669,3 +1669,153 @@ function addKendoUiColorJQueryGrid()
 	
 	 _END('addKendoUiColorJQueryGrid');
 }
+
+
+/*
+ * abre modal para controle de definicao ou expiracao de senha
+ */
+function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
+	var isAdm 							= isAdm==undefined?false:true;
+	var qtde_linhas_selecionadas 		= 0;
+	
+	if(!isAdm){
+		var loginData 					= $('body').WrsGlobal('getPHP','login');
+		var usr_id 						= loginData['USER_ID'];
+		var usr_code 					= loginData['USER_CODE'];
+		objObjetosSelecionados 			= {};
+		objObjetosSelecionados[usr_id]	= usr_code;
+	}
+	
+	for(var usr_id in objObjetosSelecionados){
+		qtde_linhas_selecionadas++;
+	}
+	
+	if(qtde_linhas_selecionadas!=1 && !isAdm){
+		WRS_ALERT(LNG('js_admin_no_user'),'error');
+		return false;
+	}
+	
+	var div_reset = 
+	$('<form/>').addClass('grid_window_values_form grid_alterar_senha')
+	.append(
+			$('<div/>').addClass('container-fluid')
+			.append(
+					$('<div/>').addClass('row form-group')
+					.append(
+							$('<label/>').attr({'for':'caracter_d3'})
+							.html(LNG('js_admin_new_pass')).css({'font-weight': 'normal'})  
+							)
+					.append(
+							$('<div/>').addClass('row form-control-wrs')
+							.append(
+									$('<input/>').prop({
+									'type'			:'password',
+									'name'			:'nova_senha',
+									'id'			:'nova_senha',
+									'placeholder'	: LNG('js_admin_new_pass_placeholder') 
+									}).addClass('form-control-wrs-auto form-control')
+									.css({'padding':'6px 12px !important'})
+									.on('focus',function(){ $('.alerta_senha_igual').hide(); })
+									)
+							)
+					)
+			.append(
+					$('<div/>').addClass('row form-group')
+					.append(
+							$('<label/>').attr({'for':'caracter_d3'})
+							.html(LNG('js_admin_confirm_pass')).css({'font-weight': 'normal'}) 
+							)
+					.append(
+							$('<div/>').addClass('row form-control-wrs')
+							.append(
+									$('<input/>').prop({
+									'type'			:'password',
+									'name'			:'confirmar_senha',
+									'id'			:'confirmar_senha',
+									'placeholder'	:LNG('js_admin_new_pass_placeholder')
+									}).addClass('form-control-wrs-auto form-control')
+									.css({'padding':'6px 12px !important'})
+									.on('focus',function(){ $('.alerta_senha_igual').hide(); })
+									)
+							)
+					)
+			.append( 
+					$('<div/>').addClass('row small').html(LNG('js_admin_observation'))
+					)
+			);
+
+	var retornoQuestion = function(retorno_escolha){
+		if(retorno_escolha!='cancel'){
+			var s = qtde_linhas_selecionadas==1?'':'s';
+			var qtde = qtde_linhas_selecionadas>0?qtde_linhas_selecionadas:LNG('js_admin_pass_sintax_d');
+			var nova_senha 		= $('.grid_alterar_senha #nova_senha').val().trim();
+			var confirmar_senha = $('.grid_alterar_senha #confirmar_senha').val().trim();
+			var operacao = (nova_senha=='' && confirmar_senha=='')?'expirar':'definir';											
+			var op = operacao == 'definir'?LNG('js_admin_pass_sintax_a'):LNG('js_admin_pass_sintax_b'); 														
+			
+			var retornoQuestion2 = function(escolha){
+				if(escolha!=false){
+					
+					var funCallBackData			=	 function(data)
+					{
+						WRS_ALERT(data.mensagem,data.type);
+					}
+					
+					var Ofile				=	'ATT_WRS_USER';
+					var Oclass				=	'ATT_WRS_USER';
+					var Oevent				=	'changePassUser';	
+
+					var options				=	{
+														'objSelecionados'	:	objObjetosSelecionados,
+														'senha'				:	nova_senha
+												};
+					runCall(options,Ofile,Oclass,Oevent,funCallBackData,'modal','json');
+					
+				}
+			}
+			
+			var msg = op+qtde+LNG_s('js_admin_pass_sintax_c',((qtde_linhas_selecionadas>1)?'s':''));
+			WRS_CONFIRM(msg,'warning',retornoQuestion2);
+		}
+	}
+
+	WRS_CONFIRM(
+					div_reset,
+					'warning',
+					retornoQuestion,
+					undefined,
+					'custom',
+					[
+					 	{ 
+					 		text : LNG('BTN_SAVE'), 
+					 		addClass: 'btn-light-blue',
+					 		val : true, 
+					 		onClick:function(e){		
+										 			var nova_senha 		= $('.grid_alterar_senha #nova_senha').val().trim();
+										 			var confirmar_senha = $('.grid_alterar_senha #confirmar_senha').val().trim();
+										 			if(nova_senha!='' || confirmar_senha!=''){
+														if(nova_senha!=confirmar_senha){
+															if($('.alerta_senha_igual').length>0) $('.alerta_senha_igual').remove(); 
+															$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_same')+'</div>');
+															return false;
+														}
+														if(nova_senha.length < 3 || confirmar_senha.length < 3){
+															if($('.alerta_senha_igual').length>0) $('.alerta_senha_igual').remove(); 
+															$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_min')+'</div>');
+															return false;
+														}
+													}					
+					 								return true;
+									 			}
+					 	},
+					 	{
+					 		text : LNG('MODAL_CONFIRM_BT_CANCEL'), 
+					 		val : 'cancel', 
+					 		onClick:function(e){																	
+														return true;
+									 			}
+					 	}
+					]
+				);
+
+}

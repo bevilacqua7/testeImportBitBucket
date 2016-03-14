@@ -32,7 +32,7 @@
 				
 					  </div>
 					  <div class="col-md-8 col-sm-8 col-xs-8 aling-center">					  
-					  			<button class="btn btn-link">
+					  			<button class="btn btn-link bt_alterar_senha">
 						  			<span class="ui_color_user ui-state-active no_border_background"  title="<?php echo LNG('TITLE_ALTER_SENHA')?>" >
 						  				<?php echo WRS::INFO_SSAS_LOGIN('USER_DESC').' - '.WRS::INFO_SSAS_LOGIN('USER_TYPE'); ?> 
 									</span>

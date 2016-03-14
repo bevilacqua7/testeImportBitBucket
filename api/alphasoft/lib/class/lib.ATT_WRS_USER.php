@@ -38,57 +38,79 @@ class ATT_WRS_USER extends WRS_BASE
 		header('Content-Type: application/json');
 		
 		$options		=	 array(
-				'operacao',
 				'objSelecionados',
 				'senha'
 		);
-
-		$parameter		=	 fwrs_request($options);
+		
+		$parameter		=	fwrs_request($options);
+		$nova_senha 	= 	$parameter['senha'];
+		$objSelecionados=	$parameter['objSelecionados'];
 		
 		includeQUERY('WRS_LOGIN');
 		$class_query_login = new QUERY_LOGIN();
 		
-		$arr_operacoes = array('expirar','definir');
-		if(in_array($parameter['operacao'],$arr_operacoes)){
-				
-			$query = array();
-			if($parameter['operacao']=='expirar'){
-				foreach($parameter['objSelecionados'] as $user_id=>$user_code){
-					$query[] = $class_query_login->RESET_SSAS_PASSWORD($user_code);
-				}
-			}else{
-				$CUSTOMER_ID 			= 	WRS::CUSTOMER_ID();
-				/*
-				 * TODO: se for todos os usuarios, varrer usuarios do customer e setar a query abaixo
-				 */
-				foreach($parameter['objSelecionados'] as $user_id=>$user_code){
-					$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( $user_code, '', $parameter['senha'], '', $CUSTOMER_ID ); // TODO: tratar $USER_MASTER - gravar no statis WRS 343, depois no WRS_LOGIN pra ser recuperado no sistema
-				}
+		$qtde_user = (is_array($objSelecionados) && count($objSelecionados)>0)?count($objSelecionados):0;
+			
+		$query = array();
+		$USER_ID_LOGADO			= 	WRS::USER_ID();
+		$CUSTOMER_ID 			= 	WRS::CUSTOMER_ID();
+		if($qtde_user){
+			foreach($objSelecionados as $user_id=>$user_code){
+				$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( $user_code, '', $nova_senha, '', $USER_ID_LOGADO, $CUSTOMER_ID ); 
+				// TODO: tratar $USER_MASTER - gravar no statis WRS 343, depois no WRS_LOGIN pra ser recuperado no sistema
 			}
-			
-			/*
-			 * TODO: implementar no language, a descricao dos campos no banco
-			 */
-			
-			/*
-			 }else{
-			 $rows 	= $this->fetch_array($query);
-			 if(array_key_exists('output', $rows)){
-			 $msg = $rows['output'];
-			 }else if(array_key_exists('ERROR_MESSAGE', $rows)){
-			 $status=false;
-			 $msg = $rows['ERROR_MESSAGE'];
-			 }
-			 */
-			
-			$mensagems['mensagem']	=	"<pre>".print_r($query,1)."</pre>";//'PHP OK - registros: '.$parameter['qtde'].' - Operacao: '.$parameter['operacao'].' - Senha: '.$parameter['senha'].' - Objetos: <pre>'.print_r($parameter['objSelecionados'],1).'</pre>' ;
-			$mensagems['type']		=	'success';
-					
-			echo json_encode($mensagems);
-			
 		}else{
-			return false;
+				$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( '', '', $nova_senha, '', $USER_ID_LOGADO, $CUSTOMER_ID ); 					
 		}
+		
+		/*
+		 * TODO: implementar no language, a descricao dos campos no banco
+		 */
+
+		$this->admin->set_conn($this->get_conn());
+		$status=true;
+		$op = '';
+		if($parameter['operacao']=='expirar'){
+			$op = $qtde_user==0?LNG('js_admin_pass_sintax_d'):$qtde_user;
+			$op.= LNG_s('js_admin_pass_sintax_c',(($qtde_user>1)?'s':''));
+			$op.= ' '.LNG_s('php_admin_msg_exp_success',(($qtde_user>1)?'s':''));
+		}else{
+			$op = LNG('php_admin_msg_red_success');
+			$op.= $qtde_user==0?LNG('js_admin_pass_sintax_d'):$qtde_user;
+			$op.= LNG_s('js_admin_pass_sintax_c',(($qtde_user>1)?'s':''));
+			$op.= LNG('php_admin_msg_red_success2');
+		}
+		$msg = $op;
+		
+		if(is_array($query) && count($query)>0){
+			foreach($query as $query_exec){
+				
+				$queryRes = $this->admin->query($query_exec);
+				
+				if(!$queryRes){
+					$status=false;
+					$st = sqlsrv_errors();
+					$DATA_BASE_ERROR		=	LNG('DATA_BASE_ERROR');
+					$msg					=	$DATA_BASE_ERROR.$st[0]['message'];						
+				}else if($this->admin->num_rows($queryRes)){
+					$rows	=	$this->fetch_array($queryRes);
+					$status = 	(int)trim($rows['STATUS']);
+					if($status!=1){
+						$status=false;
+						$msg = ($nova_senha=='')?LNG('php_admin_msg_exp_erro'):LNG('php_admin_msg_red_erro');
+					}
+				}
+				
+			}
+		}else{
+			$msg = ($nova_senha=='')?LNG('php_admin_msg_exp_erro'):LNG('php_admin_msg_red_erro');
+		}
+		
+		$mensagens['mensagem']	=	$msg;
+		$mensagens['type']		=	(!$status)?'error':'success';
+				
+		echo json_encode($mensagens);
+		
 	}
 	
 	public function insert($options)

@@ -277,28 +277,18 @@ HTML;
 		
 		$msgs_erros = $msgs_erros_detalhes = array();
 		$output_geral='';
-		if(!$this->num_rows($query))
+		if($this->num_rows($query))
 		{
-			/* -- na ausencia de mensagens, considero como OK - facioli 20160301 - felipeb
-			$st = sqlsrv_errors();
-			$DATA_BASE_ERROR		=	LNG('DATA_BASE_ERROR');
-			$msgs_erros[]			=	$DATA_BASE_ERROR.$st[0]['message'];
-			*/
-		}else{
 			$rows 	= $this->fetch_array($query);
-		
-			if(array_key_exists('ERROR', $rows) && $rows['ERROR']!=''){
+			if ($rows['STATUS']<=0)
+				$msgs_erros[]=$rows['MESSAGE'];
+
+			/*if(array_key_exists('ERROR', $rows) && $rows['ERROR']!=''){
 				$msgs_erros[]=$rows['ERROR'];
-			}
-			if(array_key_exists('ERROR_MESSAGE', $rows) && $rows['ERROR_MESSAGE']!=''){
-				$msgs_erros[]=$rows['ERROR_MESSAGE'];
-			}
-			if(array_key_exists('REMOVE_MESSAGE', $rows) && $rows['REMOVE_MESSAGE']!=''){
-				$msgs_erros[]=$rows['REMOVE_MESSAGE'];
-			}
-		
+			}*/
+		}else{
+			$msgs_erros[]=LNG('ADMIN_NO_REG');
 		}
-		
 		
 		$mensagem_success		= ($this->current_action=='UPDATE')?LNG('ADMIN_REG_UPDATED'):LNG('ADMIN_REG_INSERTED');
 		$tipo_mensagem_success	= 'success';
