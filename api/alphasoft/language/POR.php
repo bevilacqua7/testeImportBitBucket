@@ -1,6 +1,7 @@
 <?php
 	$language = array ();
 	
+	$language['LINGUA'] 				= 	"Português";
 	$language['IDIOMA'] 				= 	"POR";
 	$language['TITLE']					=	"WRS - ".WRS::VERSION();
 	$language['CharSet']		  		= 	'utf-8';		//por enqtanto está implementado apenas no  sendmail
@@ -9,7 +10,7 @@
 	$language['DESCONECTED_TITLE']		=	"USUÁRIO DESCONECTADO";
 	$language['DESCONECTED_DESCRIPT']	=	"Usuário desconectado do sistema por motivo diversos:";
 	$language['DESCONECTED_BUTTON']		=	"VOLTAR PARA O LOGIN";
-	$language['DESCONECTED_REASONS']	=	array('Inatividade na sessão,','Alteração de senha,','Banco de dados sem conexão,','Senha expirtada,','Entre outras.');
+	$language['DESCONECTED_REASONS']	=	array('Inatividade na sessão,','Alteração de senha,','Banco de dados sem conexão,','Outras.');
 	
  
 

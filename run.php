@@ -39,16 +39,19 @@
 	
 	
 	//Validando conexão de usuário
-	$val	=	WRS::LOGIN_ID();
+/*	$val	=	WRS::LOGIN_ID();
 	if(empty($val))
-	{
+	{*/
+	if($class!='WRS_LOGIN'){
+		includeQUERY('WRS_LOGIN');
+	}
 		//Apenas não verifica pasa as seguintes classes
 		$notcheck		= array('WRS_LOGIN','WRS_FILTER');
 				if(!in_array($class,$notcheck))
 		{
 			$obj->isUserConnect();
 		}
-	}
+	//}
 	
 	$obj->run(); 	
 	
