@@ -42,7 +42,7 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.min.css",								"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.blueopal.min.css",								"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.default.min.css",						"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.mobile.all.min.css",							"access"=>array("main","panel"));
+//	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.mobile.all.min.css",							"access"=>array("main","panel"));
 	 	
 	 	
 	 	//Jquery Modal

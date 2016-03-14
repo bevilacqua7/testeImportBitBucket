@@ -21,7 +21,8 @@
 		$name_file = 'filename';		
 	}
 	
-	WRS_DEBUG_QUERY($_REQUEST,'ds.log');
+	//WRS_DEBUG_QUERY($_REQUEST,'ds.log');
+	
 	$data		=	array($name_file, 'event', 'class');
 	
 	$data		=	fwrs_request($data);
@@ -46,7 +47,7 @@
 		includeQUERY('WRS_LOGIN');
 	}
 		//Apenas não verifica pasa as seguintes classes
-		$notcheck		= array('WRS_LOGIN','WRS_FILTER');
+		$notcheck		= array('WRS_LOGIN','WRS_FILTER','IMAGE');
 				if(!in_array($class,$notcheck))
 		{
 			$obj->isUserConnect();
