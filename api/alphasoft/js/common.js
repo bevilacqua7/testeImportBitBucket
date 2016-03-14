@@ -1640,6 +1640,51 @@ function addKendoUiColorJQueryGrid()
 	 _END('addKendoUiColorJQueryGrid');
 }
 
+
+/**
+ * screenShot
+ * 
+ * @link http://stackoverflow.com/questions/17672020/html2canvas-save-image-doesnt-work
+ * 
+ */
+
+function change_SVG(){
+
+	$('body').find('text').attr('fill','#ffc125');
+	$('body').find('text').css('font-size','12px');
+
+}
+
+
+function screenShot() {
+//	var _report	=	$('#'+get_aba_active_kendoUi().REPORT_ID+'chart');
+	
+	//_report.find('svg').height(_report.height()).width(_report.width());
+	
+    html2canvas(document.body, {
+//    	proxy: "https://html2canvas.appspot.com/query",
+        onrendered: function(canvas) {
+
+            var img 			= 	canvas.toDataURL("image/png");
+            var output 			= 	base64_encode(img);
+            var _param_request	=	{};
+                  
+            var report_wrs		=	get_aba_active_kendoUi();
+            
+            var _title			=	str_replace(global_especial_caracteres,'',str_replace(' ','_',report_wrs.TITLE_ABA))+date('_Y_m_d_H_i_s');
+            
+            
+            var _param_request	= 	{image:output,nameFile:'screenShot'+_title};                  
+            
+    		//Remove o report ID
+    		runCall(_param_request,'IMAGE','IMAGE','screenShot',null,'modal');
+    		
+        }
+    });
+    
+}    
+
+
 //CheckPassword
 $(function(){
 	

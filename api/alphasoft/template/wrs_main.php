@@ -86,6 +86,13 @@ $(function(){
 
 <?PHP include_once(PATH_TEMPLATE.'upload_script.php'); ?>
 <?php
+
+			$_jsPHP	=	 array('type'=>'login','data'=>WRS::INFO_SSAS_LOGIN());
+	
+			WRS_GLOBAL::setPHP($_jsPHP);
+			
+			echo WRS_GLOBAL::loadGLobal();
+				
 				include_once(PATH_TEMPLATE.'footer.php');
 ?>
 		

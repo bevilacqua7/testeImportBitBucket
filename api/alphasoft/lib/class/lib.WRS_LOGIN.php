@@ -369,7 +369,6 @@ class WRS_LOGIN extends WRS_BASE
 				{
 					$login_id			=	$rows['LOGIN_ID'];
 					
-					
 					//Verificando a senha expirada e ou salvando a nova senha
 					if($login_id==LOGIN_EXPIRED)
 					{
