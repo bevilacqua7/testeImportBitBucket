@@ -10,7 +10,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="shortcut icon" href="./imagens/favico/favicon.ico" type="image/x-icon">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<script>
+var NOT_CHECK_LOGIN	=	true;
+</script>
 <?php include_once 'config/configCommon.php';?>
 
 <title><?php eLNG('LOGIN_HTML_TITLE'); ?></title>
@@ -134,8 +136,8 @@
 						
 						$HTML	=	<<<HTML
 													<li style='background:{$color}'>
-																	<span class='wrs_click_user' user='{$user}' pwd='{$value['pwd']}' >{$user}</span>
-																	<span  user='{$user}' pwd='{$value['pwd']}' class='wrs_remove_user_temp  glyphicon glyphicon-remove pull-right' ></span>
+																	<div class='wrs_click_user' user='{$user}' pwd='{$value['pwd']}' >{$user}</div>
+																	<div  user='{$user}' pwd='{$value['pwd']}' class='wrs_remove_user_temp  glyphicon glyphicon-remove pull-right' ></div>
 													</li>
 
 HTML;

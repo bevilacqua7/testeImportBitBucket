@@ -42,7 +42,7 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.min.css",								"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.blueopal.min.css",								"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.default.min.css",						"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.mobile.all.min.css",							"access"=>array("main","panel"));
+//	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.mobile.all.min.css",							"access"=>array("main","panel"));
 	 	
 	 	
 	 	//Jquery Modal
@@ -124,7 +124,7 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"js/jquery-ui/jquery.ui.touch-punch.min.js",	"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"js/jquery-ui/jquery.layout-latest.js",		"access"=>array("main","panel"));	//Main
 	 	
-	 	$tag[]		=	array("host"=>JS_PATH_API."Global.js",						"access"=>array("main","panel"));	//Main
+	 	$tag[]		=	array("host"=>JS_PATH_API."Global.js",						"access"=>array("main","panel",'login'));	//Main
 	 	$tag[]		=	array("host"=>JS_PATH_API."common.js",						"access"=>array("main","panel","login"));	//Main
 	 	$tag[]		=	array("host"=>"language_javascript.php",				"access"=>array("main","panel",'login'));			//Main
 	 	
@@ -182,8 +182,14 @@ class HeaderTag
 	 	
 	 	
 	 	
+	 	
+	 	
+	 	
+	 	
 	 	$tag[]		=	array("host"=>"api/jquery.qtip.custom/jquery.qtip.min.js",	"access"=>array("main","panel"));//Main
 	 	$tag[]		=	array("host"=>"api/fakeLoader/fakeLoader.js",				"access"=>array("main","panel",'login'));//Main
+	 	
+	 	$tag[]		=	array("host"=>"api/html2canvas/dist/html2canvas.js",				"access"=>array("panel"));//Main
 	 	
 
 //	 	$tag[]		=	array("host"=>"api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2",				"access"=>array("main"),'version'=>'no-use');//Main

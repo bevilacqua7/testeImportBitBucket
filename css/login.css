@@ -4,12 +4,7 @@ body {
 	margin:0px;
 	text-align: center;
 }
-
-.topNegativo{
-	top: -500px;	
-	position: fixed;
-}
-
+ 
 .full {
   background: url(../imagens/wrs_background.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -31,6 +26,34 @@ src='imagens/wrs_background.jpg', sizingMethod='scale');
 src='imagens/wrs_background.jpg', sizingMethod='scale')";
 }
 
+.list-user li{
+	width: 100%;
+	cursor:auto;
+	display: table;
+}
+
+.wrs_click_user,.wrs_remove_user_temp{
+	margin: 0px;
+	padding:0px;
+	cursor: pointer;
+	position: relative;
+	 
+	
+}
+
+.wrs_click_user{
+ 	width: 80%;
+ 	float: left;
+}
+
+
+.wrs_remove_user_temp {
+	color: red;
+ 	width: 15%;
+ 	float: right;
+ 	text-align: center;
+ 	padding-top: 3px;
+}
 
 
 .checkbox input{
@@ -56,10 +79,7 @@ src='imagens/wrs_background.jpg', sizingMethod='scale')";
 	right: 40px !important;
 }
 
-.wrs_remove_user_temp {
-	color: red;
-	margin: 3px 2px;
-}
+
 
 #label_chk_remote{
     margin-left: 45px;

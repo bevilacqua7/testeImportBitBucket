@@ -1,9 +1,21 @@
 <?php
 	$language = array ();
 	
+	$language['LINGUA'] 				= 	"Português";
 	$language['IDIOMA'] 				= 	"POR";
 	$language['TITLE']					=	"WRS - ".WRS::VERSION();
 	$language['CharSet']		  		= 	'utf-8';		//por enqtanto está implementado apenas no  sendmail
+	
+	
+	$language['DESCONECTED_TITLE']		=	"USUÁRIO DESCONECTADO";
+	$language['DESCONECTED_DESCRIPT']	=	"Usuário desconectado do sistema por motivo diversos:";
+	$language['DESCONECTED_BUTTON']		=	"VOLTAR PARA O LOGIN";
+	$language['DESCONECTED_REASONS']	=	array('Inatividade na sessão,','Alteração de senha,','Banco de dados sem conexão,','Outras.');
+	
+ 
+
+	
+	
 	/*
 	 * Mensagem de Privilegios
 	 */
@@ -449,6 +461,7 @@
 
 	//Login
 	$language['LOGIN_USER']			=	'Usuários';
+	$language['LOGIN_REMOVE_HISTORY_SUCCESS']			=	'Histórico removido com sucesso';
 	$language['LOGIN_REMOVE']		=	'Remover';
 	$language['LOGIN_PASSWORD_RECOVER']		=	'Recuperar Senha';
 	$language['LOGIN_BUTTON']				=	'Login';
@@ -492,7 +505,7 @@ HTML;
 	$language['LOGIN_NEW_PASSWORD_CONFIRM_ERROR']		='A confirmação da nova senha não confere';
 	$language['LOGIN_CHANGE_SQL_ERRO']		='Ops.. erro ao executar query do login, favor tentar novamente.';
 	
-	$language['LOGIN_RECOVER_SUCCESS_TIME']		=	'Senha gerada com sucesso.<br> Aguarde <b class="logtime">10</b> segundos para conectar com a nova senha.';
+	$language['LOGIN_RECOVER_SUCCESS_TIME']		=	'Senha gerada com sucesso. Redirecionando para o acesso ao sistema.';
 	
 	
 	$language['LOGIN_CHANGE_SQL_ERRO_RECOVER']		='Ops.. erro ao executar query do login, para a recuperação da senha.';

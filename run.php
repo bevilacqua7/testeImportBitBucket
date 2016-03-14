@@ -21,50 +21,41 @@
 		$name_file = 'filename';		
 	}
 	
+	//WRS_DEBUG_QUERY($_REQUEST,'ds.log');
+	
 	$data		=	array($name_file, 'event', 'class');
 	
 	$data		=	fwrs_request($data);
-	
-	
 	
 	
 	$is_js		=	 fwrs_request('is_js');
 	$login		=	 fwrs_request('login');
 	$pwd		=	 fwrs_request('pwd');
 	
-		
-	
-	/*
-	$exeption_by_event		=	array('threadJobManager','change_cube','save_history','stopjob','load_grid_header','logout');
-	
-	if(($is_js!=true && empty($login) && empty($pwd)))
-	{
-		if(!in_array($data['event'], $search_array) && $data['event']!='' && !empty($data['event']))
-		{
-			WRS_DEBUG_QUERY($data['event']);
-			
-			includeCLASS('WRS_LOGIN');
-			$login	=	 new WRS_LOGIN();
-			$login->set_conn($conn_wrs);
-			$userIsLogged	=	 $login->userIsLogged();
-			
-	
-			if(!$userIsLogged['is_loged'] )
-			{
-				header('Location: login.php');	
-				exit();
-			}
-		}
-		
-	}*/
-	
-
-	
 	
 	includeCLASS($data[$name_file]);
 	$class	=	 $data['class'];	
 	$obj	=	 new $class();
 	$obj->set_conn($conn_wrs);
+	
+	
+	//Validando conexão de usuário
+/*	$val	=	WRS::LOGIN_ID();
+	if(empty($val))
+	{*/
+	if($class!='WRS_LOGIN'){
+		includeQUERY('WRS_LOGIN');
+	}
+		//Apenas não verifica pasa as seguintes classes
+		$notcheck		= array('WRS_LOGIN','WRS_FILTER','IMAGE');
+				if(!in_array($class,$notcheck))
+		{
+			$obj->isUserConnect();
+		}
+	//}
+	
 	$obj->run(); 	
+	
+	
 
 ?>

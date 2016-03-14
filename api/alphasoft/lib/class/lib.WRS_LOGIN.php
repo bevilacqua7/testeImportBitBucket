@@ -23,8 +23,11 @@ class WRS_LOGIN extends WRS_BASE
 		switch($event)
 		{
 			case 'login' 		:	{	echo $this->setLogin($login, $pwd, $perfil);};break;
-			case 'remove'		:	{ 	$this->remove($login);	}; break;
-			case 'userIsLogged'	:	{ 	$this->userIsLogged() ;	}; break;
+			case 'remove'		:	{ 
+				header('Content-Type: application/json');
+				echo $this->remove($login);	
+			}; break;
+			case 'isUserConnect'	:	{ 	echo $this->isUserConnect(true) ;	}; break;
 			case 'recover_login':	{	echo $this->recover_login();}; break;
 			case 'recover_email'		:	{	echo $this->recover_email();}; break;
 		}
@@ -207,6 +210,16 @@ class WRS_LOGIN extends WRS_BASE
 	{
 		WRS_TRACE('remove($login)', __LINE__, __FILE__);
 		
+		$param		=	array(
+				'html'=>	fwrs_success(LNG('LOGIN_REMOVE_HISTORY_SUCCESS')),
+				'data'=>	array(
+						'expired'=>false,
+						'login'=>false,
+						'change'=>false)
+					
+		);
+		
+		
 		$user_cookie	=	json_decode($_COOKIE['WRS_LOGIN'],true);
 		$cookie_temp	=	array();
 		$last_user		=	false;
@@ -239,6 +252,10 @@ class WRS_LOGIN extends WRS_BASE
 		}
 		
 		fwrs_set_cookie(json_encode($cookie_temp), 'WRS_LOGIN');
+		
+		
+		
+		return json_encode($param,true);
 		
 		WRS_TRACE('END remove($login)', __LINE__, __FILE__);
 	}
@@ -352,7 +369,6 @@ class WRS_LOGIN extends WRS_BASE
 				{
 					$login_id			=	$rows['LOGIN_ID'];
 					
-					
 					//Verificando a senha expirada e ou salvando a nova senha
 					if($login_id==LOGIN_EXPIRED)
 					{
@@ -448,48 +464,7 @@ class WRS_LOGIN extends WRS_BASE
 	}
 	
 	
-	/*
-	 * Verifica se o usuario permanece logado - true or false
-	 * felipeb 20151112
-	 */
-	public function userIsLogged()
-	{
-		$login_id 	= 	WRS::GET_LOGIN_ID();
-		$is_js		=	fwrs_request('is_js');
-		
-		
-		if($is_js==true) header('Content-Type: application/json');
-		
-		$var	=		array('is_loged'=>false);
-		
-		if(trim($login_id)!='')
-		{
-			if($this->num_rows($this->query(QUERY_LOGIN::GET_SSAS_LOGIN($login_id)))>0)
-			{
-				$var['is_loged']	=  	true;
-			}
-		}
-		
-		
-		if($var['is_loged']==false)
-		{
-			session_destroy();
-		}
-		
-		
-		if($is_js==true)
-		{
-			echo json_encode($var,true);
-			exit();
-		}
-		else
-		{
-			return $var;
-		}
-		
-		
-		
-	}
+
 	
 	
 
