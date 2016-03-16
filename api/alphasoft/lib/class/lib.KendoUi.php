@@ -893,7 +893,11 @@ HTML;
 		                                		contentType	: 'application/json',
 	                                			url			:	'run.php?file=WindowGrid&class=WindowGrid&event_grid_inside=grid&table={$table}&cube_s={$cube_s}'
 		                                	},
-		                                parameterMap		:	function(data) {return kendo.stringify(data);}
+		                                parameterMap		:	function(data) { 
+		                                								// TODO: para fazer a condicao de AND ou OR das colunas, basta alterar a variavel this.options.dataSource._filter.logic baseado em outro componente na tela, valores 'and' ou 'or' 
+		                                								data['filters']=this.options.dataSource._filter;
+		                                								return kendo.stringify(data);
+																}
 		                            },
 		                            schema: {
 		                            	data	:"data",

@@ -461,9 +461,12 @@ HTML;
 		// ATENCAO: JS aplicado somente no ambiente administrativo!!!
 		// se for utilizar no panel, incluir JS no header e as chamadas para aplicar mascara de acordo com o evento (focus) no input desejado
 		
+		// FILTERABLE
+		//  ,'filterable'=>false		
+		
 		// Atributos gerados com base na tabela ATT_WRS_USER automaticamente de acordo com script SQL ao final deste arquivo
 		$fields['USER_ID']   			= array('title'=>LNG('USER_ID')    			, 'type'=>'int', 'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
-		$fields['USER_CODE']   			= array('title'=>LNG('USER_CODE')    		, 'key'=>true ,'filterable'=>true, 'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_CODE']   			= array('title'=>LNG('USER_CODE')    		, 'key'=>true, 'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_DESC']   			= array('title'=>LNG('USER_DESC')    		, 'length'=>100, 'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_PWD']   			= array('title'=>LNG('USER_PWD')    		, 'type'=>'password', 'length'=>32, 'class'=>'hide', 'edit_on_new'=>true,  'obrigatorio' => true);
 		$fields['USER_SALT']   			= array('title'=>LNG('USER_SALT')    		, 'length'=>32, 'class'=>'hide',  'obrigatorio' => false);

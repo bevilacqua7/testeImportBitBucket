@@ -547,7 +547,7 @@ EOF;
 					$_tmp_column			=	$field;
 					$_tmp_column['field']	=	$label;
 					
-					$_tmp_column['filterable'] = (array_key_exists('filterable',$field) && $field['filterable']) ?true:false;
+					$_tmp_column['filterable'] = (array_key_exists('filterable',$field) && !$field['filterable']) ?false:true;
 					
 					/*
 					 * TODO: Analisar o porquê do KendoUi não respeitar o tamanho das colunas enviadas para o script.  A coluna está sendo tratada corretamente de acordo com seu conteúdo e sua exceção (use_auto_width), porém o KendoUi parece espremer as colunas pela quantidade existente quando há muitas colunas a serem exibidas (tabela de usuarios por exmeplo)
@@ -600,6 +600,7 @@ EOF;
 		$page				=	$request['page'];
 		$take				=	$request['take'];
 		$skip				=	$request['skip'];
+		$column_filters		=	$request['filters'];
 		$sort				=	isset($request['sort']) ? $request['sort'] : array();
 		$pageSize			=	$request['pageSize'];
 		$table				=	 fwrs_request('table');
@@ -636,7 +637,7 @@ EOF;
 		}
 		
 
-		$where=NULL;
+		$where=array();
 
 		// excecao para usuarios NAO MST ou ADM, não visualizarem usuarios maiores que eles proprios
 		// felipeb 20160226
@@ -644,18 +645,60 @@ EOF;
 		if($perfil_logado!='MST' || $perfil_logado=='ADM'){
 			$CUSTOMER_ID 			= WRS::CUSTOMER_ID();
 			if($table=='ATT_WRS_USER'){
-				$where="PERFIL_ID != ''MST'' and CUSTOMER_ID = ".$CUSTOMER_ID;
+				$where[]="PERFIL_ID != ''MST'' and CUSTOMER_ID = ".$CUSTOMER_ID;
 			}
 			if($table=='ATT_WRS_CUSTOMER'){
-				$where="CUSTOMER_ID = ".$CUSTOMER_ID;
+				$where[]="CUSTOMER_ID = ".$CUSTOMER_ID;
 			}
 			if($table=='REL_WRS_CUBE_USER'){
-				$where="CUSTOMER_ID = ".$CUSTOMER_ID;
+				$where[]="CUSTOMER_ID = ".$CUSTOMER_ID;
 			}
 			if(WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($table)=='ATT_WRS_LOG'){
-				$where="CUSTOMER_ID = ".$CUSTOMER_ID;
+				$where[]="CUSTOMER_ID = ".$CUSTOMER_ID;
 			}
 		}
+		
+		// Implementacao dos filtros por coluna nativo do KendoUi - felipeb 20160316
+		/*
+		 * <option value="eq">É igual a</option>
+		 * <option value="neq">Não é igual a</option>
+		 * <option value="startswith">Começa com</option>
+		 * <option value="contains">Contém</option>
+		 * <option value="doesnotcontain">Não contém</option>
+		 * <option value="endswith">Termina com</option>
+		 */
+		$filters_operations = array(
+				'eq'				=>	" #CAMPO#  = 		''#VALOR#''		",
+				'neq'				=>	" #CAMPO# != 		''#VALOR#''		",
+				'startswith'		=>	" #CAMPO# LIKE 		''#VALOR#%''	",
+				'contains'			=>	" #CAMPO# LIKE 		''%#VALOR#%''	",
+				'doesnotcontain'	=>	" #CAMPO# NOT LIKE 	''%#VALOR#%''	",
+				'endswith'			=>	" #CAMPO# LIKE 		''%#VALOR#''	"
+		);
+		if($column_filters!=null && $column_filters!='' && is_array($column_filters)){
+			/* Ex.: $column_filters vindo do request:
+			 * Array ( 
+			 * 			[filters] => Array ( 
+			 * 								[0] => Array ( 
+			 * 												[field] => USER_CODE 
+			 * 												[operator] => eq 
+			 * 												[value] => DRV 
+			 * 											) 
+			 * 								) 
+			 * 			[logic] => and 
+			 * 		)
+			 */
+			$where_conditions_columns	=	array();
+			$campos_de = array('#CAMPO#','#VALOR#');
+			foreach($column_filters['filters'] as $arr_operacao){
+				$campos_para = array($arr_operacao['field'],$arr_operacao['value']);
+				$condicao = str_replace($campos_de,$campos_para,$filters_operations[$arr_operacao['operator']]);
+				$where_conditions_columns[] = '('.$condicao.')';
+			}
+			$where[] = '('.implode(' '.strtoupper($column_filters['logic']).' ',$where_conditions_columns).')';
+		}
+		
+		$where = implode(' AND ',$where);
 		
 		if(!empty($this->exception))
 		{
