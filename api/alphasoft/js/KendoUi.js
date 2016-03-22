@@ -1399,6 +1399,15 @@ function  themeSUM(nameID,arg,wrsParam)
 																generate_csv_zip();
 																return true;
 															}
+															
+															
+															//PrintScrean and send mail
+															if(getClass=='print_send_mail') 
+															{
+																screenShotSendMail();
+																return true;
+															}
+															
 														
 															//Faz com que o sistema não execute opções nativas quando for export
 															$('.'+report_id).wrsAbaData('setKendoUi',{EXPORT:true});

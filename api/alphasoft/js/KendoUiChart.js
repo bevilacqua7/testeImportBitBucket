@@ -1675,11 +1675,13 @@ function	WRSKendoUiChart(KendoUi,_onlyDefault,_start_modal)
 						image.click(function() {
 					            var chart = kendoChart.getKendoChart();
 					            chart.exportImage().done(function(data) {
+//					            	$('body').html('<img src="'+data+'"/>');
 					                kendo.saveAs({
 					                    dataURI: data,
 					                    fileName: "chart_wrs.png"
 					                  //  proxyURL: "http://demos.telerik.com/kendo-ui/service/export"
 					                });
+					                
 					            });
 					        });
 						

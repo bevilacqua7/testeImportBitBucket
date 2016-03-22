@@ -34,6 +34,9 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"css/jquery/jquery-ui.css",												"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/contextMenu/src/jquery.contextMenu.css",								"access"=>array("main","panel"));
 	 	
+	 	//IF
+	 	$tag[]		=	array("host"=>"api/compatibilidade/bootstrap-ie7-master/css/bootstrap-ie7.css",								"access"=>array("panel","main",'login'),'IF'=>'<!--[if lt IE 8]>');
+	 	
 	 	
 	 	//Kendo Ui
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.common.min.css",								"access"=>array("main","panel"));
@@ -85,7 +88,17 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"api/CaptionHoverEffects/css/default.css",	"access"=>array("main"));
 	 	$tag[]		=	array("host"=>"api/CaptionHoverEffects/css/component.css",	"access"=>array("main"));
 	 	
-
+	 	
+	 	$tag[]		=	array("host"=>"api/wysiwyg/summernote.0.8.1/summernote.css",	"access"=>array("panel"));
+	 	
+	  
+	 	
+	 	
+	 	//UPLOAD
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/css/jquery.fileupload.css",	"access"=>array("main",'panel'));
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/css/jquery.fileupload-ui.css",	"access"=>array("main",'panel'));
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/css/blueimp-gallery.min.css",	"access"=>array("main",'panel'));
+	 	//END UPLOAD
 	 	
 
 	 	//LOGIN
@@ -141,7 +154,7 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"api/alertify/src/alertify.js",			"access"=>array("main","panel"));		//Main
 	 	
 	 	//http://igorescobar.github.io/jQuery-Mask-Plugin/
-	 	$tag[]		=	array("host"=>"api/jQuery-Mask-Plugin-535b4e4/jquery.mask.min.js",			"access"=>array("main"));		//Main
+	 	$tag[]		=	array("host"=>"api/jQueryMask/jquery.mask.min.js",			"access"=>array("main"));		//Main
 	 	
 	 	$tag[]		=	array("host"=>"api/contextjs/context.js",					"access"=>array("panel"));
 	 	
@@ -156,6 +169,7 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"api/kendoUi/js/jszip.min.js",				"access"=>array("main","panel"));//Main
 	 	$tag[]		=	array("host"=>"api/kendoUi/js/kendo.dataviz.themes.min.js",	"access"=>array("main","panel"));	//Main
 	 	$tag[]		=	array("host"=>"http://maps.googleapis.com/maps/api/js?key=AIzaSyAvq_yJP8-zcJZNuwF47gmhIGPXQhjlTgE&sensor=true&v=3.exp","access"=>array("panel"),'version'=>'no-use');
+	 	$tag[]		=	array("host"=>"https://www.google.com/jsapi","access"=>array("panel"),'version'=>'no-use');
 	 	$tag[]		=	array("host"=>"api/gomap/jquery.gomap-1.3.3.js",			"access"=>array("panel"));
 
 	 	
@@ -180,18 +194,31 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>JS_PATH_API."Drill.js",						"access"=>array("panel"));
 	 	$tag[]		=	array("host"=>JS_PATH_API."MultipleCube.js",				"access"=>array("panel"));
 	 	
+	 	$tag[]		=	array("host"=>JS_PATH_API."Anexo.js",				"access"=>array("panel"));
 	 	
 	 	
 	 	
+	 	$tag[]		=	array("host"=>"api/wysiwyg/summernote.0.8.1/summernote.js",	"access"=>array("panel"));
+	 	$tag[]		=	array("host"=>"api/wysiwyg/summernote.0.8.1/lang/".LNG('summernote'),	"access"=>array("panel"));
 	 	
+	 	
+	 	
+	 	 
+
 	 	
 	 	
 	 	$tag[]		=	array("host"=>"api/jquery.qtip.custom/jquery.qtip.min.js",	"access"=>array("main","panel"));//Main
 	 	$tag[]		=	array("host"=>"api/fakeLoader/fakeLoader.js",				"access"=>array("main","panel",'login'));//Main
 	 	
-	 	$tag[]		=	array("host"=>"api/html2canvas/dist/html2canvas.js",				"access"=>array("panel"));//Main
+	 	//http://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js
+//	 	$tag[]		=	array("host"=>"api/html2canvas/html2canvas.min.js",				"access"=>array("panel"));//Main
 	 	
-
+	 	
+	 	$tag[]		=	array("host"=>"api/html2canvas/html2canvas.min.js",				"access"=>array("panel"));//Main
+	 	$tag[]		=	array("host"=>"api/html2canvas/dist/html2canvas.svg.min.js",				"access"=>array("panel"));//Main  
+	 	
+ 
+	 	
 //	 	$tag[]		=	array("host"=>"api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2",				"access"=>array("main"),'version'=>'no-use');//Main
 	 	
 	 	$tag[]		=	array("host"=>JS_PATH_API."Painel.js",				"access"=>array("panel"));
@@ -211,6 +238,52 @@ class HeaderTag
 	 	//Login
 	 	$tag[]		=	array("host"=>JS_PATH_API."login.js",						"access"=>array("login"));	//Main
 	 	
+	 	
+	 	
+	 	//HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries 
+	 	//WARNING: Respond.js doesn't work if you view the page via file:// 
+	 	$tag[]		=	array("host"=>"https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js",	"access"=>array("all"), 'IF'=>'<!--[if lt IE 9]>');//Main
+	 	$tag[]		=	array("host"=>"https://oss.maxcdn.com/respond/1.4.2/respond.min.js",	"access"=>array("all"), 'IF'=>'<!--[if lt IE 9]>');//Main
+	 	$tag[]		=	array("host"=>"//html5shiv.googlecode.com/svn/trunk/html5.js",	"access"=>array("all"), 'IF'=>'<!--[if lt IE 9]>');//Main
+ 
+	 	
+	 	
+	 	
+	 	//UPLOAD
+	 	//The jQuery UI widget factory, can be omitted if jQuery UI is already included
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/vendor/jquery.ui.widget.js",	"access"=>array("main",'panel'));//Main
+	 	//The Templates plugin is included to render the upload/download listings 
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/tmpl.min.js",	"access"=>array("main",'panel'));//Main
+	 	//The Load Image plugin is included for the preview images and image resizing functionality 
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/load-image.all.min.js",	"access"=>array("main",'panel'));//Main
+	 	//The Canvas to Blob plugin is included for image resizing functionality
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/canvas-to-blob.min.js",	"access"=>array("main",'panel'));//Main
+	 	//blueimp Gallery script
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/jquery.blueimp-gallery.min.js",	"access"=>array("main",'panel'));//Main
+	 	//The Iframe Transport is required for browsers without support for XHR file uploads 
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/jquery.iframe-transport.js",	"access"=>array("main",'panel'));//Main
+	 	//The basic File Upload plugin 
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/jquery.fileupload.js",	"access"=>array("main",'panel'));//Main
+	 	//The File Upload processing plugin 
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/jquery.fileupload-process.js",	"access"=>array("main",'panel'));//Main
+	 	//The File Upload image preview & resize plugin 
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/jquery.fileupload-image.js",	"access"=>array("main",'panel'));//Main
+	 	//The File Upload audio preview plugin 
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/jquery.fileupload-audio.js",	"access"=>array("main",'panel'));//Main
+	 	//The File Upload video preview plugin 
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/jquery.fileupload-video.js",	"access"=>array("main",'panel'));//Main
+	 	//The File Upload validation plugin 
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/jquery.fileupload-validate.js",	"access"=>array("main",'panel'));//Main
+	 	//The File Upload user interface plugin 
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/jquery.fileupload-ui.js",	"access"=>array("main",'panel'));//Main
+	 	//The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
+	 	
+	 	
+	 	$tag[]		=	array("host"=>"api/jQueryFileUpload/js/cors/jquery.xdr-transport.js",	"access"=>array("main",'panel'), 'IF'=>'<!--[if (gte IE 8)&(lt IE 10)]>');//Main
+	 	
+	 	
+	 	//END UPLOAD
+	 	
 	 	return $this->script($tag,$type);
 	 	
 	 }
@@ -227,7 +300,11 @@ class HeaderTag
 	 			$host		=	$tag_html['host'];
 	 			$version	=	false;
 	 			
-	 			if(!in_array($type,$tag_html['access']))  continue;
+	 			
+	 			if(!in_array('all',$tag_html['access']))
+	 			{
+	 				if(!in_array($type,$tag_html['access']))  continue;
+	 			}
 
 	 			
 	 			if(array_key_exists('version', $tag_html))
@@ -256,9 +333,22 @@ class HeaderTag
 		 			}
 	 			}
 	 			
-
 	 			
-	 			$html.='<script type="text/javascript" src="'.$host.'"></script>'.PHP_EOL;
+	 			if(isset($tag_html['IF']))
+	 			{
+	 			
+	 				$html		.=	<<<EOF
+	 			
+	 						{$tag_html['IF']}
+	 							<script type="text/javascript" src="{$host}"></script>
+						  	<![endif]-->
+	 			
+EOF;
+
+	 			}else{
+	 			
+	 				$html.='<script type="text/javascript" src="'.$host.'"></script>'.PHP_EOL;
+	 			}
 	 		}
 	 		
 	 		
@@ -307,8 +397,22 @@ class HeaderTag
 	 		}
 	 	 	
 	 		
+	 		if(isset($tag_html['IF']))
+	 		{
+		 		$html.=	<<<EOF
+		 		
+		 		{$tag_html['IF']}
+		 			<link type="text/css"  {$add_tags} rel="stylesheet"  href="{$host}"/>
+		 		<![endif]-->
 	 		
-	 		$html.='<link type="text/css"  '.$add_tags.' rel="stylesheet"  href="'.$host.'"/>'.PHP_EOL;
+EOF;
+
+	 		}else{
+	 		
+	 		
+	 		
+	 			$html.='<link type="text/css"  '.$add_tags.' rel="stylesheet"  href="'.$host.'"/>'.PHP_EOL;
+	 		}
 	 	}
 	 	
 	 	return $html;

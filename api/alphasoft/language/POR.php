@@ -5,7 +5,8 @@
 	$language['IDIOMA'] 				= 	"POR";
 	$language['TITLE']					=	"WRS - ".WRS::VERSION();
 	$language['CharSet']		  		= 	'utf-8';		//por enqtanto está implementado apenas no  sendmail
-	
+	$language['summernote']				=	"summernote-pt-BR.js";
+	$language['siglaIdioma']			=	"pt-BR";
 	
 	$language['DESCONECTED_TITLE']		=	"USUÁRIO DESCONECTADO";
 	$language['DESCONECTED_DESCRIPT']	=	"Usuário desconectado do sistema por motivo diversos:";
@@ -14,7 +15,30 @@
 	
  
 
+	$language['ScreenShotGenerate']			=	"Criando o print screen da tela";
 	
+	
+	$language['ScreenShotMailBodyHtml']		=	<<<HTML
+	
+											<p><strong>Olá</strong>, </p>
+													<p>Veja o extrato desta consulta "%s" na base "%s" extraído da ferramenta WRS.</p>
+													<p>Nesta consulta foram aplicados os seguintes filtros:</p><br><br>
+													%s
+													<br><p>Atenciosamente,<br>
+													<strong>%s</strong>;</p>
+	
+HTML;
+
+	
+	$language['ScreenShotMailWrong']		=	"Há email(s) incompletos, favor verificar antes de enviar: <br><p> <b>%s</b> </p> <br>Obrigado.";
+	$language['ScreenShotMailTO']			=	"O campo <b>Para</b> é de prenchimento obrigatório";
+	$language['ScreenShotMailSUBJECT']		=	"O campo <b>Assunto</b> é de prenchimento obrigatório";
+	$language['ScreenShotMailMESSENGER']	=	"É necessário inserir algum conteúdo no corpo do email";
+	$language['ScreenShotMailSend']			=	"Enviando mensagem, aguarde... <img src='imagens/wrs_loading.gif' />";
+	
+	$language['ScreenShotMailSendSuccess']			=	"Email enviado com sucesso.";
+	
+	$language['ScreenShotMailSendError']			=	'Não foi possível enviar o email devido á: <br><br><b>%s</b>.';
 	
 	/*
 	 * Mensagem de Privilegios
@@ -64,6 +88,10 @@
 	$language['file_not_validated']			=	'Arquivo não validado';	
 	$language['file_not_unziped']			=	'Arquivo não descompactado';
 	
+	$language['MAIL_TITLE']				=	"Envio de e-mail";
+	$language['MAIL_TO']				=	"Para";
+	$language['MAIL_SUBJECT']			=	"Assunto";
+	$language['MAIL_SEND']				=	"Enviar email";
 	
 	
 	
@@ -280,6 +308,7 @@
 	$language['GRID_HEADER_SEE'] 		= 	"Visão";
 	$language['GRID_HEADER_SEE_GRID']	=	"Planilha";	
 	$language['GRID_HEADER_SEE_CHART']	=	"Gráfico";
+	$language['GRID_HEADER_MAIL_SEND']	=	'Enviar e-mail';
 	$language['GRID_HEADER_SEE_MAP']	=	"Mapa";
 	
 	$language['GRID_HEADER_TITLE_DADOS']		=	"DADOS";
@@ -586,6 +615,10 @@ HTML;
 	$language['IMPORT_EXPORT_MESSAGES_DETAIL'] 	= 	'Detalhes:';
 	
 	
+	$language['UPLOAD_BTN_DELETAR'] 	= 	'Deletar';
+	$language['UPLOAD_BTN_CANCEL']		=	'Cancelar';
+	$language['UPLOAD_BTN_PROCESS']		=	'Processando...';
+	$language['UPLOAD_BTN_ANEXAR']		=	'Anexar';
 	/*
 	 * GERADO COM O SQL:
 	 * felipeb 20160225

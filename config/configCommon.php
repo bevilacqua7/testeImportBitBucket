@@ -13,6 +13,8 @@ define('DS',DIRECTORY_SEPARATOR);
  */
 define('PATH_MAIN',dirname(__DIR__).DS);
 
+define('PATH_FILES_MAILS',dirname(__DIR__).DS.'files'.DS.'mail'.DS);
+
 /**
  * Endereço do arquivo ini
  * @var string'

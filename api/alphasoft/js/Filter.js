@@ -784,9 +784,17 @@ function text_width(input)
 }
 
 
-function tagFilterWRS(typeReturn)
+function tagFilterWRS(typeReturn,_typeHeader)
 {
 	_START('tagFilterWRS');
+	var typeHeader	=	'h3';
+	var quebra		=	'';
+	if(_typeHeader!=undefined)
+	{
+		typeHeader=_typeHeader;
+		quebra		=	'<br>';
+	}
+	
 	//Salvando para poder recuperar as seleções
 	var html		=	'';
 	var html_bk		=	'';// uso estas variaveis pra jogar os filtros fixos para o final de todos, sempre, e em vermelho
@@ -807,7 +815,7 @@ function tagFilterWRS(typeReturn)
 				tmp_width 	=	text_width(title);
 				if(tmp_width>=_width) _width	=	tmp_width; 
 				
-				return {html:'<h3 class="'+css__class+'">'+title+'</h3>', 'width':_width};
+				return {html:'<'+typeHeader+' class="'+css__class+'">'+title+'</'+typeHeader+'>'+quebra, 'width':_width};
 			}
 		
 		return {html:'', 'width':_width};

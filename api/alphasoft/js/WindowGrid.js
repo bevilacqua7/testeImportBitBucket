@@ -458,6 +458,7 @@ function grid_window_modal(param_request,Event,_funCallBackData)
 				btn_events	=	{btn:layout_events_button};
 		}
 	
+	
 	if(!isset(_funCallBackData) || _funCallBackData==undefined)
 	{
 		funCallBackData	=	function(data)

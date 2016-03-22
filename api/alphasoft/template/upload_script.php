@@ -103,39 +103,3 @@
 				</script>
 	
 	
-<!-- TODO: Baixar as firulas que estão externas para a pasta do jQueryUpload  -->				
-
-<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
-<link rel="stylesheet" href="api/jQuery-File-Upload-9.11.2/css/jquery.fileupload.css">
-<link rel="stylesheet" href="api/jQuery-File-Upload-9.11.2/css/jquery.fileupload-ui.css">
-<link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
-<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-<script src="api/jQuery-File-Upload-9.11.2/js/vendor/jquery.ui.widget.js"></script>
-<!-- The Templates plugin is included to render the upload/download listings -->
-<script src="//blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
-<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
-<!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
-<!-- blueimp Gallery script -->
-<script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
-<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="api/jQuery-File-Upload-9.11.2/js/jquery.iframe-transport.js"></script>
-<!-- The basic File Upload plugin -->
-<script src="api/jQuery-File-Upload-9.11.2/js/jquery.fileupload.js"></script>
-<!-- The File Upload processing plugin -->
-<script src="api/jQuery-File-Upload-9.11.2/js/jquery.fileupload-process.js"></script>
-<!-- The File Upload image preview & resize plugin -->
-<script src="api/jQuery-File-Upload-9.11.2/js/jquery.fileupload-image.js"></script>
-<!-- The File Upload audio preview plugin -->
-<script src="api/jQuery-File-Upload-9.11.2/js/jquery.fileupload-audio.js"></script>
-<!-- The File Upload video preview plugin -->
-<script src="api/jQuery-File-Upload-9.11.2/js/jquery.fileupload-video.js"></script>
-<!-- The File Upload validation plugin -->
-<script src="api/jQuery-File-Upload-9.11.2/js/jquery.fileupload-validate.js"></script>
-<!-- The File Upload user interface plugin -->
-<script src="api/jQuery-File-Upload-9.11.2/js/jquery.fileupload-ui.js"></script>
-<!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
-<!--[if (gte IE 8)&(lt IE 10)]>
-<script src="api/jQuery-File-Upload-9.11.2/js/cors/jquery.xdr-transport.js"></script>
-<![endif]-->		

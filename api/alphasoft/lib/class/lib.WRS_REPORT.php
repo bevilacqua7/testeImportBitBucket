@@ -47,16 +47,131 @@ class WRS_REPORT  extends  WRS_USER
 		{
 			switch ($this->event)
 			{
-				case 'openModalSave' 	: 	return $this->openModalSave(); break;
-				case 'save' 			: 	return $this->save(); break;
-				case 'delete' 			: 	return $this->delete(); break;
-				case 'csv_zip'			:	return $this->csv_zip(); break;
-				
+				case 'openModalSave' 		: 	return $this->openModalSave(); break;
+				case 'save' 				: 	return $this->save(); break;
+				case 'delete' 				: 	return $this->delete(); break;
+				case 'csv_zip'				:	return $this->csv_zip(); break;
+				case 'screenshot'			:	$this->sendscreenshot(); break;
 			}
 		}
 	}
 	
 	
+	
+	private function getDir($directory)
+	{
+		
+		if(!is_dir($directory)) return array();
+		$d 	= dir($directory);
+		$ds	=	array();
+		
+		while (false !== ($entry = $d->read())) 
+		{
+			if($entry=='.' || $entry=='..') continue;
+			
+			if(!is_file($directory.$entry)) continue;
+			
+			//Não permitir anexar arquivo .db
+			$extension	=	explode('.',$entry);
+			if($extension[count($extension)-1]=='db') continue;
+			
+			$ds[]	=	$directory.$entry;
+		}
+		
+		$d->close();
+		
+		return $ds;
+	}
+	
+	private function sendscreenshot()
+	{
+		header('Content-Type: application/json');
+		
+		$subject		=	fwrs_request('subject');
+		$user_id		=	fwrs_request('user_id');
+		$messsage		=	fwrs_request('messsage');
+		$to				=  	fwrs_request('to');
+		
+		
+		$param['mail']			=	$to[0];
+		$param['subject']		=	$subject;
+		$param['body']			=	$messsage;
+		
+		
+		unset($to[0]); //apenas remove para não repetir o mesmo email 
+		
+		$param['addCC']			=	$to;
+		
+		//''
+		
+		
+		
+		$ini				=	WRS_INI::WRS_DEFINE();
+		$path_screen_shot	=	str_replace($ini['DB_DIRECTORY_SEPARATOR'], DS, $ini['PATH_SCREEN_SHOT']).$user_id.DS;
+		$path_mail			=	PATH_FILES_MAILS.$user_id.DS;
+
+		
+		$param['addAttachment']	=	 array_merge(
+											$this->getDir($path_mail),
+											$this->getDir($path_screen_shot)
+							);
+		
+		//Email do usuário
+		$param['uEmail']	=	WRS::USER_EMAIL();
+		$param['nameHost']	=	WRS::USER_DESC();		
+
+	
+		$send	=	array();
+
+		$send['data']['send']	=	false;
+		
+		
+		$param['cError']	=	true;
+		
+			
+		$_send	=		SendMail::send($param);
+		
+		
+		if($_send['send'])
+		{
+			$send['data']['send']	=true;
+		}else{
+			
+			$send['data']['error']	=	$_send['error'];
+		}
+		
+		echo json_encode($send,true);
+		
+		//Removendo arquivos
+		$this->removeFiles($path_mail);
+		$this->removeFiles($path_screen_shot);
+		
+	}
+	
+	
+	//@link http://stackoverflow.com/questions/11613840/remove-all-files-folders-and-their-subfolders-with-php
+	private function removeFiles($dir)
+	{
+		
+			if(is_dir($dir))
+			{
+				$objects = scandir($dir);
+				
+				foreach ($objects as $object)
+				{
+					if ($object != "." && $object != "..")
+					{
+						if (filetype($dir.DS.$object) == "dir")
+							$this->removeFiles($dir.DS.$object);
+						else unlink   ($dir.DS.$object);
+					}
+				}
+				
+				reset($objects);
+				rmdir($dir);
+			}
+		
+	}
 	
 	/**
 	 * Gerando o CSV e o ZIP e depois inicia o download

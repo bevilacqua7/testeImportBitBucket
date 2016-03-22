@@ -107,7 +107,23 @@ function quebra_carachteres_especiais()
 	return _tmp_array;
 	
 }
+
+function retiraAcento(palavra){
+    var com_acento = 'áàãâäéèêëíìîïóòõôöúùûüçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÖÔÚÙÛÜÇ´`^¨~';  
+    var sem_acento = 'aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC     ';
+    for (l in palavra){
+        for (l2 in com_acento){
+            if (palavra[l] == com_acento[l2]){
+                palavra=palavra.replace(palavra[l],sem_acento[l2]);
+    		}
+        }
+    }
+    return palavra;
+}
+
 var global_especial_caracteres		=	quebra_carachteres_especiais();
+
+
 
 //'|',',',"\",'/','*','=','.',':','?','}','{',')','(','>','<','!','@','#','$','%','¨','&','|','<','>',':','?','^','}','Ç','`','{','\',',','.',';','/',']','~','[','´','-','+'
 
@@ -977,6 +993,8 @@ function countTimeCheck()
 function getDataDisconectUser(data)
 {
 	_ONLY('getDataDisconectUser');
+	
+	
 	if(data.data.isUserConnect==false)
 	{
 		SYSTEM_OFF	=	true;
@@ -1646,43 +1664,249 @@ function addKendoUiColorJQueryGrid()
  * 
  * @link http://stackoverflow.com/questions/17672020/html2canvas-save-image-doesnt-work
  * 
+ * @Link http://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js
+ * @link http://stackoverflow.com/questions/24009869/google-map-screen-capture-is-not-working-for-marker-and-marker-cluster-using-htm
  */
-
-function change_SVG(){
-
-	$('body').find('text').attr('fill','#ffc125');
-	$('body').find('text').css('font-size','12px');
-
-}
-
-
 function screenShot() {
-//	var _report	=	$('#'+get_aba_active_kendoUi().REPORT_ID+'chart');
 	
-	//_report.find('svg').height(_report.height()).width(_report.width());
+	//Confere os chart para poder fazer as conversões
+	screenShotChart();
 	
     html2canvas(document.body, {
-//    	proxy: "https://html2canvas.appspot.com/query",
-        onrendered: function(canvas) {
-
-            var img 			= 	canvas.toDataURL("image/png");
-            var output 			= 	base64_encode(img);
-            var _param_request	=	{};
-                  
-            var report_wrs		=	get_aba_active_kendoUi();
-            
-            var _title			=	str_replace(global_especial_caracteres,'',str_replace(' ','_',report_wrs.TITLE_ABA))+date('_Y_m_d_H_i_s');
-            
-            
-            var _param_request	= 	{image:output,nameFile:'screenShot'+_title};                  
-            
-    		//Remove o report ID
-    		runCall(_param_request,'IMAGE','IMAGE','screenShot',null,'modal');
-    		
-        }
-    });
-    
+   	 useCORS: true,
+   	logging	: false,
+    	onrendered	: function(canvas) 
+    					{
+				           var img 				= 	canvas.toDataURL("image/png");
+				           var output 			= 	base64_encode(img);
+				           var _param_request	=	{};
+				           var report_wrs		=	get_aba_active_kendoUi();
+				           var _title			=	str_replace(global_especial_caracteres,'',str_replace(' ','_',retiraAcento(report_wrs.TITLE_ABA)))+date('_Y_m_d_H_i_s');
+				           var _param_request	= 	{image:output,nameFile:'screenShot'+_title};                  
+				         	//Remove o report ID
+					   		runCall(_param_request,'IMAGE','IMAGE','screenShot',function(data){
+					   			
+					   			$('.html2canvasImageSite').remove();
+					   			$('svg').show();
+					   			callModalScreenShot(_param_request.nameFile);
+					   		},'modal');
+					   		
+				   		}
+   });
 }    
+
+function get_form_info_screenShot()
+{
+ 
+	var name_base		=	$('.title_cube').html();
+	var infoKendo		=	get_aba_active_kendoUi();
+	
+		$('#mailSubject').val('WRS - '+name_base+' - '+infoKendo.TITLE_ABA);
+	
+		body	=	sprintf(LNG('ScreenShotMailBodyHtml'),infoKendo.TITLE_ABA,name_base,tagFilterWRS(false,'b'),getLogin('USER_DESC'));
+	
+	$('#bodyMail').html(body);
+}
+
+//Enviando email screen Shot
+//@link http://pt.stackoverflow.com/questions/81870/qual-express%C3%A3o-regular-posso-utilizar-para-remover-espa%C3%A7os-duplos-em-javascript
+//@link http://www.rogeralmeida.com.br/blog/jquery/validacao-de-email-utilizando-expressoes-regulares-e-jquery
+function sendMailScreenShot()
+{
+	var request			=	{
+								messsage	:	$('#bodyMail').summernote('code'),
+								subject		:	$('#mailSubject').val(),
+								to			:	str_replace([' ',','],';',$('#mailTo').val().replace(/( ){2,}/g, '$1')),
+								user_id		:	getLogin('USER_ID')
+							};
+	
+	 
+	
+	//validando emails
+	var check_mail		=	explode(';',request.to);
+	var mails_error		=	null;
+	var mails_correct	=	[]; 
+	
+	
+	if(isEmpty($.trim($('#mailTo').val())))
+	{
+		 WRS_ALERT(LNG('ScreenShotMailTO'),'warning');
+		 return false;
+	}
+	
+	if(isEmpty($.trim(request.subject)))
+	{
+		 WRS_ALERT(LNG('ScreenShotMailSUBJECT'),'warning');
+		 return false;
+	}
+	
+
+	if(isEmpty($.trim(request.messsage)) || $.trim(request.messsage)=='<p><br></p>')
+	{
+		 WRS_ALERT(LNG('ScreenShotMailMESSENGER'),'warning');
+		 return false;
+	}
+	
+	
+	
+	 for(var lineMail in check_mail)
+	 {
+     
+		if(isEmpty($.trim(check_mail[lineMail]))) continue;
+		 
+        	var filtro = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        
+        if(!filtro.test(check_mail[lineMail]))
+        {
+        	if(mails_error==null) mails_error='';
+        	mails_error	+=	check_mail[lineMail]+'<br>';
+        }else{
+        	mails_correct.push(check_mail[lineMail]);
+        }
+        
+	 }
+	 
+	 
+	 if(mails_error!=null)
+		 {
+			 WRS_ALERT(sprintf(LNG('ScreenShotMailWrong'),mails_error),'warning');
+			 return false;
+		 }
+	 
+	 
+	 	request.to	=	mails_correct;
+	 
+	 	
+		var _file	=	'WRS_REPORT';
+		var _class	=	'WRS_REPORT';
+		var _event	=	'screenshot';
+
+
+		var mail_send_callback	=	 function(data)
+		{
+			$('.btn-modal-cancel').click();
+			
+			if(data.data.send==true){
+				//send
+				 WRS_ALERT(LNG('ScreenShotMailSendSuccess'),'success');
+			}else{
+				WRS_ALERT(sprintf(LNG('ScreenShotMailSendError'),data.data.error),'error');
+				//not send
+			}
+			
+			
+		}
+		//HERE
+		$('.body_data_mail').html(LNG('ScreenShotMailSend'));
+		$('.btn_window_grid_event,.btn-left-anexo-css').remove();
+		//Remove o report ID
+		runCall(request,_file,_class,_event,mail_send_callback,'modal');
+		
+		
+     
+}
+
+function screenShotSendMail()
+{
+	
+	
+	var html		=	'<div class="progress wrs_generate_csv_zip">'+
+	  '<div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span></span>'+
+	 '</div>'+
+	'</div>';
+
+	
+	if($('.wrs_generate_csv_zip').length<=0){
+		$('body').append(html);
+	}
+	
+	$('.wrs_generate_csv_zip span').html(LNG('ScreenShotGenerate'));
+	
+	screenShot() ;
+	
+}
+
+function callModalScreenShot(nameImage)
+{
+	var funCallBack	=	function(data)
+	{
+		_START('screenShotSendMail');
+		
+			$('.modal-content-grid').html(data);
+		_END('screenShotSendMail');	
+	};
+	
+	$('#myModal').modal('show');
+	$('.wrs_generate_csv_zip').remove();
+	//modal enviando email
+	grid_window_modal(
+				{'nameImage':nameImage},
+				'screenShotSendMail',
+				funCallBack);
+}
+
+function screenShotChart()
+{
+	var container_chart	=	$('#'+get_aba_active_kendoUi().REPORT_ID+'Elements .chart');
+	var multiple_chart	=	$('#'+get_aba_active_kendoUi().REPORT_ID+'Elements .wrs_multiple_chart');
+	var gauge			=	$('#'+get_aba_active_kendoUi().REPORT_ID+'Elements .gauge_chart');
+	var dataChart		=	 'kendoChart';
+	var isGauge			=	false;
+	
+	if(multiple_chart.length>=1){
+		container_chart	=	multiple_chart;
+	}
+	
+	if(gauge.length>=1){
+		container_chart	=	gauge;
+		dataChart		=	'kendoRadialGauge';
+		isGauge			=	true;
+	}
+	
+	//
+		
+	
+	container_chart.each(function(){
+		var that		=	 $(this);
+		
+		
+
+		if(isGauge==true)
+		{
+			if($(this).attr('data-role')==="lineargauge")
+			{
+				dataChart	=	'kendoLinearGauge';
+			}
+		}
+			
+			
+		var chart	=	that.data(dataChart);
+		
+			chart.exportImage().done(function(data) {
+				that.find('svg').hide();
+				that.prepend('<img class="html2canvasImageSite" src="'+data+'"/>');
+				
+			});
+			
+	});
+	
+}
+
+function getLogin(id)
+{
+	var login 	=	$('body').WrsGlobal('getPHP','login');
+	var get		=	null;
+	
+	try{
+		get	=	login[id];
+	}catch(e){
+		get	=	 null;
+	}
+	
+	return get;
+	
+	
+}
 
 
 //CheckPassword

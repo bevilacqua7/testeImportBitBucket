@@ -393,7 +393,15 @@ class WRS
 	{
 		return WRS_SESSION('USER_CODE');
 	}
-		
+	
+	
+	public static function USER_EMAIL()
+	{
+	
+		return self::INFO_SSAS_LOGIN('USER_EMAIL');
+	}
+	
+	
 	public static function USER_DESC()
 	{
 		
