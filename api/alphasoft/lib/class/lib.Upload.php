@@ -1,8 +1,7 @@
 <?php
 
 includeCLASS('WRS_BASE');
-
-define('DIR_JQUERY_UPLOAD_LIB','jQuery-File-Upload-9.11.2'.DS.'server'.DS.'php'.DS.'UploadHandler.php');
+define('DIR_JQUERY_UPLOAD_LIB','jQueryFileUpload'.DS.'server'.DS.'php'.DS.'UploadHandler.php');
 
 $paramUpload	=	array(
 							'php'=>DIR_JQUERY_UPLOAD_LIB

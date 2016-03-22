@@ -411,7 +411,6 @@ EOF;
 			
 			$rels				=	 array('class'=>'form-group form-control-wrs_color');
 			$rel				=	 $this->getParamFormInput($this->merge_array_value($param,$rels));
-
 			$upload_dir_key 	= 	array($this->obj_atual['table'],$this->obj_atual['id'],$param['label']); // chave consiste em usuario logado + formulario em questao (ex. ATT_WRS_USER) + valor da chave da tabela (ex. USER_ID = 3)
 			$extra_params		=	array(
 					'autoUpload'		=> 	true,

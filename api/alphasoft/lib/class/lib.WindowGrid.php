@@ -80,6 +80,16 @@ class WindowGrid extends FORM
 		$this->manage_param	= new WRS_MANAGE_PARAM();
 		
 		/*
+		 * Envio de E-mail
+		 */
+		if($event=='screenShotSendMail')
+		{
+			$this->screenShotSendMail();
+			return false;
+		}
+		
+		
+		/*
 		 *	Executando as ROWS das GRIDS
 		 */
 		if(!empty($event_grid_inside))
@@ -129,12 +139,12 @@ class WindowGrid extends FORM
 				
 				switch($form_event)
 				{
-					case 'remove' 			: 	$param	=	$LocalEvents->delete($param) ; break;
-					case 'update'			:	$param	=	$LocalEvents->update($param) ; break;
-					case 'new'				:	$param	=	$LocalEvents->insert($param); break;
-					case 'import'			:	$param	=	$LocalEvents->import($param); break;
-					case 'export'			:	$param	=	$LocalEvents->export($param); break;
-					case 'form_exception'	:	{
+					case 'remove' 				: 	$param	=	$LocalEvents->delete($param) ; break;
+					case 'update'				:	$param	=	$LocalEvents->update($param) ; break;
+					case 'new'					:	$param	=	$LocalEvents->insert($param); break;
+					case 'import'				:	$param	=	$LocalEvents->import($param); break;
+					case 'export'				:	$param	=	$LocalEvents->export($param); break;
+					case 'form_exception'		:	{
 													$param			=	$this->build_grid_form($param);
 													$LocalEvents->build_grid_form_exception($param); // felipeb 20160310 - NAO SEI o motivo da classe nao retornar o $param completo, já fiz tudo que é teste possível mas não há mais tempo para investigação, acrescentei em uma variavel da classe e resgato logo abaixo se ela existir para substituir apenas o HTML do param
 													break;
@@ -196,6 +206,21 @@ class WindowGrid extends FORM
 		}else{
 			echo $TPL_HTML;
 		}
+		
+	}
+	
+	
+	
+	public function screenShotSendMail()
+	{
+		//Apenas informações dos cubos
+		includeCLASS('IMAGE');
+		$IMAGE	=	 new IMAGE();
+		
+		$pathScreenShot		=	 $IMAGE->getPathScreenShot();
+		
+		include PATH_TEMPLATE.'screenShotSendMail.php';
+		
 		
 	}
 	

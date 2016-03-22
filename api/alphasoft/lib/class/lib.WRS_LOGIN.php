@@ -183,11 +183,11 @@ class WRS_LOGIN extends WRS_BASE
 		$url			=	dirname($_SERVER['HTTP_REFERER']);
 		
 		
-		$TITLE		=LNG('HTML_LOGIN_RECOVER_TITLE');
-		$BODY		=LNG('HTML_LOGIN_RECOVER');
-		$LINK		=$url.'/login.php?recover='.$tag;
-		$TITLE_BUTTON	=LNG('HTML_LOGIN_RECOVER_BTN');
-		$LOGO		=$url.'/imagens/logo-wrs.png';
+		$TITLE			=	LNG('HTML_LOGIN_RECOVER_TITLE');
+		$BODY			=	LNG('HTML_LOGIN_RECOVER');
+		$LINK			=	$url.'/login.php?recover='.$tag;
+		$TITLE_BUTTON	=	LNG('HTML_LOGIN_RECOVER_BTN');
+		$LOGO			=	$url.'/imagens/logo-wrs.png';
 
 		include PATH_TEMPLATE.'recover_password.php';
 		

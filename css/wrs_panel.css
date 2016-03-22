@@ -1855,8 +1855,18 @@ border-radius: 3px;
 	position:inherit !important;
 
 }
-
-.chart g text{
-	color:#ffc1245 !important;
-	
+.btn-left-anexo-css{
+	color:#fff !important;
+	float:left;
 }
+
+.container-butto-table button,
+.container-butto-table button i{
+	color:#fff !important;
+	font-size:13px;
+}
+
+.html2canvasImageSite{
+	margin: 0px !important;
+	padding: 0px !important;
+} 

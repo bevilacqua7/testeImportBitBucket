@@ -1,6 +1,47 @@
 
 
- 
+function convertURLGoogleMaps(google,wrsParam,_map)
+{
+			var c = google.getCenter();
+            //URL of Google Static Maps.
+            var staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap";
+
+            //Set the Google Map Center.
+            staticMapUrl += "?center=" + c.lat() + "," + c.lng();
+
+            //Set the Google Map Size.
+            staticMapUrl += "&size="+_map.width+"x"+_map.height;
+
+            //Set the Google Map Zoom.
+            staticMapUrl += "&zoom=" + google.getZoom();
+
+            //Set the Google Map Type.
+            staticMapUrl += "&maptype=" + google.mapTypeId;
+
+            //Loop and add Markers.
+            for (var line in wrsParam) 
+			{
+				 staticMapUrl += "&markers=color:" + wrsParam[line].color + "|" + wrsParam[line].latitude + "," + wrsParam[line].longitude;
+//                staticMapUrl += "&markers=icon:" + wrsParam[line].icon + "|" + wrsParam[line].latitude + "," + wrsParam[line].longitude;
+            }
+
+		//	staticMapUrl += "&key=AIzaSyAvq_yJP8-zcJZNuwF47gmhIGPXQhjlTgE";
+           TRACE_DEBUG('<img src="'+staticMapUrl+'" />');
+         
+
+		
+}
+
+function exportGoogleMapsImage()
+{
+	$('.map').each(function(){
+			var _that		=	 $(this);
+			var wrsParam	=	_that.data('mapsImage');
+			var google		=	_that.data('goMap').map;	
+			//	_that.find('.gm-style').hide();
+			convertURLGoogleMaps(google,wrsParam,{width:_that.width(), height:_that.height()});
+	});
+}	
 
 
 function WRSMaps(KendoUi)
@@ -125,6 +166,8 @@ function WRSMaps(KendoUi)
 	var is_sort			=	getElementsWrsKendoUi(GRID);
 		is_sort			=	is_sort.ORDER_BY_COLUMN;
 		is_sort			=	empty(is_sort) ? false : is_sort;
+		
+	var that_url		=	'.';//dirname(window.location.href);
 	
 	//foreach(telerikGrid.headerIndex['1_3']);
 	/*
@@ -166,11 +209,23 @@ function WRSMaps(KendoUi)
 						}
 						
 						_title			=	strip_tags(_title);
+						var	_icon		=	that_url+'/api/gomap/map-marker-32_blue.png';
 						
+							switch(data_value)
+							{
+								case 'setinha_verde'	:	_icon =that_url+'/api/gomap/map-marker-32_green.png'; break;
+								case 'setinha_vermelha'	:	_icon =that_url+'/api/gomap/map-marker-32_pink.png'; break;
+								case 'yellow_square'	:	_icon =that_url+'/api/gomap/map-marker-32_yellow'; break;
+								
+							}
+							 
+							
+							
 							maps[maps.length]	=	 {
 															latitude	:	_explode[0],
 															longitude	:	_explode[1],
-															icon		: 	(data_value.indexOf('setinha_verde')>0)?'./api/gomap/map-marker-32_green.png':((data_value.indexOf('setinha_vermelha')>0)?'./api/gomap/map-marker-32_pink.png':((data_value.indexOf('yellow_square')>0)?'./api/gomap/map-marker-32_yellow.png':'./api/gomap/map-marker-32_blue.png')),
+															icon		: 	_icon,
+														//	color: 'red',
 															title		:	 _title,
 															html		: 	'<h5>'+_title+'</h5>'+data_value,
 															id			:	_data[obj].C000
@@ -199,11 +254,16 @@ function WRSMaps(KendoUi)
 			MAP.goMap(options);
 			
 			//var goMapCurrent	=	 MAP.data('goMap');
+			ELEMENT.attr('maps','true')
 			
-			ELEMENT.attr('maps','true');
+			MAP.data('mapsImage',maps);
 	}
 		
 		ELEMENT.attr('maps_wrs','true');
 
 	_END('WRSMaps');
 }
+
+
+
+ 

@@ -29,6 +29,8 @@ $REPORT_RESULT_HISTORY						=	LNG('REPORT_RESULT_HISTORY');
 $script_tags								=	'';
 $LABEL_LOAD									=	LNG('LABEL_LOAD');
 
+$GRID_HEADER_MAIL_SEND						=	LNG('GRID_HEADER_MAIL_SEND');
+
 $LAYOUTS					=	LNG('tpl_layout');
 //TAG pode ser enviada externamente pelo include
 if(!isset($HIDE_EXPORT)) $HIDE_EXPORT		=	'';
@@ -188,13 +190,20 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						    <li><a href="#" class="wrs_event_export" id-tag="{$idTag}" rel="k-grid-pdf"><i class="fa fa-file-pdf-o"></i> {$GRID_HEADER_EXPORT_PDF}</a></li>
 						    <li><a href="#" class="wrs_event_export" id-tag="{$idTag}" rel="k-grid-excel"><i class="fa fa-file-excel-o"></i> {$GRID_HEADER_EXPORT_EXCEL}</a></li>
 					  		<li><a href="#" class="wrs_event_export" id-tag="{$idTag}"  rel="k-grid-excel"><i class="fa fa-file-o"></i> {$GRID_HEADER_EXPORT_CSV}</a></li>
-						    <li><a href="#"><i class="fa fa-picture-o"></i> {$GRID_HEADER_EXPORT_IMAGE}</a></li>
+						   <!-- <li><a href="#"><i class="fa fa-picture-o"></i> {$GRID_HEADER_EXPORT_IMAGE}</a></li> -->
 						    
 						    <li  class="info_chart divider"></li>
+						    
+						
+						    
 						    <li class="info_chart" id="dropdown-title"><h4 class="black"><i class="fa fa-bar-chart"></i> {$GRID_HEADER_SEE_CHART}</h4></li>
 						    <li class="info_chart" ><a href="#" id-tag="{$idTag}" class="wrs_chart_export_svg"><i class="fa fa-file-o"></i> {$GRID_HEADER_EXPORT_IMAGE_SVG}</a></li>
-						    <li class="info_chart" ><a href="#" id-tag="{$idTag}" class="wrs_chart_export_image"><i class="fa fa-picture-o"></i> {$GRID_HEADER_EXPORT_IMAGE}</a></li>
-						    <li class="info_chart" ><a href="#" id-tag="{$idTag}" class="wrs_event_export wrs_chart_export_pdf" rel="k-grid-pdf"><i class="fa fa-file-pdf-o"></i> {$GRID_HEADER_EXPORT_PDF}</a></li>
+						 <!--   <li class="info_chart" ><a href="#" id-tag="{$idTag}" class="wrs_chart_export_image"><i class="fa fa-picture-o"></i> {$GRID_HEADER_EXPORT_IMAGE}</a></li> -->
+						 <!--   <li class="info_chart" ><a href="#" id-tag="{$idTag}" class="wrs_event_export wrs_chart_export_pdf" rel="k-grid-pdf"><i class="fa fa-file-pdf-o"></i> {$GRID_HEADER_EXPORT_PDF}</a></li> -->
+						    
+						 <li  class="divider"></li>
+						     <li ><a class="wrs_event_export"  href="#" id-tag="{$idTag}" rel="print_send_mail"  ><i class="fa fa-envelope-o"></i> {$GRID_HEADER_MAIL_SEND}</a></li>
+						    
 						    
 						</ul>
 				</div>

@@ -697,6 +697,17 @@ function array_uintersect(arr1) {
 	  return retArr;
 	}
 
+function implode_request(param)
+{
+	var tmp	=	[];
+	
+	for(var line in param)
+		{
+			tmp.push(line+'='+param[line]);	
+		}
+	
+	return implode('&',tmp);
+}
 
 function strcasecmp(f_string1, f_string2) {
 	  //  discuss at: http://phpjs.org/functions/strcasecmp/
@@ -2636,4 +2647,22 @@ function sleep(milliseconds) {
 	      break;
 	    }
 	  }
+	}
+
+
+
+function dirname(path) {
+	  //  discuss at: http://phpjs.org/functions/dirname/
+	  //        http: //kevin.vanzonneveld.net
+	  // original by: Ozh
+	  // improved by: XoraX (http://www.xorax.info)
+	  //   example 1: dirname('/etc/passwd');
+	  //   returns 1: '/etc'
+	  //   example 2: dirname('c:/Temp/x');
+	  //   returns 2: 'c:/Temp'
+	  //   example 3: dirname('/dir/test/');
+	  //   returns 3: '/dir'
+
+	  return path.replace(/\\/g, '/')
+	    .replace(/\/[^\/]*\/?$/, '');
 	}
