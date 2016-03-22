@@ -62,8 +62,8 @@ class WRS_MANAGE_PARAM
 					'nome_menu_LNG'			=>	'MENU_ADMIN_USER',
 					'nome_arquivo_import'	=>	'USER.CSV',
 					'icon'					=>	'fa fa-users',
-					'colunas_import_export'	=>	'USER_CODE, USER_DESC, USER_EMAIL, USER_TYPE, USER_FILTER, USER_FILTER_VALUE, USER_INTERNAL, USER_STATUS, USER_FORMAT, LANGUAGE_ID, PERFIL_ID',
-					'colunas_descricao'		=>	'USER_CODE(varchar[50]), USER_DESC(varchar[100]), USER_EMAIL(varchar[200]), USER_TYPE(varchar[100]), USER_FILTER(text), USER_FILTER_VALUE(text), USER_INTERNAL(varchar[50]), USER_STATUS(smallint), USER_FORMAT(varchar[15]), LANGUAGE_ID(varchar[3]), PERFIL_ID(varchar[50])',
+					'colunas_import_export'	=>	'USER_CODE, USER_DESC, USER_EMAIL, USER_PWD, USER_TYPE, USER_FILTER, USER_FILTER_VALUE, USER_INTERNAL, USER_STATUS, USER_FORMAT, LANGUAGE_ID, PERFIL_ID',
+					'colunas_descricao'		=>	'USER_CODE(varchar[50]), USER_DESC(varchar[100]), USER_PWD(varchar[32]), USER_EMAIL(varchar[200]), USER_TYPE(varchar[100]), USER_FILTER(text), USER_FILTER_VALUE(text), USER_INTERNAL(varchar[50]), USER_STATUS(smallint), USER_FORMAT(varchar[15]), LANGUAGE_ID(varchar[3]), PERFIL_ID(varchar[50])',
 					'exibe_menu_ADM'		=>	true
 			),
 			'ATT_WRS_SERVER'				=> 	array(
@@ -99,8 +99,8 @@ class WRS_MANAGE_PARAM
 					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE_USER',
 					'icon'					=>	'fa fa-object-group',
 					'nome_arquivo_import'	=>	'ASSOCIATION.CSV',
-					'colunas_import_export'	=>	'DATABASE_ID, CUBE_ID, USER_ID',
-					'colunas_descricao'		=>	'DATABASE_ID(varchar[100]), CUBE_ID(varchar[100]), USER_ID(varchar[50])',
+					'colunas_import_export'	=>	'DATABASE_ID, CUBE_ID, USER_CODE',
+					'colunas_descricao'		=>	'DATABASE_ID(varchar[100]), CUBE_ID(varchar[100]), USER_CODE(varchar[50])',
 					'exibe_menu_ADM'		=>	true,
 					'menu_visao_modal'		=>	false /*array( // pode ser false, onde esconde o menu todo na modal da tabela em questao
 														'list'			=> true, // GRID
@@ -461,19 +461,22 @@ HTML;
 		// ATENCAO: JS aplicado somente no ambiente administrativo!!!
 		// se for utilizar no panel, incluir JS no header e as chamadas para aplicar mascara de acordo com o evento (focus) no input desejado
 		
+		// FILTERABLE
+		//  ,'filterable'=>false		
+		
 		// Atributos gerados com base na tabela ATT_WRS_USER automaticamente de acordo com script SQL ao final deste arquivo
-		$fields['USER_ID']   			= array('title'=>LNG('USER_ID')    			, 'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
-		$fields['USER_CODE']   			= array('title'=>LNG('USER_CODE')    		, 'key'=>true ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_DESC']   			= array('title'=>LNG('USER_DESC')    		, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_PWD']   			= array('title'=>LNG('USER_PWD')    		, 'type'=>'password', 'length'=>32, 'class'=>'hide', 'edit_on_new'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
-		$fields['USER_SALT']   			= array('title'=>LNG('USER_SALT')    		, 'length'=>32, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
-		$fields['USER_PWD_OLD']  	 	= array('title'=>LNG('USER_PWD_OLD')    	, 'length'=>32, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
-		$fields['USER_EMAIL']  			= array('title'=>LNG('USER_EMAIL')    		, 'length'=>200,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_TYPE']   			= array('title'=>LNG('USER_TYPE')    		, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_ID']   			= array('title'=>LNG('USER_ID')    			, 'type'=>'int', 'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
+		$fields['USER_CODE']   			= array('title'=>LNG('USER_CODE')    		, 'key'=>true, 'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_DESC']   			= array('title'=>LNG('USER_DESC')    		, 'length'=>100, 'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_PWD']   			= array('title'=>LNG('USER_PWD')    		, 'type'=>'password', 'length'=>32, 'class'=>'hide', 'edit_on_new'=>true,  'obrigatorio' => true);
+		$fields['USER_SALT']   			= array('title'=>LNG('USER_SALT')    		, 'length'=>32, 'class'=>'hide',  'obrigatorio' => false);
+		$fields['USER_PWD_OLD']  	 	= array('title'=>LNG('USER_PWD_OLD')    	, 'length'=>32, 'class'=>'hide',  'obrigatorio' => false);
+		$fields['USER_EMAIL']  			= array('title'=>LNG('USER_EMAIL')    		, 'length'=>200, 'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_TYPE']   			= array('title'=>LNG('USER_TYPE')    		, 'length'=>100, 'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_FILTER']   		= array('title'=>LNG('USER_FILTER')    		, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['USER_FILTER_VALUE']   	= array('title'=>LNG('USER_FILTER_VALUE') 	, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
-		$fields['USER_INTERNAL']   		= array('title'=>LNG('USER_INTERNAL')    	, 'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
-		$fields['USER_FVD']   			= array('title'=>LNG('USER_FVD')    		, 'type'=>'int',   'length' => 5, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
+		$fields['USER_INTERNAL']   		= array('title'=>LNG('USER_INTERNAL')    	, 'length'=>50, 'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
+		$fields['USER_FVD']   			= array('title'=>LNG('USER_FVD')    		, 'type'=>'int', 'length' => 5, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['USER_FLAG']   			= array('title'=>LNG('USER_FLAG')    		, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['USER_STATUS']   		= array('title'=>LNG('USER_STATUS')   		, 'is_select'=>array('-1'=>'Selecionar','1'=>'Ativo','0'=>'Inativo'),   'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_FORMAT']   		= array('title'=>LNG('USER_FORMAT')    		, 'is_select'=>array('-1'=>'Selecionar','azul'=>'Azul','cinza'=>'Cinza','laranja'=>'Laranja','verde'=>'Verde','vermelho'=>'Vermelho'),   'length'=>15,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);

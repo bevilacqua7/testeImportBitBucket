@@ -847,7 +847,7 @@ HTML;
 		$table				=	$param['table'];
 		$model				=	array();
 		$modelField			=	array();	
-		
+		$filterable 		=	isset($param['filterable'])?$param['filterable']:false;
 		
 		$_column		=	 json_encode($column,true);
 		$_param			=	 json_encode($param,true);
@@ -893,7 +893,11 @@ HTML;
 		                                		contentType	: 'application/json',
 	                                			url			:	'run.php?file=WindowGrid&class=WindowGrid&event_grid_inside=grid&table={$table}&cube_s={$cube_s}'
 		                                	},
-		                                parameterMap		:	function(data) {return kendo.stringify(data);}
+		                                parameterMap		:	function(data) { 
+		                                								// TODO: para fazer a condicao de AND ou OR das colunas, basta alterar a variavel this.options.dataSource._filter.logic baseado em outro componente na tela, valores 'and' ou 'or' 
+		                                								data['filters']=this.options.dataSource._filter;
+		                                								return kendo.stringify(data);
+																}
 		                            },
 		                            schema: {
 		                            	data	:"data",
@@ -909,6 +913,7 @@ HTML;
                        				sortable:true,
 									resizable:true,
 									scrollable:true,
+									filterable:{$filterable},
 									pageable:	{
 													refresh		:false,
 													pageSizes	:[10,25,50,100,200,500,1000],
@@ -927,6 +932,7 @@ HTML;
 		            
 HTML;
 
+		
 		return $grid;	
 		
 	}

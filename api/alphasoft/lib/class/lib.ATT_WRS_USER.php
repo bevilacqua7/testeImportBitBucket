@@ -38,57 +38,83 @@ class ATT_WRS_USER extends WRS_BASE
 		header('Content-Type: application/json');
 		
 		$options		=	 array(
-				'operacao',
 				'objSelecionados',
-				'senha'
+				'senha',
+				'old_senha'
 		);
-
-		$parameter		=	 fwrs_request($options);
+		
+		$parameter		=	fwrs_request($options);
+		$nova_senha 	= 	$parameter['senha'];
+		$old_senha 		= 	$nova_senha!='' && $parameter['old_senha']!=''?$parameter['old_senha']:''; // garante que haja uma nova senha para utilizar controles com a senha antiga
+		$objSelecionados=	$parameter['objSelecionados'];
 		
 		includeQUERY('WRS_LOGIN');
 		$class_query_login = new QUERY_LOGIN();
 		
-		$arr_operacoes = array('expirar','definir');
-		if(in_array($parameter['operacao'],$arr_operacoes)){
-				
-			$query = array();
-			if($parameter['operacao']=='expirar'){
-				foreach($parameter['objSelecionados'] as $user_id=>$user_code){
-					$query[] = $class_query_login->RESET_SSAS_PASSWORD($user_code);
-				}
-			}else{
-				$CUSTOMER_ID 			= 	WRS::CUSTOMER_ID();
-				/*
-				 * TODO: se for todos os usuarios, varrer usuarios do customer e setar a query abaixo
-				 */
-				foreach($parameter['objSelecionados'] as $user_id=>$user_code){
-					$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( $user_code, '', $parameter['senha'], '', $CUSTOMER_ID ); // TODO: tratar $USER_MASTER - gravar no statis WRS 343, depois no WRS_LOGIN pra ser recuperado no sistema
-				}
+		$qtde_user = (is_array($objSelecionados) && count($objSelecionados)>0)?count($objSelecionados):0;
+			
+		$query = array();
+		
+		// se houver senha antiga, não pode passar user_id e customer_id
+		$USER_MASTER			= 	WRS::USER_MASTER();
+		$USER_ID_LOGADO			= 	$old_senha!=''?0:WRS::USER_ID();
+		$CUSTOMER_ID 			= 	$old_senha!=''?0:WRS::CUSTOMER_ID();
+		
+		if($qtde_user){
+			foreach($objSelecionados as $user_id=>$user_code){
+				$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( $user_code, $USER_MASTER, $nova_senha, $old_senha, $CUSTOMER_ID, $USER_ID_LOGADO ); 
 			}
-			
-			/*
-			 * TODO: implementar no language, a descricao dos campos no banco
-			 */
-			
-			/*
-			 }else{
-			 $rows 	= $this->fetch_array($query);
-			 if(array_key_exists('output', $rows)){
-			 $msg = $rows['output'];
-			 }else if(array_key_exists('ERROR_MESSAGE', $rows)){
-			 $status=false;
-			 $msg = $rows['ERROR_MESSAGE'];
-			 }
-			 */
-			
-			$mensagems['mensagem']	=	"<pre>".print_r($query,1)."</pre>";//'PHP OK - registros: '.$parameter['qtde'].' - Operacao: '.$parameter['operacao'].' - Senha: '.$parameter['senha'].' - Objetos: <pre>'.print_r($parameter['objSelecionados'],1).'</pre>' ;
-			$mensagems['type']		=	'success';
-					
-			echo json_encode($mensagems);
-			
 		}else{
-			return false;
+				$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( '', $USER_MASTER, $nova_senha, $old_senha, $CUSTOMER_ID, $USER_ID_LOGADO ); 					
 		}
+		
+		$this->admin->set_conn($this->get_conn());
+		$status=true;
+		$op = '';
+		$qtde_op = $qtde_user==0?LNG('js_admin_pass_sintax_d'):$qtde_user;
+		$qtde_op = ($old_senha!='')?LNG('js_admin_pass_sintax_e'):$qtde_op;		
+		if($nova_senha==''){		
+			$op 	 = $qtde_op;
+			$op		.= LNG_s('js_admin_pass_sintax_c',(($qtde_user>1)?'s':''));
+			$op		.= ' '.LNG_s('php_admin_msg_exp_success',(($qtde_user>1)?'s':''));
+		}else{
+			$op = LNG('php_admin_msg_red_success');
+			$op.= $qtde_op;
+			$op.= LNG_s('js_admin_pass_sintax_c',(($qtde_user>1)?'s':''));
+			$op.= LNG('php_admin_msg_red_success2');
+		}
+		$msg = $op;
+		
+		if(is_array($query) && count($query)>0){
+			foreach($query as $query_exec){
+				
+				$queryRes = $this->admin->query($query_exec);
+				
+				if(!$queryRes){
+					$status=false;
+					$st = sqlsrv_errors();
+					$DATA_BASE_ERROR		=	LNG('DATA_BASE_ERROR');
+					$msg					=	$DATA_BASE_ERROR.$st[0]['message'];						
+				}else if($this->admin->num_rows($queryRes)){
+					$rows	=	$this->fetch_array($queryRes);
+					$status = 	(int)trim($rows['STATUS']);
+					if($status!=1){
+						$status=false;
+						$msg = ($nova_senha=='')?LNG('php_admin_msg_exp_erro'):LNG('php_admin_msg_red_erro');
+						$msg.= "<br><b>".$rows['MESSAGE']."</b>";
+					}
+				}
+				
+			}
+		}else{
+			$msg = ($nova_senha=='')?LNG('php_admin_msg_exp_erro'):LNG('php_admin_msg_red_erro');
+		}
+		
+		$mensagens['mensagem']	=	$msg;
+		$mensagens['type']		=	(!$status)?'error':'success';
+				
+		echo json_encode($mensagens);
+		
 	}
 	
 	public function insert($options)

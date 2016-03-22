@@ -98,6 +98,10 @@ $(document).ready(function(){
 		  }
 	});
 	
+	$('.bt_alterar_senha').click(function(){
+		abre_modal_alterar_senha();
+	});
+	
 	
 	_END('Menu.js');
 	

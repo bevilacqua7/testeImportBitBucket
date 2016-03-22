@@ -122,6 +122,11 @@ class WRS
 	{
 		$_SESSION['CUSTOMER_ID']	=	$custumer_id;
 	}
+
+	public static function SET_USER_MASTER($user_master)
+	{
+		$_SESSION['USER_MASTER']	=	$user_master;
+	}
 	
 	
 	/**
@@ -340,10 +345,11 @@ class WRS
 	 * Grava o Logind ID
 	 * @param string $login
 	 */
-	public static function SET_LOGIN($login,$perfil=null)
+	public static function SET_LOGIN($login,$perfil=null) // user_master, user_code
 	{
 		$_SESSION['LOGIN']		=	$login;
 		$_SESSION['USER_CODE']	=	(trim($perfil)!='' && $perfil!=null)?$perfil:$login;
+		$_SESSION['USER_MASTER']=	(trim($perfil)!='' && $perfil!=null)?$login:'';
 	}
 	
 	/**
@@ -388,11 +394,17 @@ class WRS
 	{
 		return WRS_SESSION('SERVER_ID');
 	}
-	
+
 	public static function USER_CODE()
 	{
 		return WRS_SESSION('USER_CODE');
 	}
+	
+	public static function USER_MASTER()
+	{
+		return WRS_SESSION('USER_MASTER');
+	}
+		
 	
 	
 	public static function USER_EMAIL()

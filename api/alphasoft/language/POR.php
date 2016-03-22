@@ -149,7 +149,7 @@ HTML;
 	
 	$language ['TITLE_TEMA'] 			= "Tema";
 	$language ['TITLE_LINGUA'] 			= "Lingua";
-	$language ['TITLE_ALTER_SENHA'] 	= "Alterar Seha";
+	$language ['TITLE_ALTER_SENHA'] 	= "Alterar Senha";
 	$language ['TITLE_ADMINISTRATIVO'] 	= "Administrativo";
 	$language ['TITLE_ADMINISTRATIVO_MENU'] 	= "MENU PRINCIPAL";
 		
@@ -564,6 +564,8 @@ HTML;
 	// JSs de MENU, ADMIN e REPORTS
 	$language['JS_menu_report_include'] 	= 	'Inclusão de Relatório';
 	$language['JS_menu_report_name'] 		= 	'Escolha um nome para o relatório';
+	
+	$language['js_admin_no_user'] 			= 	'Não é possível alterar a senha sem que seja do seu próprio usuário';
 
 	$language['JS_admin_choice_column'] 	= 	'Qual coluna deseja editar?';
 	$language['JS_admin_choice_column_user']= 	'Usuário';
@@ -573,12 +575,26 @@ HTML;
 	$language['js_admin_pass_sintax_b']		=	'Deseja realmente expirar a senha para ';
 	$language['js_admin_pass_sintax_c']		=	' usuário%s';
 	$language['js_admin_pass_sintax_d']		=	'todos os';
+	$language['js_admin_pass_sintax_e']		=	'seu próprio';
+	$language['js_admin_pass_self']			=	'Você precisa definir sua nova senha';
 	$language['js_admin_pass_same']			=	'A senha e a confirmação de senha precisam ser iguais.';
+	$language['js_admin_pass_blank']		=	'A senha e a confirmação de senha não podem ser em branco.';
 	$language['js_admin_pass_min']			=	'A senha e a confirmação de senha não podem ter menos de 3 caracteres.';
-	$language['js_admin_observation']		=	'* deixe os campos em branco para expirar a senha';
+	$language['js_admin_pass_equals']		=	'A nova senha e a confirmação de senha devem ser diferentes da senha atual.';
+	$language['js_admin_observation']		=	' expirar a senha';
 	$language['js_admin_new_pass_placeholder']=	'mínimo de 3 caracteres';
+	$language['js_admin_old_pass_placeholder']=	'entre com sua senha atual';
 	$language['js_admin_new_pass']			=	'Nova Senha: ';
 	$language['js_admin_confirm_pass']		=	'Confirmar Senha: ';
+	$language['js_admin_old_pass']			=	'Senha Atual: ';
+	$language['js_admin_confirm_question']	=	'?';
+	
+
+	$language['php_admin_msg_exp_success']	=	'expirado%s com sucesso';
+	$language['php_admin_msg_red_success']	=	'Redefinição de senha para ';
+	$language['php_admin_msg_red_success2']	=	' realizada com sucesso';
+	$language['php_admin_msg_exp_erro']		=	'Erro na expiração de senha';
+	$language['php_admin_msg_red_erro']		=	'Erro na definição de nova senha';
 	
 	$language['JS_admin_confirm_export'] 	= 	'Deseja exportar quais registros?';
 	$language['JS_admin_all_records'] 		= 	'Todos os registros';
