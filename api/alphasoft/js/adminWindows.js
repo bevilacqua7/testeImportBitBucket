@@ -757,7 +757,7 @@ function atualiza_link_field_master(obj_principal,obj_referencias){
 			campo_a_preencher_descricao.html(descricao_a_preencher);
 			campo_a_preencher_valor.val(valor_a_preencher);
 		}
-	});
+	}).trigger('change');
 }
 
 
