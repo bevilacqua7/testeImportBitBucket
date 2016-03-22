@@ -361,10 +361,13 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 		$param['tabela_export']			= $event_form;
 		$param['caracter_separacao']	= $_regForExport['caracter_separacao'];
 		$param['efetua_compactacao']	= $_regForExport['efetua_compactacao'];
-	
-		$nome_diretorio = 'uploads/'.WRS::CUSTOMER_ID().'/';
+
+		$customer_id_logado		= WRS::CUSTOMER_ID();
+		
+		$nome_diretorio = 'uploads/'.$customer_id_logado.'/';
 		$param['nome_diretorio']	= $nome_diretorio;
-	
+		
+		$param['filtro_fixo'] = 'CUSTOMER_ID = '.$customer_id_logado;
 	
 		include PATH_TEMPLATE.'export_file_window.php';
 		$link_download = $this->admin->downloadLink($_regForExport['objetosSelecionados'],$_regForExport['chave_primaria'],$param);

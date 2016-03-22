@@ -165,7 +165,10 @@ class HeaderTag
 
 	 	$tag[]		=	array("host"=>"api/kendoUi/examples/content/shared/js/console.js","access"=>array("main","panel"));//Main
 	 	
-	 	$tag[]		=	array("host"=>"api/kendoUi/js/messages/kendo.messages.pt-BR.min.js","access"=>array("main","panel"));	//Main
+	 	$tag[]		=	array("host"=>"api/kendoUi/js/messages/".LNG('kendoUI'),"access"=>array("main","panel"));	//Main
+	 	
+	 	
+	 	
 	 	$tag[]		=	array("host"=>"api/kendoUi/js/jszip.min.js",				"access"=>array("main","panel"));//Main
 	 	$tag[]		=	array("host"=>"api/kendoUi/js/kendo.dataviz.themes.min.js",	"access"=>array("main","panel"));	//Main
 	 	$tag[]		=	array("host"=>"http://maps.googleapis.com/maps/api/js?key=AIzaSyAvq_yJP8-zcJZNuwF47gmhIGPXQhjlTgE&sensor=true&v=3.exp","access"=>array("panel"),'version'=>'no-use');

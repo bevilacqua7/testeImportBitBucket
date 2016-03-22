@@ -358,7 +358,8 @@ class WindowGrid extends FORM
 		//Formulário
 		if($wrs_type_grid=='form')
 		{
-			$param					=	 $this->create_form($param,$visao,$actions_fiels);
+			$current_event			=	fwrs_request('form_event');
+			$param					=	 $this->create_form($param,$visao,$actions_fiels,$current_event);
 			$param['title_menu']	=	$this->navMenu($param['table']);
 			return $param;
 		}
@@ -712,15 +713,71 @@ EOF;
 			 * 								) 
 			 * 			[logic] => and 
 			 * 		)
+			 * 
+			 * OU
+			 * 
+			 * Array(
+			 *		[filters] => Array(
+			 *							[0] => Array(
+			 *											[logic] => or
+			 *											[filters] =>  Array(
+			 *																[0] => Array(
+			 *																			[field] =>  USER_CODE
+			 *																			[operator] =>   contains
+			 *																			[value] =>   dm
+			 *																		),
+			 *																[1] => Array(
+			 *																			[field] =>   USER_CODE
+			 *																			[operator] =>   contains
+			 *																			[value] =>   drg
+			 *																		)
+			 *														)
+			 *										),
+			 *							[1] => Array(
+			 *											[logic] =>   and
+			 *											[filters] =>  Array(
+			 *																[0] => Array(
+			 *																			[field] =>   USER_DESC
+			 *																			[operator] =>   contains
+			 *																			[value] =>   drop
+			 *																		),
+			 *																[1] => Array(
+			 *																			[field] =>   USER_DESC
+			 *																			[operator] =>   contains
+			 *																			[value] =>   metric
+			 *																		)
+			 *														)
+			 *										)
+			 *						),
+			 *		[logic] =>   and
+			 *	)
 			 */
 			$where_conditions_columns	=	array();
 			$campos_de = array('#CAMPO#','#VALOR#');
+			
+			// TODO: quando for feito o tipo de condicao pras COLUNAS, considerar esta variavel originalmente
+			$column_filters['logic'] = ' AND ';
+									
 			foreach($column_filters['filters'] as $arr_operacao){
-				$campos_para = array($arr_operacao['field'],$arr_operacao['value']);
-				$condicao = str_replace($campos_de,$campos_para,$filters_operations[$arr_operacao['operator']]);
-				$where_conditions_columns[] = '('.$condicao.')';
+				if(array_key_exists('filters', $arr_operacao)){
+					$where_conditions_columns_parcial	=	array();
+					foreach($arr_operacao['filters'] as $arr_operacao_parcial){
+						$campos_para = array($arr_operacao_parcial['field'],$arr_operacao_parcial['value']);
+						$condicao = str_replace($campos_de,$campos_para,$filters_operations[$arr_operacao_parcial['operator']]);
+						$where_conditions_columns_parcial[] = '('.$condicao.')';
+					}
+					$where_conditions_columns[] = '('.implode(' '.strtoupper($arr_operacao['logic']).' ',$where_conditions_columns_parcial).')';					
+				}else{				
+					$campos_para = array($arr_operacao['field'],$arr_operacao['value']);
+					$condicao = str_replace($campos_de,$campos_para,$filters_operations[$arr_operacao['operator']]);
+					$where_conditions_columns[] = '('.$condicao.')';
+				}
 			}
 			$where[] = '('.implode(' '.strtoupper($column_filters['logic']).' ',$where_conditions_columns).')';
+			
+			
+			
+			
 		}
 		
 		$where = implode(' AND ',$where);
@@ -751,7 +808,12 @@ EOF;
 			}
 			
 			
-			if(isset($tools['is_select']))
+			if(
+					isset($tools['is_select']) && 										// alem de validar se ele é is_select  
+					(!array_key_exists('list', $tools) || $tools['list']==true) && 		// deve validar para validar se o campo que é is_select realmente tem de ser executado em uma grid, sendo que o SQL será executado para cada linha.  Este comando deve ser atualizado para ser trazido direto no SQL e acrescentar um field a mais com o parametro grid_only - felipeb 20160321
+					(!array_key_exists('basic', $tools) || $tools['basic']==true) && 
+					(!array_key_exists('grid', $tools) || $tools['grid']==true)
+			)
 			{
 					$is_select[$label]	=	$tools['is_select'];
 			}
@@ -823,7 +885,7 @@ EOF;
 						
 						
 						
-						$query_box			=	$this->query($query_box,true,false);
+						$query_box			=	$this->query($query_box);//,true,false);
 						$html_option		=	'';
 						if($this->num_rows($query_box))
 						{

@@ -126,6 +126,7 @@ class ATT_WRS_USER extends WRS_BASE
 	{
 		$_fields			= $options['field'];
 		$_request_original 	= $_REQUEST;
+		
 		$_tabela			= $options['table'];
 	
 		$param				=	$this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
@@ -170,8 +171,15 @@ class ATT_WRS_USER extends WRS_BASE
 			$condicao_query = $id_for_del.",".$CUTOMER_ID.",".$USER_CODE;
 			$query_exec = $this->queryClass->Get_procedure_remove_user($_tabela, $condicao_query);
 			$query = $this->admin->query($query_exec);
-			if(!$this->num_rows($query) || !$query)
-			{
+			if ($this->num_rows($query)){
+				$rows	=	$this->fetch_array($query);
+				if ($rows['STATUS'] < 1){
+					$status=false;
+					$msg		=	$rows['MESSAGE'];
+					$this->admin->retornaMsgAcaoTelaAdmin($query,$msg,$_tabela,$query_exec);
+					return false;
+				}
+			}else if(!$this->num_rows($query) || !$query){
 				$status=false;
 				$st = sqlsrv_errors();
 				$DATA_BASE_ERROR		=	LNG('DATA_BASE_ERROR');
@@ -182,12 +190,7 @@ class ATT_WRS_USER extends WRS_BASE
 		}
 		$msg = LNG_S('ADMIN_REG_DELETED',((count($_regForDelete['objetosSelecionados'])>1)?'s':''));
 		$this->admin->retornaMsgAcaoTelaAdmin($status,$msg,$_tabela,$query_exec);
-		
-		
-		
-		
-		
-	
+
 	}
 	
 	public function import($options)
@@ -241,10 +244,13 @@ class ATT_WRS_USER extends WRS_BASE
 		$param['tabela_export']			= $event_form;
 		$param['caracter_separacao']	= $_regForExport['caracter_separacao'];
 		$param['efetua_compactacao']	= $_regForExport['efetua_compactacao'];
-	
-		$nome_diretorio = 'uploads/'.WRS::CUSTOMER_ID().'/';
+
+		$customer_id_logado		= WRS::CUSTOMER_ID();
+		
+		$nome_diretorio = 'uploads/'.$customer_id_logado.'/';
 		$param['nome_diretorio']	= $nome_diretorio;
-	
+
+		$param['filtro_fixo'] = 'CUSTOMER_ID = '.$customer_id_logado;
 	
 		include PATH_TEMPLATE.'export_file_window.php';
 		$link_download = $this->admin->downloadLink($_regForExport['objetosSelecionados'],$_regForExport['chave_primaria'],$param);

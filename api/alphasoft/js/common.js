@@ -754,7 +754,7 @@ function replace_attr(value)
 
 
 
-function WRS_CONFIRM(_text,_type,_callback,_extraButtonParam,_extraType,_extraForceButtons)
+function WRS_CONFIRM(_text,_type,_callback,_extraButtonParam,_extraType,_extraForceButtons,_extraParams)
 {
 	var _title				=	"ALERT_TITLE_INFO";
 	var _is_type			=	_type;
@@ -793,11 +793,16 @@ function WRS_CONFIRM(_text,_type,_callback,_extraButtonParam,_extraType,_extraFo
 									text  		: 	_text,
 									callback	: 	function(result){ _callback(result); }
 							};
-		
+
 		
 		if(_extraForceButtons!=undefined)
 		{
 			_modal			=	merge_objeto(_modal,{buttons 	: _extraForceButtons});
+		}
+		
+		if(_extraParams!=undefined)
+		{
+			_modal			=	merge_objeto(_modal,_extraParams);
 		}
 		
 		modal(_modal);
@@ -1854,7 +1859,10 @@ function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
 														return true;
 									 			}
 					 	}
-					]
+					],
+					{
+						title	:	LNG('TITLE_ALTER_SENHA')
+					}
 				);
 
 }
