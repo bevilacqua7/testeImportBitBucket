@@ -308,6 +308,7 @@ function get_grid_window_values_form(_event)
 	var param		=	{};
 
 	form.find('input[type=text]').each(function(){
+		//if(!$(this).hasClass('hide'))
 		param[$(this).attr('name')]	=	$(this).val();
 	});
 
@@ -315,6 +316,9 @@ function get_grid_window_values_form(_event)
 		param[$(this).attr('name')]	=	$(this).val();
 	});
 
+	form.find('input[type=password]').each(function(){
+		param[$(this).attr('name')]	=	$(this).val();
+	});
 
 	form.find('input[type=checkbox]').each(function(){		
 		var _value			=	$(this).prop('checked')==true ? $(this).val() : 0;		

@@ -38,6 +38,8 @@
 	$language['TOOLTIP_BTN_CLEAR_ELEMENTS_BELLOW']	=	"Remove todos os elementos do container a baixo";
 	//END
 	
+	$language['kendoUI']							=	"kendo.messages.pt-BR.min.js";
+	
 	$language['ERROR_CANT_CREATE_JOB'] 						= "Ops.. Favor reenviar a consulta, não foi possível criar um job, se o erro persistir favor entrar em contato com o suporte";
 	
 	$language['CSV_ERROR_TABLE_EMPTY']			="Ops, ainda não foi gerado nenhum relatório para essa  consulta, ou falta informaçõe da tabela para ser gerada.";
@@ -61,10 +63,9 @@
 	$language['MENU_ADMIN_SSAS_REPORT']		=	'Relatórios';
 	$language['MENU_ADMIN_SSAS_LAYOUTS']	=	'Layouts';
 	
+	$language['file_error_import']			=	'Arquivo não importado';
 	$language['file_not_validated']			=	'Arquivo não validado';	
 	$language['file_not_unziped']			=	'Arquivo não descompactado';
-	
-	
 	
 	
 	$language['ADMIN_AVISO_IMPORT']			=	'- importe apenas arquivos no formato CSV ou ZIP<br>- certifique-se que o nome do arquivo seja: #NAME_FILE#, ou que o ZIP contenha este arquivo<br>- Layout padrão:<br><span class="class_layout_padrao">#DEFAULT_LAYOUT#</span>';
@@ -603,6 +604,35 @@ HTML;
 	
 	
 	/*
+	 * MANAGE_PARAM
+	 */
+
+	$language['manage_param_sem_opcao']				=	'Sem opção';
+	$language['manage_param_selecionar']			=	'Selecionar';
+	$language['manage_param_ativo']					=	'Ativo';
+	$language['manage_param_inativo']				=	'Inativo';
+	$language['manage_param_bloqueado']				=	'Bloqueado';
+	$language['manage_param_azul']					=	'Azul';
+	$language['manage_param_cinza']					=	'Cinza';
+	$language['manage_param_laranja']				=	'Laranja';
+	$language['manage_param_verde']					=	'Verde';
+	$language['manage_param_vermelho']				=	'Vermelho';
+	$language['manage_param_ingles']				=	'Inglês';
+	$language['manage_param_espanhol']				=	'Espanhol';
+	$language['manage_param_portugues']				=	'Português';
+	$language['manage_param_abrir_relatorio']		=	'Abrir Relatório';
+	$language['manage_param_abrir_layout']			=	'Abrir Layout';
+	
+			
+	$language['FILTER_DESC']	=	'Filtrados';		
+	$language['FILTERS_VALUES']	=	'Itens Filtrados';	
+	$language['LAYOUT_DATE']	=	'Data';	
+	$language['LAYOUT_UPDATE']	=	'Update';	
+	$language['LAYOUT_FLAG']	=	'Flag';	
+	$language['LAYOUT_STATUS']	=	'Status';		
+				
+	
+	/*
 	 * GERADO COM O SQL:
 	 * felipeb 20160225
 		select 
@@ -701,5 +731,82 @@ HTML;
 	 $language['USER_SALT']  =  'Código Interno';
 	 $language['USER_STATUS']  =  'Situação do Usuário';
 	 $language['USER_TYPE']  =  'Tipo do Usuário';
+	 
+	 $language['CUBE_DESC_PLACEHOLDER']  =  'Descrição do Cubo';
+	 $language['CUBE_FILTER_PLACEHOLDER']  =  'Atributos com Filtro';
+	 $language['CUBE_FILTER_VALUE_PLACEHOLDER']  =  'Valores dos Atributos com Filtros';
+	 $language['CUBE_FLAG_PLACEHOLDER']  =  'Flag do Cubo';
+	 $language['CUBE_ID_PLACEHOLDER']  =  'Código do Cubo';
+	 $language['CUBE_STATUS_PLACEHOLDER']  =  'Situação do Cubo';
+	 $language['CUSTOMER_CODE_PLACEHOLDER']  =  'Código do Cliente';
+	 $language['CUSTOMER_DESC_PLACEHOLDER']  =  'Descrição do Cliente';
+	 $language['CUSTOMER_EXPIRY_PLACEHOLDER']  =  'Expiração da Senha';
+	 $language['CUSTOMER_FLAG_PLACEHOLDER']  =  'Flag do Cliente';
+	 $language['CUSTOMER_GROUP_PLACEHOLDER']  =  'Grupo do Cliente';
+	 $language['CUSTOMER_ID_PLACEHOLDER']  =  'Código Interno do Cliente';
+	 $language['CUSTOMER_STATUS_PLACEHOLDER']  =  'Situação do Cliente';
+	 $language['DATABASE_BALANCE_PLACEHOLDER']  =  'Base Balanceada';
+	 $language['DATABASE_COMMENT_PLACEHOLDER']  =  'Comentário sobre a Base';
+	 $language['DATABASE_DESC_PLACEHOLDER']  =  'Descrição da Base';
+	 $language['DATABASE_FLAG_PLACEHOLDER']  =  'Situação da Base';
+	 $language['DATABASE_ID_PLACEHOLDER']  =  'Código da Base';
+	 $language['DATABASE_IMAGE_PLACEHOLDER']  =  'Imagem da Base';
+	 $language['DATABASE_LINK_PLACEHOLDER']  =  'Link de acesso Externo';
+	 $language['DATABASE_ORDER_PLACEHOLDER']  =  'Ordem de Exibição';
+	 $language['DATABASE_POOL_PLACEHOLDER']  =  'Base Compartilhado';
+	 $language['DATABASE_STATUS_PLACEHOLDER']  =  'Situação da Base';
+	 $language['DATE_ID_PLACEHOLDER']  =  'Período';
+	 $language['DOWNLOAD_ID_PLACEHOLDER']  =  'Código do Download';
+	 $language['FILE_DATE_PLACEHOLDER']  =  'Data do Arquivo';
+	 $language['FILE_DESC_PLACEHOLDER']  =  'Descrição do Arquivo';
+	 $language['FILE_FLAG_PLACEHOLDER']  =  'Flag do Arquivo';
+	 $language['FILE_NAME_PLACEHOLDER']  =  'Nome do Arquivo';
+	 $language['FILE_SIZE_PLACEHOLDER']  =  'Tamanho do Arquivo';
+	 $language['LANGUAGE_ID_PLACEHOLDER']  =  'Lingua';
+	 $language['MESSAGE_PLACEHOLDER']  =  'Mensagem';
+	 $language['MODULE_PLACEHOLDER']  =  'Módulo';
+	 $language['OPERATION_PLACEHOLDER']  =  'Operação';
+	 $language['PERFIL_DESC_PLACEHOLDER']  =  'Descrição do Perfil';
+	 $language['PERFIL_FLAG_PLACEHOLDER']  =  'Flag do Perfil';
+	 $language['PERFIL_ID_PLACEHOLDER']  =  'Código do Perfil';
+	 $language['PERFIL_LEVEL_PLACEHOLDER']  =  'Nível do Perfil';
+	 $language['PERFIL_STATUS_PLACEHOLDER']  =  'Situação do Perfil';
+	 $language['PROCESS_PLACEHOLDER']  =  'Processo';
+	 $language['REPORT_AUTOLOAD_PLACEHOLDER']  =  'Carga Automática';
+	 $language['REPORT_DATE_PLACEHOLDER']  =  'Data do Relatório';
+	 $language['REPORT_DESC_PLACEHOLDER']  =  'Descrição do Relatório';
+	 $language['REPORT_FILTER_PLACEHOLDER']  =  'Filtro do Relatório';
+	 $language['REPORT_FLAG_PLACEHOLDER']  =  'Flag do Relatório';
+	 $language['REPORT_FORMULAS_PLACEHOLDER']  =  'Fórmulas do Relatório';
+	 $language['REPORT_ID_PLACEHOLDER']  =  'Código do Relatório';
+	 $language['REPORT_OPTIONS_PLACEHOLDER']  =  'Opções do Relatório';
+	 $language['REPORT_SHARE_PLACEHOLDER']  =  'Relatório Compartilhado';
+	 $language['REPORT_STATUS_PLACEHOLDER']  =  'Situação do Relatório';
+	 $language['REPORT_UPDATE_PLACEHOLDER']  =  'Atualização do Relatório';
+	 $language['SERVER_COMMENT_PLACEHOLDER']  =  'Comentário do Servidor';
+	 $language['SERVER_DESC_PLACEHOLDER']  =  'Descrição do Servidor';
+	 $language['SERVER_FLAG_PLACEHOLDER']  =  'Flag do Servidor';
+	 $language['SERVER_ID_PLACEHOLDER']  =  'Código do Servidor';
+	 $language['SERVER_PWD_PLACEHOLDER']  =  'Senha do Usuário';
+	 $language['SERVER_STATUS_PLACEHOLDER']  =  'Situação do Servidor';
+	 $language['SERVER_USER_PLACEHOLDER']  =  'Usuário de Conexão';
+	 $language['TRANSACTION_ID_PLACEHOLDER']  =  'Código da Transação';
+	 $language['USER_CODE_PLACEHOLDER']  =  'Código do Usuário';
+	 $language['USER_DESC_PLACEHOLDER']  =  'Descrição do Usuário';
+	 $language['USER_EMAIL_PLACEHOLDER']  =  'Email do Usuário';
+	 $language['USER_EXPIRY_PLACEHOLDER']  =  'Expiração da Senha';
+	 $language['USER_FILTER_PLACEHOLDER']  =  'Atributos com Filtro';
+	 $language['USER_FILTER_VALUE_PLACEHOLDER']  =  'Valores dos Atributos com Filtros';
+	 $language['USER_FLAG_PLACEHOLDER']  =  'Flag de Usuário';
+	 $language['USER_FORMAT_PLACEHOLDER']  =  'Formato do Layout';
+	 $language['USER_FVD_PLACEHOLDER']  =  'Flag Interna';
+	 $language['USER_ID_PLACEHOLDER']  =  'Código Interno do Usuário';
+	 $language['USER_INTERNAL_PLACEHOLDER']  =  'Código Interno';
+	 $language['USER_MASTER_PLACEHOLDER']  =  'Usuário MASTER';
+	 $language['USER_PWD_PLACEHOLDER']  =  'Senha do Usuário';
+	 $language['USER_PWD_OLD_PLACEHOLDER']  =  'Senha Anterior';
+	 $language['USER_SALT_PLACEHOLDER']  =  'Código Interno';
+	 $language['USER_STATUS_PLACEHOLDER']  =  'Situação do Usuário';
+	 $language['USER_TYPE_PLACEHOLDER']  =  'Tipo do Usuário';
 
 ?>

@@ -25,8 +25,8 @@ class QUERY_WRS_ADMIN
 		
 		$current_user 			= WRS::GET_SSAS_USER();
 
-		//$CUTOMER_ID 			= $CUSTOMER_ID==NULL?WRS::CUSTOMER_ID():implode(',',$CUSTOMER_ID);
-		$CUTOMER_ID 			= WRS::CUSTOMER_ID();
+		//$CUSTOMER_ID 			= $CUSTOMER_ID==NULL?WRS::CUSTOMER_ID():implode(',',$CUSTOMER_ID);
+		$CUSTOMER_ID 			= WRS::CUSTOMER_ID();
 		$USER_CODE 				= WRS::USER_CODE();
 		$USER_ID 				= WRS::USER_ID();
 		$SERVER_ID 				= WRS::SERVER_ID();
@@ -38,11 +38,11 @@ class QUERY_WRS_ADMIN
 		
 		switch(WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($tabela)){
 			//case "ATT_WRS_CUSTOMER_TESTE":
-			case "ATT_WRS_CUSTOMER": 		$condicao="$CUTOMER_ID, $USER_CODE"; break;
-			case "ATT_WRS_USER": 			$condicao="$USER_ID, $CUTOMER_ID, $USER_CODE"; break;
+			case "ATT_WRS_CUSTOMER": 		$condicao="$CUSTOMER_ID, $USER_CODE"; break;
+			case "ATT_WRS_USER": 			$condicao="$USER_ID, $CUSTOMER_ID, $USER_CODE"; break;
 			case "ATT_WRS_SERVER": 			$condicao="$SERVER_ID, $USER_CODE"; break;
-			case "ATT_WRS_DATABASE": 		$condicao="$DATABASE_ID, $SERVER_ID, $CUTOMER_ID, $USER_CODE"; break;
-			case "ATT_WRS_CUBE": 			$condicao="$CUBE_ID, $DATABASE_ID, $SERVER_ID, $CUTOMER_ID, $USER_CODE"; break;
+			case "ATT_WRS_DATABASE": 		$condicao="$DATABASE_ID, $SERVER_ID, $CUSTOMER_ID, $USER_CODE"; break;
+			case "ATT_WRS_CUBE": 			$condicao="$CUBE_ID, $DATABASE_ID, $SERVER_ID, $CUSTOMER_ID, $USER_CODE"; break;
 			case "ATT_WRS_PERFIL": 			$condicao="$PERFIL_ID, $USER_CODE"; break;
 			case "REL_WRS_ATTRIBUTE_LEVEL":	$condicao="$DATABASE_ID, $CUBE_ID, $ATTRIBUTE_HIERARCHY, $ATTRIBUTE_LEVEL"; break;
 		}
@@ -106,13 +106,7 @@ class QUERY_WRS_ADMIN
 		 'CUSTOMER_CODE,CUSTOMER_DESC,CUSTOMER_EXPIRY,CUSTOMER_FLAG,CUSTOMER_STATUS,CUSTOMER_GROUP',
 		 '',
 		 'E:\TEMP',
-		 ';'
-	
-		 EXEC Export_Table 'ATT_WRS_PERFIL_TESTE',
-		 '',
-		 '',
-		 'E:\TEMP',
-		 ';'
+		 ';'	
 		 */
 	
 		if(array_key_exists('tabela', $options) && $options['tabela']!=''){
@@ -123,14 +117,10 @@ class QUERY_WRS_ADMIN
 			$diretorio	= (array_key_exists('diretorio', $options))?$options['diretorio']:'';
 			$filtros 	= $options['filtros'];
 			
-
-			// excecao para usuarios NAO MST ou ADM, não visualizarem usuarios maiores que eles proprios
-			// felipeb 20160226
-			$perfil_logado 		= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
-			if($tabela=='ATT_WRS_USER'){
-				if($perfil_logado!='MST'){
-					$filtros=(($filtros!='')?$filtros.',':'')."PERFIL_ID != ''MST''";
-				}
+			// Nas tabelas de Usuarios e Associacao, não devem exportar PERFIS = MASTER e ADMINISTRADOR
+			$perfil_logado 	= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
+			if($tabela=='ATT_WRS_USER' || $tabela=='REL_WRS_CUBE_USER'){
+				$filtros=(($filtros!='')?$filtros.' AND ':'')."PERFIL_ID NOT IN (''MST'',''ADM'')";
 			}
 			
 			$arq_conf_param	= WRS_MANAGE_PARAM::getAtributoTabelaConfig($tabela,'nome_arquivo_import');
@@ -140,7 +130,7 @@ class QUERY_WRS_ADMIN
 				
 			return array("query"=> "
 						EXEC Export_Table '".$tabela."',
-		                        '".$colunas."', --  * , exporta todos os campos
+		                        '".$colunas."',
 		                        '".$filtros."',
 		                        '".$diretorio_inv."',
 		                        '".$separador."'
@@ -187,7 +177,7 @@ class QUERY_WRS_ADMIN
 			$colunas	= (array_key_exists('colunas', $options))?((is_array($options['colunas']))?implode(',',$options['colunas']):$options['colunas']):'';
 			$filtros	= (array_key_exists('filtros', $options))?((is_array($options['filtros']))?implode(',',$options['filtros']):$options['filtros']):'';
 			$separador	= (array_key_exists('separador', $options))?$options['separador']:';';
-			$tipoImport	= (array_key_exists('tipoImport', $options))?$options['tipoImport']:1;
+			$tipoImport	= (array_key_exists('tipoImport', $options))?$options['tipoImport']:0;
 			$campo_id 	= $options['campo_id'];
 			$user_logado 		= WRS::USER_CODE();
 			$customer_id_logado	= WRS::CUSTOMER_ID();
@@ -198,7 +188,7 @@ class QUERY_WRS_ADMIN
 						EXEC Import_Table '".$tabela."',
 		                        '".$colunas."',
 		                        '".$campo_id."',
-		                        '".$filtros."', --'PERFIL_ID LIKE ''DRG%''',
+		                        '".$filtros."',
 		                        '".$diretorio."',
 		                        '".$separador."',
 				                ".$tipoImport.",

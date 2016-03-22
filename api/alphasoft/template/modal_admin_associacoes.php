@@ -4,6 +4,7 @@ $HTML 		=	<<<HTML
 <form class='grid_window_values_form'>
 <div class="association-container">
 
+				
 			<label for="select_cubes">Cubos</label>
 	      		<div class="row default_config" id="select_cubes">
 	      				<select name="cubos_unselected" class="select_altura col-sm-5 wrs-select multiple" multiple="multiple">
@@ -21,7 +22,7 @@ $HTML 		=	<<<HTML
 				</div>
 				
 			<br>
-			
+				
 			<label for="select_users">Usuários</label>
 	      		<div class="row default_config" id="select_users">
 	      				<select name="users_unselected" class="select_altura col-sm-5 wrs-select multiple" multiple="multiple">
@@ -37,7 +38,7 @@ $HTML 		=	<<<HTML
 	  					{$parameter['users_sel']}
 						</select>
 				</div>
-	  						
+	  					
 			<input type="hidden" name="association_for" value="{$parameter['association_for']}">	
 			<input type="hidden" name="association_indexes_for_cubes" value="{$parameter['association_indexes_for_cubes']}">	
 				

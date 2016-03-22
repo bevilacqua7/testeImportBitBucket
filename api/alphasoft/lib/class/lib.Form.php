@@ -19,18 +19,19 @@ class FORM  extends WRS_USER
 	 */
 	protected  $manage_param	=	NULL;
 	private $obj_atual 			= 	NULL;
+	private $current_event		= 	NULL;
 	
 	/**
 	 * 
 	 * Criando o Formulário
 	 * 
 	 */
-	protected  function create_form($_param,$visao,$actions_fiels)
+	protected  function create_form($_param,$visao,$actions_fiels,$current_event)
 	{
 		
-		$param				=	$_param;
-				
-		$html				=	NULL;
+		$param					=	$_param;
+		$this->current_event 	= 	$current_event;
+		$html					=	NULL;
 		
 		if(!array_key_exists('button', $param) || !is_array($param['button']) || count($param['button'])<=0){
 			$param['button']	=	array('new'=>'','remove'=>'');
@@ -66,8 +67,11 @@ class FORM  extends WRS_USER
 		foreach($param['field'] as $label =>$tools)
 		{
 			$object								=	 $tools;
-						
-			$object['title']					=	$tools['title'];
+			
+			if(array_key_exists('grid_only', $object) && $object['grid_only']==true){
+				continue;
+			}
+			
 			$object['label']					=	$label;
 			$object['length']					=	(isset($tools['length']))?$tools['length']:'';
 			$object['value']					=	fwrs_request($label);
@@ -149,8 +153,19 @@ class FORM  extends WRS_USER
 		
 	private function input($param)
 	{
-				//Verificando se é key com valor
-				if((isset($param['primary']) || isset($param['key'])) && $param['value']!='')
+				//Verificando se é key/primary com valor
+				if(
+						(
+							(isset($param['primary']) || isset($param['key'])) && // se for primary ou key
+							$param['value']!='' && // e tiver algum valor
+							$this->current_event!='new' &&  // e for uma alteracao (diferente de novo)
+							(!array_key_exists('disabled_edit', $param) || $param['disabled_edit']===true) // nao tenha parametro disabled_edit ou que ele seja verdadeiro (nao permita alterar na edicao)
+						) || // OU
+						(
+							array_key_exists('disabled', $param) && // que tenha o parametro disabled e que ele seja verdadeiro (campo somente leitura)
+							$param['disabled']
+						)
+				)
 				{
 					return $this->is_key_with_value($param);	
 				}
@@ -200,13 +215,13 @@ EOF;
 				$rels		=	 array('class'=>'form-group form-control-wrs_color'.$classHide);
 				$rel		=	 $this->getParamFormInput($this->merge_array_value($param,$rels));
 				
-				// felipeb 20160311 - por ser dinamico a montagem dos class ao inves de respeitar o padrao do form, trato o que vier antes de gravar no HTML para permitir que um campo HIDE porem com edit_on_new=true apareca no formulario para sua inclusao durante a criacao do registro
-				if(isset($param['edit_on_new']) && $param['edit_on_new']==true && (!isset($param['value']) || $param['value']=='')){
+				// felipeb 20160311 - por ser dinamico a montagem dos class ao inves de respeitar o padrao do form, trato o que vier antes de gravar no HTML para permitir que um campo HIDE porem com edit_new=true apareca no formulario para sua inclusao durante a criacao do registro
+				if(isset($param['edit_new']) && $param['edit_new']==true && (!isset($param['value']) || $param['value']=='') && $this->current_event=='new'){
 					$rel = str_replace('hide','',$rel);
 				}
 
-				$param['title_placeholder']	=$param['title'];
-				$param['label_title']		=$param['title'];
+				$param['title_placeholder']	=(array_key_exists('placeholder', $param))?$param['placeholder']:$param['title'];
+				$param['label_title']		=$param['title_placeholder'];
 				
 				if(array_key_exists('primary',$param) && $param['primary']=='true' && (!isset($param['value']) || $param['value']=='')){
 					$extra_html .='<input type="hidden" name="novo_registro" value="1">';
@@ -246,12 +261,14 @@ EOF;
 						$class.=' valida_valor';
 					}
 				}
+
+				$disabled = ((array_key_exists('disabled_edit', $param) && $param['disabled_edit']===true && $this->current_event!='new') || (array_key_exists('disabled', $param) && $param['disabled']===true))?' disabled':'';
 				
 				$html 	=	<<<EOF
 							<div  {$rel} title="{$param['label_title']}">
 					    		<label for="{$param['label']}" title="{$param['label_title']}" >{$param['title']}</label>
 						    	<div class="form-control-wrs" title="{$param['label_title']}">
-						    		<input type="{$type_input}" {$max_min_value} title="{$param['label_title']}" name="{$param['label']}" {$length} {$mask} class=" {$class}" value="{$param['value']}" id="{$param['label']}" placeholder="{$param['title_placeholder']}">
+						    		<input type="{$type_input}" {$disabled} {$max_min_value} title="{$param['label_title']}" name="{$param['label']}" {$length} {$mask} class=" {$class}" value="{$param['value']}" id="{$param['label']}" placeholder="{$param['title_placeholder']}">
 						    	</div>
 						    	{$extra_html}
 					    	</div>
@@ -294,6 +311,10 @@ EOF;
 						
 						foreach($param['is_select'] as $label =>$value)
 						{
+								if(array_key_exists('selected', $param) && (!array_key_exists('value', $param) || $param['value']=='')){
+									$param['value'] = $param['selected'];
+								}
+								
 								$option	.=	 fwrs_option($label, $value,$param['value']);
 						}
 						
@@ -314,7 +335,12 @@ EOF;
 									$where_query		=	"CUSTOMER_ID = ".$CUSTOMER_ID;
 								}
 							}
-							
+
+							$obj_aux_link_field = null;
+							// quando houverem filhos que dependem da escolha de valor deste pai, inclui atributos e scripts a mais. - felipeb 20160322
+							if(array_key_exists('link_field_master', $param) && is_array($param['link_field_master'])){
+								$obj_aux_link_field = array();
+							}
 							
 							$_query		=	$this->manage_param->select($param_select['field'], $param_select['table'], $param_select['order']['order_by'], $param_select['order']['order_type'], 1, 100,$where_query);
 							
@@ -326,16 +352,43 @@ EOF;
 								while($rows = $this->fetch_array($query))
 								{
 		
-									$html_option		=	 array();
-									$value_option		=	$rows[$param_select['primary']];
+									$html_option				=	array();
+									$value_option				=	$rows[$param_select['primary']];
+									$extra_attr_for_values 		= 	'';
 									
+									// TRATAMENTO extra para quando existirem mais de uma chave para o select, bem como o possivel tratamento/validacao em outros campos dentro do formulario que dependam deste select.  Atualmente aplicado para o DATABASE_ID no cadastro de CUBOS - felipeb 20160322
+									if(is_array($obj_aux_link_field)){
+										$valores_preenche = $param['link_field_master']['valores'];
+										$linha_comando = '';
+										$extra_val_arr = array();
+										if(is_array($param['link_field_master']['id'])){
+											foreach($param['link_field_master']['id'] as $campo_chave){
+												$extra_val_arr[$campo_chave]=$rows[$campo_chave];
+												$linha_comando.= '["'.$rows[$campo_chave].'"]';
+											}
+										}else{
+											$linha_comando.='["'.$rows[$param['link_field_master']['id']].'"]';
+										}
+										$arr_temp = array();
+										foreach($valores_preenche as $campo1=>$campo2){
+											$arr_temp[$campo1] = $rows[$campo1];
+											$arr_temp[$campo2] = $rows[$campo2];
+											$extra_val_arr[$campo1]=$rows[$campo1];
+											$extra_val_arr[$campo2]=$rows[$campo2];
+										}
+										$extra_attr_for_values = base64_encode(json_encode($extra_val_arr,1));
+										$comando = '$'.'obj_aux_link_field'.$linha_comando.'='.'$'.'arr_temp;';
+										eval($comando);
+									}
 
 									if(isset($param['select_fields_in_table']) && is_array($param['select_fields_in_table']))
 									{
 										
 										foreach($param['select_fields_in_table'] as $label)
 										{
-											$html_option[]	=	$rows[$label];
+											if($param_select['primary']!=$label){
+												$html_option[]	=	$rows[$label];
+											}
 										}
 										
 									}else{
@@ -350,15 +403,13 @@ EOF;
 										
 									}
 									
-									$option	.=	 fwrs_option($value_option, implode(' - ',$html_option),$param['value']);
+									$extra_attr_for_values = $extra_attr_for_values!=''?' extra_values_for_option="'.$extra_attr_for_values.'"':'';
+									
+									$option	.=	 fwrs_option($value_option, implode(' - ',$html_option),$param['value'],$extra_attr_for_values);
 								}
-								//$option
-								
-							}else{
-								
 							}
 					}
-					//$param['value']
+					
 
 					//Verificando se é obrigatorio
 					$param['title_placeholder']=$param['title'];
@@ -371,14 +422,22 @@ EOF;
 						$param['label_title'].='  ('.LNG('obrigatorio').')';
 					}
 
+					$complemento_link_field = (is_array($obj_aux_link_field) && count($obj_aux_link_field)>0)?json_encode($obj_aux_link_field,1):'';
+					$disabled 				= ((array_key_exists('disabled_edit', $param) && $param['disabled_edit']===true && $this->current_event!='new') || (array_key_exists('disabled', $param) && $param['disabled']===true))?' disabled':'';
+
+					if($complemento_link_field!=''){
+						$complemento_link_field = "<script> atualiza_link_field_master($('#".$param['label']."'),".$complemento_link_field."); </script>";
+					}
+					
 					$html 	=	<<<EOF
 								<div  {$rel}  title="{$param['label_title']}">
 						    		<label for="{$param['label']}"  title="{$param['label_title']}" >{$param['title']}</label>
 							    	<div class="form-control-wrs" title="{$param['label_title']}" >
-							    		<select name="{$param['label']}" title="{$param['label_title']}" {$length} class=" {$class}" id="{$param['label']}" placeholder="{$param['title']}">
+							    		<select name="{$param['label']}" title="{$param['label_title']}" {$disabled} {$length} class=" {$class}" id="{$param['label']}" placeholder="{$param['title']}">
 							    		{$option}
 							    		</select>
 							    	</div>
+							    	{$complemento_link_field}
 						    	</div>
 EOF;
 	
@@ -396,8 +455,8 @@ EOF;
 			$html 	=	<<<EOF
 								<div  {$rel}>
 						    		<label for="{$param['label']}"  >{$param['title']}</label>
-							    	<div class="form-control-wrs h4">
-							    		{$param['value']}
+							    	<div class="form-control-wrs">
+							    		<div class="h4">{$param['value']}</div>
 							    		<input type="hidden" name="{$param['label']}" value="{$param['value']}" id="{$param['label']}">
 							    	</div>
 						    	</div>
@@ -451,6 +510,9 @@ EOF;
 		{
 			$html		=	"";
 			foreach($param as $label =>$value){
+				if(is_array($value)){
+					$value = base64_encode(json_encode($value,1));
+				}
 				$html.=' '.$label.'="'.$value.'" ';
 			}
 			return $html;

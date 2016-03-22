@@ -242,15 +242,26 @@ HTML;
 							$this->setCurrentAction('INSERT');
 						}
 					}else{
-						$separador = "''";
-						if(array_key_exists('type', $param['field'][$nome_campo]) && $param['field'][$nome_campo]['type']=='int'){
-							$separador='';
+						$possui_class_hide 		= array_key_exists('class', $valores) && strstr($valores['class'],'hide');
+						$possui_class_edit_new 	= array_key_exists('edit_new', $valores) && $valores['edit_new'];
+						
+						if(
+							!$possui_class_hide || // nao tiver a class Hide 
+							($possui_class_hide && $possui_class_edit_new && $this->current_action=='INSERT') // ou se tiver mas for uma insercao e tiver tambem o edit_new=true
+						){ // adiciona na query o campo e seu valor
+						
+							$separador = "''";
+							if(array_key_exists('type', $param['field'][$nome_campo]) && $param['field'][$nome_campo]['type']=='int'){
+								$separador='';
+							}
+							$arr_campos_valores[$nome_campo]=$_request_original[$nome_campo]==''?'NULL':$separador.$_request_original[$nome_campo].$separador;
+							
 						}
-						$arr_campos_valores[$nome_campo]=$_request_original[$nome_campo]==''?'NULL':$separador.$_request_original[$nome_campo].$separador;
 					}
 				}
 			}
 		}
+		
 		return $arr_campos_valores;
 	}
 	
@@ -280,12 +291,8 @@ HTML;
 		if($this->num_rows($query))
 		{
 			$rows 	= $this->fetch_array($query);
-			if ($rows['STATUS']<=0)
+			if ($rows['STATUS']<0)
 				$msgs_erros[]=$rows['MESSAGE'];
-
-			/*if(array_key_exists('ERROR', $rows) && $rows['ERROR']!=''){
-				$msgs_erros[]=$rows['ERROR'];
-			}*/
 		}else{
 			$msgs_erros[]=LNG('ADMIN_NO_REG');
 		}
@@ -326,6 +333,9 @@ HTML;
 		$nome_diretorio	= $WRS_DEFINE['WRS_DIRNAME_EXPORT'].$nome_diretorio;
 		$this->confere_criacao_diretorio($nome_diretorio);
 		
+		$filtro_fixo 	= array_key_exists('filtro_fixo', $_param) && $_param['filtro_fixo']!=''?$_param['filtro_fixo']:'';
+		$filtros		= ((is_array($regIds) && count($regIds)>0)?$primary.' in ('.implode(',',$regIds).')':'').$filtro_fixo;
+		
 		$_param['tabela_export'] 		= WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_param['tabela_export']);
 		$tabela_para_query 				= WRS_MANAGE_PARAM::getAtributoTabelaConfig($_param['tabela_export'],'tabela_bd');
 
@@ -336,7 +346,7 @@ HTML;
 		$return_export 	= $this->queryClass->getQueryExportarTabela(array(
 																'tabela'	=> $tabela_para_query,
 																'colunas'	=> WRS_MANAGE_PARAM::getAtributoTabelaConfig($_param['tabela_export'],'colunas_import_export'),
-																'filtros'	=> (is_array($regIds) && count($regIds)>0)?$primary.' in ('.implode(',',$regIds).')':'',
+																'filtros'	=> $filtros,
 																'separador' => $_param['caracter_separacao'],
 																'diretorio'	=> $nome_diretorio
 													));
@@ -359,9 +369,8 @@ HTML;
 		}else{		
 			$rows 	= $this->fetch_array($query);
 			
-			$output	= $rows['output'];
-
-			if(substr($output,0,6)=='SUCESS'){
+			$status	= $rows['STATUS'];
+			if($status>0){
 				if($compacta){
 					$file_export_inv	= str_replace('/','\\',$file_export); // troca barras normais por invertidas para processo no SQL server/ windows
 					$new_file_export	= substr($file_export,0,-4).'.ZIP';
@@ -373,15 +382,13 @@ HTML;
 						return false;
 					}else{
 						$rows 	= $this->fetch_array($query);
-						$output	= $rows['output'];
-					
-						if(substr($output,0,10)=='Compressed'){
+
+						$status	= $rows['STATUS'];
+						if($status>0){
 							$processo=true;
 							$file_export = $new_file_export;
 						}
-						
 					}
-					
 				}else{
 					$processo=true;
 				}			
@@ -571,24 +578,22 @@ HTML;
 					{
 						$msgs_erros[]="<b>".$arq."</b> ".LNG('file_not_unziped');						
 					}else{
+						
+
 						$rows 	= $this->fetch_array($query);
-						if(array_key_exists('output', $rows)){
-							$output	= $rows['output'];
+						// Verifica Retorno
+						$status	= $rows['STATUS'];
+						if($status>0){
+							$nome_arquivo = $diretorio.$upload_dir_key.$name_file_import;
+							$output_geral.= addslashes($rows['MESSAGE'])."<br>";
+						}else{
+							$msgs_erros[]=LNG('file_error_import');
 							
-							if(substr($output,0,9)=='Extracted'){
-								$nome_arquivo = $diretorio.$upload_dir_key.$name_file_import;
-								$output_geral.=addslashes($output)."<br>";
-							}else{
-								$msgs_erros[]=$output;
+							if($rows['MESSAGE']!=''){
+								$msgs_erros_detalhes[]=$rows['MESSAGE'];
 							}
 						}
-
-						if(array_key_exists('ERROR_MESSAGE', $rows) && $rows['ERROR_MESSAGE']!=''){
-							$msgs_erros_detalhes[]=$rows['ERROR_MESSAGE'];
-						}
-						if(array_key_exists('REMOVE_MESSAGE', $rows) && $rows['REMOVE_MESSAGE']!=''){
-							$msgs_erros_detalhes[]=$rows['REMOVE_MESSAGE'];
-						}
+						
 			
 					}								
 					
@@ -605,7 +610,7 @@ HTML;
 						$obj = $_request_original['_param'];
 						$keys = array();
 						foreach($obj['field'] as $atributo=>$dados_campo){
-							if(array_key_exists('key', $dados_campo)){
+							if(array_key_exists('key', $dados_campo) || array_key_exists('primary', $dados_campo)){
 								$keys[]=$atributo;
 							}
 						}
@@ -624,23 +629,19 @@ HTML;
 															));
 
 					if(is_array($ret)){
-
-						if(array_key_exists('output', $ret)){
-							$output	= $ret['output'];
-							if(substr($output,0,6)!='SUCESS'){								
-								$msgs_erros[]=$output;
-							}else{
-								$output_geral.=addslashes($output)."<br>";
-							}
+						
+						// Verifica Retorno
+						$status	= $ret['STATUS'];
+						if($status>0){
+							$output_geral.= addslashes($ret['MESSAGE'])."<br>";
+						}else{
+							$msgs_erros[]=LNG('file_error_import');
 						}
 						
-						if(array_key_exists('ERROR_MESSAGE', $ret) && $ret['ERROR_MESSAGE']!=''){
-							$msgs_erros_detalhes[]=$ret['ERROR_MESSAGE'];
+						if($ret['ERROR']!=''){
+							$msgs_erros_detalhes[]=$ret['ERROR'];
 						}
-						if(array_key_exists('REMOVE_MESSAGE', $ret) && $ret['REMOVE_MESSAGE']!=''){
-							$msgs_erros_detalhes[]=$ret['REMOVE_MESSAGE'];
-						}
-							
+					
 					}else{
 						$msgs_erros[]="<b>".$arq."</b> ".LNG('file_not_validated');
 					}
@@ -681,7 +682,7 @@ HTML;
 	
 	public function trataDadosImportados($nameFile,$options){
 		$delimitador 			= $options['delimitador']=='virgula'?',':(($options['delimitador']=='ponto_virgula')?';':'\t');
-		$tipoImport	 			= $options['tipo_importacao']=='atualizar'?1:0;
+		$tipoImport	 			= $options['tipo_importacao']=='atualizar'?0:1;
 		$tabelaImport	 		= $options['tabela_import'];
 		$colunas	 			= $options['colunas'];
 		$campo_id	 			= $options['campo_id'];

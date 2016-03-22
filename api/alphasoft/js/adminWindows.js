@@ -19,6 +19,11 @@ function bt_reset_senha_user(){
 
 function callback_load_admin_generic_modal_associations(arg,tabela)
 {
+	// se o evento ocorrer em cima do texto, o padrao do browser seleciona a palavra.  Portanto, intercepto e disparo o doubleclick do TD - felipeb 20160321
+	if(arg.dadosHandlerEvento.target.tagName=='B'){
+		$(arg.dadosHandlerEvento.target.parentElement).trigger('dblclick');
+		return false;
+	}
 	var indexClique = arg.dadosHandlerEvento.target.cellIndex;
 	var coluna_clicada = $($('#'+tabela+' .k-grid-header-wrap th[role=columnheader]')[indexClique]).attr('data-field');	
 	if(coluna_clicada=='USER_CODE' || coluna_clicada=='CUBE_DESC'){
@@ -578,7 +583,10 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 																		 				return true;
 																		 			}
 														 	}
-														]
+														],
+														{
+															title	:	LNG('bt_export')
+														}														
 													);
 										return false;
 										break;
@@ -735,9 +743,22 @@ function select_work_generic(obj, enabled){
 }
 
 
-
-
-
+function atualiza_link_field_master(obj_principal,obj_referencias){
+	var dados_obj_principal = json_decode(base64_decode($(obj_principal.parents('div')[1]).attr('link_field_master')));
+	obj_principal.on('change',function(){
+		var id_obj = $(this).attr('id');
+		var filhos = $("[link_field='"+id_obj+"']");
+		var dados_obj_selecionado = json_decode(base64_decode($(this).find('option:selected').attr('extra_values_for_option')));
+		for(var campo in dados_obj_principal['valores']){			
+			var campo_a_preencher_descricao = $("[label='"+campo+"']").find('div.h4');
+			var descricao_a_preencher = dados_obj_selecionado[dados_obj_principal['valores'][campo]];
+			var campo_a_preencher_valor = $('#'+campo);
+			var valor_a_preencher = dados_obj_selecionado[campo];			
+			campo_a_preencher_descricao.html(descricao_a_preencher);
+			campo_a_preencher_valor.val(valor_a_preencher);
+		}
+	});
+}
 
 
 function executaDownloadFile($file){
