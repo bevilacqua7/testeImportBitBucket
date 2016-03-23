@@ -159,7 +159,7 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						  		<form>
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="ORDER_COLUMN"> {$GRID_HEADER_OPTION_ORDER_COLUMN}</label></div>
 						  				<div class="checkbox"><label><input type="checkbox" value="1" name="SUMARIZA"> {$GRID_HEADER_OPTION_TOTAL_SUMARIZA}</label></div>
-						  				<div class="checkbox"><label><input type="checkbox" value="1" name="DRILL_HIERARQUIA_LINHA"> {$GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA}</label></div>
+						  				<div class="checkbox DRILL_HIERARQUIA_LINHA_CHECK"><label><input type="checkbox" value="1" name="DRILL_HIERARQUIA_LINHA"  > {$GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA}</label></div>
 						  		</form>
 					  		</li>
 	
