@@ -204,7 +204,7 @@ class WRS
 		
 	}
 	
-	public static function getFiltersCube($cube_id,$_filters,$_filters_values)
+	public static function getFiltersCube($cube_id,$_filters=NULL,$_filters_values=NULL)
 	{
 			$cube	=	self::GET_SSAS_USER();
 			
@@ -277,7 +277,7 @@ class WRS
 					
 					$md5		=	md5($val);
 					
-					self::generate_filter($filter,$fullName);
+					//self::generate_filter($filter,$fullName);
 					
 					$param[]	=	 array(	'__'.$md5,
 											$_simples,

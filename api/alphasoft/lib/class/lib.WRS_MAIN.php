@@ -97,14 +97,41 @@ class WRS_MAIN  extends WRS_BASE
 	}
 	
 	
+	private function getLoadLanguage($path)
+	{
+		include $path;
+		
+		return $language;
+		
+	}
+	
 	private function getIdioma()
 	{
 		$theme	=	array();
+		/*
 		$theme['ENG']	='English';
 		$theme['POR']	='Portuguese';
-		$theme['ESP']	='Espanhol';
+		$theme['ESP']	='Espanhol';*/
 		
 		$implements		=	 array();
+	
+		$d = dir(PATH_LANGUAGE);
+		$theme	=	 array();
+		
+		while (false !== ($entry = $d->read())) 
+		{
+			if($entry=='.' || $entry=='..') continue;
+			
+			if(in_array('php', explode('.',$entry)))
+			{
+				$language	=	$this->getLoadLanguage(PATH_LANGUAGE.$entry);
+				$theme[$language['IDIOMA']]	=	$language['LINGUA'] ;
+			}
+		}
+		
+		$d->close();
+		
+		
 		
 		$implements['name']		='WRSChangeIdioma';
 		$implements['class']	='WRSChangeIdioma';

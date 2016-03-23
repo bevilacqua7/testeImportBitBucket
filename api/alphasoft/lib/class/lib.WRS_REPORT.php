@@ -18,7 +18,6 @@ class WRS_REPORT  extends  WRS_USER
 {
 	
 	private $event			=	NULL;
-	private $paran_query	=	NULL;
 	private $cube			=	array();
 
 	/**
@@ -32,14 +31,18 @@ class WRS_REPORT  extends  WRS_USER
 	 */
 	private $_query_layout	=	NULL;
 	
-	public function run($event,$paran_query,$cube_s)
+	public function run()
 	{		
-		$this->event		=	empty($event)?fwrs_request('event'):$event;
-		$this->paran_query	=	$paran_query;
-		$cube_s				=	empty($cube_s)?fwrs_request('cube_s'):$cube_s;
+		$this->event		=	fwrs_request('event');
+		$cube_s				=	fwrs_request('cube_s');
 		
 		$cubes				=	WRS::GET_SSAS_USER();
-		$this->cube			=	$cubes[$cube_s];
+		
+		if(!empty($cube_s))
+		{
+			$this->cube			=	$cubes[$cube_s];
+		}
+		
 		$this->_query		=	new QUERY_WRS_REPORT();
 		$this->_query_layout=	new QUERY_ReportLayout();
 

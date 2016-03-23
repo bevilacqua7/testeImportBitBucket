@@ -16,7 +16,7 @@
 	var AUTO_LOAD				=	'';
 
 
-	var AUTO_LOAD_RUN			= 	<?php echo (($request_exec_report && $request_exec_report=='1') ? 'true' : 'false' ); ?>;
+	var AUTO_LOAD_RUN			= 	<?php echo ((@$request_exec_report && @$request_exec_report=='1') ? 'true' : 'false' ); ?>;
 	
 	
 

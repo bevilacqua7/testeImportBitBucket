@@ -410,7 +410,7 @@ class KendoUi
 																
 																
 																
-																
+																//@link http://www.telerik.com/forums/grid-filtering-in-javascript---not-equal-to-null
 																jsonDecode.dataSource.transport.parameterMap			=	function(data) {
 		                                								// TODO: para fazer a condicao de AND ou OR das colunas, basta alterar a variavel this.options.dataSource._filter.logic baseado em outro componente na tela, valores 'and' ou 'or' 
 				                                						
@@ -421,6 +421,16 @@ class KendoUi
 		                                								
 		                                								return kendo.stringify(data);
 																}
+																
+																
+																
+																	var grid = $('#A162').data('kendoGrid');
+
+			//jsonDecode.dataSource.filter = new Array();
+   			//jsonDecode.dataSource.filter.push({ field: "C002", operator: "neq", value: 15 });
+																	
+   			
+   			
 																
 																
 																
@@ -560,6 +570,7 @@ HTML;
 		$this->_param['dataSource']['schema']['total']			=	"total";
 		$this->_param['dataSource']['serverSorting']			=	true;
 		$this->_param['dataSource']['serverPaging']				=	true;
+		
 	}
 	
 	
@@ -687,7 +698,7 @@ HTML;
 											$_menuUse[$pos]['title']			=	(string)$value['title'];
 											$_menuUse[$pos]['is_total']			=	(string)$value['TOTAL'];
 											$_menuUse[$pos]['columns']			=	array_values($_menuUseTmp[$value['key']]);
-											$_menuUse[$pos]['tb_field']			=	(string)$value['FIELD'];
+											$_menuUse[$pos]['tb_field']			=	(string)@$value['FIELD'];
 											$_menuUse[$pos]['LEVEL_FULL']		=	(string)$value['LEVEL_FULL'];
 										
 											
@@ -697,7 +708,7 @@ HTML;
 										$_menuUse[$value['keyUp']][$value['key']]['title']		=	(string)$value['title'];
 										$_menuUse[$value['keyUp']][$value['key']]['columns']	=	array_values($_menuUseTmp[$value['key']]);
 										
-										$_menuUse[$value['keyUp']][$value['key']]['tb_field']	=	(string)$value['FIELD'];
+										$_menuUse[$value['keyUp']][$value['key']]['tb_field']	=	(string)@$value['FIELD'];
 										$_menuUse[$value['keyUp']][$value['key']]['LEVEL_FULL']	=	(string)$value['LEVEL_FULL'];
 								}
 					}
@@ -860,8 +871,8 @@ HTML;
 	}
 	
 
-	private function filtersToWhereField($field){
-
+	private function filtersToWhereField($field)
+	{
 		$campos_de = array('#CAMPO#','#VALOR#');				
 		
 		$arr_operacoes = array(
@@ -898,10 +909,14 @@ HTML;
 		$campos_para 						= 	array($field['field'],$field['value']);
 		$field['type'] 						= 	array_key_exists('type', $field) && $field['type']!=''?$field['type']:'string'; // verifica se existe o type_column nativo na estrutura da coluna em questão para a montagem do filtro corretamente de acordo com seu tipo de conteudo.  Se nao existir, assume tipo string
 		$condicao 							= 	str_replace($campos_de,$campos_para,$arr_operacoes[$field['type']][$field['operator']]);
+		
 		return '('.$condicao.')';
 	}
 	
-	private function filtersToWhereContent($arr_content_field){
+	
+	
+	private function filtersToWhereContent($arr_content_field)
+	{
 		if(array_key_exists('filters', $arr_content_field))
 		{
 			$where_conditions_columns_parcial					=	array();
@@ -915,6 +930,7 @@ HTML;
 		{
 			return 		$this->filtersToWhereField($arr_content_field);
 		}
+		
 	}
 	
 	
