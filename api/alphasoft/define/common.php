@@ -160,7 +160,7 @@ function wrs_get_user_browser()
  */
 function select($array,$selected_by_label,$implements)
 {
-	$option			=	'<option value="{label}" {SELECTED} >{value}</option>'.PHP_EOL;
+	$option			=	'<option value="{label}" {SELECTED} ><img src="http://179.111.208.168/DEV/SANTOS/WRS/imagens/country/POR.png" />  {value}</option>'.PHP_EOL;
 	$option_array	=	array('{value}','{SELECTED}','{label}');
 	
 	$select			=	'<select name="{name}" id="{id}" class="{class}" {implements} >{option}</select>'.PHP_EOL;

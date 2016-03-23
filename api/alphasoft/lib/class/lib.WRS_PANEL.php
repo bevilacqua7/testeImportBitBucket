@@ -1183,13 +1183,12 @@ class WRS_PANEL  extends WRS_USER
 		}
 		
 		// Obtem a Quantidade de Registros da Consulta		
-		$query_table = $this->query($this->_query->COUNT_SSAS_TABLE($_cube['TABLE_CACHE'],((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+		$query_table = $this->query($this->_query->COUNT_SSAS_TABLE($_cube['TABLE_CACHE'],'',((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+		
 		if($this->num_rows($query_table))
 		{
 			$rows 		= $this->fetch_array($query_table);
 			$num_rows 	= (int) $rows['TOTAL_ROWS'];
-			
-//			WRS::SET_TOTAL_COLUMN($cube['TABLE_CACHE'], array('TOTAL_COLUMNS'=> $rows['TOTAL_COLUMNS'],'ORDER_BY_COLUMN'=>$_sort_order ));//Gravando
 			
 			WRS::SET_TOTAL_COLUMN($cube['TABLE_CACHE'],$_sort_order > $rows['TOTAL_COLUMNS'] ? $rows['TOTAL_COLUMNS'] : $_sort_order  );//Gravando
 		}
@@ -1301,10 +1300,6 @@ HTML;
 		$TelerikUi->setPageSize($page_size);
 		$TelerikUi->setHeaderColumnWRS($param);
 		
-		
-	
-		
-		
 		$tagToUrl['TOTAL_COLUMN']	=	$TelerikUi->get_total_column();
 		
 		
@@ -1387,6 +1382,7 @@ HTML;
 		$CUBE_ID					=	fwrs_request('CUBE_ID');
 		$TOTAL_COLUMN				=	fwrs_request('TOTAL_COLUMN');
 		$total_column_detect		= 	false;
+		
 		/*
 		 * Pegando os Eventos do Telerik
 		 */
@@ -1398,7 +1394,12 @@ HTML;
 		$pageSize				=	$request['pageSize'];
 		$resultGridDrill		=	NULL;
 	
-		WRS_DEBUG_QUERY($request,'ds.log');
+		
+		//Columns Filters
+		$column_filters			=	@$request['filters'];
+		$kendoUI				=	new KendoUi();
+		$QUERY_FILTER  			= 	$kendoUI->filtersToWhere($column_filters);
+
 		
 		/*
 		 * Pegando os eventos do WRS_PAnel
@@ -1434,9 +1435,6 @@ HTML;
 					$total_column_detect	=	true;
 				}
 				
-				
-				
-				
 				$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$field,$getRequestKendoUi['ALL_ROWS'],strtoupper($sort[0]['dir'])));
 						
 				if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
@@ -1445,10 +1443,7 @@ HTML;
 					$query_DRILL_SSAS_TABLE_INFO = $this->_query->GET_SSAS_DRILL( $TABLE_NAME );
 					$this->query($query_DRILL_SSAS_TABLE_INFO);
 				}	
-				
-				
 			}
-			
 		}
 		
 		
@@ -1459,13 +1454,13 @@ HTML;
 		$ROW_NUMBER_END			=	$take+$skip;
 		
 		//Query convencional com a formatação para o gráfico
-		$sqlGrid				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		$sqlGrid				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME,$QUERY_FILTER, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
 		
 		//Query convencional com a formatação para o gráfico
-		$sql_chart				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,0,0,$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		$sql_chart				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME,$QUERY_FILTER, $ROW_NUMBER_START, $ROW_NUMBER_END,0,0,$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
 
 		//Query com o Tamanho das colunas
-		$sql_string_width_size	=	 $this->_query->SELECT_SSAS_SIZE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		$sql_string_width_size	=	 $this->_query->SELECT_SSAS_SIZE( $TABLE_NAME,$QUERY_FILTER, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
 		
 		//Processando o bloco com o tamanho das colunas		
 		$columns_width			=	NULL;

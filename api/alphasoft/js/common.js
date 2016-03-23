@@ -25,6 +25,15 @@ function filter_mouse_hover_details()
 	
 }
 
+//HERE
+//@link http://www.telerik.com/forums/grid-filtering-in-javascript---not-equal-to-null
+function setKNewFilter()
+{
+	var grid = $('#A162').data('kendoGrid');
+		$filter = new Array();
+   	$filter.push({ field: "C002", operator: "neq", value: 15 });
+	grid.dataSource.filter($filter);
+}
 
 
 /**

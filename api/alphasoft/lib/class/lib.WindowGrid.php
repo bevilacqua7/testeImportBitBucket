@@ -626,7 +626,7 @@ EOF;
 		$page				=	$request['page'];
 		$take				=	$request['take'];
 		$skip				=	$request['skip'];
-		$column_filters		=	$request['filters'];
+		$column_filters		=	@$request['filters'];
 		$sort				=	isset($request['sort']) ? $request['sort'] : array();
 		$pageSize			=	$request['pageSize'];
 		$table				=	 fwrs_request('table');
@@ -845,7 +845,7 @@ EOF;
 
 		$result				=	 array();
 		$result['total']	=	$num_rows;
-		$result['data']		=	$resultGrid;
+		$result['data']		=	@$resultGrid;
 			
 		echo json_encode($result);
 		

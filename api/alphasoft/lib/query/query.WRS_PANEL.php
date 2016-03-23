@@ -139,25 +139,22 @@ EOF;
 	 * 
 	 * o $DRILL_LINE é para um execução temporária para a consulta do drill
 	 * @param string $_QUERY_TABLE
+	 * @param string $_QUERY_FILTER
 	 * @param int $DRILL_LINE
 	 * @return string
 	 */
-	 
-	 // ************* RECORDS_SSAS_TABLES = COUNT_SSAS_TABLE
-	 
-	 public function COUNT_SSAS_TABLE( $_QUERY_TABLE, $DRILL_LINE=0 )
+	 	 
+	 public function COUNT_SSAS_TABLE( $_QUERY_TABLE, $_QUERY_FILTER = '', $DRILL_LINE = 0 )
 	{
-		$FAT_SSAS_TABLES	=	<<<EOF
-		select TOTAL_ROWS,TOTAL_COLUMNS from FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}'
+		// Exemplo: EXEC Get_SSAS_Count '_MDX_0C0362048E1E46E1BBF8FB8E03AC6968_F','C007 < 1000 AND C010 > 100'
+		$FAT_SSAS_TABLES = <<<EOF
+								EXEC Get_SSAS_Count 	'{$_QUERY_TABLE}',
+														'{$_QUERY_FILTER}'
 EOF;
-		$SQL_DRILL_LINE			=	<<<EOF
-		    select TOTAL_ROWS,TOTAL_COLUMNS
-		    from (SELECT TOTAL_COLUMNS FROM FAT_SSAS_TABLES where QUERY_TABLE = '{$_QUERY_TABLE}') A,
-			     (SELECT COUNT(*) AS TOTAL_ROWS FROM {$_QUERY_TABLE}D) B
+		$SQL_DRILL_LINE = <<<EOF
+								EXEC Get_SSAS_Count 	'{$_QUERY_TABLE}D',
+														'{$_QUERY_FILTER}'
 EOF;
-		/*
-		 * TODO: Temporário
-		 */
 		if($DRILL_LINE==1) return $SQL_DRILL_LINE; 
 		
 		return $FAT_SSAS_TABLES;	
@@ -296,16 +293,15 @@ EOF;
 	 
 	 // ************* INSERIDO PARAMETROS DE FORMATACAO / NUMEROS RESUMIDOS / LINGUAGEM
 	
-	public function SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END, $FORMAT, $_RESUME, $LANGUAGE )
+	public function SELECT_SSAS_TABLE( $TABLE_NAME, $QUERY_FILTER,$ROW_NUMBER_START, $ROW_NUMBER_END, $FORMAT, $_RESUME, $LANGUAGE )
 	{
-		
-		
 		
 		$RESUME		=	empty($_RESUME) ? 0 : $_RESUME;
 		
 		// Exemplo: Exec Select_SSAS_Table '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F' OUTPUT,11,20,0,0,'POR'
 		$query = <<<EOF
 					EXEC Select_SSAS_Table '{$TABLE_NAME}',
+											'{$QUERY_FILTER}',
 											{$ROW_NUMBER_START},
 											{$ROW_NUMBER_END},
 											{$FORMAT},
@@ -334,7 +330,7 @@ EOF;
 	
 	// ************* INSERIDO PARAMETROS DE FORMATACAO / NUMEROS RESUMIDOS / LINGUAGEM
 	
-	public function SELECT_SSAS_SIZE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END, $FORMAT, $_RESUME, $LANGUAGE )
+	public function SELECT_SSAS_SIZE( $TABLE_NAME,$QUERY_FILTER, $ROW_NUMBER_START, $ROW_NUMBER_END, $FORMAT, $_RESUME, $LANGUAGE )
 	{
 	
 		$RESUME		=	empty($_RESUME) ? 0 : $_RESUME;
@@ -342,6 +338,7 @@ EOF;
 		// Exemplo: Exec Select_SSAS_Size '_MDX_692E3FEAFAC44F708FF864EC3ECA8615_F' OUTPUT,11,20,0,0,'POR'
 		$query = <<<EOF
 					EXEC Select_SSAS_Size '{$TABLE_NAME}',
+											'{$QUERY_FILTER}',
 											{$ROW_NUMBER_START},
 											{$ROW_NUMBER_END},
 											{$FORMAT},
