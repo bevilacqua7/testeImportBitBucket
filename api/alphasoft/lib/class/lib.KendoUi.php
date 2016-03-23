@@ -840,41 +840,6 @@ HTML;
 
 	private function filtersToWhereField($field){
 
-		// Como podem existir filtros para tipos de colunas diferentes, se ocorrer
-		
-		
-		// Implementacao dos filtros por coluna nativo do KendoUi - felipeb 20160316
-		/*
-		 date: {
-		 eq: "É igual a",
-		 gt: "É posterior a",
-		 gte: "É posterior ou igual a",
-		 lt: "É anterior a",
-		 lte: "É anterior ou igual a",
-		 neq: "Não é igual a"
-		 },
-		 enums: {
-		 eq: "É igual a",
-		 neq: "Não é igual a"
-		 },
-		 number: {
-		 eq: "É igual a",
-		 gt: "É maior que",
-		 gte: "É maior que ou igual a",
-		 lt: "É menor que",
-		 lte: "É menor que ou igual a",
-		 neq: "Não é igual a"
-		 },
-		 string: {
-		 contains: "Contém",
-		 doesnotcontain: "Não contém",
-		 endswith: "Termina com",
-		 eq: "É igual a",
-		 neq: "Não é igual a",
-		 startswith: "Começa com"
-		 }
-		
-		 */
 		$campos_de = array('#CAMPO#','#VALOR#');				
 		
 		$arr_operacoes = array(
@@ -908,172 +873,50 @@ HTML;
 				)
 		);
 		
-		$campo_type_column_name 			= 	'type_colunm'; // TEMPORARIO até que se defina um nome;
 		$campos_para 						= 	array($field['field'],$field['value']);
-		$field[$campo_type_column_name] 	= 	array_key_exists($campo_type_column_name, $field) && $field[$campo_type_column_name]!=''?$field[$campo_type_column_name]:'string'; // verifica se existe o type_column nativo na estrutura da coluna em questão para a montagem do filtro corretamente de acordo com seu tipo de conteudo.  Se nao existir, assume tipo string
-		$condicao 							= 	str_replace($campos_de,$campos_para,$arr_operacoes[$field[$campo_type_column_name]][$field['operator']]);
+		$field['type'] 						= 	array_key_exists('type', $field) && $field['type']!=''?$field['type']:'string'; // verifica se existe o type_column nativo na estrutura da coluna em questão para a montagem do filtro corretamente de acordo com seu tipo de conteudo.  Se nao existir, assume tipo string
+		$condicao 							= 	str_replace($campos_de,$campos_para,$arr_operacoes[$field['type']][$field['operator']]);
 		return '('.$condicao.')';
 	}
 	
+	private function filtersToWhereContent($arr_content_field){
+		if(array_key_exists('filters', $arr_content_field))
+		{
+			$where_conditions_columns_parcial					=	array();
+			foreach($arr_content_field['filters'] as $arr_operacao_parcial)
+			{
+				$where_conditions_columns_parcial[] 			= 	$this->filtersToWhereContent($arr_operacao_parcial);
+			}
+			return 		'('.implode(' '.strtoupper($arr_content_field['logic']).' ',$where_conditions_columns_parcial).')';
+		}
+		else
+		{
+			return 		$this->filtersToWhereField($arr_content_field);
+		}
+	}
 	
+	
+	/**
+	 * Transforma o objeto padrao do KendoUi (json) para uma clausula WHERE
+	 * @param array $column_filters-  JSON original do KendoUi de filtros
+	 * @param string $column_condition - opcional para definir a operacao entre as colunas passadas (AND ou OR)
+	 * @return string - clausila WHERE no padrao WRS com duas apostrofes simples como delimitador de string
+	 */
 	public function filtersToWhere($column_filters,$column_condition=" AND "){
-		$where = array();
+		$where = '';
+		
 		if($column_filters!=null && $column_filters!='' && is_array($column_filters)){
 			
-			/* Ex.: $column_filters vindo do request:
-			 * 
-			 * // APENAS 1 NIVEL (de 'filters' no array)
-			 * Array (
-			 * 			[filters] => Array (
-			 * 								[0] => Array (
-			 * 												[field] => USER_CODE
-			 * 												[operator] => eq
-			 * 												[type_colunm] => string // considero este campo que ainda nao existe pois o santos ira fazer existir
-			 * 												[value] => DRV
-			 * 											)
-			 * 								)
-			 * 			[logic] => and
-			 * 		)
-			 *
-			 * OU
-			 *
-			 * // OCORRE 2 NIVEIS (de 'filters' no array)
-			 * Array(
-			 *		[filters] => Array(
-			 *							[0] => Array(
-			 *											[logic] => or
-			 *											[filters] =>  Array(
-			 *																[0] => Array(
-			 *																			[field] =>  USER_CODE
-			 *																			[operator] =>   contains
-			 *																			[value] =>   dm
-			 *																		),
-			 *																[1] => Array(
-			 *																			[field] =>   USER_CODE
-			 *																			[operator] =>   contains
-			 *																			[value] =>   drg
-			 *																		)
-			 *														)
-			 *										),
-			 *							[1] => Array(
-			 *											[logic] =>   and
-			 *											[filters] =>  Array(
-			 *																[0] => Array(
-			 *																			[field] =>   USER_DESC
-			 *																			[operator] =>   contains
-			 *																			[value] =>   drop
-			 *																		),
-			 *																[1] => Array(
-			 *																			[field] =>   USER_DESC
-			 *																			[operator] =>   contains
-			 *																			[value] =>   metric
-			 *																		)
-			 *														)
-			 *										)
-			 *						),
-			 *		[logic] =>   and
-			 *	)
-			 *
-			 *
-			 * OU
-			 * 
-			 * OCORRE ESSA EXCECAO, que é um misto de ambas as situacoes
-			 * // OCORRE ATE 3 NIVEIS (de 'filters' no array)
-			 * 
-			 * 			    [filters] => Array
-			 * 			        (
-			 * 			            [filters] => Array
-			 * 			                (
-			 * 			                    [0] => Array
-			 * 			                        (
-			 * 			                            [field] => C002
-			 * 			                            [operator] => eq
-			 * 			                            [value] => D
-			 * 			                        )
-			 *			
-			 * 			                    [1] => Array
-			 * 			                        (
-			 * 			                            [field] => C002
-			 * 			                            [operator] => eq
-			 * 			                            [value] => D
-			 * 			                        )
-			 *			
-			 * 			                    [2] => Array
-			 * 			                        (
-			 * 			                            [logic] => and
-			 * 			                            [filters] => Array
-			 * 			                                (
-			 * 			                                    [0] => Array
-			 * 			                                        (
-			 * 			                                            [field] => C003
-			 * 			                                            [operator] => eq
-			 * 			                                            [value] => S
-			 * 			                                        )
-			 *			
-			 * 			                                    [1] => Array
-			 * 			                                        (
-			 * 			                                            [field] => C003
-			 * 			                                            [operator] => eq
-			 * 			                                            [value] => S
-			 * 			                                        )
-			 *			
-			 * 			                                )
-			 *			
-			 * 			                        )
-			 *
-			 *                  		   [3] => Array
-			 *                 		        (
-			 *                  		           [field] => C004
-			 *                 		            [operator] => eq
-			 *                  		           [value] => SD
-			 *                 		        )
-			 *			
-			 * 			                )
-			 *			
-			 * 			            [logic] => and
-			 * 			        )
-			 *						 
-			 *
-			 *
-			 *
-			 */
-			
 			$where_conditions_columns	=	array();
+			// este foreach inicial poderia ter sido suprimido chamando diretamente $this->filtersToWhereContent, porém, ele existe já que sempre haverá a primeira posicao de filters no array, E, PRINCIPALMENTE para manipular a condicao entre colunas, AND ou OR de acordo com o parametro inicial do metodo: $column_condition 
 			foreach($column_filters['filters'] as $arr_operacao)
 			{
-				if(array_key_exists('filters', $arr_operacao))
-				{
-					$where_conditions_columns_parcial											=	array();
-					foreach($arr_operacao['filters'] as $arr_operacao_parcial)
-					{
-						if(array_key_exists('filters', $arr_operacao_parcial))
-						{
-							$where_conditions_columns_parcial_terceiro_nivel					=	array();
-							foreach($arr_operacao_parcial['filters'] as $arr_operacao_parcial_terceiro_nivel)
-							{
-								$where_conditions_columns_parcial_terceiro_nivel[] 				= 	$this->filtersToWhereField($arr_operacao_parcial_terceiro_nivel);
-							}
-							$where_conditions_columns_parcial[] 								= 	'('.implode(' '.strtoupper($arr_operacao_parcial['logic']).' ',$where_conditions_columns_parcial_terceiro_nivel).')';
-						}
-						else
-						{
-							$where_conditions_columns_parcial[] 								= 	$this->filtersToWhereField($arr_operacao_parcial);
-						}
-					}
-					$where_conditions_columns[] 												= 	'('.implode(' '.strtoupper($arr_operacao['logic']).' ',$where_conditions_columns_parcial).')';
-				}
-				else
-				{
-					$where_conditions_columns[] 												= 	$this->filtersToWhereField($arr_operacao);
-				}
-			}
-						
+					$where_conditions_columns[] 	= 	$this->filtersToWhereContent($arr_operacao);
+			}						
 			
-			$where[] = '('.implode(' '.strtoupper($column_condition).' ',$where_conditions_columns).')';				
+			$where = '('.implode(' '.strtoupper($column_condition).' ',$where_conditions_columns).')';				
 		}
-		
-		$where = implode(' AND ',$where);
-		
+				
 		return $where;
 	}
 	 
