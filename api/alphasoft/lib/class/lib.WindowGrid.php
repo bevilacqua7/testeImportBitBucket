@@ -684,116 +684,14 @@ EOF;
 			}
 		}
 		
-		// Implementacao dos filtros por coluna nativo do KendoUi - felipeb 20160316
-		/*
-		 * <option value="eq">É igual a</option>
-		 * <option value="neq">Não é igual a</option>
-		 * <option value="startswith">Começa com</option>
-		 * <option value="contains">Contém</option>
-		 * <option value="doesnotcontain">Não contém</option>
-		 * <option value="endswith">Termina com</option>
-		 */
-
-		$filters_operations = array(
-				'eq'				=>	" #CAMPO#  = 		''#VALOR#''		",
-				'neq'				=>	" #CAMPO# != 		''#VALOR#''		",
-				'startswith'		=>	" #CAMPO# LIKE 		''#VALOR#%''	",
-				'contains'			=>	" #CAMPO# LIKE 		''%#VALOR#%''	",
-				'doesnotcontain'	=>	" #CAMPO# NOT LIKE 	''%#VALOR#%''	",
-				'endswith'			=>	" #CAMPO# LIKE 		''%#VALOR#''	"
-		);
+		$kendoUI			=	new KendoUi();
+		$where_filters  	= 	$kendoUI->filtersToWhere($column_filters);
 		
-		if($column_filters!=null && $column_filters!='' && is_array($column_filters)){
-			/* Ex.: $column_filters vindo do request:
-			 * Array ( 
-			 * 			[filters] => Array ( 
-			 * 								[0] => Array ( 
-			 * 												[field] => USER_CODE 
-			 * 												[operator] => eq 
-			 * 												[value] => DRV 
-			 * 											) 
-			 * 								) 
-			 * 			[logic] => and 
-			 * 		)
-			 * 
-			 * OU
-			 * 
-			 * Array(
-			 *		[filters] => Array(
-			 *							[0] => Array(
-			 *											[logic] => or
-			 *											[filters] =>  Array(
-			 *																[0] => Array(
-			 *																			[field] =>  USER_CODE
-			 *																			[operator] =>   contains
-			 *																			[value] =>   dm
-			 *																		),
-			 *																[1] => Array(
-			 *																			[field] =>   USER_CODE
-			 *																			[operator] =>   contains
-			 *																			[value] =>   drg
-			 *																		)
-			 *														)
-			 *										),
-			 *							[1] => Array(
-			 *											[logic] =>   and
-			 *											[filters] =>  Array(
-			 *																[0] => Array(
-			 *																			[field] =>   USER_DESC
-			 *																			[operator] =>   contains
-			 *																			[value] =>   drop
-			 *																		),
-			 *																[1] => Array(
-			 *																			[field] =>   USER_DESC
-			 *																			[operator] =>   contains
-			 *																			[value] =>   metric
-			 *																		)
-			 *														)
-			 *										)
-			 *						),
-			 *		[logic] =>   and
-			 *	)
-			 */
-			$where_conditions_columns	=	array();
-			$campos_de = array('#CAMPO#','#VALOR#');
-			
-			// TODO: quando for feito o tipo de condicao pras COLUNAS, considerar esta variavel originalmente
-			$column_filters['logic'] = ' AND ';
-									
-			foreach($column_filters['filters'] as $arr_operacao)
-			{
-				if(array_key_exists('filters', $arr_operacao))
-				{
-					$where_conditions_columns_parcial	=	array();
-					
-					foreach($arr_operacao['filters'] as $arr_operacao_parcial)
-					{
-						$campos_para = array($arr_operacao_parcial['field'],$arr_operacao_parcial['value']);
-						$condicao = str_replace($campos_de,$campos_para,$filters_operations[$arr_operacao_parcial['operator']]);
-						$where_conditions_columns_parcial[] = '('.$condicao.')';
-					}
-					
-					$where_conditions_columns[] = '('.implode(' '.strtoupper($arr_operacao['logic']).' ',$where_conditions_columns_parcial).')';					
-					
-				}else{			
-					
-					$campos_para = array($arr_operacao['field'],$arr_operacao['value']);
-					
-					$condicao = str_replace($campos_de,$campos_para,$filters_operations[$arr_operacao['operator']]);
-					
-					$where_conditions_columns[] = '('.$condicao.')';
-					
-					
-				}
-			}
-			$where[] = '('.implode(' '.strtoupper($column_filters['logic']).' ',$where_conditions_columns).')';
-			
-			
-			
-			
+		if($where_filters!=''){
+			$where[] = $where_filters;
 		}
 		
-		$where = implode(' AND ',$where);
+		$where = implode(" AND ",$where);
 		
 		if(!empty($this->exception))
 		{

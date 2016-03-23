@@ -859,6 +859,88 @@ HTML;
 		
 	}
 	
+
+	private function filtersToWhereField($field){
+
+		$campos_de = array('#CAMPO#','#VALOR#');				
+		
+		$arr_operacoes = array(
+				'date' => array(
+						'eq'				=>	" #CAMPO#  = 		''#VALOR#''		",
+						'gt'				=>	" #CAMPO# > 		''#VALOR#''		",
+						'gte'				=>	" #CAMPO# >= 		''#VALOR#''		",
+						'lt'				=>	" #CAMPO# < 		''#VALOR#''		",
+						'lte'				=>	" #CAMPO# <= 		''#VALOR#''		",
+						'neq'				=>	" #CAMPO# != 		''#VALOR#''		"
+				),
+				'enums' => array(
+						'eq'				=>	" #CAMPO#  = 		''#VALOR#''		",
+						'neq'				=>	" #CAMPO# != 		''#VALOR#''		"
+				),
+				'number' => array(
+						'eq'				=>	" #CAMPO#  = 		#VALOR#			",
+						'gt'				=>	" #CAMPO# > 		#VALOR#			",
+						'gte'				=>	" #CAMPO# >= 		#VALOR#			",
+						'lt'				=>	" #CAMPO# < 		#VALOR#			",
+						'lte'				=>	" #CAMPO# <= 		#VALOR#			",
+						'neq'				=>	" #CAMPO# != 		#VALOR#			"
+				),
+				'string' => array(
+						'eq'				=>	" #CAMPO#  = 		''#VALOR#''		",
+						'neq'				=>	" #CAMPO# != 		''#VALOR#''		",
+						'startswith'		=>	" #CAMPO# LIKE 		''#VALOR#%''	",
+						'contains'			=>	" #CAMPO# LIKE 		''%#VALOR#%''	",
+						'doesnotcontain'	=>	" #CAMPO# NOT LIKE 	''%#VALOR#%''	",
+						'endswith'			=>	" #CAMPO# LIKE 		''%#VALOR#''	"
+				)
+		);
+		
+		$campos_para 						= 	array($field['field'],$field['value']);
+		$field['type'] 						= 	array_key_exists('type', $field) && $field['type']!=''?$field['type']:'string'; // verifica se existe o type_column nativo na estrutura da coluna em questão para a montagem do filtro corretamente de acordo com seu tipo de conteudo.  Se nao existir, assume tipo string
+		$condicao 							= 	str_replace($campos_de,$campos_para,$arr_operacoes[$field['type']][$field['operator']]);
+		return '('.$condicao.')';
+	}
+	
+	private function filtersToWhereContent($arr_content_field){
+		if(array_key_exists('filters', $arr_content_field))
+		{
+			$where_conditions_columns_parcial					=	array();
+			foreach($arr_content_field['filters'] as $arr_operacao_parcial)
+			{
+				$where_conditions_columns_parcial[] 			= 	$this->filtersToWhereContent($arr_operacao_parcial);
+			}
+			return 		'('.implode(' '.strtoupper($arr_content_field['logic']).' ',$where_conditions_columns_parcial).')';
+		}
+		else
+		{
+			return 		$this->filtersToWhereField($arr_content_field);
+		}
+	}
+	
+	
+	/**
+	 * Transforma o objeto padrao do KendoUi (json) para uma clausula WHERE
+	 * @param array $column_filters-  JSON original do KendoUi de filtros
+	 * @param string $column_condition - opcional para definir a operacao entre as colunas passadas (AND ou OR)
+	 * @return string - clausila WHERE no padrao WRS com duas apostrofes simples como delimitador de string
+	 */
+	public function filtersToWhere($column_filters,$column_condition=" AND "){
+		$where = '';
+		
+		if($column_filters!=null && $column_filters!='' && is_array($column_filters)){
+			
+			$where_conditions_columns	=	array();
+			// este foreach inicial poderia ter sido suprimido chamando diretamente $this->filtersToWhereContent, porém, ele existe já que sempre haverá a primeira posicao de filters no array, E, PRINCIPALMENTE para manipular a condicao entre colunas, AND ou OR de acordo com o parametro inicial do metodo: $column_condition 
+			foreach($column_filters['filters'] as $arr_operacao)
+			{
+					$where_conditions_columns[] 	= 	$this->filtersToWhereContent($arr_operacao);
+			}						
+			
+			$where = '('.implode(' '.strtoupper($column_condition).' ',$where_conditions_columns).')';				
+		}
+				
+		return $where;
+	}
 	 
  
 	
