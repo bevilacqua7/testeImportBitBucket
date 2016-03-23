@@ -92,6 +92,8 @@ $nameImage	=	 fwrs_request('nameImage');
 
 
 	$('.btn_window_grid_event').click(sendMailScreenShot);
+
+		var URL_REQUEST		=	dirname(window.location.href);
 	
 	    $('.btn_attach').Anexo('upload',
 	    				{
@@ -104,7 +106,7 @@ $nameImage	=	 fwrs_request('nameImage');
    							progressComplete	:	false,
    					        paramRequest		:	{	
    					        								upload_dir 	: 'files/mail/'+getLogin('USER_ID')+'/',
-											                upload_url 	: 'http://179.111.208.168/DEV/SANTOS/WRS/files/mail/'+getLogin('USER_ID')+'/'
+											                upload_url 	: URL_REQUEST+'/files/mail/'+getLogin('USER_ID')+'/'
 											         },
 						    attachStartSend		:	 function(){
 							    							//ao clicar em enviar ele realoca a barra para visualizar o que está sendo baixado

@@ -1045,12 +1045,24 @@ function rules_pendences_checkbox(element,fullEvent)
 	var checked		=	element.prop('checked');
 	var _input		=	'';
 	
-	if(!empty(dependence)) {
-
+	
+	if(!empty(dependence))
+	{
 		_input	=	fullEvent.find('input[name='+dependence+']');
 		if(checked){
+			var _show	=	 true;
 			//_input.prop('disabled',false);
-			_input.parent().parent().show();
+			//Se for consolidado permite apenas se tiver duas ou mais linhas
+			if(dependence=='DRILL_HIERARQUIA_LINHA')
+			{
+				if($('.sortable_linha').find('li').length<=1) _show=false;
+			}
+			
+			if(_show==true)
+			{
+				_input.parent().parent().show();
+			}
+			
 		}else{
 			_input.prop('checked',false);
 			//_input.prop('disabled',true);
@@ -1196,6 +1208,12 @@ var getRequestKendoUiDefault	=	{};
 	  				rules_pendences_checkbox($(this),$(this).parent().parent().parents('ul'));
   		});
   		
+		//hide CONSOLIDADO
+		if($('.sortable_linha').find('li').length<=1){
+			$('.DRILL_HIERARQUIA_LINHA_CHECK').hide();
+		}
+		
+		
 		delete _opts;
 		_END('wrsConfigGridDefault::event_click_btn_options');
   	}

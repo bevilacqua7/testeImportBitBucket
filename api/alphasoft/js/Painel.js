@@ -1689,6 +1689,14 @@ function wrs_run_filter()
 					wrs_data_param.LAYOUT_COLUMNS	=	base64_encode(implode(',',request_coluna));
 					wrs_data_param.LAYOUT_MEASURES	=	base64_encode(implode(',',request_metrica));
 					
+
+					if(explode(',',request_linha).length<=1)
+					{
+						wrs_data_param.DRILL_HIERARQUIA_LINHA	=	0;
+						aba_active.wrsAbaData('setKendoUi',{DRILL_HIERARQUIA_LINHA	:	0});
+					}
+					
+					
 					
 							//Força a conversão do Menu 
 							wrsFilterShow();
@@ -1732,6 +1740,8 @@ function wrs_run_filter()
 					
 					//Merge com a estrutura da aba
 					 _param_request		=	array_concat(wrs_data_param,report_KendoUi);
+					
+					
 					
 					 
 					//Passando o ID do Cubo na sessão
