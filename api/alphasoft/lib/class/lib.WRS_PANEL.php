@@ -1398,6 +1398,7 @@ HTML;
 		$pageSize				=	$request['pageSize'];
 		$resultGridDrill		=	NULL;
 	
+		WRS_DEBUG_QUERY($request,'ds.log');
 		
 		/*
 		 * Pegando os eventos do WRS_PAnel
@@ -1410,6 +1411,7 @@ HTML;
 		/*
 		 * Efetuando a contagem recursiva para fazer a reordenação
 		 * WARNING:Esse é o trecho do código que está se repetindo
+		 * 
 		 */
 		
 		

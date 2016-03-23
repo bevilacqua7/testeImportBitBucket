@@ -37,17 +37,14 @@ class KendoUi
 	 * Contem o esqueleto da estrutura do telerik Ui Kendo
 	 * @var array
 	 */
-	private $_param		=	array();
-	private $_field		=	array();		
-	private $_idName	=	'grid';
-	private $wrsKendoUi	=	array();
-	
+	private $_param				=	array();
+	private $_field				=	array();		
+	private $_idName			=	'grid';
+	private $wrsKendoUi			=	array();
 	private $Drilllayout		=	 array();
-	
 	private $param_wrs			=	 array();
-	
 	private $total_column		=	0;
-
+	
 	
 	public function set_total_column($input)
 	{
@@ -308,13 +305,15 @@ class KendoUi
 		$parseParam['MEASURE_NAME']	=	$_param['LEVEL_FULL'];
 		$parseParam['MEASURE_NAME']	=	$_param['LEVEL_FULL'];*/
 		
-
+		$_type		=	'number';
+		
 			if($locked)
 			{
 				$this->wrsKendoUi['frozen']++;
+				$_type	=	'string';
 			}
 			
-		$this->_field[]		= array("field"=>$field,/*"parse"=>'wrs_format_line',*/"type"=>'string');
+		$this->_field[]		= array("field"=>$field,/*"parse"=>'wrs_format_line',*/"type"=>$_type);
 		
 //		$_param['FORMAT_STRING']
 		//'formataValue(MEASURE_NAME,formatacao,valor,sumariza)'
@@ -346,6 +345,9 @@ class KendoUi
 		$PLUS_MINUS			=	$getRequestKendoUi['PLUS_MINUS'];
 		
 		$this->orderByOnLoad($getRequestKendoUi);
+		
+		//Filtro para todos os outros elementos
+		$this->_param['filterable']	=	true;
 		
 		$_jsonencode =	json_encode($this->_param,true);
 		
@@ -402,9 +404,25 @@ class KendoUi
 															$(window).unload(function(){});
 														
 															var jsonDecode											= 	{$_jsonencode};
-																jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
+																
 																jsonDecode.dataBound									= 	function(arg){ return onDataBound(arg);}								
 																jsonDecode.dataBinding									=	function(arg){ return onDataBinding(arg);}
+																
+																
+																
+																
+																jsonDecode.dataSource.transport.parameterMap			=	function(data) {
+		                                								// TODO: para fazer a condicao de AND ou OR das colunas, basta alterar a variavel this.options.dataSource._filter.logic baseado em outro componente na tela, valores 'and' ou 'or' 
+				                                						
+		                                								if(!isEmpty(this.options.dataSource._filter))
+		                                								{
+		                                									data['filters']	=	recursiveFilterFindType(rFFTIndex(this.options.dataSource.options.schema.model.fields),this.options.dataSource._filter);
+																		}
+		                                								
+		                                								return kendo.stringify(data);
+																}
+																
+																
 																
 																$("#{$this->getId()}").kendoGrid(jsonDecode);
 																$(".{$this->getId()}BOX").hide();
@@ -618,7 +636,8 @@ HTML;
 		$frozenHeader			=	array_reverse($frozenHeader);
 		$frozenArrayHeader		=	array();
 		$frozenArrayHeaderTMP	=	array();
-		 
+		
+
 		
 
 		/*
@@ -671,6 +690,8 @@ HTML;
 											$_menuUse[$pos]['tb_field']			=	(string)$value['FIELD'];
 											$_menuUse[$pos]['LEVEL_FULL']		=	(string)$value['LEVEL_FULL'];
 										
+											
+										
 										}										
 								}else{
 										$_menuUse[$value['keyUp']][$value['key']]['title']		=	(string)$value['title'];
@@ -721,7 +742,7 @@ HTML;
 		$this->set_total_column(count($columns_table));
 		
 
-		
+
 		$this->setColumn($wrs_column);
 		
 		
@@ -787,7 +808,8 @@ HTML;
 
 		if($locked)
 		{
-			$paramTelerik['locked']	=	$locked;
+			$paramTelerik['locked']		=	$locked;
+			$paramTelerik['filterable']	=	false;
 		}
 		
 		
