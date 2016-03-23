@@ -27,6 +27,37 @@ function filter_mouse_hover_details()
 
 
 
+/**
+ * 	Index do FilterFindType
+ */
+function rFFTIndex(label)
+{
+	var _tmp	=	{};
+	for(var line in label) _tmp[label[line].field]	=	label[line].type;
+	return _tmp;
+}
+
+
+/**
+ * Recursividade para pegar apenas os types das coluns
+ */
+function recursiveFilterFindType(types,deep)
+{
+	for(var line in deep)
+	{
+		if(typeof deep[line]=='object')
+		{
+			deep[line]	=	recursiveFilterFindType(types,deep[line]);
+		}
+
+		if(typeof deep[line].field!='undefined')
+		{
+				deep[line]['type']	=	types[deep[line].field];
+		}
+	}
+	return deep;	
+}
+
 
 function wrs_logout()
  {

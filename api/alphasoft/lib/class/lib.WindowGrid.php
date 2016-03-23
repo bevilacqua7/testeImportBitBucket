@@ -693,6 +693,7 @@ EOF;
 		 * <option value="doesnotcontain">Não contém</option>
 		 * <option value="endswith">Termina com</option>
 		 */
+
 		$filters_operations = array(
 				'eq'				=>	" #CAMPO#  = 		''#VALOR#''		",
 				'neq'				=>	" #CAMPO# != 		''#VALOR#''		",
@@ -701,6 +702,7 @@ EOF;
 				'doesnotcontain'	=>	" #CAMPO# NOT LIKE 	''%#VALOR#%''	",
 				'endswith'			=>	" #CAMPO# LIKE 		''%#VALOR#''	"
 		);
+		
 		if($column_filters!=null && $column_filters!='' && is_array($column_filters)){
 			/* Ex.: $column_filters vindo do request:
 			 * Array ( 
@@ -758,19 +760,30 @@ EOF;
 			// TODO: quando for feito o tipo de condicao pras COLUNAS, considerar esta variavel originalmente
 			$column_filters['logic'] = ' AND ';
 									
-			foreach($column_filters['filters'] as $arr_operacao){
-				if(array_key_exists('filters', $arr_operacao)){
+			foreach($column_filters['filters'] as $arr_operacao)
+			{
+				if(array_key_exists('filters', $arr_operacao))
+				{
 					$where_conditions_columns_parcial	=	array();
-					foreach($arr_operacao['filters'] as $arr_operacao_parcial){
+					
+					foreach($arr_operacao['filters'] as $arr_operacao_parcial)
+					{
 						$campos_para = array($arr_operacao_parcial['field'],$arr_operacao_parcial['value']);
 						$condicao = str_replace($campos_de,$campos_para,$filters_operations[$arr_operacao_parcial['operator']]);
 						$where_conditions_columns_parcial[] = '('.$condicao.')';
 					}
+					
 					$where_conditions_columns[] = '('.implode(' '.strtoupper($arr_operacao['logic']).' ',$where_conditions_columns_parcial).')';					
-				}else{				
+					
+				}else{			
+					
 					$campos_para = array($arr_operacao['field'],$arr_operacao['value']);
+					
 					$condicao = str_replace($campos_de,$campos_para,$filters_operations[$arr_operacao['operator']]);
+					
 					$where_conditions_columns[] = '('.$condicao.')';
+					
+					
 				}
 			}
 			$where[] = '('.implode(' '.strtoupper($column_filters['logic']).' ',$where_conditions_columns).')';
