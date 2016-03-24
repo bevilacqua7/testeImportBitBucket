@@ -27,6 +27,9 @@ $(function(){
 			
 			
 			$('.logout_wrs').click(function(){wrs_logout();});
+			
+			
+			 
 		
 	
 });

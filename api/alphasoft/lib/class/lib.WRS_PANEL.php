@@ -1227,10 +1227,12 @@ class WRS_PANEL  extends WRS_USER
 			/*
 			 * Apenas informa qual o nome das columns 
 			 */
+			
 			$param[] 	= 	array( 	'FIELD'			=>	$rows['FIELD'], 
 									'TOTAL'			=>	$rows['TOTAL'],
 				 	               	'LEVEL_TYPE'	=>	$rows['LEVEL_TYPE'], 
 									'LEVEL_FULL'	=>	$rows['LEVEL_FULL'], 
+									'LEVEL_DRILL'	=>	$rows['LEVEL_DRILL'],
 									'LEVEL_NAME'	=>	$rows['LEVEL_NAME'], 
 									'LEVEL_VALUE'	=>	$rows['LEVEL_VALUE'], 
 									'LEVEL_POS'		=>	$rows['LEVEL_POS'],
@@ -1470,17 +1472,12 @@ HTML;
 			$columns_width			=$this->fetch_array($sql_width_size);	
 		}
 		//END
-		
+
 		
 		//Validando a consulta da GRID
 		$sqlGrid_exec		=	 $this->query($sqlGrid);
-		if(!$this->num_rows($sqlGrid_exec))
-		{
-			echo fwrs_error(LNG('SELECT_NULL'));
-			WRS_TRACE('A consulta retornou vazia  '.$sqlGrid, __LINE__, __FILE__);
-			WRS_DEBUG_QUERY('A consulta retornou vazia  '.$sqlGrid);
-			return false;
-		}
+		
+		
 		
 		
 		
@@ -1507,21 +1504,27 @@ HTML;
 												$page,
 												$pageSize,false);
 		
-
-		//Processando a Query da GRID
-		while ($rows =  $this->fetch_array($sqlGrid_exec))
-		{
-			$resultGridTmp		=	$rows;
-			//Colocando em negrito o value
-			if(isset($sort[0]['field']))
+			if($this->num_rows($sqlGrid_exec))
 			{
-				$resultGridTmp['bold'.$sort[0]['field']]	=	true;
-				//$resultGridTmp[$sort[0]['field']]	='<span style="color: #00ff00; font-weight: bold">42</span>';
-			}
-			$resultGrid[]		=	$resultGridTmp;
-		}
+				/*echo fwrs_error(LNG('SELECT_NULL'));
+				WRS_TRACE('A consulta retornou vazia  '.$sqlGrid, __LINE__, __FILE__);
+				WRS_DEBUG_QUERY('A consulta retornou vazia  '.$sqlGrid);
+				return false;*/
+			
+				//Processando a Query da GRID
+				while ($rows =  $this->fetch_array($sqlGrid_exec))
+				{
+					$resultGridTmp		=	$rows;
+					//Colocando em negrito o value
+					if(isset($sort[0]['field']))
+					{
+						$resultGridTmp['bold'.$sort[0]['field']]	=	true;
+						//$resultGridTmp[$sort[0]['field']]	='<span style="color: #00ff00; font-weight: bold">42</span>';
+					}
+					$resultGrid[]		=	$resultGridTmp;
+				}
 
-		
+			}
 		
 		//Processando a query e dados do CHart and MAP
 		$sqlChart_exec		=	 $this->query($sql_chart);
@@ -1569,6 +1572,8 @@ HTML;
 		}
 		
 
+		
+	
 		/*
 		 * Retorna os valores para o Json 
 		 */

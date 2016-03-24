@@ -23,7 +23,7 @@
 										{
 											return $('<div class="container tooltip_info_wrs_panel_details"> '+tagFilterWRS()+'</div>');
 										},
-								title : 'Filtros'
+								title : LNG('ATTRIBUTOS_FILTRO')
             	         },
         	         style: {
         	        	 classes: 'qtip-bootstrap qtip-shadow'

@@ -81,16 +81,16 @@ class WRS_MAIN  extends WRS_BASE
 	private function getTheme()
 	{
 		$theme	=	array();
-		$theme['theme-azul']	='Azul';
-		$theme['theme-cinza']	='Cinza';
-		$theme['theme-laranja']	='Laranja';
-		$theme['theme-verde']	='Verde';
-		$theme['theme-vermelho']='Vermelho';
+		$theme['theme-azul']		=	LNG('theme_azul');
+		$theme['theme-cinza']		=	LNG('theme_cinza');
+		$theme['theme-laranja']		=	LNG('theme_laranja');
+		$theme['theme-verde']		=	LNG('theme_verde');
+		$theme['theme-vermelho']	=	LNG('theme_vermelho');
 
 		$implements		=	 array();
 		
 		$implements['name']		='WRSChangeTheme';
-		$implements['class']	='WRSChangeTheme';
+		$implements['class']	='WRSChangeTheme selectpicker';
 		
 
 		return select($theme,WRS::INFO_SSAS_LOGIN('USER_FORMAT'),$implements);
@@ -105,7 +105,7 @@ class WRS_MAIN  extends WRS_BASE
 		
 	}
 	
-	private function getIdioma()
+	public function getIdioma()
 	{
 		$theme	=	array();
 		/*
@@ -122,10 +122,16 @@ class WRS_MAIN  extends WRS_BASE
 		{
 			if($entry=='.' || $entry=='..') continue;
 			
-			if(in_array('php', explode('.',$entry)))
+			if(in_array('lng', explode('.',$entry)))
 			{
 				$language	=	$this->getLoadLanguage(PATH_LANGUAGE.$entry);
-				$theme[$language['IDIOMA']]	=	$language['LINGUA'] ;
+				
+				
+				//
+						
+				$theme[$language['IDIOMA']]	=	array('value'=>$language['LINGUA'], 'element'=>' data-thumbnail="imagens/country/'.$language['IDIOMA'].'.png" ') ;
+				
+				
 			}
 		}
 		
@@ -133,8 +139,9 @@ class WRS_MAIN  extends WRS_BASE
 		
 		
 		
+		//data-thumbnail="images/icon-opera.png"
 		$implements['name']		='WRSChangeIdioma';
-		$implements['class']	='WRSChangeIdioma';
+		$implements['class']	='WRSChangeIdioma selectpicker';
 		
 		return select($theme,WRS::INFO_SSAS_LOGIN('LANGUAGE_ID'),$implements);
 		

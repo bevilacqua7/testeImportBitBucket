@@ -1,0 +1,1221 @@
+<?php
+	$language = array ();
+	
+	$language['LINGUA'] 				= 	"English";
+	$language['IDIOMA'] 				= 	"ENG";
+	$language['TITLE']					=	"WRS - English -".WRS::VERSION();
+	$language['CharSet']		  		= 	'utf-8';		//por enqtanto está implementado apenas no  sendmail
+	
+	
+	$language['BRN_OUT_SYSTEM']			='
+Exit WRS';
+
+	$language["MES"]=array(' January ', ' February ' , 'March' , ' April ', ' may' , ' June ', ' July' , ' August' , ' September' , ' October ', ' November ', ' December ');
+
+$language["DIAS"]=array(' Sunday ', ' Monday ', ' Tuesday ', ' Wednesday ', ' Thursday ', ' Friday ', ' Saturday ');
+
+$language["DE"]		=	' of ';
+	
+
+$language["summernote"]="summernote-es-EU.js";
+
+$language["siglaIdioma"]="en-us ";
+
+$language["theme_azul"]="Blue";
+
+$language["theme_cinza"]="Grey";
+
+$language["theme_laranja"]="Orange";
+
+$language["theme_verde"]="Green";
+
+$language["theme_vermelho"]="Red";
+
+$language["DESCONECTED_TITLE"]="UNPLUGGED USER ";
+
+$language["DESCONECTED_DESCRIPT"]="User disconnected from the system for several reasons: ";
+
+$language["DESCONECTED_BUTTON"]="BACK TO LOGIN ";
+
+$language["DESCONECTED_REASONS"]=array("Inactivity in the session,", 
+"Change password,",
+"Database without connection,",
+"Others.");
+
+$language["ScreenShotGenerate"]="Creating the print screen of the screen ";
+
+$language["ScreenShotMailBodyHtml"]='	<P> <strong> Hello </ strong> </ p> <p> See the extract of this query " %s " at the base " %s " extracted from WRS tool. </ P> <p> In this query were applied the following filters: </ p> <br> %s  <br> <p> Sincerely, Europe <strong> %s  </ strong>; </ p> ';
+
+$language["ScreenShotMailWrong"]="There are email (s) incomplete, please check before sending <br> <p> <b> %s  </ b> </ p> Filmography Thank you. ";
+
+$language["ScreenShotMailTO"]="The <b> To </ b> is required padding ";
+
+$language["ScreenShotMailSUBJECT"]="The <b> subject </ b> is required padding ";
+
+$language["ScreenShotMailMESSENGER"]="You must enter some content in the email body ";
+
+$language["ScreenShotMailSend"]='Sending message, please wait ... <img src = "images / wrs_loading.gif "/>';
+
+$language["ScreenShotMailSendSuccess"]="Email successfully sent.";
+
+$language["ScreenShotMailSendError"]="Could not send the email due to:. <br> <B> %s  </ b> ";
+
+$language["USUARIO_SEM_PRIVILEGIOS"]="User without privileges ";
+
+$language["USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS"]="User without privileges to view the grid, it contains more than 65,000 records ";
+
+$language["ERROR_NOT_ROWS"]="Internal error while executing the query ";
+
+$language["ERROR_DRILL_LINE_RESULT"]="Internal error when processing the creation LINE DRILL, if the error persists, contact support ";
+
+$language["MSG_ERROR_TABLE_CACHE"]="Query can not be performed, please modify the layout of the selected attributes ";
+
+$language["VALOR"]="Value";
+
+$language["TOOLTIP_BTN_RUN"]="Run Report ";
+
+$language["TOOLTIP_BTN_CLEAN_FILTER"]="Clear all selected filters ";
+
+$language["TOOLTIP_BTN_CHANTE_FILTER_DROP"]="Does the state change <br> DRAG and DROP to filter selection <br> state filter to DRAG and DROP ";
+
+$language["TOOLTIP_BTN_NEGADO"]="Denying the selected filters, the query will come all the less the selected filters. ";
+
+$language["TOOLTIP_BTN_CLEAN_FILTER_LOCAL"]="Clear only the filters of this size ";
+
+$language["TOOLTIP_BTN_ERASER_FILTER_LOCAL"]="Clean the research done in the surveyed filters ";
+
+$language["TOOLTIP_BTN_CLEAR_ELEMENTS_BELLOW"]="Remove all container elements to bottom ";
+
+$language["kendoUI"]="kendo.messages.en-US.min.js ";
+
+$language["ERROR_CANT_CREATE_JOB"]="Oops .. Please resend the query, could not create a job, if the error persists please contact support ";
+
+$language["CSV_ERROR_TABLE_EMPTY"]="Ops, it has not generated any report for that query, or lack information Do the table to be generated. ";
+
+$language["CSV_NOT_GENERATE"]="It not is possible to generate the CSV, internal error in the bank ";
+
+$language["CSV_GENERATE_ZIP"]="Generating %s  CSV files ";
+
+$language["LOGOUT"]="Wait a moment we are leaving the system .. <br> ";
+
+$language["MENU_ADMIN_CUSTOMER"]="Customers";
+
+$language["MENU_ADMIN_USER"]="Users ";
+
+$language["MENU_ADMIN_SERVER"]="Servers ";
+
+$language["MENU_ADMIN_DATABASE"]="Databases ";
+
+$language["MENU_ADMIN_CUBE"]="Cubes ";
+
+$language["MENU_ADMIN_HIERARCHY"]="Hierarchies ";
+
+$language["MENU_ADMIN_PERFIL"]="Profiles ";
+
+$language["MENU_ADMIN_CUBE_USER"]="Associations ";
+
+$language["MENU_ADMIN_REPORT"]="Reports ";
+
+$language["MENU_ADMIN_DOWNLOAD"]="Downloads ";
+
+$language["MENU_ADMIN_LOG"]="Logs ";
+
+$language["MENU_ADMIN_SSAS_REPORT"]="Reports ";
+
+$language["MENU_ADMIN_SSAS_LAYOUTS"]="Layouts ";
+
+$language["file_error_import"]="File not imported ";
+
+$language["file_not_validated"]="File not valid ";
+
+$language["file_not_unziped"]="File not decompressed ";
+
+$language["MAIL_TITLE"]="email sending ";
+
+$language["MAIL_TO"]="For";
+
+$language["MAIL_SUBJECT"]="Subject matter";
+
+$language["MAIL_SEND"]="Email ";
+
+$language["ADMIN_AVISO_IMPORT"]='- Only import files in CSV or ZIP <br> format - make sure that the file name is: #NAME_FILE#, or the ZIP file contains this <br> - Standard Layout: Portuguese <span class = "class_layout_padrao "> #DEFAULT_LAYOUT# </ span>';
+
+$language["TITLE_OPTIONS"]="Options ";
+
+$language["MENU_ALL_CATEGORY"]="All categories";
+
+$language["NO_RESULTS_QUERY"]="No matches for the query: ";
+
+$language["NAME_REPORT_EMPTY"]="Choose a name for the report ";
+
+$language["DATABASE_NOT_CONECTED"]="No connection to the database, try unplugging and logging in again ";
+
+$language["DATABASE_NOT_FOUND"]="Oops !!! No connection to the database ";
+
+$language["ERRO_CUBO_INDISPONIVEL"]="Error: Unavailable";
+
+$language["ERROR_TABLE_CACHE_NO_HEADER"]="There are no data for this query .. ";
+
+$language["ERROR_CUBO_NOT_FOUND"]="It was not possible to identify the Cube used. <br> If the error persists, please inform support ";
+
+$language["ERRO_EXECUTE_ABA"]="Error executing the query <b> %s  </ b> Subject ";
+
+$language["ABA_IN_USER"]="Consultation in use ";
+
+$language["ABA_LIMIT_SEE"]="It is not possible to remove the query <b> %s  </ b> Filmography at least one must remain visible. ";
+
+$language["ABA_CHANGE_CUBE_ID"]="The information will be erased as the ABA belongs to another cube ";
+
+$language["JOB_COMPLETE_LOAD"]="Query <b> %s  </ b> has been completed ";
+
+$language["JOB_COMPLETE"]="No further consultations running ";
+
+$language["JOB_CANCEL"]="Query <b> %s  </ b> has been successfully canceled ";
+
+$language["JOB_CANCEL_ERRO"]="Error canceling query <b> %s  </ b> Please try again ";
+
+$language["JOB_NOTFOUND"]="It was found the consultation to cancel or it has been completed ";
+
+$language["JOB_CLOSE_ALERT"]="Close Alert Window ";
+
+$language["SORT_SSAS_TABLE_ERROR"]="ERROR :: 008 Unable Raffle table ";
+
+$language["CONSULTA_ATIVA_CANCELAR"]="There is a query in progress for this report, you must cancel to request a new query. ";
+
+$language["SELECT_NULL"]="Query returned empty ";
+
+$language["RUN_GRID_CHANGE_NOT"]="No modifications to generate a new query .. ";
+
+$language["NOT_CLOSE_WINDOW"]="The tabs listed below are the unsaved: ";
+
+$language["NOT_CLOSE_WINDOW_LOGOUT"]="The tabs listed below are the unsaved, even want to leave without saving? ";
+
+$language["ABA_TITLE_EMPTY"]="You must enter a <b> Title </ b> to the report ";
+
+$language["SEE_IN_MAP"]="SEE ON THE MAP ";
+
+$language["REMOVE"]="TO REMOVE";
+
+$language["DATA_BASE_ERROR"]="<B> Oops ... Error in database: </ b> ";
+
+$language["TITLE_TEMA"]="Theme";
+
+$language["TITLE_LINGUA"]="Tongue";
+
+$language["TITLE_ALTER_SENHA"]="Change Password";
+
+$language["TITLE_ADMINISTRATIVO"]="Administrative";
+
+$language["TITLE_ADMINISTRATIVO_MENU"]="MAIN MENU";
+
+$language["TITLE_GRID_WINDOW_MENU_MANAGER"]="Vision";
+
+$language["TITLE_GRID_WINDOW_MENU_LIST"]="Grid ";
+
+$language["TITLE_GRID_WINDOW_MENU_DETAILS"]="Details";
+
+$language["TITLE_GRID_WINDOW_MENU_BIG_ICON"]="Icon Great ";
+
+$language["TITLE_GRID_WINDOW_MENU_MEDIUM_ICON"]="Icon East ";
+
+$language["TITLE_GRID_WINDOW_MENU_SMALL_ICON"]="Small icon ";
+
+$language["TITLE_GRID_WINDOW_MENU_LIST_INFO"]="Basic list ";
+
+$language["REPORT_RESULT_HISTORY"]="There is no historical ";
+
+$language["MAIN_OPEN_REPORT"]="Open reports ";
+
+$language["MAIN_OPEN_LAYOUT"]="Open layouts ";
+
+$language["TITLE_TOP_TOTAL"]="TOTAL";
+
+$language["TITLE_TOP_5"]="TOP 5 ";
+
+$language["TITLE_TOP_10"]="TOP 10 ";
+
+$language["TITLE_TOP_15"]="TOP 15 ";
+
+$language["TITLE_TOP_20"]="TOP 20 ";
+
+$language["TITLE_TOP_25"]="TOP 25 ";
+
+$language["TITLE_TOP_50"]="TOP 50 ";
+
+$language["TITLE_TOP_100"]="TOP 100 ";
+
+$language["ERROR_LOAD_ABA"]="ERROR: ABA01 - An error occurred when opening the tab .. ";
+
+$language["ABA_BE_LOADED"]="The flap <b> %s  </ b> is already loaded ";
+
+$language["FILTER_NOT_ROWS"]="No evidence was found. ";
+
+$language["FILTER_NOT_ROWS_TOOLTIP"]="No filter selected. ";
+
+$language["FILTER_CLEAN_FIND"]="Clear the search ";
+
+$language["FILTER_CLEAN_FILTER"]="Are you sure desenja delete the filters already selected ";
+
+$language["FILTER_CLEAN_FILTER_SUCCESS"]="Cleaning the filter was successful. ";
+
+$language["ERRO_FILE_PROCCESS"]="Oops there was an error in processso ERROR: 0001 ";
+
+$language["BTN_CLOSE"]="Close";
+
+$language["MSG_FORCE_LOGOFF"]="You were disconnected from the system ";
+
+$language["DRAG_DROP_FILE_IN_USER"]="The <b> %s  </ b> is already in use ";
+
+$language["DRAG_DROP_FILE_IN_USER_REMOVE"]="The <b> %s  </ b> is already in use and was therefore removed from the selection ";
+
+$language["DRAG_DROP_FILE_NOT_PUT"]="You can not enter the <b> %s  </ b> in this box, it shall belong to another other structure ";
+
+$language["DRAG_DROP_AREA"]="Drag this area <b> %s  </ b>. ";
+
+$language["DRAG_DROP_CLEAN_SELECTION"]="Are you sure you want to remove all (the) <b> %s  </ b> ";
+
+$language["DRAG_DROP_CLEAN_SELECTION_INSIDE"]="Are you sure you want to clear all filter selections ";
+
+$language["DRAG_DROP_MSG_ERROX_MAX_QTDE"]="You can not enter more than %s  %s  attributes in the field ";
+
+$language["DRAG_DROP_CLEAN_SELECTION_SUCCESS"]="Removal of (the) <b> %s  </ b> (s) successfully carried out. ";
+
+$language["DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE"]="Selections filter successfully removed. ";
+
+$language["RUN_RELATORIO_FALTA_INFORMACAO"]="For execurar Query lack information: Portuguese <b> %s  </ b> ";
+
+$language["DRAG_DROP_FIELD_ATRIBUTO"]="an attribute ";
+
+$language["DRAG_DROP_FIELD_METRICA"]="one Metrica ";
+
+$language["GERANDO_RELATORIO"]="Wait a moment enquando Query is created ";
+
+$language["GERANDO_RELATORIO_TITLE"]="Generating consultation ";
+
+$language["GERANDO_MULTI_CUBE_BODY"]="Wait a moment to exchange Cube ";
+
+$language["GERANDO_MULTI_CUBE_TITLE"]="Replacing the Cube ";
+
+$language["ATTRIBUTOS_FILTRO"]="Filters ";
+
+$language["ATTRIBUTOS_COLUNA"]="Columns ";
+
+$language["ATTRIBUTOS_LINHA"]="Lines ";
+
+$language["ATTRIBUTOS_METRICA"]="Metrics ";
+
+$language["ATTRIBUTOS_MULTIPLE_CUBE"]="Cubes ";
+
+$language["ATTRIBUTOS_SIMPLES"]="Simple";
+
+$language["ATTRIBUTOS_COMPOSTO"]="Compound";
+
+$language["ATTRIBUTOS_TITLE"]="Attributes ";
+
+$language["ACTIVE"]="Active (to) ";
+
+$language["ACTION"]="Shares ";
+
+$language["TYPE"]="Kind";
+
+$language["SUB_TYPE"]="Sub type ";
+
+$language["LEGEND_ENABLE"]="Disable ";
+
+$language["POLAR"]="Polar";
+
+$language["RADAR"]="Radar";
+
+$language["NORMAL"]="Nornal ";
+
+$language["STACKED"]="Piled up";
+
+$language["WAVY"]="Wavy";
+
+$language["PERCENT"]="Percentage ";
+
+$language["LEGEND"]="Subtitles";
+
+$language["MULTIPLE_CURSOR"]="Multiple";
+
+$language["CHART_GAUGE_RANGE"]="Range ";
+
+$language["CHART_GAUGE_QUANTIDADE"]="Quantity per line ";
+
+$language["CHART_GAUGE_COLOR_TITLE"]="Gauge ";
+
+$language["CHART_GAUGE_LINEAR"]="Linear";
+
+$language["CHART_GAUGE_RADIAL"]="Radial";
+
+$language["CHART_PIE"]="Nornal ";
+
+$language["CHART_DONUT"]="Leaked ";
+
+$language["CHART_INSIDE_NOT_LEGEND"]="Values ​​";
+
+$language["CHART_RADAR_LINE"]="Line";
+
+$language["CHART_RADAR_COLUMN"]="Column";
+
+$language["CHART_RADAR_AREA"]="Area";
+
+$language["CHART_LEGEND_BOTTOM"]="Below";
+
+$language["CHART_LEGEND_TOP"]="Above";
+
+$language["CHART_LEGEND_LEFT"]="Left";
+
+$language["CHART_LEGEND_RIGHT"]="Right ";
+
+$language["CHART_BUBBLE_X"]="X axis";
+
+$language["CHART_BUBBLE_Y"]="Y Axis ";
+
+$language["CHART_BUBBLE_TOTAL"]="Volume";
+
+$language["GRID_HEADER_OPTION"]="Options ";
+
+$language["GRID_HEADER_OPTION_TOTAL_LINE"]="Lines ";
+
+$language["GRID_HEADER_OPTION_TOTAL_COLUMN"]="Columns ";
+
+$language["GRID_HEADER_OPTION_TOTAL_SUMARIZA"]="Summarized numbers ";
+
+$language["GRID_HEADER_OPTION_TOTAL_LINE_COLOR"]="Interspersed lines ";
+
+$language["GRID_HEADER_OPTION_ORDER_COLUMN"]="Invert Columns ";
+
+$language["GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA"]="Consolidated records ";
+
+$language["GRID_HEADER_EXPORT"]="Export";
+
+$language["GRID_HEADER_EXPORT_PDF"]="Pdf ";
+
+$language["GRID_HEADER_EXPORT_CSV"]="Csv ";
+
+$language["GRID_HEADER_EXPORT_EXCEL"]="Excel ";
+
+$language["GRID_HEADER_EXPORT_IMAGE"]="Image";
+
+$language["GRID_HEADER_EXPORT_IMAGE_SVG"]="SVG image ";
+
+$language["CHART_CONFIG"]="Configure Graphic ";
+
+$language["GRID_HEADER_SEE"]="Vision";
+
+$language["GRID_HEADER_SEE_GRID"]="Spreadsheet";
+
+$language["GRID_HEADER_SEE_CHART"]="Graphic";
+
+$language["GRID_HEADER_MAIL_SEND"]="Email ";
+
+$language["GRID_HEADER_SEE_MAP"]="Map";
+
+$language["GRID_HEADER_TITLE_DADOS"]="Data";
+
+$language["GRID_HEADER_TITLE_TOTAL"]="Total";
+
+$language["GRID_HEADER_TITLE_EXIBITION"]="Exhibition";
+
+$language["WHAT_SEARCH"]="What do you look? ";
+
+$language["TITLE_TOP"]="Top Options ";
+
+$language["BTN_SAIR"]="Get out";
+
+$language["BTN_SAIR_MENU"]="Close menu ";
+
+$language["BTN_SIM"]="Yes";
+
+$language["BTN_NAO"]="No";
+
+$language["BTN_CONFIRM"]="Confirmed";
+
+$language["BTN_CANCEL_CONSULTA"]="Cancel Query ";
+
+$language["BTN_APLY"]="To apply";
+
+$language["BTN_REMOVE"]="To remove";
+
+$language["BTN_UPDATE"]="Change";
+
+$language["BTN_NEW"]="New";
+
+$language["BTN_SAVE"]="To save";
+
+$language["BTN_APPLY"]="To apply";
+
+$language["OF"]="in";
+
+$language["PAGE"]="Page";
+
+$language["tpl_layout_remove_empty"]="You must select a report in order to delete ";
+
+$language["tpl_layout_remove_sucess"]="Layouts Removed successfully ";
+
+$language["tpl_layout_remove_error"]="Could not remove some layouts ";
+
+$language["tpl_layout_options_default"]="Pattern";
+
+$language["tpl_layout"]="Layouts ";
+
+$language["tpl_layout_title"]="Save Layout ";
+
+$language["tpl_layout_name"]="Name Layout ";
+
+$language["tpl_layout_alias"]="Alias ​​Layout ";
+
+$language["tpl_layout_name_empty"]="You must enter the <b> Name Layout </ b> ";
+
+$language["tpl_layout_alias_empty"]="You must enter the <b> Alias ​​Layout </ b> ";
+
+$language["tpl_layout_data_empty"]="You must complete one of the options to save a layout <b> Metrics, Rows or Columns </ b> ";
+
+$language["tpl_layout_option_select_empty"]="You must select any option for the layout ";
+
+$language["tpl_layout_share"]="To share";
+
+$language["tpl_layout_error"]="OPS ... Error saving layout, please try again ";
+
+$language["tpl_layout_sucess"]="Layout saved successfully ";
+
+$language["ALERT_TITLE_ERRO"]="An error occurred. ";
+
+$language["ALERT_TITLE_SUCCESS"]="Confirming. ";
+
+$language["ALERT_TITLE_WARNING"]="Attention!";
+
+$language["ALERT_TITLE_INFO"]="To your knowledge";
+
+$language["ERROR_MULTIPLE_CUBE_JSON"]="Error in the process of creating multiple cubes if the error persists please contact. ";
+
+$language["ERROR_NOT_EVENT"]="Could not find the requested event, if the error persists please contact ";
+
+$language["ERROR_TITLE"]="Attention was an error .. ";
+
+$language["ERROR_EVENT_NOT_FOUND"]="was not specified event for this request ";
+
+$language["WARNING_TITLE_RESULT_NOT_FOUND"]="Query";
+
+$language["WARNING_BODY_RESULT_NOT_FOUND"]="The query returned no result .. ";
+
+$language["TITLE_CONTEX_MENU"]="Add to";
+
+$language["FILTER_CONTEX_MENU_SELECTION_REMOVE"]="Remove Selection %s  ite %s  ";
+
+$language["FILTER_CONTEX_MENU_SELECTION_VIEW"]="View ite% ns selected %s  ";
+
+$language["FILTER_CONTEX_MENU_SELECTION_ITEM_EXISTS"]=" %s  %s  ite below existed% me not fo ram% added %s  ";
+
+$language["TITLE_MENU_DASHBOARD"]="( 'Consolidated Visions with Different Reports Segmented bases in Quadrants Independent') ";
+
+$language["tpl_association_save_sucess"]="successfully saved Association ";
+
+$language["tpl_association_save_error"]="Error in association ";
+
+$language["tpl_association_remove_sucess"]="Association %s  ite %s  successfully removed ";
+
+$language["tpl_association_remove_error"]="Error in removing association ";
+
+$language["tpl_association_title"]="individual by association ";
+
+$language["tpl_association_title_cube"]="Cube";
+
+$language["tpl_association_title_user"]="User";
+
+$language["HTML_CUBE_EDITION"]="Edition:";
+
+$language["HTML_CUBE_UPDATE"]="Updated:";
+
+$language["LABEL_NOVO"]="New";
+
+$language["LABEL_LOAD"]="Loading...";
+
+$language["PAGINATION_PAGE"]="Elements ";
+
+$language["PAGINATION_PAGE_INSIDE"]="up until";
+
+$language["TITLE_ATT_WRS_CUSTOMER"]="Customer Management ";
+
+$language["TITLE_ATT_WRS_SERVER"]="Server Management ";
+
+$language["TITLE_ATT_WRS_USER"]="User Management ";
+
+$language["TITLE_ATT_WRS_DATABASE"]="Databases Management ";
+
+$language["TITLE_ATT_WRS_CUBE"]="Cube Management ";
+
+$language["TITLE_ATT_WRS_HIERARCHY"]="Hierarchies Management ";
+
+$language["TITLE_ATT_WRS_PROFILE"]="Profile Management ";
+
+$language["TITLE_REL_WRS_CUBE_USER"]="Associations Management ";
+
+$language["TITLE_ATT_WRS_REPORT"]="Reports Management ";
+
+$language["TITLE_ATT_WRS_DOWNLOAD"]="File Management ";
+
+$language["TITLE_ATT_WRS_PERFIL"]="Profile Management ";
+
+$language["TITLE_ATT_WRS_LOG"]="Log Management ";
+
+$language["LINE_TOTAL"]="TOTAL";
+
+$language["label_total"]="Total";
+
+$language["LINE_TOTAL_BUBBLE"]="You want to use the total line on the chart ";
+
+$language["msg_maxNumberOfFiles"]="maximum number of files exceeded ";
+
+$language["msg_acceptFileTypes"]="not allowed file extension ";
+
+$language["msg_maxFileSize"]="oversized file ";
+
+$language["msg_minFileSize"]="minimum file size not reached ";
+
+$language["msg_nao_existe_file_in_zip"]="There is not allowed file within this ZIP: ";
+
+$language["msg_nome_obrigatorio_necessario"]="the use of a specific name for this upload is required ";
+
+$language["upload_form_selecionar"]="Select";
+
+$language["upload_form_enviar"]="To send";
+
+$language["upload_form_cancelar"]="Cancel";
+
+$language["upload_form_apagar"]="Delete";
+
+$language["upload_form_processando"]="Loading ... ";
+
+$language["upload_form_erro"]="Error sending ";
+
+$language["upload_files_select"]="Select the file to import ";
+
+$language["upload_files_success_sing"]=" successfully imported record ";
+
+$language["upload_files_success_plur"]=" successfully imported records ";
+
+$language["upload_files_error_sing"]=" record imported error ";
+
+$language["upload_files_error_plur"]=" imported records with error ";
+
+$language["upload_files_success_file"]="successfully imported file ";
+
+$language["MODAL_GENERICA_SALVAR"]="To save";
+
+$language["MODAL_GENERICA_ATUALIZAR"]="Update";
+
+$language["MODAL_GENERICA_APAGAR"]="Delete";
+
+$language["MODAL_GENERICA_CANCELAR"]="Close";
+
+$language["MODAL_GENERICA_VOLTAR"]="Come back";
+
+$language["MODAL_CONFIRM_BT_CONFIRM"]="Delete";
+
+$language["MODAL_CONFIRM_BT_CANCEL"]="Cancel";
+
+$language["obrigatorio"]="mandatory ";
+
+$language["bt_back"]="Come back";
+
+$language["bt_new"]="New";
+
+$language["bt_update"]="To save";
+
+$language["bt_remove"]="Delete";
+
+$language["bt_export"]="Export";
+
+$language["bt_import"]="Import";
+
+$language["bt_export_user"]="Export";
+
+$language["bt_import_user"]="Import";
+
+$language["bt_export_customer"]="Export";
+
+$language["bt_import_customer"]="Import";
+
+$language["bt_export_server"]="Export";
+
+$language["bt_import_server"]="Import";
+
+$language["bt_export_database"]="Export";
+
+$language["bt_import_database"]="Import";
+
+$language["bt_export_cube"]="Export";
+
+$language["bt_import_cube"]="Import";
+
+$language["bt_export_profile"]="Export";
+
+$language["bt_import_profile"]="Import";
+
+$language["bt_export_cube_user"]="Export";
+
+$language["bt_import_cube_user"]="Import";
+
+$language["bt_export_download"]="Export";
+
+$language["bt_import_download"]="Import";
+
+$language["bt_export_log"]="Export";
+
+$language["bt_import_log"]="Import";
+
+$language["LOGIN_USER"]="Users ";
+
+$language["LOGIN_REMOVE_HISTORY_SUCCESS"]="successfully removed History ";
+
+$language["LOGIN_REMOVE"]="To remove";
+
+$language["LOGIN_PASSWORD_RECOVER"]="Recover Password";
+
+$language["LOGIN_BUTTON"]="Login";
+
+$language["LOGIN_HISTORY"]="User History ";
+
+$language["LOGIN_SUBJECT"]="Password recovery";
+
+$language["LOGIN_RECOVER_NOT_FOUND"]="Oops ... not found the user <b> %s  </ b> to send the recovery password. ";
+
+$language["LOGIN_NOT_EMAIL"]='Oops .. not found email to be sent to the user <b> %s  </ b>. <br> Please contact support for password recovery <br> Thank you ..';
+
+$language["LOGIN_RECOVER_NEW"]="<H4> Password change </ h4> Enter the new password to access the system. ";
+
+$language["LOGIN_OTHER_PERFIL"]="Another Profile ";
+
+$language["LOGIN_ARMAZENA"]="Storing User Data ";
+
+$language["LOGIN_PASSWORD"]="Password ";
+
+$language["LOGIN_USER_SYSTEM"]="User";
+
+$language["LOGIN_TITLE"]="WRS System ";
+
+$language["LOGIN_ADD_NEW_RECOVER"]="Enter the new password to access the system ";
+
+$language["LOGIN_RECOVER_SUCCESS"]="password recovery sent to the user's email ";
+
+$language["LOGIN_RECOVER_ERROR"]="Oops .. Could not send email. Please contact support to be able to recover the password. Thank you";
+
+$language["HTML_LOGIN_RECOVER_BTN"]="CHANGE PASSWORD";
+
+$language["HTML_LOGIN_RECOVER_TITLE"]="Password recovery";
+
+$language["HTML_LOGIN_RECOVER"]="	Password recovery request for access to the WRS system if you have not requested please disregard this email. <br> Click the button below to be redirected to password change. <br> If you do not operate the click linque copy and paste in your browser to make the change. ";
+
+$language["LOGIN_NEW_PASSWORD"]="New password";
+
+$language["LOGIN_NEW_PASSWORD_CONFIRM"]="Confirm New Password ";
+
+$language["LOGIN_CHECK"]="Checking password ... ";
+
+$language["LOGIN_CHECK_NEW"]="Saving new password ... ";
+
+$language["LOGIN_PASSWORD_EMPTY"]="You must fill out the <b> %s  </ b> ";
+
+$language["LOGIN_PASSWORD_EMPTY_NEW"]="is not being passed to new password. ";
+
+$language["LOGIN_TAG_EMPTY"]="The code for password reset is blank ";
+
+$language["LOGIN_NEW_PASSWORD_CONFIRM_ERROR"]="Confirmation of the new password does not match ";
+
+$language["LOGIN_CHANGE_SQL_ERRO"]="Oops .. error when running query login, please try again. ";
+
+$language["LOGIN_RECOVER_SUCCESS_TIME"]="Password successfully generated. Redirecting to access the system. ";
+
+$language["LOGIN_CHANGE_SQL_ERRO_RECOVER"]="Oops .. error when running query login for password recovery. ";
+
+$language["LOGIN_CHANGE_OK"]="Password successfully changed now log in with the new password ";
+
+$language["REMOVE_LOGIN_COOKIE"]="Are you sure you want to remove the access history of the user ";
+
+$language["LOGIN_HTML_TITLE"]="WRS - Web Report System ";
+
+$language["ADMIN_IMPORT_caracter_delimitador"]="delimiter character ";
+
+$language["ADMIN_IMPORT_tipo_importacao"]="import type ";
+
+$language["ADMIN_IMPORT_virgula"]="Comma";
+
+$language["ADMIN_IMPORT_ponto_virgula"]="Semicolon";
+
+$language["ADMIN_IMPORT_tabulacao"]="Tab";
+
+$language["ADMIN_IMPORT_remover"]="Remove the previous records ";
+
+$language["ADMIN_IMPORT_atualizar"]="Update and add new ";
+
+$language["ADMIN_IMPORT_compactar_resultados"]="Compress results ";
+
+$language["PASSWORD_EXPIRED"]="Expired password, you must create a new password. Filmography Complete the form with the new password. ";
+
+$language["LOGIN_OK"]="Redirecting to the main screen ";
+
+$language["LOGIN_PASSWORD_ERROR"]="Username or password is invalid";
+
+$language["LOGIN_SEND_CHANGE"]="Processing password recovery .. ";
+
+$language["JS_menu_report_include"]="Report of inclusion ";
+
+$language["JS_menu_report_name"]="Choose a name for the report ";
+
+$language["js_admin_no_user"]="You can not change the password without having your own server ";
+
+$language["JS_admin_choice_column"]="Which column you want to edit ";
+
+$language["JS_admin_choice_column_user"]="User";
+
+$language["JS_admin_choice_column_cube"]="Cube";
+
+$language["js_admin_pass_sintax_a"]="Do you really want to set a new password ";
+
+$language["js_admin_pass_sintax_b"]="Do you really want the password to expire ";
+
+$language["js_admin_pass_sintax_c"]=" User %s  ";
+
+$language["js_admin_pass_sintax_d"]="all the";
+
+$language["js_admin_pass_sintax_e"]="your own";
+
+$language["js_admin_pass_self"]="You need to set your new password ";
+
+$language["js_admin_pass_same"]="The password and password confirmation to be the same. ";
+
+$language["js_admin_pass_blank"]="The password and confirmation password can not be blank. ";
+
+$language["js_admin_pass_min"]="The password and confirmation password can not be less than 3 characters. ";
+
+$language["js_admin_pass_equals"]="The new password and password confirmation should be different from the current password. ";
+
+$language["js_admin_observation"]=" expire password ";
+
+$language["js_admin_new_pass_placeholder"]="minimum of 3 characters ";
+
+$language["js_admin_old_pass_placeholder"]="enter your current password ";
+
+$language["js_admin_new_pass"]="New password: ";
+
+$language["js_admin_confirm_pass"]="Confirm password: ";
+
+$language["js_admin_old_pass"]="Current password: ";
+
+$language["js_admin_confirm_question"]="? ";
+
+$language["php_admin_msg_exp_success"]="expired %s  successful ";
+
+$language["php_admin_msg_red_success"]="password reset to ";
+
+$language["php_admin_msg_red_success2"]=" successfully carried out ";
+
+$language["php_admin_msg_exp_erro"]="Error in password expiration ";
+
+$language["php_admin_msg_red_erro"]="Error in setting new password ";
+
+$language["JS_admin_confirm_export"]="Which want to export records? ";
+
+$language["JS_admin_all_records"]="All records ";
+
+$language["JS_admin_selecteds"]="Only the selected %s  %s  ";
+
+$language["JS_admin_select_one"]="Select at least one record ";
+
+$language["JS_admin_select_just_one"]="Select only one record to change ";
+
+$language["JS_admin_select_one_file"]="Select a file before importing ";
+
+$language["JS_admin_confirm_remove"]="Do you really want to delete this record %s  %s  ";
+
+$language["JS_admin_removed"]="Registration %s  %s  successfully removed ";
+
+$language["JS_report_confirm_remove"]="Do you want to delete this report %s  %s  ";
+
+$language["JS_report_select_one"]="Select at least one report ";
+
+$language["JS_report_removed"]="Report %s  %s  successfully removed ";
+
+$language["JS_admin_preencha_obrigatorios"]="Please fill in all required fields";
+
+$language["JS_admin_preencha_minimo"]="The minimum value for this field #NOMECAMPO# is: ";
+
+$language["JS_admin_preencha_maximo"]="The maximum value for this field #NOMECAMPO# is: ";
+
+$language["JS_admin_preencha_auto"]="Want to correct this value to #VAL# ";
+
+$language["ADMIN_EXPORT_OPTION_ERROR"]="There are no records to be exported ";
+
+$language["ADMIN_EXPORT_OPTION_OK"]="Starting download ... ";
+
+$language["ADMIN_REG_INSERTED"]="successfully included record ";
+
+$language["ADMIN_REG_UPDATED"]="successfully changed record ";
+
+$language["ADMIN_REG_DELETED"]="Registration %s  %s  deleted successfully ";
+
+$language["ADMIN_NO_REG"]="No registration for action ";
+
+$language["FORM_TYPE_PASSWORD_SHOW"]="see password ";
+
+$language["IMPORT_EXPORT_MESSAGES_STATUS"]="Status: ";
+
+$language["IMPORT_EXPORT_MESSAGES_DETAIL"]="Details:";
+
+$language["UPLOAD_BTN_DELETAR"]="Delete";
+
+$language["UPLOAD_BTN_CANCEL"]="Cancel";
+
+$language["UPLOAD_BTN_PROCESS"]="Loading ... ";
+
+$language["UPLOAD_BTN_ANEXAR"]="Attach";
+
+$language["manage_param_sem_opcao"]="No option";
+
+$language["manage_param_selecionar"]="Select";
+
+$language["manage_param_ativo"]="Active";
+
+$language["manage_param_inativo"]="Inactive";
+
+$language["manage_param_bloqueado"]="Blocked";
+
+$language["manage_param_azul"]="Blue";
+
+$language["manage_param_cinza"]="Grey";
+
+$language["manage_param_laranja"]="Orange";
+
+$language["manage_param_verde"]="Green";
+
+$language["manage_param_vermelho"]="Red";
+
+$language["manage_param_ingles"]="English";
+
+$language["manage_param_espanhol"]="Spanish";
+
+$language["manage_param_portugues"]="Portuguese";
+
+$language["manage_param_abrir_relatorio"]="Open Report ";
+
+$language["manage_param_abrir_layout"]="Open Layout ";
+
+$language["FILTER_DESC"]="Filtered ";
+
+$language["FILTERS_VALUES"]="Items Filtered ";
+
+$language["LAYOUT_DATE"]="Date";
+
+$language["LAYOUT_UPDATE"]="Update ";
+
+$language["LAYOUT_FLAG"]="Flag ";
+
+$language["LAYOUT_STATUS"]="Status ";
+
+$language["CUBE_DESC"]='Cube description';
+
+$language["CUBE_FILTER"]="Attributes Filter ";
+
+$language["CUBE_FILTER_VALUE"]="Values ​​of attributes with filters ";
+
+$language["CUBE_FLAG"]="Flag Cube ";
+
+$language["CUBE_ID"]="Cube Code ";
+
+$language["CUBE_STATUS"]="Cube situation ";
+
+$language["CUSTOMER_CODE"]="Customer Code ";
+
+$language["CUSTOMER_DESC"]="Client Description ";
+
+$language["CUSTOMER_EXPIRY"]="Password expiration ";
+
+$language["CUSTOMER_FLAG"]="Client flag ";
+
+$language["CUSTOMER_GROUP"]="Customer Group ";
+
+$language["CUSTOMER_ID"]="Customer Internal Code ";
+
+$language["CUSTOMER_STATUS"]="Client situation ";
+
+$language["DATABASE_BALANCE"]="Balanced Base ";
+
+$language["DATABASE_COMMENT"]="Comment on Base ";
+
+$language["DATABASE_DESC"]="Base description ";
+
+$language["DATABASE_FLAG"]="Base situation ";
+
+$language["DATABASE_ID"]="Base Code ";
+
+$language["DATABASE_IMAGE"]="Base Image ";
+
+$language["DATABASE_LINK"]="External Access Link ";
+
+$language["DATABASE_ORDER"]="Display Order ";
+
+$language["DATABASE_POOL"]="Shared Base ";
+
+$language["DATABASE_STATUS"]="Base situation ";
+
+$language["DATE_ID"]="Period";
+
+$language["DOWNLOAD_ID"]="Download Code ";
+
+$language["FILE_DATE"]="Data File ";
+
+$language["FILE_DESC"]="File Description ";
+
+$language["FILE_FLAG"]="Flag file ";
+
+$language["FILE_NAME"]="File name";
+
+$language["FILE_SIZE"]="File size";
+
+$language["LANGUAGE_ID"]="Tongue";
+
+$language["MESSAGE"]="Message";
+
+$language["MODULE"]="Module";
+
+$language["OPERATION"]="Operation";
+
+$language["PERFIL_DESC"]="Profile Description ";
+
+$language["PERFIL_FLAG"]="Profile flag ";
+
+$language["PERFIL_ID"]="Profile Code ";
+
+$language["PERFIL_LEVEL"]="Profile level ";
+
+$language["PERFIL_STATUS"]="Profile situation ";
+
+$language["PROCESS"]="Process";
+
+$language["REPORT_AUTOLOAD"]="Automatic load ";
+
+$language["REPORT_DATE"]="Report Date ";
+
+$language["REPORT_DESC"]="Report description ";
+
+$language["REPORT_FILTER"]="Report Filter ";
+
+$language["REPORT_FLAG"]="Report Flag ";
+
+$language["REPORT_FORMULAS"]="Report formulas ";
+
+$language["REPORT_ID"]="Report Code ";
+
+$language["REPORT_OPTIONS"]="Report Options ";
+
+$language["REPORT_SHARE"]="Shared Report ";
+
+$language["REPORT_STATUS"]="Report of the situation ";
+
+$language["REPORT_UPDATE"]="Report Update ";
+
+$language["SERVER_COMMENT"]="Server comment ";
+
+$language["SERVER_DESC"]="Server Description ";
+
+$language["SERVER_FLAG"]="Server flag ";
+
+$language["SERVER_ID"]="Server code ";
+
+$language["SERVER_PWD"]="User Password ";
+
+$language["SERVER_STATUS"]="Server Status ";
+
+$language["SERVER_USER"]="Connection User ";
+
+$language["TRANSACTION_ID"]="Transaction Code ";
+
+$language["USER_CODE"]="User Code ";
+
+$language["USER_DESC"]="User description ";
+
+$language["USER_EMAIL"]="User email ";
+
+$language["USER_EXPIRY"]="Password expiration ";
+
+$language["USER_FILTER"]="Attributes Filter ";
+
+$language["USER_FILTER_VALUE"]="Values ​​of attributes with filters ";
+
+$language["USER_FLAG"]="User flag ";
+
+$language["USER_FORMAT"]="Layout format ";
+
+$language["USER_FVD"]="Flag Homeland ";
+
+$language["USER_ID"]="User Internal Code ";
+
+$language["USER_INTERNAL"]="Internal code";
+
+$language["USER_MASTER"]="User MASTER ";
+
+$language["USER_PWD"]="User Password ";
+
+$language["USER_PWD_OLD"]="Old Password ";
+
+$language["USER_SALT"]="Internal code";
+
+$language["USER_STATUS"]="User Status ";
+
+$language["USER_TYPE"]="User type ";
+
+$language["CUBE_DESC_PLACEHOLDER"]="Cube description";
+
+$language["CUBE_FILTER_PLACEHOLDER"]="Attributes Filter ";
+
+$language["CUBE_FILTER_VALUE_PLACEHOLDER"]="Values ​​of attributes with filters ";
+
+$language["CUBE_FLAG_PLACEHOLDER"]="Flag Cube ";
+
+$language["CUBE_ID_PLACEHOLDER"]="Cube Code ";
+
+$language["CUBE_STATUS_PLACEHOLDER"]="Cube situation ";
+
+$language["CUSTOMER_CODE_PLACEHOLDER"]="Customer Code ";
+
+$language["CUSTOMER_DESC_PLACEHOLDER"]="Client Description ";
+
+$language["CUSTOMER_EXPIRY_PLACEHOLDER"]="Password expiration ";
+
+$language["CUSTOMER_FLAG_PLACEHOLDER"]="Client flag ";
+
+$language["CUSTOMER_GROUP_PLACEHOLDER"]="Customer Group ";
+
+$language["CUSTOMER_ID_PLACEHOLDER"]="Customer Internal Code ";
+
+$language["CUSTOMER_STATUS_PLACEHOLDER"]="Client situation ";
+
+$language["DATABASE_BALANCE_PLACEHOLDER"]="Balanced Base ";
+
+$language["DATABASE_COMMENT_PLACEHOLDER"]="Comment on Base ";
+
+$language["DATABASE_DESC_PLACEHOLDER"]="Base description ";
+
+$language["DATABASE_FLAG_PLACEHOLDER"]="Base situation ";
+
+$language["DATABASE_ID_PLACEHOLDER"]="Base Code ";
+
+$language["DATABASE_IMAGE_PLACEHOLDER"]="Base Image ";
+
+$language["DATABASE_LINK_PLACEHOLDER"]="External Access Link ";
+
+$language["DATABASE_ORDER_PLACEHOLDER"]="Display Order ";
+
+$language["DATABASE_POOL_PLACEHOLDER"]="Shared Base ";
+
+$language["DATABASE_STATUS_PLACEHOLDER"]="Base situation ";
+
+$language["DATE_ID_PLACEHOLDER"]="Period";
+
+$language["DOWNLOAD_ID_PLACEHOLDER"]="Download Code ";
+
+$language["FILE_DATE_PLACEHOLDER"]="Data File ";
+
+$language["FILE_DESC_PLACEHOLDER"]="File Description ";
+
+$language["FILE_FLAG_PLACEHOLDER"]="Flag file ";
+
+$language["FILE_NAME_PLACEHOLDER"]="File name";
+
+$language["FILE_SIZE_PLACEHOLDER"]="File size";
+
+$language["LANGUAGE_ID_PLACEHOLDER"]="Tongue";
+
+$language["MESSAGE_PLACEHOLDER"]="Message";
+
+$language["MODULE_PLACEHOLDER"]="Module";
+
+$language["OPERATION_PLACEHOLDER"]="Operation";
+
+$language["PERFIL_DESC_PLACEHOLDER"]="Profile Description ";
+
+$language["PERFIL_FLAG_PLACEHOLDER"]="Profile flag ";
+
+$language["PERFIL_ID_PLACEHOLDER"]="Profile Code ";
+
+$language["PERFIL_LEVEL_PLACEHOLDER"]="Profile level ";
+
+$language["PERFIL_STATUS_PLACEHOLDER"]="Profile situation ";
+
+$language["PROCESS_PLACEHOLDER"]="Process";
+
+$language["REPORT_AUTOLOAD_PLACEHOLDER"]="Automatic load ";
+
+$language["REPORT_DATE_PLACEHOLDER"]="Report Date ";
+
+$language["REPORT_DESC_PLACEHOLDER"]="Report description ";
+
+$language["REPORT_FILTER_PLACEHOLDER"]="Report Filter ";
+
+$language["REPORT_FLAG_PLACEHOLDER"]="Report Flag ";
+
+$language["REPORT_FORMULAS_PLACEHOLDER"]="Report formulas ";
+
+$language["REPORT_ID_PLACEHOLDER"]="Report Code ";
+
+$language["REPORT_OPTIONS_PLACEHOLDER"]="Report Options ";
+
+$language["REPORT_SHARE_PLACEHOLDER"]="Shared Report ";
+
+$language["REPORT_STATUS_PLACEHOLDER"]="Report of the situation ";
+
+$language["REPORT_UPDATE_PLACEHOLDER"]="Report Update ";
+
+$language["SERVER_COMMENT_PLACEHOLDER"]="Server comment ";
+
+$language["SERVER_DESC_PLACEHOLDER"]="Server Description ";
+
+$language["SERVER_FLAG_PLACEHOLDER"]="Server flag ";
+
+$language["SERVER_ID_PLACEHOLDER"]="Server code ";
+
+$language["SERVER_PWD_PLACEHOLDER"]="User Password ";
+
+$language["SERVER_STATUS_PLACEHOLDER"]="Server Status ";
+
+$language["SERVER_USER_PLACEHOLDER"]="Connection User ";
+
+$language["TRANSACTION_ID_PLACEHOLDER"]="Transaction Code ";
+
+$language["USER_CODE_PLACEHOLDER"]="User Code ";
+
+$language["USER_DESC_PLACEHOLDER"]="User description ";
+
+$language["USER_EMAIL_PLACEHOLDER"]="User email ";
+
+$language["USER_EXPIRY_PLACEHOLDER"]="Password expiration ";
+
+$language["USER_FILTER_PLACEHOLDER"]="Attributes Filter ";
+
+$language["USER_FILTER_VALUE_PLACEHOLDER"]="Values ​​of attributes with filters ";
+
+$language["USER_FLAG_PLACEHOLDER"]="User flag ";
+
+$language["USER_FORMAT_PLACEHOLDER"]="Layout format ";
+
+$language["USER_FVD_PLACEHOLDER"]="Flag Homeland ";
+
+$language["USER_ID_PLACEHOLDER"]="User Internal Code ";
+
+$language["USER_INTERNAL_PLACEHOLDER"]="Internal code";
+
+$language["USER_MASTER_PLACEHOLDER"]="User MASTER ";
+
+$language["USER_PWD_PLACEHOLDER"]="User Password ";
+
+$language["USER_PWD_OLD_PLACEHOLDER"]="Old Password ";
+
+$language["USER_SALT_PLACEHOLDER"]="Internal code";
+
+$language["USER_STATUS_PLACEHOLDER"]="User Status ";
+
+$language["USER_TYPE_PLACEHOLDER"]="User type ";
+
+?>
