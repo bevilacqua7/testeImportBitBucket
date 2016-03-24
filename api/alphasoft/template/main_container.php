@@ -23,13 +23,23 @@
 							<li class="only-li bt_config_templates">
 									<div><i class=" fa fa-desktop" ></i><span ><?php echo LNG('TITLE_TEMA')?>: </span><?php echo $SELECT_THEME;?></div>
 							</li>
+							
 							<li class="only-li bt_config_templates">
 									<div><i class=" fa fa-language" ></i><span><?php echo LNG('TITLE_LINGUA')?>: </span><?php echo $SELECT_IDOMA;?></div>
 							</li>
 							
+							
+							<li class="out_main_menu only-li" >
+								 <div class="logout_wrs"> <i class="fa fa-power-off"></i> <?php echo LNG('BRN_OUT_SYSTEM')?></div>
+							</li>
+							
+							
+							
 							<li class="out_main_menu only-li" >
 								 <div> <i class="fa fa-sign-out" ></i> <?php echo LNG('BTN_SAIR_MENU')?></div>
 							</li>
+							
+							
 							
 							
 						</ul>

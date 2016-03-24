@@ -59,7 +59,7 @@ class HeaderTag
 	 	
 	 	$tag[]		=	array("host"=>"api/contextjs/context.bootstrap.css",									"access"=>array("panel"));
 	 	$tag[]		=	array("host"=>"api/contextjs/context.standalone.css",									"access"=>array("panel"));
-	 	$tag[]		=	array("host"=>"api/silviomoreto-bootstrap-select/dist/css/bootstrap-select.min.css",	"access"=>array("panel"));
+	 	$tag[]		=	array("host"=>"api/silviomoreto-bootstrap-select/dist/css/bootstrap-select.min.css",	"access"=>array("panel",'main'));
 	 	
 	
 	 	
@@ -158,7 +158,7 @@ class HeaderTag
 	 	
 	 	$tag[]		=	array("host"=>"api/contextjs/context.js",					"access"=>array("panel"));
 	 	
-	 	$tag[]		=	array("host"=>"api/silviomoreto-bootstrap-select/js/bootstrap-select.js","access"=>array("panel"));
+	 	$tag[]		=	array("host"=>"api/silviomoreto-bootstrap-select/js/bootstrap-select.js","access"=>array("panel",'main'));
 
 	 	$tag[]		=	array("host"=>"api/kendoUi/js/angular.min.js",				"access"=>array("main","panel"));	//Main
 	 	$tag[]		=	array("host"=>"api/kendoUi/src/js/kendo.all.js",			"access"=>array("main","panel"));	//Main

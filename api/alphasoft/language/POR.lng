@@ -1,20 +1,63 @@
 <?php
 	$language = array ();
 	
-	$language['LINGUA'] 				= 	"Español";
-	$language['IDIOMA'] 				= 	"ESP";
+	$language['LINGUA'] 				= 	"Português";
+	$language['IDIOMA'] 				= 	"POR";
 	$language['TITLE']					=	"WRS - ".WRS::VERSION();
 	$language['CharSet']		  		= 	'utf-8';		//por enqtanto está implementado apenas no  sendmail
+	$language['summernote']				=	"summernote-pt-BR.js";
+	$language['siglaIdioma']			=	"pt-BR";
 	
+	
+	
+	$language["MES"]=array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro');
+
+$language["DIAS"]=array('Sunday', 'Lunes', 'Martes', 'del miércoles, el jueves por', 'Friday', 'Saturday');
+
+$language["DE"]		=	' de ';
+
+
+		$language['BRN_OUT_SYSTEM']			='Sair do WRS';
+		
+		$language['theme_azul']			='Azul';
+		$language['theme_cinza']		='Cinza';
+		$language['theme_laranja']		='Laranja';
+		$language['theme_verde']		='Verde';
+		$language['theme_vermelho']		='Vermelho';
+		
+		
 	
 	$language['DESCONECTED_TITLE']		=	"USUÁRIO DESCONECTADO";
 	$language['DESCONECTED_DESCRIPT']	=	"Usuário desconectado do sistema por motivo diversos:";
 	$language['DESCONECTED_BUTTON']		=	"VOLTAR PARA O LOGIN";
-	$language['DESCONECTED_REASONS']	=	array('Inatividade na sessão,','Alteração de senha,','Banco de dados sem conexão,','Senha expirtada,','Entre outras.');
+	$language['DESCONECTED_REASONS']	=	array('Inatividade na sessão,','Alteração de senha,','Banco de dados sem conexão,','Outras.');
 	
  
 
+	$language['ScreenShotGenerate']			=	"Criando o print screen da tela";
 	
+	
+	$language['ScreenShotMailBodyHtml']		=	<<<HTML
+	
+											<p><strong>Olá</strong>, </p>
+													<p>Veja o extrato desta consulta "%s" na base "%s" extraído da ferramenta WRS.</p>
+													<p>Nesta consulta foram aplicados os seguintes filtros:</p><br><br>
+													%s
+													<br><p>Atenciosamente,<br>
+													<strong>%s</strong>;</p>
+	
+HTML;
+
+	
+	$language['ScreenShotMailWrong']		=	"Há email(s) incompletos, favor verificar antes de enviar: <br><p> <b>%s</b> </p> <br>Obrigado.";
+	$language['ScreenShotMailTO']			=	"O campo <b>Para</b> é de prenchimento obrigatório";
+	$language['ScreenShotMailSUBJECT']		=	"O campo <b>Assunto</b> é de prenchimento obrigatório";
+	$language['ScreenShotMailMESSENGER']	=	"É necessário inserir algum conteúdo no corpo do email";
+	$language['ScreenShotMailSend']			=	"Enviando mensagem, aguarde... <img src='imagens/wrs_loading.gif' />";
+	
+	$language['ScreenShotMailSendSuccess']			=	"Email enviado com sucesso.";
+	
+	$language['ScreenShotMailSendError']			=	'Não foi possível enviar o email devido á: <br><br><b>%s</b>.';
 	
 	/*
 	 * Mensagem de Privilegios
@@ -37,6 +80,8 @@
 	$language['TOOLTIP_BTN_ERASER_FILTER_LOCAL']=	"Limpa as pesquisas feita nos filtros pesquisados";
 	$language['TOOLTIP_BTN_CLEAR_ELEMENTS_BELLOW']	=	"Remove todos os elementos do container a baixo";
 	//END
+	
+	$language['kendoUI']							=	"kendo.messages.pt-BR.min.js";
 	
 	$language['ERROR_CANT_CREATE_JOB'] 						= "Ops.. Favor reenviar a consulta, não foi possível criar um job, se o erro persistir favor entrar em contato com o suporte";
 	
@@ -61,11 +106,14 @@
 	$language['MENU_ADMIN_SSAS_REPORT']		=	'Relatórios';
 	$language['MENU_ADMIN_SSAS_LAYOUTS']	=	'Layouts';
 	
+	$language['file_error_import']			=	'Arquivo não importado';
 	$language['file_not_validated']			=	'Arquivo não validado';	
 	$language['file_not_unziped']			=	'Arquivo não descompactado';
 	
-	
-	
+	$language['MAIL_TITLE']				=	"Envio de e-mail";
+	$language['MAIL_TO']				=	"Para";
+	$language['MAIL_SUBJECT']			=	"Assunto";
+	$language['MAIL_SEND']				=	"Enviar email";
 	
 	$language['ADMIN_AVISO_IMPORT']			=	'- importe apenas arquivos no formato CSV ou ZIP<br>- certifique-se que o nome do arquivo seja: #NAME_FILE#, ou que o ZIP contenha este arquivo<br>- Layout padrão:<br><span class="class_layout_padrao">#DEFAULT_LAYOUT#</span>';
 	
@@ -82,7 +130,7 @@
 	/*
 	 * CUBO ERRO
 	 */
-	$language ['ERRO_CUBO_INDISPONIVEL'] 			= "ERRO: INDISPONIVEL";
+	$language ['ERRO_CUBO_INDISPONIVEL'] 			= "Erro: Indisponível";
 	$language ['ERROR_TABLE_CACHE_NO_HEADER']		= "Não existem Dados para esta Consulta..";
 	$language ['ERROR_CUBO_NOT_FOUND']				= "Não foi possível identificar o Cubo utilizado. <br> Se o erro persistir, favor informar ao suporte";
 	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executar a Consulta <b>%s</b> <br>";
@@ -121,7 +169,7 @@
 	
 	$language ['TITLE_TEMA'] 			= "Tema";
 	$language ['TITLE_LINGUA'] 			= "Lingua";
-	$language ['TITLE_ALTER_SENHA'] 	= "Alterar Seha";
+	$language ['TITLE_ALTER_SENHA'] 	= "Alterar Senha";
 	$language ['TITLE_ADMINISTRATIVO'] 	= "Administrativo";
 	$language ['TITLE_ADMINISTRATIVO_MENU'] 	= "MENU PRINCIPAL";
 		
@@ -280,11 +328,12 @@
 	$language['GRID_HEADER_SEE'] 		= 	"Visão";
 	$language['GRID_HEADER_SEE_GRID']	=	"Planilha";	
 	$language['GRID_HEADER_SEE_CHART']	=	"Gráfico";
+	$language['GRID_HEADER_MAIL_SEND']	=	'Enviar e-mail';
 	$language['GRID_HEADER_SEE_MAP']	=	"Mapa";
 	
-	$language['GRID_HEADER_TITLE_DADOS']		=	"DADOS";
-	$language['GRID_HEADER_TITLE_TOTAL']		=	"TOTAL";
-	$language['GRID_HEADER_TITLE_EXIBITION']	=	"EXIBIÇÃO";
+	$language['GRID_HEADER_TITLE_DADOS']		=	"Dados";
+	$language['GRID_HEADER_TITLE_TOTAL']		=	"Total";
+	$language['GRID_HEADER_TITLE_EXIBITION']	=	"Exibição";
 		
 	$language['WHAT_SEARCH'] = "O que procura?";
 	
@@ -535,6 +584,8 @@ HTML;
 	// JSs de MENU, ADMIN e REPORTS
 	$language['JS_menu_report_include'] 	= 	'Inclusão de Relatório';
 	$language['JS_menu_report_name'] 		= 	'Escolha um nome para o relatório';
+	
+	$language['js_admin_no_user'] 			= 	'Não é possível alterar a senha sem que seja do seu próprio usuário';
 
 	$language['JS_admin_choice_column'] 	= 	'Qual coluna deseja editar?';
 	$language['JS_admin_choice_column_user']= 	'Usuário';
@@ -544,12 +595,26 @@ HTML;
 	$language['js_admin_pass_sintax_b']		=	'Deseja realmente expirar a senha para ';
 	$language['js_admin_pass_sintax_c']		=	' usuário%s';
 	$language['js_admin_pass_sintax_d']		=	'todos os';
+	$language['js_admin_pass_sintax_e']		=	'seu próprio';
+	$language['js_admin_pass_self']			=	'Você precisa definir sua nova senha';
 	$language['js_admin_pass_same']			=	'A senha e a confirmação de senha precisam ser iguais.';
+	$language['js_admin_pass_blank']		=	'A senha e a confirmação de senha não podem ser em branco.';
 	$language['js_admin_pass_min']			=	'A senha e a confirmação de senha não podem ter menos de 3 caracteres.';
-	$language['js_admin_observation']		=	'* deixe os campos em branco para expirar a senha';
+	$language['js_admin_pass_equals']		=	'A nova senha e a confirmação de senha devem ser diferentes da senha atual.';
+	$language['js_admin_observation']		=	' expirar a senha';
 	$language['js_admin_new_pass_placeholder']=	'mínimo de 3 caracteres';
+	$language['js_admin_old_pass_placeholder']=	'entre com sua senha atual';
 	$language['js_admin_new_pass']			=	'Nova Senha: ';
 	$language['js_admin_confirm_pass']		=	'Confirmar Senha: ';
+	$language['js_admin_old_pass']			=	'Senha Atual: ';
+	$language['js_admin_confirm_question']	=	'?';
+	
+
+	$language['php_admin_msg_exp_success']	=	'expirado%s com sucesso';
+	$language['php_admin_msg_red_success']	=	'Redefinição de senha para ';
+	$language['php_admin_msg_red_success2']	=	' realizada com sucesso';
+	$language['php_admin_msg_exp_erro']		=	'Erro na expiração de senha';
+	$language['php_admin_msg_red_erro']		=	'Erro na definição de nova senha';
 	
 	$language['JS_admin_confirm_export'] 	= 	'Deseja exportar quais registros?';
 	$language['JS_admin_all_records'] 		= 	'Todos os registros';
@@ -585,6 +650,39 @@ HTML;
 	$language['IMPORT_EXPORT_MESSAGES_STATUS'] 	= 	'Status:';
 	$language['IMPORT_EXPORT_MESSAGES_DETAIL'] 	= 	'Detalhes:';
 	
+	
+	$language['UPLOAD_BTN_DELETAR'] 	= 	'Deletar';
+	$language['UPLOAD_BTN_CANCEL']		=	'Cancelar';
+	$language['UPLOAD_BTN_PROCESS']		=	'Processando...';
+	$language['UPLOAD_BTN_ANEXAR']		=	'Anexar';
+	/*
+	 * MANAGE_PARAM
+	 */
+
+	$language['manage_param_sem_opcao']				=	'Sem opção';
+	$language['manage_param_selecionar']			=	'Selecionar';
+	$language['manage_param_ativo']					=	'Ativo';
+	$language['manage_param_inativo']				=	'Inativo';
+	$language['manage_param_bloqueado']				=	'Bloqueado';
+	$language['manage_param_azul']					=	'Azul';
+	$language['manage_param_cinza']					=	'Cinza';
+	$language['manage_param_laranja']				=	'Laranja';
+	$language['manage_param_verde']					=	'Verde';
+	$language['manage_param_vermelho']				=	'Vermelho';
+	$language['manage_param_ingles']				=	'Inglês';
+	$language['manage_param_espanhol']				=	'Espanhol';
+	$language['manage_param_portugues']				=	'Português';
+	$language['manage_param_abrir_relatorio']		=	'Abrir Relatório';
+	$language['manage_param_abrir_layout']			=	'Abrir Layout';
+	
+			
+	$language['FILTER_DESC']	=	'Filtrados';		
+	$language['FILTERS_VALUES']	=	'Itens Filtrados';	
+	$language['LAYOUT_DATE']	=	'Data';	
+	$language['LAYOUT_UPDATE']	=	'Update';	
+	$language['LAYOUT_FLAG']	=	'Flag';	
+	$language['LAYOUT_STATUS']	=	'Status';		
+				
 	
 	/*
 	 * GERADO COM O SQL:
@@ -685,5 +783,82 @@ HTML;
 	 $language['USER_SALT']  =  'Código Interno';
 	 $language['USER_STATUS']  =  'Situação do Usuário';
 	 $language['USER_TYPE']  =  'Tipo do Usuário';
+	 
+	 $language['CUBE_DESC_PLACEHOLDER']  =  'Descrição do Cubo';
+	 $language['CUBE_FILTER_PLACEHOLDER']  =  'Atributos com Filtro';
+	 $language['CUBE_FILTER_VALUE_PLACEHOLDER']  =  'Valores dos Atributos com Filtros';
+	 $language['CUBE_FLAG_PLACEHOLDER']  =  'Flag do Cubo';
+	 $language['CUBE_ID_PLACEHOLDER']  =  'Código do Cubo';
+	 $language['CUBE_STATUS_PLACEHOLDER']  =  'Situação do Cubo';
+	 $language['CUSTOMER_CODE_PLACEHOLDER']  =  'Código do Cliente';
+	 $language['CUSTOMER_DESC_PLACEHOLDER']  =  'Descrição do Cliente';
+	 $language['CUSTOMER_EXPIRY_PLACEHOLDER']  =  'Expiração da Senha';
+	 $language['CUSTOMER_FLAG_PLACEHOLDER']  =  'Flag do Cliente';
+	 $language['CUSTOMER_GROUP_PLACEHOLDER']  =  'Grupo do Cliente';
+	 $language['CUSTOMER_ID_PLACEHOLDER']  =  'Código Interno do Cliente';
+	 $language['CUSTOMER_STATUS_PLACEHOLDER']  =  'Situação do Cliente';
+	 $language['DATABASE_BALANCE_PLACEHOLDER']  =  'Base Balanceada';
+	 $language['DATABASE_COMMENT_PLACEHOLDER']  =  'Comentário sobre a Base';
+	 $language['DATABASE_DESC_PLACEHOLDER']  =  'Descrição da Base';
+	 $language['DATABASE_FLAG_PLACEHOLDER']  =  'Situação da Base';
+	 $language['DATABASE_ID_PLACEHOLDER']  =  'Código da Base';
+	 $language['DATABASE_IMAGE_PLACEHOLDER']  =  'Imagem da Base';
+	 $language['DATABASE_LINK_PLACEHOLDER']  =  'Link de acesso Externo';
+	 $language['DATABASE_ORDER_PLACEHOLDER']  =  'Ordem de Exibição';
+	 $language['DATABASE_POOL_PLACEHOLDER']  =  'Base Compartilhado';
+	 $language['DATABASE_STATUS_PLACEHOLDER']  =  'Situação da Base';
+	 $language['DATE_ID_PLACEHOLDER']  =  'Período';
+	 $language['DOWNLOAD_ID_PLACEHOLDER']  =  'Código do Download';
+	 $language['FILE_DATE_PLACEHOLDER']  =  'Data do Arquivo';
+	 $language['FILE_DESC_PLACEHOLDER']  =  'Descrição do Arquivo';
+	 $language['FILE_FLAG_PLACEHOLDER']  =  'Flag do Arquivo';
+	 $language['FILE_NAME_PLACEHOLDER']  =  'Nome do Arquivo';
+	 $language['FILE_SIZE_PLACEHOLDER']  =  'Tamanho do Arquivo';
+	 $language['LANGUAGE_ID_PLACEHOLDER']  =  'Lingua';
+	 $language['MESSAGE_PLACEHOLDER']  =  'Mensagem';
+	 $language['MODULE_PLACEHOLDER']  =  'Módulo';
+	 $language['OPERATION_PLACEHOLDER']  =  'Operação';
+	 $language['PERFIL_DESC_PLACEHOLDER']  =  'Descrição do Perfil';
+	 $language['PERFIL_FLAG_PLACEHOLDER']  =  'Flag do Perfil';
+	 $language['PERFIL_ID_PLACEHOLDER']  =  'Código do Perfil';
+	 $language['PERFIL_LEVEL_PLACEHOLDER']  =  'Nível do Perfil';
+	 $language['PERFIL_STATUS_PLACEHOLDER']  =  'Situação do Perfil';
+	 $language['PROCESS_PLACEHOLDER']  =  'Processo';
+	 $language['REPORT_AUTOLOAD_PLACEHOLDER']  =  'Carga Automática';
+	 $language['REPORT_DATE_PLACEHOLDER']  =  'Data do Relatório';
+	 $language['REPORT_DESC_PLACEHOLDER']  =  'Descrição do Relatório';
+	 $language['REPORT_FILTER_PLACEHOLDER']  =  'Filtro do Relatório';
+	 $language['REPORT_FLAG_PLACEHOLDER']  =  'Flag do Relatório';
+	 $language['REPORT_FORMULAS_PLACEHOLDER']  =  'Fórmulas do Relatório';
+	 $language['REPORT_ID_PLACEHOLDER']  =  'Código do Relatório';
+	 $language['REPORT_OPTIONS_PLACEHOLDER']  =  'Opções do Relatório';
+	 $language['REPORT_SHARE_PLACEHOLDER']  =  'Relatório Compartilhado';
+	 $language['REPORT_STATUS_PLACEHOLDER']  =  'Situação do Relatório';
+	 $language['REPORT_UPDATE_PLACEHOLDER']  =  'Atualização do Relatório';
+	 $language['SERVER_COMMENT_PLACEHOLDER']  =  'Comentário do Servidor';
+	 $language['SERVER_DESC_PLACEHOLDER']  =  'Descrição do Servidor';
+	 $language['SERVER_FLAG_PLACEHOLDER']  =  'Flag do Servidor';
+	 $language['SERVER_ID_PLACEHOLDER']  =  'Código do Servidor';
+	 $language['SERVER_PWD_PLACEHOLDER']  =  'Senha do Usuário';
+	 $language['SERVER_STATUS_PLACEHOLDER']  =  'Situação do Servidor';
+	 $language['SERVER_USER_PLACEHOLDER']  =  'Usuário de Conexão';
+	 $language['TRANSACTION_ID_PLACEHOLDER']  =  'Código da Transação';
+	 $language['USER_CODE_PLACEHOLDER']  =  'Código do Usuário';
+	 $language['USER_DESC_PLACEHOLDER']  =  'Descrição do Usuário';
+	 $language['USER_EMAIL_PLACEHOLDER']  =  'Email do Usuário';
+	 $language['USER_EXPIRY_PLACEHOLDER']  =  'Expiração da Senha';
+	 $language['USER_FILTER_PLACEHOLDER']  =  'Atributos com Filtro';
+	 $language['USER_FILTER_VALUE_PLACEHOLDER']  =  'Valores dos Atributos com Filtros';
+	 $language['USER_FLAG_PLACEHOLDER']  =  'Flag de Usuário';
+	 $language['USER_FORMAT_PLACEHOLDER']  =  'Formato do Layout';
+	 $language['USER_FVD_PLACEHOLDER']  =  'Flag Interna';
+	 $language['USER_ID_PLACEHOLDER']  =  'Código Interno do Usuário';
+	 $language['USER_INTERNAL_PLACEHOLDER']  =  'Código Interno';
+	 $language['USER_MASTER_PLACEHOLDER']  =  'Usuário MASTER';
+	 $language['USER_PWD_PLACEHOLDER']  =  'Senha do Usuário';
+	 $language['USER_PWD_OLD_PLACEHOLDER']  =  'Senha Anterior';
+	 $language['USER_SALT_PLACEHOLDER']  =  'Código Interno';
+	 $language['USER_STATUS_PLACEHOLDER']  =  'Situação do Usuário';
+	 $language['USER_TYPE_PLACEHOLDER']  =  'Tipo do Usuário';
 
 ?>

@@ -1058,6 +1058,7 @@ function isDesconected()
 		$('body').WrsGlobal('setCM',{isDesconected:countTimeCheck()});
 	}
 	
+	_ONLY('isDesconected:: userLoged 60 seconds');
 	
 	if(_isDesconected<=mktime())
 	{
@@ -1075,7 +1076,7 @@ function isDesconected()
 		$('body').WrsGlobal('setCM',{isDesconected:countTimeCheck()});
 	}
 	
-	setTimeout(isDesconected,1000*30);//60 Segundos
+	setTimeout(isDesconected,1000*60);//60 Segundos
 	
 	
 }
@@ -1087,16 +1088,16 @@ function isDesconected()
 function getDateTime(){
 	
 		var objToday = new Date(),
-			weekday = new Array('Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'),
+			weekday = LNG('DIAS'),
 			dayOfWeek = weekday[objToday.getDay()],
 			dayOfMonth = today + (objToday.getDate() < 10) ? '0' + objToday.getDate() : objToday.getDate(),
-			months = new Array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'),
+			months = LNG('MES'),
 			curMonth = months[objToday.getMonth()],
 			curYear = objToday.getFullYear(),
 			curHour = objToday.getHours() < 10 ? "0" + objToday.getHours() : objToday.getHours(),
 			curMinute = objToday.getMinutes() < 10 ? "0" + objToday.getMinutes() : objToday.getMinutes(),
 			curSeconds = objToday.getSeconds() < 10 ? "0" + objToday.getSeconds() : objToday.getSeconds()
-		var today = curHour + ":" + curMinute + ":" + curSeconds + " - " + dayOfWeek + ", " + dayOfMonth + " de " + curMonth + " de " + curYear;
+		var today = curHour + ":" + curMinute + ":" + curSeconds + " - " + dayOfWeek + ", " + dayOfMonth + LNG('DE') + curMonth + LNG('DE') + curYear;
 	
 		/*
 	if(curSeconds % 59 == 0){

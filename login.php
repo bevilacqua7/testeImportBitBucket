@@ -149,6 +149,7 @@ HTML;
 							</ul>
 						</div>
 				</div>
+				
 
 				<button class="btn btn-lg btn-primary btn-block wrs_login" type="button"> <?php eLNG('LOGIN_BUTTON');?> </button>
 				

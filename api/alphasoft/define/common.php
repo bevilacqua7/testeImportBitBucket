@@ -160,8 +160,8 @@ function wrs_get_user_browser()
  */
 function select($array,$selected_by_label,$implements)
 {
-	$option			=	'<option value="{label}" {SELECTED} ><img src="http://179.111.208.168/DEV/SANTOS/WRS/imagens/country/POR.png" />  {value}</option>'.PHP_EOL;
-	$option_array	=	array('{value}','{SELECTED}','{label}');
+	$option			=	'<option value="{label}" {SELECTED} {element} >{value}</option>'.PHP_EOL;
+	$option_array	=	array('{value}','{SELECTED}','{label}','{element}');
 	
 	$select			=	'<select name="{name}" id="{id}" class="{class}" {implements} >{option}</select>'.PHP_EOL;
 	$select_array	=	array('{option}','{name}','{id}','{class}','{implements}');
@@ -170,10 +170,20 @@ function select($array,$selected_by_label,$implements)
 	$selected		=	NULL;
 	
 	
-	foreach ($array as $label =>$value)
+	foreach ($array as $label =>$_value)
 	{
 		$selected	=	$selected_by_label==$label ? 'SELECTED' : NULL;
-		$replace	=	 array($value,$selected,$label);
+		
+		$value		=	$_value;
+		$element	=	'';
+		if(is_array($_value))
+		{
+			$value		=	$_value['value'];
+			$element	=	$_value['element'];
+		}
+		
+		
+		$replace	=	 array($value,$selected,$label,$element);
 		$html		.= str_replace($option_array, $replace, $option);
 	}
 	
@@ -198,10 +208,10 @@ function select($array,$selected_by_label,$implements)
 /**
  * Fazendo o include do idioma
  */
-$file_language	=	PATH_LANGUAGE.WRS::USER_LANGUAGE().'.php';
+$file_language	=	PATH_LANGUAGE.WRS::USER_LANGUAGE().'.lng';
 
 if(!file_exists($file_language)){
-	$file_language	=	PATH_LANGUAGE.'POR.php';
+	$file_language	=	PATH_LANGUAGE.'POR.lng';
 }
 //Ao incluir esse arquivo é criada a variável $language
 include_once $file_language;

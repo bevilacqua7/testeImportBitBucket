@@ -10,6 +10,10 @@ body {
 .association-container select{
     height: 130px;
 }
+.container-menu-animation .alert-danger{
+
+	text-transform: uppercase !important;
+}
 
 .not-allowed     { cursor: not-allowed; }
 
@@ -1864,3 +1868,21 @@ border-radius: 3px;
 .box_wrs_panel:hover{ border: 1px solid #58BCE7; background: #2191C0 url("theme-azul/images/ui-bg_diagonals-small_50_2191C0_40x40.png") 50% 50% repeat ; font-weight: bold; color: #ffffff;  color: #ffffff; text-decoration: none; }
 
 
+
+.bt_config_templates ul a{
+	color:#000 !important;
+	padding:5px 10px !important;
+	font-size:13px !important;
+}
+
+.bt_config_templates .btn-group{
+
+	celar:left !important;
+	width:150px !important;
+}
+
+.bt_config_templates .caret{
+
+	width:5px !important;
+}
+ 

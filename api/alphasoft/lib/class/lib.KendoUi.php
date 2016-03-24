@@ -305,7 +305,7 @@ class KendoUi
 		$parseParam['MEASURE_NAME']	=	$_param['LEVEL_FULL'];
 		$parseParam['MEASURE_NAME']	=	$_param['LEVEL_FULL'];*/
 		
-		$_type		=	'number';
+		$_type		=	'string';//number
 		
 			if($locked)
 			{
@@ -629,7 +629,7 @@ HTML;
 			}else{
 				$_param_label					=	$param_label;
 				$_param_label['KEYS']			=  	$_param_label['FIELD'];//count($arrayFrozen);
-				$_param_label['LEVEL_VALUE']	=	$_param_label['LEVEL_NAME'];				
+				$_param_label['LEVEL_VALUE']	=	$_param_label['LEVEL_NAME'];		
 				$arrayFrozen					=	$this->findSetKey($arrayFrozen,$_param_label,true);
 			}
 			
@@ -815,8 +815,10 @@ HTML;
 		$paramTelerik['TOTAL']	=	(string)$_param['TOTAL'];
 		$paramTelerik['tb_field']=	(string)$field;
 		$paramTelerik['LEVEL_FULL']=	(string)$_param['LEVEL_FULL'];
+		$paramTelerik['LEVEL_DRILL']=	(string)$_param['LEVEL_DRILL'];
 		$paramTelerik['field']		=	'';
 
+	 
 		if($locked)
 		{
 			$paramTelerik['locked']		=	$locked;
@@ -833,6 +835,7 @@ HTML;
 			$paramTelerik['title']		=	$paramTelerik['field']=='C000' ? '.' : $paramTelerik['title'];
 			$paramTelerik['tb_field']	=	(string)$field;
 			$paramTelerik['LEVEL_FULL']=	(string)$_param['LEVEL_FULL'];
+			$paramTelerik['LEVEL_DRILL']=	(string)$_param['LEVEL_DRILL'];
 					
 			$_tmp_param					=	$_param;
 			$_tmp_param['INDEX']		=	 ((int)substr($field, 1))-$this->wrsKendoUi['frozen'];

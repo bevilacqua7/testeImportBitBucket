@@ -11,6 +11,25 @@ $(function(){
 	$('#fullwidth a').click(function(){
 		$("#fakeloader").show().fakeLoader({closeLoad:true});
 	});
+
+	$('.selectpicker').selectpicker();
+
+
+	$('.WRSChangeIdioma button, .WRSChangeTheme button').click(function(event){
+			var menu		=	$(this).parent().find('.dropdown-menu');
+			var ul			=	menu.find('ul');
+
+				menu.toggle();
+				ul.toggle();
+
+				 $(window).one('click',function() {
+							menu.toggle();
+							ul.toggle();
+					  });
+			  
+			event.stopPropagation();
+});
+	
 });
 
 
