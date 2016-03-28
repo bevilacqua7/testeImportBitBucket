@@ -38,7 +38,7 @@ class WRS_REPORT  extends  WRS_USER
 		
 		$cubes				=	WRS::GET_SSAS_USER();
 		
-		if(!empty($cube_s))
+		if(!empty($cube_s) || $cube_s>=0)
 		{
 			$this->cube			=	$cubes[$cube_s];
 		}
@@ -365,8 +365,11 @@ class WRS_REPORT  extends  WRS_USER
  		$ALL_COLS 			= ($dadosJs->KendoUi->ALL_COLS=="1")?1:0;
  		$COLS_ORDER 		= $dadosJs->KendoUi->ORDER_COLUMN;
  		 		 		
+ 		
+ 		
+ 		
  		$REPORT_FORMULAS 	= '';
- 		$REPORT_FILTER 		= '';
+ 		$REPORT_FILTER 		= json_encode(@$dadosJs->REPORT_FILTER);
  		$REPORT_FLAG 		= '';
  		$LAYOUT_SHARE 		= (is_array($layouts)?implode(PARAMETERS_SEPARATORS('vir'),$layouts):$layouts); 
  		$USER_TYPE 			= (is_array($grupos)?implode(PARAMETERS_SEPARATORS('vir'),$grupos):$grupos);

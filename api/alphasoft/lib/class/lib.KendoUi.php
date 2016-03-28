@@ -38,7 +38,8 @@ class KendoUi
 	 * @var array
 	 */
 	private $_param				=	array();
-	private $_field				=	array();		
+	private $_field				=	array();
+	private $_field_param		=	array();
 	private $_idName			=	'grid';
 	private $wrsKendoUi			=	array();
 	private $Drilllayout		=	 array();
@@ -335,6 +336,7 @@ class KendoUi
 		$this->pageScheme();
 
 		
+		
 		//Pegando O ID do Cubo
 		$_request	=	$_REQUEST;
 		unset($_request['class']); // Apagando info da URL
@@ -383,7 +385,8 @@ class KendoUi
 		$wrsKendoUi					=	 base64_encode(json_encode($this->wrsKendoUi,true));
 		
 		
-		
+		$fields		=	 json_encode($this->_field_param,true);
+
 		$html 	= <<<HTML
 		
 			
@@ -401,6 +404,9 @@ class KendoUi
 								  		
 										$(function(){
 										
+										
+													$('.btn-clean-filter-kendo-ui').unbind('click').click(btn_clean_filter_kendo_ui)
+										
 															$(window).unload(function(){});
 														
 															var jsonDecode											= 	{$_jsonencode};
@@ -417,6 +423,8 @@ class KendoUi
 		                                								if(!isEmpty(this.options.dataSource._filter))
 		                                								{
 		                                									data['filters']	=	recursiveFilterFindType(rFFTIndex(this.options.dataSource.options.schema.model.fields),this.options.dataSource._filter);
+		                                									
+																			data['REPORT_FILTER']	=	changeFiltersKendoUi("{$report_id}",json_decode(json_encode(data['filters'])));
 																		}
 		                                								
 		                                								return kendo.stringify(data);
@@ -426,13 +434,20 @@ class KendoUi
 																
 																	var grid = $('#A162').data('kendoGrid');
 
-			//jsonDecode.dataSource.filter = new Array();
-   			//jsonDecode.dataSource.filter.push({ field: "C002", operator: "neq", value: 15 });
-																	
-   			
-   			
-																
-																
+																//jsonDecode.dataSource.filter = new Array();
+													   			//
+													   			
+													   			try{
+													   					var  filters						=	json_decode($(".{$this->getId()}").wrsAbaData('getWrsData').REPORT_FILTER);
+													   						jsonDecode.dataSource.filter	=	setFiltersKendoUiDecode(json_decode('{$fields}'),filters);
+													   			}catch(e){
+													   				console.log('Sem Filtros');
+													   			}
+													   			
+													   			
+													   			
+																														
+   																
 																
 																$("#{$this->getId()}").kendoGrid(jsonDecode);
 																$(".{$this->getId()}BOX").hide();
@@ -454,6 +469,9 @@ class KendoUi
 																	TABLE_CAHCE		:	'{$table_cache}'
 																}
 																);
+																
+																
+																
 																		
 												//Adicionando nova ABA						
 												var _options_aba	=	{
@@ -639,6 +657,11 @@ HTML;
 					$frozenHeader[$param_label['LEVEL_NAME']]		=	$param_label;
 			}
 			
+			if(isset($param_label['LEVEL_POS'])){
+				$param_label['field']	=	$param_label['FIELD'];
+				$this->_field_param[$param_label['FIELD']]	=	$param_label;
+			}
+			
 		}
 		
 		
@@ -752,7 +775,6 @@ HTML;
 		
 		$this->set_total_column(count($columns_table));
 		
-
 
 		$this->setColumn($wrs_column);
 		

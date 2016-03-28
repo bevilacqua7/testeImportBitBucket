@@ -333,6 +333,14 @@ function WRSKendoGridComplete(IDGrid)
 				_paranKendoUi.PAGE_CURRENT=1;
 			}
 			
+			try{
+				_layout['REPORT_FILTER']		=	_history['REPORT_FILTER'];
+			}catch(e){
+				
+			}
+			
+			
+			
 			WRSKendoGridCompleteRun(_wrs_id,_layout,_paranKendoUi,true);
 			
 			

@@ -63,6 +63,7 @@ h1 {
 	line-height: 34px;
 	text-align: center;
 	color: red;
+	text-transform: uppercase;
 }
 
 .container {

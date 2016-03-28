@@ -5,14 +5,24 @@
 	$language['IDIOMA'] 				= 	"POR";
 	$language['TITLE']					=	"WRS - ".WRS::VERSION();
 	$language['CharSet']		  		= 	'utf-8';		//por enqtanto está implementado apenas no  sendmail
-	$language['summernote']				=	"summernote-pt-BR.js";
 	$language['siglaIdioma']			=	"pt-BR";
+	$language['kendoUI']				=	"kendo.messages.pt-BR.min.js";
+	$language['summernote']				=	"summernote-pt-BR.js";
 	
 	
+	
+	$language['MODAL_OK']			=	"Ok";
+	$language['MODAL_YES']			=	"Sim";
+	$language['MODAL_CANCEL']		=	"Cancelar";
+	
+		
+	$language['CLEAR_FILTER_KENDOUI']			=	"Limpar filtros da Grid";
+	$language['CLEAR_FILTER_KENDOUI_WARNING']	=	"Deseja realmente limpar os filtros da Grid?";
+	$language['CLEAR_FILTER_KENDOUI_SUCCESS']	=	"Filtros da Grid limpos com sucesso.";
 	
 	$language["MES"]=array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro');
 
-$language["DIAS"]=array('Sunday', 'Lunes', 'Martes', 'del miércoles, el jueves por', 'Friday', 'Saturday');
+$language["DIAS"]=array('Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira','Sábado');
 
 $language["DE"]		=	' de ';
 
@@ -27,7 +37,7 @@ $language["DE"]		=	' de ';
 		
 		
 	
-	$language['DESCONECTED_TITLE']		=	"USUÁRIO DESCONECTADO";
+	$language['DESCONECTED_TITLE']		=	"Usuário desconectado";
 	$language['DESCONECTED_DESCRIPT']	=	"Usuário desconectado do sistema por motivo diversos:";
 	$language['DESCONECTED_BUTTON']		=	"VOLTAR PARA O LOGIN";
 	$language['DESCONECTED_REASONS']	=	array('Inatividade na sessão,','Alteração de senha,','Banco de dados sem conexão,','Outras.');
@@ -53,7 +63,7 @@ HTML;
 	$language['ScreenShotMailTO']			=	"O campo <b>Para</b> é de prenchimento obrigatório";
 	$language['ScreenShotMailSUBJECT']		=	"O campo <b>Assunto</b> é de prenchimento obrigatório";
 	$language['ScreenShotMailMESSENGER']	=	"É necessário inserir algum conteúdo no corpo do email";
-	$language['ScreenShotMailSend']			=	"Enviando mensagem, aguarde... <img src='imagens/wrs_loading.gif' />";
+	$language['ScreenShotMailSend']			=	"Enviando mensagem, aguarde... <img src='imagens/wrs_loading.gif'/>";
 	
 	$language['ScreenShotMailSendSuccess']			=	"Email enviado com sucesso.";
 	
@@ -81,7 +91,7 @@ HTML;
 	$language['TOOLTIP_BTN_CLEAR_ELEMENTS_BELLOW']	=	"Remove todos os elementos do container a baixo";
 	//END
 	
-	$language['kendoUI']							=	"kendo.messages.pt-BR.min.js";
+
 	
 	$language['ERROR_CANT_CREATE_JOB'] 						= "Ops.. Favor reenviar a consulta, não foi possível criar um job, se o erro persistir favor entrar em contato com o suporte";
 	
@@ -243,7 +253,7 @@ HTML;
 	$language ['DRAG_DROP_FIELD_ATRIBUTO'] 	= "um Atributo";
 	$language ['DRAG_DROP_FIELD_METRICA'] 	= "uma Metrica";
 	
-	$language ['GERANDO_RELATORIO'] 		= "Aguarde um instante enquando a Consulta é criada";
+	$language ['GERANDO_RELATORIO'] 		= "Aguarde um instante enquanto a consulta é criada";
 	$language ['GERANDO_RELATORIO_TITLE'] 	= "Gerando Consulta";
 	
 	$language ['GERANDO_MULTI_CUBE_BODY'] 		= "Aguarde um instante para troca de Cubo";
@@ -398,7 +408,7 @@ HTML;
 	$language ['FILTER_CONTEX_MENU_SELECTION_VIEW'] 		= "Visualizar ite%ns selecionado%s";
 	$language ['FILTER_CONTEX_MENU_SELECTION_ITEM_EXISTS'] 	= "O%s ite%ns abaixo já existia%m e não fo%ram adicionado%s:";
 	
-	$language ['TITLE_MENU_DASHBOARD'] 	= "('Visões Consolidadas com Relatórios de Diferentes Bases Segmentadas em Quadrantes Independentes')";
+	$language ['TITLE_MENU_DASHBOARD'] 	= "(Visões Consolidadas com Relatórios de Diferentes Bases Segmentadas em Quadrantes Independentes)";
 	
 
 	$language['tpl_association_save_sucess'] 				= "Associação salva com sucesso";
@@ -418,7 +428,7 @@ HTML;
 	$language ['HTML_CUBE_EDITION'] 	= "Edição:";
 	$language ['HTML_CUBE_UPDATE'] 		= "Atualizado:";
 	
-	$language['LABEL_NOVO']				=	"Novo";
+	$language['LABEL_NOVO']				=	" Novo ";
 	$language['LABEL_LOAD']				=	"Carregando...";
 	$language['PAGINATION_PAGE']		=	"Elementos";
 	$language['PAGINATION_PAGE_INSIDE']	=	"até";
