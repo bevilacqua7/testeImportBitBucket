@@ -230,7 +230,7 @@ function LNG($string)
 
 	if(!isset($language[$string])) return $string;
 
-	return ($language[$string]);
+	return ucfirst($language[$string]);
 }
 
 function eLNG($string)

@@ -1475,8 +1475,8 @@ function optionsDataConvert(gridValue,with_decode)
 				var optsDefault		=	_optsDefault;
 				var FILTER_TMP		=	[];
 				
-
 				
+								
 					optsDefault['KendoUi']	=	opts['KendoUi'];
 					
 				// construindo o reverso
@@ -1563,6 +1563,8 @@ function optionsDataConvert(gridValue,with_decode)
 					delete opts,optsDefault;
 					_END('wrsAbas::encode_to_aba_create');
 					
+					optsDefault['REPORT_FILTER']	=	opts['REPORT_FILTER'];	
+					
 					return optsDefault;
 					
 				
@@ -1584,10 +1586,12 @@ function optionsDataConvert(gridValue,with_decode)
 								LAYOUT_COLUMNS		:[],
 								LAYOUT_MEASURES		:[],
 								LAYOUT_FILTERS		:[],
+								REPORT_FILTER		:'',
 								KendoUi				:[],
 								FILTER_TMP			:""
 							};
 				
+
 						var	opts 				= 	$.extend( {}, optionsAba, options);
 						var	opts_encode			=	encode_to_aba_create(opts,optionsAba);
 						
@@ -1674,13 +1678,14 @@ function optionsDataConvert(gridValue,with_decode)
 				
 				if(empty(inputBase64)) return false;
 				
+
 				var input	=	base64_json_decode(inputBase64);
-				
+			
+
 					if(input.length!=0)
 					{
 						//Garante que não irá apagar os filtros
 						$('body').WrsGlobal('setCM',{'dblclick_open_aba':true});
-						
 						__load_multiple(	input,
 											input.length==1 ? true : AUTO_LOAD_RUN,
 											input.length==1 ? undefined : true
@@ -1698,11 +1703,13 @@ function optionsDataConvert(gridValue,with_decode)
 						$('.wrs_run_filter').data('auto_load_data','');
 					}
 					
+					
+
 					//Remove a aba em branco ou aque não tiver linhas
-					if(aba_active.wrsAbaData('getWrsData').LAYOUT_ROWS=='e30='|| isEmpty(aba_active.wrsAbaData('getWrsData').LAYOUT_ROWS))
-					{
-						aba_active.find('.icon-remove-aba').trigger('click');
-					}
+											if(aba_active.wrsAbaData('getWrsData').LAYOUT_ROWS=='e30='|| isEmpty(aba_active.wrsAbaData('getWrsData').LAYOUT_ROWS))
+						{
+							aba_active.find('.icon-remove-aba').trigger('click');
+						}
 					
 					
 					delete input;

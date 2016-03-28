@@ -12,6 +12,17 @@ body {
 }
 
 
+.btn-clean-filter-kendo-ui{
+	text-align: center !important;
+	padding-left:9px !important;
+	padding-right:5px !important;
+
+}
+
+.wrs_panel_center_body_container .btn-clean-filter-kendo-ui{
+	visible:hidden !important;
+	display:none !important;
+}
 
 .wrs_generate_csv_zip{
 	position:absolute;

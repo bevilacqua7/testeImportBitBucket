@@ -5,1234 +5,683 @@
 	$language['IDIOMA'] 				= 	"JP";
 	$language['TITLE']					=	"WRS - Japones - ".WRS::VERSION();
 	$language['CharSet']		  		= 	'utf-8';		//por enqtanto está implementado apenas no  sendmail
+	$language["siglaIdioma"]			=	'PT-BR';
+	$language["kendoUI"]				=	'kendo.messages.zh-CN.min.js';
+	$language["summernote"]				=	'summernote-ja-JP.js';
 	
-	$language['BRN_OUT_SYSTEM']			='終了WRS';
 
-	$language["MES"]=array(
-'1月',
-'2月',
-'月',
-'4月',
-'5月',
-'ジュン',
-'7月',
-'8月',
-'9月',
-'10月',
-'11月',
-'12月');
+$language['MODAL_OK']			=	"オーケー";
+	$language['MODAL_YES']			=	"はい";
+	$language['MODAL_CANCEL']		=	"キャンセル";
+	
+	
+	
+$language["MES"]=array("1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月");
+$language["DIAS"]=array("日曜日","月曜日","火曜日","水曜日","木曜日","金曜日","土曜日");
+$language["DE"]=" の ";
+$language["BRN_OUT_SYSTEM"]="終了WRS";
+$language["theme_azul"]="ブルー";
+$language["theme_cinza"]="グレー";
+$language["theme_laranja"]="オレンジ";
+$language["theme_verde"]="グリーン";
+$language["theme_vermelho"]="赤";
+$language["DESCONECTED_TITLE"]="ユーザー切断";
+$language["DESCONECTED_DESCRIPT"]="いくつかの理由のためのシステムから切り離さユーザー：";
+$language["DESCONECTED_BUTTON"]="戻るログインへ";
+$language["DESCONECTED_REASONS"]=array("セッションでの非アクティブ、","パスワードの変更、","接続せずにデータベース、","その他。");
+$language["ScreenShotGenerate"]="印刷画面の画面を作成します";
+$language["ScreenShotMailBodyHtml"]=<<<EOF
+<P> <強い>こんにちは</ strong>の</ p> <p>このクエリの抽出を参照してください " %s "ベース" %s 「抽出はWRSツールから</ p> <p>このクエリでは、次のフィルタが適用されている:. </ P> <BR> %s フィルモグラフィー<P>敬具、ヨーロッパの<strong> %s </ STRONG> </ P> 
+EOF;
+$language["ScreenShotMailWrong"]=<<<EOF
+電子メール（s）は不完全であり、<P> <B>を<BR>送信する前に確認してください %s </ B> </ P>フィルモグラフィーありがとうございます。 
+EOF;
+$language["ScreenShotMailTO"]=<<<EOF
+<b> </ b>のパディングを必要とされるために 
+EOF;
+$language["ScreenShotMailSUBJECT"]=<<<EOF
+<B>件名</ b>を必要とされるパディング 
+EOF;
+$language["ScreenShotMailMESSENGER"]="あなたは電子メールの本文中の一部のコンテンツを入力する必要があります";
+$language["ScreenShotMailSend"]=<<<EOF
+送信メッセージ、お待ちください... <IMG SRC = "画像/ wrs_loading.gif '/> 
+EOF;
+$language["ScreenShotMailSendSuccess"]="メールは正常に送信しました。";
+$language["ScreenShotMailSendError"]=<<<EOF
+原因に電子メールを送信できませんでした：<BR> <B> %s </ B>。 
+EOF;
+$language["USUARIO_SEM_PRIVILEGIOS"]="非特権ユーザ";
+$language["USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS"]="グリッドを表示するための権限を持たないユーザーには、65,000以上のレコードが含まれています";
+$language["ERROR_NOT_ROWS"]="クエリを実行している内部エラーが発生しました";
+$language["ERROR_DRILL_LINE_RESULT"]="内部エラー作成LINEドリルを処理し、エラーが続く場合は、サポートにお問い合わせください";
+$language["MSG_ERROR_TABLE_CACHE"]="クエリを実行することができない、選択したレイアウトの属性を変更してください。";
+$language["VALOR"]="値";
+$language["TOOLTIP_BTN_RUN"]="ランレポート";
+$language["TOOLTIP_BTN_CLEAN_FILTER"]="選択したすべてのフィルタをクリア";
+$language["TOOLTIP_BTN_CHANTE_FILTER_DROP"]=<<<EOF
+ドラッグ＆ドロップする選択<BR>状態フィルタをフィルタリングするために、状態変化<BR>ドラッグ＆ドロップを行います 
+EOF;
+$language["TOOLTIP_BTN_NEGADO"]="選択されたフィルタを拒否、クエリはすべての少ない選択したフィルタを来ります。";
+$language["TOOLTIP_BTN_CLEAN_FILTER_LOCAL"]="そのディメンションクリアフィルタのみ";
+$language["TOOLTIP_BTN_ERASER_FILTER_LOCAL"]="調査対象のフィルタで行われた研究を清掃してください";
+$language["TOOLTIP_BTN_CLEAR_ELEMENTS_BELLOW"]="ダウンすべてのコンテナ要素を削除します";
+$language["ERROR_CANT_CREATE_JOB"]="おっと..、ジョブを作成することができませんでした、クエリを再送信してくださいエラーが続く場合は、サポートにお問い合わせください";
+$language["CSV_ERROR_TABLE_EMPTY"]="オプス、それはそのクエリの任意のレポートを生成し、または情報が不足していないテーブルが生成されるように実行します。";
+$language["CSV_NOT_GENERATE"]="銀行にCSV、内部エラーを生成することが可能ではありません";
+$language["CSV_GENERATE_ZIP"]="生成 %s CSVファイル";
+$language["LOGOUT"]=<<<EOF
+我々はシステムを残している瞬間を待って.. <BR> 
+EOF;
+$language["MENU_ADMIN_CUSTOMER"]="顧客";
+$language["MENU_ADMIN_USER"]="ユーザー";
+$language["MENU_ADMIN_SERVER"]="サーバー";
+$language["MENU_ADMIN_DATABASE"]="データベース";
+$language["MENU_ADMIN_CUBE"]="キューブ";
+$language["MENU_ADMIN_HIERARCHY"]="階層";
+$language["MENU_ADMIN_PERFIL"]="プロフィール";
+$language["MENU_ADMIN_CUBE_USER"]="団体";
+$language["MENU_ADMIN_REPORT"]="レポート";
+$language["MENU_ADMIN_DOWNLOAD"]="ダウンロード";
+$language["MENU_ADMIN_LOG"]="ログ";
+$language["MENU_ADMIN_SSAS_REPORT"]="レポート";
+$language["MENU_ADMIN_SSAS_LAYOUTS"]="レイアウト";
+$language["file_error_import"]="ファイルをインポートされません";
+$language["file_not_validated"]="ファイルを検証しません";
+$language["file_not_unziped"]="ない解凍したファイル";
+$language["MAIL_TITLE"]="電子メールを送信します";
+$language["MAIL_TO"]="へ";
+$language["MAIL_SUBJECT"]="テーマ";
+$language["MAIL_SEND"]="メール";
+$language["ADMIN_AVISO_IMPORT"]=<<<EOF
+- CSVまたはZIP <BR>形式のインポートファイルのみ - ファイル名があることを確認してください。 #NAME_FILE#またはZIPファイルには、この<BR>が含まれています - 標準レイアウト：ポルトガル<スパンクラス= "class_layout_padrao">#DEFAULT_LAYOUT#</スパン> 
+EOF;
+$language["TITLE_OPTIONS"]="オプション";
+$language["MENU_ALL_CATEGORY"]="すべてのカテゴリー";
+$language["NO_RESULTS_QUERY"]="クエリの一致なし： ";
+$language["NAME_REPORT_EMPTY"]="レポートの名前を選択します。";
+$language["DATABASE_NOT_CONECTED"]="データベースへの接続なし、抜いて、もう一度ログインしてみ";
+$language["DATABASE_NOT_FOUND"]="おっと！データベースへの接続がありません";
+$language["ERRO_CUBO_INDISPONIVEL"]="エラー：使用不可";
+$language["ERROR_TABLE_CACHE_NO_HEADER"]="このクエリのデータはありません..";
+$language["ERROR_CUBO_NOT_FOUND"]=<<<EOF
+使用キューブを識別することができませんでした。エラーが解決しない場合は<BR>、サポートまでご連絡ください 
+EOF;
+$language["ERRO_EXECUTE_ABA"]=<<<EOF
+エラー<B>クエリを実行します %s </ B>フィルモグラフィー 
+EOF;
+$language["ABA_IN_USER"]="使用中の相談";
+$language["ABA_LIMIT_SEE"]=<<<EOF
+<B>クエリを削除することはできません %s </ B>フィルモグラフィー少なくとも一方が表示されたままにしなければなりません。 
+EOF;
+$language["ABA_CHANGE_CUBE_ID"]="ABAは、別のキューブに属しているような情報が消去されます";
+$language["JOB_COMPLETE_LOAD"]=<<<EOF
+クエリ<B> %s 完成した</ B> 
+EOF;
+$language["JOB_COMPLETE"]="これ以上の実行中のクエリはありません";
+$language["JOB_CANCEL"]=<<<EOF
+クエリ<B> %s </ B>正常にキャンセルされました 
+EOF;
+$language["JOB_CANCEL_ERRO"]=<<<EOF
+クエリをキャンセルエラー<B> %s </ B>もう一度やり直してください 
+EOF;
+$language["JOB_NOTFOUND"]="なお、相談キャンセルすることが見出されたか、終了しています";
+$language["JOB_CLOSE_ALERT"]="アラートウィンドウを閉じます";
+$language["SORT_SSAS_TABLE_ERROR"]="ERROR :: 008できませんラッフルテーブル";
+$language["CONSULTA_ATIVA_CANCELAR"]="このレポートのための継続的な相談があり、あなたが新しい予定を要求するためにキャンセルする必要があります。";
+$language["SELECT_NULL"]="クエリは空返さ";
+$language["RUN_GRID_CHANGE_NOT"]="新しいクエリを生成するために修正しないん..";
+$language["NOT_CLOSE_WINDOW"]="以下に記載されているタブが保存されていない、次のとおりです。";
+$language["NOT_CLOSE_WINDOW_LOGOUT"]="以下に記載されているタブは、未保存であっても保存せずに終了したいですか？";
+$language["ABA_TITLE_EMPTY"]=<<<EOF
+レポートに<B>タイトル</ b>]を入力する必要があります 
+EOF;
+$language["SEE_IN_MAP"]="地図で見ます";
+$language["REMOVE"]="取り外し";
+$language["DATA_BASE_ERROR"]=<<<EOF
+<B>おっと...データベースでエラーが発生しました：</ b>の 
+EOF;
+$language["TITLE_TEMA"]="テーマ";
+$language["TITLE_LINGUA"]="舌";
+$language["TITLE_ALTER_SENHA"]="パスワードを変更";
+$language["TITLE_ADMINISTRATIVO"]="行政の";
+$language["TITLE_ADMINISTRATIVO_MENU"]="MAIN MENU";
+$language["TITLE_GRID_WINDOW_MENU_MANAGER"]="ビュー";
+$language["TITLE_GRID_WINDOW_MENU_LIST"]="グリッド";
+$language["TITLE_GRID_WINDOW_MENU_DETAILS"]="細部";
+$language["TITLE_GRID_WINDOW_MENU_BIG_ICON"]="グレートアイコン";
+$language["TITLE_GRID_WINDOW_MENU_MEDIUM_ICON"]="アイコンミディアム";
+$language["TITLE_GRID_WINDOW_MENU_SMALL_ICON"]="スモールアイコン";
+$language["TITLE_GRID_WINDOW_MENU_LIST_INFO"]="基本的なリスト";
+$language["REPORT_RESULT_HISTORY"]="既往はありません";
+$language["MAIN_OPEN_REPORT"]="オープンレポート";
+$language["MAIN_OPEN_LAYOUT"]="オープンレイアウト";
+$language["TITLE_TOP_TOTAL"]="TOTAL";
+$language["TITLE_TOP_5"]="TOP 5";
+$language["TITLE_TOP_10"]="TOP 10";
+$language["TITLE_TOP_15"]="TOP 15";
+$language["TITLE_TOP_20"]="TOP 20";
+$language["TITLE_TOP_25"]="TOP 25";
+$language["TITLE_TOP_50"]="TOP 50";
+$language["TITLE_TOP_100"]="TOP 100";
+$language["ERROR_LOAD_ABA"]="ERROR：ABA01 - タブを開くときにエラーが発生しました..";
+$language["ABA_BE_LOADED"]=<<<EOF
+フラップ<B> %s </ B>すでにロードされています 
+EOF;
+$language["FILTER_NOT_ROWS"]="証拠は見つかりませんでした。";
+$language["FILTER_NOT_ROWS_TOOLTIP"]="フィルタなしが選択されていません。";
+$language["FILTER_CLEAN_FIND"]="クリア検索";
+$language["FILTER_CLEAN_FILTER"]="あなたは既に選択したフィルタを削除しdesenjaか？";
+$language["FILTER_CLEAN_FILTER_SUCCESS"]="正常に実行されたフィルターを清掃。";
+$language["ERRO_FILE_PROCCESS"]="0001：おっとprocessso ERRORにエラーが発生しました";
+$language["BTN_CLOSE"]="近いです";
+$language["MSG_FORCE_LOGOFF"]="あなたは、システムから切断されました";
+$language["DRAG_DROP_FILE_IN_USER"]=<<<EOF
+<B> %s </ B>既に使用されています 
+EOF;
+$language["DRAG_DROP_FILE_IN_USER_REMOVE"]=<<<EOF
+<B> %s </ B>既に使用されているので、選択から削除されました 
+EOF;
+$language["DRAG_DROP_FILE_NOT_PUT"]=<<<EOF
+あなたは<b>]を入力することはできません %s </ B>このボックスに、それは別の他の構造に帰属するものと 
+EOF;
+$language["DRAG_DROP_AREA"]=<<<EOF
+この領域をドラッグして、<B> %s </ B>。 
+EOF;
+$language["DRAG_DROP_CLEAN_SELECTION"]=<<<EOF
+あなたはすべての（）を削除してもよろしいです<B> %s </ B>？ 
+EOF;
+$language["DRAG_DROP_CLEAN_SELECTION_INSIDE"]="あなたはすべてのフィルタ選択をクリアにしてもよろしいですか？";
+$language["DRAG_DROP_MSG_ERROX_MAX_QTDE"]="あなたはより多くを入力することはできません %s フィールドの属性 %s ";
+$language["DRAG_DROP_CLEAN_SELECTION_SUCCESS"]=<<<EOF
+（）<B>の除去 %s </ B>（複数可）が正常に実行。 
+EOF;
+$language["DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE"]="選択は成功したフィルタを削除しました。";
+$language["RUN_RELATORIO_FALTA_INFORMACAO"]=<<<EOF
+execurarのクエリは、情報が不足している：ポルトガル<b>]を %s </ B> 
+EOF;
+$language["DRAG_DROP_FIELD_ATRIBUTO"]="属性";
+$language["DRAG_DROP_FIELD_METRICA"]="1 Metrica";
+$language["GERANDO_RELATORIO"]="クエリが作成されている間、しばらくお待ちください";
+$language["GERANDO_RELATORIO_TITLE"]="生成クエリ";
+$language["GERANDO_MULTI_CUBE_BODY"]="交換ハブにちょっと待って";
+$language["GERANDO_MULTI_CUBE_TITLE"]="キューブの交換";
+$language["ATTRIBUTOS_FILTRO"]="フィルター";
+$language["ATTRIBUTOS_COLUNA"]="コラム";
+$language["ATTRIBUTOS_LINHA"]="ライン";
+$language["ATTRIBUTOS_METRICA"]="メトリクス";
+$language["ATTRIBUTOS_MULTIPLE_CUBE"]="キューブ";
+$language["ATTRIBUTOS_SIMPLES"]="シンプル";
+$language["ATTRIBUTOS_COMPOSTO"]="化合物";
+$language["ATTRIBUTOS_TITLE"]="属性";
+$language["ACTIVE"]="アクティブ（）";
+$language["ACTION"]="アクション";
+$language["TYPE"]="タイプ";
+$language["SUB_TYPE"]="サブタイプ";
+$language["LEGEND_ENABLE"]="非活性化します";
+$language["POLAR"]="極性の";
+$language["RADAR"]="レーダー";
+$language["NORMAL"]="ノーマル";
+$language["STACKED"]="重畳";
+$language["WAVY"]="波形の";
+$language["PERCENT"]="パーセンテージ";
+$language["LEGEND"]="字幕";
+$language["MULTIPLE_CURSOR"]="複数";
+$language["CHART_GAUGE_RANGE"]="範囲";
+$language["CHART_GAUGE_QUANTIDADE"]="行あたりの数量";
+$language["CHART_GAUGE_COLOR_TITLE"]="ゲージ";
+$language["CHART_GAUGE_LINEAR"]="リニア";
+$language["CHART_GAUGE_RADIAL"]="ラジアル";
+$language["CHART_PIE"]="ノーマル";
+$language["CHART_DONUT"]="ノックアウト";
+$language["CHART_INSIDE_NOT_LEGEND"]="価値観";
+$language["CHART_RADAR_LINE"]="ライン";
+$language["CHART_RADAR_COLUMN"]="コラム";
+$language["CHART_RADAR_AREA"]="エリア";
+$language["CHART_LEGEND_BOTTOM"]="以下";
+$language["CHART_LEGEND_TOP"]="アップ";
+$language["CHART_LEGEND_LEFT"]="左";
+$language["CHART_LEGEND_RIGHT"]="右";
+$language["CHART_BUBBLE_X"]="X軸";
+$language["CHART_BUBBLE_Y"]="Y軸";
+$language["CHART_BUBBLE_TOTAL"]="ボリューム";
+$language["GRID_HEADER_OPTION"]="オプション";
+$language["GRID_HEADER_OPTION_TOTAL_LINE"]="ライン";
+$language["GRID_HEADER_OPTION_TOTAL_COLUMN"]="コラム";
+$language["GRID_HEADER_OPTION_TOTAL_SUMARIZA"]="数字要約";
+$language["GRID_HEADER_OPTION_TOTAL_LINE_COLOR"]="散在ライン";
+$language["GRID_HEADER_OPTION_ORDER_COLUMN"]="反転列";
+$language["GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA"]="集約レコード";
+$language["GRID_HEADER_EXPORT"]="輸出";
+$language["GRID_HEADER_EXPORT_PDF"]="PDFファイル";
+$language["GRID_HEADER_EXPORT_CSV"]="csvファイル";
+$language["GRID_HEADER_EXPORT_EXCEL"]="エクセル";
+$language["GRID_HEADER_EXPORT_IMAGE"]="画像";
+$language["GRID_HEADER_EXPORT_IMAGE_SVG"]="SVG画像";
+$language["CHART_CONFIG"]="グラフィックを設定";
+$language["GRID_HEADER_SEE"]="ビュー";
+$language["GRID_HEADER_SEE_GRID"]="スプレッドシート";
+$language["GRID_HEADER_SEE_CHART"]="グラフィック";
+$language["GRID_HEADER_MAIL_SEND"]="メール";
+$language["GRID_HEADER_SEE_MAP"]="地図";
+$language["GRID_HEADER_TITLE_DADOS"]="データ";
+$language["GRID_HEADER_TITLE_TOTAL"]="合計";
+$language["GRID_HEADER_TITLE_EXIBITION"]="ディスプレイ";
+$language["WHAT_SEARCH"]="あなたは何を求めますか？";
+$language["TITLE_TOP"]="トップオプション";
+$language["BTN_SAIR"]="残します";
+$language["BTN_SAIR_MENU"]="メニューを閉じます";
+$language["BTN_SIM"]="はい";
+$language["BTN_NAO"]="しません";
+$language["BTN_CONFIRM"]="確認されました";
+$language["BTN_CANCEL_CONSULTA"]="クエリをキャンセル ";
+$language["BTN_APLY"]="適用します";
+$language["BTN_REMOVE"]="削除します";
+$language["BTN_UPDATE"]="変更";
+$language["BTN_NEW"]="新しいです";
+$language["BTN_SAVE"]="保存";
+$language["BTN_APPLY"]="適用します";
+$language["OF"]="の";
+$language["PAGE"]="ページ";
+$language["tpl_layout_remove_empty"]="あなたは、削除するために、レポートを選択する必要があります";
+$language["tpl_layout_remove_sucess"]="レイアウトが正常に削除されました";
+$language["tpl_layout_remove_error"]="いくつかのレイアウトを削除できませんでした";
+$language["tpl_layout_options_default"]="標準";
+$language["tpl_layout"]="レイアウト";
+$language["tpl_layout_title"]="レイアウトの保存";
+$language["tpl_layout_name"]="レイアウト名";
+$language["tpl_layout_alias"]="別名レイアウト";
+$language["tpl_layout_name_empty"]=<<<EOF
+あなたは<b>の名前レイアウト</ b>]を入力する必要があります 
+EOF;
+$language["tpl_layout_alias_empty"]=<<<EOF
+あなたは<b>のエイリアスレイアウト</ b>]を入力する必要があります 
+EOF;
+$language["tpl_layout_data_empty"]=<<<EOF
+あなたはレイアウトを保存するためのオプションのいずれかを完了する必要があります<b>のメトリック、行または列</ b>を 
+EOF;
+$language["tpl_layout_option_select_empty"]="あなたはレイアウトのいずれかのオプションを選択する必要があります";
+$language["tpl_layout_share"]="シェア";
+$language["tpl_layout_error"]="OPS ...保存中にエラーが発生しましたレイアウト、再度お試しください";
+$language["tpl_layout_sucess"]="レイアウトが正常に保存され";
+$language["ALERT_TITLE_ERRO"]="エラーが発生しました。";
+$language["ALERT_TITLE_SUCCESS"]="確認されました。";
+$language["ALERT_TITLE_WARNING"]="警告！";
+$language["ALERT_TITLE_INFO"]="ご参考までに";
+$language["ERROR_MULTIPLE_CUBE_JSON"]="誤差はご連絡先を解決しない場合は、複数のキューブを作成するプロセスでエラーが発生しました。";
+$language["ERROR_NOT_EVENT"]="誤差はご連絡先を解決しない場合は、要求されたイベントが見つかりませんでした";
+$language["ERROR_TITLE"]="エラー警告が発生しました..";
+$language["ERROR_EVENT_NOT_FOUND"]="なお、このイベント要求に指定されていません";
+$language["WARNING_TITLE_RESULT_NOT_FOUND"]="相談";
+$language["WARNING_BODY_RESULT_NOT_FOUND"]="クエリには結果が返されませんでした..";
+$language["TITLE_CONTEX_MENU"]="に追加";
+$language["FILTER_CONTEX_MENU_SELECTION_REMOVE"]="選択範囲を削除します %s ITE S％";
+$language["FILTER_CONTEX_MENU_SELECTION_VIEW"]="ITE％選択されたナノ秒を見ます %s ";
+$language["FILTER_CONTEX_MENU_SELECTION_ITEM_EXISTS"]="ザ %s 以下ITE％のnsのは私ではない付加％ラムFO％存在していました %s ：";
+$language["TITLE_MENU_DASHBOARD"]="（クアドラント独立でレポートをセグメント化の異なる塩基との連結ビジョン）";
+$language["tpl_association_save_sucess"]="正常に協会に保存";
+$language["tpl_association_save_error"]="協会でのエラー";
+$language["tpl_association_remove_sucess"]="協会 %s ITE％sが正常に削除します";
+$language["tpl_association_remove_error"]="関連付けを削除中にエラーが発生しました";
+$language["tpl_association_title"]="による個々の協会 ";
+$language["tpl_association_title_cube"]="キューブ";
+$language["tpl_association_title_user"]="ユーザー";
+$language["HTML_CUBE_EDITION"]="エディション：";
+$language["HTML_CUBE_UPDATE"]="更新日：";
+$language["LABEL_NOVO"]=" 新しいです ";
+$language["LABEL_LOAD"]="読み込んでいます...";
+$language["PAGINATION_PAGE"]="要素";
+$language["PAGINATION_PAGE_INSIDE"]="へ";
+$language["TITLE_ATT_WRS_CUSTOMER"]="顧客管理";
+$language["TITLE_ATT_WRS_SERVER"]="サーバーの管理";
+$language["TITLE_ATT_WRS_USER"]="ユーザー管理";
+$language["TITLE_ATT_WRS_DATABASE"]="データベース管理";
+$language["TITLE_ATT_WRS_CUBE"]="キューブの管理";
+$language["TITLE_ATT_WRS_HIERARCHY"]="階層管理";
+$language["TITLE_ATT_WRS_PROFILE"]="プロファイル管理";
+$language["TITLE_REL_WRS_CUBE_USER"]="団体の管理";
+$language["TITLE_ATT_WRS_REPORT"]="レポートの管理";
+$language["TITLE_ATT_WRS_DOWNLOAD"]="ファイル管理";
+$language["TITLE_ATT_WRS_PERFIL"]="プロファイル管理";
+$language["TITLE_ATT_WRS_LOG"]="ログ管理";
+$language["LINE_TOTAL"]="TOTAL";
+$language["label_total"]="合計";
+$language["LINE_TOTAL_BUBBLE"]="あなたは、グラフに合計行を使用したいですか？";
+$language["msg_maxNumberOfFiles"]="ファイルの最大数を超えました";
+$language["msg_acceptFileTypes"]="許可されていないファイルの拡張子";
+$language["msg_maxFileSize"]="特大のファイル";
+$language["msg_minFileSize"]="最小ファイルサイズは達していません";
+$language["msg_nao_existe_file_in_zip"]="このZIP内のファイルが許可されていません。 ";
+$language["msg_nome_obrigatorio_necessario"]="このアップロードのために特定の名前を使用することが必須です。 ";
+$language["upload_form_selecionar"]="選択します";
+$language["upload_form_enviar"]="送信";
+$language["upload_form_cancelar"]="キャンセル";
+$language["upload_form_apagar"]="削除します";
+$language["upload_form_processando"]="読み込んでいます...";
+$language["upload_form_erro"]="送信エラー";
+$language["upload_files_select"]="インポートするファイルを選択します。";
+$language["upload_files_success_sing"]=" 正常にインポート記録";
+$language["upload_files_success_plur"]=" 正常にインポートされたレコード";
+$language["upload_files_error_sing"]=" 登録インポートエラー";
+$language["upload_files_error_plur"]=" レコードのインポートエラー";
+$language["upload_files_success_file"]="正常にインポートされたファイル";
+$language["MODAL_GENERICA_SALVAR"]="保存";
+$language["MODAL_GENERICA_ATUALIZAR"]="更新";
+$language["MODAL_GENERICA_APAGAR"]="削除します";
+$language["MODAL_GENERICA_CANCELAR"]="近いです";
+$language["MODAL_GENERICA_VOLTAR"]="リターン";
+$language["MODAL_CONFIRM_BT_CONFIRM"]="削除します";
+$language["MODAL_CONFIRM_BT_CANCEL"]="キャンセル";
+$language["obrigatorio"]="必須の";
+$language["bt_back"]="リターン";
+$language["bt_new"]="新しいです";
+$language["bt_update"]="保存";
+$language["bt_remove"]="削除します";
+$language["bt_export"]="輸出";
+$language["bt_import"]="インポート";
+$language["bt_export_user"]="輸出";
+$language["bt_import_user"]="インポート";
+$language["bt_export_customer"]="輸出";
+$language["bt_import_customer"]="インポート";
+$language["bt_export_server"]="輸出";
+$language["bt_import_server"]="インポート";
+$language["bt_export_database"]="輸出";
+$language["bt_import_database"]="インポート";
+$language["bt_export_cube"]="輸出";
+$language["bt_import_cube"]="インポート";
+$language["bt_export_profile"]="輸出";
+$language["bt_import_profile"]="インポート";
+$language["bt_export_cube_user"]="輸出";
+$language["bt_import_cube_user"]="インポート";
+$language["bt_export_download"]="輸出";
+$language["bt_import_download"]="インポート";
+$language["bt_export_log"]="輸出";
+$language["bt_import_log"]="インポート";
+$language["LOGIN_USER"]="ユーザー";
+$language["LOGIN_REMOVE_HISTORY_SUCCESS"]="正常に削除歴史";
+$language["LOGIN_REMOVE"]="削除します";
+$language["LOGIN_PASSWORD_RECOVER"]="パスワードを回復します";
+$language["LOGIN_BUTTON"]="ログイン";
+$language["LOGIN_HISTORY"]="ユーザー履歴";
+$language["LOGIN_SUBJECT"]="パスワードの復元";
+$language["LOGIN_RECOVER_NOT_FOUND"]=<<<EOF
+おっと... <B>ユーザーが見つかりません %s </ B>パスワード回復を送信します。 
+EOF;
+$language["LOGIN_NOT_EMAIL"]=<<<EOF
+おっと..電子メールがユーザー<B>に送信されることが見出されていません %s</ B>。<BR>パスワード回復のためのサポートにご連絡ください。フィルモグラフィーをありがとう。 
+EOF;
+$language["LOGIN_RECOVER_NEW"]=<<<EOF
+<H4>パスワードの変更</ H4>は、システムにアクセスするための新しいパスワードを入力します。 
+EOF;
+$language["LOGIN_OTHER_PERFIL"]="別のプロフィール";
+$language["LOGIN_ARMAZENA"]="ユーザーデータを保存しますか？";
+$language["LOGIN_PASSWORD"]="パスワード";
+$language["LOGIN_USER_SYSTEM"]="ユーザー";
+$language["LOGIN_TITLE"]="WRSシステム";
+$language["LOGIN_ADD_NEW_RECOVER"]="システムにアクセスするために新しいパスワードを入力してください";
+$language["LOGIN_RECOVER_SUCCESS"]="ユーザーの電子メールに送信されたパスワードを回復";
+$language["LOGIN_RECOVER_ERROR"]="おっと..メールを送信できませんでした。パスワードを回復することができるようにサポートに連絡してください。ありがとう";
+$language["HTML_LOGIN_RECOVER_BTN"]="パスワードの変更";
+$language["HTML_LOGIN_RECOVER_TITLE"]="パスワードの復元";
+$language["HTML_LOGIN_RECOVER"]=<<<EOF
+WRSシステムにアクセスするためのパスワード回復要求あなたはこのメールを無視してください要求していない場合。パスワードの変更にリダイレクトするには、以下のボタンをクリックしてください<BR​​>。<BR>あなたが変更を行うには、ブラウザのクリックlinqueコピー＆ペーストの操作をしないと。 
+EOF;
+$language["LOGIN_NEW_PASSWORD"]="新しいパスワード";
+$language["LOGIN_NEW_PASSWORD_CONFIRM"]="新しいパスワードの確認";
+$language["LOGIN_CHECK"]="パスワードを確認しています...";
+$language["LOGIN_CHECK_NEW"]="新しいパスワードを保存しています...";
+$language["LOGIN_PASSWORD_EMPTY"]=<<<EOF
+あなたは<b>]を記入しなければなりません %s </ B> 
+EOF;
+$language["LOGIN_PASSWORD_EMPTY_NEW"]="これは、新しいパスワードに渡されていません。";
+$language["LOGIN_TAG_EMPTY"]="パスワードをリセットするためのコードは空白です";
+$language["LOGIN_NEW_PASSWORD_CONFIRM_ERROR"]="新しいパスワードの確認が一致しません。";
+$language["LOGIN_CHANGE_SQL_ERRO"]="おっと..エラークエリのログインを実行して、再度お試しください。";
+$language["LOGIN_RECOVER_SUCCESS_TIME"]="パスワードが正常に生成されました。システムへのアクセスをリダイレクト。";
+$language["LOGIN_CHANGE_SQL_ERRO_RECOVER"]="おっと..エラーパスワード回復のためのクエリのログインを実行しています。";
+$language["LOGIN_CHANGE_OK"]="パスワードが正常に新しいパスワードでログイン今すぐ変更します";
+$language["REMOVE_LOGIN_COOKIE"]="あなたは、ユーザのアクセス履歴を削除してもよろしいですか？";
+$language["LOGIN_HTML_TITLE"]="WRS - Webレポートシステム";
+$language["ADMIN_IMPORT_caracter_delimitador"]="区切り文字： ";
+$language["ADMIN_IMPORT_tipo_importacao"]="インポートタイプ： ";
+$language["ADMIN_IMPORT_virgula"]="コンマ";
+$language["ADMIN_IMPORT_ponto_virgula"]="セミコロン";
+$language["ADMIN_IMPORT_tabulacao"]="タブ";
+$language["ADMIN_IMPORT_remover"]="以前のレコードを削除します";
+$language["ADMIN_IMPORT_atualizar"]="更新して新しい追加";
+$language["ADMIN_IMPORT_compactar_resultados"]="結果を圧縮します： ";
+$language["PASSWORD_EXPIRED"]=<<<EOF
+期限切れのパスワード、新しいパスワードを作成する必要があります。フィルモグラフィーは、新しいパスワードを使用してフォームを完成させます。 
+EOF;
+$language["LOGIN_OK"]="メイン画面にリダイレクト";
+$language["LOGIN_PASSWORD_ERROR"]="ユーザーまたはパスワードが無効です";
+$language["LOGIN_SEND_CHANGE"]="パスワード回復を処理..";
+$language["JS_menu_report_include"]="レポートのインクルージョン";
+$language["JS_menu_report_name"]="レポートの名前を選択します。";
+$language["js_admin_no_user"]="あなたは、あなた自身のサーバーを持たずにパスワードを変更することはできません";
+$language["JS_admin_choice_column"]="どの列あなたが編集したいですか？";
+$language["JS_admin_choice_column_user"]="ユーザー";
+$language["JS_admin_choice_column_cube"]="キューブ";
+$language["js_admin_pass_sintax_a"]="あなたは本当にのための新しいパスワードを設定しますか ";
+$language["js_admin_pass_sintax_b"]="あなたは本当に、パスワードの有効期限が切れますか ";
+$language["js_admin_pass_sintax_c"]=" ユーザー %s ";
+$language["js_admin_pass_sintax_d"]="すべて";
+$language["js_admin_pass_sintax_e"]="あなた自身の";
+$language["js_admin_pass_self"]="あなたは、あなたの新しいパスワードを設定する必要があります";
+$language["js_admin_pass_same"]="パスワードおよびパスワードの確認が同じです。";
+$language["js_admin_pass_blank"]="パスワードと確認パスワードが空白にすることはできません。";
+$language["js_admin_pass_min"]="パスワードと確認パスワードは3文字未満にすることはできません。";
+$language["js_admin_pass_equals"]="新しいパスワードとパスワードの確認は、現在のパスワードとは異なっている必要があります。";
+$language["js_admin_observation"]=" パスワードの有効期限";
+$language["js_admin_new_pass_placeholder"]="3文字以上";
+$language["js_admin_old_pass_placeholder"]="現在のパスワードを入力します。";
+$language["js_admin_new_pass"]="新しいパスワード： ";
+$language["js_admin_confirm_pass"]="パスワードの確認： ";
+$language["js_admin_old_pass"]="現在のパスワード： ";
+$language["js_admin_confirm_question"]="？";
+$language["php_admin_msg_exp_success"]="期限切れの %s うまく";
+$language["php_admin_msg_red_success"]="へのパスワードのリセット ";
+$language["php_admin_msg_red_success2"]=" 正常に実行";
+$language["php_admin_msg_exp_erro"]="パスワードの有効期限中にエラーが発生しました";
+$language["php_admin_msg_red_erro"]="新しいパスワードを設定中にエラーが発生しました";
+$language["JS_admin_confirm_export"]="どのレコードをエクスポートしたいですか？";
+$language["JS_admin_all_records"]="すべてのレコード";
+$language["JS_admin_selecteds"]="のみ %s 選択 %s ";
+$language["JS_admin_select_one"]="少なくとも1つのレコードを選択します";
+$language["JS_admin_select_just_one"]="変更するだけで1つのレコードを選択";
+$language["JS_admin_select_one_file"]="インポートする前に、ファイルを選択します";
+$language["JS_admin_confirm_remove"]="あなたが本当にこれを削除しますか %s レコード %s ？";
+$language["JS_admin_removed"]="レコード %s 削除 %s うまく";
+$language["JS_report_confirm_remove"]="あなたはこれを削除しますか %s レポート %s ？";
+$language["JS_report_select_one"]="少なくとも一つのレポートを選択";
+$language["JS_report_removed"]="レポート %s 削除 %s うまく";
+$language["JS_admin_preencha_obrigatorios"]="必須欄にご記入ください";
+$language["JS_admin_preencha_minimo"]="このフィールドの最小値 #NOMECAMPO# それは次のとおりです。 ";
+$language["JS_admin_preencha_maximo"]="このフィールドの最大値 #NOMECAMPO# それは次のとおりです。 ";
+$language["JS_admin_preencha_auto"]="この値を修正したいです #VAL# ？";
+$language["ADMIN_EXPORT_OPTION_ERROR"]="エクスポートするレコードがありません";
+$language["ADMIN_EXPORT_OPTION_OK"]="ダウンロードを開始しています...";
+$language["ADMIN_REG_INSERTED"]="レコードを正常に含ま";
+$language["ADMIN_REG_UPDATED"]="成功したレコードを変更";
+$language["ADMIN_REG_DELETED"]="レコード %s 削除されました %s うまく";
+$language["ADMIN_NO_REG"]="アクションには登録しません";
+$language["FORM_TYPE_PASSWORD_SHOW"]="パスワードを見ます";
+$language["IMPORT_EXPORT_MESSAGES_STATUS"]="ステータス：";
+$language["IMPORT_EXPORT_MESSAGES_DETAIL"]="詳細：";
+$language["UPLOAD_BTN_DELETAR"]="削除します";
+$language["UPLOAD_BTN_CANCEL"]="キャンセル";
+$language["UPLOAD_BTN_PROCESS"]="読み込んでいます...";
+$language["UPLOAD_BTN_ANEXAR"]="アタッチ";
+$language["manage_param_sem_opcao"]="オプションなし";
+$language["manage_param_selecionar"]="選択します";
+$language["manage_param_ativo"]="アクティブ";
+$language["manage_param_inativo"]="非アクティブな";
+$language["manage_param_bloqueado"]="ブロックされました";
+$language["manage_param_azul"]="ブルー";
+$language["manage_param_cinza"]="グレー";
+$language["manage_param_laranja"]="オレンジ";
+$language["manage_param_verde"]="グリーン";
+$language["manage_param_vermelho"]="赤";
+$language["manage_param_ingles"]="英語";
+$language["manage_param_espanhol"]="スペイン語";
+$language["manage_param_portugues"]="ポルトガル語";
+$language["manage_param_abrir_relatorio"]="オープンレポート";
+$language["manage_param_abrir_layout"]="オープンレイアウト";
+$language["FILTER_DESC"]="フィルタリング";
+$language["FILTERS_VALUES"]="フィルタ処理アイテム";
+$language["LAYOUT_DATE"]="日付";
+$language["LAYOUT_UPDATE"]="更新";
+$language["LAYOUT_FLAG"]="フラグ";
+$language["LAYOUT_STATUS"]="ステータス";
+$language["CUBE_DESC"]="キューブの説明";
+$language["CUBE_FILTER"]="属性フィルター";
+$language["CUBE_FILTER_VALUE"]="フィルタと属性値";
+$language["CUBE_FLAG"]="旗キューブ";
+$language["CUBE_ID"]="キューブコード";
+$language["CUBE_STATUS"]="キューブの状況";
+$language["CUSTOMER_CODE"]="クライアントコード";
+$language["CUSTOMER_DESC"]="クライアントの説明";
+$language["CUSTOMER_EXPIRY"]="パスワードの有効期限";
+$language["CUSTOMER_FLAG"]="クライアントの旗";
+$language["CUSTOMER_GROUP"]="顧客グループ";
+$language["CUSTOMER_ID"]="お客様の内部コード";
+$language["CUSTOMER_STATUS"]="顧客ロケーション";
+$language["DATABASE_BALANCE"]="バランスのとれたベース";
+$language["DATABASE_COMMENT"]="ベースへのコメント";
+$language["DATABASE_DESC"]="基本説明";
+$language["DATABASE_FLAG"]="基本状況";
+$language["DATABASE_ID"]="ベースコード";
+$language["DATABASE_IMAGE"]="ベース画像";
+$language["DATABASE_LINK"]="外部アクセスリンク";
+$language["DATABASE_ORDER"]="順序表示";
+$language["DATABASE_POOL"]="共有ベース";
+$language["DATABASE_STATUS"]="基本状況";
+$language["DATE_ID"]="期間";
+$language["DOWNLOAD_ID"]="コー​​ドのダウンロード";
+$language["FILE_DATE"]="データアーカイブ";
+$language["FILE_DESC"]="ファイル説明";
+$language["FILE_FLAG"]="フラグファイル";
+$language["FILE_NAME"]="ファイル名";
+$language["FILE_SIZE"]="ファイルサイズ";
+$language["LANGUAGE_ID"]="舌";
+$language["MESSAGE"]="メッセージ";
+$language["MODULE"]="モジュール";
+$language["OPERATION"]="操作";
+$language["PERFIL_DESC"]="プロフィールの説明";
+$language["PERFIL_FLAG"]="フラグプロフィール";
+$language["PERFIL_ID"]="プロフィールコード";
+$language["PERFIL_LEVEL"]="プロファイルレベル";
+$language["PERFIL_STATUS"]="プロフィール場所";
+$language["PROCESS"]="プロセス";
+$language["REPORT_AUTOLOAD"]="自動ロード";
+$language["REPORT_DATE"]="報告日";
+$language["REPORT_DESC"]="報告書の記述";
+$language["REPORT_FILTER"]="レポートフィルタ";
+$language["REPORT_FLAG"]="レポート旗";
+$language["REPORT_FORMULAS"]="レポート式";
+$language["REPORT_ID"]="レポートコード";
+$language["REPORT_OPTIONS"]="レポートのオプション";
+$language["REPORT_SHARE"]="共有レポート";
+$language["REPORT_STATUS"]="レポートステータス";
+$language["REPORT_UPDATE"]="レポートの更新";
+$language["SERVER_COMMENT"]="サーバー・レビュー";
+$language["SERVER_DESC"]="サーバー説明";
+$language["SERVER_FLAG"]="サーバーの旗";
+$language["SERVER_ID"]="サーバコード";
+$language["SERVER_PWD"]="利用者パスワード";
+$language["SERVER_STATUS"]="サーバステータス";
+$language["SERVER_USER"]="接続ユーザー";
+$language["TRANSACTION_ID"]="トランザクションコード";
+$language["USER_CODE"]="利用者コード";
+$language["USER_DESC"]="ユーザー説明";
+$language["USER_EMAIL"]="ユーザーの電子メール";
+$language["USER_EXPIRY"]="パスワードの有効期限";
+$language["USER_FILTER"]="属性フィルター";
+$language["USER_FILTER_VALUE"]="フィルタと属性値";
+$language["USER_FLAG"]="ユーザフラグ";
+$language["USER_FORMAT"]="書式レイアウト";
+$language["USER_FVD"]="フラグ内部";
+$language["USER_ID"]="ユーザー内部コード";
+$language["USER_INTERNAL"]="内部コード";
+$language["USER_MASTER"]="ユーザマスタ";
+$language["USER_PWD"]="利用者パスワード";
+$language["USER_PWD_OLD"]="以前のパスワード";
+$language["USER_SALT"]="内部コード";
+$language["USER_STATUS"]="ユーザステータス";
+$language["USER_TYPE"]="ユーザータイプ";
+$language["CUBE_DESC_PLACEHOLDER"]="キューブの説明";
+$language["CUBE_FILTER_PLACEHOLDER"]="属性フィルター";
+$language["CUBE_FILTER_VALUE_PLACEHOLDER"]="フィルタと属性値";
+$language["CUBE_FLAG_PLACEHOLDER"]="旗キューブ";
+$language["CUBE_ID_PLACEHOLDER"]="キューブコード";
+$language["CUBE_STATUS_PLACEHOLDER"]="キューブの状況";
+$language["CUSTOMER_CODE_PLACEHOLDER"]="クライアントコード";
+$language["CUSTOMER_DESC_PLACEHOLDER"]="クライアントの説明";
+$language["CUSTOMER_EXPIRY_PLACEHOLDER"]="パスワードの有効期限";
+$language["CUSTOMER_FLAG_PLACEHOLDER"]="クライアントの旗";
+$language["CUSTOMER_GROUP_PLACEHOLDER"]="顧客グループ";
+$language["CUSTOMER_ID_PLACEHOLDER"]="お客様の内部コード";
+$language["CUSTOMER_STATUS_PLACEHOLDER"]="顧客ロケーション";
+$language["DATABASE_BALANCE_PLACEHOLDER"]="バランスのとれたベース";
+$language["DATABASE_COMMENT_PLACEHOLDER"]="ベースへのコメント";
+$language["DATABASE_DESC_PLACEHOLDER"]="基本説明";
+$language["DATABASE_FLAG_PLACEHOLDER"]="基本状況";
+$language["DATABASE_ID_PLACEHOLDER"]="ベースコード";
+$language["DATABASE_IMAGE_PLACEHOLDER"]="ベース画像";
+$language["DATABASE_LINK_PLACEHOLDER"]="外部アクセスリンク";
+$language["DATABASE_ORDER_PLACEHOLDER"]="順序表示";
+$language["DATABASE_POOL_PLACEHOLDER"]="共有ベース";
+$language["DATABASE_STATUS_PLACEHOLDER"]="基本状況";
+$language["DATE_ID_PLACEHOLDER"]="期間";
+$language["DOWNLOAD_ID_PLACEHOLDER"]="コー​​ドのダウンロード";
+$language["FILE_DATE_PLACEHOLDER"]="データアーカイブ";
+$language["FILE_DESC_PLACEHOLDER"]="ファイル説明";
+$language["FILE_FLAG_PLACEHOLDER"]="フラグファイル";
+$language["FILE_NAME_PLACEHOLDER"]="ファイル名";
+$language["FILE_SIZE_PLACEHOLDER"]="ファイルサイズ";
+$language["LANGUAGE_ID_PLACEHOLDER"]="舌";
+$language["MESSAGE_PLACEHOLDER"]="メッセージ";
+$language["MODULE_PLACEHOLDER"]="モジュール";
+$language["OPERATION_PLACEHOLDER"]="操作";
+$language["PERFIL_DESC_PLACEHOLDER"]="プロフィールの説明";
+$language["PERFIL_FLAG_PLACEHOLDER"]="フラグプロフィール";
+$language["PERFIL_ID_PLACEHOLDER"]="プロフィールコード";
+$language["PERFIL_LEVEL_PLACEHOLDER"]="プロファイルレベル";
+$language["PERFIL_STATUS_PLACEHOLDER"]="プロフィール場所";
+$language["PROCESS_PLACEHOLDER"]="プロセス";
+$language["REPORT_AUTOLOAD_PLACEHOLDER"]="自動ロード";
+$language["REPORT_DATE_PLACEHOLDER"]="報告日";
+$language["REPORT_DESC_PLACEHOLDER"]="報告書の記述";
+$language["REPORT_FILTER_PLACEHOLDER"]="レポートフィルタ";
+$language["REPORT_FLAG_PLACEHOLDER"]="レポート旗";
+$language["REPORT_FORMULAS_PLACEHOLDER"]="レポート式";
+$language["REPORT_ID_PLACEHOLDER"]="レポートコード";
+$language["REPORT_OPTIONS_PLACEHOLDER"]="レポートのオプション";
+$language["REPORT_SHARE_PLACEHOLDER"]="共有レポート";
+$language["REPORT_STATUS_PLACEHOLDER"]="レポートステータス";
+$language["REPORT_UPDATE_PLACEHOLDER"]="レポートの更新";
+$language["SERVER_COMMENT_PLACEHOLDER"]="サーバー・レビュー";
+$language["SERVER_DESC_PLACEHOLDER"]="サーバー説明";
+$language["SERVER_FLAG_PLACEHOLDER"]="サーバーの旗";
+$language["SERVER_ID_PLACEHOLDER"]="サーバコード";
+$language["SERVER_PWD_PLACEHOLDER"]="利用者パスワード";
+$language["SERVER_STATUS_PLACEHOLDER"]="サーバステータス";
+$language["SERVER_USER_PLACEHOLDER"]="接続ユーザー";
+$language["TRANSACTION_ID_PLACEHOLDER"]="トランザクションコード";
+$language["USER_CODE_PLACEHOLDER"]="利用者コード";
+$language["USER_DESC_PLACEHOLDER"]="ユーザー説明";
+$language["USER_EMAIL_PLACEHOLDER"]="ユーザーの電子メール";
+$language["USER_EXPIRY_PLACEHOLDER"]="パスワードの有効期限";
+$language["USER_FILTER_PLACEHOLDER"]="属性フィルター";
+$language["USER_FILTER_VALUE_PLACEHOLDER"]="フィルタと属性値";
+$language["USER_FLAG_PLACEHOLDER"]="ユーザフラグ";
+$language["USER_FORMAT_PLACEHOLDER"]="書式レイアウト";
+$language["USER_FVD_PLACEHOLDER"]="フラグ内部";
+$language["USER_ID_PLACEHOLDER"]="ユーザー内部コード";
+$language["USER_INTERNAL_PLACEHOLDER"]="内部コード";
+$language["USER_MASTER_PLACEHOLDER"]="ユーザマスタ";
+$language["USER_PWD_PLACEHOLDER"]="利用者パスワード";
+$language["USER_PWD_OLD_PLACEHOLDER"]="以前のパスワード";
+$language["USER_SALT_PLACEHOLDER"]="内部コード";
+$language["USER_STATUS_PLACEHOLDER"]="ユーザステータス";
+$language["USER_TYPE_PLACEHOLDER"]="ユーザータイプ";
 
-$language["DIAS"]=array('日曜日',
-'月曜日',
-'火曜日',
-'水曜日',
-'木曜日',
-'金曜日',
-'土曜日');
-
-$language["DE"]		=	' の ';
-
-
-$language["summernote"]='summernote-ja-JP.js';
-
-$language["siglaIdioma"]=' PT-BR';
-
-$language["theme_azul"]=' ブルー';
-
-$language["theme_cinza"]=' グレー';
-
-$language["theme_laranja"]=' オレンジ';
-
-$language["theme_verde"]=' グリーン';
-
-$language["theme_vermelho"]=' 赤';
-
-$language["DESCONECTED_TITLE"]=' ユーザー切断';
-
-$language["DESCONECTED_DESCRIPT"]=' いくつかの理由のためのシステムから切り離さユーザー：';
-
-$language["DESCONECTED_BUTTON"]=' 戻るログインへ';
-
-$language["DESCONECTED_REASONS"]=array("セッションでの非アクティブ、", 
-"パスワードの変更、",
-"接続せずにデータベース、",
-"その他。");
-
-$language["ScreenShotGenerate"]=' 印刷画面の画面を作成します';
-
-$language["ScreenShotMailBodyHtml"]=' <P> <強い>こんにちは</ strong>の</ p> <p>このクエリの抽出を参照してください "%s"ベース"%s「抽出はWRSツールから</ p> <p>このクエリでは、次のフィルタが適用されている:. </ P> <BR> %s フィルモグラフィー<P>敬具、ヨーロッパの<strong>%s</ STRONG> </ P> ';
-
-$language["ScreenShotMailWrong"]=' 電子メール（s）は不完全であり、<P> <B>を<BR>送信する前に確認してください%s</ B> </ P>フィルモグラフィーありがとうございます。';
-
-$language["ScreenShotMailTO"]=' <b> </ b>のパディングを必要とされるために';
-
-$language["ScreenShotMailSUBJECT"]=' <B>件名</ b>を必要とされるパディング';
-
-$language["ScreenShotMailMESSENGER"]=' あなたは電子メールの本文中の一部のコンテンツを入力する必要があります';
-
-$language["ScreenShotMailSend"]=' 送信メッセージ、お待ちください... <IMG SRC = "画像/ wrs_loading.gif "/>';
-
-$language["ScreenShotMailSendSuccess"]=' メールは正常に送信しました。';
-
-$language["ScreenShotMailSendError"]=' 原因に電子メールを送信できませんでした：<BR> <B>%s</ B>。';
-
-$language["USUARIO_SEM_PRIVILEGIOS"]=' 非特権ユーザ';
-
-$language["USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS"]=' グリッドを表示するための権限を持たないユーザーには、65,000以上のレコードが含まれています';
-
-$language["ERROR_NOT_ROWS"]=' クエリを実行している内部エラーが発生しました';
-
-$language["ERROR_DRILL_LINE_RESULT"]=' 内部エラー作成LINEドリルを処理し、エラーが続く場合は、サポートにお問い合わせください';
-
-$language["MSG_ERROR_TABLE_CACHE"]=' クエリを実行することができない、選択したレイアウトの属性を変更してください。';
-
-$language["VALOR"]=' 値';
-
-$language["TOOLTIP_BTN_RUN"]=' ランレポート';
-
-$language["TOOLTIP_BTN_CLEAN_FILTER"]=' 選択したすべてのフィルタをクリア';
-
-$language["TOOLTIP_BTN_CHANTE_FILTER_DROP"]=' ドラッグ＆ドロップする選択<BR>状態フィルタをフィルタリングするために、状態変化<BR>ドラッグ＆ドロップを行います';
-
-$language["TOOLTIP_BTN_NEGADO"]=' 選択されたフィルタを拒否、クエリはすべての少ない選択したフィルタを来ります。';
-
-$language["TOOLTIP_BTN_CLEAN_FILTER_LOCAL"]=' そのディメンションクリアフィルタのみ';
-
-$language["TOOLTIP_BTN_ERASER_FILTER_LOCAL"]=' 調査対象のフィルタで行われた研究を清掃してください';
-
-$language["TOOLTIP_BTN_CLEAR_ELEMENTS_BELLOW"]=' ダウンすべてのコンテナ要素を削除します';
-
-$language["kendoUI"]='kendo.messages.zh-CN.min.js';
-
-$language["ERROR_CANT_CREATE_JOB"]=' おっと..、ジョブを作成することができませんでした、クエリを再送信してくださいエラーが続く場合は、サポートにお問い合わせください';
-
-$language["CSV_ERROR_TABLE_EMPTY"]=' オプス、それはそのクエリの任意のレポートを生成し、または情報が不足していないテーブルが生成されるように実行します。';
-
-$language["CSV_NOT_GENERATE"]=' 銀行にCSV、内部エラーを生成することが可能ではありません';
-
-$language["CSV_GENERATE_ZIP"]=' 生成 %s CSVファイル';
-
-$language["LOGOUT"]=' 我々はシステムを残している瞬間を待って.. <BR>';
-
-$language["MENU_ADMIN_CUSTOMER"]=' 顧客';
-
-$language["MENU_ADMIN_USER"]=' ユーザー';
-
-$language["MENU_ADMIN_SERVER"]=' サーバー';
-
-$language["MENU_ADMIN_DATABASE"]=' データベース';
-
-$language["MENU_ADMIN_CUBE"]=' キューブ';
-
-$language["MENU_ADMIN_HIERARCHY"]=' 階層';
-
-$language["MENU_ADMIN_PERFIL"]=' プロフィール';
-
-$language["MENU_ADMIN_CUBE_USER"]=' 団体';
-
-$language["MENU_ADMIN_REPORT"]=' レポート';
-
-$language["MENU_ADMIN_DOWNLOAD"]=' ダウンロード';
-
-$language["MENU_ADMIN_LOG"]=' ログ';
-
-$language["MENU_ADMIN_SSAS_REPORT"]=' レポート';
-
-$language["MENU_ADMIN_SSAS_LAYOUTS"]=' レイアウト';
-
-$language["file_error_import"]=' ファイルをインポートされません';
-
-$language["file_not_validated"]=' ファイルを検証しません';
-
-$language["file_not_unziped"]=' ない解凍したファイル';
-
-$language["MAIL_TITLE"]=' 電子メールを送信します';
-
-$language["MAIL_TO"]=' へ';
-
-$language["MAIL_SUBJECT"]=' テーマ';
-
-$language["MAIL_SEND"]=' メール';
-
-$language["ADMIN_AVISO_IMPORT"]=' #NOMECAMPO#、またはZIPファイルには、この<BR>含まれています - 標準レイアウト：ポルトガル<スパンクラス= "class_layout_padraoファイル名があることを確認してください - - CSVまたはZIP <BR>形式でのみインポートファイル"> #DEFAULT_LAYOUT＃</ span>の';
-
-$language["TITLE_OPTIONS"]=' オプション';
-
-$language["MENU_ALL_CATEGORY"]=' すべてのカテゴリー';
-
-$language["NO_RESULTS_QUERY"]=' クエリの一致なし： ';
-
-$language["NAME_REPORT_EMPTY"]=' レポートの名前を選択します。';
-
-$language["DATABASE_NOT_CONECTED"]=' データベースへの接続なし、抜いて、もう一度ログインしてみ';
-
-$language["DATABASE_NOT_FOUND"]=' おっと！データベースへの接続がありません';
-
-$language["ERRO_CUBO_INDISPONIVEL"]=' エラー：使用不可';
-
-$language["ERROR_TABLE_CACHE_NO_HEADER"]=' このクエリのデータはありません..';
-
-$language["ERROR_CUBO_NOT_FOUND"]=' 使用キューブを識別することができませんでした。エラーが解決しない場合は<BR>、サポートまでご連絡ください';
-
-$language["ERRO_EXECUTE_ABA"]=' エラー<B>クエリを実行します%s</ B>フィルモグラフィー';
-
-$language["ABA_IN_USER"]=' 使用中の相談';
-
-$language["ABA_LIMIT_SEE"]=' <B>クエリを削除することはできません%s</ B>フィルモグラフィー少なくとも一方が表示されたままにしなければなりません。';
-
-$language["ABA_CHANGE_CUBE_ID"]=' ABAは、別のキューブに属しているような情報が消去されます';
-
-$language["JOB_COMPLETE_LOAD"]=' クエリ<B>%s完成した</ B>';
-
-$language["JOB_COMPLETE"]=' これ以上の実行中のクエリはありません';
-
-$language["JOB_CANCEL"]=' クエリ<B>%s</ B>正常にキャンセルされました';
-
-$language["JOB_CANCEL_ERRO"]=' クエリをキャンセルエラー<B>%s</ B>もう一度やり直してください';
-
-$language["JOB_NOTFOUND"]=' なお、相談キャンセルすることが見出されたか、終了しています';
-
-$language["JOB_CLOSE_ALERT"]=' アラートウィンドウを閉じます';
-
-$language["SORT_SSAS_TABLE_ERROR"]=' ERROR :: 008できませんラッフルテーブル';
-
-$language["CONSULTA_ATIVA_CANCELAR"]=' このレポートのための継続的な相談があり、あなたが新しい予定を要求するためにキャンセルする必要があります。';
-
-$language["SELECT_NULL"]=' クエリは空返さ';
-
-$language["RUN_GRID_CHANGE_NOT"]=' 新しいクエリを生成するために修正しないん..';
-
-$language["NOT_CLOSE_WINDOW"]=' 以下に記載されているタブが保存されていない、次のとおりです。';
-
-$language["NOT_CLOSE_WINDOW_LOGOUT"]=' 以下に記載されているタブは、未保存であっても保存せずに終了したいですか？';
-
-$language["ABA_TITLE_EMPTY"]=' レポートに<B>タイトル</ b>]を入力する必要があります';
-
-$language["SEE_IN_MAP"]=' 地図で見ます';
-
-$language["REMOVE"]=' 取り外し';
-
-$language["DATA_BASE_ERROR"]=' <B>おっと...データベースでエラーが発生しました：</ b>の ';
-
-$language["TITLE_TEMA"]=' テーマ';
-
-$language["TITLE_LINGUA"]=' 舌';
-
-$language["TITLE_ALTER_SENHA"]=' パスワードを変更';
-
-$language["TITLE_ADMINISTRATIVO"]=' 行政の';
-
-$language["TITLE_ADMINISTRATIVO_MENU"]=' MAIN MENU';
-
-$language["TITLE_GRID_WINDOW_MENU_MANAGER"]=' ビュー';
-
-$language["TITLE_GRID_WINDOW_MENU_LIST"]=' グリッド';
-
-$language["TITLE_GRID_WINDOW_MENU_DETAILS"]=' 細部';
-
-$language["TITLE_GRID_WINDOW_MENU_BIG_ICON"]=' グレートアイコン';
-
-$language["TITLE_GRID_WINDOW_MENU_MEDIUM_ICON"]=' アイコンミディアム';
-
-$language["TITLE_GRID_WINDOW_MENU_SMALL_ICON"]=' スモールアイコン';
-
-$language["TITLE_GRID_WINDOW_MENU_LIST_INFO"]=' 基本的なリスト';
-
-$language["REPORT_RESULT_HISTORY"]=' 既往はありません';
-
-$language["MAIN_OPEN_REPORT"]=' オープンレポート';
-
-$language["MAIN_OPEN_LAYOUT"]=' オープンレイアウト';
-
-$language["TITLE_TOP_TOTAL"]=' TOTAL';
-
-$language["TITLE_TOP_5"]=' TOP 5';
-
-$language["TITLE_TOP_10"]=' TOP 10';
-
-$language["TITLE_TOP_15"]=' TOP 15';
-
-$language["TITLE_TOP_20"]=' TOP 20';
-
-$language["TITLE_TOP_25"]=' TOP 25';
-
-$language["TITLE_TOP_50"]=' TOP 50';
-
-$language["TITLE_TOP_100"]=' TOP 100';
-
-$language["ERROR_LOAD_ABA"]=' ERROR：ABA01 - タブを開くときにエラーが発生しました..';
-
-$language["ABA_BE_LOADED"]=' フラップ<B>%s</ B>すでにロードされています';
-
-$language["FILTER_NOT_ROWS"]=' 証拠は見つかりませんでした。';
-
-$language["FILTER_NOT_ROWS_TOOLTIP"]=' フィルタなしが選択されていません。';
-
-$language["FILTER_CLEAN_FIND"]=' クリア検索';
-
-$language["FILTER_CLEAN_FILTER"]=' あなたは既に選択したフィルタを削除しdesenjaか？';
-
-$language["FILTER_CLEAN_FILTER_SUCCESS"]=' 正常に実行されたフィルターを清掃。';
-
-$language["ERRO_FILE_PROCCESS"]=' 0001：おっとprocessso ERRORにエラーが発生しました';
-
-$language["BTN_CLOSE"]=' 近いです';
-
-$language["MSG_FORCE_LOGOFF"]=' あなたは、システムから切断されました';
-
-$language["DRAG_DROP_FILE_IN_USER"]=' <B>%s</ B>既に使用されています';
-
-$language["DRAG_DROP_FILE_IN_USER_REMOVE"]=' <B>%s</ B>既に使用されているので、選択から削除されました';
-
-$language["DRAG_DROP_FILE_NOT_PUT"]=' あなたは<b>]を入力することはできません%s</ B>このボックスに、それは別の他の構造に帰属するものと ';
-
-$language["DRAG_DROP_AREA"]=' この領域をドラッグして、<B>%s</ B>。';
-
-$language["DRAG_DROP_CLEAN_SELECTION"]=' あなたはすべての（）を削除してもよろしいです<B>%s</ B>？';
-
-$language["DRAG_DROP_CLEAN_SELECTION_INSIDE"]=' あなたはすべてのフィルタ選択をクリアにしてもよろしいですか？';
-
-$language["DRAG_DROP_MSG_ERROX_MAX_QTDE"]=' あなたはより多くを入力することはできません %s フィールドの属性 %s';
-
-$language["DRAG_DROP_CLEAN_SELECTION_SUCCESS"]=' （）<B>の除去%s</ B>（複数可）が正常に実行。';
-
-$language["DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE"]=' 選択は成功したフィルタを削除しました。';
-
-$language["RUN_RELATORIO_FALTA_INFORMACAO"]=' execurarのクエリは、情報が不足している：ポルトガル<b>]を%s</ B>';
-
-$language["DRAG_DROP_FIELD_ATRIBUTO"]=' 属性';
-
-$language["DRAG_DROP_FIELD_METRICA"]=' 1 Metrica';
-
-$language["GERANDO_RELATORIO"]=' enquandoクエリが作成される瞬間を待ちます';
-
-$language["GERANDO_RELATORIO_TITLE"]=' 生成クエリ';
-
-$language["GERANDO_MULTI_CUBE_BODY"]=' 交換ハブにちょっと待って';
-
-$language["GERANDO_MULTI_CUBE_TITLE"]=' キューブの交換';
-
-$language["ATTRIBUTOS_FILTRO"]=' フィルター';
-
-$language["ATTRIBUTOS_COLUNA"]=' コラム';
-
-$language["ATTRIBUTOS_LINHA"]=' ライン';
-
-$language["ATTRIBUTOS_METRICA"]=' メトリクス';
-
-$language["ATTRIBUTOS_MULTIPLE_CUBE"]=' キューブ';
-
-$language["ATTRIBUTOS_SIMPLES"]=' シンプル';
-
-$language["ATTRIBUTOS_COMPOSTO"]=' 化合物';
-
-$language["ATTRIBUTOS_TITLE"]=' 属性';
-
-$language["ACTIVE"]=' アクティブ（）';
-
-$language["ACTION"]=' アクション';
-
-$language["TYPE"]=' タイプ';
-
-$language["SUB_TYPE"]=' サブタイプ';
-
-$language["LEGEND_ENABLE"]=' 非活性化します';
-
-$language["POLAR"]=' 極性の';
-
-$language["RADAR"]=' レーダー';
-
-$language["NORMAL"]=' nornal';
-
-$language["STACKED"]=' 重畳';
-
-$language["WAVY"]=' 波形の';
-
-$language["PERCENT"]=' パーセンテージ';
-
-$language["LEGEND"]=' 字幕';
-
-$language["MULTIPLE_CURSOR"]=' 複数';
-
-$language["CHART_GAUGE_RANGE"]=' 範囲';
-
-$language["CHART_GAUGE_QUANTIDADE"]=' 行あたりの数量';
-
-$language["CHART_GAUGE_COLOR_TITLE"]=' ゲージ';
-
-$language["CHART_GAUGE_LINEAR"]=' リニア';
-
-$language["CHART_GAUGE_RADIAL"]=' ラジアル';
-
-$language["CHART_PIE"]=' nornal';
-
-$language["CHART_DONUT"]=' ノックアウト';
-
-$language["CHART_INSIDE_NOT_LEGEND"]=' 価値観';
-
-$language["CHART_RADAR_LINE"]=' ライン';
-
-$language["CHART_RADAR_COLUMN"]=' コラム';
-
-$language["CHART_RADAR_AREA"]=' エリア';
-
-$language["CHART_LEGEND_BOTTOM"]=' 以下';
-
-$language["CHART_LEGEND_TOP"]=' アップ';
-
-$language["CHART_LEGEND_LEFT"]=' 左';
-
-$language["CHART_LEGEND_RIGHT"]=' 右';
-
-$language["CHART_BUBBLE_X"]=' X軸';
-
-$language["CHART_BUBBLE_Y"]=' Y軸';
-
-$language["CHART_BUBBLE_TOTAL"]=' ボリューム';
-
-$language["GRID_HEADER_OPTION"]=' オプション';
-
-$language["GRID_HEADER_OPTION_TOTAL_LINE"]=' ライン';
-
-$language["GRID_HEADER_OPTION_TOTAL_COLUMN"]=' コラム';
-
-$language["GRID_HEADER_OPTION_TOTAL_SUMARIZA"]=' 数字要約';
-
-$language["GRID_HEADER_OPTION_TOTAL_LINE_COLOR"]=' 散在ライン';
-
-$language["GRID_HEADER_OPTION_ORDER_COLUMN"]=' 反転列';
-
-$language["GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA"]=' 集約レコード';
-
-$language["GRID_HEADER_EXPORT"]=' 輸出';
-
-$language["GRID_HEADER_EXPORT_PDF"]=' PDFファイル';
-
-$language["GRID_HEADER_EXPORT_CSV"]=' csvファイル';
-
-$language["GRID_HEADER_EXPORT_EXCEL"]=' エクセル';
-
-$language["GRID_HEADER_EXPORT_IMAGE"]=' 画像';
-
-$language["GRID_HEADER_EXPORT_IMAGE_SVG"]=' SVG画像';
-
-$language["CHART_CONFIG"]=' グラフィックを設定';
-
-$language["GRID_HEADER_SEE"]=' ビュー';
-
-$language["GRID_HEADER_SEE_GRID"]=' スプレッドシート';
-
-$language["GRID_HEADER_SEE_CHART"]=' グラフィック';
-
-$language["GRID_HEADER_MAIL_SEND"]=' メール';
-
-$language["GRID_HEADER_SEE_MAP"]=' 地図';
-
-$language["GRID_HEADER_TITLE_DADOS"]=' 日付';
-
-$language["GRID_HEADER_TITLE_TOTAL"]=' 合計';
-
-$language["GRID_HEADER_TITLE_EXIBITION"]=' ディスプレイ';
-
-$language["WHAT_SEARCH"]=' あなたは何を求めますか？';
-
-$language["TITLE_TOP"]=' トップオプション';
-
-$language["BTN_SAIR"]=' 残します';
-
-$language["BTN_SAIR_MENU"]=' メニューを閉じます';
-
-$language["BTN_SIM"]=' はい';
-
-$language["BTN_NAO"]=' しません';
-
-$language["BTN_CONFIRM"]=' 確認されました';
-
-$language["BTN_CANCEL_CONSULTA"]=' クエリをキャンセル ';
-
-$language["BTN_APLY"]=' 適用します';
-
-$language["BTN_REMOVE"]=' 削除します';
-
-$language["BTN_UPDATE"]=' 変更';
-
-$language["BTN_NEW"]=' 新しいです';
-
-$language["BTN_SAVE"]=' 保存';
-
-$language["BTN_APPLY"]=' 適用します';
-
-$language["OF"]=' の';
-
-$language["PAGE"]=' ページ';
-
-$language["tpl_layout_remove_empty"]=' あなたは、削除するために、レポートを選択する必要があります';
-
-$language["tpl_layout_remove_sucess"]=' レイアウトが正常に削除されました';
-
-$language["tpl_layout_remove_error"]=' いくつかのレイアウトを削除できませんでした';
-
-$language["tpl_layout_options_default"]=' 標準';
-
-$language["tpl_layout"]=' レイアウト';
-
-$language["tpl_layout_title"]=' レイアウトの保存';
-
-$language["tpl_layout_name"]=' レイアウト名';
-
-$language["tpl_layout_alias"]=' 別名レイアウト';
-
-$language["tpl_layout_name_empty"]=' あなたは<b>の名前レイアウト</ b>]を入力する必要があります';
-
-$language["tpl_layout_alias_empty"]=' あなたは<b>のエイリアスレイアウト</ b>]を入力する必要があります';
-
-$language["tpl_layout_data_empty"]=' あなたはレイアウトを保存するためのオプションのいずれかを完了する必要があります<b>のメトリック、行または列</ b>を';
-
-$language["tpl_layout_option_select_empty"]=' あなたはレイアウトのいずれかのオプションを選択する必要があります';
-
-$language["tpl_layout_share"]=' シェア';
-
-$language["tpl_layout_error"]=' OPS ...保存中にエラーが発生しましたレイアウト、再度お試しください';
-
-$language["tpl_layout_sucess"]=' レイアウトが正常に保存され';
-
-$language["ALERT_TITLE_ERRO"]=' エラーが発生しました。';
-
-$language["ALERT_TITLE_SUCCESS"]=' 確認されました。';
-
-$language["ALERT_TITLE_WARNING"]=' 警告！';
-
-$language["ALERT_TITLE_INFO"]=' ご参考までに';
-
-$language["ERROR_MULTIPLE_CUBE_JSON"]=' 誤差はご連絡先を解決しない場合は、複数のキューブを作成するプロセスでエラーが発生しました。';
-
-$language["ERROR_NOT_EVENT"]=' 誤差はご連絡先を解決しない場合は、要求されたイベントが見つかりませんでした';
-
-$language["ERROR_TITLE"]=' エラー警告が発生しました..';
-
-$language["ERROR_EVENT_NOT_FOUND"]=' なお、このイベント要求に指定されていません';
-
-$language["WARNING_TITLE_RESULT_NOT_FOUND"]=' 相談';
-
-$language["WARNING_BODY_RESULT_NOT_FOUND"]=' クエリには結果が返されませんでした..';
-
-$language["TITLE_CONTEX_MENU"]=' に追加';
-
-$language["FILTER_CONTEX_MENU_SELECTION_REMOVE"]=' 選択範囲を削除します%s ITE S％';
-
-$language["FILTER_CONTEX_MENU_SELECTION_VIEW"]=' ITE％選択されたナノ秒を見ます%s';
-
-$language["FILTER_CONTEX_MENU_SELECTION_ITEM_EXISTS"]=' ザ%s 以下ITE％のnsのは私ではない付加％ラムFO％存在していました%s：';
-
-$language["TITLE_MENU_DASHBOARD"]=" （ 'さまざまなレポートとの統合ビジョンは象限独立に拠点をセグメント化'）";
-
-$language["tpl_association_save_sucess"]=' 正常に協会に保存';
-
-$language["tpl_association_save_error"]=' 協会でのエラー';
-
-$language["tpl_association_remove_sucess"]=' 協会%s ITE％sが正常に削除します';
-
-$language["tpl_association_remove_error"]=' 関連付けを削除中にエラーが発生しました';
-
-$language["tpl_association_title"]=' による個々の協会 ';
-
-$language["tpl_association_title_cube"]=' キューブ';
-
-$language["tpl_association_title_user"]=' ユーザー';
-
-$language["HTML_CUBE_EDITION"]=' エディション：';
-
-$language["HTML_CUBE_UPDATE"]=' 更新日：';
-
-$language["LABEL_NOVO"]=' 新しいです';
-
-$language["LABEL_LOAD"]=' 読み込んでいます...';
-
-$language["PAGINATION_PAGE"]=' 要素';
-
-$language["PAGINATION_PAGE_INSIDE"]=' へ';
-
-$language["TITLE_ATT_WRS_CUSTOMER"]=' 顧客管理';
-
-$language["TITLE_ATT_WRS_SERVER"]=' サーバーの管理';
-
-$language["TITLE_ATT_WRS_USER"]=' ユーザー管理';
-
-$language["TITLE_ATT_WRS_DATABASE"]=' データベース管理';
-
-$language["TITLE_ATT_WRS_CUBE"]=' キューブの管理';
-
-$language["TITLE_ATT_WRS_HIERARCHY"]=' 階層管理';
-
-$language["TITLE_ATT_WRS_PROFILE"]=' プロファイル管理';
-
-$language["TITLE_REL_WRS_CUBE_USER"]=' 団体の管理';
-
-$language["TITLE_ATT_WRS_REPORT"]=' レポートの管理';
-
-$language["TITLE_ATT_WRS_DOWNLOAD"]=' ファイル管理';
-
-$language["TITLE_ATT_WRS_PERFIL"]=' プロファイル管理';
-
-$language["TITLE_ATT_WRS_LOG"]=' ログ管理';
-
-$language["LINE_TOTAL"]=' TOTAL';
-
-$language["label_total"]=' 合計';
-
-$language["LINE_TOTAL_BUBBLE"]=' あなたは、グラフに合計行を使用したいですか？';
-
-$language["msg_maxNumberOfFiles"]=' ファイルの最大数を超えました';
-
-$language["msg_acceptFileTypes"]=' 許可されていないファイルの拡張子';
-
-$language["msg_maxFileSize"]=' 特大のファイル';
-
-$language["msg_minFileSize"]=' 最小ファイルサイズは達していません';
-
-$language["msg_nao_existe_file_in_zip"]=' このZIP内のファイルが許可されていません。 ';
-
-$language["msg_nome_obrigatorio_necessario"]=' このアップロードのために特定の名前を使用することが必須です。 ';
-
-$language["upload_form_selecionar"]=' 選択します';
-
-$language["upload_form_enviar"]=' 送信';
-
-$language["upload_form_cancelar"]=' キャンセル';
-
-$language["upload_form_apagar"]=' 削除します';
-
-$language["upload_form_processando"]=' 読み込んでいます...';
-
-$language["upload_form_erro"]=' 送信エラー';
-
-$language["upload_files_select"]=' インポートするファイルを選択します。';
-
-$language["upload_files_success_sing"]=' 正常にインポート記録';
-
-$language["upload_files_success_plur"]=' 正常にインポートされたレコード';
-
-$language["upload_files_error_sing"]=' 登録インポートエラー';
-
-$language["upload_files_error_plur"]=' レコードのインポートエラー';
-
-$language["upload_files_success_file"]=' 正常にインポートされたファイル';
-
-$language["MODAL_GENERICA_SALVAR"]=' 保存';
-
-$language["MODAL_GENERICA_ATUALIZAR"]=' 更新';
-
-$language["MODAL_GENERICA_APAGAR"]=' 削除します';
-
-$language["MODAL_GENERICA_CANCELAR"]=' 近いです';
-
-$language["MODAL_GENERICA_VOLTAR"]=' リターン';
-
-$language["MODAL_CONFIRM_BT_CONFIRM"]=' 削除します';
-
-$language["MODAL_CONFIRM_BT_CANCEL"]=' キャンセル';
-
-$language["obrigatorio"]=' 必須の';
-
-$language["bt_back"]=' リターン';
-
-$language["bt_new"]=' 新しいです';
-
-$language["bt_update"]=' 保存';
-
-$language["bt_remove"]=' 削除します';
-
-$language["bt_export"]=' 輸出';
-
-$language["bt_import"]=' インポート';
-
-$language["bt_export_user"]=' 輸出';
-
-$language["bt_import_user"]=' インポート';
-
-$language["bt_export_customer"]=' 輸出';
-
-$language["bt_import_customer"]=' インポート';
-
-$language["bt_export_server"]=' 輸出';
-
-$language["bt_import_server"]=' インポート';
-
-$language["bt_export_database"]=' 輸出';
-
-$language["bt_import_database"]=' インポート';
-
-$language["bt_export_cube"]=' 輸出';
-
-$language["bt_import_cube"]=' インポート';
-
-$language["bt_export_profile"]=' 輸出';
-
-$language["bt_import_profile"]=' インポート';
-
-$language["bt_export_cube_user"]=' 輸出';
-
-$language["bt_import_cube_user"]=' インポート';
-
-$language["bt_export_download"]=' 輸出';
-
-$language["bt_import_download"]=' インポート';
-
-$language["bt_export_log"]=' 輸出';
-
-$language["bt_import_log"]=' インポート';
-
-$language["LOGIN_USER"]=' ユーザー';
-
-$language["LOGIN_REMOVE_HISTORY_SUCCESS"]=' 正常に削除歴史';
-
-$language["LOGIN_REMOVE"]=' 削除します';
-
-$language["LOGIN_PASSWORD_RECOVER"]=' パスワードを回復します';
-
-$language["LOGIN_BUTTON"]=' ログイン';
-
-$language["LOGIN_HISTORY"]=' ユーザー履歴';
-
-$language["LOGIN_SUBJECT"]=' パスワードの復元';
-
-$language["LOGIN_RECOVER_NOT_FOUND"]=' おっと... <B>ユーザーが見つかりません%s</ B>パスワード回復を送信します。';
-
-$language["LOGIN_NOT_EMAIL"]=' おっと..電子メールがユーザー<B>に送信されることが見出されていません%s</ B>。<BR>パスワード回復のためのサポートにご連絡ください。フィルモグラフィーをありがとう。';
-
-$language["LOGIN_RECOVER_NEW"]=' <H4>パスワードの変更</ H4>は、システムにアクセスするための新しいパスワードを入力します。';
-
-$language["LOGIN_OTHER_PERFIL"]=' 別のプロフィール';
-
-$language["LOGIN_ARMAZENA"]=' ユーザーデータを保存しますか？';
-
-$language["LOGIN_PASSWORD"]=' パスワード';
-
-$language["LOGIN_USER_SYSTEM"]=' ユーザー';
-
-$language["LOGIN_TITLE"]=' WRSシステム';
-
-$language["LOGIN_ADD_NEW_RECOVER"]=' システムにアクセスするために新しいパスワードを入力してください';
-
-$language["LOGIN_RECOVER_SUCCESS"]=' ユーザーの電子メールに送信されたパスワードを回復';
-
-$language["LOGIN_RECOVER_ERROR"]=' おっと..メールを送信できませんでした。パスワードを回復することができるようにサポートに連絡してください。ありがとう';
-
-$language["HTML_LOGIN_RECOVER_BTN"]=' パスワードの変更';
-
-$language["HTML_LOGIN_RECOVER_TITLE"]=' パスワードの復元';
-
-$language["HTML_LOGIN_RECOVER"]=' WRSシステムにアクセスするためのパスワード回復要求あなたはこのメールを無視してください要求していない場合。パスワードの変更にリダイレクトするには、以下のボタンをクリックしてください<BR​​>。<BR>あなたが変更を行うには、ブラウザのクリックlinqueコピー＆ペーストの操作をしないと。';
-
-$language["LOGIN_NEW_PASSWORD"]=' 新しいパスワード';
-
-$language["LOGIN_NEW_PASSWORD_CONFIRM"]=' 新しいパスワードの確認';
-
-$language["LOGIN_CHECK"]=' パスワードを確認しています...';
-
-$language["LOGIN_CHECK_NEW"]=' 新しいパスワードを保存しています...';
-
-$language["LOGIN_PASSWORD_EMPTY"]=' あなたは<b>]を記入しなければなりません%s</ B> ';
-
-$language["LOGIN_PASSWORD_EMPTY_NEW"]=' これは、新しいパスワードに渡されていません。';
-
-$language["LOGIN_TAG_EMPTY"]=' パスワードをリセットするためのコードは空白です';
-
-$language["LOGIN_NEW_PASSWORD_CONFIRM_ERROR"]=' 新しいパスワードの確認が一致しません。';
-
-$language["LOGIN_CHANGE_SQL_ERRO"]=' おっと..エラークエリのログインを実行して、再度お試しください。';
-
-$language["LOGIN_RECOVER_SUCCESS_TIME"]=' パスワードが正常に生成されました。システムへのアクセスをリダイレクト。';
-
-$language["LOGIN_CHANGE_SQL_ERRO_RECOVER"]=' おっと..エラーパスワード回復のためのクエリのログインを実行しています。';
-
-$language["LOGIN_CHANGE_OK"]=' パスワードが正常に新しいパスワードでログイン今すぐ変更します';
-
-$language["REMOVE_LOGIN_COOKIE"]=' あなたは、ユーザのアクセス履歴を削除してもよろしいですか？';
-
-$language["LOGIN_HTML_TITLE"]=' WRS - Webレポートシステム';
-
-$language["ADMIN_IMPORT_caracter_delimitador"]=' 区切り文字： ';
-
-$language["ADMIN_IMPORT_tipo_importacao"]=' インポートタイプ： ';
-
-$language["ADMIN_IMPORT_virgula"]=' コンマ';
-
-$language["ADMIN_IMPORT_ponto_virgula"]=' セミコロン';
-
-$language["ADMIN_IMPORT_tabulacao"]=' タブ';
-
-$language["ADMIN_IMPORT_remover"]=' 以前のレコードを削除します';
-
-$language["ADMIN_IMPORT_atualizar"]=' 更新して新しい追加';
-
-$language["ADMIN_IMPORT_compactar_resultados"]=' 結果を圧縮します： ';
-
-$language["PASSWORD_EXPIRED"]=' 期限切れのパスワード、新しいパスワードを作成する必要があります。フィルモグラフィーは、新しいパスワードを使用してフォームを完成させます。';
-
-$language["LOGIN_OK"]=' メイン画面にリダイレクト';
-
-$language["LOGIN_PASSWORD_ERROR"]=' ユーザーまたはパスワードが無効です';
-
-$language["LOGIN_SEND_CHANGE"]=' パスワード回復を処理..';
-
-$language["JS_menu_report_include"]=' レポートのインクルージョン';
-
-$language["JS_menu_report_name"]=' レポートの名前を選択します。';
-
-$language["js_admin_no_user"]=' あなたは、あなた自身のサーバーを持たずにパスワードを変更することはできません';
-
-$language["JS_admin_choice_column"]=' どの列あなたが編集したいですか？';
-
-$language["JS_admin_choice_column_user"]=' ユーザー';
-
-$language["JS_admin_choice_column_cube"]=' キューブ';
-
-$language["js_admin_pass_sintax_a"]=' あなたは本当にのための新しいパスワードを設定しますか ';
-
-$language["js_admin_pass_sintax_b"]=' あなたは本当に、パスワードの有効期限が切れますか ';
-
-$language["js_admin_pass_sintax_c"]=' ユーザー%s';
-
-$language["js_admin_pass_sintax_d"]=' すべて';
-
-$language["js_admin_pass_sintax_e"]=' あなた自身の';
-
-$language["js_admin_pass_self"]=' あなたは、あなたの新しいパスワードを設定する必要があります';
-
-$language["js_admin_pass_same"]=' パスワードおよびパスワードの確認が同じです。';
-
-$language["js_admin_pass_blank"]=' パスワードと確認パスワードが空白にすることはできません。';
-
-$language["js_admin_pass_min"]=' パスワードと確認パスワードは3文字未満にすることはできません。';
-
-$language["js_admin_pass_equals"]=' 新しいパスワードとパスワードの確認は、現在のパスワードとは異なっている必要があります。';
-
-$language["js_admin_observation"]=' パスワードの有効期限';
-
-$language["js_admin_new_pass_placeholder"]=' 3文字以上';
-
-$language["js_admin_old_pass_placeholder"]=' 現在のパスワードを入力します。';
-
-$language["js_admin_new_pass"]=' 新しいパスワード： ';
-
-$language["js_admin_confirm_pass"]=' パスワードの確認： ';
-
-$language["js_admin_old_pass"]=' 現在のパスワード： ';
-
-$language["js_admin_confirm_question"]=' ？';
-
-$language["php_admin_msg_exp_success"]=' 期限切れの%s うまく';
-
-$language["php_admin_msg_red_success"]=' へのパスワードのリセット ';
-
-$language["php_admin_msg_red_success2"]=' 正常に実行';
-
-$language["php_admin_msg_exp_erro"]=' パスワードの有効期限中にエラーが発生しました';
-
-$language["php_admin_msg_red_erro"]=' 新しいパスワードを設定中にエラーが発生しました';
-
-$language["JS_admin_confirm_export"]=' どのレコードをエクスポートしたいですか？';
-
-$language["JS_admin_all_records"]=' すべてのレコード';
-
-$language["JS_admin_selecteds"]=' のみ%s 選択%s';
-
-$language["JS_admin_select_one"]=' 少なくとも1つのレコードを選択します';
-
-$language["JS_admin_select_just_one"]=' 変更するだけで1つのレコードを選択';
-
-$language["JS_admin_select_one_file"]=' インポートする前に、ファイルを選択します';
-
-$language["JS_admin_confirm_remove"]=' あなたが本当にこれを削除しますか%s レコード%s？';
-
-$language["JS_admin_removed"]=' レコード%s 削除%s うまく';
-
-$language["JS_report_confirm_remove"]=' あなたはこれを削除しますか%s レポート%s？';
-
-$language["JS_report_select_one"]=' 少なくとも一つのレポートを選択';
-
-$language["JS_report_removed"]=' レポート%s 削除%s うまく';
-
-$language["JS_admin_preencha_obrigatorios"]=' 必須欄にご記入ください';
-
-$language["JS_admin_preencha_minimo"]=' このフィールドのフィールド名のの##の最小値は次のとおりです。 ';
-
-$language["JS_admin_preencha_maximo"]=' このフィールドのフィールド名のは##の最大値は次のとおりです。 ';
-
-$language["JS_admin_preencha_auto"]=' ＃VAL＃この値を修正したいですか？';
-
-$language["ADMIN_EXPORT_OPTION_ERROR"]=' エクスポートするレコードがありません';
-
-$language["ADMIN_EXPORT_OPTION_OK"]=' ダウンロードを開始しています...';
-
-$language["ADMIN_REG_INSERTED"]=' レコードを正常に含ま';
-
-$language["ADMIN_REG_UPDATED"]=' 成功したレコードを変更';
-
-$language["ADMIN_REG_DELETED"]=' レコード%s 削除されました%s うまく';
-
-$language["ADMIN_NO_REG"]=' アクションには登録しません';
-
-$language["FORM_TYPE_PASSWORD_SHOW"]=' パスワードを見ます';
-
-$language["IMPORT_EXPORT_MESSAGES_STATUS"]=' ステータス：';
-
-$language["IMPORT_EXPORT_MESSAGES_DETAIL"]=' 詳細：';
-
-$language["UPLOAD_BTN_DELETAR"]=' 削除します';
-
-$language["UPLOAD_BTN_CANCEL"]=' キャンセル';
-
-$language["UPLOAD_BTN_PROCESS"]=' 読み込んでいます...';
-
-$language["UPLOAD_BTN_ANEXAR"]=' アタッチ';
-
-$language["manage_param_sem_opcao"]=' オプションなし';
-
-$language["manage_param_selecionar"]=' 選択します';
-
-$language["manage_param_ativo"]=' アクティブ';
-
-$language["manage_param_inativo"]=' 非アクティブな';
-
-$language["manage_param_bloqueado"]=' ブロックされました';
-
-$language["manage_param_azul"]=' ブルー';
-
-$language["manage_param_cinza"]=' グレー';
-
-$language["manage_param_laranja"]=' オレンジ';
-
-$language["manage_param_verde"]=' グリーン';
-
-$language["manage_param_vermelho"]=' 赤';
-
-$language["manage_param_ingles"]=' 英語';
-
-$language["manage_param_espanhol"]=' スペイン語';
-
-$language["manage_param_portugues"]=' ポルトガル語';
-
-$language["manage_param_abrir_relatorio"]=' オープンレポート';
-
-$language["manage_param_abrir_layout"]=' オープンレイアウト';
-
-$language["FILTER_DESC"]=' フィルタリング';
-
-$language["FILTERS_VALUES"]=' フィルタ処理アイテム';
-
-$language["LAYOUT_DATE"]=' 日付';
-
-$language["LAYOUT_UPDATE"]=' 更新';
-
-$language["LAYOUT_FLAG"]=' フラグ';
-
-$language["LAYOUT_STATUS"]=' ステータス';
-
-$language["CUBE_DESC"]=' キューブの説明';
-
-$language["CUBE_FILTER"]=' 属性フィルター';
-
-$language["CUBE_FILTER_VALUE"]=' フィルタと属性値';
-
-$language["CUBE_FLAG"]=' 旗キューブ';
-
-$language["CUBE_ID"]=' キューブコード';
-
-$language["CUBE_STATUS"]=' キューブの状況';
-
-$language["CUSTOMER_CODE"]=' クライアントコード';
-
-$language["CUSTOMER_DESC"]=' クライアントの説明';
-
-$language["CUSTOMER_EXPIRY"]=' パスワードの有効期限';
-
-$language["CUSTOMER_FLAG"]=' クライアントの旗';
-
-$language["CUSTOMER_GROUP"]=' 顧客グループ';
-
-$language["CUSTOMER_ID"]=' お客様の内部コード';
-
-$language["CUSTOMER_STATUS"]=' 顧客ロケーション';
-
-$language["DATABASE_BALANCE"]=' バランスのとれたベース';
-
-$language["DATABASE_COMMENT"]=' ベースへのコメント';
-
-$language["DATABASE_DESC"]=' 基本説明';
-
-$language["DATABASE_FLAG"]=' 基本状況';
-
-$language["DATABASE_ID"]=' ベースコード';
-
-$language["DATABASE_IMAGE"]=' ベース画像';
-
-$language["DATABASE_LINK"]=' 外部アクセスリンク';
-
-$language["DATABASE_ORDER"]=' 順序表示';
-
-$language["DATABASE_POOL"]=' 共有ベース';
-
-$language["DATABASE_STATUS"]=' 基本状況';
-
-$language["DATE_ID"]=' 期間';
-
-$language["DOWNLOAD_ID"]=' コー​​ドのダウンロード';
-
-$language["FILE_DATE"]=' データアーカイブ';
-
-$language["FILE_DESC"]=' ファイル説明';
-
-$language["FILE_FLAG"]=' フラグファイル';
-
-$language["FILE_NAME"]=' ファイル名';
-
-$language["FILE_SIZE"]=' ファイルサイズ';
-
-$language["LANGUAGE_ID"]=' 舌';
-
-$language["MESSAGE"]=' メッセージ';
-
-$language["MODULE"]=' モジュール';
-
-$language["OPERATION"]=' 操作';
-
-$language["PERFIL_DESC"]=' プロフィールの説明';
-
-$language["PERFIL_FLAG"]=' フラグプロフィール';
-
-$language["PERFIL_ID"]=' プロフィールコード';
-
-$language["PERFIL_LEVEL"]=' プロファイルレベル';
-
-$language["PERFIL_STATUS"]=' プロフィール場所';
-
-$language["PROCESS"]=' プロセス';
-
-$language["REPORT_AUTOLOAD"]=' 自動ロード';
-
-$language["REPORT_DATE"]=' 報告日';
-
-$language["REPORT_DESC"]=' 報告書の記述';
-
-$language["REPORT_FILTER"]=' レポートフィルタ';
-
-$language["REPORT_FLAG"]=' レポート旗';
-
-$language["REPORT_FORMULAS"]=' レポート式';
-
-$language["REPORT_ID"]=' レポートコード';
-
-$language["REPORT_OPTIONS"]=' レポートのオプション';
-
-$language["REPORT_SHARE"]=' 共有レポート';
-
-$language["REPORT_STATUS"]=' レポートステータス';
-
-$language["REPORT_UPDATE"]=' レポートの更新';
-
-$language["SERVER_COMMENT"]=' サーバー・レビュー';
-
-$language["SERVER_DESC"]=' サーバー説明';
-
-$language["SERVER_FLAG"]=' サーバーの旗';
-
-$language["SERVER_ID"]=' サーバコード';
-
-$language["SERVER_PWD"]=' 利用者パスワード';
-
-$language["SERVER_STATUS"]=' サーバステータス';
-
-$language["SERVER_USER"]=' 接続ユーザー';
-
-$language["TRANSACTION_ID"]=' トランザクションコード';
-
-$language["USER_CODE"]=' 利用者コード';
-
-$language["USER_DESC"]=' ユーザー説明';
-
-$language["USER_EMAIL"]=' ユーザーの電子メール';
-
-$language["USER_EXPIRY"]=' パスワードの有効期限';
-
-$language["USER_FILTER"]=' 属性フィルター';
-
-$language["USER_FILTER_VALUE"]=' フィルタと属性値';
-
-$language["USER_FLAG"]=' ユーザフラグ';
-
-$language["USER_FORMAT"]=' 書式レイアウト';
-
-$language["USER_FVD"]=' フラグ内部';
-
-$language["USER_ID"]=' ユーザー内部コード';
-
-$language["USER_INTERNAL"]=' 内部コード';
-
-$language["USER_MASTER"]=' ユーザマスタ';
-
-$language["USER_PWD"]=' 利用者パスワード';
-
-$language["USER_PWD_OLD"]=' 以前のパスワード';
-
-$language["USER_SALT"]=' 内部コード';
-
-$language["USER_STATUS"]=' ユーザステータス';
-
-$language["USER_TYPE"]=' ユーザータイプ';
-
-$language["CUBE_DESC_PLACEHOLDER"]=' キューブの説明';
-
-$language["CUBE_FILTER_PLACEHOLDER"]=' 属性フィルター';
-
-$language["CUBE_FILTER_VALUE_PLACEHOLDER"]=' フィルタと属性値';
-
-$language["CUBE_FLAG_PLACEHOLDER"]=' 旗キューブ';
-
-$language["CUBE_ID_PLACEHOLDER"]=' キューブコード';
-
-$language["CUBE_STATUS_PLACEHOLDER"]=' キューブの状況';
-
-$language["CUSTOMER_CODE_PLACEHOLDER"]=' クライアントコード';
-
-$language["CUSTOMER_DESC_PLACEHOLDER"]=' クライアントの説明';
-
-$language["CUSTOMER_EXPIRY_PLACEHOLDER"]=' パスワードの有効期限';
-
-$language["CUSTOMER_FLAG_PLACEHOLDER"]=' クライアントの旗';
-
-$language["CUSTOMER_GROUP_PLACEHOLDER"]=' 顧客グループ';
-
-$language["CUSTOMER_ID_PLACEHOLDER"]=' お客様の内部コード';
-
-$language["CUSTOMER_STATUS_PLACEHOLDER"]=' 顧客ロケーション';
-
-$language["DATABASE_BALANCE_PLACEHOLDER"]=' バランスのとれたベース';
-
-$language["DATABASE_COMMENT_PLACEHOLDER"]=' ベースへのコメント';
-
-$language["DATABASE_DESC_PLACEHOLDER"]=' 基本説明';
-
-$language["DATABASE_FLAG_PLACEHOLDER"]=' 基本状況';
-
-$language["DATABASE_ID_PLACEHOLDER"]=' ベースコード';
-
-$language["DATABASE_IMAGE_PLACEHOLDER"]=' ベース画像';
-
-$language["DATABASE_LINK_PLACEHOLDER"]=' 外部アクセスリンク';
-
-$language["DATABASE_ORDER_PLACEHOLDER"]=' 順序表示';
-
-$language["DATABASE_POOL_PLACEHOLDER"]=' 共有ベース';
-
-$language["DATABASE_STATUS_PLACEHOLDER"]=' 基本状況';
-
-$language["DATE_ID_PLACEHOLDER"]=' 期間';
-
-$language["DOWNLOAD_ID_PLACEHOLDER"]=' コー​​ドのダウンロード';
-
-$language["FILE_DATE_PLACEHOLDER"]=' データアーカイブ';
-
-$language["FILE_DESC_PLACEHOLDER"]=' ファイル説明';
-
-$language["FILE_FLAG_PLACEHOLDER"]=' フラグファイル';
-
-$language["FILE_NAME_PLACEHOLDER"]=' ファイル名';
-
-$language["FILE_SIZE_PLACEHOLDER"]=' ファイルサイズ';
-
-$language["LANGUAGE_ID_PLACEHOLDER"]=' 舌';
-
-$language["MESSAGE_PLACEHOLDER"]=' メッセージ';
-
-$language["MODULE_PLACEHOLDER"]=' モジュール';
-
-$language["OPERATION_PLACEHOLDER"]=' 操作';
-
-$language["PERFIL_DESC_PLACEHOLDER"]=' プロフィールの説明';
-
-$language["PERFIL_FLAG_PLACEHOLDER"]=' フラグプロフィール';
-
-$language["PERFIL_ID_PLACEHOLDER"]=' プロフィールコード';
-
-$language["PERFIL_LEVEL_PLACEHOLDER"]=' プロファイルレベル';
-
-$language["PERFIL_STATUS_PLACEHOLDER"]=' プロフィール場所';
-
-$language["PROCESS_PLACEHOLDER"]=' プロセス';
-
-$language["REPORT_AUTOLOAD_PLACEHOLDER"]=' 自動ロード';
-
-$language["REPORT_DATE_PLACEHOLDER"]=' 報告日';
-
-$language["REPORT_DESC_PLACEHOLDER"]=' 報告書の記述';
-
-$language["REPORT_FILTER_PLACEHOLDER"]=' レポートフィルタ';
-
-$language["REPORT_FLAG_PLACEHOLDER"]=' レポート旗';
-
-$language["REPORT_FORMULAS_PLACEHOLDER"]=' レポート式';
-
-$language["REPORT_ID_PLACEHOLDER"]=' レポートコード';
-
-$language["REPORT_OPTIONS_PLACEHOLDER"]=' レポートのオプション';
-
-$language["REPORT_SHARE_PLACEHOLDER"]=' 共有レポート';
-
-$language["REPORT_STATUS_PLACEHOLDER"]=' レポートステータス';
-
-$language["REPORT_UPDATE_PLACEHOLDER"]=' レポートの更新';
-
-$language["SERVER_COMMENT_PLACEHOLDER"]=' サーバー・レビュー';
-
-$language["SERVER_DESC_PLACEHOLDER"]=' サーバー説明';
-
-$language["SERVER_FLAG_PLACEHOLDER"]=' サーバーの旗';
-
-$language["SERVER_ID_PLACEHOLDER"]=' サーバコード';
-
-$language["SERVER_PWD_PLACEHOLDER"]=' 利用者パスワード';
-
-$language["SERVER_STATUS_PLACEHOLDER"]=' サーバステータス';
-
-$language["SERVER_USER_PLACEHOLDER"]=' 接続ユーザー';
-
-$language["TRANSACTION_ID_PLACEHOLDER"]=' トランザクションコード';
-
-$language["USER_CODE_PLACEHOLDER"]=' 利用者コード';
-
-$language["USER_DESC_PLACEHOLDER"]=' ユーザー説明';
-
-$language["USER_EMAIL_PLACEHOLDER"]=' ユーザーの電子メール';
-
-$language["USER_EXPIRY_PLACEHOLDER"]=' パスワードの有効期限';
-
-$language["USER_FILTER_PLACEHOLDER"]=' 属性フィルター';
-
-$language["USER_FILTER_VALUE_PLACEHOLDER"]=' フィルタと属性値';
-
-$language["USER_FLAG_PLACEHOLDER"]=' ユーザフラグ';
-
-$language["USER_FORMAT_PLACEHOLDER"]=' 書式レイアウト';
-
-$language["USER_FVD_PLACEHOLDER"]=' フラグ内部';
-
-$language["USER_ID_PLACEHOLDER"]=' ユーザー内部コード';
-
-$language["USER_INTERNAL_PLACEHOLDER"]=' 内部コード';
-
-$language["USER_MASTER_PLACEHOLDER"]=' ユーザマスタ';
-
-$language["USER_PWD_PLACEHOLDER"]=' 利用者パスワード';
-
-$language["USER_PWD_OLD_PLACEHOLDER"]=' 以前のパスワード';
-
-$language["USER_SALT_PLACEHOLDER"]=' 内部コード';
-
-$language["USER_STATUS_PLACEHOLDER"]=' ユーザステータス';
-
-$language["USER_TYPE_PLACEHOLDER"]=' ユーザータイプ';
-
-
-?>

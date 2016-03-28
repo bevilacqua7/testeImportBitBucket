@@ -550,6 +550,24 @@ function layout_east_close(_only_show_progress,is_hide)
 	_END('layout_east_close');
 }
 
+function btn_clean_filter_kendo_ui()
+{
+	
+	WRS_CONFIRM(LNG('CLEAR_FILTER_KENDOUI_WARNING'),'warning',
+			function(result)
+			{ 
+					if(result)
+					{
+						var REPORT_ID		=	 get_aba_active_kendoUi().REPORT_ID;
+							$('#'+REPORT_ID).data('kendoGrid').dataSource.filter({});
+							get_aba_active_object().wrsAbaData('setWrsData',{REPORT_FILTER:json_encode({})});
+							WRS_ALERT(LNG('CLEAR_FILTER_KENDOUI_SUCCESS'),'success');
+					}
+					
+				 
+		});
+}
+
 function wrs_clean_box_drag_drop()
 {
 	_START('wrs_clean_box_drag_drop');

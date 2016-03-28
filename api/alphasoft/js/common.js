@@ -68,6 +68,137 @@ function recursiveFilterFindType(types,deep)
 }
 
 
+
+/**
+ * Obtendo os atributos do filtro KendoUi para Salvar
+ * 
+ * Chamando a função 
+ * 
+ * json_encode(getFiltersKendoUiSave($('#A162').data('kendoGrid').headerIndex.field,json_decode(json_encode($('#A162').data('kendoGrid').dataSource.filter()))))
+ * 
+ * @param types
+ * @param deep
+ * @returns array
+ */
+function getFiltersKendoUiSave(types,deep)
+{
+	
+	for(var line in deep)
+	{
+		
+		if(typeof deep[line]=='object')
+		{
+			deep[line]	=	getFiltersKendoUiSave(types,deep[line]);
+		}
+		
+		if(typeof deep[line]['type']!='undefined') delete deep[line]['type'];
+
+		if(typeof deep[line].field!='undefined')
+		{
+			try
+			{
+				deep[line].field	=	types[deep[line].field].LEVEL_DRILL;
+			}catch(e){
+				delete deep[line];
+			}
+		}
+	}
+	
+	
+	return deep;	
+}
+
+/**
+ * Save in History
+ * @param report
+ * @param kendoUiFilters
+ * @returns
+ * 
+ */
+function changeFiltersKendoUi(report,kendoUiFilters)
+{
+	var kendoUI		=	 $('#'+report).data('kendoGrid');
+	
+	if(kendoUI.headerIndex==undefined || kendoUI.headerIndex=='undefined')
+	{
+		kendoUI.headerIndex	=	WRSHeaderIndex(kendoUI);
+	}
+
+	var filters		=	json_encode(getFiltersKendoUiSave(kendoUI.headerIndex.field,kendoUiFilters));
+	var history_data=	$('#'+report+'Main').find('.wrs_history_report li:first-child a');
+	
+	$('.'+report).wrsAbaData('setWrsData',{REPORT_FILTER:filters});
+	
+	
+	var history						=	json_decode(base64_decode(history_data.attr('json')));
+
+		if(!isEmpty(history))
+		{
+			history['REPORT_FILTER']	=	filters;
+			
+			history_data.attr('json',base64_encode(json_encode(history)))
+		
+		}
+
+		
+	return filters;
+}
+
+function findFieldLevelDrill(param,field)
+{
+	for(var line in param)
+	{
+		if(param[line].LEVEL_DRILL==field) return line;
+	}
+	
+	return null;
+}
+
+/**
+ * Converte o json para o atributo de elemento
+ * 
+ *  setFiltersKendoUiDecode($('#A162').data('kendoGrid').headerIndex.field,json)
+ *  
+ *  
+ *  
+ *	setFiltersKendoUiDecode($('#A162').data('kendoGrid').headerIndex.field,json_decode('{"filters":[{"field":"[Ano][2010][Semestre][201102][Dolar]","operator":"eq","value":"1"},{"field":"[Ano][2010][Semestre][201102][Dolar]","operator":"eq","value":"2"},{"logic":"and","filters":[{"field":"[Ano][2011][Semestre][201102][Dolar]","operator":"eq","value":"2"},{"field":"[Ano][2011][Semestre][201102][Dolar]","operator":"eq","value":"3"}]},{"logic":"and","filters":[{"field":"[Ano][2011][Semestre][201108][Dolar]","operator":"eq","value":"4"},{"field":"[Ano][2011][Semestre][201108][Dolar]","operator":"eq","value":"5"}]}],"logic":"and"}'))
+ *  
+ *  
+ *  $('#A162').data('kendoGrid').dataSource.filter(setFiltersKendoUiDecode($('#A162').data('kendoGrid').headerIndex.field,json_decode('{"filters":[{"field":"[Ano][2010][Semestre][201102][Dolar]","operator":"eq","value":"1"},{"field":"[Ano][2010][Semestre][201102][Dolar]","operator":"eq","value":"2"},{"logic":"and","filters":[{"field":"[Ano][2011][Semestre][201102][Dolar]","operator":"eq","value":"2"},{"field":"[Ano][2011][Semestre][201102][Dolar]","operator":"eq","value":"3"}]},{"logic":"and","filters":[{"field":"[Ano][2011][Semestre][201108][Dolar]","operator":"eq","value":"4"},{"field":"[Ano][2011][Semestre][201108][Dolar]","operator":"eq","value":"5"}]}],"logic":"and"}')))
+ *  
+ * @param types
+ * @param deep
+ * @returns {___anonymous2497_2498}
+ */
+function setFiltersKendoUiDecode(types,deep)
+{
+
+	for(var line in deep)
+	{
+		
+		if(typeof deep[line]=='object')
+		{
+			deep[line]	=	setFiltersKendoUiDecode(types,deep[line]);
+		}
+
+		if(typeof deep[line].field!='undefined')
+		{
+			
+			var _field	=	 findFieldLevelDrill(types,deep[line].field)
+			
+			if(_field!=null){
+				deep[line].field	=	_field;
+			}else{
+				delete deep[line];
+			}			
+		}
+	}
+	
+	return deep;	
+}
+
+
+
 function wrs_logout()
  {
 	

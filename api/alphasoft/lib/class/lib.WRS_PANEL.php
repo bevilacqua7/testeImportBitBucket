@@ -330,7 +330,8 @@ class WRS_PANEL  extends WRS_USER
 				
 				if(trim($report['REPORT_AUTOLOAD'])=='1')
 				{
-					$rows_REPORTS[] 	=	'AUTO_LOAD.push(callback_load_report_generic_modal('.json_encode($report,true).',true))';
+					$param	=	json_encode($report,true);
+					$rows_REPORTS[] 	=	'AUTO_LOAD.push(callback_load_report_generic_modal('.$param.',true))';
 				}			
 			}
 		}
@@ -549,7 +550,7 @@ class WRS_PANEL  extends WRS_USER
 			if(!empty($lineData)) $flagEmpty=false;
 		}
 		
-//		WRS_DEBUG_QUERY($getRequestKendoUi);
+	
 		
 
 		
@@ -664,7 +665,7 @@ class WRS_PANEL  extends WRS_USER
 	 * @param array $getRequestKendoUi
 	 * @param string $column
 	 */
-	private function managerHistotyChangeColOrder($cube_id,$getRequestKendoUi,$column,$order,$page_current,$rows_page,$saveHistory=false)
+	private function managerHistotyChangeColOrder($cube_id,$getRequestKendoUi,$column,$order,$page_current,$rows_page,$REPORT_FILTER,$saveHistory=false)
 	{
 		$report_id		=	 $getRequestKendoUi['REPORT_ID'];
 		$history		=	json_decode(base64_decode(WRS::GET_REPORT_HISTORY($cube_id, $report_id)),true);
@@ -678,15 +679,21 @@ class WRS_PANEL  extends WRS_USER
 			$history[0]['kendoUi']['ORDER_BY_COLUMN']	=	$column;
 			$history[0]['kendoUi']['ORDER_COLUMN_TYPE']	=	$order;
 			
+			$history[0]['REPORT_FILTER']				=	$REPORT_FILTER;
+			
 			if($page_current)$history[0]['kendoUi']['PAGE_CURRENT']	=	$page_current;
 			
 			if($rows_page)$history[0]['kendoUi']['page_size']	=	$rows_page;
 			
 		}else{
+			
+			$history[0]['REPORT_FILTER']	=	$REPORT_FILTER;
+			
 			//Se for a opção salvar 
 			foreach($column as $line => $data)
 			{
 				$history[0]['kendoUi'][$line]	=	$data;
+				
 			}
 			
 		}
@@ -713,7 +720,7 @@ class WRS_PANEL  extends WRS_USER
 		
 		$getRequestKendoUi					=	 array();
 		$getRequestKendoUi['REPORT_ID']		=	$options['report_id'];
-		$this->managerHistotyChangeColOrder($cube_id, $getRequestKendoUi, $options['history_options'], NULL,NULL,NULL,true);
+		$this->managerHistotyChangeColOrder($cube_id, $getRequestKendoUi, $options['history_options'], NULL,NULL,NULL,'',true);
 	}
 	
 	private function convertDataHistory($data,$tagClass="")
@@ -830,7 +837,7 @@ class WRS_PANEL  extends WRS_USER
 		$COLUMNS		=	$this->implode($this->_param_ssas_reports['LAYOUT_COLUMNS']);
 		$MEASURES		=	$this->implode($this->_param_ssas_reports['LAYOUT_MEASURES']);
 		$FILTERS		=	$this->implode($this->_param_ssas_reports['LAYOUT_FILTERS']);
-		
+
 		$DillLayout						=	 array();
 		$DillLayout['LAYOUT_ROWS']		=	$ROWSL;
 		$DillLayout['LAYOUT_COLUMNS']	=	$COLUMNS;
@@ -1402,6 +1409,9 @@ HTML;
 		$kendoUI				=	new KendoUi();
 		$QUERY_FILTER  			= 	$kendoUI->filtersToWhere($column_filters);
 
+		$REPORT_FILTER			=	@$request['REPORT_FILTER'];
+		
+		
 		
 		/*
 		 * Pegando os eventos do WRS_PAnel
@@ -1502,7 +1512,7 @@ HTML;
 												$order_field,
 												$order_dir,
 												$page,
-												$pageSize,false);
+												$pageSize,$REPORT_FILTER,false);
 		
 			if($this->num_rows($sqlGrid_exec))
 			{
@@ -1537,8 +1547,6 @@ HTML;
 			}
 		}
 		//END CHART MAPS
-		
-		
 		
 		// Caso Esteja no Modo Drill Obtem os Registros Abertos
 		if($getRequestKendoUi['DRILL_HIERARQUIA_LINHA']==1)
