@@ -105,12 +105,12 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 		  <!-- Title -->
 			 <div class="navbar-left wrs_titles_config">
 			 
-			 <button type="button" class="btn btn-default btn-xs  btn-clean-filter-kendo-ui wrs-tooltip"  title="{$CLEAR_FILTER_KENDOUI}"><i class="fa fa-trash-o"></i></button>
+			 
  
 			 <!-- Botão Histórico -->
 			 <div class="btn-group  font-black" role="group">	
 			 
-			 
+			 <button type="button" class="btn btn-warning btn-xs  btn-clean-filter-kendo-ui wrs-tooltip"  title="{$CLEAR_FILTER_KENDOUI}"><i class="glyphicon glyphicon-trash"></i></button>
 						
 						
 					  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" disabled_s >

@@ -89,7 +89,7 @@ class WRS_PANEL  extends WRS_USER
 													'LAYOUT_MEASURES'		=> NULL,
 													'LAYOUT_FILTERS'		=> NULL,
 													'FILTER_FILTERS_ID'		=> NULL,
-													'FILTER_FILTERS_DESC'	=> NULL
+													'FILTER_FILTERS_DESC'	=> NULL,
 											);
 		
 		//Inicializando as metricas do layout
@@ -135,7 +135,7 @@ class WRS_PANEL  extends WRS_USER
 			$this->setCube(json_decode(base64_decode($json_request),true));
 		}
 		
-		$exception	=	array('TITLE_ABA','cube_s','WINDOW','TYPE_RUN','TOP_CONFIG','SUMARIZA','SHOW_LINE_TOTAL','REPORT_ID','PLUS_MINUS','PAGE_CURRENT','MKTIME_HISTORY','IS_REFRESH','DRILL_HIERARQUIA_LINHA','COLORS_LINE','ALL_ROWS','ALL_COLS','ORDER_COLUMN');
+		$exception	=	array('TITLE_ABA','cube_s','WINDOW','TYPE_RUN','TOP_CONFIG','SUMARIZA','SHOW_LINE_TOTAL','REPORT_ID','PLUS_MINUS','PAGE_CURRENT','MKTIME_HISTORY','IS_REFRESH','DRILL_HIERARQUIA_LINHA','COLORS_LINE','ALL_ROWS','ALL_COLS','ORDER_COLUMN','REPORT_FILTER');
 		//Pegando informações do Request
 		foreach ($this->_param_ssas_reports as $label =>$value)
 		{
@@ -267,6 +267,10 @@ class WRS_PANEL  extends WRS_USER
 		$METRICAS_JSON			=	base64_encode(json_encode($METRICAS,true));
 		$HTML_METICAS			=	$panelHTML->MENU_DRAG_DROP_DIREITO($this->_cube_pos_session,$METRICAS,array('MEASURE_NAME','MEASURE_NAME'),'metrica');
 		$MEASURE_RELATIONSSHIPS	=	$this->MEASURE_RELATIONSSHIPS;
+		
+		
+		$kendoInfo				=	 new KendoUi();
+		$getOPerationsFilter	=	$kendoInfo->getOPerationsFilter();
 		
 		if($changeCube)
 		{
@@ -838,11 +842,16 @@ class WRS_PANEL  extends WRS_USER
 		$MEASURES		=	$this->implode($this->_param_ssas_reports['LAYOUT_MEASURES']);
 		$FILTERS		=	$this->implode($this->_param_ssas_reports['LAYOUT_FILTERS']);
 
+		$REPORT_FILTER	=	$this->_param_ssas_reports['REPORT_FILTER'];
+		
+		
 		$DillLayout						=	 array();
 		$DillLayout['LAYOUT_ROWS']		=	$ROWSL;
 		$DillLayout['LAYOUT_COLUMNS']	=	$COLUMNS;
 		$DillLayout['LAYOUT_MEASURES']	=	$MEASURES;
 		$DillLayout['LAYOUT_FILTERS']	=	$FILTERS;
+		$DillLayout['REPORT_FILTER']	=	$REPORT_FILTER;
+
 
 		//Criando o ID do REPORT ID
 		if(empty($getRequestKendoUi['REPORT_ID']))
@@ -1033,9 +1042,6 @@ class WRS_PANEL  extends WRS_USER
 					//return false;
 				}
 		
-		
-		
-		
 		WRS_TRACE('END getGrid', __LINE__, __FILE__);
 	}
 	
@@ -1120,6 +1126,30 @@ class WRS_PANEL  extends WRS_USER
 		
 	}
 	
+	
+	private function recursiveFilterCustom($_filter)
+	{
+		$filter	=	 $_filter;
+		
+		
+		foreach($filter as $line =>$value)
+		{
+			if(is_array($value) && !isset($value['field']))
+			{
+				$filter[$line]	=	 $this->recursiveFilterCustom($value);
+			}else{			
+				
+				if(isset($value['field_old']))
+				{
+					$filter[$line]['field']	=	$value['field_old'];
+				}
+				
+			}
+		}
+		
+		return $filter;
+		
+	}
 	//$SERVER,$DATABASE,$CUBE,$USER_CODE
 	/**
 	 * 
@@ -1139,9 +1169,14 @@ class WRS_PANEL  extends WRS_USER
 		
 		$cube						=	$_cube;
 		$getRequestKendoUi			=	$_getRequestKendoUi;
-
 		
-//		$getRequestKendoUi['ALL_ROWS']
+		
+		$kendoUI				=	new KendoUi();
+		 
+		
+		$REPORT_FILTER				=	$kendoUI->filtersToWhere($this->recursiveFilterCustom(json_decode($DillLayout['REPORT_FILTER'],true)));
+		
+	 
 
 		$LAYOUT_ROWS_SIZE							=	count(explode(',',$ROWSL));
 		$msg										=	''; //mensagens do sistema ela muda a cada conjunto de regras
@@ -1190,7 +1225,7 @@ class WRS_PANEL  extends WRS_USER
 		}
 		
 		// Obtem a Quantidade de Registros da Consulta		
-		$query_table = $this->query($this->_query->COUNT_SSAS_TABLE($_cube['TABLE_CACHE'],'',((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+		$query_table = $this->query($this->_query->COUNT_SSAS_TABLE($_cube['TABLE_CACHE'],$REPORT_FILTER,((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
 		
 		if($this->num_rows($query_table))
 		{
@@ -1409,6 +1444,9 @@ HTML;
 		$kendoUI				=	new KendoUi();
 		$QUERY_FILTER  			= 	$kendoUI->filtersToWhere($column_filters);
 
+//		Teste recursivo unic
+//		$kendoUI->getFilters($column_filters);
+		
 		$REPORT_FILTER			=	@$request['REPORT_FILTER'];
 		
 		

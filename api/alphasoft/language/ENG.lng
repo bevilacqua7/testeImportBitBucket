@@ -9,13 +9,14 @@
 	$language['kendoUI']="kendo.messages.en-US.min.js ";
 	$language['summernote']="summernote-es-EU.js";
 	
-$language['MODAL_OK']			=	"Ok";
-	$language['MODAL_YES']			=	"Yes";
-	$language['MODAL_CANCEL']		=	"Cancel";
-	
-	
-$language["MES"]=array("January","February","March","April","May","June","July","August","September","October","November","December");;
-$language["DIAS"]=array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");;
+$language["MODAL_OK"]="OK";
+$language["MODAL_YES"]="Yes";
+$language["MODAL_CANCEL"]="Cancel";
+$language["CLEAR_FILTER_KENDOUI"]="Clear filters Grid";
+$language["CLEAR_FILTER_KENDOUI_WARNING"]="You really want to clear the Grid filters?";
+$language["CLEAR_FILTER_KENDOUI_SUCCESS"]="Grid filters successfully clean.";
+$language["MES"]=array("January","February","March","April","May","June","July","August","September","October","November","December");
+$language["DIAS"]=array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
 $language["DE"]=" in ";
 $language["BRN_OUT_SYSTEM"]="Exit WRS";
 $language["theme_azul"]="Blue";
@@ -23,30 +24,30 @@ $language["theme_cinza"]="Grey";
 $language["theme_laranja"]="Orange";
 $language["theme_verde"]="Green";
 $language["theme_vermelho"]="Red";
-$language["DESCONECTED_TITLE"]="UNPLUGGED USER";
+$language["DESCONECTED_TITLE"]="User disconnected";
 $language["DESCONECTED_DESCRIPT"]="User disconnected from the system for several reasons:";
-$language["DESCONECTED_BUTTON"]="BACK TO LOGIN";
-$language["DESCONECTED_REASONS"]=array("Inactivity in the session,","Change password,","Database without connection,","Others.");;
+$language["DESCONECTED_BUTTON"]="Back to login";
+$language["DESCONECTED_REASONS"]=array("Inactivity in the session,","Change password,","Database without connection,","Others.");
 $language["ScreenShotGenerate"]="Creating the print screen screen";
 $language["ScreenShotMailBodyHtml"]=<<<EOF
-<P> <strong> Hello </ strong> </ p> <p> See the extract of this query " %s "The base" %s "Extracted from WRS tool </ p> <p> In this query the following filters have been applied:. </ P> <br> %s Filmography <p> Sincerely, Europe <strong> %s </ Strong>; </ p> 
+<p><strong>Hello</strong>, </p> <p>See the extract of this query " %s "The base" %s "Extracted from WRS tool.</p> <p>In this consultation the following filters have been applied:</p><br><br> %s <br><p>Regards,<br> <strong> %s </strong>;</p> 
 EOF;
 $language["ScreenShotMailWrong"]=<<<EOF
-There are email (s) incomplete, please check before sending <br> <p> <b> %s </ B> </ p> Filmography Thank you. 
+There are email (s) incomplete, please check before sending: <br><p> <b> %s </b> </p> <br>Thank you. 
 EOF;
 $language["ScreenShotMailTO"]=<<<EOF
-The <b> To </ b> is required padding 
+The field <b>For</b> is mandatory padding 
 EOF;
 $language["ScreenShotMailSUBJECT"]=<<<EOF
-The <b> subject </ b> is required padding 
+The field <b>Subject matter</b> is mandatory padding 
 EOF;
 $language["ScreenShotMailMESSENGER"]="You must enter some content in the email body";
 $language["ScreenShotMailSend"]=<<<EOF
-Sending message, please wait ... <img src = "images / wrs_loading.gif '/> 
+Sending message, please wait ... <img src='imagens/wrs_loading.gif'/> 
 EOF;
 $language["ScreenShotMailSendSuccess"]="Email successfully sent.";
 $language["ScreenShotMailSendError"]=<<<EOF
-Could not send the email due to: <br> <b> %s </ B>. 
+Could not send the email due to: <br><br><b> %s </b>. 
 EOF;
 $language["USUARIO_SEM_PRIVILEGIOS"]="User unprivileged";
 $language["USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS"]="User without privileges to view the grid, it contains more than 65,000 records";
@@ -57,7 +58,7 @@ $language["VALOR"]="Value";
 $language["TOOLTIP_BTN_RUN"]="run report";
 $language["TOOLTIP_BTN_CLEAN_FILTER"]="Clear all selected filters";
 $language["TOOLTIP_BTN_CHANTE_FILTER_DROP"]=<<<EOF
-Does the state change <br> DRAG and DROP to filter selection <br> state filter to DRAG and DROP 
+It makes the change of status: <br> DRAG and DROP to filter selection <br> filter state to DRAG and DROP 
 EOF;
 $language["TOOLTIP_BTN_NEGADO"]="Denying the selected filters, the query will come all the less the selected filters.";
 $language["TOOLTIP_BTN_CLEAN_FILTER_LOCAL"]="Clear only the filters that dimension";
@@ -68,7 +69,7 @@ $language["CSV_ERROR_TABLE_EMPTY"]="Ops, it has not generated any report for tha
 $language["CSV_NOT_GENERATE"]="It not is possible to generate the CSV, internal error in the bank";
 $language["CSV_GENERATE_ZIP"]="generating %s CSV files";
 $language["LOGOUT"]=<<<EOF
-Wait a moment we are leaving the system .. <br> 
+Wait a moment we are leaving the system ..<br><br><br> 
 EOF;
 $language["MENU_ADMIN_CUSTOMER"]="Customers";
 $language["MENU_ADMIN_USER"]="users";
@@ -91,7 +92,7 @@ $language["MAIL_TO"]="For";
 $language["MAIL_SUBJECT"]="Subject matter";
 $language["MAIL_SEND"]="email";
 $language["ADMIN_AVISO_IMPORT"]=<<<EOF
-- Import only files in CSV or ZIP <br> format - make sure the file name is: #NAME_FILE#Or the ZIP file contains this <br> - Standard Layout: Portuguese <span class = "class_layout_padrao">#DEFAULT_LAYOUT#</ Span> 
+- Import only files in CSV or ZIP format<br>- Make sure the file name is: #NAME_FILE#Or the ZIP file containing this<br>- Default Layout:<br><Span class = "class_layout_padrao">#DEFAULT_LAYOUT#</ Span> 
 EOF;
 $language["TITLE_OPTIONS"]="Options";
 $language["MENU_ALL_CATEGORY"]="All categories";
@@ -105,22 +106,22 @@ $language["ERROR_CUBO_NOT_FOUND"]=<<<EOF
 It was not possible to identify the Cube used. <br> If the error persists, please inform support 
 EOF;
 $language["ERRO_EXECUTE_ABA"]=<<<EOF
-Error executing the query <b> %s </ B> Filmography 
+Error executing the query <b> %s </b> <br> 
 EOF;
 $language["ABA_IN_USER"]="Consultation in use";
 $language["ABA_LIMIT_SEE"]=<<<EOF
-It is not possible to remove the query <b> %s </ B> Filmography at least one must remain visible. 
+It is not possible to remove Inquiry <b> %s </b><br> at least one must remain visible. 
 EOF;
 $language["ABA_CHANGE_CUBE_ID"]="The information will be erased as the ABA belongs to another cube";
 $language["JOB_COMPLETE_LOAD"]=<<<EOF
-Query <b> %s </ B> completed 
+Query <b> %s </b> It was completed 
 EOF;
 $language["JOB_COMPLETE"]="No more running queries";
 $language["JOB_CANCEL"]=<<<EOF
-Query <b> %s </ B> has been successfully canceled 
+Query <b> %s </b> It has been successfully canceled 
 EOF;
 $language["JOB_CANCEL_ERRO"]=<<<EOF
-Error canceling query <b> %s </ B> Please try again 
+Error canceling Inquiry <b> %s </b> Please try again 
 EOF;
 $language["JOB_NOTFOUND"]="It was found the consultation to cancel or it has been completed";
 $language["JOB_CLOSE_ALERT"]="Close Alert Window";
@@ -131,12 +132,12 @@ $language["RUN_GRID_CHANGE_NOT"]="No modifications to generate a new query ..";
 $language["NOT_CLOSE_WINDOW"]="The tabs listed below are the unsaved:";
 $language["NOT_CLOSE_WINDOW_LOGOUT"]="The tabs listed below are the unsaved, even want to leave without saving?";
 $language["ABA_TITLE_EMPTY"]=<<<EOF
-You must enter a <b> Title </ b> to the report 
+You must enter a <b>title</b> to report 
 EOF;
 $language["SEE_IN_MAP"]="SEE ON THE MAP";
 $language["REMOVE"]="TO REMOVE";
 $language["DATA_BASE_ERROR"]=<<<EOF
-<B> Oops ... Error in database: </ b> 
+<b>Oops ... Error in database:</b> 
 EOF;
 $language["TITLE_TEMA"]="Theme";
 $language["TITLE_LINGUA"]="Tongue";
@@ -153,52 +154,52 @@ $language["TITLE_GRID_WINDOW_MENU_LIST_INFO"]="Basic list";
 $language["REPORT_RESULT_HISTORY"]="There is no history";
 $language["MAIN_OPEN_REPORT"]="open reports";
 $language["MAIN_OPEN_LAYOUT"]="open layouts";
-$language["TITLE_TOP_TOTAL"]="TOTAL";
-$language["TITLE_TOP_5"]="TOP 5";
-$language["TITLE_TOP_10"]="TOP 10";
-$language["TITLE_TOP_15"]="TOP 15";
-$language["TITLE_TOP_20"]="TOP 20";
-$language["TITLE_TOP_25"]="TOP 25";
-$language["TITLE_TOP_50"]="TOP 50";
-$language["TITLE_TOP_100"]="TOP 100";
+$language["TITLE_TOP_TOTAL"]="Total";
+$language["TITLE_TOP_5"]="Top 5";
+$language["TITLE_TOP_10"]="Top 10";
+$language["TITLE_TOP_15"]="Top 15";
+$language["TITLE_TOP_20"]="Top 20";
+$language["TITLE_TOP_25"]="Top 25";
+$language["TITLE_TOP_50"]="Top 50";
+$language["TITLE_TOP_100"]="Top 100";
 $language["ERROR_LOAD_ABA"]="ERROR: ABA01 - An error occurred when opening the tab ..";
 $language["ABA_BE_LOADED"]=<<<EOF
-The flap <b> %s </ B> is already loaded 
+The flap <b> %s </b> already loaded 
 EOF;
 $language["FILTER_NOT_ROWS"]="No evidence was found.";
 $language["FILTER_NOT_ROWS_TOOLTIP"]="No filter selected.";
 $language["FILTER_CLEAN_FIND"]="Clear search";
 $language["FILTER_CLEAN_FILTER"]="Are you sure desenja delete the filters already selected?";
 $language["FILTER_CLEAN_FILTER_SUCCESS"]="Cleaning successfully executed filter.";
-$language["ERRO_FILE_PROCCESS"]="Oops there was an error in processso ERROR: 0001";
+$language["ERRO_FILE_PROCCESS"]="Oops there was an error in the process ERROR: 0001";
 $language["BTN_CLOSE"]="Close";
 $language["MSG_FORCE_LOGOFF"]="You were disconnected from the system";
 $language["DRAG_DROP_FILE_IN_USER"]=<<<EOF
-The <b> %s </ B> is already in use 
+The element <b> %s </b> already in use 
 EOF;
 $language["DRAG_DROP_FILE_IN_USER_REMOVE"]=<<<EOF
-The <b> %s </ B> is already in use and was therefore removed from the selection 
+The element <b> %s </b> I was already in use and was therefore removed from the selection 
 EOF;
 $language["DRAG_DROP_FILE_NOT_PUT"]=<<<EOF
-You can not enter the <b> %s </ B> in this box, it shall belong to another other structure 
+You can not enter <b> %s </b> in this box, it shall belong to another other structure 
 EOF;
 $language["DRAG_DROP_AREA"]=<<<EOF
-Drag this area <b> %s </ B>. 
+Drag this area <b> %s </b>. 
 EOF;
 $language["DRAG_DROP_CLEAN_SELECTION"]=<<<EOF
-Are you sure you want to remove all (the) <b> %s </ B>? 
+Are you sure you want to remove all (the) <b> %s </b> ? 
 EOF;
 $language["DRAG_DROP_CLEAN_SELECTION_INSIDE"]="Are you sure you want to clear all filter selections?";
 $language["DRAG_DROP_MSG_ERROX_MAX_QTDE"]="You can not enter more than %s attributes in the field %s ";
 $language["DRAG_DROP_CLEAN_SELECTION_SUCCESS"]=<<<EOF
-Removal of (the) <b> %s </ B> (s) successfully performed. 
+Removal of (the) <b> %s </b>(S) successfully performed. 
 EOF;
 $language["DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE"]="Selections successfully removed filter.";
 $language["RUN_RELATORIO_FALTA_INFORMACAO"]=<<<EOF
-For execurar Query lack information: Portuguese <b> %s </ B> 
+To run the Query lack information on: <br> <b> %s </b> 
 EOF;
 $language["DRAG_DROP_FIELD_ATRIBUTO"]="an Attribute";
-$language["DRAG_DROP_FIELD_METRICA"]="one Metrica";
+$language["DRAG_DROP_FIELD_METRICA"]="one Metric";
 $language["GERANDO_RELATORIO"]="Wait a moment while the query is created";
 $language["GERANDO_RELATORIO_TITLE"]="generating Query";
 $language["GERANDO_MULTI_CUBE_BODY"]="Wait a moment to exchange hub";
@@ -289,13 +290,13 @@ $language["tpl_layout_title"]="Save Layout";
 $language["tpl_layout_name"]="Layout name";
 $language["tpl_layout_alias"]="alias Layout";
 $language["tpl_layout_name_empty"]=<<<EOF
-You must enter the <b> Name Layout </ b> 
+You must enter the <b>Layout name</b> 
 EOF;
 $language["tpl_layout_alias_empty"]=<<<EOF
-You must enter the <b> Alias ​​Layout </ b> 
+You must enter the <b>alias Layout</b> 
 EOF;
 $language["tpl_layout_data_empty"]=<<<EOF
-You must complete one of the options to save a layout <b> Metrics, Rows or Columns </ b> 
+You must complete one of the options to save a layout <b>Metrics, Rows or Columns</b> 
 EOF;
 $language["tpl_layout_option_select_empty"]="You must select any option for layout";
 $language["tpl_layout_share"]="To share";
@@ -315,7 +316,7 @@ $language["TITLE_CONTEX_MENU"]="Add to";
 $language["FILTER_CONTEX_MENU_SELECTION_REMOVE"]="Remove selection %s ite s%";
 $language["FILTER_CONTEX_MENU_SELECTION_VIEW"]="View ite% selected ns %s ";
 $language["FILTER_CONTEX_MENU_SELECTION_ITEM_EXISTS"]="O %s ite% ns below existed% me not fo% ram added %s :";
-$language["TITLE_MENU_DASHBOARD"]="( 'Consolidated Visions with Different Reports Segmented bases in Quadrants Independent')";
+$language["TITLE_MENU_DASHBOARD"]="(Consolidated Visions with Different Bases Segmented Reports in Quadrants Independent)";
 $language["tpl_association_save_sucess"]="successfully saved Association";
 $language["tpl_association_save_error"]="Error in association";
 $language["tpl_association_remove_sucess"]="Association %s ite% s successfully removed";
@@ -325,7 +326,7 @@ $language["tpl_association_title_cube"]="Cube";
 $language["tpl_association_title_user"]="User";
 $language["HTML_CUBE_EDITION"]="Edition:";
 $language["HTML_CUBE_UPDATE"]="Updated:";
-$language["LABEL_NOVO"]="New";
+$language["LABEL_NOVO"]=" New ";
 $language["LABEL_LOAD"]="Loading...";
 $language["PAGINATION_PAGE"]="elements";
 $language["PAGINATION_PAGE_INSIDE"]="up until";
@@ -341,7 +342,7 @@ $language["TITLE_ATT_WRS_REPORT"]="Reports Management";
 $language["TITLE_ATT_WRS_DOWNLOAD"]="File Management";
 $language["TITLE_ATT_WRS_PERFIL"]="Profile Management";
 $language["TITLE_ATT_WRS_LOG"]="Log Management";
-$language["LINE_TOTAL"]="TOTAL";
+$language["LINE_TOTAL"]="Total";
 $language["label_total"]="Total";
 $language["LINE_TOTAL_BUBBLE"]="You want to use the totals line in the graph?";
 $language["msg_maxNumberOfFiles"]="maximum number of files exceeded";
@@ -402,10 +403,10 @@ $language["LOGIN_BUTTON"]="Login";
 $language["LOGIN_HISTORY"]="User History";
 $language["LOGIN_SUBJECT"]="Password recovery";
 $language["LOGIN_RECOVER_NOT_FOUND"]=<<<EOF
-Oops ... not found the user <b> %s </ B> to send the password recovery. 
+Oops ... not found the user <b> %s </b> to send the recovery password. 
 EOF;
 $language["LOGIN_NOT_EMAIL"]=<<<EOF
-Oops .. not found email to be sent to the user <b> %s</ B>. <br> Please contact support for password recovery. Filmography Thanks. 
+Oops .. not found email to be sent to the user <b> %s </b>. <br>Please contact support for password recovery.<br>Thank you. 
 EOF;
 $language["LOGIN_RECOVER_NEW"]=<<<EOF
 <H4> Password change </ h4> Enter the new password to access the system. 
@@ -421,14 +422,14 @@ $language["LOGIN_RECOVER_ERROR"]="Oops .. Could not send email. Please contact s
 $language["HTML_LOGIN_RECOVER_BTN"]="CHANGE PASSWORD";
 $language["HTML_LOGIN_RECOVER_TITLE"]="Password recovery";
 $language["HTML_LOGIN_RECOVER"]=<<<EOF
-Password recovery request for access to the WRS system if you have not requested please disregard this email. <br> Click the button below to be redirected to password change. <br> If you do not operate the click linque copy and paste in your browser to make the change. 
+Password recovery request for access to the WRS system if you have not requested please disregard this email. <br><br> Click the button below to be redirected to password change.	<br><br> If you do not not work the click linque copy and paste in your browser to make the change. 
 EOF;
 $language["LOGIN_NEW_PASSWORD"]="New password";
 $language["LOGIN_NEW_PASSWORD_CONFIRM"]="Confirm New Password";
 $language["LOGIN_CHECK"]="Checking password ...";
 $language["LOGIN_CHECK_NEW"]="Saving new password ...";
 $language["LOGIN_PASSWORD_EMPTY"]=<<<EOF
-You must fill out the <b> %s </ B> 
+You must fill in the field <b> %s </b> 
 EOF;
 $language["LOGIN_PASSWORD_EMPTY_NEW"]="It is not being passed to new password.";
 $language["LOGIN_TAG_EMPTY"]="The code to reset password is blank";
@@ -448,7 +449,7 @@ $language["ADMIN_IMPORT_remover"]="Remove the previous records";
 $language["ADMIN_IMPORT_atualizar"]="Update and add new";
 $language["ADMIN_IMPORT_compactar_resultados"]="Compress results: ";
 $language["PASSWORD_EXPIRED"]=<<<EOF
-Expired password, you must create a new password. Filmography Complete the form with the new password. 
+Expired password, you must create a new password. <br> Complete the form with the new password. 
 EOF;
 $language["LOGIN_OK"]="Redirecting to the main screen";
 $language["LOGIN_PASSWORD_ERROR"]="username or password is invalid";

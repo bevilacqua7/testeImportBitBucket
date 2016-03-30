@@ -15,6 +15,7 @@ var TIME_CHECK_USER_CONECT		=	1;
 
 function filter_mouse_hover_details()
 {
+	_ONLY('filter_mouse_hover_details');
 	if($('.tooltip_info_wrs_panel_details').length>0)
 	{
 		if($('.tooltip_info_wrs_panel_details').is(':hidden')==false)
@@ -29,6 +30,8 @@ function filter_mouse_hover_details()
 //@link http://www.telerik.com/forums/grid-filtering-in-javascript---not-equal-to-null
 function setKNewFilter()
 {
+	_ONLY('setKNewFilter');
+	
 	var grid = $('#A162').data('kendoGrid');
 		$filter = new Array();
    	$filter.push({ field: "C002", operator: "neq", value: 15 });
@@ -41,6 +44,7 @@ function setKNewFilter()
  */
 function rFFTIndex(label)
 {
+	_ONLY('rFFTIndex');
 	var _tmp	=	{};
 	for(var line in label) _tmp[label[line].field]	=	label[line].type;
 	return _tmp;
@@ -61,7 +65,7 @@ function recursiveFilterFindType(types,deep)
 
 		if(typeof deep[line].field!='undefined')
 		{
-				deep[line]['type']	=	types[deep[line].field];
+				deep[line]['type']	=	'number';//types[deep[line].field];
 		}
 	}
 	return deep;	
@@ -82,7 +86,7 @@ function recursiveFilterFindType(types,deep)
  */
 function getFiltersKendoUiSave(types,deep)
 {
-	
+	_ONLY('getFiltersKendoUiSave');
 	for(var line in deep)
 	{
 		
@@ -95,6 +99,10 @@ function getFiltersKendoUiSave(types,deep)
 
 		if(typeof deep[line].field!='undefined')
 		{
+			var _field	=	deep[line].field;
+			
+			deep[line]['field_old']	=	_field;
+			
 			try
 			{
 				deep[line].field	=	types[deep[line].field].LEVEL_DRILL;
@@ -108,6 +116,92 @@ function getFiltersKendoUiSave(types,deep)
 	return deep;	
 }
 
+
+function merge_all(first,second)
+{
+	var _first	=	first;
+	
+	for(var line in second)
+	{
+		_first.push(second[line]);
+	}
+	
+	return _first;
+}
+
+/*
+ * QUery
+ */
+
+function makeFiltersKendoUiQuery(types,deep,logic)
+{
+	_ONLY('getFiltersKendoUiSave');
+	
+	var _filter				=	[];
+	var optionsFilter		=	$('body').WrsGlobal('getCM','getOPerationsFilter');
+	var options				=	['%c','#v'];
+	var clean_filter		=	$('body').WrsGlobal('getCM','cleanMakeFiltersKendoUiQuery');
+	
+	var _logic	=	' and ';
+	
+	if(!isEmpty(logic)) _logic	=	logic;
+	
+	for(var line in deep)
+	{
+		var _op		=	optionsFilter[deep[line].type];
+				
+		if(typeof deep[line]=='object')
+		{
+			
+			var _make	=	makeFiltersKendoUiQuery(types,deep[line],deep[line].logic);
+			
+			var _data	=	implode(_span(_logic.toUpperCase(),'#8a2d24'),_make);
+			
+			if(!isEmpty(_data))
+			{
+				_filter.push(_data);
+			}
+			
+		}
+		
+		if(typeof deep[line].field!='undefined')
+		{
+				deep[line].field	=	types[deep[line].field].LEVEL_DRILL;
+				var _br				=	'';
+				
+				if(in_array(deep[line].field,clean_filter))
+				{
+					deep[line].field	=	'';
+				}
+				else
+				{
+					if(clean_filter.length>=1)
+					{
+						_br	=	'<br>';
+					}
+					
+					clean_filter.push(deep[line].field);
+					
+					$('body').WrsGlobal('setCM',{cleanMakeFiltersKendoUiQuery:clean_filter});
+				}
+				
+			var _query		=	 _br+str_replace(options,[deep[line].field, _span(deep[line].value,'#03be80') ],_op[deep[line].operator])+'  ';
+			
+				_filter.push(_query);
+		}
+		
+	}
+	
+ 
+	return _filter;	
+}
+
+function _span(string,color)
+{
+	return '<span style="color:'+color+'"><strong>'+string+'</strong></span>';
+}
+
+
 /**
  * Save in History
  * @param report
@@ -117,6 +211,7 @@ function getFiltersKendoUiSave(types,deep)
  */
 function changeFiltersKendoUi(report,kendoUiFilters)
 {
+	_ONLY('changeFiltersKendoUi');
 	var kendoUI		=	 $('#'+report).data('kendoGrid');
 	
 	if(kendoUI.headerIndex==undefined || kendoUI.headerIndex=='undefined')
@@ -184,10 +279,11 @@ function setFiltersKendoUiDecode(types,deep)
 		if(typeof deep[line].field!='undefined')
 		{
 			
-			var _field	=	 findFieldLevelDrill(types,deep[line].field)
+			var _field		=	 findFieldLevelDrill(types,deep[line].field)
+			var _filter_old	=	deep[line].field;
 			
 			if(_field!=null){
-				deep[line].field	=	_field;
+				deep[line].field			=	_field;
 			}else{
 				delete deep[line];
 			}			
@@ -202,7 +298,7 @@ function setFiltersKendoUiDecode(types,deep)
 function wrs_logout()
  {
 	
-	
+	_ONLY('wrs_logout');
 
 
 	var aba_data	=	abas_to_save()
@@ -1143,19 +1239,20 @@ function runCall(param_request,Ofile,Oclass,Oevent,funCallBack,typeAlert,typeDat
 		param	=	merge_objeto(param,param_request);
 
 	$('body').WrsGlobal('setCM',{isDesconected:countTimeCheck()});
-	
 		
 	TRACE('Enviando parametro para o run.php mas sem esperar resposta file:common.js');	
+	
 	$.post('run.php',param,funCallBack,typeData).fail(function() {
 			if(typeAlert=='modal')
 			{
-				WRS_ALERT(LNG('ERRO_FILE_PROCCESS'),'error');
-				
-			}else{
-				$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
+				WRS_ALERT(LNG('ERRO_FILE_PROCCESS'),'error');				
 			}
-			
+			else
+			{
+				$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
+			}			
 	  });
+	
 	TRACE('runCall finalizado');
 }
 
@@ -1592,7 +1689,7 @@ function merge_filter_data(input,inputMerge)
 
 
 
-	for(lineInputMerge in input)
+	for(var lineInputMerge in input)
 		{
 			var _key	=	String(lineInputMerge);
 			

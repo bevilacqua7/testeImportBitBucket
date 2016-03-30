@@ -15,6 +15,8 @@
 	$language['MODAL_YES']			=	"Sim";
 	$language['MODAL_CANCEL']		=	"Cancelar";
 	
+	
+	$language['FILTER_KENDO_UI']		=	"Filtros da Grid";
 		
 	$language['CLEAR_FILTER_KENDOUI']			=	"Limpar filtros da Grid";
 	$language['CLEAR_FILTER_KENDOUI_WARNING']	=	"Deseja realmente limpar os filtros da Grid?";
@@ -39,7 +41,7 @@ $language["DE"]		=	' de ';
 	
 	$language['DESCONECTED_TITLE']		=	"Usuário desconectado";
 	$language['DESCONECTED_DESCRIPT']	=	"Usuário desconectado do sistema por motivo diversos:";
-	$language['DESCONECTED_BUTTON']		=	"VOLTAR PARA O LOGIN";
+	$language['DESCONECTED_BUTTON']		=	"Voltar para o login";
 	$language['DESCONECTED_REASONS']	=	array('Inatividade na sessão,','Alteração de senha,','Banco de dados sem conexão,','Outras.');
 	
  
@@ -51,7 +53,7 @@ $language["DE"]		=	' de ';
 	
 											<p><strong>Olá</strong>, </p>
 													<p>Veja o extrato desta consulta "%s" na base "%s" extraído da ferramenta WRS.</p>
-													<p>Nesta consulta foram aplicados os seguintes filtros:</p><br><br>
+													<p>Nesta consulta foram aplicados os seguintes filtros:</p>
 													%s
 													<br><p>Atenciosamente,<br>
 													<strong>%s</strong>;</p>
@@ -196,14 +198,14 @@ HTML;
 	$language ['MAIN_OPEN_LAYOUT'] 		= "Abrir layouts";
 
 
-	$language['TITLE_TOP_TOTAL'] 	= "TOTAL";
-	$language['TITLE_TOP_5'] 		= "TOP 5";
-	$language['TITLE_TOP_10'] 		= "TOP 10";
-	$language['TITLE_TOP_15'] 		= "TOP 15";
-	$language['TITLE_TOP_20'] 		= "TOP 20";
-	$language['TITLE_TOP_25'] 		= "TOP 25";
-	$language['TITLE_TOP_50'] 		= "TOP 50";
-	$language['TITLE_TOP_100'] 		= "TOP 100";
+	$language['TITLE_TOP_TOTAL'] 	= "Total";
+	$language['TITLE_TOP_5'] 		= "Top 5";
+	$language['TITLE_TOP_10'] 		= "Top 10";
+	$language['TITLE_TOP_15'] 		= "Top 15";
+	$language['TITLE_TOP_20'] 		= "Top 20";
+	$language['TITLE_TOP_25'] 		= "Top 25";
+	$language['TITLE_TOP_50'] 		= "Top 50";
+	$language['TITLE_TOP_100'] 		= "Top 100";
 	
 	
 	
@@ -224,7 +226,7 @@ HTML;
 	/*
 	 * ERRO AO CARREGAR A RUN.php
 	 */
-	$language ['ERRO_FILE_PROCCESS'] = "Ops Houve algum erro no processso ERRO:0001";
+	$language ['ERRO_FILE_PROCCESS'] = "Ops Houve algum erro no processo ERRO:0001";
 	
 	/*
 	 * BOTAO
@@ -246,12 +248,12 @@ HTML;
 	$language ['DRAG_DROP_CLEAN_SELECTION_SUCCESS'] 		= "Remoção dos(as) <b>%s</b>(s) realizadas com sucesso.";
 	$language ['DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE'] = "Seleções do filtro removido com sucesso .";
 	
-	$language ['RUN_RELATORIO_FALTA_INFORMACAO'] 	= "Para execurar a Consulta falta informações em: <br> <b>%s</b>";
+	$language ['RUN_RELATORIO_FALTA_INFORMACAO'] 	= "Para executar a Consulta falta informações em: <br> <b>%s</b>";
 	
 	
 	
 	$language ['DRAG_DROP_FIELD_ATRIBUTO'] 	= "um Atributo";
-	$language ['DRAG_DROP_FIELD_METRICA'] 	= "uma Metrica";
+	$language ['DRAG_DROP_FIELD_METRICA'] 	= "uma Métrica";
 	
 	$language ['GERANDO_RELATORIO'] 		= "Aguarde um instante enquanto a consulta é criada";
 	$language ['GERANDO_RELATORIO_TITLE'] 	= "Gerando Consulta";
@@ -263,7 +265,7 @@ HTML;
 	$language ['ATTRIBUTOS_FILTRO'] 	= "Filtros";
 	$language ['ATTRIBUTOS_COLUNA'] 	= "Colunas";
 	$language ['ATTRIBUTOS_LINHA'] 		= "Linhas";
-	$language ['ATTRIBUTOS_METRICA'] 	= "Metricas";
+	$language ['ATTRIBUTOS_METRICA'] 	= "Métricas";
 	$language ['ATTRIBUTOS_MULTIPLE_CUBE'] 	= "Cubos";
 	$language ['ATTRIBUTOS_SIMPLES'] 	= "Simples";
 	$language ['ATTRIBUTOS_COMPOSTO'] 	= "Composto";
@@ -447,7 +449,7 @@ HTML;
 	$language ['TITLE_ATT_WRS_PERFIL'] 		=  "Gerenciamento de Perfis";
 	$language ['TITLE_ATT_WRS_LOG'] 		=  "Gerenciamento de Logs";
 	
-	$language['LINE_TOTAL']					=	'TOTAL';
+	$language['LINE_TOTAL']					=	'Total';
 	$language['label_total']				=	'Total';
 	$language['LINE_TOTAL_BUBBLE']			=	'Deseja usar as linha de totais no gráfico?';
 	
