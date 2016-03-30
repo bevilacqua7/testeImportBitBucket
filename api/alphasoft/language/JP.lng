@@ -9,13 +9,12 @@
 	$language["kendoUI"]				=	'kendo.messages.zh-CN.min.js';
 	$language["summernote"]				=	'summernote-ja-JP.js';
 	
-
-$language['MODAL_OK']			=	"オーケー";
-	$language['MODAL_YES']			=	"はい";
-	$language['MODAL_CANCEL']		=	"キャンセル";
-	
-	
-	
+$language["MODAL_OK"]="オーケー";
+$language["MODAL_YES"]="はい";
+$language["MODAL_CANCEL"]="キャンセル";
+$language["CLEAR_FILTER_KENDOUI"]="クリアフィルタグリッド";
+$language["CLEAR_FILTER_KENDOUI_WARNING"]="あなたは本当にグリッドフィルタをクリアしたいですか？";
+$language["CLEAR_FILTER_KENDOUI_SUCCESS"]="グリッドが正常にクリーンフィルタ。";
 $language["MES"]=array("1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月");
 $language["DIAS"]=array("日曜日","月曜日","火曜日","水曜日","木曜日","金曜日","土曜日");
 $language["DE"]=" の ";
@@ -31,24 +30,24 @@ $language["DESCONECTED_BUTTON"]="戻るログインへ";
 $language["DESCONECTED_REASONS"]=array("セッションでの非アクティブ、","パスワードの変更、","接続せずにデータベース、","その他。");
 $language["ScreenShotGenerate"]="印刷画面の画面を作成します";
 $language["ScreenShotMailBodyHtml"]=<<<EOF
-<P> <強い>こんにちは</ strong>の</ p> <p>このクエリの抽出を参照してください " %s "ベース" %s 「抽出はWRSツールから</ p> <p>このクエリでは、次のフィルタが適用されている:. </ P> <BR> %s フィルモグラフィー<P>敬具、ヨーロッパの<strong> %s </ STRONG> </ P> 
+<p><strong>もしもし</strong>、 </p> <p>「このクエリの抽出を参照してください。 %s "ベース" %s 「WRSツールから抽出。</p> <p>この協議では、次のフィルタが適用されています：</p><br><br> %s <br><p>敬具<br> <strong> %s </strong>;</p> 
 EOF;
 $language["ScreenShotMailWrong"]=<<<EOF
-電子メール（s）は不完全であり、<P> <B>を<BR>送信する前に確認してください %s </ B> </ P>フィルモグラフィーありがとうございます。 
+電子メール（s）は不完全であり、送信する前に確認してください。 <br><p> <b> %s </b> </p> <br>ありがとう。 
 EOF;
 $language["ScreenShotMailTO"]=<<<EOF
-<b> </ b>のパディングを必要とされるために 
+フィールド <b>へ</b> 必須パディングです 
 EOF;
 $language["ScreenShotMailSUBJECT"]=<<<EOF
-<B>件名</ b>を必要とされるパディング 
+フィールド <b>テーマ</b> 必須パディングです 
 EOF;
 $language["ScreenShotMailMESSENGER"]="あなたは電子メールの本文中の一部のコンテンツを入力する必要があります";
 $language["ScreenShotMailSend"]=<<<EOF
-送信メッセージ、お待ちください... <IMG SRC = "画像/ wrs_loading.gif '/> 
+メッセージの送信、しばらくお待ちください... <img src='imagens/wrs_loading.gif'/> 
 EOF;
 $language["ScreenShotMailSendSuccess"]="メールは正常に送信しました。";
 $language["ScreenShotMailSendError"]=<<<EOF
-原因に電子メールを送信できませんでした：<BR> <B> %s </ B>。 
+のために電子メールを送信できませんでした： <br><br><b> %s </b>。 
 EOF;
 $language["USUARIO_SEM_PRIVILEGIOS"]="非特権ユーザ";
 $language["USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS"]="グリッドを表示するための権限を持たないユーザーには、65,000以上のレコードが含まれています";
@@ -59,7 +58,7 @@ $language["VALOR"]="値";
 $language["TOOLTIP_BTN_RUN"]="ランレポート";
 $language["TOOLTIP_BTN_CLEAN_FILTER"]="選択したすべてのフィルタをクリア";
 $language["TOOLTIP_BTN_CHANTE_FILTER_DROP"]=<<<EOF
-ドラッグ＆ドロップする選択<BR>状態フィルタをフィルタリングするために、状態変化<BR>ドラッグ＆ドロップを行います 
+これは、ステータスの変更を行います。 <br> フィルタ選択へのドラッグ＆ドロップ <br> ドラッグ＆ドロップの状態をフィルタリング 
 EOF;
 $language["TOOLTIP_BTN_NEGADO"]="選択されたフィルタを拒否、クエリはすべての少ない選択したフィルタを来ります。";
 $language["TOOLTIP_BTN_CLEAN_FILTER_LOCAL"]="そのディメンションクリアフィルタのみ";
@@ -70,7 +69,7 @@ $language["CSV_ERROR_TABLE_EMPTY"]="オプス、それはそのクエリの任�
 $language["CSV_NOT_GENERATE"]="銀行にCSV、内部エラーを生成することが可能ではありません";
 $language["CSV_GENERATE_ZIP"]="生成 %s CSVファイル";
 $language["LOGOUT"]=<<<EOF
-我々はシステムを残している瞬間を待って.. <BR> 
+我々はシステムを残している瞬間を待って..<br><br><br> 
 EOF;
 $language["MENU_ADMIN_CUSTOMER"]="顧客";
 $language["MENU_ADMIN_USER"]="ユーザー";
@@ -93,7 +92,7 @@ $language["MAIL_TO"]="へ";
 $language["MAIL_SUBJECT"]="テーマ";
 $language["MAIL_SEND"]="メール";
 $language["ADMIN_AVISO_IMPORT"]=<<<EOF
-- CSVまたはZIP <BR>形式のインポートファイルのみ - ファイル名があることを確認してください。 #NAME_FILE#またはZIPファイルには、この<BR>が含まれています - 標準レイアウト：ポルトガル<スパンクラス= "class_layout_padrao">#DEFAULT_LAYOUT#</スパン> 
+- CSVまたはZIP形式のインポートファイルのみ<br> - ファイル名があることを確認してください： #NAME_FILE#これを含むまたはZIPファイル<br> - デフォルトレイアウト：<br><スパンクラス= "class_layout_padrao">#DEFAULT_LAYOUT#</スパン> 
 EOF;
 $language["TITLE_OPTIONS"]="オプション";
 $language["MENU_ALL_CATEGORY"]="すべてのカテゴリー";
@@ -104,25 +103,25 @@ $language["DATABASE_NOT_FOUND"]="おっと！データベースへの接続が�
 $language["ERRO_CUBO_INDISPONIVEL"]="エラー：使用不可";
 $language["ERROR_TABLE_CACHE_NO_HEADER"]="このクエリのデータはありません..";
 $language["ERROR_CUBO_NOT_FOUND"]=<<<EOF
-使用キューブを識別することができませんでした。エラーが解決しない場合は<BR>、サポートまでご連絡ください 
+使用キューブを識別することができませんでした。 <br> エラーが続く場合は、サポートまでご連絡ください 
 EOF;
 $language["ERRO_EXECUTE_ABA"]=<<<EOF
-エラー<B>クエリを実行します %s </ B>フィルモグラフィー 
+クエリの実行エラー <b> %s </b> <br> 
 EOF;
 $language["ABA_IN_USER"]="使用中の相談";
 $language["ABA_LIMIT_SEE"]=<<<EOF
-<B>クエリを削除することはできません %s </ B>フィルモグラフィー少なくとも一方が表示されたままにしなければなりません。 
+照会を除去することは不可能です <b> %s </b><br> 少なくとも一方が表示されたままにしなければなりません。 
 EOF;
 $language["ABA_CHANGE_CUBE_ID"]="ABAは、別のキューブに属しているような情報が消去されます";
 $language["JOB_COMPLETE_LOAD"]=<<<EOF
-クエリ<B> %s 完成した</ B> 
+相談 <b> %s </b> それが完了しました 
 EOF;
 $language["JOB_COMPLETE"]="これ以上の実行中のクエリはありません";
 $language["JOB_CANCEL"]=<<<EOF
-クエリ<B> %s </ B>正常にキャンセルされました 
+相談 <b> %s </b> これは、正常にキャンセルされました 
 EOF;
 $language["JOB_CANCEL_ERRO"]=<<<EOF
-クエリをキャンセルエラー<B> %s </ B>もう一度やり直してください 
+お問い合わせをキャンセルするエラー <b> %s </b> もう一度やり直してください 
 EOF;
 $language["JOB_NOTFOUND"]="なお、相談キャンセルすることが見出されたか、終了しています";
 $language["JOB_CLOSE_ALERT"]="アラートウィンドウを閉じます";
@@ -133,12 +132,12 @@ $language["RUN_GRID_CHANGE_NOT"]="新しいクエリを生成するために修�
 $language["NOT_CLOSE_WINDOW"]="以下に記載されているタブが保存されていない、次のとおりです。";
 $language["NOT_CLOSE_WINDOW_LOGOUT"]="以下に記載されているタブは、未保存であっても保存せずに終了したいですか？";
 $language["ABA_TITLE_EMPTY"]=<<<EOF
-レポートに<B>タイトル</ b>]を入力する必要があります 
+あなたが入力する必要があります <b>タイトル</b> 報告します 
 EOF;
 $language["SEE_IN_MAP"]="地図で見ます";
 $language["REMOVE"]="取り外し";
 $language["DATA_BASE_ERROR"]=<<<EOF
-<B>おっと...データベースでエラーが発生しました：</ b>の 
+<b>おっと...データベースでエラーが発生しました：</b> 
 EOF;
 $language["TITLE_TEMA"]="テーマ";
 $language["TITLE_LINGUA"]="舌";
@@ -155,52 +154,52 @@ $language["TITLE_GRID_WINDOW_MENU_LIST_INFO"]="基本的なリスト";
 $language["REPORT_RESULT_HISTORY"]="既往はありません";
 $language["MAIN_OPEN_REPORT"]="オープンレポート";
 $language["MAIN_OPEN_LAYOUT"]="オープンレイアウト";
-$language["TITLE_TOP_TOTAL"]="TOTAL";
-$language["TITLE_TOP_5"]="TOP 5";
-$language["TITLE_TOP_10"]="TOP 10";
-$language["TITLE_TOP_15"]="TOP 15";
-$language["TITLE_TOP_20"]="TOP 20";
-$language["TITLE_TOP_25"]="TOP 25";
-$language["TITLE_TOP_50"]="TOP 50";
-$language["TITLE_TOP_100"]="TOP 100";
+$language["TITLE_TOP_TOTAL"]="合計";
+$language["TITLE_TOP_5"]="トップ5";
+$language["TITLE_TOP_10"]="トップ10";
+$language["TITLE_TOP_15"]="トップ15";
+$language["TITLE_TOP_20"]="トップ20";
+$language["TITLE_TOP_25"]="トップ25";
+$language["TITLE_TOP_50"]="トップ50";
+$language["TITLE_TOP_100"]="トップ100";
 $language["ERROR_LOAD_ABA"]="ERROR：ABA01 - タブを開くときにエラーが発生しました..";
 $language["ABA_BE_LOADED"]=<<<EOF
-フラップ<B> %s </ B>すでにロードされています 
+フラップ <b> %s </b> すでにロードされました 
 EOF;
 $language["FILTER_NOT_ROWS"]="証拠は見つかりませんでした。";
 $language["FILTER_NOT_ROWS_TOOLTIP"]="フィルタなしが選択されていません。";
 $language["FILTER_CLEAN_FIND"]="クリア検索";
 $language["FILTER_CLEAN_FILTER"]="あなたは既に選択したフィルタを削除しdesenjaか？";
 $language["FILTER_CLEAN_FILTER_SUCCESS"]="正常に実行されたフィルターを清掃。";
-$language["ERRO_FILE_PROCCESS"]="0001：おっとprocessso ERRORにエラーが発生しました";
+$language["ERRO_FILE_PROCCESS"]="0001：おっとプロセスERRORにエラーが発生しました";
 $language["BTN_CLOSE"]="近いです";
 $language["MSG_FORCE_LOGOFF"]="あなたは、システムから切断されました";
 $language["DRAG_DROP_FILE_IN_USER"]=<<<EOF
-<B> %s </ B>既に使用されています 
+要素 <b> %s </b> 既に使用されています 
 EOF;
 $language["DRAG_DROP_FILE_IN_USER_REMOVE"]=<<<EOF
-<B> %s </ B>既に使用されているので、選択から削除されました 
+要素 <b> %s </b> 私は既に使用中だったので、選択から削除されました 
 EOF;
 $language["DRAG_DROP_FILE_NOT_PUT"]=<<<EOF
-あなたは<b>]を入力することはできません %s </ B>このボックスに、それは別の他の構造に帰属するものと 
+あなたが入力することはできません <b> %s </b> このボックスには、別の他の構造に帰属するものと 
 EOF;
 $language["DRAG_DROP_AREA"]=<<<EOF
-この領域をドラッグして、<B> %s </ B>。 
+この領域をドラッグします <b> %s </b>。 
 EOF;
 $language["DRAG_DROP_CLEAN_SELECTION"]=<<<EOF
-あなたはすべての（）を削除してもよろしいです<B> %s </ B>？ 
+あなたはすべての（）を削除してもよろしいです <b> %s </b> ？ 
 EOF;
 $language["DRAG_DROP_CLEAN_SELECTION_INSIDE"]="あなたはすべてのフィルタ選択をクリアにしてもよろしいですか？";
 $language["DRAG_DROP_MSG_ERROX_MAX_QTDE"]="あなたはより多くを入力することはできません %s フィールドの属性 %s ";
 $language["DRAG_DROP_CLEAN_SELECTION_SUCCESS"]=<<<EOF
-（）<B>の除去 %s </ B>（複数可）が正常に実行。 
+（）の除去 <b> %s </b>（S）が正常に実行します。 
 EOF;
 $language["DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE"]="選択は成功したフィルタを削除しました。";
 $language["RUN_RELATORIO_FALTA_INFORMACAO"]=<<<EOF
-execurarのクエリは、情報が不足している：ポルトガル<b>]を %s </ B> 
+上のクエリの不足情報を実行するには： <br> <b> %s </b> 
 EOF;
 $language["DRAG_DROP_FIELD_ATRIBUTO"]="属性";
-$language["DRAG_DROP_FIELD_METRICA"]="1 Metrica";
+$language["DRAG_DROP_FIELD_METRICA"]="メトリック1";
 $language["GERANDO_RELATORIO"]="クエリが作成されている間、しばらくお待ちください";
 $language["GERANDO_RELATORIO_TITLE"]="生成クエリ";
 $language["GERANDO_MULTI_CUBE_BODY"]="交換ハブにちょっと待って";
@@ -220,7 +219,7 @@ $language["SUB_TYPE"]="サブタイプ";
 $language["LEGEND_ENABLE"]="非活性化します";
 $language["POLAR"]="極性の";
 $language["RADAR"]="レーダー";
-$language["NORMAL"]="ノーマル";
+$language["NORMAL"]="nornal";
 $language["STACKED"]="重畳";
 $language["WAVY"]="波形の";
 $language["PERCENT"]="パーセンテージ";
@@ -231,7 +230,7 @@ $language["CHART_GAUGE_QUANTIDADE"]="行あたりの数量";
 $language["CHART_GAUGE_COLOR_TITLE"]="ゲージ";
 $language["CHART_GAUGE_LINEAR"]="リニア";
 $language["CHART_GAUGE_RADIAL"]="ラジアル";
-$language["CHART_PIE"]="ノーマル";
+$language["CHART_PIE"]="nornal";
 $language["CHART_DONUT"]="ノックアウト";
 $language["CHART_INSIDE_NOT_LEGEND"]="価値観";
 $language["CHART_RADAR_LINE"]="ライン";
@@ -291,13 +290,13 @@ $language["tpl_layout_title"]="レイアウトの保存";
 $language["tpl_layout_name"]="レイアウト名";
 $language["tpl_layout_alias"]="別名レイアウト";
 $language["tpl_layout_name_empty"]=<<<EOF
-あなたは<b>の名前レイアウト</ b>]を入力する必要があります 
+あなたが入力する必要があります <b>レイアウト名</b> 
 EOF;
 $language["tpl_layout_alias_empty"]=<<<EOF
-あなたは<b>のエイリアスレイアウト</ b>]を入力する必要があります 
+あなたが入力する必要があります <b>別名レイアウト</b> 
 EOF;
 $language["tpl_layout_data_empty"]=<<<EOF
-あなたはレイアウトを保存するためのオプションのいずれかを完了する必要があります<b>のメトリック、行または列</ b>を 
+あなたはレイアウトを保存するためのオプションのいずれかを完了する必要があります <b>メトリック、行または列</b> 
 EOF;
 $language["tpl_layout_option_select_empty"]="あなたはレイアウトのいずれかのオプションを選択する必要があります";
 $language["tpl_layout_share"]="シェア";
@@ -343,7 +342,7 @@ $language["TITLE_ATT_WRS_REPORT"]="レポートの管理";
 $language["TITLE_ATT_WRS_DOWNLOAD"]="ファイル管理";
 $language["TITLE_ATT_WRS_PERFIL"]="プロファイル管理";
 $language["TITLE_ATT_WRS_LOG"]="ログ管理";
-$language["LINE_TOTAL"]="TOTAL";
+$language["LINE_TOTAL"]="合計";
 $language["label_total"]="合計";
 $language["LINE_TOTAL_BUBBLE"]="あなたは、グラフに合計行を使用したいですか？";
 $language["msg_maxNumberOfFiles"]="ファイルの最大数を超えました";
@@ -404,10 +403,10 @@ $language["LOGIN_BUTTON"]="ログイン";
 $language["LOGIN_HISTORY"]="ユーザー履歴";
 $language["LOGIN_SUBJECT"]="パスワードの復元";
 $language["LOGIN_RECOVER_NOT_FOUND"]=<<<EOF
-おっと... <B>ユーザーが見つかりません %s </ B>パスワード回復を送信します。 
+おっと...ユーザーが見つかりません <b> %s </b> 回復パスワードを送信します。 
 EOF;
 $language["LOGIN_NOT_EMAIL"]=<<<EOF
-おっと..電子メールがユーザー<B>に送信されることが見出されていません %s</ B>。<BR>パスワード回復のためのサポートにご連絡ください。フィルモグラフィーをありがとう。 
+おっと..電子メールがユーザに送信されることが見出されていません <b> %s </b>。 <br>パスワード回復のためのサポートにご連絡ください。<br>ありがとう。 
 EOF;
 $language["LOGIN_RECOVER_NEW"]=<<<EOF
 <H4>パスワードの変更</ H4>は、システムにアクセスするための新しいパスワードを入力します。 
@@ -423,14 +422,14 @@ $language["LOGIN_RECOVER_ERROR"]="おっと..メールを送信できません�
 $language["HTML_LOGIN_RECOVER_BTN"]="パスワードの変更";
 $language["HTML_LOGIN_RECOVER_TITLE"]="パスワードの復元";
 $language["HTML_LOGIN_RECOVER"]=<<<EOF
-WRSシステムにアクセスするためのパスワード回復要求あなたはこのメールを無視してください要求していない場合。パスワードの変更にリダイレクトするには、以下のボタンをクリックしてください<BR​​>。<BR>あなたが変更を行うには、ブラウザのクリックlinqueコピー＆ペーストの操作をしないと。 
+WRSシステムにアクセスするためのパスワード回復要求あなたはこのメールを無視してください要求していない場合。 <br><br> 下のボタンをクリックし、パスワードの変更にリダイレクトします。	<br><br> あなたが変更を行うには、ブラウザのクリックlinqueコピー＆ペーストを動作しないしない場合。 
 EOF;
 $language["LOGIN_NEW_PASSWORD"]="新しいパスワード";
 $language["LOGIN_NEW_PASSWORD_CONFIRM"]="新しいパスワードの確認";
 $language["LOGIN_CHECK"]="パスワードを確認しています...";
 $language["LOGIN_CHECK_NEW"]="新しいパスワードを保存しています...";
 $language["LOGIN_PASSWORD_EMPTY"]=<<<EOF
-あなたは<b>]を記入しなければなりません %s </ B> 
+あなたはフィールドに入力する必要があります <b> %s </b> 
 EOF;
 $language["LOGIN_PASSWORD_EMPTY_NEW"]="これは、新しいパスワードに渡されていません。";
 $language["LOGIN_TAG_EMPTY"]="パスワードをリセットするためのコードは空白です";
@@ -450,7 +449,7 @@ $language["ADMIN_IMPORT_remover"]="以前のレコードを削除します";
 $language["ADMIN_IMPORT_atualizar"]="更新して新しい追加";
 $language["ADMIN_IMPORT_compactar_resultados"]="結果を圧縮します： ";
 $language["PASSWORD_EXPIRED"]=<<<EOF
-期限切れのパスワード、新しいパスワードを作成する必要があります。フィルモグラフィーは、新しいパスワードを使用してフォームを完成させます。 
+期限切れのパスワード、新しいパスワードを作成する必要があります。 <br> 新しいパスワードを使用してフォームを完成させます。 
 EOF;
 $language["LOGIN_OK"]="メイン画面にリダイレクト";
 $language["LOGIN_PASSWORD_ERROR"]="ユーザーまたはパスワードが無効です";

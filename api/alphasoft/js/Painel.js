@@ -560,7 +560,12 @@ function btn_clean_filter_kendo_ui()
 					{
 						var REPORT_ID		=	 get_aba_active_kendoUi().REPORT_ID;
 							$('#'+REPORT_ID).data('kendoGrid').dataSource.filter({});
-							get_aba_active_object().wrsAbaData('setWrsData',{REPORT_FILTER:json_encode({})});
+							
+							var _aba_active	=	get_aba_active_object();
+							//CLean Filters
+							_aba_active.wrsAbaData('setWrsFilterStart',{filter	:	json_encode({}) });
+							_aba_active.wrsAbaData('setWrsData',{REPORT_FILTER:json_encode({})});
+							
 							WRS_ALERT(LNG('CLEAR_FILTER_KENDOUI_SUCCESS'),'success');
 					}
 					
@@ -1947,9 +1952,6 @@ function wrs_run_filter()
 		
 		
 		
-		
-	
-		
 		if( _param_request['TYPE_RUN']!='DrillColuna')
 		{
 			aba_active.wrsAbaData('aba_detect_change');
@@ -1966,6 +1968,17 @@ function wrs_run_filter()
 			$('.wrs_run_filter').attr('is_atributo_simples',false);
 		}
 		
+		
+		
+		var REPORT_FILTER		=	get_aba_active_object().wrsAbaData('getWrsFilterStart').filter;
+		
+		if(isEmpty(REPORT_FILTER))
+		{
+			console.log('empty');
+			REPORT_FILTER	=	get_aba_active_object().wrsAbaData('getWrsData').REPORT_FILTER;
+		}
+		
+		_param_request['REPORT_FILTER']	=	REPORT_FILTER;
 		
 		//console.log('_param_request',_param_request);
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		

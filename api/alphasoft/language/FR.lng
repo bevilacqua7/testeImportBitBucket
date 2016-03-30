@@ -9,15 +9,14 @@
 	$language["kendoUI"]				=	"kendo.messages.fr-FR.min.js";
 	$language["summernote"]				=	"summernote-fr-FR.js";
 
-
-	$language['MODAL_OK']			=	"d'accord";
-	$language['MODAL_YES']			=	"oui";
-	$language['MODAL_CANCEL']		=	"annuler";
-	
-	
-
-$language["MES"]=array("janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre");;
-$language["DIAS"]=array("dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi");;
+$language["MODAL_OK"]="d'accord";
+$language["MODAL_YES"]="oui";
+$language["MODAL_CANCEL"]="annuler";
+$language["CLEAR_FILTER_KENDOUI"]="Vider les filtres Grille";
+$language["CLEAR_FILTER_KENDOUI_WARNING"]="Vous voulez vraiment effacer les filtres de grille?";
+$language["CLEAR_FILTER_KENDOUI_SUCCESS"]="Grille filtre avec succès propre.";
+$language["MES"]=array("janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre");
+$language["DIAS"]=array("dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi");
 $language["DE"]=" de ";
 $language["BRN_OUT_SYSTEM"]="WRS de sortie";
 $language["theme_azul"]="bleu";
@@ -25,30 +24,30 @@ $language["theme_cinza"]="gris";
 $language["theme_laranja"]="orange";
 $language["theme_verde"]="vert";
 $language["theme_vermelho"]="rouge";
-$language["DESCONECTED_TITLE"]="USER UNPLUGGED";
+$language["DESCONECTED_TITLE"]="déconnecté utilisateur";
 $language["DESCONECTED_DESCRIPT"]="Utilisateur déconnecté du système pour plusieurs raisons:";
-$language["DESCONECTED_BUTTON"]="BACK TO LOGIN";
-$language["DESCONECTED_REASONS"]=array("Inactivité dans la session,","changement de mot de passe,","Base de données sans connexion,","Autres.");;
+$language["DESCONECTED_BUTTON"]="Retour à la connexion";
+$language["DESCONECTED_REASONS"]=array("Inactivité dans la session,","changement de mot de passe,","Base de données sans connexion,","Autres.");
 $language["ScreenShotGenerate"]="Création de l'écran de l'écran d'impression";
 $language["ScreenShotMailBodyHtml"]=<<<EOF
-<P> <strong> Bonjour </ strong> </ p> <p> Voir l'extrait de cette requête " %s "La base" %s "Extrait de l'outil WRS </ p> <p> Dans cette requête les filtres suivants ont été appliqués :. </ P> <br> %s Filmographie <p> Cordialement, Europe <strong> %s </ Strong>; </ p> 
+<p><strong>Bonjour</strong>, </p> <p>Voir l'extrait de cette requête " %s "La base" %s »Extrait de l'outil WRS.</p> <p>Dans cette consultation les filtres suivants ont été appliqués:</p><br><br> %s <br><p>Cordialement,<br> <strong> %s </strong>;</p> 
 EOF;
 $language["ScreenShotMailWrong"]=<<<EOF
-Il y a email (s) incomplète, s'il vous plaît vérifier avant d'envoyer <br> <p> <b> %s </ B> </ p> Filmographie Merci. 
+Il y a email (s) incomplète, s'il vous plaît vérifier avant d'envoyer: <br><p> <b> %s </b> </p> <br>Merci. 
 EOF;
 $language["ScreenShotMailTO"]=<<<EOF
-Le <b> Pour </ b> padding est nécessaire 
+champ <b>à</b> est obligatoire rembourrage 
 EOF;
 $language["ScreenShotMailSUBJECT"]=<<<EOF
-Le <b> subject </ b> padding est nécessaire 
+champ <b>sujet</b> est obligatoire rembourrage 
 EOF;
 $language["ScreenShotMailMESSENGER"]="Vous devez entrer un peu de contenu dans le corps du message";
 $language["ScreenShotMailSend"]=<<<EOF
-Envoi de message, s'il vous plaît patienter ... <img src = "images / wrs_loading.gif '/> 
+Envoi de message, s'il vous plaît patienter ... <img src='imagens/wrs_loading.gif'/> 
 EOF;
 $language["ScreenShotMailSendSuccess"]="Email envoyé avec succès.";
 $language["ScreenShotMailSendError"]=<<<EOF
-Impossible d'envoyer le courriel en raison de: <br> <b> %s </ B>. 
+Impossible d'envoyer le courriel en raison de: <br><br><b> %s </b>. 
 EOF;
 $language["USUARIO_SEM_PRIVILEGIOS"]="utilisateur non privilégié";
 $language["USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS"]="Utilisateur sans privilèges pour afficher la grille, il contient plus de 65.000 dossiers";
@@ -59,7 +58,7 @@ $language["VALOR"]="valeur";
 $language["TOOLTIP_BTN_RUN"]="rapport d'exécution";
 $language["TOOLTIP_BTN_CLEAN_FILTER"]="Effacer tous les filtres sélectionnés";
 $language["TOOLTIP_BTN_CHANTE_FILTER_DROP"]=<<<EOF
-Est-ce que le changement de l'état de la DRAG et DROP pour filtrer le filtre de l'État pour faire glisser et déposer de sélection 
+Elle rend le changement de statut: <br> DRAG et DROP à la sélection du filtre <br> filtrer état à DRAG et DROP 
 EOF;
 $language["TOOLTIP_BTN_NEGADO"]="Niant les filtres sélectionnés, la requête va venir tous les moins les filtres sélectionnés.";
 $language["TOOLTIP_BTN_CLEAN_FILTER_LOCAL"]="Effacer seulement les filtres de cette dimension";
@@ -70,7 +69,7 @@ $language["CSV_ERROR_TABLE_EMPTY"]="Ops, il n'a pas généré un rapport pour ce
 $language["CSV_NOT_GENERATE"]="Il n'est possible de générer le CSV, erreur interne dans la banque";
 $language["CSV_GENERATE_ZIP"]="générateur %s fichiers CSV";
 $language["LOGOUT"]=<<<EOF
-Attendez un instant, nous laissons le système .. <br> 
+Attendez un instant, nous laissons le système ..<br><br><br> 
 EOF;
 $language["MENU_ADMIN_CUSTOMER"]="clientèle";
 $language["MENU_ADMIN_USER"]="utilisateurs";
@@ -93,7 +92,7 @@ $language["MAIL_TO"]="à";
 $language["MAIL_SUBJECT"]="sujet";
 $language["MAIL_SEND"]="email";
 $language["ADMIN_AVISO_IMPORT"]=<<<EOF
-- Importer des fichiers uniquement en format CSV ou ZIP <br> Format - assurez-vous que le nom du fichier est: #NAME_FILE#Ou le fichier ZIP contient cette <br> - Layout Standard: portugais <span class = "class_layout_padrao">#DEFAULT_LAYOUT#</ Span> 
+- Importer des fichiers uniquement en format CSV ou postal<br>- Assurez-vous que le nom du fichier est: #NAME_FILE#Ou le fichier ZIP contenant ce<br>- Par défaut Mise en page:<br><Span class = "class_layout_padrao">#DEFAULT_LAYOUT#</ Span> 
 EOF;
 $language["TITLE_OPTIONS"]="options de";
 $language["MENU_ALL_CATEGORY"]="Toutes les catégories";
@@ -107,22 +106,22 @@ $language["ERROR_CUBO_NOT_FOUND"]=<<<EOF
 Il n'a pas été possible d'identifier le Cube utilisé. <br> Si l'erreur persiste, s'il vous plaît informer support 
 EOF;
 $language["ERRO_EXECUTE_ABA"]=<<<EOF
-Erreur d'exécution de la requête <b> %s </ B> Filmographie 
+Erreur d'exécution de la requête <b> %s </b> <br> 
 EOF;
 $language["ABA_IN_USER"]="Consultation en cours d'utilisation";
 $language["ABA_LIMIT_SEE"]=<<<EOF
-Il est impossible de retirer la requête <b> %s </ B> Filmographie au moins un doit rester visible. 
+Il est impossible de supprimer l'enquête <b> %s </b><br> au moins doit rester visible. 
 EOF;
 $language["ABA_CHANGE_CUBE_ID"]="L'information sera effacée que l'ABA appartient à un autre cube";
 $language["JOB_COMPLETE_LOAD"]=<<<EOF
-Query <b> %s </ B> terminé 
+consultation <b> %s </b> il a été achevé 
 EOF;
 $language["JOB_COMPLETE"]="Pas plus de requêtes en cours d'exécution";
 $language["JOB_CANCEL"]=<<<EOF
-Query <b> %s </ B> a été annulé avec succès 
+consultation <b> %s </b> Il a été annulé avec succès 
 EOF;
 $language["JOB_CANCEL_ERRO"]=<<<EOF
-Erreur annulant requête <b> %s </ B> S'il vous plaît essayer à nouveau 
+Erreur d'annulation d'enquête <b> %s </b> S'il vous plaît essayer à nouveau 
 EOF;
 $language["JOB_NOTFOUND"]="Il a été constaté la consultation d'annuler ou il a été complété";
 $language["JOB_CLOSE_ALERT"]="Fermer la fenêtre Alerte";
@@ -133,12 +132,12 @@ $language["RUN_GRID_CHANGE_NOT"]="Aucune modification pour générer une nouvell
 $language["NOT_CLOSE_WINDOW"]="Les onglets ci-dessous sont les inconvertis:";
 $language["NOT_CLOSE_WINDOW_LOGOUT"]="Les onglets ci-dessous sont les inconvertis, même vouloir quitter sans sauvegarder?";
 $language["ABA_TITLE_EMPTY"]=<<<EOF
-Vous devez entrer un <b> Titre </ b> au rapport 
+Vous devez entrer un <b>titre</b> signaler 
 EOF;
 $language["SEE_IN_MAP"]="VOIR SUR LA CARTE";
 $language["REMOVE"]="RETRAIT";
 $language["DATA_BASE_ERROR"]=<<<EOF
-<B> Oups ... Erreur dans la base de données: </ b> 
+<b>Oops ... Erreur dans la base de données:</b> 
 EOF;
 $language["TITLE_TEMA"]="thème";
 $language["TITLE_LINGUA"]="lingua";
@@ -155,52 +154,52 @@ $language["TITLE_GRID_WINDOW_MENU_LIST_INFO"]="liste de base";
 $language["REPORT_RESULT_HISTORY"]="Il n'y a pas d'histoire";
 $language["MAIN_OPEN_REPORT"]="rapports ouverts";
 $language["MAIN_OPEN_LAYOUT"]="dispositions ouvertes";
-$language["TITLE_TOP_TOTAL"]="TOTAL";
-$language["TITLE_TOP_5"]="TOP 5";
-$language["TITLE_TOP_10"]="TOP 10";
-$language["TITLE_TOP_15"]="TOP 15";
-$language["TITLE_TOP_20"]="TOP 20";
-$language["TITLE_TOP_25"]="TOP 25";
-$language["TITLE_TOP_50"]="TOP 50";
-$language["TITLE_TOP_100"]="TOP 100";
+$language["TITLE_TOP_TOTAL"]="total";
+$language["TITLE_TOP_5"]="Top 5";
+$language["TITLE_TOP_10"]="Top 10";
+$language["TITLE_TOP_15"]="Top 15";
+$language["TITLE_TOP_20"]="Top 20";
+$language["TITLE_TOP_25"]="Top 25";
+$language["TITLE_TOP_50"]="Top 50";
+$language["TITLE_TOP_100"]="Top 100";
 $language["ERROR_LOAD_ABA"]="ERREUR: ABA01 - Une erreur est survenue lors de l'ouverture de l'onglet ..";
 $language["ABA_BE_LOADED"]=<<<EOF
-Le volet <b> %s </ B> est déjà chargée 
+Le rabat <b> %s </b> déjà chargé 
 EOF;
 $language["FILTER_NOT_ROWS"]="Aucune preuve n'a été trouvée.";
 $language["FILTER_NOT_ROWS_TOOLTIP"]="Aucun filtre sélectionné.";
 $language["FILTER_CLEAN_FIND"]="Effacer la recherche";
 $language["FILTER_CLEAN_FILTER"]="Etes-vous sûr desenja supprimer les filtres déjà sélectionnés?";
 $language["FILTER_CLEAN_FILTER_SUCCESS"]="Nettoyage du filtre exécuté avec succès.";
-$language["ERRO_FILE_PROCCESS"]="Oops il y avait une erreur dans ERROR processso: 0001";
+$language["ERRO_FILE_PROCCESS"]="Oops il y avait une erreur dans le processus ERREUR: 0001";
 $language["BTN_CLOSE"]="fermer";
 $language["MSG_FORCE_LOGOFF"]="Vous avez été déconnecté du système";
 $language["DRAG_DROP_FILE_IN_USER"]=<<<EOF
-Le <b> %s </ B> est déjà utilisé 
+l'élément <b> %s </b> déjà utilisé 
 EOF;
 $language["DRAG_DROP_FILE_IN_USER_REMOVE"]=<<<EOF
-Le <b> %s </ B> est déjà en cours d'utilisation et a donc été supprimée de la sélection 
+l'élément <b> %s </b> J'étais déjà en cours d'utilisation et a donc été retiré de la sélection 
 EOF;
 $language["DRAG_DROP_FILE_NOT_PUT"]=<<<EOF
-Vous ne pouvez pas entrer dans le <b> %s </ B> dans cette case, il doit appartenir à une autre autre structure 
+Vous ne pouvez pas entrer <b> %s </b> dans cette case, il doit appartenir à une autre autre structure 
 EOF;
 $language["DRAG_DROP_AREA"]=<<<EOF
-Faites glisser cette zone <b> %s </ B>. 
+Faites glisser cette zone <b> %s </b>. 
 EOF;
 $language["DRAG_DROP_CLEAN_SELECTION"]=<<<EOF
-Etes-vous sûr de vouloir supprimer tous (le) <b> %s </ B>? 
+Etes-vous sûr de vouloir supprimer tous (le) <b> %s </b> ? 
 EOF;
 $language["DRAG_DROP_CLEAN_SELECTION_INSIDE"]="Etes-vous sûr de vouloir effacer toutes les sélections de filtre?";
 $language["DRAG_DROP_MSG_ERROX_MAX_QTDE"]="Vous ne pouvez pas entrer plus de %s attributs dans le domaine %s ";
 $language["DRAG_DROP_CLEAN_SELECTION_SUCCESS"]=<<<EOF
-Suppression de (la) <b> %s </ B> (s) réalisée avec succès. 
+L'élimination du (des) <b> %s </b>(S) réalisée avec succès. 
 EOF;
 $language["DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE"]="Sélections filtre supprimés.";
 $language["RUN_RELATORIO_FALTA_INFORMACAO"]=<<<EOF
-Pour Query execurar manquent d'information: Portugais <b> %s </ B> 
+Pour exécuter les informations d'absence de requête sur: <br> <b> %s </b> 
 EOF;
 $language["DRAG_DROP_FIELD_ATRIBUTO"]="un attribut";
-$language["DRAG_DROP_FIELD_METRICA"]="un Metrica";
+$language["DRAG_DROP_FIELD_METRICA"]="une métrique";
 $language["GERANDO_RELATORIO"]="Attendez un instant alors que la requête est créée";
 $language["GERANDO_RELATORIO_TITLE"]="génération de requêtes";
 $language["GERANDO_MULTI_CUBE_BODY"]="Attendez un instant à l'échange hub";
@@ -291,13 +290,13 @@ $language["tpl_layout_title"]="Enregistrer la disposition";
 $language["tpl_layout_name"]="nom Mise en page";
 $language["tpl_layout_alias"]="alias Disposition";
 $language["tpl_layout_name_empty"]=<<<EOF
-Vous devez entrer le <b> Nom Mise en page </ b> 
+Vous devez entrer le <b>nom Mise en page</b> 
 EOF;
 $language["tpl_layout_alias_empty"]=<<<EOF
-Vous devez entrer le <b> Alias ​​mise en page </ b> 
+Vous devez entrer le <b>alias Disposition</b> 
 EOF;
 $language["tpl_layout_data_empty"]=<<<EOF
-Vous devez remplir l'une des options pour enregistrer une mise en page <b> Metrics, lignes ou colonnes </ b> 
+Vous devez remplir l'une des options pour enregistrer une mise en page <b>Metrics, lignes ou colonnes</b> 
 EOF;
 $language["tpl_layout_option_select_empty"]="Vous devez sélectionner une option pour la mise en page";
 $language["tpl_layout_share"]="part";
@@ -317,7 +316,7 @@ $language["TITLE_CONTEX_MENU"]="Ajouter à";
 $language["FILTER_CONTEX_MENU_SELECTION_REMOVE"]="Supprimer la sélection %s ite s%";
 $language["FILTER_CONTEX_MENU_SELECTION_VIEW"]="Voir ite% sélectionné ns %s ";
 $language["FILTER_CONTEX_MENU_SELECTION_ITEM_EXISTS"]="la %s ite% ns ci-dessous existaient% me pas fo% ram ajouté %s :";
-$language["TITLE_MENU_DASHBOARD"]="( «Visions consolidés avec différents rapports segmentés bases en Quadrants indépendant»)";
+$language["TITLE_MENU_DASHBOARD"]="(Visions consolidés avec différentes bases segmentée Reports dans Quadrants Independent)";
 $language["tpl_association_save_sucess"]="enregistré avec succès Association";
 $language["tpl_association_save_error"]="Erreur en association";
 $language["tpl_association_remove_sucess"]="association %s ite% s supprimé avec succès";
@@ -327,7 +326,7 @@ $language["tpl_association_title_cube"]="cube";
 $language["tpl_association_title_user"]="utilisateur";
 $language["HTML_CUBE_EDITION"]="édition:";
 $language["HTML_CUBE_UPDATE"]="mise à jour:";
-$language["LABEL_NOVO"]="nouveau";
+$language["LABEL_NOVO"]=" nouveau ";
 $language["LABEL_LOAD"]="Chargement en cours ...";
 $language["PAGINATION_PAGE"]="éléments";
 $language["PAGINATION_PAGE_INSIDE"]="à";
@@ -343,7 +342,7 @@ $language["TITLE_ATT_WRS_REPORT"]="Gestion des rapports";
 $language["TITLE_ATT_WRS_DOWNLOAD"]="Gestion des fichiers";
 $language["TITLE_ATT_WRS_PERFIL"]="gestion des profils";
 $language["TITLE_ATT_WRS_LOG"]="Log Management";
-$language["LINE_TOTAL"]="TOTAL";
+$language["LINE_TOTAL"]="total";
 $language["label_total"]="total";
 $language["LINE_TOTAL_BUBBLE"]="Vous souhaitez utiliser la ligne des totaux dans le graphique?";
 $language["msg_maxNumberOfFiles"]="nombre maximal de fichiers dépassé";
@@ -404,10 +403,10 @@ $language["LOGIN_BUTTON"]="login";
 $language["LOGIN_HISTORY"]="Histoire de l'utilisateur";
 $language["LOGIN_SUBJECT"]="Password Recovery";
 $language["LOGIN_RECOVER_NOT_FOUND"]=<<<EOF
-Oups ... pas trouvé l'utilisateur <b> %s </ B> pour envoyer la récupération de mot de passe. 
+Oups ... pas trouvé l'utilisateur <b> %s </b> pour envoyer le mot de passe de récupération. 
 EOF;
 $language["LOGIN_NOT_EMAIL"]=<<<EOF
-Oops .. not found email à envoyer à l'utilisateur <b> %s</ B>. <br> S'il vous plaît contacter le support pour la récupération de mot de passe. Filmographie Merci. 
+Oops .. not found email à envoyer à l'utilisateur <b> %s </b>. <br>S'il vous plaît contacter le support pour la récupération de mot de passe.<br>Merci. 
 EOF;
 $language["LOGIN_RECOVER_NEW"]=<<<EOF
 <H4> changement de mot de passe </ h4> Entrez le nouveau mot de passe pour accéder au système. 
@@ -423,14 +422,14 @@ $language["LOGIN_RECOVER_ERROR"]="Oops .. Impossible d'envoyer email. S'il vous 
 $language["HTML_LOGIN_RECOVER_BTN"]="CHANGER MOT DE PASSE";
 $language["HTML_LOGIN_RECOVER_TITLE"]="Password Recovery";
 $language["HTML_LOGIN_RECOVER"]=<<<EOF
-Mot de passe demande de récupération pour l'accès au système WRS si vous ne l'avez pas demandé s'il vous plaît ignorer cet e-mail. <br> Cliquez sur le bouton ci-dessous pour être redirigé vers le changement de mot de passe. <br> Si vous ne l'utilisez pas la copie de clic Linque et coller dans votre navigateur pour effectuer le changement. 
+Mot de passe demande de récupération pour l'accès au système WRS si vous ne l'avez pas demandé s'il vous plaît ignorer cet e-mail. <br><br> Cliquez sur le bouton ci-dessous pour être redirigé vers le changement de mot de passe.	<br><br> Si vous ne travaillez pas la copie de clic Linque et coller dans votre navigateur pour effectuer le changement. 
 EOF;
 $language["LOGIN_NEW_PASSWORD"]="nouveau mot de passe";
 $language["LOGIN_NEW_PASSWORD_CONFIRM"]="Confirmer le nouveau mot de passe";
 $language["LOGIN_CHECK"]="Vérification de mot de passe ...";
 $language["LOGIN_CHECK_NEW"]="Enregistrement nouveau mot de passe ...";
 $language["LOGIN_PASSWORD_EMPTY"]=<<<EOF
-Vous devez remplir le <b> %s </ B> 
+Vous devez remplir le champ <b> %s </b> 
 EOF;
 $language["LOGIN_PASSWORD_EMPTY_NEW"]="Il est pas passé au nouveau mot de passe.";
 $language["LOGIN_TAG_EMPTY"]="Le code pour réinitialiser le mot de passe est vide";
@@ -450,7 +449,7 @@ $language["ADMIN_IMPORT_remover"]="Retirez les disques précédents";
 $language["ADMIN_IMPORT_atualizar"]="Mettre à jour et ajouter de nouvelles";
 $language["ADMIN_IMPORT_compactar_resultados"]="Compresser résultats: ";
 $language["PASSWORD_EXPIRED"]=<<<EOF
-Mot de passe expiré, vous devez créer un nouveau mot de passe. Filmographie remplir le formulaire avec le nouveau mot de passe. 
+Mot de passe expiré, vous devez créer un nouveau mot de passe. <br> Remplissez le formulaire avec le nouveau mot de passe. 
 EOF;
 $language["LOGIN_OK"]="Redirection vers l'écran principal";
 $language["LOGIN_PASSWORD_ERROR"]="Utilisateur ou mot de passe incorrect";

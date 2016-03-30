@@ -1,3 +1,4 @@
+
 <?PHP
 header('Content-Type: text/html; charset=utf-8');
 
@@ -31,42 +32,42 @@ function isArray($value,$prince)
 	
 	if(is_array($value))
 	{
-		return '<span class="notranslate">array(</span>'.$prince.implode($prince.",".$prince,$value).$prince.'<span class="notranslate">)</span>';
+		return '<span class="notranslate">array(</span>'.$prince.implode($prince."<span class='notranslate'>,</span>".$prince,$value).$prince.'<span class="notranslate">)</span>';
 	}
 	
 	
 	
 	$replace		=	 array('%s',
 								'"',
-								'<p>',
-								'</p>',
-								'<br>',
-								'<strong>',
-								'</strong>',
-								'<b>',
-								'</b>',
+								htmlspecialchars('<p>'),
+								htmlspecialchars('</p>'),
+								htmlspecialchars('<br>'),
+								htmlspecialchars('<strong>'),
+								htmlspecialchars('</strong>'),
+								htmlspecialchars('<b>'),
+								htmlspecialchars('</b>'),
 								'#NOMECAMPO#',
 								'#VAL#',
 								'#DEFAULT_LAYOUT#',
 								'#NAME_FILE#',
-								"<img src='imagens/wrs_loading.gif'/>"
+								htmlspecialchars("<img src='imagens/wrs_loading.gif'/>")
 								
 	);
 	$rr				=	array(
 								' <span class="notranslate">%s</span> ', 
 								"'",
-								'<span class="notranslate"><p></span>',
-								'<span class="notranslate"></p></span>',
-								'<span class="notranslate"><br></span>',
-								'<span class="notranslate"><strong></span>',
-								'<span class="notranslate"></strong></span>',
-								'<span class="notranslate"><b></span>',
-								'<span class="notranslate"></b></span>',
+								'<span class="notranslate">'.htmlspecialchars('<p>').'</span>',
+								'<span class="notranslate">'.htmlspecialchars('</p>').'</span>',
+								'<span class="notranslate">'.htmlspecialchars('<br>').'</span>',
+								'<span class="notranslate">'.htmlspecialchars('<strong>').'</span>',
+								'<span class="notranslate">'.htmlspecialchars('</strong>').'</span>',
+								'<span class="notranslate">'.htmlspecialchars('<b>').'</span>',
+								'<span class="notranslate">'.htmlspecialchars('</b>').'</span>',
 								'<span class="notranslate">#NOMECAMPO#</span>',
 								'<span class="notranslate">#VAL#</span>',
 								'<span class="notranslate">#DEFAULT_LAYOUT#</span>',
 								'<span class="notranslate">#NAME_FILE#</span>',
-								"<span class='notranslate'><img src='imagens/wrs_loading.gif'/><span>"
+								"<span class='notranslate'>".htmlspecialchars("<img src='imagens/wrs_loading.gif'/>")."</span>"
 	);
 	
 	
@@ -82,6 +83,8 @@ function isArray($value,$prince)
 	
 }
 
+
+ 
 foreach($language as $label =>$value)
 {
 	

@@ -29,6 +29,8 @@
 				<p>
 					<ul>
 						<?php 
+						
+						
 								foreach(LNG('DESCONECTED_REASONS') as $val)
 								{
 									echo '<li><i class="fa fa-info-circle"></i> '.$val.'</li>';

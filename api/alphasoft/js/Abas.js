@@ -1790,6 +1790,7 @@ function optionsDataConvert(gridValue,with_decode)
 				var base		=	{
 										kendoUi			:	{}, 
 										data			:	{},
+										FilterStart		:	{},
 										kendoGrid		:	{},
 										reportDetails	:	{},
 										first_MLC		:	null,
@@ -2353,6 +2354,18 @@ function optionsDataConvert(gridValue,with_decode)
 				set_input_poolin(input,'data');
 			}
 			
+			var __setWrsFilterStart	=	 function(input)
+			{
+				_ONLY('wrsAbaData::__setWrsData');
+				set_input_poolin(input,'FilterStart');
+			}
+			
+			
+			var __getWrsFilterStart	=	 function()
+			{
+				return data_global['FilterStart'];
+			}
+			
 			var __change_div_elements	=	 function(input)
 			{
 				//input.old
@@ -2655,6 +2668,8 @@ function optionsDataConvert(gridValue,with_decode)
 			        change				: 	__change,
 			        setKendoUi			:	__setKendoUi,
 			        setWrsData			:	__setWrsData,
+			        setWrsFilterStart	:	__setWrsFilterStart,
+			        getWrsFilterStart	:	__getWrsFilterStart,
 			        setKendoUiGrid		:	__setKendoUiGrid,
 			        setReportDetails	:  	__setReportDetails,
 			        setHistory			:	__setHistory,

@@ -230,6 +230,8 @@ function LNG($string)
 
 	if(!isset($language[$string])) return $string;
 
+	if(is_array($language[$string])) return $language[$string];
+		
 	return ucfirst($language[$string]);
 }
 
