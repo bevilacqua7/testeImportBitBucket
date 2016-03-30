@@ -76,6 +76,8 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 			
 			$user_id 		= array_shift($arr_users_sel);
 			$condicao		= 'USER_ID = '.$user_id;
+			
+			/* -- otimizado para rotina abaixo deste bloco
 			$sql_del[] 		= $this->queryClass->Get_procedure_remove_cube_user($this->admin->classname,$condicao); // obrigatoriamente sempre terá 1 registro quando a requisicao vier do duplo clique na coluna usuario
 			if(is_array($arr_cubos_sel) && count($arr_cubos_sel)>0){
 				foreach($arr_cubos_sel as $cube_index){
@@ -89,6 +91,19 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 					$sql_insert[]	= $this->queryClass->Get_query_changetable_cube_user($this->admin->classname,$arr_campos_valores,$condicao,$operacao);
 				}
 			}
+			*/
+			
+			$servers = $databases = $cubos = array();
+			if(is_array($arr_cubos_sel) && count($arr_cubos_sel)>0){
+				foreach($arr_cubos_sel as $cube_index){
+					$data_cube 		= (array)$arr_indices_cubos->$cube_index;
+					$servers[]		=$data_cube['SERVER_ID'];
+					$databases[]	=$data_cube['DATABASE_ID'];
+					$cubos[]		=$data_cube['CUBE_ID'];
+				}
+			}
+			$sql_insert[]	= $this->queryClass->INSERT_RELATIONSHIP(implode(',',$servers),implode(',',$databases),implode(',',$cubos),$user_id,'USER'); // $SERVERS, $DATABASES, $CUBES, $USERS, $RELATIONSHIP  = 'USER'
+			exit('<pre>'.print_r($arr_indices_cubos,1).print_r($arr_cubos_sel,1));
 			
 		}else if($tipo_save=='cube'){
 			
@@ -99,6 +114,8 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 			$server_id 		= $data_cube['SERVER_ID'];	
 			// atencao, o server_id nao é validado na condicao pois pode estar cadastrado com servidor diferente, uma vez que existe o balance entre servers - facioli 20160307 - felipeb
 			$condicao		= "CUBE_ID = ''".$cube_id."'' AND DATABASE_ID = ''".$database_id."''";
+			
+			/* -- otimizado para rotina abaixo deste bloco
 			$sql_del[] 		= $this->queryClass->Get_procedure_remove_cube_user($this->admin->classname,$condicao); // obrigatoriamente sempre terá 1 registro quando a requisicao vier do duplo clique na coluna usuario
 			if(is_array($arr_users_sel) && count($arr_users_sel)>0){
 				foreach($arr_users_sel as $user_id){
@@ -111,10 +128,15 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 					$sql_insert[]	= $this->queryClass->Get_query_changetable_cube_user($this->admin->classname,$arr_campos_valores,$condicao,$operacao);
 				}
 			}
+			*/
+			
+			$sql_insert[]	= $this->queryClass->INSERT_RELATIONSHIP($server_id,$database_id,$cube_id,implode(',',$arr_users_sel),'CUBE'); // $SERVERS, $DATABASES, $CUBES, $USERS, $RELATIONSHIP  = 'USER'
+					
 			
 		}else if($tipo_save=='new'){
 			
 			if(is_array($arr_users_sel) && count($arr_users_sel)>0){
+				/* -- otimizado para rotina abaixo deste bloco				 	
 				foreach($arr_users_sel as $user_id){
 					
 					$condicao		= 'USER_ID = '.$user_id;					
@@ -133,6 +155,19 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 						}
 					}
 				}
+				*/
+
+				$servers = $databases = $cubos = array();	
+				if(is_array($arr_cubos_sel) && count($arr_cubos_sel)>0){
+					foreach($arr_cubos_sel as $cube_index){
+						$data_cube 		= (array)$arr_indices_cubos->$cube_index;
+						$servers[]		=$data_cube['SERVER_ID'];
+						$databases[]	=$data_cube['DATABASE_ID'];
+						$cubos[]		=$data_cube['CUBE_ID'];
+					}
+				}
+				$sql_insert[]	= $this->queryClass->INSERT_RELATIONSHIP(implode(',',$servers),implode(',',$databases),implode(',',$cubos),implode(',',$arr_users_sel)); // $SERVERS, $DATABASES, $CUBES, $USERS, $RELATIONSHIP  = 'USER'
+										
 			}
 			
 		}else{
@@ -202,11 +237,14 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 		if($cube_id && $database_id && $server_id){
 			$query_user_sel			=	$this->queryClass->getCurrentAssociationsByCube($cube_id,$database_id,$server_id);
 		}
-		
+		//echo "<pre>".print_r($primaries,1)."</pre>";
 		$query_all_cubes		=	$this->queryClass->getQueryAllCubes();
 		$query_all_users		=	$this->queryClass->getQueryAllUsers();	
-		
-		$query_clicked_cubes	=	$this->queryClass->getQueryAllCubes($coluna_clique_user=='USER_CODE' || $coluna_clique_user==false?null:$cube_id);
+		if($coluna_clique_user=='USER_CODE' || $coluna_clique_user==false){
+			$query_clicked_cubes	=	$this->queryClass->getQueryAllCubes();
+		}else{
+			$query_clicked_cubes	=	$this->queryClass->getQueryAllCubes($cube_id,$database_id,$server_id);
+		}
 		$query_clicked_users	=	$this->queryClass->getQueryAllUsers($coluna_clique_user=='USER_CODE'?$user_id:null);	
 
 
@@ -214,19 +252,20 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 
 		
 		// monta indice para trabalhar com os cubos, pois utilizam chaves compostas
-		$indices 				= $this->admin->criaIndicesComQueryParaCubos($query_all_cubes,array('CUBE_ID','DATABASE_ID','SERVER_ID'),'CUBE_DESC');
+		$indices 				= $this->admin->criaIndicesComQueryParaCubos($query_all_cubes,array('CUBE_ID','DATABASE_ID','SERVER_ID'),'CUBE_DESC_FULL');
 		$parameter['association_indexes_for_cubes']	= base64_encode(json_encode($indices['indices'],1));
+		//echo "<pre>".print_r($query_all_cubes,1)."</pre>";
 
 		if($coluna_clique_user!=false){
 			$chave_combo_provisoria	= 'XXX';
-			$indices_sel 			= $this->admin->criaIndicesComQueryParaCubos($query_clicked_cubes,array('CUBE_ID','DATABASE_ID','SERVER_ID'),'CUBE_DESC',$chave_combo_provisoria);
+			$indices_sel 			= $this->admin->criaIndicesComQueryParaCubos($query_clicked_cubes,array('CUBE_ID','DATABASE_ID','SERVER_ID'),'CUBE_DESC_FULL',$chave_combo_provisoria);
 			$option_cube_sel		= '';			
 			// monta option com indice real para mostrar quando o cubo for selecionado
 			if($coluna_clique_user=='CUBE_DESC'){
 				$key_cube_clicked	= $this->admin->findIndexInarrayByMultipleValues($indices['indices'],array_shift($indices_sel['indices']));
 				$option_cube_sel	= str_replace($chave_combo_provisoria,$key_cube_clicked,$indices_sel['combo']);
 			}else{
-				$option_cube_sel	= $this->admin->preencheCombosComQuery($query_cube_sel ,'CUBE_ID','CUBE_DESC', $indices_sel['indices']);
+				$option_cube_sel	= $this->admin->preencheCombosComQuery($query_cube_sel ,'CUBE_ID','CUBE_DESC_FULL', $indices_sel['indices']);
 			}		
 		}
 		
@@ -310,81 +349,20 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 	
 	}
 
-	public function import($options)
-	{
-	
-		$_fields						= $options['field'];
-		$_request_original 				= $_REQUEST;
-		$_tabela						= $options['table'];
-		$_request_original['campo_id'] 	= $options['primary'];
-		$_request_original['_param'] 	= $options;
-	
-		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
-	
-		unset($param['button']['update']);
-		unset($param['button']['remove']);
-		unset($param['button']['export']);
-	
-		$nome_arquivo = 'uploads/'.WRS::CUSTOMER_ID().'/';
-	
-		// criacao do HTML para exibir o form de upload ou realizar a importacao se houverem arquivos enviados
-		$param['html'] = $this->admin->importarDadosEmMassa($nome_arquivo,$_request_original);
-	
-		return $param;
-	}
-	
 	public function export($options)
 	{
-		$_fields			= $options['field'];
-		$_request_original 	= $_REQUEST;
-		$_tabela			= $options['table'];
-		$_regForExport		= json_decode($_request_original['extraValues'],1);
-		$_regForExport['caracter_separacao'] = $_request_original['caracter_d'];
-		$_regForExport['efetua_compactacao'] = $_request_original['caracter_c']!='nao'?true:false;
-	
-		$arr_campos_request = array();
-		foreach($_fields as $nome_campo => $valores){
-			if(array_key_exists($nome_campo, $_request_original)){
-				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
-			}
-		}
-	
-		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
-	
-		unset($param['button']['update']);
-		unset($param['button']['remove']);
-		unset($param['button']['import']);
-	
-		$event_form						= WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_request_original['event']);
-		$_request_original['event'] 	= $event_form;
-	
-		$param['tabela_export']			= $event_form;
-		$param['caracter_separacao']	= $_regForExport['caracter_separacao'];
-		$param['efetua_compactacao']	= $_regForExport['efetua_compactacao'];
-
-		$customer_id_logado		= WRS::CUSTOMER_ID();
-		
-		$nome_diretorio = 'uploads/'.$customer_id_logado.'/';
-		$param['nome_diretorio']	= $nome_diretorio;
-		
-		$param['filtro_fixo'] = 'CUSTOMER_ID = '.$customer_id_logado;
-	
-		include PATH_TEMPLATE.'export_file_window.php';
-		$link_download = $this->admin->downloadLink($_regForExport['objetosSelecionados'],$_regForExport['chave_primaria'],$param);
-		if(!$link_download){
-			$msg 	= LNG('ADMIN_EXPORT_OPTION_ERROR');
-			$tipomsg= "error";
-		}else{
-			$msg 	= LNG('ADMIN_EXPORT_OPTION_OK');
-			$tipomsg= "success";
-		}
-		$HTML 	= str_replace(array('{MENSAGEM}','{TIPOMENSAGEM}','{URL_DOWNLOAD}'),array($msg,$tipomsg,$link_download),$HTML);
-		$param['html'] = $HTML;
-	
-		return $param;
+		return $this->admin->export($options);
 	}
 	
-
+	public function exportResults($options)
+	{
+		$customer_id_logado		= WRS::CUSTOMER_ID();
+		$param_extra = array(
+				'filtro_fixo' => 'CUSTOMER_ID = '.$customer_id_logado
+		);
+		return $this->admin->exportResults($options,$param_extra);
+	}
+	
 }
 
 ?>

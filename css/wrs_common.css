@@ -1,4 +1,4 @@
-/* Configuração do Title do Contex Menu */
+/* Configuraï¿½ï¿½o do Title do Contex Menu */
 .contex-menu-title:before {
     content: attr(data-menutitle);
     display: block;
@@ -20,6 +20,10 @@
 .ui-layout-south{
 	padding: 0px !important;
 	position: relative;
+}
+
+.k-grid-content tr.k-state-selected {
+    background-color: #A9E5FF!important;
 }
 
 .qtip {

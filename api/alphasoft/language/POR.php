@@ -86,7 +86,8 @@ HTML;
 	$language['MENU_ADMIN_LOG']				=	'Logs';
 	$language['MENU_ADMIN_SSAS_REPORT']		=	'Relatórios';
 	$language['MENU_ADMIN_SSAS_LAYOUTS']	=	'Layouts';
-	
+
+	$language['file_error_export']			=	'Erro na exportação';
 	$language['file_error_import']			=	'Arquivo não importado';
 	$language['file_not_validated']			=	'Arquivo não validado';	
 	$language['file_not_unziped']			=	'Arquivo não descompactado';
@@ -582,6 +583,7 @@ HTML;
 	$language['js_admin_pass_blank']		=	'A senha e a confirmação de senha não podem ser em branco.';
 	$language['js_admin_pass_min']			=	'A senha e a confirmação de senha não podem ter menos de 3 caracteres.';
 	$language['js_admin_pass_equals']		=	'A nova senha e a confirmação de senha devem ser diferentes da senha atual.';
+	$language['js_admin_pass_current']		=	'É necessário confirmar sua senha atual';
 	$language['js_admin_observation']		=	' expirar a senha';
 	$language['js_admin_new_pass_placeholder']=	'mínimo de 3 caracteres';
 	$language['js_admin_old_pass_placeholder']=	'entre com sua senha atual';
@@ -589,6 +591,7 @@ HTML;
 	$language['js_admin_confirm_pass']		=	'Confirmar Senha: ';
 	$language['js_admin_old_pass']			=	'Senha Atual: ';
 	$language['js_admin_confirm_question']	=	'?';
+	$language['js_admin_pass_choice']		=	'Não é possível definir e expirar a senha ao mesmo tempo.  Escolha apenas uma opção.';
 	
 
 	$language['php_admin_msg_exp_success']	=	'expirado%s com sucesso';

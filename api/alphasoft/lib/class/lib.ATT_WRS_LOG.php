@@ -112,54 +112,17 @@ class ATT_WRS_LOG extends WRS_BASE
 	
 		return $param;
 	}
-	
+
 	public function export($options)
 	{
-		$_fields			= $options['field'];
-		$_request_original 	= $_REQUEST;
-		$_tabela			= $options['table'];
-		$_regForExport		= json_decode($_request_original['extraValues'],1);
-		$_regForExport['caracter_separacao'] = $_request_original['caracter_d'];
-		$_regForExport['efetua_compactacao'] = $_request_original['caracter_c']!='nao'?true:false;
-	
-		$arr_campos_request = array();
-		foreach($_fields as $nome_campo => $valores){
-			if(array_key_exists($nome_campo, $_request_original)){
-				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
-			}
-		}
-	
-		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
-	
-		unset($param['button']['update']);
-		unset($param['button']['remove']);
-		unset($param['button']['import']);
-	
-		$event_form						= WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_request_original['event']);
-		$_request_original['event'] 	= $event_form;
-	
-		$param['tabela_export']			= $event_form;
-		$param['caracter_separacao']	= $_regForExport['caracter_separacao'];
-		$param['efetua_compactacao']	= $_regForExport['efetua_compactacao'];
-	
-		$nome_diretorio = 'uploads/'.WRS::CUSTOMER_ID().'/';
-		$param['nome_diretorio']	= $nome_diretorio;
-	
-	
-		include PATH_TEMPLATE.'export_file_window.php';
-		$link_download = $this->admin->downloadLink($_regForExport['objetosSelecionados'],$_regForExport['chave_primaria'],$param);
-		if(!$link_download){
-			$msg 	= LNG('ADMIN_EXPORT_OPTION_ERROR');
-			$tipomsg= "error";
-		}else{
-			$msg 	= LNG('ADMIN_EXPORT_OPTION_OK');
-			$tipomsg= "success";
-		}
-		$HTML 	= str_replace(array('{MENSAGEM}','{TIPOMENSAGEM}','{URL_DOWNLOAD}'),array($msg,$tipomsg,$link_download),$HTML);
-		$param['html'] = $HTML;
-	
-		return $param;
+		return $this->admin->export($options);
 	}
+	
+	public function exportResults($options)
+	{
+		return $this->admin->exportResults($options);
+	}
+	
 	
 }
 

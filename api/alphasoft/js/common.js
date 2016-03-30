@@ -1667,204 +1667,32 @@ function addKendoUiColorJQueryGrid()
 /*
  * abre modal para controle de definicao ou expiracao de senha
  */
-function abre_modal_alterar_senha(objObjetosSelecionados,isAdm){
-	var isAdm 							= isAdm==undefined?false:true;
-	var qtde_linhas_selecionadas 		= 0;
-	
-	if(!isAdm){
-		var loginData 					= $('body').WrsGlobal('getPHP','login');
-		var usr_id 						= loginData['USER_ID'];
-		var usr_code 					= loginData['USER_CODE'];
-		objObjetosSelecionados 			= {};
-		objObjetosSelecionados[usr_id]	= usr_code;
-	}
-	
-	for(var usr_id in objObjetosSelecionados){
-		qtde_linhas_selecionadas++;
-	}
-	
-	if(qtde_linhas_selecionadas!=1 && !isAdm){
-		WRS_ALERT(LNG('js_admin_no_user'),'error');
-		return false;
-	}
-	
-	var div_reset = 
-	$('<form/>').addClass('grid_window_values_form grid_alterar_senha')
-	.append( $('<div/>').addClass('container-fluid') );
+function abre_modal_alterar_senha(){
 
-	if(!isAdm){
-		div_reset.find('div.container-fluid').append(
-				$('<div/>').addClass('row form-group')
-				.append(
-						$('<label/>').attr({'for':'old_senha'})
-						.html(LNG('js_admin_old_pass')).css({'font-weight': 'normal'})  
-						)
-				.append(
-						$('<div/>').addClass('row form-control-wrs')
-						.append(
-								$('<input/>').prop({
-								'type'			:'password',
-								'name'			:'old_senha',
-								'id'			:'old_senha',
-								'placeholder'	: LNG('js_admin_old_pass_placeholder') 
-								}).addClass('form-control-wrs-auto form-control')
-								.css({'padding':'6px 12px !important'})
-								.on('focus',function(){ $('.alerta_senha_igual').hide(); })
-								)
-						)
-				);
-	}
-
-	div_reset.find('div.container-fluid').append(
-					$('<div/>').addClass('row form-group')
-					.append(
-							$('<label/>').attr({'for':'nova_senha'})
-							.html(LNG('js_admin_new_pass')).css({'font-weight': 'normal'})  
-							)
-					.append(
-							$('<div/>').addClass('row form-control-wrs')
-							.append(
-									$('<input/>').prop({
-									'type'			:'password',
-									'name'			:'nova_senha',
-									'id'			:'nova_senha',
-									'placeholder'	: LNG('js_admin_new_pass_placeholder') 
-									}).addClass('form-control-wrs-auto form-control')
-									.css({'padding':'6px 12px !important'})
-									.on('focus',function(){ $('.alerta_senha_igual').hide(); })
-									)
-							)
-					)
-			.append(
-					$('<div/>').addClass('row form-group')
-					.append(
-							$('<label/>').attr({'for':'confirmar_senha'})
-							.html(LNG('js_admin_confirm_pass')).css({'font-weight': 'normal'}) 
-							)
-					.append(
-							$('<div/>').addClass('row form-control-wrs')
-							.append(
-									$('<input/>').prop({
-									'type'			:'password',
-									'name'			:'confirmar_senha',
-									'id'			:'confirmar_senha',
-									'placeholder'	:LNG('js_admin_new_pass_placeholder')
-									}).addClass('form-control-wrs-auto form-control')
-									.css({'padding':'6px 12px !important'})
-									.on('focus',function(){ $('.alerta_senha_igual').hide(); })
-									)
-							)
-					);
+	_START('abre_modal_alterar_senha');
+	var funCallBack	=	function(data)
+	{
+		_START('callbackabre_modal_alterar_senha');
+		
+			$('.modal-content-grid').html(data);
+			$('.grid_alterar_senha #extraValues').val('');
+			wrs_window_grid_events_tools({btn:btn_window_grid_event_admin});
 			
-	if(isAdm){
-		div_reset.find('div.container-fluid').append( 
-			$('<div/>').addClass('row')
-			.append(
-					$('<input/>').prop({
-					'type'			:'checkbox',
-					'name'			:'expira_senha',
-					'id'			:'expira_senha'
-					}).on('change',function(){
-						$('.grid_alterar_senha #nova_senha, .grid_alterar_senha #confirmar_senha').val('').prop('disabled',$(this).is(':checked'));
-					})
-					)
-			.append(
-					$('<label/>').attr({'for':'expira_senha'})
-					.html(LNG('js_admin_observation')).css({'font-weight': 'normal'}) 
-					)
-		);
-	}
+		_END('callbackabre_modal_alterar_senha');	
+	};
 	
-	var retornoQuestion = function(retorno_escolha){
-		if(retorno_escolha!='cancel'){
-			var _s 				= qtde_linhas_selecionadas==1?'':'s';
-			var qtde 			= qtde_linhas_selecionadas>0?qtde_linhas_selecionadas:LNG('js_admin_pass_sintax_d');
-			qtde 				= !isAdm?LNG('js_admin_pass_sintax_e'):qtde;
-			var nova_senha 		= $('.grid_alterar_senha #nova_senha').val().trim();
-			var confirmar_senha = $('.grid_alterar_senha #confirmar_senha').val().trim();
-			var old_senha 		= $('.grid_alterar_senha #old_senha').length?$('.grid_alterar_senha #old_senha').val().trim():'';
- 			var operacao 		= (nova_senha=='' && confirmar_senha=='')?'expirar':'definir';											
-			var op 				= operacao == 'definir'?LNG('js_admin_pass_sintax_a'):LNG('js_admin_pass_sintax_b'); 														
-			
-			var retornoQuestion2 = function(escolha){
-				if(escolha!=false){
-					
-					var funCallBackData			=	 function(data)
-					{
-						WRS_ALERT(data.mensagem,data.type);
-					}
-					
-					var Ofile				=	'ATT_WRS_USER';
-					var Oclass				=	'ATT_WRS_USER';
-					var Oevent				=	'changePassUser';	
+	$('#myModal').modal('show');
 
-					var options				=	{
-														'objSelecionados'	:	objObjetosSelecionados,
-														'senha'				:	nova_senha,
-														'old_senha'			:	old_senha
-												};
-					runCall(options,Ofile,Oclass,Oevent,funCallBackData,'modal','json');
-					
-				}
-			}
-			
-			var msg = op+qtde+LNG_s('js_admin_pass_sintax_c',_s)+LNG('js_admin_confirm_question');
-			WRS_CONFIRM(msg,'warning',retornoQuestion2);
-		}
-	}
-
-	WRS_CONFIRM(
-					div_reset,
-					'warning',
-					retornoQuestion,
-					undefined,
-					'custom',
-					[
-					 	{ 
-					 		text : LNG('BTN_SAVE'), 
-					 		addClass: 'btn-light-blue',
-					 		val : true, 
-					 		onClick:function(e){		
-										 			var old_senha 		= $('.grid_alterar_senha #old_senha').length?$('.grid_alterar_senha #old_senha').val().trim():false;
-										 			var nova_senha 		= $('.grid_alterar_senha #nova_senha').val().trim();
-										 			var confirmar_senha = $('.grid_alterar_senha #confirmar_senha').val().trim();
-													if($('.alerta_senha_igual').length>0) $('.alerta_senha_igual').remove(); 
-										 			if(nova_senha!='' || confirmar_senha!=''){
-														if(nova_senha!=confirmar_senha){
-															$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_same')+'</div>');
-															return false;
-														}
-														if(nova_senha.length < 3 || confirmar_senha.length < 3){
-															$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_min')+'</div>');
-															return false;
-														}
-														if(old_senha && nova_senha == old_senha){
-															$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_equals')+'</div>');
-															return false;
-														}
-													}else if(!isAdm){
-														$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_self')+'</div>');
-														return false;
-													}else if(isAdm && $('#expira_senha').length>0 && nova_senha=='' && confirmar_senha=='' && !$('#expira_senha').is(':checked')){
-														$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_blank')+'</div>');
-														return false;														
-													}
-					 								return true;
-									 			}
-					 	},
-					 	{
-					 		text : LNG('MODAL_CONFIRM_BT_CANCEL'), 
-					 		val : 'cancel', 
-					 		onClick:function(e){																	
-														return true;
-									 			}
-					 	}
-					],
-					{
-						title	:	LNG('TITLE_ALTER_SENHA')
-					}
-				);
-
+	grid_window_modal(
+				{	
+					'wrs_type_grid'	:		'form',
+					'form_event'	:		'changePassword',
+					'extraValues'	: 		'self'
+				},
+				null,
+				funCallBack);
+	_END('abre_modal_alterar_senha');	
+	
 }
 
 

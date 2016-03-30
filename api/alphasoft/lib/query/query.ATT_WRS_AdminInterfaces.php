@@ -61,7 +61,7 @@ class QUERY_WRS_ADMIN
 			
 			$query			=	"EXEC Change_Table '".$tabela."',
 				                  '".implode(",",array_keys($arr_campos_valores))."',
-				                  '".implode(",",array_values($arr_campos_valores))."',
+				                  '".implode("(_;_)",array_values($arr_campos_valores))."',
 				                  '".$condicao."',
 				                  '".$operacao."',
 				                  1";
@@ -178,7 +178,8 @@ class QUERY_WRS_ADMIN
 			$filtros	= (array_key_exists('filtros', $options))?((is_array($options['filtros']))?implode(',',$options['filtros']):$options['filtros']):'';
 			$separador	= (array_key_exists('separador', $options))?$options['separador']:';';
 			$tipoImport	= (array_key_exists('tipoImport', $options))?$options['tipoImport']:0;
-			$campo_id 	= $options['campo_id'];
+			$campo_id	= WRS_MANAGE_PARAM::getAtributoTabelaConfig($tabela,'colunas_import_key');
+			//$campo_id 	= $options['campo_id'];
 			$user_logado 		= WRS::USER_CODE();
 			$customer_id_logado	= WRS::CUSTOMER_ID();
 				
@@ -200,7 +201,7 @@ class QUERY_WRS_ADMIN
 		}
 	}
 	
-	public function getQueryCompreessFile($action, $arquivo_de, $arquivo_para, $options){
+	public function getQueryCompreessFile($action, $arquivo_de, $arquivo_para, $options=null){
 		/*
 		 Compress_Files ( @ZipCommand VARCHAR(10), @ZipFolder VARCHAR(255), @ZipFile VARCHAR(255), @Replace BIT = 1, @ShowOutput BIT = 0 )
 		 	
@@ -211,8 +212,8 @@ class QUERY_WRS_ADMIN
 		$_action 		= $action=='ZIP'?'ZIP':'UNZIP';
 		$_arquivo_de 	= $arquivo_de;
 		$_arquivo_para 	= $arquivo_para;
-		$replace 		= (array_key_exists('replace',$options) && $options['replace'])?'0':'1';
-		$output 		= (array_key_exists('output',$options) && $options['output'])?'1':'0';
+		$replace 		= (is_array($options) && array_key_exists('replace',$options) && $options['replace'])?'0':'1';
+		$output 		= (is_array($options) && array_key_exists('output',$options) && $options['output'])?'1':'0';
 		$query 			= "
 			EXEC Compress_Files '".$_action."','".$_arquivo_de."','".$_arquivo_para."',".$replace.",".$output."
 				";
