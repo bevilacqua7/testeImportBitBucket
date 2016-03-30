@@ -429,7 +429,7 @@ class KendoUi
 						<div class="wrs_box {$idTag}BOX">
 									{$WRS_PANEL_HEADER_TABLE}
 								
-									<div id="{$idTag}" class="wrsGrid table_border border_bottom hide wrs_grid_container"  ></div>
+									<div id="{$idTag}" class="wrsGrid table_border border_bottom hide wrs_grid_container" wrs-grid="true"  ></div>
 									
 									<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
 							
@@ -500,8 +500,11 @@ class KendoUi
 													   			try{
 													   					var  filters						=	json_decode($(".{$this->getId()}").wrsAbaData('getWrsData').REPORT_FILTER);
 													   					var ffilter=	setFiltersKendoUiDecode(json_decode('{$fields}'),filters);
-													   						
-													   						jsonDecode.dataSource.filter	=ffilter;
+													   					
+																			if(array_length(ffilter.filters)!=0)
+																			{
+													   							jsonDecode.dataSource.filter	=ffilter;
+													   						}
 													   						
 													   						$(".{$this->getId()}").wrsAbaData('setWrsFilterStart',{filter	:	ffilter});
 													   						
@@ -516,7 +519,9 @@ class KendoUi
 																$('.dropdown-menu-configuration form, .dropdown-menu-configuration li ').click(function (e) {e.stopPropagation();});
 																$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
 																		
-																WRSKendoGridComplete("#{$this->getId()}");		
+																WRSKendoGridComplete("#{$this->getId()}");	
+																
+																kendoFilterMaskWRSElements();
 																
 													});
 													
@@ -528,6 +533,9 @@ class KendoUi
 																	TABLE_CAHCE		:	'{$table_cache}'
 																}
 																);
+																
+																
+																
 																
 																
 																
@@ -970,15 +978,21 @@ HTML;
 		$campos_de = array('%c','#v');				
 		
 		$arr_operacoes = $this->arr_operacoes;
-		
-		$campos_para 						= 	array($field['field'],$field['value']);
 		$field['type'] 						= 	array_key_exists('type', $field) && $field['type']!=''?$field['type']:'string'; // verifica se existe o type_column nativo na estrutura da coluna em questão para a montagem do filtro corretamente de acordo com seu tipo de conteudo.  Se nao existir, assume tipo string
+		
+		$campos_para 						= 	array($field['field'],$this->formatNumber($field['value'],$field['type']));
 		$condicao 							= 	str_replace($campos_de,$campos_para,$arr_operacoes[$field['type']][$field['operator']]);
 		
 		return '('.$condicao.')';
 	}
 	
 	
+	private function formatNumber($val,$type)
+	{
+		if($type=='number') return str_replace(array('.',','), '', $val);
+			
+		return $val;	
+	}
 	
 	private function filtersToWhereContent($arr_content_field)
 	{

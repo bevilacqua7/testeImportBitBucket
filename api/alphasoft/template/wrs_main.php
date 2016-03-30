@@ -67,6 +67,7 @@ $(function(){
 	{
 		TRACE('Mudando o Idioma na função WRSChangeIdioma  no file:wrs_main.php');
 		var idioma	=	$(this).val();
+		$("#fakeloader").show();
 		var param	=	{'idioma':idioma};
 		console.log('change');
 		runCall(param,'WRS_MAIN','WRS_MAIN','updateIdioma',function(data){ location.reload();});
