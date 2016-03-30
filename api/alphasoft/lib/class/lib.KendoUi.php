@@ -1008,12 +1008,15 @@ HTML;
 	 */
 	public function filtersToWhere($column_filters,$column_condition=" AND "){
 		$where = '';
-		
+
+		if($column_filters!=null && $column_filters!='' && !is_array($column_filters) && is_object($column_filters)){
+			$column_filters = (array)json_decode(json_encode($column_filters,1),1);			
+		}
+
 		
 		$column_condition	=	$column_filters['logic'];
 
 		if($column_filters!=null && $column_filters!='' && is_array($column_filters)){
-			
 			$where_conditions_columns	=	array();
 			// este foreach inicial poderia ter sido suprimido chamando diretamente $this->filtersToWhereContent, porém, ele existe já que sempre haverá a primeira posicao de filters no array, E, PRINCIPALMENTE para manipular a condicao entre colunas, AND ou OR de acordo com o parametro inicial do metodo: $column_condition 
 			foreach($column_filters['filters'] as $arr_operacao)

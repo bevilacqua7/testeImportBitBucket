@@ -133,6 +133,7 @@ class FORM  extends WRS_USER
 			
 			foreach($param['field'] as $label =>$value)
 			{
+				$value['value']	=	array_key_exists('value', $value)?$value['value']:'';
 				$form_value[]	=	$label."='".$value['value']."'";
 			}
 			
@@ -302,7 +303,8 @@ EOF;
 					$rels		=	 array('class'=>'form-group form-control-wrs_color');
 					$rel		=	 $this->getParamFormInput($this->merge_array_value($param,$rels));
 					
-					
+
+					$obj_aux_link_field = null;
 					
 					
 					//$where	=	$param_select['primary']="=''".$param['value']."''";
@@ -336,7 +338,6 @@ EOF;
 								}
 							}
 
-							$obj_aux_link_field = null;
 							// quando houverem filhos que dependem da escolha de valor deste pai, inclui atributos e scripts a mais. - felipeb 20160322
 							if(array_key_exists('link_field_master', $param) && is_array($param['link_field_master'])){
 								$obj_aux_link_field = array();
@@ -345,6 +346,9 @@ EOF;
 							$_query		=	$this->manage_param->select($param_select['field'], $param_select['table'], $param_select['order']['order_by'], $param_select['order']['order_type'], 1, 100,$where_query);
 							
 							$query		=	 $this->query($_query);
+							
+							$array_options = array();
+							
 							
 							if($this->num_rows($query))
 							{
@@ -405,7 +409,20 @@ EOF;
 									
 									$extra_attr_for_values = $extra_attr_for_values!=''?' extra_values_for_option="'.$extra_attr_for_values.'"':'';
 									
-									$option	.=	 fwrs_option($value_option, implode(' - ',$html_option),$param['value'],$extra_attr_for_values);
+									$label_combo = implode(' - ',$html_option);
+									
+									$array_options[$label_combo.rand(0,999)] = array( // adiciono rand na chave pois podem existir labels iguais
+											'value'=>$value_option,
+											'label'=>$label_combo,
+											'valor'=>$param['value'],
+											'extra'=>$extra_attr_for_values
+									);
+									
+								}
+								// ordenacao dos valores de selects - felipeb 20160323
+								ksort($array_options);
+								foreach($array_options as $arr_dados){
+									$option	.=	 fwrs_option($arr_dados['value'], $arr_dados['label'], $arr_dados['valor'], $arr_dados['extra']);
 								}
 							}
 					}

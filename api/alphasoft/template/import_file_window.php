@@ -1,7 +1,7 @@
 <?php
 
 includeCLASS('Upload');
-	
+$extra_params = isset($extra_params)?$extra_params:null;
 $upload				=	new WRSUpload($upload_dir_key,$extra_params);
 $htmlUpload			=	$upload->uploadHTML();
 $msg_sel			=	LNG('upload_files_select');

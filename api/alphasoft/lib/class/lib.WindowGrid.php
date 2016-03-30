@@ -41,7 +41,7 @@ class WindowGrid extends FORM
 		 *
 		 */
 //form_event
-		if(array_key_exists('exception', $param) && is_array($param['exception']))
+		if(is_array($param) && array_key_exists('exception', $param) && is_array($param['exception']))
 		{
 			$this->exception	=	 $param['exception'];
 			includeCLASS($this->exception['file']);
@@ -144,6 +144,9 @@ class WindowGrid extends FORM
 					case 'new'					:	$param	=	$LocalEvents->insert($param); break;
 					case 'import'				:	$param	=	$LocalEvents->import($param); break;
 					case 'export'				:	$param	=	$LocalEvents->export($param); break;
+					case 'exportResults'		:	$param	=	$LocalEvents->exportResults($param); break;
+					case 'changePassword'		:	$param	=	$LocalEvents->changePassword($param); break;
+					case 'changePassUser'		:	$param	=	$LocalEvents->changePassUser($param); break;
 					case 'form_exception'		:	{
 													$param			=	$this->build_grid_form($param);
 													$LocalEvents->build_grid_form_exception($param); // felipeb 20160310 - NAO SEI o motivo da classe nao retornar o $param completo, já fiz tudo que é teste possível mas não há mais tempo para investigação, acrescentei em uma variavel da classe e resgato logo abaixo se ela existir para substituir apenas o HTML do param
@@ -185,18 +188,21 @@ class WindowGrid extends FORM
 		if($wrs_type_grid=='form'){
 			unset($param['button']['new']); 
 			unset($param['button']['remove']); 	// se o usuario estiver no formulario para alteracao, ele so pode salvar ou apagar algo (sem botao de novo)
-			if(array_key_exists('export',$param['button']) && $form_event!='export'){
+			if(is_array($param['button']) && array_key_exists('export',$param['button']) && $form_event!='export'){
 				unset($param['button']['export']); // no formulario de alteracao nao tem de aparecer botoes de import/export se existirem
 			}
-			if(array_key_exists('import',$param['button']) && $form_event!='import'){
+			if(is_array($param['button']) && array_key_exists('import',$param['button']) && $form_event!='import'){
 				unset($param['button']['import']);
+			}
+			if(is_array($param['button']) && array_key_exists('changePassword',$param['button']) && $form_event!='changePassword'){
+				unset($param['button']['changePassword']);
 			}
 		}else{
 			unset($param['button']['update']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
 			unset($param['button']['back']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
 		}
 						
-		$this->setButton($param['button'],$param['table'],((array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false),((array_key_exists('button_icon',$param) && is_array($param['button_icon']) && count($param['button_icon'])>0)?$param['button_icon']:false));
+		$this->setButton($param['button'],$param['table'],((is_array($param) && array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false),((is_array($param) && array_key_exists('button_icon',$param) && is_array($param['button_icon']) && count($param['button_icon'])>0)?$param['button_icon']:false),((is_array($param) && array_key_exists('button_type',$param) && is_array($param['button_type']) && count($param['button_type'])>0)?$param['button_type']:false));
 				
 		$TPL_BUTTON				=		$this->getButton();
 				
@@ -278,7 +284,7 @@ class WindowGrid extends FORM
 	 * 
 	 * 
 	 */
-	public function setButton($button,$table,$label_force=false,$button_icon=false)
+	public function setButton($button,$table,$label_force=false,$button_icon=false,$button_type=false)
 	{
 		$button_merge			=	array('new','update','remove');
 		$map_buttons			=	array();
@@ -287,7 +293,8 @@ class WindowGrid extends FORM
 		if(is_array($button)){
 			foreach($button as $action_bt=>$label_bt){
 				if(!in_array($action_bt, $button_merge)){
-					$map_buttons[$action_bt]		=	'<button type="button"  {complement} table="'.$table.'"	 action_type="'.$action_bt.'" 		class="btn btn_extra '.(($action_bt=='back')?'btn-default':'btn-info btn-color-write').' 	btn_window_grid_event">	<i class="'.(($button_icon && array_key_exists($action_bt, $button_icon))		?$button_icon[$action_bt]:'glyphicon glyphicon-plus color_write')								.'"></i> '	.$label_bt.	'</button>';
+					$btn_type = is_array($button_type) && array_key_exists($action_bt, $button_type)?$button_type[$action_bt]:'btn-info';
+					$map_buttons[$action_bt]		=	'<button type="button"  {complement} table="'.$table.'"	 action_type="'.$action_bt.'" 		class="btn btn_extra '.(($action_bt=='back')?'btn-default':$btn_type.' btn-color-write').' 	btn_window_grid_event">	<i class="'.(($button_icon && array_key_exists($action_bt, $button_icon))		?$button_icon[$action_bt]:'glyphicon glyphicon-plus color_write')								.'"></i> '	.$label_bt.	'</button>';
 				}					
 			}
 		}
@@ -297,20 +304,21 @@ class WindowGrid extends FORM
 		$map_buttons['remove']	=	'<button type="button" 	{complement} table="'.$table.'"	 action_type="remove" 	class="btn btn-color-write btn-danger	btn_window_grid_event">	<i class="'.(($button_icon && array_key_exists('remove', $button_icon))		?$button_icon['remove']:'glyphicon glyphicon-trash color_write')	.'"></i> '	.LNG('BTN_REMOVE').	'</button>';
 		$map_buttons['out']		=	'<button type="button" 															class="btn btn-default" 	data-dismiss="modal">				<i class="glyphicon glyphicon-off"></i> '				.LNG('BTN_CLOSE').	'</button>';
 		
-		foreach($button as $label => $_btn)
-		{
-			if(isset($map_buttons[$label]))
+		if(is_array($button)){
+			foreach($button as $label => $_btn)
 			{
-				$value_btn		=	$_btn;
-				$partes_btn		=	explode("</i>",$map_buttons[$label]);
-				if($label_force){
-					$this->button.=str_replace('{complement}', '', $partes_btn[0]."</i>".$value_btn."</button>");
-				}else{
-					$this->button.=str_replace('{complement}', $value_btn, $map_buttons[$label]);
+				if(isset($map_buttons[$label]))
+				{
+					$value_btn		=	$_btn;
+					$partes_btn		=	explode("</i>",$map_buttons[$label]);
+					if($label_force){
+						$this->button.=str_replace('{complement}', '', $partes_btn[0]."</i>".$value_btn."</button>");
+					}else{
+						$this->button.=str_replace('{complement}', $value_btn, $map_buttons[$label]);
+					}
 				}
 			}
 		}
-		
 		$this->button.=$map_buttons['out'];	      
 	}
 	
@@ -626,7 +634,7 @@ EOF;
 		$page				=	$request['page'];
 		$take				=	$request['take'];
 		$skip				=	$request['skip'];
-		$column_filters		=	@$request['filters'];
+		$column_filters		=	array_key_exists('filters', $request)?$request['filters']:'';
 		$sort				=	isset($request['sort']) ? $request['sort'] : array();
 		$pageSize			=	$request['pageSize'];
 		$table				=	 fwrs_request('table');

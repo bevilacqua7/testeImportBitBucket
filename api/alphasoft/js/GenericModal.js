@@ -295,6 +295,12 @@ function callback_check_line_generic_modal(data,tabela)
 		{	
 			var linha=$('#'+tabela+' .k-grid-content table').find('tr')[data.indexClickTabela];
 			var check = !$(linha).find('td input.checkline').prop('checked');
+	
+				if(check){
+					$(linha).addClass('k-state-selected');
+				}else{
+					$(linha).removeClass('k-state-selected');
+				}
 			
 				$(linha).find('td input.checkline').prop('checked',check);
 				$('#'+tabela+' .k-grid-header table').find('input.checkline').prop('checked',false); // qualquer alteracao na linha, desmarca o checkall da coluna
@@ -314,6 +320,11 @@ function trataCheckColuna(obj,tabela){
 	var checkColuna = obj.prop('checked');
 	$('#'+tabela+' .k-grid-content table').find('tr').each(function(){
 		$(this).find('td input.checkline').prop('checked',checkColuna);
+		if(checkColuna){
+			$(this).addClass('k-state-selected');
+		}else{
+			$(this).removeClass('k-state-selected');
+		}
 	});
 	_END('trataCheckColuna');
 }

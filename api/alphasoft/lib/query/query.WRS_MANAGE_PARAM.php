@@ -19,6 +19,7 @@ class WRS_MANAGE_PARAM
 										 'primary'				=>	'',
 										 'button_force_label'	=>	false, 		// forca o label dos icones na visualizacao de ICON de acordo com o array abaixo
 						 				 'button_icon'			=>	'',			// altera o icone padrao de cada botao na WindowGrid
+										 'button_type'			=>	'',			// altera o tipo de cada botao na WindowGrid
 										 'exception'			=>	'', 		// quando houver exceptions (uma view ao inves de tabela) utilizar um array com o nome da classe em questão para esta excecao 
 										 'checkbox'				=>	false,		// se existe checkbox por linha na visualizacao de grid
 										 'label_icon_custom'	=>	false,		// se existir labels personalizados por visao de icone
@@ -51,8 +52,9 @@ class WRS_MANAGE_PARAM
 					'tabela_bd'				=>	'ATT_WRS_CUSTOMER',
 					'metodo_classe_param'	=>	'ATT_WRS_CUSTOMER',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_CUSTOMER',
-					'nome_arquivo_import'	=>	'CUSTOMER.CSV',
+					'nome_arquivo_import'	=>	'WRS_CUSTOMER.CSV',
 					'icon'					=>	'fa fa-user',
+					'colunas_import_key'	=>	'CUSTOMER_CODE',
 					'colunas_import_export'	=>	'CUSTOMER_CODE, CUSTOMER_DESC, CUSTOMER_EXPIRY, CUSTOMER_FLAG, CUSTOMER_STATUS, CUSTOMER_GROUP',
 					'colunas_descricao'		=>	'CUSTOMER_CODE(varchar[50]), CUSTOMER_DESC(varchar[100]), CUSTOMER_EXPIRY(Int), CUSTOMER_FLAG(text), CUSTOMER_STATUS(Int), CUSTOMER_GROUP(varchar[100])'
 			),
@@ -60,8 +62,9 @@ class WRS_MANAGE_PARAM
 					'tabela_bd'				=>	'ATT_WRS_USER',
 					'metodo_classe_param'	=>	'ATT_WRS_USER',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_USER',
-					'nome_arquivo_import'	=>	'USER.CSV',
+					'nome_arquivo_import'	=>	'WRS_USER.CSV',
 					'icon'					=>	'fa fa-users',
+					'colunas_import_key'	=>	'USER_CODE',
 					'colunas_import_export'	=>	'USER_CODE, USER_DESC, USER_EMAIL, USER_PWD, USER_TYPE, USER_FILTER, USER_FILTER_VALUE, USER_INTERNAL, USER_STATUS, USER_FORMAT, LANGUAGE_ID, PERFIL_ID',
 					'colunas_descricao'		=>	'USER_CODE(varchar[50]), USER_DESC(varchar[100]), USER_PWD(varchar[32]), USER_EMAIL(varchar[200]), USER_TYPE(varchar[100]), USER_FILTER(text), USER_FILTER_VALUE(text), USER_INTERNAL(varchar[50]), USER_STATUS(smallint), USER_FORMAT(varchar[15]), LANGUAGE_ID(varchar[3]), PERFIL_ID(varchar[50])',
 					'exibe_menu_ADM'		=>	true
@@ -71,7 +74,8 @@ class WRS_MANAGE_PARAM
 					'metodo_classe_param'	=>	'ATT_WRS_SERVER',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_SERVER',
 					'icon'					=>	'fa fa-server',
-					'nome_arquivo_import'	=>	'SERVER.CSV',
+					'nome_arquivo_import'	=>	'WRS_SERVER.CSV',
+					'colunas_import_key'	=>	'SERVER_ID',
 					'colunas_import_export'	=>	'SERVER_ID, SERVER_DESC, SERVER_COMMENT, SERVER_USER, SERVER_PWD, SERVER_FLAG, SERVER_STATUS',
 					'colunas_descricao'		=>	'SERVER_ID(varchar[50]), SERVER_DESC(varchar[100]), SERVER_COMMENT(varchar[1000]), SERVER_USER(varchar[100]), SERVER_PWD(varchar[100]), SERVER_STATUS(smallint))'
 			),
@@ -80,26 +84,29 @@ class WRS_MANAGE_PARAM
 					'metodo_classe_param'	=>	'ATT_WRS_DATABASE',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_DATABASE',
 					'icon'					=>	'fa fa-database',
-					'nome_arquivo_import'	=>	'DATABASE.CSV',
-					'colunas_import_export'	=>	'DATABASE_ID, DATABASE_DESC, DATABASE_COMMENT, DATABASE_LINK, DATABASE_IMAGE, DATABASE_ORDER, DATABASE_POOL, DATABASE_STATUS, DATABASE_BALANCE, SERVER_ID',
-					'colunas_descricao'		=>	'DATABASE_ID(varchar[100]), DATABASE_DESC(varchar[100]), DATABASE_COMMENT(varchar[1000]), DATABASE_LINK(varchar[1000]), DATABASE_IMAGE(varchar[100]), DATABASE_ORDER(smallint), DATABASE_POOL(smallint), DATABASE_STATUS(smallint), DATABASE_BALANCE(bigint), SERVER_ID(varchar[100])'
+					'nome_arquivo_import'	=>	'WRS_DATABASE.CSV',
+					'colunas_import_key'	=>	'SERVER_ID,DATABASE_ID',
+					'colunas_import_export'	=>	'DATABASE_ID, DATABASE_DESC, DATABASE_COMMENT, DATABASE_FLAG, DATABASE_LINK, DATABASE_IMAGE, DATABASE_ORDER, DATABASE_POOL, DATABASE_STATUS, DATABASE_BALANCE, SERVER_ID, CUSTOMER_CODE',
+					'colunas_descricao'		=>	'DATABASE_ID(varchar[100]), DATABASE_DESC(varchar[100]), DATABASE_COMMENT(varchar[1000]), DATABASE_FLAG(varchar[1000]), DATABASE_LINK(varchar[1000]), DATABASE_IMAGE(varchar[100]), DATABASE_ORDER(smallint), DATABASE_POOL(smallint), DATABASE_STATUS(smallint), DATABASE_BALANCE(bigint), SERVER_ID(varchar[100]), CUSTOMER_CODE(varchar[10])'
 			),
 			'ATT_WRS_CUBE'					=> 	array(
 					'tabela_bd'				=>	'ATT_WRS_CUBE',
 					'metodo_classe_param'	=>	'ATT_WRS_CUBE',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE',
 					'icon'					=>	'fa fa-cube',
-					'nome_arquivo_import'	=>	'CUBE.CSV',
-					'colunas_import_export'	=>	'CUBE_ID, CUBE_DESC, CUBE_FILTER, CUBE_FILTER_VALUE, CUBE_STATUS, DATABASE_ID, SERVER_ID',
-					'colunas_descricao'		=>	'CUBE_ID(varchar[100]), CUBE_DESC(varchar[100]), CUBE_FILTER(text), CUBE_FILTER_VALUE(text), CUBE_STATUS(smallint), DATABASE_ID(varchar[100]), SERVER_ID(varchar[100])'
+					'nome_arquivo_import'	=>	'WRS_CUBE.CSV',
+					'colunas_import_key'	=>	'SERVER_ID,DATABASE_ID,CUBE_ID',
+					'colunas_import_export'	=>	'CUBE_ID, CUBE_DESC, CUBE_FILTER, CUBE_FILTER_VALUE, CUBE_STATUS, DATABASE_ID, SERVER_ID, CUSTOMER_CODE',
+					'colunas_descricao'		=>	'CUBE_ID(varchar[100]), CUBE_DESC(varchar[100]), CUBE_FILTER(text), CUBE_FILTER_VALUE(text), CUBE_STATUS(smallint), DATABASE_ID(varchar[100]), SERVER_ID(varchar[100]), CUSTOMER_CODE(varchar[10])'
 			),
 			'REL_WRS_CUBE_USER'				=> 	array(
 					'tabela_bd'				=>	'REL_WRS_CUBE_USER',
 					'metodo_classe_param'	=>	'REL_WRS_CUBE_USER',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_CUBE_USER',
 					'icon'					=>	'fa fa-object-group',
-					'nome_arquivo_import'	=>	'CUBE_USER.CSV',
-					'colunas_import_export'	=>	'DATABASE_ID, CUBE_ID, USER_CODE',
+					'nome_arquivo_import'	=>	'WRS_CUBE_USER.CSV',
+					'colunas_import_key'	=>	'SERVER_ID,DATABASE_ID,CUBE_ID,USER_CODE',
+					'colunas_import_export'	=>	'SERVER_ID,DATABASE_ID, CUBE_ID, USER_CODE',
 					'colunas_descricao'		=>	'DATABASE_ID(varchar[100]), CUBE_ID(varchar[100]), USER_CODE(varchar[50])',
 					'exibe_menu_ADM'		=>	true,
 					'menu_visao_modal'		=>	false /*array( // pode ser false, onde esconde o menu todo na modal da tabela em questao
@@ -116,8 +123,8 @@ class WRS_MANAGE_PARAM
 					'metodo_classe_param'	=>	'ATT_WRS_LOG',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_LOG',
 					'icon'					=>	'fa fa-file-text-o',
-					'nome_arquivo_import'	=>	'LOG.CSV',
-					'colunas_import_export'	=>	'DATE_ID, MODULE, PROCESS, OPERATION, MESSAGE, USER_MASTER, USER_CODE, USER_DESC, CUSTOMER_DESC',
+					'nome_arquivo_import'	=>	'WRS_LOG.CSV',
+					'colunas_import_export'	=>	'DATE_ID, MODULE, PROCESS, OPERATION, MESSAGE, USER_MASTER, USER_CODE, USER_DESC, USER_TYPE, CUSTOMER_DESC',
 					'exibe_menu_ADM'		=>	true
 			),
 			'ATT_WRS_PERFIL'				=> 	array(
@@ -125,7 +132,8 @@ class WRS_MANAGE_PARAM
 					'metodo_classe_param'	=>	'ATT_WRS_PERFIL',
 					'nome_menu_LNG'			=>	'MENU_ADMIN_PERFIL',
 					'icon'					=>	'fa fa-male',
-					'nome_arquivo_import'	=>	'PERFIL.CSV',
+					'nome_arquivo_import'	=>	'WRS_PERFIL.CSV',
+					'colunas_import_key'	=>	'PERFIL_ID',
 					'colunas_import_export'	=>	'PERFIL_ID, PERFIL_DESC, PERFIL_LEVEL, PERFIL_FLAG, PERFIL_STATUS'
 			),
 			'ATT_WRS_REPORT'				=> 	array(
@@ -367,7 +375,7 @@ HTML;
 		$fields['CUSTOMER_DESC']   	= array('title'=>LNG('CUSTOMER_DESC')    	, 'placeholder'=>LNG('CUSTOMER_DESC_PLACEHOLDER')    		, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['CUSTOMER_EXPIRY']	= array('title'=>LNG('CUSTOMER_EXPIRY') 	, 'placeholder'=>LNG('CUSTOMER_EXPIRY_PLACEHOLDER')    		, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'max-value'=>365, 'min-value'=>0); // existe tambem 'min-value'=>1
 		$fields['CUSTOMER_FLAG'] 	= array('title'=>LNG('CUSTOMER_FLAG')    	, 'placeholder'=>LNG('CUSTOMER_FLAG_PLACEHOLDER')    		, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500, 'class'=>'hide', 'list'=>true, 'basic'=>true , 'grid'=>true, 'obrigatorio' => false);
-		$fields['CUSTOMER_STATUS']	= array('title'=>LNG('CUSTOMER_STATUS')		, 'placeholder'=>LNG('CUSTOMER_STATUS_PLACEHOLDER')    		, 'is_select'=>array('-1'=>LNG('manage_param_selecionar'),'1'=>LNG('manage_param_ativo'),'0'=>LNG('manage_param_inativo')),   'type'=>'int',   'length' => 5,  'list'=>true, 'basic'=>true , 'grid'=>true, 'obrigatorio' => true);
+		$fields['CUSTOMER_STATUS']	= array('title'=>LNG('CUSTOMER_STATUS')		, 'placeholder'=>LNG('CUSTOMER_STATUS_PLACEHOLDER')    		, 'is_select'=>array('-1'=>LNG('manage_param_selecionar'),'1'=>LNG('manage_param_ativo'),'0'=>LNG('manage_param_inativo')), 'selected' => '1',   'type'=>'int',   'length' => 5,  'list'=>true, 'basic'=>true , 'grid'=>true, 'obrigatorio' => true);
 		$fields['CUSTOMER_GROUP']	= array('title'=>LNG('CUSTOMER_GROUP')    	, 'placeholder'=>LNG('CUSTOMER_GROUP_PLACEHOLDER')    		, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);		
 		
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_CUSTOMER'), 
@@ -396,21 +404,25 @@ HTML;
 	{
 		$button		=	$button_icon	=	array();
 		
-		$button['back']			=	LNG('bt_back');
-		$button['new']			=	LNG('bt_new');
-		$button['update']		=	LNG('bt_update');		
-		$button['export']		=	LNG('bt_export_user');
-		$button['import']		=	LNG('bt_import_user');
-		
+		$button['back']				=	LNG('bt_back');
+		$button['new']				=	LNG('bt_new');
+		$button['update']			=	LNG('bt_update');		
+		$button['export']			=	LNG('bt_export_user');
+		$button['import']			=	LNG('bt_import_user');
+		$button['changePassword']	=	LNG('TITLE_ALTER_SENHA');
+			
 		if(!WRS_USER::getArrPerfUser('DRG')){
 			$button['remove']	=	LNG('bt_remove');
 		}
 
-		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
-		$button_icon['new']		=	'fa fa-pencil-square-o';
-		$button_icon['update']	=	'fa fa-floppy-o';
-		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
-		$button_icon['import']	=	'glyphicon glyphicon-import color_write';
+		$button_icon['back']			=	'glyphicon glyphicon-chevron-left bt_voltar';
+		$button_icon['new']				=	'fa fa-pencil-square-o';
+		$button_icon['update']			=	'fa fa-floppy-o';
+		$button_icon['export']			=	'glyphicon glyphicon-export color_write';
+		$button_icon['import']			=	'glyphicon glyphicon-import color_write';
+		$button_icon['changePassword']	=	'fa fa-exclamation-triangle';
+		
+		$button_type['changePassword']	=	'btn-warning';
 
 		$dados_tabela_evento = $this->getDadosTabelaConfig('ATT_WRS_USER');
 		
@@ -442,7 +454,7 @@ HTML;
 		$fields['USER_INTERNAL']   		= array('title'=>LNG('USER_INTERNAL')    	, 'placeholder'=>LNG('USER_INTERNAL_PLACEHOLDER')    	, 'length'=>50, 'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['USER_FVD']   			= array('title'=>LNG('USER_FVD')    		, 'placeholder'=>LNG('USER_FVD_PLACEHOLDER')    		, 'type'=>'int', 'length' => 5, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['USER_FLAG']   			= array('title'=>LNG('USER_FLAG')    		, 'placeholder'=>LNG('USER_FLAG_PLACEHOLDER')    		, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500, 'class'=>'hide',   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
-		$fields['USER_STATUS']   		= array('title'=>LNG('USER_STATUS')   		, 'placeholder'=>LNG('USER_STATUS_PLACEHOLDER')    		, 'is_select'=>array('-1'=>LNG('manage_param_selecionar'),'1'=>LNG('manage_param_ativo'),'0'=>LNG('manage_param_inativo')),   'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_STATUS']   		= array('title'=>LNG('USER_STATUS')   		, 'placeholder'=>LNG('USER_STATUS_PLACEHOLDER')    		, 'is_select'=>array('-1'=>LNG('manage_param_selecionar'),'1'=>LNG('manage_param_ativo'),'0'=>LNG('manage_param_inativo')), 'selected' => '1',   'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_FORMAT']   		= array('title'=>LNG('USER_FORMAT')    		, 'placeholder'=>LNG('USER_FORMAT_PLACEHOLDER')    		, 'is_select'=>array('azul'=>LNG('manage_param_azul'),'cinza'=>LNG('manage_param_cinza'),'laranja'=>LNG('manage_param_laranja'),'verde'=>LNG('manage_param_verde'),'vermelho'=>LNG('manage_param_vermelho')), 'selected'=>'azul',   'length'=>15,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_EXPIRY']   		= array('title'=>LNG('USER_EXPIRY')    		, 'placeholder'=>LNG('USER_EXPIRY_PLACEHOLDER')    		, 'type'=>'date_object' ,'format'=>'Y/m/d H:i:s', 'class'=>'hide', 'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);
 		$fields['LANGUAGE_ID']   		= array('title'=>LNG('LANGUAGE_ID')    		, 'placeholder'=>LNG('LANGUAGE_ID_PLACEHOLDER')    		, 'is_select'=>array('-1'=>LNG('manage_param_selecionar'),'ENG'=>LNG('manage_param_ingles'),'ESP'=>LNG('manage_param_espanhol'),'POR'=>LNG('manage_param_portugues')), 'selected' => 'POR',   'length'=>3,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
@@ -462,6 +474,7 @@ HTML;
 						'extend'				=>	$extend,											// NEW
 						'checkbox'				=>	true, 												// NEW
 						'button_icon'			=>	$button_icon,										// NEW
+						'button_type'			=>	$button_type,										// NEW
 						'button_force_label'	=>	true, 			  									// NEW
 		 				'callback_btn_events'	=>	'callback_admin_btn_events', 						// NEW
 						'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
@@ -577,7 +590,7 @@ HTML;
 		$fields['DATABASE_STATUS']   	= array('title'=>LNG('DATABASE_STATUS')   	, 'placeholder'=>LNG('DATABASE_STATUS_PLACEHOLDER')			, 'is_select'=>array('-1'=>LNG('manage_param_selecionar'),'1'=>LNG('manage_param_ativo'),'2'=>LNG('manage_param_bloqueado'),'3'=>LNG('manage_param_inativo')) ,   'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['DATABASE_BALANCE']   	= array('title'=>LNG('DATABASE_BALANCE')    , 'placeholder'=>LNG('DATABASE_BALANCE_PLACEHOLDER')		, 'class'=>'hide', 'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['SERVER_ID']   			= array('title'=>LNG('SERVER_ID')    		, 'placeholder'=>LNG('SERVER_ID_PLACEHOLDER')				, 'is_select'=>'ATT_WRS_SERVER', 'select_fields_in_table'=>array('SERVER_ID','SERVER_DESC'), 'length'=>100,   'primary' => true,   'obrigatorio' => true,   'list'=>false, 'basic'=>false , 'grid'=>false);
-		$fields['CUSTOMER_ID']   		= array('title'=>LNG('CUSTOMER_ID')    		, 'placeholder'=>LNG('CUSTOMER_ID_PLACEHOLDER')				, 'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_CODE','CUSTOMER_DESC'),'type'=>'int',   'length' => 19,   'obrigatorio' => true,   'list'=>false, 'basic'=>false , 'grid'=>false);
+		$fields['CUSTOMER_ID']   		= array('title'=>LNG('CUSTOMER_ID')    		, 'placeholder'=>LNG('CUSTOMER_ID_PLACEHOLDER')				, 'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_DESC'),'type'=>'int',   'length' => 19,   'obrigatorio' => true,   'list'=>false, 'basic'=>false , 'grid'=>false);
 			
 		$fields['SERVER_DESC']   		= array('title'=>LNG('SERVER_DESC')    		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
 		$fields['CUSTOMER_DESC']   		= array('title'=>LNG('CUSTOMER_DESC')  		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
@@ -643,7 +656,7 @@ HTML;
 		$fields['CUBE_STATUS'] 			= array('title'=>LNG('CUBE_STATUS')    		, 'placeholder'=>LNG('CUBE_STATUS_PLACEHOLDER')    			, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['DATABASE_ID'] 			= array('title'=>LNG('DATABASE_ID')    		, 'placeholder'=>LNG('DATABASE_ID_PLACEHOLDER')    			, 'is_select'=>'ATT_WRS_DATABASE', 'select_fields_in_table'=>array('DATABASE_ID','DATABASE_DESC','SERVER_DESC','CUSTOMER_CODE'), 'length'=>100,   'primary' => true,   'obrigatorio' => true, 'link_field_master'=>array('id'=>array('DATABASE_ID','SERVER_ID'),'valores'=>array('SERVER_ID'=>'SERVER_DESC','CUSTOMER_ID'=>'CUSTOMER_DESC')), 'disabled_edit'=>false,   'list'=>false, 'basic'=>false , 'grid'=>false); // colocar server_desc junto da descricao do database
 		$fields['SERVER_ID'] 			= array('title'=>LNG('SERVER_ID')    		, 'placeholder'=>LNG('SERVER_ID_PLACEHOLDER')    			, 'is_select'=>'ATT_WRS_SERVER', 'select_fields_in_table'=>array('SERVER_ID','SERVER_DESC'), 'length'=>100,   'primary' => true,  'obrigatorio' => true, 'link_field'=>'DATABASE_ID', 'disabled'=>true,   'list'=>false, 'basic'=>false , 'grid'=>false);
-		$fields['CUSTOMER_ID']   		= array('title'=>LNG('CUSTOMER_ID')    		, 'placeholder'=>LNG('CUSTOMER_ID_PLACEHOLDER')    			, 'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_CODE','CUSTOMER_DESC'), 'type'=>'int',   'length' => 19,  'obrigatorio' => true, 'link_field'=>'DATABASE_ID', 'key'=>true, 'disabled'=>true,   'list'=>false, 'basic'=>false , 'grid'=>false);
+		$fields['CUSTOMER_ID']   		= array('title'=>LNG('CUSTOMER_ID')    		, 'placeholder'=>LNG('CUSTOMER_ID_PLACEHOLDER')    			, 'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_DESC'), 'type'=>'int',   'length' => 19,  'obrigatorio' => true, 'link_field'=>'DATABASE_ID', 'key'=>true, 'disabled'=>true,   'list'=>false, 'basic'=>false , 'grid'=>false);
 
 		$fields['DATABASE_DESC']   		= array('title'=>LNG('DATABASE_DESC')  		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
 		$fields['SERVER_DESC']   		= array('title'=>LNG('SERVER_DESC')    		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
@@ -767,6 +780,7 @@ HTML;
 		$fields['DATABASE_DESC']  	= array('title'=>LNG('DATABASE_DESC')  		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
 		
 		$fields['CUBE_DESC']   		= array('title'=>LNG('MENU_ADMIN_CUBE'), 'width'=>200	, 'placeholder'=>LNG('MENU_ADMIN_CUBE_PLACEHOLDER') ,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
+		$fields['CUBE_DESC_FULL'] 	= array('title'=>LNG('MENU_ADMIN_CUBE'), 'width'=>200, 'class'=>'hide'	, 'placeholder'=>LNG('MENU_ADMIN_CUBE_PLACEHOLDER') ,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
 		$fields['USER_CODE']   		= array('title'=>LNG('MENU_ADMIN_USER'), 'width'=>200	, 'placeholder'=>LNG('MENU_ADMIN_USER_PLACEHOLDER') ,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
 
 		$fields['USER_DESC']  		= array('title'=>LNG('USER_DESC')  		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
@@ -882,6 +896,7 @@ HTML;
 		$fields['USER_ID']   = array('title'=>LNG('USER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
 		$fields['USER_CODE']   = array('title'=>LNG('USER_CODE')    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_DESC']   = array('title'=>LNG('USER_DESC')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_TYPE']   = array('title'=>LNG('USER_TYPE')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['CUSTOMER_ID']   = array('title'=>LNG('CUSTOMER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
 		$fields['CUSTOMER_DESC']   = array('title'=>LNG('CUSTOMER_DESC')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		

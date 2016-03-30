@@ -42,6 +42,10 @@ class WRSUpload extends WRS_BASE
 		
 	}
 	
+	public function getParameters(){
+		return $this->parameter;
+	}
+	
 	public function run()
 	{
 

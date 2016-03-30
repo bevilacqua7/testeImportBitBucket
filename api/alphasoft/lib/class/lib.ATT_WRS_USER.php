@@ -24,8 +24,8 @@ class ATT_WRS_USER extends WRS_BASE
 		$event	=	 fwrs_request('event');
 		switch($event)
 		{
-			case 'downloadFile' 	: $this->downloadFile(); break;
-			case 'changePassUser' 	: $this->changePassUser(); break;
+			case 'downloadFile' 		: $this->downloadFile(); 			break;
+			case 'changePassUser' 		: $this->changePassUser(); 			break;
 		}
 	}
 	
@@ -33,20 +33,28 @@ class ATT_WRS_USER extends WRS_BASE
 		$this->admin->downloadFile();
 	}
 
-	public function changePassUser(){
+	public function changePassword($options){
+		$param 				= $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
+		$perfil_logado 		= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
+		$_request_original	= $_REQUEST;
+		$extraValues 		= array_key_exists('extraValues', $_request_original) && $_request_original['extraValues']!='self'?base64_encode($_request_original['extraValues']):'';
+		$isAdm 				= ($perfil_logado=='MST' || $perfil_logado=='ADM') && $extraValues!='';
+		$HTML 				= includeTemplate('modal_change_passwd',array('isAdm'=>$isAdm,'extraValues'=>$extraValues),true);
+		$param['html']		= $HTML;
+		$param['title']		= LNG('TITLE_ALTER_SENHA');
+		if(!$isAdm){
+			unset($param['button']['back']);			
+		}
+		unset($param['button']['update']);
+		return $param;
+	}
 
-		header('Content-Type: application/json');
-		
-		$options		=	 array(
-				'objSelecionados',
-				'senha',
-				'old_senha'
-		);
-		
-		$parameter		=	fwrs_request($options);
+	public function changePassUser($options){
+				
+		$parameter		=	(array)json_decode(fwrs_request('extraValues'));
 		$nova_senha 	= 	$parameter['senha'];
 		$old_senha 		= 	$nova_senha!='' && $parameter['old_senha']!=''?$parameter['old_senha']:''; // garante que haja uma nova senha para utilizar controles com a senha antiga
-		$objSelecionados=	$parameter['objSelecionados'];
+		$objSelecionados=	(array)$parameter['objSelecionados'];
 		
 		includeQUERY('WRS_LOGIN');
 		$class_query_login = new QUERY_LOGIN();
@@ -62,13 +70,14 @@ class ATT_WRS_USER extends WRS_BASE
 		
 		if($qtde_user){
 			foreach($objSelecionados as $user_id=>$user_code){
+				if(trim($user_code)=='*'){ $user_code=""; }
 				$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( $user_code, $USER_MASTER, $nova_senha, $old_senha, $CUSTOMER_ID, $USER_ID_LOGADO ); 
 			}
 		}else{
 				$query[] = $class_query_login->CHANGE_SSAS_PASSWORD( '', $USER_MASTER, $nova_senha, $old_senha, $CUSTOMER_ID, $USER_ID_LOGADO ); 					
 		}
 		
-		$this->admin->set_conn($this->get_conn());
+		$this->admin->set_conn($this->admin->OBJECT->get_conn());
 		$status=true;
 		$op = '';
 		$qtde_op = $qtde_user==0?LNG('js_admin_pass_sintax_d'):$qtde_user;
@@ -96,7 +105,7 @@ class ATT_WRS_USER extends WRS_BASE
 					$DATA_BASE_ERROR		=	LNG('DATA_BASE_ERROR');
 					$msg					=	$DATA_BASE_ERROR.$st[0]['message'];						
 				}else if($this->admin->num_rows($queryRes)){
-					$rows	=	$this->fetch_array($queryRes);
+					$rows	=	$this->admin->fetch_array($queryRes);
 					$status = 	(int)trim($rows['STATUS']);
 					if($status!=1){
 						$status=false;
@@ -110,11 +119,8 @@ class ATT_WRS_USER extends WRS_BASE
 			$msg = ($nova_senha=='')?LNG('php_admin_msg_exp_erro'):LNG('php_admin_msg_red_erro');
 		}
 		
-		$mensagens['mensagem']	=	$msg;
-		$mensagens['type']		=	(!$status)?'error':'success';
-				
-		echo json_encode($mensagens);
-		
+		$this->admin->retornaMsgAcaoTelaAdmin($status,$msg,$old_senha!=''?'':$this->admin->classname);
+						
 	}
 	
 	public function insert($options)
@@ -167,13 +173,14 @@ class ATT_WRS_USER extends WRS_BASE
 		$CUTOMER_ID 			= WRS::CUSTOMER_ID();
 		$this->admin->set_conn($this->admin->OBJECT->get_conn());
 		$status=true;
+		$msg = LNG_S('ADMIN_REG_DELETED',((count($_regForDelete['objetosSelecionados'])>1)?'s':''));
 		foreach($_regForDelete['objetosSelecionados'] as $id_for_del){
 			$condicao_query = $id_for_del.",".$CUTOMER_ID.",".$USER_CODE;
 			$query_exec = $this->queryClass->Get_procedure_remove_user($_tabela, $condicao_query);
 			$query = $this->admin->query($query_exec);
 			if ($this->num_rows($query)){
 				$rows	=	$this->fetch_array($query);
-				if ($rows['STATUS'] < 1){
+				if ($rows['STATUS'] < 0){
 					$status=false;
 					$msg		=	$rows['MESSAGE'];
 					$this->admin->retornaMsgAcaoTelaAdmin($query,$msg,$_tabela,$query_exec);
@@ -188,7 +195,6 @@ class ATT_WRS_USER extends WRS_BASE
 				return false;
 			}
 		}
-		$msg = LNG_S('ADMIN_REG_DELETED',((count($_regForDelete['objetosSelecionados'])>1)?'s':''));
 		$this->admin->retornaMsgAcaoTelaAdmin($status,$msg,$_tabela,$query_exec);
 
 	}
@@ -207,6 +213,7 @@ class ATT_WRS_USER extends WRS_BASE
 		unset($param['button']['update']);
 		unset($param['button']['remove']);
 		unset($param['button']['export']);
+		unset($param['button']['changePassword']);
 	
 		$nome_arquivo = 'uploads/'.WRS::CUSTOMER_ID().'/';
 	
@@ -215,56 +222,19 @@ class ATT_WRS_USER extends WRS_BASE
 	
 		return $param;
 	}
-	
+
 	public function export($options)
 	{
-		$_fields			= $options['field'];
-		$_request_original 	= $_REQUEST;
-		$_tabela			= $options['table'];
-		$_regForExport		= json_decode($_request_original['extraValues'],1);
-		$_regForExport['caracter_separacao'] = $_request_original['caracter_d'];
-		$_regForExport['efetua_compactacao'] = $_request_original['caracter_c']!='nao'?true:false;
+		return $this->admin->export($options);
+	}
 	
-		$arr_campos_request = array();
-		foreach($_fields as $nome_campo => $valores){
-			if(array_key_exists($nome_campo, $_request_original)){
-				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
-			}
-		}
-	
-		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
-	
-		unset($param['button']['update']);
-		unset($param['button']['remove']);
-		unset($param['button']['import']);
-	
-		$event_form						= WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_request_original['event']);
-		$_request_original['event'] 	= $event_form;
-	
-		$param['tabela_export']			= $event_form;
-		$param['caracter_separacao']	= $_regForExport['caracter_separacao'];
-		$param['efetua_compactacao']	= $_regForExport['efetua_compactacao'];
-
+	public function exportResults($options)
+	{
 		$customer_id_logado		= WRS::CUSTOMER_ID();
-		
-		$nome_diretorio = 'uploads/'.$customer_id_logado.'/';
-		$param['nome_diretorio']	= $nome_diretorio;
-
-		$param['filtro_fixo'] = 'CUSTOMER_ID = '.$customer_id_logado;
-	
-		include PATH_TEMPLATE.'export_file_window.php';
-		$link_download = $this->admin->downloadLink($_regForExport['objetosSelecionados'],$_regForExport['chave_primaria'],$param);
-		if(!$link_download){
-			$msg 	= LNG('ADMIN_EXPORT_OPTION_ERROR');
-			$tipomsg= "error";
-		}else{
-			$msg 	= LNG('ADMIN_EXPORT_OPTION_OK');
-			$tipomsg= "success";
-		}
-		$HTML 	= str_replace(array('{MENSAGEM}','{TIPOMENSAGEM}','{URL_DOWNLOAD}'),array($msg,$tipomsg,$link_download),$HTML);
-		$param['html'] = $HTML;
-	
-		return $param;
+		$param_extra = array(
+				'filtro_fixo' => 'CUSTOMER_ID = '.$customer_id_logado
+		);
+		return $this->admin->exportResults($options,$param_extra);
 	}
 	
 	

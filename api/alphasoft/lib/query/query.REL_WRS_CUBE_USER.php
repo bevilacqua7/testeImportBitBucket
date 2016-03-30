@@ -26,7 +26,8 @@ class QUERY_WRS_CUBE_USER extends QUERY_WRS_ADMIN
 		if(isset($cube_id) && isset($database_id) && isset($server_id) && $cube_id!='' && $database_id!='' && $server_id!=''){
 			$where[]="CUBE_ID = ''".$cube_id."''";
 			$where[]="DATABASE_ID = ''".$database_id."''";
-			//$where[]="SERVER_ID = ''".$server_id."''"; // nao considero server id por existir balance entre os servers - facioli 20160307 - felipeb
+			// voltou a considerar SERVER ID - Faciolli - felipeb 20160324 17h21
+			$where[]="SERVER_ID = ''".$server_id."''"; // nao considero server id por existir balance entre os servers - facioli 20160307 - felipeb
 		}
 		
 		$where = is_array($where) && count($where)>0?implode(' AND ',$where):'';
@@ -60,16 +61,19 @@ class QUERY_WRS_CUBE_USER extends QUERY_WRS_ADMIN
 		return $sql;
 	}
 
-	public function getQueryAllCubes($cube_id=null){	
+	public function getQueryAllCubes($cube_id=null,$database_id=null,$server_id=null){	
 		$perfil_logado 		= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
 		$where=array();
 		if($perfil_logado!='MST' || $perfil_logado=='ADM'){
 			$CUTOMER_ID 			= WRS::CUSTOMER_ID();
 			$where[]="CUSTOMER_ID = ".$CUTOMER_ID;
-		}			
-		if(isset($cube_id) && $cube_id!=''){
+		}		
+		if(isset($cube_id) && isset($database_id) && isset($server_id) && $cube_id!='' && $database_id!='' && $server_id!=''){
 			$where[]="CUBE_ID = ''".$cube_id."''";
-		}	
+			$where[]="DATABASE_ID = ''".$database_id."''";
+			// voltou a considerar SERVER ID - Faciolli - felipeb 20160324 17h21
+			$where[]="SERVER_ID = ''".$server_id."''"; // nao considero server id por existir balance entre os servers - facioli 20160307 - felipeb
+		}
 		$where = is_array($where) && count($where)>0?implode(' AND ',$where):'';
 	
 		$sql = WRS_MANAGE_PARAM::select('*','ATT_WRS_CUBE(POOL)','','ASC',1,0, $where);	
@@ -92,6 +96,30 @@ class QUERY_WRS_CUBE_USER extends QUERY_WRS_ADMIN
 	
 		return $this->Get_query_changetable($tabela,$arr_campos_valores,$condicao,$operacao);
 	}
-	
-	
+
+	/**
+	 * Insere os Relacionamentos entre Cubo x Usuário
+	 * 
+	 * @param int $SERVERS
+	 * @param int $DATABASES
+	 * @param int $CUBES
+	 * @param int $USERSS
+	 * @param int $RELATIONSHIP
+	 *
+	 * @return string
+	 */
+	public function INSERT_RELATIONSHIP( $SERVERS, $DATABASES, $CUBES, $USERS, $RELATIONSHIP  = 'USER')
+	{
+		// Exemplo: EXEC Insert_Relationship  'ALPHABASE,ALPHAWEB', 'GSK - DDD,GSK - MDTR', 'GSK - DDD,GSK - MDTR', '1,2,3', 'CUBE' -- CUBE / USER
+		$USER_CODE = WRS::USER_CODE();
+		$query = <<<EOF
+					EXEC Insert_Relationship '{$SERVERS}', 
+					                         '{$DATABASES}',
+					                         '{$CUBES}',
+					                         '{$USERS}',
+					                         '{$RELATIONSHIP}',
+EOF;
+		return $query;
+	}
+		
 }

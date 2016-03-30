@@ -1,19 +1,11 @@
 function scripts_ini_after_load_modal_admin(){
 	confere_botao_touch();
-	bt_reset_senha_user();
 }
 
 function confere_botao_touch(){
 	if(Modernizr.touch && $('.modal-content-grid .modal-body div.k-grid').length>0){
 		var botoes = $('.modal-content-grid .modal-footer button[action_type]');
 		$( botoes.first().clone().attr('class','').addClass('btn btn-primary btn-color-write btn_window_grid_event').attr('action_type','dbl_click_btn').html('<li class="fa fa-pencil"></li> '+LNG('BTN_UPDATE')) ).insertAfter( botoes.parent().children().first() );
-	}
-}
-
-function bt_reset_senha_user(){
-	if($('.modal-content-grid .wrs_window_grid .k-grid').attr('id')=="ATT_WRS_USER"){ // validar perfil logado para MST E ADM apenas
-		var botoes = $('.modal-content-grid .modal-footer button[action_type]');
-		$( botoes.first().clone().attr('class','').addClass('btn btn-warning btn-color-write btn_window_grid_event').attr('action_type','reset_password').html('<li class="fa fa-exclamation-triangle"></li> '+LNG('TITLE_ALTER_SENHA')) ).insertBefore( botoes.parent().children().last() );
 	}
 }
 
@@ -442,157 +434,6 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 										return false;
 										break;
 									}
-				case 'export' 	: 	{			
-
-										var LNG_caracter_delimitador 	= LNG('ADMIN_IMPORT_caracter_delimitador');
-										var LNG_compactar_resultados	= LNG('ADMIN_IMPORT_compactar_resultados');
-										var LNG_virgula 				= LNG('ADMIN_IMPORT_virgula');
-										var LNG_ponto_virgula 			= LNG('ADMIN_IMPORT_ponto_virgula');
-										var LNG_tabulacao 				= LNG('ADMIN_IMPORT_tabulacao');
-										var LNG_sim 					= LNG('BTN_SIM');
-										var LNG_nao 					= LNG('BTN_NAO');
-					
-										var div_export = 
-											$('<form/>').addClass('grid_window_values_form')
-											.append(
-												$('<div/>').addClass('container-fluid')
-													.append($('<div/>').addClass('row').html('<strong>'+LNG('JS_admin_confirm_export')+'</strong>'))
-													.append($('<div/>').addClass('row')
-															.append($('<table/>').addClass('table')
-																	.append($('<tr/>')
-																			.append($('<td/>')
-																					.append(LNG_caracter_delimitador)
-																			)
-																			.append($('<td/>')
-																					.append($('<input/>').prop({
-																						'type'		:'radio',
-																						'name'		:'caracter_d',
-																						'id'		:'caracter_d2',
-																						'value'		:'ponto_virgula',
-																						'checked'	:'checked'
-																						})
-																					)
-																					.append($('<label/>').attr({
-																						'for':'caracter_d2'
-																					}).html(LNG_ponto_virgula).css({'font-weight': 'normal'}))
-																			)
-																			.append($('<td/>')
-																					.append($('<input/>').prop({
-																						'type'		:'radio',
-																						'name'		:'caracter_d',
-																						'id'		:'caracter_d1',
-																						'value'		:'virgula'
-																						})
-																					)
-																					.append($('<label/>').attr({
-																						'for':'caracter_d1'
-																					}).html(LNG_virgula).css({'font-weight': 'normal'}))
-																			)
-																			.append($('<td/>')
-																					.append($('<input/>').prop({
-																						'type'		:'radio',
-																						'name'		:'caracter_d',
-																						'id'		:'caracter_d3',
-																						'value'		:'tabulacao'
-																						})
-																					)
-																					.append($('<label/>').attr({
-																						'for':'caracter_d3'
-																					}).html(LNG_tabulacao).css({'font-weight': 'normal'}))
-																			)
-																	)
-																	.append($('<tr/>')
-																			.append($('<td/>')
-																					.append(LNG_compactar_resultados)
-																			)
-																			.append($('<td/>')
-																					.append($('<input/>').prop({
-																						'type'		:'radio',
-																						'name'		:'caracter_c',
-																						'id'		:'caracter_c1',
-																						'value'		:'sim',
-																						'checked'	:'checked'
-																						})
-																					)
-																					.append($('<label/>').attr({
-																						'for':'caracter_c1'
-																					}).html(LNG_sim).css({'font-weight': 'normal'}))
-																			)
-																			.append($('<td/>')
-																					.prop({'colspan':'2'})
-																					.append($('<input/>').prop({
-																						'type'		:'radio',
-																						'name'		:'caracter_c',
-																						'id'		:'caracter_c2',
-																						'value'		:'nao'
-																						})
-																					)
-																					.append($('<label/>').attr({
-																						'for':'caracter_c2'
-																					}).html(LNG_nao).css({'font-weight': 'normal'}))
-																			)
-																	)
-															)															
-													)
-											)
-										;
-										
-										var retornoQuestion = function(escolha){
-											if(qtde_linhas_selecionadas==0 && escolha!='cancel' && escolha!='all' && escolha!=false){	
-												WRS_ALERT(LNG('JS_admin_select_one'),'warning');
-											}else{
-												if(escolha!='cancel' && escolha!=false){
-													//_extraValues = {'objetosSelecionados':(escolha=='all')?'*':arrObjetosSelecionados};	
-													_extraValues = {
-															'objetosSelecionados'	:	(escolha=='all')?'*':arrRegisterIds,
-															'chave_primaria'		:	chave_primaria			
-													};					
-													btn_window_grid_event(funCallBack,action_type,table,_extraValues);
-												}
-											}
-										}
-										var _s = (qtde_linhas_selecionadas>1)?'s':'';
-										
-
-										
-										WRS_CONFIRM(
-														div_export,
-														'warning',
-														retornoQuestion,
-														undefined,
-														'custom',
-														[
-														 	{
-														 		text : LNG('JS_admin_all_records'), 
-														 		val : "all", 
-														 		onClick:function(e){																	
-														 								return true;
-																		 			}
-														 	},
-														 	{
-														 		text : LNG_s('JS_admin_selecteds',_s), 
-														 		val : "sel", 
-														 		onClick:function(e){																	
-									 													return true;
-																		 			}
-														 	},
-														 	{
-														 		text : LNG('MODAL_CONFIRM_BT_CANCEL'), 
-														 		val : 'cancel', 
-														 		onClick:function(e){
-																		 				return true;
-																		 			}
-														 	}
-														],
-														{
-															title	:	LNG('bt_export')
-														}														
-													);
-										return false;
-										break;
-									}
-				
-
 				case 'import' 	: 	{	
 										if( // validacao se o usuario clicou pra importar sem selecionar arquivo
 											$('form.grid_window_values_form').length > 0 // verifica se existe o formulario de importacao ou se esta clicando no botao de importacao da tela da grid (inicial)
@@ -615,12 +456,6 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 				case 'new' 		: 
 						btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 						break;
-						
-				case 'reset_password'	: {
-											abre_modal_alterar_senha(objObjetosSelecionados,true);
-											return false;
-											break;
-										};
 
 				case 'dbl_click_btn'	: {
 											if(qtde_linhas_selecionadas>0){			
@@ -681,6 +516,107 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 											return false;
 											break;
 										};
+
+				case 'export' 	: 	{ // sempre exportará todos os registros									
+										_extraValues = {
+												'objetosSelecionados'	:	'*',
+												'chave_primaria'		:	chave_primaria			
+										};					
+										btn_window_grid_event(funCallBack,action_type,table,_extraValues);
+										break;
+									}
+
+				
+				case 'changePassword'	: {					
+											if($('.grid_alterar_senha #nova_senha').length && $('.grid_alterar_senha #confirmar_senha').length){
+												var qtde_linhas_selecionadas 		= 0;
+
+												var nova_senha 			= $('.grid_alterar_senha #nova_senha').length?$('.grid_alterar_senha #nova_senha').val():'';
+												var confirmar_senha 	= $('.grid_alterar_senha #confirmar_senha').length?$('.grid_alterar_senha #confirmar_senha').val():'';
+												var old_senha 			= $('.grid_alterar_senha #old_senha').length?$('.grid_alterar_senha #old_senha').val():false;
+												var operacao 			= (nova_senha=='' && confirmar_senha=='')?'expirar':'definir';											
+												var op 					= operacao == 'definir'?LNG('js_admin_pass_sintax_a'):LNG('js_admin_pass_sintax_b'); 
+												var extraValues		 	= $('.grid_alterar_senha #extraValues').length?base64_decode($('.grid_alterar_senha #extraValues').val()):null;
+												var isAdm 				= !$('.grid_alterar_senha #old_senha').is(':visible');
+												
+												if(isAdm && extraValues!=undefined && extraValues!=null && extraValues!=''){
+													var ObjsDecode 			= json_decode(extraValues);
+													objObjetosSelecionados 	= ObjsDecode['objetosSelecionados'];
+												}else{
+													objObjetosSelecionados = {};
+													objObjetosSelecionados[$('body').WrsGlobal('getPHP','login')['USER_ID']] = $('body').WrsGlobal('getPHP','login')['USER_CODE'];													
+												}
+												
+												if(objObjetosSelecionados!='*')
+												for(var usr_id in objObjetosSelecionados){
+													qtde_linhas_selecionadas++;
+												}
+
+									 			if($('.alerta_senha_igual').length>0) $('.alerta_senha_igual').remove(); 
+									 			
+									 			if(nova_senha!='' || confirmar_senha!=''){
+													if(nova_senha!=confirmar_senha){
+														$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_same')+'</div>');
+														return false;
+													}
+													if(nova_senha.length < 3 || confirmar_senha.length < 3){
+														$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_min')+'</div>');
+														return false;
+													}
+													if(old_senha!==false && nova_senha == old_senha){
+														$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_equals')+'</div>');
+														return false;
+													}
+													if(old_senha!==false && old_senha==''){
+														$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_current')+'</div>');
+														return false;
+													}
+													if($('#expira_senha').length>0 && (nova_senha!='' || confirmar_senha!='') && $('#expira_senha').is(':checked')){
+														$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_choice')+'</div>');
+														return false;			
+													}
+												}else if(!isAdm){
+													$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_self')+'</div>');
+													return false;
+												}else if(isAdm && $('#expira_senha').length>0 && nova_senha=='' && confirmar_senha=='' && !$('#expira_senha').is(':checked')){
+													$('.grid_alterar_senha').prepend('<div class="alert alert-danger alerta_senha_igual" role="alert">'+LNG('js_admin_pass_blank')+'</div>');
+													return false;														
+												}						
+									 			
+												if(qtde_linhas_selecionadas!=1 && !isAdm){
+													WRS_ALERT(LNG('js_admin_no_user'),'error');
+													return false;
+												}
+												
+												var _s 				= qtde_linhas_selecionadas==1?'':'s';
+												var qtde 			= qtde_linhas_selecionadas>0?qtde_linhas_selecionadas:LNG('js_admin_pass_sintax_d');
+												qtde 				= !isAdm?LNG('js_admin_pass_sintax_e'):qtde;
+												
+												var retornoQuestion2 = function(escolha){
+													if(escolha!=false){
+														
+														_extraValues = {
+																'objSelecionados'	:	objObjetosSelecionados,
+																'senha'				:	nova_senha,
+																'old_senha'			:	old_senha	
+														};	
+														btn_window_grid_event(funCallBack,'changePassUser',table,_extraValues);
+														
+													}
+												}
+												
+												var msg = op+qtde+LNG_s('js_admin_pass_sintax_c',_s)+LNG('js_admin_confirm_question');
+												WRS_CONFIRM(msg,'warning',retornoQuestion2);
+											}else{
+												_extraValues = {
+														'objetosSelecionados'	:	arrRegisterIds.length>0?objObjetosSelecionados:'*',
+														'chave_primaria'		:	chave_primaria			
+												};					
+												btn_window_grid_event(funCallBack,action_type,table,_extraValues);
+											}
+											break;
+										};
+				case 'exportResults':
 				default: 	btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 			}
 	

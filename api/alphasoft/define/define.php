@@ -587,7 +587,7 @@ function fwrs_js_location($location)
  * @param array $result
  * @param string|int $selected
  */
-function fwrs_option($value,$text,$selected=NULL,$elements=NULL)
+function fwrs_option($value,$text,$selected=NULL,$elements=NULL,$extra_param=null)
 {
 	$subject 	= '<option value="{value}" {select} '.$elements.' >{text}</option>'.PHP_EOL;
 	$search		=	array('{value}','{text}','{select}');
@@ -597,7 +597,7 @@ function fwrs_option($value,$text,$selected=NULL,$elements=NULL)
 	 
 		$replace	=	 array(	$value,
 								$text, 
-								($value==$selected ? ' selected="selected" ' : NULL)
+								($value==$selected ? ' selected ' : NULL)
 								);
 		
 	return str_replace($search, $replace, $subject);

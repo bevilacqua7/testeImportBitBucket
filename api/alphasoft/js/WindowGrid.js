@@ -373,25 +373,38 @@ function btn_window_grid_event(_functionCallBack,_action_type,_table,_extraValue
 
 	var extraValues				=	_extraValues;
 		values['wrs_type_grid']	=	(extraValues!=undefined && extraValues['wrs_type_grid']!=undefined)?extraValues['wrs_type_grid']:'form';
+	
+	var janela_grid				=	$('#'+table).data();
 
+		if(janela_grid!=undefined && janela_grid!=null)
+		{
+			var filtros_existentes	=		janela_grid.kendoGrid.dataSource.filter();
+			filtros_existentes		=	filtros_existentes==undefined?'':filtros_existentes;
+			values['filters_window_grid'] = filtros_existentes;
+			
+		}		
+		
 		switch(action_type)
 		{
-			case 'new' 		: values['form_event']='new'	;	break;
-			case 'update' 	: 
-								{
-									if(extraValues!=undefined && extraValues['extra_validation_on_update_admin']!=undefined && typeof extraValues['extra_validation_on_update_admin'] == 'function'){
-										$retorno = extraValues['extra_validation_on_update_admin']();
-										if(!$retorno){
-											return false;
+			case 'new' 				: values['form_event']='new'	;	break;
+			case 'update' 			: 
+										{
+											if(extraValues!=undefined && extraValues['extra_validation_on_update_admin']!=undefined && typeof extraValues['extra_validation_on_update_admin'] == 'function'){
+												$retorno = extraValues['extra_validation_on_update_admin']();
+												if(!$retorno){
+													return false;
+												}
+											}
 										}
-									}
-								}
-								values['form_event']='update' ; 	
-								break;
-			case 'remove' 	: values['form_event']='remove' ;	break;
-			case 'import' 	: values['form_event']='import' ;	break;
-			case 'export' 	: values['form_event']='export' ;	break;
-			case 'back' 	: values['form_event']='back' 	;	break;
+										values['form_event']='update' ; 	
+										break;
+			case 'remove' 			: values['form_event']='remove' ;	break;
+			case 'import' 			: values['form_event']='import' ;	break;
+			case 'export' 			: values['form_event']='export' ;	break;
+			case 'exportResults' 	: values['form_event']='exportResults' ;	break;
+			case 'changePassword' 	: values['form_event']='changePassword' ;	break;
+			case 'changePassUser' 	: values['form_event']='changePassUser' ;	break;
+			case 'back' 			: values['form_event']='back' 	;	break;
 		}
 
 		values = merge_objeto(values,option);
