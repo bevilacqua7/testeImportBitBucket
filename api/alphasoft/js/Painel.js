@@ -1974,7 +1974,6 @@ function wrs_run_filter()
 		
 		if(isEmpty(REPORT_FILTER))
 		{
-			console.log('empty');
 			REPORT_FILTER	=	get_aba_active_object().wrsAbaData('getWrsData').REPORT_FILTER;
 		}
 		
@@ -2461,8 +2460,17 @@ function force_show_drag_on_drop(painel_origem,count){
 /**
  * Processo principal
  */
+
+function fake_load_start()
+{
+	$("#fakeloader").show();
+}
  $(function(){
 	 _START('wrs_panel.js Enable CLick');
+	 
+	 
+	 
+	 $('.loadWindow').click(fake_load_start);
 	  
 	 //Evento de click para gerar o relatório
 	 $('.wrs_run_filter').unbind('click').click(wrs_run_filter);

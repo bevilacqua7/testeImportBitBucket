@@ -34,7 +34,7 @@
         var spinner03 = '<div class="fl spinner3"><div class="dot1"></div><div class="dot2"></div></div>';
         var spinner04 = '<div class="fl spinner4"></div>'; 
         var spinner05 = '<div class="fl spinner5"><div class="cube1"></div><div class="cube2"></div></div>'; 
-        var spinner06 = '<div class="fl spinner6"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>'; 
+        var spinner06 = '<div class="fl spinner6"><img src="./imagens/rolling.gif"/></div>'; 
         var spinner07 = '<div class="fl spinner7"><div class="circ1"></div><div class="circ2"></div><div class="circ3"></div><div class="circ4"></div></div>'; 
 
         //The target
