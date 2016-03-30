@@ -15,6 +15,7 @@ var TIME_CHECK_USER_CONECT		=	1;
 
 function filter_mouse_hover_details()
 {
+	_ONLY('filter_mouse_hover_details');
 	if($('.tooltip_info_wrs_panel_details').length>0)
 	{
 		if($('.tooltip_info_wrs_panel_details').is(':hidden')==false)
@@ -25,13 +26,279 @@ function filter_mouse_hover_details()
 	
 }
 
+//HERE
+//@link http://www.telerik.com/forums/grid-filtering-in-javascript---not-equal-to-null
+function setKNewFilter()
+{
+	_ONLY('setKNewFilter');
+	
+	var grid = $('#A162').data('kendoGrid');
+		$filter = new Array();
+   	$filter.push({ field: "C002", operator: "neq", value: 15 });
+	grid.dataSource.filter($filter);
+}
+
+
+/**
+ * 	Index do FilterFindType
+ */
+function rFFTIndex(label)
+{
+	_ONLY('rFFTIndex');
+	var _tmp	=	{};
+	for(var line in label) _tmp[label[line].field]	=	label[line].type;
+	return _tmp;
+}
+
+
+/**
+ * Recursividade para pegar apenas os types das coluns
+ */
+function recursiveFilterFindType(types,deep)
+{
+	for(var line in deep)
+	{
+		if(typeof deep[line]=='object')
+		{
+			deep[line]	=	recursiveFilterFindType(types,deep[line]);
+		}
+
+		if(typeof deep[line].field!='undefined')
+		{
+				deep[line]['type']	=	'number';//types[deep[line].field];
+		}
+	}
+	return deep;	
+}
+
+
+
+/**
+ * Obtendo os atributos do filtro KendoUi para Salvar
+ * 
+ * Chamando a função 
+ * 
+ * json_encode(getFiltersKendoUiSave($('#A162').data('kendoGrid').headerIndex.field,json_decode(json_encode($('#A162').data('kendoGrid').dataSource.filter()))))
+ * 
+ * @param types
+ * @param deep
+ * @returns array
+ */
+function getFiltersKendoUiSave(types,deep)
+{
+	_ONLY('getFiltersKendoUiSave');
+	for(var line in deep)
+	{
+		
+		if(typeof deep[line]=='object')
+		{
+			deep[line]	=	getFiltersKendoUiSave(types,deep[line]);
+		}
+		
+		if(typeof deep[line]['type']!='undefined') delete deep[line]['type'];
+
+		if(typeof deep[line].field!='undefined')
+		{
+			var _field	=	deep[line].field;
+			
+			deep[line]['field_old']	=	_field;
+			
+			try
+			{
+				deep[line].field	=	types[deep[line].field].LEVEL_DRILL;
+			}catch(e){
+				delete deep[line];
+			}
+		}
+	}
+	
+	
+	return deep;	
+}
+
+
+function merge_all(first,second)
+{
+	var _first	=	first;
+	
+	for(var line in second)
+	{
+		_first.push(second[line]);
+	}
+	
+	return _first;
+}
+
+/*
+ * QUery
+ */
+
+function makeFiltersKendoUiQuery(types,deep,logic)
+{
+	_ONLY('getFiltersKendoUiSave');
+	
+	var _filter				=	[];
+	var optionsFilter		=	$('body').WrsGlobal('getCM','getOPerationsFilter');
+	var options				=	['%c','#v'];
+	var clean_filter		=	$('body').WrsGlobal('getCM','cleanMakeFiltersKendoUiQuery');
+	
+	var _logic	=	' and ';
+	
+	if(!isEmpty(logic)) _logic	=	logic;
+	
+	for(var line in deep)
+	{
+		var _op		=	optionsFilter[deep[line].type];
+				
+		if(typeof deep[line]=='object')
+		{
+			
+			var _make	=	makeFiltersKendoUiQuery(types,deep[line],deep[line].logic);
+			
+			var _data	=	implode(_span(_logic.toUpperCase(),'#8a2d24'),_make);
+			
+			if(!isEmpty(_data))
+			{
+				_filter.push(_data);
+			}
+			
+		}
+		
+		if(typeof deep[line].field!='undefined')
+		{
+				deep[line].field	=	types[deep[line].field].LEVEL_DRILL;
+				var _br				=	'';
+				
+				if(in_array(deep[line].field,clean_filter))
+				{
+					deep[line].field	=	'';
+				}
+				else
+				{
+					if(clean_filter.length>=1)
+					{
+						_br	=	'<br>';
+					}
+					
+					clean_filter.push(deep[line].field);
+					
+					$('body').WrsGlobal('setCM',{cleanMakeFiltersKendoUiQuery:clean_filter});
+				}
+				
+			var _query		=	 _br+str_replace(options,[deep[line].field, _span(deep[line].value,'#03be80') ],_op[deep[line].operator])+'  ';
+			
+				_filter.push(_query);
+		}
+		
+	}
+	
+ 
+	return _filter;	
+}
+
+function _span(string,color)
+{
+	return '<span style="color:'+color+'"><strong>'+string+'</strong></span>';
+}
+
+
+/**
+ * Save in History
+ * @param report
+ * @param kendoUiFilters
+ * @returns
+ * 
+ */
+function changeFiltersKendoUi(report,kendoUiFilters)
+{
+	_ONLY('changeFiltersKendoUi');
+	var kendoUI		=	 $('#'+report).data('kendoGrid');
+	
+	if(kendoUI.headerIndex==undefined || kendoUI.headerIndex=='undefined')
+	{
+		kendoUI.headerIndex	=	WRSHeaderIndex(kendoUI);
+	}
+
+	var filters		=	json_encode(getFiltersKendoUiSave(kendoUI.headerIndex.field,kendoUiFilters));
+	var history_data=	$('#'+report+'Main').find('.wrs_history_report li:first-child a');
+	
+	$('.'+report).wrsAbaData('setWrsData',{REPORT_FILTER:filters});
+	
+	
+	var history						=	json_decode(base64_decode(history_data.attr('json')));
+
+		if(!isEmpty(history))
+		{
+			history['REPORT_FILTER']	=	filters;
+			
+			history_data.attr('json',base64_encode(json_encode(history)))
+		
+		}
+
+		
+	return filters;
+}
+
+function findFieldLevelDrill(param,field)
+{
+	for(var line in param)
+	{
+		if(param[line].LEVEL_DRILL==field) return line;
+	}
+	
+	return null;
+}
+
+/**
+ * Converte o json para o atributo de elemento
+ * 
+ *  setFiltersKendoUiDecode($('#A162').data('kendoGrid').headerIndex.field,json)
+ *  
+ *  
+ *  
+ *	setFiltersKendoUiDecode($('#A162').data('kendoGrid').headerIndex.field,json_decode('{"filters":[{"field":"[Ano][2010][Semestre][201102][Dolar]","operator":"eq","value":"1"},{"field":"[Ano][2010][Semestre][201102][Dolar]","operator":"eq","value":"2"},{"logic":"and","filters":[{"field":"[Ano][2011][Semestre][201102][Dolar]","operator":"eq","value":"2"},{"field":"[Ano][2011][Semestre][201102][Dolar]","operator":"eq","value":"3"}]},{"logic":"and","filters":[{"field":"[Ano][2011][Semestre][201108][Dolar]","operator":"eq","value":"4"},{"field":"[Ano][2011][Semestre][201108][Dolar]","operator":"eq","value":"5"}]}],"logic":"and"}'))
+ *  
+ *  
+ *  $('#A162').data('kendoGrid').dataSource.filter(setFiltersKendoUiDecode($('#A162').data('kendoGrid').headerIndex.field,json_decode('{"filters":[{"field":"[Ano][2010][Semestre][201102][Dolar]","operator":"eq","value":"1"},{"field":"[Ano][2010][Semestre][201102][Dolar]","operator":"eq","value":"2"},{"logic":"and","filters":[{"field":"[Ano][2011][Semestre][201102][Dolar]","operator":"eq","value":"2"},{"field":"[Ano][2011][Semestre][201102][Dolar]","operator":"eq","value":"3"}]},{"logic":"and","filters":[{"field":"[Ano][2011][Semestre][201108][Dolar]","operator":"eq","value":"4"},{"field":"[Ano][2011][Semestre][201108][Dolar]","operator":"eq","value":"5"}]}],"logic":"and"}')))
+ *  
+ * @param types
+ * @param deep
+ * @returns {___anonymous2497_2498}
+ */
+function setFiltersKendoUiDecode(types,deep)
+{
+
+	for(var line in deep)
+	{
+		
+		if(typeof deep[line]=='object')
+		{
+			deep[line]	=	setFiltersKendoUiDecode(types,deep[line]);
+		}
+
+		if(typeof deep[line].field!='undefined')
+		{
+			
+			var _field		=	 findFieldLevelDrill(types,deep[line].field)
+			var _filter_old	=	deep[line].field;
+			
+			if(_field!=null){
+				deep[line].field			=	_field;
+			}else{
+				delete deep[line];
+			}			
+		}
+	}
+	
+	return deep;	
+}
 
 
 
 function wrs_logout()
  {
 	
-	
+	_ONLY('wrs_logout');
 
 
 	var aba_data	=	abas_to_save()
@@ -972,19 +1239,20 @@ function runCall(param_request,Ofile,Oclass,Oevent,funCallBack,typeAlert,typeDat
 		param	=	merge_objeto(param,param_request);
 
 	$('body').WrsGlobal('setCM',{isDesconected:countTimeCheck()});
-	
 		
 	TRACE('Enviando parametro para o run.php mas sem esperar resposta file:common.js');	
+	
 	$.post('run.php',param,funCallBack,typeData).fail(function() {
 			if(typeAlert=='modal')
 			{
-				WRS_ALERT(LNG('ERRO_FILE_PROCCESS'),'error');
-				
-			}else{
-				$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
+				WRS_ALERT(LNG('ERRO_FILE_PROCCESS'),'error');				
 			}
-			
+			else
+			{
+				$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
+			}			
 	  });
+	
 	TRACE('runCall finalizado');
 }
 
@@ -1018,6 +1286,7 @@ function isDesconected()
 		$('body').WrsGlobal('setCM',{isDesconected:countTimeCheck()});
 	}
 	
+	_ONLY('isDesconected:: userLoged 60 seconds');
 	
 	if(_isDesconected<=mktime())
 	{
@@ -1035,7 +1304,7 @@ function isDesconected()
 		$('body').WrsGlobal('setCM',{isDesconected:countTimeCheck()});
 	}
 	
-	setTimeout(isDesconected,1000*30);//60 Segundos
+	setTimeout(isDesconected,1000*60);//60 Segundos
 	
 	
 }
@@ -1047,16 +1316,16 @@ function isDesconected()
 function getDateTime(){
 	
 		var objToday = new Date(),
-			weekday = new Array('Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'),
+			weekday = LNG('DIAS'),
 			dayOfWeek = weekday[objToday.getDay()],
 			dayOfMonth = today + (objToday.getDate() < 10) ? '0' + objToday.getDate() : objToday.getDate(),
-			months = new Array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'),
+			months = LNG('MES'),
 			curMonth = months[objToday.getMonth()],
 			curYear = objToday.getFullYear(),
 			curHour = objToday.getHours() < 10 ? "0" + objToday.getHours() : objToday.getHours(),
 			curMinute = objToday.getMinutes() < 10 ? "0" + objToday.getMinutes() : objToday.getMinutes(),
 			curSeconds = objToday.getSeconds() < 10 ? "0" + objToday.getSeconds() : objToday.getSeconds()
-		var today = curHour + ":" + curMinute + ":" + curSeconds + " - " + dayOfWeek + ", " + dayOfMonth + " de " + curMonth + " de " + curYear;
+		var today = curHour + ":" + curMinute + ":" + curSeconds + " - " + dayOfWeek + ", " + dayOfMonth + LNG('DE') + curMonth + LNG('DE') + curYear;
 	
 		/*
 	if(curSeconds % 59 == 0){
@@ -1420,7 +1689,7 @@ function merge_filter_data(input,inputMerge)
 
 
 
-	for(lineInputMerge in input)
+	for(var lineInputMerge in input)
 		{
 			var _key	=	String(lineInputMerge);
 			

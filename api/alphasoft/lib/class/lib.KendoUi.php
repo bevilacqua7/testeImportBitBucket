@@ -37,18 +37,50 @@ class KendoUi
 	 * Contem o esqueleto da estrutura do telerik Ui Kendo
 	 * @var array
 	 */
-	private $_param		=	array();
-	private $_field		=	array();		
-	private $_idName	=	'grid';
-	private $wrsKendoUi	=	array();
-	
+	private $_param				=	array();
+	private $_field				=	array();
+	private $_field_param		=	array();
+	private $_idName			=	'grid';
+	private $wrsKendoUi			=	array();
 	private $Drilllayout		=	 array();
-	
 	private $param_wrs			=	 array();
-	
 	private $total_column		=	0;
-
 	
+	
+	private $arr_operacoes		=	array(
+			'date' => array(
+					'eq'				=>	" %c  = ''#v'' ",
+					'gt'				=>	" %c > ''#v'' ",
+					'gte'				=>	" %c >= ''#v'' ",
+					'lt'				=>	" %c < ''#v'' ",
+					'lte'				=>	" %c <= ''#v'' ",
+					'neq'				=>	" %c !=  ''#v'' "
+			),
+			'enums' => array(
+					'eq'				=>	" %c  =  ''#v'' ",
+					'neq'				=>	" %c != ''#v'' "
+			),
+			'number' => array(
+					'eq'				=>	" %c  = #v ",
+					'gt'				=>	" %c > #v ",
+					'gte'				=>	" %c >= #v ",
+					'lt'				=>	" %c < #v ",
+					'lte'				=>	" %c <= #v ",
+					'neq'				=>	" %c != #v "
+			),
+			'string' => array(
+					'eq'				=>	" %c  = ''#v'' ",
+					'neq'				=>	" %c != ''#v'' ",
+					'startswith'		=>	" %c LIKE ''#v%'' ",
+					'contains'			=>	" %c LIKE ''%#v%'' ",
+					'doesnotcontain'	=>	" %c NOT LIKE ''%#v%'' ",
+					'endswith'			=>	" %c LIKE ''%#v'' "
+			)
+	);
+	
+	
+	
+
 	public function set_total_column($input)
 	{
 		$this->total_column	=	 $input;
@@ -308,13 +340,15 @@ class KendoUi
 		$parseParam['MEASURE_NAME']	=	$_param['LEVEL_FULL'];
 		$parseParam['MEASURE_NAME']	=	$_param['LEVEL_FULL'];*/
 		
-
+		$_type		=	'string';// 'number';
+		
 			if($locked)
 			{
 				$this->wrsKendoUi['frozen']++;
+				$_type	=	'string';
 			}
 			
-		$this->_field[]		= array("field"=>$field,/*"parse"=>'wrs_format_line',*/"type"=>'string');
+		$this->_field[]		= array("field"=>$field,/*"parse"=>'wrs_format_line',*/"type"=>$_type);
 		
 //		$_param['FORMAT_STRING']
 		//'formataValue(MEASURE_NAME,formatacao,valor,sumariza)'
@@ -336,6 +370,7 @@ class KendoUi
 		$this->pageScheme();
 
 		
+		
 		//Pegando O ID do Cubo
 		$_request	=	$_REQUEST;
 		unset($_request['class']); // Apagando info da URL
@@ -346,6 +381,9 @@ class KendoUi
 		$PLUS_MINUS			=	$getRequestKendoUi['PLUS_MINUS'];
 		
 		$this->orderByOnLoad($getRequestKendoUi);
+		
+		//Filtro para todos os outros elementos
+		$this->_param['filterable']	=	true;
 		
 		$_jsonencode =	json_encode($this->_param,true);
 		
@@ -381,10 +419,12 @@ class KendoUi
 		$wrsKendoUi					=	 base64_encode(json_encode($this->wrsKendoUi,true));
 		
 		
-		
+		$fields		=	 json_encode($this->_field_param,true);
+
 		$html 	= <<<HTML
 		
 			
+		
 			<div id="{$idTag}Main" class="container_panel_relatorio_rows hide" keys="{$getRequestWrsExceptions['KEYS']}">
 						<div class="wrs_box {$idTag}BOX">
 									{$WRS_PANEL_HEADER_TABLE}
@@ -399,12 +439,76 @@ class KendoUi
 								  		
 										$(function(){
 										
+													$('.btn-clean-filter-kendo-ui').unbind('click').click(btn_clean_filter_kendo_ui)
+										
 															$(window).unload(function(){});
 														
 															var jsonDecode											= 	{$_jsonencode};
-																jsonDecode.dataSource.transport.parameterMap			=	function(data) {return kendo.stringify(data);}
+																
 																jsonDecode.dataBound									= 	function(arg){ return onDataBound(arg);}								
 																jsonDecode.dataBinding									=	function(arg){ return onDataBinding(arg);}
+																
+																
+																
+																
+																
+																 jsonDecode.filterable	=	 {
+											                            operators: {
+														                                string	: {
+																                                    eq	: kendo.ui.FilterCell.prototype.options.operators.number.eq,
+																									gt	: kendo.ui.FilterCell.prototype.options.operators.number.gt,
+																									gte	: kendo.ui.FilterCell.prototype.options.operators.number.gte,
+																									lt	: kendo.ui.FilterCell.prototype.options.operators.number.lt,
+																									lte	: kendo.ui.FilterCell.prototype.options.operators.number.lte,
+																									neq	: kendo.ui.FilterCell.prototype.options.operators.number.neq
+														                                }
+											                            }
+											                        };
+                        
+                        
+																
+																
+																//@link http://www.telerik.com/forums/grid-filtering-in-javascript---not-equal-to-null
+																jsonDecode.dataSource.transport.parameterMap			=	function(data) {
+		                                								// TODO: para fazer a condicao de AND ou OR das colunas, basta alterar a variavel this.options.dataSource._filter.logic baseado em outro componente na tela, valores 'and' ou 'or' 
+				                                						
+		                                								var _filters		=	'{}';
+		                                								
+		                                								if(!isEmpty(this.options.dataSource._filter))
+		                                								{
+		                                									data['filters']	=	recursiveFilterFindType(rFFTIndex(this.options.dataSource.options.schema.model.fields),this.options.dataSource._filter);
+																			_filters	=	data['REPORT_FILTER']	=	changeFiltersKendoUi("{$report_id}",json_decode(json_encode(data['filters'])));
+																			
+																		}
+		                                							
+																	 	$(".{$this->getId()}").wrsAbaData('setWrsFilterStart',{filter	:	_filters});
+																		$(".{$this->getId()}").wrsAbaData('setWrsData',{REPORT_FILTER:_filters});
+																		
+																		
+																			
+																			
+		                                								return kendo.stringify(data);
+																}
+																
+																
+																
+																	var grid = $('#A162').data('kendoGrid');
+
+																//jsonDecode.dataSource.filter = new Array();
+													   			//
+													   			
+													   			try{
+													   					var  filters						=	json_decode($(".{$this->getId()}").wrsAbaData('getWrsData').REPORT_FILTER);
+													   					var ffilter=	setFiltersKendoUiDecode(json_decode('{$fields}'),filters);
+													   						
+													   						jsonDecode.dataSource.filter	=ffilter;
+													   						
+													   						$(".{$this->getId()}").wrsAbaData('setWrsFilterStart',{filter	:	ffilter});
+													   						
+													   			}catch(e){
+													   				console.log('Sem Filtros');
+													   			}
+													   			
 																
 																$("#{$this->getId()}").kendoGrid(jsonDecode);
 																$(".{$this->getId()}BOX").hide();
@@ -413,8 +517,6 @@ class KendoUi
 																$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
 																		
 																WRSKendoGridComplete("#{$this->getId()}");		
-																
-																
 																
 													});
 													
@@ -426,6 +528,9 @@ class KendoUi
 																	TABLE_CAHCE		:	'{$table_cache}'
 																}
 																);
+																
+																
+																
 																		
 												//Adicionando nova ABA						
 												var _options_aba	=	{
@@ -542,6 +647,7 @@ HTML;
 		$this->_param['dataSource']['schema']['total']			=	"total";
 		$this->_param['dataSource']['serverSorting']			=	true;
 		$this->_param['dataSource']['serverPaging']				=	true;
+		
 	}
 	
 	
@@ -600,7 +706,7 @@ HTML;
 			}else{
 				$_param_label					=	$param_label;
 				$_param_label['KEYS']			=  	$_param_label['FIELD'];//count($arrayFrozen);
-				$_param_label['LEVEL_VALUE']	=	$_param_label['LEVEL_NAME'];				
+				$_param_label['LEVEL_VALUE']	=	$_param_label['LEVEL_NAME'];		
 				$arrayFrozen					=	$this->findSetKey($arrayFrozen,$_param_label,true);
 			}
 			
@@ -608,6 +714,11 @@ HTML;
 			if(empty($param_label['FIELD']) && !empty($param_label['LEVEL_NAME']) && !empty($param_label['LEVEL_VALUE']))
 			{
 					$frozenHeader[$param_label['LEVEL_NAME']]		=	$param_label;
+			}
+			
+			if(isset($param_label['LEVEL_POS'])){
+				$param_label['field']	=	$param_label['FIELD'];
+				$this->_field_param[$param_label['FIELD']]	=	$param_label;
 			}
 			
 		}
@@ -618,7 +729,8 @@ HTML;
 		$frozenHeader			=	array_reverse($frozenHeader);
 		$frozenArrayHeader		=	array();
 		$frozenArrayHeaderTMP	=	array();
-		 
+		
+
 		
 
 		/*
@@ -668,15 +780,17 @@ HTML;
 											$_menuUse[$pos]['title']			=	(string)$value['title'];
 											$_menuUse[$pos]['is_total']			=	(string)$value['TOTAL'];
 											$_menuUse[$pos]['columns']			=	array_values($_menuUseTmp[$value['key']]);
-											$_menuUse[$pos]['tb_field']			=	(string)$value['FIELD'];
+											$_menuUse[$pos]['tb_field']			=	(string)@$value['FIELD'];
 											$_menuUse[$pos]['LEVEL_FULL']		=	(string)$value['LEVEL_FULL'];
+										
+											
 										
 										}										
 								}else{
 										$_menuUse[$value['keyUp']][$value['key']]['title']		=	(string)$value['title'];
 										$_menuUse[$value['keyUp']][$value['key']]['columns']	=	array_values($_menuUseTmp[$value['key']]);
 										
-										$_menuUse[$value['keyUp']][$value['key']]['tb_field']	=	(string)$value['FIELD'];
+										$_menuUse[$value['keyUp']][$value['key']]['tb_field']	=	(string)@$value['FIELD'];
 										$_menuUse[$value['keyUp']][$value['key']]['LEVEL_FULL']	=	(string)$value['LEVEL_FULL'];
 								}
 					}
@@ -721,7 +835,6 @@ HTML;
 		$this->set_total_column(count($columns_table));
 		
 
-		
 		$this->setColumn($wrs_column);
 		
 		
@@ -783,13 +896,21 @@ HTML;
 		$paramTelerik['TOTAL']	=	(string)$_param['TOTAL'];
 		$paramTelerik['tb_field']=	(string)$field;
 		$paramTelerik['LEVEL_FULL']=	(string)$_param['LEVEL_FULL'];
+		$paramTelerik['LEVEL_DRILL']=	(string)$_param['LEVEL_DRILL'];
 		$paramTelerik['field']		=	'';
 
+		
+		
+
+		
 		if($locked)
 		{
-			$paramTelerik['locked']	=	$locked;
+			$paramTelerik['locked']		=	$locked;
+			$paramTelerik['filterable']	=	false;
 		}
 		
+		
+	 
 		
 		if(!empty($field))
 		{
@@ -800,6 +921,7 @@ HTML;
 			$paramTelerik['title']		=	$paramTelerik['field']=='C000' ? '.' : $paramTelerik['title'];
 			$paramTelerik['tb_field']	=	(string)$field;
 			$paramTelerik['LEVEL_FULL']=	(string)$_param['LEVEL_FULL'];
+			$paramTelerik['LEVEL_DRILL']=	(string)$_param['LEVEL_DRILL'];
 					
 			$_tmp_param					=	$_param;
 			$_tmp_param['INDEX']		=	 ((int)substr($field, 1))-$this->wrsKendoUi['frozen'];
@@ -838,48 +960,28 @@ HTML;
 	}
 	
 
-	private function filtersToWhereField($field){
-
-		$campos_de = array('#CAMPO#','#VALOR#');				
+	public  function getOPerationsFilter()
+	{
+		return json_encode($this->arr_operacoes,true);
+	}
+	
+	private function filtersToWhereField($field)
+	{
+		$campos_de = array('%c','#v');				
 		
-		$arr_operacoes = array(
-				'date' => array(
-						'eq'				=>	" #CAMPO#  = 		''#VALOR#''		",
-						'gt'				=>	" #CAMPO# > 		''#VALOR#''		",
-						'gte'				=>	" #CAMPO# >= 		''#VALOR#''		",
-						'lt'				=>	" #CAMPO# < 		''#VALOR#''		",
-						'lte'				=>	" #CAMPO# <= 		''#VALOR#''		",
-						'neq'				=>	" #CAMPO# != 		''#VALOR#''		"
-				),
-				'enums' => array(
-						'eq'				=>	" #CAMPO#  = 		''#VALOR#''		",
-						'neq'				=>	" #CAMPO# != 		''#VALOR#''		"
-				),
-				'number' => array(
-						'eq'				=>	" #CAMPO#  = 		#VALOR#			",
-						'gt'				=>	" #CAMPO# > 		#VALOR#			",
-						'gte'				=>	" #CAMPO# >= 		#VALOR#			",
-						'lt'				=>	" #CAMPO# < 		#VALOR#			",
-						'lte'				=>	" #CAMPO# <= 		#VALOR#			",
-						'neq'				=>	" #CAMPO# != 		#VALOR#			"
-				),
-				'string' => array(
-						'eq'				=>	" #CAMPO#  = 		''#VALOR#''		",
-						'neq'				=>	" #CAMPO# != 		''#VALOR#''		",
-						'startswith'		=>	" #CAMPO# LIKE 		''#VALOR#%''	",
-						'contains'			=>	" #CAMPO# LIKE 		''%#VALOR#%''	",
-						'doesnotcontain'	=>	" #CAMPO# NOT LIKE 	''%#VALOR#%''	",
-						'endswith'			=>	" #CAMPO# LIKE 		''%#VALOR#''	"
-				)
-		);
+		$arr_operacoes = $this->arr_operacoes;
 		
 		$campos_para 						= 	array($field['field'],$field['value']);
 		$field['type'] 						= 	array_key_exists('type', $field) && $field['type']!=''?$field['type']:'string'; // verifica se existe o type_column nativo na estrutura da coluna em questão para a montagem do filtro corretamente de acordo com seu tipo de conteudo.  Se nao existir, assume tipo string
 		$condicao 							= 	str_replace($campos_de,$campos_para,$arr_operacoes[$field['type']][$field['operator']]);
+		
 		return '('.$condicao.')';
 	}
 	
-	private function filtersToWhereContent($arr_content_field){
+	
+	
+	private function filtersToWhereContent($arr_content_field)
+	{
 		if(array_key_exists('filters', $arr_content_field))
 		{
 			$where_conditions_columns_parcial					=	array();
@@ -893,10 +995,12 @@ HTML;
 		{
 			return 		$this->filtersToWhereField($arr_content_field);
 		}
+		
 	}
 	
 	
 	/**
+	 * //START
 	 * Transforma o objeto padrao do KendoUi (json) para uma clausula WHERE
 	 * @param array $column_filters-  JSON original do KendoUi de filtros
 	 * @param string $column_condition - opcional para definir a operacao entre as colunas passadas (AND ou OR)
@@ -908,6 +1012,9 @@ HTML;
 		if($column_filters!=null && $column_filters!='' && !is_array($column_filters) && is_object($column_filters)){
 			$column_filters = (array)json_decode(json_encode($column_filters,1),1);			
 		}
+
+		
+		$column_condition	=	$column_filters['logic'];
 
 		if($column_filters!=null && $column_filters!='' && is_array($column_filters)){
 			$where_conditions_columns	=	array();
@@ -924,6 +1031,44 @@ HTML;
 	}
 	 
  
+/*
+	public function makeFiltersKendoUiQuery($deep,$logic="AND")
+	{
+	
+		$options				=	array('%c','#v');
+		$_logic					=	' and ';
+		$_filter				=	array();
+		
+		foreach($deep as $type =>$value)
+		{
+
+		 	
+				if($type =='filters')
+				{
+					$rec		=	$this->makeFiltersKendoUiQuery($value,$value['logic']);
+					$_filter[] =	$rec;
+				}
+				else
+				{
+						
+						$_filter[] = $value;
+				}
+		}
+		
+		return $_filter;
+	}
+	
+ 
+	public function getFilters($filters)
+	{
+		//WRS_DEBUG_QUERY($filters['filters'][0]['filters'],'ds.log');
+		
+//		$filters['filters'][0]['filters']['filters']=$filters['filters'][0]['filters'];
+		
+		WRS_DEBUG_QUERY($this->makeFiltersKendoUiQuery($filters['filters']),'ds.log');
+		return implode(' ',$this->makeFiltersKendoUiQuery($filters));
+	}
+	*/
 	
 	public function grid_window($column,$param)
 	{

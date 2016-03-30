@@ -16,9 +16,7 @@
 	var AUTO_LOAD				=	'';
 
 
-	var AUTO_LOAD_RUN			= 	<?php echo (($request_exec_report && $request_exec_report=='1') ? 'true' : 'false' ); ?>;
-	
-	
+	var AUTO_LOAD_RUN			= 	<?php echo ((@$request_exec_report && @$request_exec_report=='1') ? 'true' : 'false' ); ?>;
 
 
 <?php 
@@ -31,6 +29,8 @@
 			<?php 
 		}
 	}
+	
+	
 ?>
 
 </script>
@@ -47,7 +47,13 @@
 <title><?PHP echo LNG('TITLE');?></title>
 
 <script>
+
+	$(function(){
+		$('body').WrsGlobal('setCM',{getOPerationsFilter: <?php echo $getOPerationsFilter; ?>});
+	});
+	
 	not_close_save_info();
+	
 </script>	
 </head>
 <body>

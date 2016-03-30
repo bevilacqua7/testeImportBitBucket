@@ -23,7 +23,7 @@
 										{
 											return $('<div class="container tooltip_info_wrs_panel_details"> '+tagFilterWRS()+'</div>');
 										},
-								title : 'Filtros'
+								title : LNG('ATTRIBUTOS_FILTRO')
             	         },
         	         style: {
         	        	 classes: 'qtip-bootstrap qtip-shadow'
@@ -965,10 +965,31 @@ function tagFilterWRS(typeReturn,_typeHeader)
  	
  	if(typeReturn) return structArray;
  	
+ 	
+ 	var reportID		=	get_aba_active_kendoUi().REPORT_ID;
+ 	var kendoGrid		=	$('#'+reportID).data('kendoGrid');
+ 	
+ 	$('body').WrsGlobal('setCM',{cleanMakeFiltersKendoUiQuery:[]});
+ 	
+ 	var get_filters_kendoGrid		=	 makeFiltersKendoUiQuery(kendoGrid.headerIndex.field,json_decode(json_encode(kendoGrid.dataSource.filter())));
+ 	
+ 	if(!isEmpty(get_filters_kendoGrid))
+ 	{
+ 		get_filters_kendoGrid  = '<hr\><'+typeHeader+'>'+LNG('FILTER_KENDO_UI')+'</'+typeHeader+'>'+quebra+'<span style="font-size:13px;display:block;color:#333;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">'+get_filters_kendoGrid+'</span><br>';
+ 		
+ 		if(_width<=400)
+ 		{
+ 			_width	=400;	
+ 			$('.qtip-default').width(_width); 
+ 		}
+ 		
+ 	}
+ 	
 	_END('tagFilterWRS');
- 	return html;
+ 	return html+get_filters_kendoGrid;
  	
 }
+
 
 
 

@@ -1,0 +1,685 @@
+<?php
+	$language = array ();
+	
+	$language['LINGUA'] 				= 	"португальский";
+	$language['IDIOMA'] 				= 	"RU";
+	$language['TITLE']					=	"WRS - Russo - ".WRS::VERSION();
+	$language['CharSet']		  		= 	'utf-8';		//por enqtanto está implementado apenas no  sendmail
+	$language["siglaIdioma"]			=	'PT-BR';
+	$language["kendoUI"]				=	'kendo.messages.ru-RU.min.js';
+	$language["summernote"]				=	'summernote-ru-RU.js';
+	
+$language["MODAL_OK"]="хорошо";
+$language["MODAL_YES"]="да";
+$language["MODAL_CANCEL"]="отменить";
+$language["CLEAR_FILTER_KENDOUI"]="Очистка фильтров Сетка";
+$language["CLEAR_FILTER_KENDOUI_WARNING"]="Вы действительно хотите, чтобы очистить сетку фильтры?";
+$language["CLEAR_FILTER_KENDOUI_SUCCESS"]="Сетка фильтры успешно чистый.";
+$language["MES"]=array("январь","февраль","март","апреля","может","июнь","июль","август","сентябрь","октября","ноябрь","декабрь");
+$language["DIAS"]=array("воскресенье","понедельник","вторник","среда","четверг","пятница","суббота");
+$language["DE"]=" из ";
+$language["BRN_OUT_SYSTEM"]="Выход WRS";
+$language["theme_azul"]="синий";
+$language["theme_cinza"]="серый";
+$language["theme_laranja"]="оранжевый";
+$language["theme_verde"]="зеленый";
+$language["theme_vermelho"]="красный";
+$language["DESCONECTED_TITLE"]="Пользователь отключен";
+$language["DESCONECTED_DESCRIPT"]="Пользователь отключен от системы по нескольким причинам:";
+$language["DESCONECTED_BUTTON"]="Вернуться на страницу входа";
+$language["DESCONECTED_REASONS"]=array("Бездействие в сессии,","Смена пароля,","База данных без подключения,","Другое.");
+$language["ScreenShotGenerate"]="Создание экрана экрана печати";
+$language["ScreenShotMailBodyHtml"]=<<<EOF
+<p><strong>привет</strong>, </p> <p>См экстракт этого запроса " %s "База" %s "Выдержки из WRS инструмента.</p> <p>В этой консультации следующие фильтры были применены:</p><br><br> %s <br><p>С уважением,<br> <strong> %s </strong>;</p> 
+EOF;
+$language["ScreenShotMailWrong"]=<<<EOF
+Есть электронная почта (s) неполной, пожалуйста, проверьте перед отправкой: <br><p> <b> %s </b> </p> <br>Спасибо. 
+EOF;
+$language["ScreenShotMailTO"]=<<<EOF
+поле <b>к</b> является обязательным заполнение 
+EOF;
+$language["ScreenShotMailSUBJECT"]=<<<EOF
+поле <b>субъект</b> является обязательным заполнение 
+EOF;
+$language["ScreenShotMailMESSENGER"]="Вы должны ввести некоторое содержание в теле сообщения электронной почты";
+$language["ScreenShotMailSend"]=<<<EOF
+Отправка сообщения, пожалуйста, подождите ... <img src='imagens/wrs_loading.gif'/> 
+EOF;
+$language["ScreenShotMailSendSuccess"]="Электронная почта успешно отправлено.";
+$language["ScreenShotMailSendError"]=<<<EOF
+Не удалось отправить письмо из-за: <br><br><b> %s </b>, 
+EOF;
+$language["USUARIO_SEM_PRIVILEGIOS"]="Пользователь непривилегированных";
+$language["USUARIO_SEM_PRIVILEGIOS_LIMITE_ROWS"]="Пользователь без привилегий для просмотра сетки, она содержит более 65000 записей";
+$language["ERROR_NOT_ROWS"]="Внутренняя ошибка при выполнении запроса";
+$language["ERROR_DRILL_LINE_RESULT"]="Внутренняя ошибка при обработке создания линии сверлить, если ошибка не будет устранена, обратитесь в службу поддержки";
+$language["MSG_ERROR_TABLE_CACHE"]="Запрос не может быть выполнена, пожалуйста, изменить атрибуты выбранного макета";
+$language["VALOR"]="значение";
+$language["TOOLTIP_BTN_RUN"]="отчет запуска";
+$language["TOOLTIP_BTN_CLEAN_FILTER"]="Очистить все выбранные фильтры";
+$language["TOOLTIP_BTN_CHANTE_FILTER_DROP"]=<<<EOF
+Это делает изменение статуса: <br> Перетаскивая выбора фильтра <br> состояния фильтра Перетаскивание 
+EOF;
+$language["TOOLTIP_BTN_NEGADO"]="Отрицание выбранных фильтров, запрос будет приходить все меньше выбранных фильтров.";
+$language["TOOLTIP_BTN_CLEAN_FILTER_LOCAL"]="Очистить только фильтры, размерности";
+$language["TOOLTIP_BTN_ERASER_FILTER_LOCAL"]="Очистите исследования, проведенные в обследованных фильтрах";
+$language["TOOLTIP_BTN_CLEAR_ELEMENTS_BELLOW"]="Удалить все элементы контейнера вниз";
+$language["ERROR_CANT_CREATE_JOB"]="К сожалению .. Пожалуйста, повторно отправить запрос, не смог создать задание, если ошибка повторится, обратитесь в службу технической поддержки";
+$language["CSV_ERROR_TABLE_EMPTY"]="Ops, это не вызвало никакого отчета для этого запроса, или отсутствие информации ли таблица, которая должна вырабатываться.";
+$language["CSV_NOT_GENERATE"]="Это не возможно генерировать CSV-, внутренняя ошибка в банке";
+$language["CSV_GENERATE_ZIP"]="порождающий %s CSV-файлы";
+$language["LOGOUT"]=<<<EOF
+Подождите минуту мы оставляем систему ..<br><br><br> 
+EOF;
+$language["MENU_ADMIN_CUSTOMER"]="клиенты";
+$language["MENU_ADMIN_USER"]="пользователи";
+$language["MENU_ADMIN_SERVER"]="серверы";
+$language["MENU_ADMIN_DATABASE"]="Базы данных";
+$language["MENU_ADMIN_CUBE"]="кубики";
+$language["MENU_ADMIN_HIERARCHY"]="иерархий";
+$language["MENU_ADMIN_PERFIL"]="профили";
+$language["MENU_ADMIN_CUBE_USER"]="ассоциации";
+$language["MENU_ADMIN_REPORT"]="отчеты";
+$language["MENU_ADMIN_DOWNLOAD"]="загрузок";
+$language["MENU_ADMIN_LOG"]="бревна";
+$language["MENU_ADMIN_SSAS_REPORT"]="отчеты";
+$language["MENU_ADMIN_SSAS_LAYOUTS"]="макеты";
+$language["file_error_import"]="не импортируется файл";
+$language["file_not_validated"]="не подтверждено файл";
+$language["file_not_unziped"]="не Распакованный файл";
+$language["MAIL_TITLE"]="Отправка электронной почты";
+$language["MAIL_TO"]="к";
+$language["MAIL_SUBJECT"]="субъект";
+$language["MAIL_SEND"]="электронная почта";
+$language["ADMIN_AVISO_IMPORT"]=<<<EOF
+- только импорт файлов в формате CSV или в формате ZIP<br>- Убедитесь в том, что имя файла: #NAME_FILE#Или файл ZIP, содержащий этот<br>- По умолчанию Макет:<br><Span класс = "class_layout_padrao">#DEFAULT_LAYOUT#</ Span> 
+EOF;
+$language["TITLE_OPTIONS"]="опции";
+$language["MENU_ALL_CATEGORY"]="Все категории";
+$language["NO_RESULTS_QUERY"]="Нет соответствий по запросу: ";
+$language["NAME_REPORT_EMPTY"]="Выберите имя для отчета";
+$language["DATABASE_NOT_CONECTED"]="Нет подключения к базе данных, попробуйте отключить и войти снова";
+$language["DATABASE_NOT_FOUND"]="К сожалению !!! Нет подключения к базе данных";
+$language["ERRO_CUBO_INDISPONIVEL"]="Ошибка: Отсутствует";
+$language["ERROR_TABLE_CACHE_NO_HEADER"]="Там нет никаких данных по этому запросу ..";
+$language["ERROR_CUBO_NOT_FOUND"]=<<<EOF
+Невозможно было определить куб используется. <br> Если ошибка повторится, пожалуйста, сообщите поддержку 
+EOF;
+$language["ERRO_EXECUTE_ABA"]=<<<EOF
+Ошибка при выполнении запроса <b> %s </b> <br> 
+EOF;
+$language["ABA_IN_USER"]="Консультации в использовании";
+$language["ABA_LIMIT_SEE"]=<<<EOF
+Это не представляется возможным удалить запрос <b> %s </b><br> по крайней мере один должен оставаться видимым. 
+EOF;
+$language["ABA_CHANGE_CUBE_ID"]="Информация будет удалена, как ABA принадлежит другому кубе";
+$language["JOB_COMPLETE_LOAD"]=<<<EOF
+консультация <b> %s </b> она была завершена 
+EOF;
+$language["JOB_COMPLETE"]="Нет больше выполнение запросов";
+$language["JOB_CANCEL"]=<<<EOF
+консультация <b> %s </b> Он был успешно отменен 
+EOF;
+$language["JOB_CANCEL_ERRO"]=<<<EOF
+Ошибка отмены запрос <b> %s </b> Пожалуйста, повторите попытку 
+EOF;
+$language["JOB_NOTFOUND"]="Было установлено, консультации для отмены или его завершения";
+$language["JOB_CLOSE_ALERT"]="Закрыть окно оповещения";
+$language["SORT_SSAS_TABLE_ERROR"]="ОШИБКА :: 008 Невозможно Розыгрыш таблица";
+$language["CONSULTA_ATIVA_CANCELAR"]="Существует постоянная консультация для этого отчета, необходимо отменить, чтобы запросить новое назначение.";
+$language["SELECT_NULL"]="Запрос вернулся с пустыми";
+$language["RUN_GRID_CHANGE_NOT"]="Никаких изменений не генерировать новый запрос ..";
+$language["NOT_CLOSE_WINDOW"]="Вкладки Перечисленные ниже неспасенным:";
+$language["NOT_CLOSE_WINDOW_LOGOUT"]="Вкладки Перечисленные ниже неспасенным, даже хотят оставить без сохранения?";
+$language["ABA_TITLE_EMPTY"]=<<<EOF
+Вы должны ввести <b>название</b> сообщить 
+EOF;
+$language["SEE_IN_MAP"]="Посмотреть на карте";
+$language["REMOVE"]="УДАЛЕНИЕ";
+$language["DATA_BASE_ERROR"]=<<<EOF
+<b>К сожалению ... Ошибка в базе данных:</b> 
+EOF;
+$language["TITLE_TEMA"]="тема";
+$language["TITLE_LINGUA"]="язык";
+$language["TITLE_ALTER_SENHA"]="изменение пароля";
+$language["TITLE_ADMINISTRATIVO"]="административный";
+$language["TITLE_ADMINISTRATIVO_MENU"]="Главное меню";
+$language["TITLE_GRID_WINDOW_MENU_MANAGER"]="вид";
+$language["TITLE_GRID_WINDOW_MENU_LIST"]="сетка";
+$language["TITLE_GRID_WINDOW_MENU_DETAILS"]="подробности";
+$language["TITLE_GRID_WINDOW_MENU_BIG_ICON"]="Большой значок";
+$language["TITLE_GRID_WINDOW_MENU_MEDIUM_ICON"]="значок Средний";
+$language["TITLE_GRID_WINDOW_MENU_SMALL_ICON"]="Маленький значок";
+$language["TITLE_GRID_WINDOW_MENU_LIST_INFO"]="Основной список";
+$language["REPORT_RESULT_HISTORY"]="Там нет истории";
+$language["MAIN_OPEN_REPORT"]="открытые отчеты";
+$language["MAIN_OPEN_LAYOUT"]="открытые макеты";
+$language["TITLE_TOP_TOTAL"]="общий";
+$language["TITLE_TOP_5"]="Топ-5";
+$language["TITLE_TOP_10"]="Топ-10";
+$language["TITLE_TOP_15"]="Топ-15";
+$language["TITLE_TOP_20"]="Топ-20";
+$language["TITLE_TOP_25"]="Топ-25";
+$language["TITLE_TOP_50"]="Топ-50";
+$language["TITLE_TOP_100"]="Топ-100";
+$language["ERROR_LOAD_ABA"]="ОШИБКА: ABA01 - Произошла ошибка при открытии вкладки ..";
+$language["ABA_BE_LOADED"]=<<<EOF
+лоскут <b> %s </b> уже загружен 
+EOF;
+$language["FILTER_NOT_ROWS"]="Никаких доказательств не было найдено.";
+$language["FILTER_NOT_ROWS_TOOLTIP"]="Фильтры не выбраны.";
+$language["FILTER_CLEAN_FIND"]="Очистить поиск";
+$language["FILTER_CLEAN_FILTER"]="Вы уверены, что desenja удалить фильтры уже выбранные?";
+$language["FILTER_CLEAN_FILTER_SUCCESS"]="Очистка фильтра выполняется успешно.";
+$language["ERRO_FILE_PROCCESS"]="К сожалению, произошла ошибка в процессе ОШИБКА: 0001";
+$language["BTN_CLOSE"]="близко";
+$language["MSG_FORCE_LOGOFF"]="Вы были отключены от системы";
+$language["DRAG_DROP_FILE_IN_USER"]=<<<EOF
+элемент <b> %s </b> уже используется 
+EOF;
+$language["DRAG_DROP_FILE_IN_USER_REMOVE"]=<<<EOF
+элемент <b> %s </b> Я уже был в употреблении, и поэтому был удален из выборки 
+EOF;
+$language["DRAG_DROP_FILE_NOT_PUT"]=<<<EOF
+Вы не можете войти <b> %s </b> в этом поле, он должен принадлежать другой другой структуре 
+EOF;
+$language["DRAG_DROP_AREA"]=<<<EOF
+Перетащите эту область <b> %s </b>, 
+EOF;
+$language["DRAG_DROP_CLEAN_SELECTION"]=<<<EOF
+Вы уверены, что хотите удалить все (The) <b> %s </b> ? 
+EOF;
+$language["DRAG_DROP_CLEAN_SELECTION_INSIDE"]="Вы уверены, что хотите удалить все выбранные фильтры?";
+$language["DRAG_DROP_MSG_ERROX_MAX_QTDE"]="Вы не можете ввести более %s атрибутов в поле %s ";
+$language["DRAG_DROP_CLEAN_SELECTION_SUCCESS"]=<<<EOF
+Удаление (The) <b> %s </b>(S), успешно выполнена. 
+EOF;
+$language["DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE"]="Выбор успешно удален фильтр.";
+$language["RUN_RELATORIO_FALTA_INFORMACAO"]=<<<EOF
+Для запуска не хватает информации о запросе: <br> <b> %s </b> 
+EOF;
+$language["DRAG_DROP_FIELD_ATRIBUTO"]="атрибутом";
+$language["DRAG_DROP_FIELD_METRICA"]="одной метрической";
+$language["GERANDO_RELATORIO"]="Подождите, пока запрос создается";
+$language["GERANDO_RELATORIO_TITLE"]="производящая запросов";
+$language["GERANDO_MULTI_CUBE_BODY"]="Погодите к концентратору обмена";
+$language["GERANDO_MULTI_CUBE_TITLE"]="Замена куба";
+$language["ATTRIBUTOS_FILTRO"]="фильтры";
+$language["ATTRIBUTOS_COLUNA"]="столбцы";
+$language["ATTRIBUTOS_LINHA"]="линии";
+$language["ATTRIBUTOS_METRICA"]="метрика";
+$language["ATTRIBUTOS_MULTIPLE_CUBE"]="кубики";
+$language["ATTRIBUTOS_SIMPLES"]="простой";
+$language["ATTRIBUTOS_COMPOSTO"]="соединение";
+$language["ATTRIBUTOS_TITLE"]="атрибуты";
+$language["ACTIVE"]="Активный ()";
+$language["ACTION"]="действия";
+$language["TYPE"]="тип";
+$language["SUB_TYPE"]="Подтип";
+$language["LEGEND_ENABLE"]="дезактивировать";
+$language["POLAR"]="полярный";
+$language["RADAR"]="радар";
+$language["NORMAL"]="nornal";
+$language["STACKED"]="сложенный";
+$language["WAVY"]="гофрированный";
+$language["PERCENT"]="процент";
+$language["LEGEND"]="Субтитры";
+$language["MULTIPLE_CURSOR"]="множественный";
+$language["CHART_GAUGE_RANGE"]="диапазон";
+$language["CHART_GAUGE_QUANTIDADE"]="Количество в строке";
+$language["CHART_GAUGE_COLOR_TITLE"]="измерительный прибор";
+$language["CHART_GAUGE_LINEAR"]="линейный";
+$language["CHART_GAUGE_RADIAL"]="радиальный";
+$language["CHART_PIE"]="nornal";
+$language["CHART_DONUT"]="нокаут";
+$language["CHART_INSIDE_NOT_LEGEND"]="ценности";
+$language["CHART_RADAR_LINE"]="линия";
+$language["CHART_RADAR_COLUMN"]="колонка";
+$language["CHART_RADAR_AREA"]="область";
+$language["CHART_LEGEND_BOTTOM"]="ниже";
+$language["CHART_LEGEND_TOP"]="вверх";
+$language["CHART_LEGEND_LEFT"]="левый";
+$language["CHART_LEGEND_RIGHT"]="право";
+$language["CHART_BUBBLE_X"]="ось X";
+$language["CHART_BUBBLE_Y"]="ось Y";
+$language["CHART_BUBBLE_TOTAL"]="объем";
+$language["GRID_HEADER_OPTION"]="опции";
+$language["GRID_HEADER_OPTION_TOTAL_LINE"]="линии";
+$language["GRID_HEADER_OPTION_TOTAL_COLUMN"]="столбцы";
+$language["GRID_HEADER_OPTION_TOTAL_SUMARIZA"]="Обобщенная номера";
+$language["GRID_HEADER_OPTION_TOTAL_LINE_COLOR"]="перемежаются линии";
+$language["GRID_HEADER_OPTION_ORDER_COLUMN"]="Инверсия Колонны";
+$language["GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA"]="Сводные отчеты";
+$language["GRID_HEADER_EXPORT"]="экспорт";
+$language["GRID_HEADER_EXPORT_PDF"]="PDF";
+$language["GRID_HEADER_EXPORT_CSV"]="CSV";
+$language["GRID_HEADER_EXPORT_EXCEL"]="превосходить";
+$language["GRID_HEADER_EXPORT_IMAGE"]="изображение";
+$language["GRID_HEADER_EXPORT_IMAGE_SVG"]="SVG изображения";
+$language["CHART_CONFIG"]="настройка графического объекта";
+$language["GRID_HEADER_SEE"]="вид";
+$language["GRID_HEADER_SEE_GRID"]="лист распространение";
+$language["GRID_HEADER_SEE_CHART"]="графический";
+$language["GRID_HEADER_MAIL_SEND"]="E-mail";
+$language["GRID_HEADER_SEE_MAP"]="карта";
+$language["GRID_HEADER_TITLE_DADOS"]="данные";
+$language["GRID_HEADER_TITLE_TOTAL"]="общий";
+$language["GRID_HEADER_TITLE_EXIBITION"]="дисплей";
+$language["WHAT_SEARCH"]="Что ты смотришь?";
+$language["TITLE_TOP"]="Лучшие варианты";
+$language["BTN_SAIR"]="отпуск";
+$language["BTN_SAIR_MENU"]="Закрыть меню";
+$language["BTN_SIM"]="да";
+$language["BTN_NAO"]="не";
+$language["BTN_CONFIRM"]="подтвердил";
+$language["BTN_CANCEL_CONSULTA"]="Отменить запрос ";
+$language["BTN_APLY"]="применять";
+$language["BTN_REMOVE"]="удалять";
+$language["BTN_UPDATE"]="изменение";
+$language["BTN_NEW"]="новый";
+$language["BTN_SAVE"]="экономить";
+$language["BTN_APPLY"]="применять";
+$language["OF"]="из";
+$language["PAGE"]="страница";
+$language["tpl_layout_remove_empty"]="Вы должны выбрать отчет для того, чтобы удалить";
+$language["tpl_layout_remove_sucess"]="Макеты успешно удален";
+$language["tpl_layout_remove_error"]="Не удалось удалить некоторые макеты";
+$language["tpl_layout_options_default"]="стандарт";
+$language["tpl_layout"]="макеты";
+$language["tpl_layout_title"]="Сохранить макет";
+$language["tpl_layout_name"]="Компоновка имя";
+$language["tpl_layout_alias"]="псевдоним Layout";
+$language["tpl_layout_name_empty"]=<<<EOF
+Вы должны войти в <b>Компоновка имя</b> 
+EOF;
+$language["tpl_layout_alias_empty"]=<<<EOF
+Вы должны войти в <b>псевдоним Layout</b> 
+EOF;
+$language["tpl_layout_data_empty"]=<<<EOF
+Вы должны выполнить один из вариантов, чтобы сохранить макет <b>Метрики, строк или столбцов</b> 
+EOF;
+$language["tpl_layout_option_select_empty"]="Вы должны выбрать любой вариант для макета";
+$language["tpl_layout_share"]="доля";
+$language["tpl_layout_error"]="OPS ... Ошибка сохранения макета, пожалуйста, попробуйте еще раз";
+$language["tpl_layout_sucess"]="Макет успешно сохранен";
+$language["ALERT_TITLE_ERRO"]="Произошла ошибка.";
+$language["ALERT_TITLE_SUCCESS"]="Подтвердив.";
+$language["ALERT_TITLE_WARNING"]="Внимание!";
+$language["ALERT_TITLE_INFO"]="Для вашей информации";
+$language["ERROR_MULTIPLE_CUBE_JSON"]="Ошибка в процессе создания нескольких кубов, если ошибка не исчезнет, ​​обратитесь.";
+$language["ERROR_NOT_EVENT"]="Не удалось найти запрошенный событие, если ошибка не исчезнет, ​​обратитесь";
+$language["ERROR_TITLE"]="Предупреждение об ошибке произошло ..";
+$language["ERROR_EVENT_NOT_FOUND"]="Он не был указан для этого запроса события";
+$language["WARNING_TITLE_RESULT_NOT_FOUND"]="консультация";
+$language["WARNING_BODY_RESULT_NOT_FOUND"]="Запрос не дал никакого результата ..";
+$language["TITLE_CONTEX_MENU"]="добавлять";
+$language["FILTER_CONTEX_MENU_SELECTION_REMOVE"]="Удалить выбор %s ите s%";
+$language["FILTER_CONTEX_MENU_SELECTION_VIEW"]="Просмотр Ite% выбрали нс %s ";
+$language["FILTER_CONTEX_MENU_SELECTION_ITEM_EXISTS"]="O %s % нс ITE ниже существовало% меня не добавил% FO барана %s :";
+$language["TITLE_MENU_DASHBOARD"]="(Консолидированные Видения с различными базами сегментированные Отчеты в квадрантах Independent)";
+$language["tpl_association_save_sucess"]="Ассоциация успешно сохранена";
+$language["tpl_association_save_error"]="Ошибка в ассоциации";
+$language["tpl_association_remove_sucess"]="ассоциация %s % s ITE успешно удален";
+$language["tpl_association_remove_error"]="Ошибка при удалении ассоциации";
+$language["tpl_association_title"]="индивидуальная ассоциация по ";
+$language["tpl_association_title_cube"]="куб";
+$language["tpl_association_title_user"]="пользователь";
+$language["HTML_CUBE_EDITION"]="издание:";
+$language["HTML_CUBE_UPDATE"]="обновлено:";
+$language["LABEL_NOVO"]=" новый ";
+$language["LABEL_LOAD"]="Loading ...";
+$language["PAGINATION_PAGE"]="элементы";
+$language["PAGINATION_PAGE_INSIDE"]="к";
+$language["TITLE_ATT_WRS_CUSTOMER"]="Управление клиентами";
+$language["TITLE_ATT_WRS_SERVER"]="Управление сервером";
+$language["TITLE_ATT_WRS_USER"]="Управление пользователями";
+$language["TITLE_ATT_WRS_DATABASE"]="Управление Базы данных";
+$language["TITLE_ATT_WRS_CUBE"]="Управление Cube";
+$language["TITLE_ATT_WRS_HIERARCHY"]="Управление Иерархии";
+$language["TITLE_ATT_WRS_PROFILE"]="Управление профилем";
+$language["TITLE_REL_WRS_CUBE_USER"]="Управление общества";
+$language["TITLE_ATT_WRS_REPORT"]="Управление Отчеты";
+$language["TITLE_ATT_WRS_DOWNLOAD"]="Управление файлами";
+$language["TITLE_ATT_WRS_PERFIL"]="Управление профилем";
+$language["TITLE_ATT_WRS_LOG"]="Управление Вход";
+$language["LINE_TOTAL"]="общий";
+$language["label_total"]="общий";
+$language["LINE_TOTAL_BUBBLE"]="Вы хотите использовать строку итогов в графике?";
+$language["msg_maxNumberOfFiles"]="максимальное число файлов превысило";
+$language["msg_acceptFileTypes"]="Не допускается расширение файла";
+$language["msg_maxFileSize"]="слишком большой файл";
+$language["msg_minFileSize"]="Минимальный размер файла не достиг";
+$language["msg_nao_existe_file_in_zip"]="Там не разрешается файл в этом ZIP: ";
+$language["msg_nome_obrigatorio_necessario"]="В обязательном порядке использовать определенное имя для этой загрузки: ";
+$language["upload_form_selecionar"]="выбрать";
+$language["upload_form_enviar"]="послать";
+$language["upload_form_cancelar"]="отменить";
+$language["upload_form_apagar"]="удалять";
+$language["upload_form_processando"]="Loading ...";
+$language["upload_form_erro"]="Ошибка при отправке";
+$language["upload_files_select"]="Выберите файл для импорта:";
+$language["upload_files_success_sing"]=" успешно импортирован запись";
+$language["upload_files_success_plur"]=" успешно импортированные записи";
+$language["upload_files_error_sing"]=" Регистрация импортируется ошибка";
+$language["upload_files_error_plur"]=" записи импортированных ошибок";
+$language["upload_files_success_file"]="успешно импортирован файл";
+$language["MODAL_GENERICA_SALVAR"]="экономить";
+$language["MODAL_GENERICA_ATUALIZAR"]="обновление";
+$language["MODAL_GENERICA_APAGAR"]="удалять";
+$language["MODAL_GENERICA_CANCELAR"]="близко";
+$language["MODAL_GENERICA_VOLTAR"]="возвращение";
+$language["MODAL_CONFIRM_BT_CONFIRM"]="удалять";
+$language["MODAL_CONFIRM_BT_CANCEL"]="отменить";
+$language["obrigatorio"]="обязательный";
+$language["bt_back"]="возвращение";
+$language["bt_new"]="новый";
+$language["bt_update"]="экономить";
+$language["bt_remove"]="удалять";
+$language["bt_export"]="экспорт";
+$language["bt_import"]="импорт";
+$language["bt_export_user"]="экспорт";
+$language["bt_import_user"]="импорт";
+$language["bt_export_customer"]="экспорт";
+$language["bt_import_customer"]="импорт";
+$language["bt_export_server"]="экспорт";
+$language["bt_import_server"]="импорт";
+$language["bt_export_database"]="экспорт";
+$language["bt_import_database"]="импорт";
+$language["bt_export_cube"]="экспорт";
+$language["bt_import_cube"]="импорт";
+$language["bt_export_profile"]="экспорт";
+$language["bt_import_profile"]="импорт";
+$language["bt_export_cube_user"]="экспорт";
+$language["bt_import_cube_user"]="импорт";
+$language["bt_export_download"]="экспорт";
+$language["bt_import_download"]="импорт";
+$language["bt_export_log"]="экспорт";
+$language["bt_import_log"]="импорт";
+$language["LOGIN_USER"]="пользователи";
+$language["LOGIN_REMOVE_HISTORY_SUCCESS"]="успешно удален История";
+$language["LOGIN_REMOVE"]="удалять";
+$language["LOGIN_PASSWORD_RECOVER"]="восстановить пароль";
+$language["LOGIN_BUTTON"]="Войти";
+$language["LOGIN_HISTORY"]="История пользователя";
+$language["LOGIN_SUBJECT"]="Восстановление пароля";
+$language["LOGIN_RECOVER_NOT_FOUND"]=<<<EOF
+К сожалению ... не нашел пользователя <b> %s </b> Для отправки пароля восстановления. 
+EOF;
+$language["LOGIN_NOT_EMAIL"]=<<<EOF
+К сожалению .. не найден адрес электронной почты для отправки пользователю <b> %s </b>, <br>Пожалуйста, обратитесь в службу поддержки для восстановления пароля.<br>Спасибо. 
+EOF;
+$language["LOGIN_RECOVER_NEW"]=<<<EOF
+<H4> изменение пароля </ h4> Введите новый пароль для доступа к системе. 
+EOF;
+$language["LOGIN_OTHER_PERFIL"]="другой профиль";
+$language["LOGIN_ARMAZENA"]="Хранения пользовательских данных?";
+$language["LOGIN_PASSWORD"]="пароль";
+$language["LOGIN_USER_SYSTEM"]="пользователь";
+$language["LOGIN_TITLE"]="WRS системы";
+$language["LOGIN_ADD_NEW_RECOVER"]="Введите новый пароль для доступа к системе";
+$language["LOGIN_RECOVER_SUCCESS"]="восстановление пароля отправлен на электронный адрес пользователя";
+$language["LOGIN_RECOVER_ERROR"]="К сожалению .. Не удалось отправить электронную почту. Пожалуйста, обратитесь в службу поддержки, чтобы иметь возможность восстановить пароль. спасибо";
+$language["HTML_LOGIN_RECOVER_BTN"]="ИЗМЕНИТЬ ПАРОЛЬ";
+$language["HTML_LOGIN_RECOVER_TITLE"]="Восстановление пароля";
+$language["HTML_LOGIN_RECOVER"]=<<<EOF
+запрос восстановления пароля для доступа к системе WRS, если вы не просили, пожалуйста, игнорируйте это письмо. <br><br> Нажмите на кнопку ниже, чтобы быть перенаправлены на изменение пароля.	<br><br> Если вы не не работать нажмите linque скопировать и вставить в вашем браузере, чтобы сделать изменения. 
+EOF;
+$language["LOGIN_NEW_PASSWORD"]="новый пароль";
+$language["LOGIN_NEW_PASSWORD_CONFIRM"]="Подтвердите новый пароль";
+$language["LOGIN_CHECK"]="Проверка пароля ...";
+$language["LOGIN_CHECK_NEW"]="Сохранение нового пароля ...";
+$language["LOGIN_PASSWORD_EMPTY"]=<<<EOF
+Вы должны заполнить поле <b> %s </b> 
+EOF;
+$language["LOGIN_PASSWORD_EMPTY_NEW"]="Он не передается новый пароль.";
+$language["LOGIN_TAG_EMPTY"]="Код для сброса пароля пустым";
+$language["LOGIN_NEW_PASSWORD_CONFIRM_ERROR"]="Подтверждение нового пароля не совпадают";
+$language["LOGIN_CHANGE_SQL_ERRO"]="К сожалению .. ошибка при выполнении запроса логина, пожалуйста, попробуйте еще раз.";
+$language["LOGIN_RECOVER_SUCCESS_TIME"]="Пароль успешно создан. Перенаправление для доступа к системе.";
+$language["LOGIN_CHANGE_SQL_ERRO_RECOVER"]="К сожалению .. ошибка при выполнении запроса логин для восстановления пароля.";
+$language["LOGIN_CHANGE_OK"]="Пароль успешно изменен Теперь войти с новым паролем";
+$language["REMOVE_LOGIN_COOKIE"]="Вы уверены, что хотите удалить историю доступа пользователя?";
+$language["LOGIN_HTML_TITLE"]="WRS - Отчет System Web";
+$language["ADMIN_IMPORT_caracter_delimitador"]="символ разделителя: ";
+$language["ADMIN_IMPORT_tipo_importacao"]="Тип импорта: ";
+$language["ADMIN_IMPORT_virgula"]="запятая";
+$language["ADMIN_IMPORT_ponto_virgula"]="точка с запятой";
+$language["ADMIN_IMPORT_tabulacao"]="таб";
+$language["ADMIN_IMPORT_remover"]="Удалить предыдущие записи";
+$language["ADMIN_IMPORT_atualizar"]="Обновление и добавление новых";
+$language["ADMIN_IMPORT_compactar_resultados"]="Сжать результаты: ";
+$language["PASSWORD_EXPIRED"]=<<<EOF
+Истек срок действия пароля, необходимо создать новый пароль. <br> Заполните форму с новым паролем. 
+EOF;
+$language["LOGIN_OK"]="Перенаправление на главном экране";
+$language["LOGIN_PASSWORD_ERROR"]="Пользователь или пароль недействительный";
+$language["LOGIN_SEND_CHANGE"]="Обработка восстановления пароля ..";
+$language["JS_menu_report_include"]="Отчет Включение";
+$language["JS_menu_report_name"]="Выберите имя для отчета";
+$language["js_admin_no_user"]="Вы не можете изменить пароль, не имея свой собственный сервер";
+$language["JS_admin_choice_column"]="Какой столбец вы хотите изменить?";
+$language["JS_admin_choice_column_user"]="пользователь";
+$language["JS_admin_choice_column_cube"]="куб";
+$language["js_admin_pass_sintax_a"]="Вы действительно хотите, чтобы установить новый пароль для ";
+$language["js_admin_pass_sintax_b"]="Вы действительно хотите пароль истекает ";
+$language["js_admin_pass_sintax_c"]=" пользователь %s ";
+$language["js_admin_pass_sintax_d"]="все";
+$language["js_admin_pass_sintax_e"]="свой собственный";
+$language["js_admin_pass_self"]="Вам нужно установить новый пароль";
+$language["js_admin_pass_same"]="Пароль и подтверждение пароля будет то же самое.";
+$language["js_admin_pass_blank"]="Пароль и подтверждение пароля не может быть пустым.";
+$language["js_admin_pass_min"]="Пароль и подтверждение пароля не может быть менее 3-х символов.";
+$language["js_admin_pass_equals"]="Новый пароль и подтверждение пароля должен отличаться от текущего пароля.";
+$language["js_admin_observation"]=" истекают пароль";
+$language["js_admin_new_pass_placeholder"]="не менее 3 символов";
+$language["js_admin_old_pass_placeholder"]="введите текущий пароль";
+$language["js_admin_new_pass"]="Новый пароль: ";
+$language["js_admin_confirm_pass"]="Подтвердите пароль: ";
+$language["js_admin_old_pass"]="Текущий пароль: ";
+$language["js_admin_confirm_question"]="?";
+$language["php_admin_msg_exp_success"]="истекший %s успешно";
+$language["php_admin_msg_red_success"]="сброса пароля для ";
+$language["php_admin_msg_red_success2"]=" успешно выполнена";
+$language["php_admin_msg_exp_erro"]="Ошибка при истечении срока действия пароля";
+$language["php_admin_msg_red_erro"]="Ошибка при установке нового пароля";
+$language["JS_admin_confirm_export"]="Что нужно экспортировать записи?";
+$language["JS_admin_all_records"]="Все записи";
+$language["JS_admin_selecteds"]="только %s выбранный %s ";
+$language["JS_admin_select_one"]="Выберите по крайней мере одну запись";
+$language["JS_admin_select_just_one"]="Выберите только одну запись, чтобы изменить";
+$language["JS_admin_select_one_file"]="Выберите файл перед импортом";
+$language["JS_admin_confirm_remove"]="Вы действительно хотите удалить этот %s запись %s ?";
+$language["JS_admin_removed"]="запись %s удален %s успешно";
+$language["JS_report_confirm_remove"]="Вы хотите удалить этот %s доклад %s ?";
+$language["JS_report_select_one"]="Выберите по крайней мере один отчет";
+$language["JS_report_removed"]="доклад %s удален %s успешно";
+$language["JS_admin_preencha_obrigatorios"]="Пожалуйста, заполните все обязательные поля";
+$language["JS_admin_preencha_minimo"]="Минимальное значение для этого поля #NOMECAMPO# это: ";
+$language["JS_admin_preencha_maximo"]="Максимальное значение для этого поля #NOMECAMPO# это: ";
+$language["JS_admin_preencha_auto"]="Хотите, чтобы исправить это значение #VAL# ?";
+$language["ADMIN_EXPORT_OPTION_ERROR"]="Там нет записей, которые будут экспортируемые";
+$language["ADMIN_EXPORT_OPTION_OK"]="Начинается загрузка ...";
+$language["ADMIN_REG_INSERTED"]="успешно включена запись";
+$language["ADMIN_REG_UPDATED"]="успешно изменен запись";
+$language["ADMIN_REG_DELETED"]="запись %s удаленный %s успешно";
+$language["ADMIN_NO_REG"]="Нет регистрации для действий";
+$language["FORM_TYPE_PASSWORD_SHOW"]="см пароль";
+$language["IMPORT_EXPORT_MESSAGES_STATUS"]="статус:";
+$language["IMPORT_EXPORT_MESSAGES_DETAIL"]="подробности:";
+$language["UPLOAD_BTN_DELETAR"]="удалять";
+$language["UPLOAD_BTN_CANCEL"]="отменить";
+$language["UPLOAD_BTN_PROCESS"]="Loading ...";
+$language["UPLOAD_BTN_ANEXAR"]="присоединять";
+$language["manage_param_sem_opcao"]="Ни один вариант";
+$language["manage_param_selecionar"]="выбрать";
+$language["manage_param_ativo"]="активный";
+$language["manage_param_inativo"]="неактивный";
+$language["manage_param_bloqueado"]="блокированный";
+$language["manage_param_azul"]="синий";
+$language["manage_param_cinza"]="серый";
+$language["manage_param_laranja"]="оранжевый";
+$language["manage_param_verde"]="зеленый";
+$language["manage_param_vermelho"]="красный";
+$language["manage_param_ingles"]="английский";
+$language["manage_param_espanhol"]="испанский";
+$language["manage_param_portugues"]="португальский";
+$language["manage_param_abrir_relatorio"]="Открыть отчет";
+$language["manage_param_abrir_layout"]="открытая планировка";
+$language["FILTER_DESC"]="отфильтрованный";
+$language["FILTERS_VALUES"]="отфильтрованные элементы";
+$language["LAYOUT_DATE"]="дата";
+$language["LAYOUT_UPDATE"]="обновление";
+$language["LAYOUT_FLAG"]="флаг";
+$language["LAYOUT_STATUS"]="статус";
+$language["CUBE_DESC"]="Куб Описание";
+$language["CUBE_FILTER"]="Атрибуты фильтр";
+$language["CUBE_FILTER_VALUE"]="Значения атрибутов с фильтрами";
+$language["CUBE_FLAG"]="Флаг Cube";
+$language["CUBE_ID"]="код Cube";
+$language["CUBE_STATUS"]="Куб ситуация";
+$language["CUSTOMER_CODE"]="Клиентский код";
+$language["CUSTOMER_DESC"]="Клиент Описание";
+$language["CUSTOMER_EXPIRY"]="Срок действия пароля";
+$language["CUSTOMER_FLAG"]="Клиент Флаг";
+$language["CUSTOMER_GROUP"]="Группа клиентов";
+$language["CUSTOMER_ID"]="Клиент внутренний код";
+$language["CUSTOMER_STATUS"]="Местоположение клиента";
+$language["DATABASE_BALANCE"]="Сбалансированная база";
+$language["DATABASE_COMMENT"]="Оставить комментарий на базе";
+$language["DATABASE_DESC"]="Base Описание";
+$language["DATABASE_FLAG"]="Базовая ситуация";
+$language["DATABASE_ID"]="Базовый код";
+$language["DATABASE_IMAGE"]="Базовое изображение";
+$language["DATABASE_LINK"]="Доступ к внешним Link";
+$language["DATABASE_ORDER"]="Порядок отображения";
+$language["DATABASE_POOL"]="Общая база";
+$language["DATABASE_STATUS"]="Базовая ситуация";
+$language["DATE_ID"]="период";
+$language["DOWNLOAD_ID"]="Код для загрузки";
+$language["FILE_DATE"]="Архив данных";
+$language["FILE_DESC"]="Описание файла";
+$language["FILE_FLAG"]="Флаг файла";
+$language["FILE_NAME"]="имя файла";
+$language["FILE_SIZE"]="Размер файла";
+$language["LANGUAGE_ID"]="язык";
+$language["MESSAGE"]="сообщение";
+$language["MODULE"]="модуль";
+$language["OPERATION"]="операция";
+$language["PERFIL_DESC"]="Профиль Описание";
+$language["PERFIL_FLAG"]="Флаг профиля";
+$language["PERFIL_ID"]="Профиль код";
+$language["PERFIL_LEVEL"]="Уровень профиля";
+$language["PERFIL_STATUS"]="Профиль Расположение";
+$language["PROCESS"]="процесс";
+$language["REPORT_AUTOLOAD"]="Автоматическая загрузка";
+$language["REPORT_DATE"]="Report Date";
+$language["REPORT_DESC"]="Отчет Описание";
+$language["REPORT_FILTER"]="Отчет фильтра";
+$language["REPORT_FLAG"]="Флаг Отчет";
+$language["REPORT_FORMULAS"]="отчет формулы";
+$language["REPORT_ID"]="Код Отчет";
+$language["REPORT_OPTIONS"]="параметры отчета";
+$language["REPORT_SHARE"]="Общий отчет";
+$language["REPORT_STATUS"]="Отчет о статусе";
+$language["REPORT_UPDATE"]="Обновление отчет";
+$language["SERVER_COMMENT"]="Обзор сервера";
+$language["SERVER_DESC"]="Сервер Описание";
+$language["SERVER_FLAG"]="Флаг сервера";
+$language["SERVER_ID"]="Серверный код";
+$language["SERVER_PWD"]="Пользователь Пароль";
+$language["SERVER_STATUS"]="Статус сервера";
+$language["SERVER_USER"]="Подключение пользователя";
+$language["TRANSACTION_ID"]="код транзакции";
+$language["USER_CODE"]="код пользователя";
+$language["USER_DESC"]="Пользователь Описание";
+$language["USER_EMAIL"]="Адрес электронной почты пользователя";
+$language["USER_EXPIRY"]="Срок действия пароля";
+$language["USER_FILTER"]="Атрибуты фильтр";
+$language["USER_FILTER_VALUE"]="Значения атрибутов с фильтрами";
+$language["USER_FLAG"]="флаг пользователя";
+$language["USER_FORMAT"]="Формат макета";
+$language["USER_FVD"]="Внутренний флаг";
+$language["USER_ID"]="Пользователь внутренний код";
+$language["USER_INTERNAL"]="Внутренний код";
+$language["USER_MASTER"]="MASTER Пользователь";
+$language["USER_PWD"]="Пользователь Пароль";
+$language["USER_PWD_OLD"]="Предыдущий пароль";
+$language["USER_SALT"]="Внутренний код";
+$language["USER_STATUS"]="Статус Пользователь";
+$language["USER_TYPE"]="Тип пользователя";
+$language["CUBE_DESC_PLACEHOLDER"]="Куб Описание";
+$language["CUBE_FILTER_PLACEHOLDER"]="Атрибуты фильтр";
+$language["CUBE_FILTER_VALUE_PLACEHOLDER"]="Значения атрибутов с фильтрами";
+$language["CUBE_FLAG_PLACEHOLDER"]="Флаг Cube";
+$language["CUBE_ID_PLACEHOLDER"]="код Cube";
+$language["CUBE_STATUS_PLACEHOLDER"]="Куб ситуация";
+$language["CUSTOMER_CODE_PLACEHOLDER"]="Клиентский код";
+$language["CUSTOMER_DESC_PLACEHOLDER"]="Клиент Описание";
+$language["CUSTOMER_EXPIRY_PLACEHOLDER"]="Срок действия пароля";
+$language["CUSTOMER_FLAG_PLACEHOLDER"]="Клиент Флаг";
+$language["CUSTOMER_GROUP_PLACEHOLDER"]="Группа клиентов";
+$language["CUSTOMER_ID_PLACEHOLDER"]="Клиент внутренний код";
+$language["CUSTOMER_STATUS_PLACEHOLDER"]="Местоположение клиента";
+$language["DATABASE_BALANCE_PLACEHOLDER"]="Сбалансированная база";
+$language["DATABASE_COMMENT_PLACEHOLDER"]="Оставить комментарий на базе";
+$language["DATABASE_DESC_PLACEHOLDER"]="Base Описание";
+$language["DATABASE_FLAG_PLACEHOLDER"]="Базовая ситуация";
+$language["DATABASE_ID_PLACEHOLDER"]="Базовый код";
+$language["DATABASE_IMAGE_PLACEHOLDER"]="Базовое изображение";
+$language["DATABASE_LINK_PLACEHOLDER"]="Доступ к внешним Link";
+$language["DATABASE_ORDER_PLACEHOLDER"]="Порядок отображения";
+$language["DATABASE_POOL_PLACEHOLDER"]="Общая база";
+$language["DATABASE_STATUS_PLACEHOLDER"]="Базовая ситуация";
+$language["DATE_ID_PLACEHOLDER"]="период";
+$language["DOWNLOAD_ID_PLACEHOLDER"]="Код для загрузки";
+$language["FILE_DATE_PLACEHOLDER"]="Архив данных";
+$language["FILE_DESC_PLACEHOLDER"]="Описание файла";
+$language["FILE_FLAG_PLACEHOLDER"]="Флаг файла";
+$language["FILE_NAME_PLACEHOLDER"]="имя файла";
+$language["FILE_SIZE_PLACEHOLDER"]="Размер файла";
+$language["LANGUAGE_ID_PLACEHOLDER"]="язык";
+$language["MESSAGE_PLACEHOLDER"]="сообщение";
+$language["MODULE_PLACEHOLDER"]="модуль";
+$language["OPERATION_PLACEHOLDER"]="операция";
+$language["PERFIL_DESC_PLACEHOLDER"]="Профиль Описание";
+$language["PERFIL_FLAG_PLACEHOLDER"]="Флаг профиля";
+$language["PERFIL_ID_PLACEHOLDER"]="Профиль код";
+$language["PERFIL_LEVEL_PLACEHOLDER"]="Уровень профиля";
+$language["PERFIL_STATUS_PLACEHOLDER"]="Профиль Расположение";
+$language["PROCESS_PLACEHOLDER"]="процесс";
+$language["REPORT_AUTOLOAD_PLACEHOLDER"]="Автоматическая загрузка";
+$language["REPORT_DATE_PLACEHOLDER"]="Report Date";
+$language["REPORT_DESC_PLACEHOLDER"]="Отчет Описание";
+$language["REPORT_FILTER_PLACEHOLDER"]="Отчет фильтра";
+$language["REPORT_FLAG_PLACEHOLDER"]="Флаг Отчет";
+$language["REPORT_FORMULAS_PLACEHOLDER"]="отчет формулы";
+$language["REPORT_ID_PLACEHOLDER"]="Код Отчет";
+$language["REPORT_OPTIONS_PLACEHOLDER"]="параметры отчета";
+$language["REPORT_SHARE_PLACEHOLDER"]="Общий отчет";
+$language["REPORT_STATUS_PLACEHOLDER"]="Отчет о статусе";
+$language["REPORT_UPDATE_PLACEHOLDER"]="Обновление отчет";
+$language["SERVER_COMMENT_PLACEHOLDER"]="Обзор сервера";
+$language["SERVER_DESC_PLACEHOLDER"]="Сервер Описание";
+$language["SERVER_FLAG_PLACEHOLDER"]="Флаг сервера";
+$language["SERVER_ID_PLACEHOLDER"]="Серверный код";
+$language["SERVER_PWD_PLACEHOLDER"]="Пользователь Пароль";
+$language["SERVER_STATUS_PLACEHOLDER"]="Статус сервера";
+$language["SERVER_USER_PLACEHOLDER"]="Подключение пользователя";
+$language["TRANSACTION_ID_PLACEHOLDER"]="код транзакции";
+$language["USER_CODE_PLACEHOLDER"]="код пользователя";
+$language["USER_DESC_PLACEHOLDER"]="Пользователь Описание";
+$language["USER_EMAIL_PLACEHOLDER"]="Адрес электронной почты пользователя";
+$language["USER_EXPIRY_PLACEHOLDER"]="Срок действия пароля";
+$language["USER_FILTER_PLACEHOLDER"]="Атрибуты фильтр";
+$language["USER_FILTER_VALUE_PLACEHOLDER"]="Значения атрибутов с фильтрами";
+$language["USER_FLAG_PLACEHOLDER"]="флаг пользователя";
+$language["USER_FORMAT_PLACEHOLDER"]="Формат макета";
+$language["USER_FVD_PLACEHOLDER"]="Внутренний флаг";
+$language["USER_ID_PLACEHOLDER"]="Пользователь внутренний код";
+$language["USER_INTERNAL_PLACEHOLDER"]="Внутренний код";
+$language["USER_MASTER_PLACEHOLDER"]="MASTER Пользователь";
+$language["USER_PWD_PLACEHOLDER"]="Пользователь Пароль";
+$language["USER_PWD_OLD_PLACEHOLDER"]="Предыдущий пароль";
+$language["USER_SALT_PLACEHOLDER"]="Внутренний код";
+$language["USER_STATUS_PLACEHOLDER"]="Статус Пользователь";
+$language["USER_TYPE_PLACEHOLDER"]="Тип пользователя";

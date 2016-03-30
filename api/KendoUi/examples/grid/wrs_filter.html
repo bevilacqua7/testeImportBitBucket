@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,6 +13,8 @@
     <script src="../../js/jquery.min.js"></script>
     <script src="../../js/kendo.all.min.js"></script>
     <script src="../content/shared/js/console.js"></script>
+	
+	<script type="text/javascript" src="../../js/messages/Kendo.messages.pt-BR.min.js?81909"></script>
     <script>
         
     </script>
@@ -28,6 +31,8 @@
             <div id="grid"></div>
 
             <script>
+			
+	 
                 $(document).ready(function() {
                     $("#grid").kendoGrid({
                         dataSource: {
@@ -36,7 +41,7 @@
                                 model: {
                                     fields: {
                                         City: { type: "string" },
-                                        Title: { type: "string" },
+                                        Title: { type: "number" },
                                         BirthDate: { type: "date" }
                                     }
                                 }
@@ -46,12 +51,14 @@
                         height: 550,
                         scrollable: true,
                         filterable: {
-                            extra: false,
                             operators: {
-                                string: {
-                                    startswith: "Starts with",
-                                    eq: "Is equal to",
-                                    neq: "Is not equal to"
+                                string	: {
+                                    eq: kendo.ui.FilterCell.prototype.options.operators.number.eq,
+									gt: kendo.ui.FilterCell.prototype.options.operators.number.gt,
+									gte: kendo.ui.FilterCell.prototype.options.operators.number.gte,
+									lt: kendo.ui.FilterCell.prototype.options.operators.number.lt,
+									lte: kendo.ui.FilterCell.prototype.options.operators.number.lte,
+									neq: kendo.ui.FilterCell.prototype.options.operators.number.neq
                                 }
                             }
                         },
@@ -66,23 +73,15 @@
                             {
                                 field: "City",
                                 width: 130,
-                                filterable: {
-                                    ui: cityFilter
-                               }
+
                             },
                             {
                                 field: "Title",
-                                filterable: {
-                                    ui: titleFilter
-                                }
                             },
                             {
                                 field: "BirthDate",
                                 title: "Birth Date",
                                 format: "{0:MM/dd/yyyy HH:mm tt}",
-                                filterable: {
-                                    ui: "datetimepicker"
-                                }
                             }
                        ]
                     });

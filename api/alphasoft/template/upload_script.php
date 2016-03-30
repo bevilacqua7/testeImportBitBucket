@@ -15,10 +15,10 @@
 
 
 			<script>
-				var msg_maxNumberOfFiles	= '<?php echo $msg_maxNumberOfFiles; ?>';
-				var msg_acceptFileTypes		= '<?php echo $msg_acceptFileTypes; ?>';
-				var msg_maxFileSize			= '<?php echo $msg_maxFileSize; ?>';
-				var msg_minFileSize			= '<?php echo $msg_minFileSize; ?>';
+				var msg_maxNumberOfFiles	= "<?php echo $msg_maxNumberOfFiles; ?>";
+				var msg_acceptFileTypes		= "<?php echo $msg_acceptFileTypes; ?>";
+				var msg_maxFileSize			= "<?php echo $msg_maxFileSize; ?>";
+				var msg_minFileSize			= "<?php echo $msg_minFileSize; ?>";
 			</script>
 			
 				<!-- The template to display files available for upload -->

@@ -48,7 +48,8 @@ p {
 a {
 	text-decoration: underline;
 	transition: opacity 0.1s ease-in;
-	color: #80bf2e
+	color: #80bf2e;
+	text-transform: uppercase;
 }
 
 h1 {
@@ -63,6 +64,7 @@ h1 {
 	line-height: 34px;
 	text-align: center;
 	color: red;
+	text-transform: uppercase;
 }
 
 .container {

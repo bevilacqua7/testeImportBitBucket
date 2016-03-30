@@ -439,7 +439,8 @@ EOF;
 						$param['label_title'].='  ('.LNG('obrigatorio').')';
 					}
 
-					$complemento_link_field = (is_array($obj_aux_link_field) && count($obj_aux_link_field)>0)?json_encode($obj_aux_link_field,1):'';
+					$complemento_link_field = (is_array(@$obj_aux_link_field) && count(@$obj_aux_link_field)>0)?json_encode(@$obj_aux_link_field,1):'';
+					
 					$disabled 				= ((array_key_exists('disabled_edit', $param) && $param['disabled_edit']===true && $this->current_event!='new') || (array_key_exists('disabled', $param) && $param['disabled']===true))?' disabled':'';
 
 					if($complemento_link_field!=''){

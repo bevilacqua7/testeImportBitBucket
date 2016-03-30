@@ -5,7 +5,7 @@
 <meta http-equiv="content-type" content="text/html" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WRS - Web Report System</title>
+<title><?php eLNG('TITLE'); ?></title>
 <!--Importa JS-->
 
 

@@ -7,7 +7,7 @@
 
 	include_once 'config/configCommon.php';
 	
-	$file_language	=	PATH_LANGUAGE.WRS::USER_LANGUAGE().'.php';
+	$file_language	=	PATH_LANGUAGE.WRS::USER_LANGUAGE().'.lng';
 	header('Content-Type: application/javascript');
 	echo  'var LNG_VAR='.json_encode($language,true);
 	echo PHP_EOL;

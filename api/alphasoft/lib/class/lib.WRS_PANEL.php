@@ -89,7 +89,7 @@ class WRS_PANEL  extends WRS_USER
 													'LAYOUT_MEASURES'		=> NULL,
 													'LAYOUT_FILTERS'		=> NULL,
 													'FILTER_FILTERS_ID'		=> NULL,
-													'FILTER_FILTERS_DESC'	=> NULL
+													'FILTER_FILTERS_DESC'	=> NULL,
 											);
 		
 		//Inicializando as metricas do layout
@@ -135,7 +135,7 @@ class WRS_PANEL  extends WRS_USER
 			$this->setCube(json_decode(base64_decode($json_request),true));
 		}
 		
-		$exception	=	array('TITLE_ABA','cube_s','WINDOW','TYPE_RUN','TOP_CONFIG','SUMARIZA','SHOW_LINE_TOTAL','REPORT_ID','PLUS_MINUS','PAGE_CURRENT','MKTIME_HISTORY','IS_REFRESH','DRILL_HIERARQUIA_LINHA','COLORS_LINE','ALL_ROWS','ALL_COLS','ORDER_COLUMN');
+		$exception	=	array('TITLE_ABA','cube_s','WINDOW','TYPE_RUN','TOP_CONFIG','SUMARIZA','SHOW_LINE_TOTAL','REPORT_ID','PLUS_MINUS','PAGE_CURRENT','MKTIME_HISTORY','IS_REFRESH','DRILL_HIERARQUIA_LINHA','COLORS_LINE','ALL_ROWS','ALL_COLS','ORDER_COLUMN','REPORT_FILTER');
 		//Pegando informações do Request
 		foreach ($this->_param_ssas_reports as $label =>$value)
 		{
@@ -268,6 +268,10 @@ class WRS_PANEL  extends WRS_USER
 		$HTML_METICAS			=	$panelHTML->MENU_DRAG_DROP_DIREITO($this->_cube_pos_session,$METRICAS,array('MEASURE_NAME','MEASURE_NAME'),'metrica');
 		$MEASURE_RELATIONSSHIPS	=	$this->MEASURE_RELATIONSSHIPS;
 		
+		
+		$kendoInfo				=	 new KendoUi();
+		$getOPerationsFilter	=	$kendoInfo->getOPerationsFilter();
+		
 		if($changeCube)
 		{
 			//Apenas informações dos cubos	
@@ -330,7 +334,8 @@ class WRS_PANEL  extends WRS_USER
 				
 				if(trim($report['REPORT_AUTOLOAD'])=='1')
 				{
-					$rows_REPORTS[] 	=	'AUTO_LOAD.push(callback_load_report_generic_modal('.json_encode($report,true).',true))';
+					$param	=	json_encode($report,true);
+					$rows_REPORTS[] 	=	'AUTO_LOAD.push(callback_load_report_generic_modal('.$param.',true))';
 				}			
 			}
 		}
@@ -549,7 +554,7 @@ class WRS_PANEL  extends WRS_USER
 			if(!empty($lineData)) $flagEmpty=false;
 		}
 		
-//		WRS_DEBUG_QUERY($getRequestKendoUi);
+	
 		
 
 		
@@ -664,7 +669,7 @@ class WRS_PANEL  extends WRS_USER
 	 * @param array $getRequestKendoUi
 	 * @param string $column
 	 */
-	private function managerHistotyChangeColOrder($cube_id,$getRequestKendoUi,$column,$order,$page_current,$rows_page,$saveHistory=false)
+	private function managerHistotyChangeColOrder($cube_id,$getRequestKendoUi,$column,$order,$page_current,$rows_page,$REPORT_FILTER,$saveHistory=false)
 	{
 		$report_id		=	 $getRequestKendoUi['REPORT_ID'];
 		$history		=	json_decode(base64_decode(WRS::GET_REPORT_HISTORY($cube_id, $report_id)),true);
@@ -678,15 +683,21 @@ class WRS_PANEL  extends WRS_USER
 			$history[0]['kendoUi']['ORDER_BY_COLUMN']	=	$column;
 			$history[0]['kendoUi']['ORDER_COLUMN_TYPE']	=	$order;
 			
+			$history[0]['REPORT_FILTER']				=	$REPORT_FILTER;
+			
 			if($page_current)$history[0]['kendoUi']['PAGE_CURRENT']	=	$page_current;
 			
 			if($rows_page)$history[0]['kendoUi']['page_size']	=	$rows_page;
 			
 		}else{
+			
+			$history[0]['REPORT_FILTER']	=	$REPORT_FILTER;
+			
 			//Se for a opção salvar 
 			foreach($column as $line => $data)
 			{
 				$history[0]['kendoUi'][$line]	=	$data;
+				
 			}
 			
 		}
@@ -713,7 +724,7 @@ class WRS_PANEL  extends WRS_USER
 		
 		$getRequestKendoUi					=	 array();
 		$getRequestKendoUi['REPORT_ID']		=	$options['report_id'];
-		$this->managerHistotyChangeColOrder($cube_id, $getRequestKendoUi, $options['history_options'], NULL,NULL,NULL,true);
+		$this->managerHistotyChangeColOrder($cube_id, $getRequestKendoUi, $options['history_options'], NULL,NULL,NULL,'',true);
 	}
 	
 	private function convertDataHistory($data,$tagClass="")
@@ -830,12 +841,17 @@ class WRS_PANEL  extends WRS_USER
 		$COLUMNS		=	$this->implode($this->_param_ssas_reports['LAYOUT_COLUMNS']);
 		$MEASURES		=	$this->implode($this->_param_ssas_reports['LAYOUT_MEASURES']);
 		$FILTERS		=	$this->implode($this->_param_ssas_reports['LAYOUT_FILTERS']);
+
+		$REPORT_FILTER	=	$this->_param_ssas_reports['REPORT_FILTER'];
+		
 		
 		$DillLayout						=	 array();
 		$DillLayout['LAYOUT_ROWS']		=	$ROWSL;
 		$DillLayout['LAYOUT_COLUMNS']	=	$COLUMNS;
 		$DillLayout['LAYOUT_MEASURES']	=	$MEASURES;
 		$DillLayout['LAYOUT_FILTERS']	=	$FILTERS;
+		$DillLayout['REPORT_FILTER']	=	$REPORT_FILTER;
+
 
 		//Criando o ID do REPORT ID
 		if(empty($getRequestKendoUi['REPORT_ID']))
@@ -1026,9 +1042,6 @@ class WRS_PANEL  extends WRS_USER
 					//return false;
 				}
 		
-		
-		
-		
 		WRS_TRACE('END getGrid', __LINE__, __FILE__);
 	}
 	
@@ -1113,6 +1126,30 @@ class WRS_PANEL  extends WRS_USER
 		
 	}
 	
+	
+	private function recursiveFilterCustom($_filter)
+	{
+		$filter	=	 $_filter;
+		
+		
+		foreach($filter as $line =>$value)
+		{
+			if(is_array($value) && !isset($value['field']))
+			{
+				$filter[$line]	=	 $this->recursiveFilterCustom($value);
+			}else{			
+				
+				if(isset($value['field_old']))
+				{
+					$filter[$line]['field']	=	$value['field_old'];
+				}
+				
+			}
+		}
+		
+		return $filter;
+		
+	}
 	//$SERVER,$DATABASE,$CUBE,$USER_CODE
 	/**
 	 * 
@@ -1132,9 +1169,14 @@ class WRS_PANEL  extends WRS_USER
 		
 		$cube						=	$_cube;
 		$getRequestKendoUi			=	$_getRequestKendoUi;
-
 		
-//		$getRequestKendoUi['ALL_ROWS']
+		
+		$kendoUI				=	new KendoUi();
+		 
+		
+		$REPORT_FILTER				=	$kendoUI->filtersToWhere($this->recursiveFilterCustom(json_decode($DillLayout['REPORT_FILTER'],true)));
+		
+	 
 
 		$LAYOUT_ROWS_SIZE							=	count(explode(',',$ROWSL));
 		$msg										=	''; //mensagens do sistema ela muda a cada conjunto de regras
@@ -1183,13 +1225,12 @@ class WRS_PANEL  extends WRS_USER
 		}
 		
 		// Obtem a Quantidade de Registros da Consulta		
-		$query_table = $this->query($this->_query->COUNT_SSAS_TABLE($_cube['TABLE_CACHE'],((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+		$query_table = $this->query($this->_query->COUNT_SSAS_TABLE($_cube['TABLE_CACHE'],$REPORT_FILTER,((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+		
 		if($this->num_rows($query_table))
 		{
 			$rows 		= $this->fetch_array($query_table);
 			$num_rows 	= (int) $rows['TOTAL_ROWS'];
-			
-//			WRS::SET_TOTAL_COLUMN($cube['TABLE_CACHE'], array('TOTAL_COLUMNS'=> $rows['TOTAL_COLUMNS'],'ORDER_BY_COLUMN'=>$_sort_order ));//Gravando
 			
 			WRS::SET_TOTAL_COLUMN($cube['TABLE_CACHE'],$_sort_order > $rows['TOTAL_COLUMNS'] ? $rows['TOTAL_COLUMNS'] : $_sort_order  );//Gravando
 		}
@@ -1228,10 +1269,12 @@ class WRS_PANEL  extends WRS_USER
 			/*
 			 * Apenas informa qual o nome das columns 
 			 */
+			
 			$param[] 	= 	array( 	'FIELD'			=>	$rows['FIELD'], 
 									'TOTAL'			=>	$rows['TOTAL'],
 				 	               	'LEVEL_TYPE'	=>	$rows['LEVEL_TYPE'], 
 									'LEVEL_FULL'	=>	$rows['LEVEL_FULL'], 
+									'LEVEL_DRILL'	=>	$rows['LEVEL_DRILL'],
 									'LEVEL_NAME'	=>	$rows['LEVEL_NAME'], 
 									'LEVEL_VALUE'	=>	$rows['LEVEL_VALUE'], 
 									'LEVEL_POS'		=>	$rows['LEVEL_POS'],
@@ -1300,10 +1343,6 @@ HTML;
 		
 		$TelerikUi->setPageSize($page_size);
 		$TelerikUi->setHeaderColumnWRS($param);
-		
-		
-	
-		
 		
 		$tagToUrl['TOTAL_COLUMN']	=	$TelerikUi->get_total_column();
 		
@@ -1387,6 +1426,7 @@ HTML;
 		$CUBE_ID					=	fwrs_request('CUBE_ID');
 		$TOTAL_COLUMN				=	fwrs_request('TOTAL_COLUMN');
 		$total_column_detect		= 	false;
+		
 		/*
 		 * Pegando os Eventos do Telerik
 		 */
@@ -1399,6 +1439,18 @@ HTML;
 		$resultGridDrill		=	NULL;
 	
 		
+		//Columns Filters
+		$column_filters			=	@$request['filters'];
+		$kendoUI				=	new KendoUi();
+		$QUERY_FILTER  			= 	$kendoUI->filtersToWhere($column_filters);
+
+//		Teste recursivo unic
+//		$kendoUI->getFilters($column_filters);
+		
+		$REPORT_FILTER			=	@$request['REPORT_FILTER'];
+		
+		
+		
 		/*
 		 * Pegando os eventos do WRS_PAnel
 		 */
@@ -1410,6 +1462,7 @@ HTML;
 		/*
 		 * Efetuando a contagem recursiva para fazer a reordenação
 		 * WARNING:Esse é o trecho do código que está se repetindo
+		 * 
 		 */
 		
 		
@@ -1432,9 +1485,6 @@ HTML;
 					$total_column_detect	=	true;
 				}
 				
-				
-				
-				
 				$this->query($this->_query->SORT_SSAS_TABLE($TABLE_NAME,$field,$getRequestKendoUi['ALL_ROWS'],strtoupper($sort[0]['dir'])));
 						
 				if(((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])==1)
@@ -1443,10 +1493,7 @@ HTML;
 					$query_DRILL_SSAS_TABLE_INFO = $this->_query->GET_SSAS_DRILL( $TABLE_NAME );
 					$this->query($query_DRILL_SSAS_TABLE_INFO);
 				}	
-				
-				
 			}
-			
 		}
 		
 		
@@ -1457,13 +1504,13 @@ HTML;
 		$ROW_NUMBER_END			=	$take+$skip;
 		
 		//Query convencional com a formatação para o gráfico
-		$sqlGrid				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		$sqlGrid				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME,$QUERY_FILTER, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
 		
 		//Query convencional com a formatação para o gráfico
-		$sql_chart				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,0,0,$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		$sql_chart				=	 $this->_query->SELECT_SSAS_TABLE( $TABLE_NAME,$QUERY_FILTER, $ROW_NUMBER_START, $ROW_NUMBER_END,0,0,$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
 
 		//Query com o Tamanho das colunas
-		$sql_string_width_size	=	 $this->_query->SELECT_SSAS_SIZE( $TABLE_NAME, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
+		$sql_string_width_size	=	 $this->_query->SELECT_SSAS_SIZE( $TABLE_NAME,$QUERY_FILTER, $ROW_NUMBER_START, $ROW_NUMBER_END,1,$getRequestKendoUi['SUMARIZA'],$this->getUserLanguage() ); // Implementar 2 Últimos Parametro = Formatação / Numeros Resumidos
 		
 		//Processando o bloco com o tamanho das colunas		
 		$columns_width			=	NULL;
@@ -1473,17 +1520,12 @@ HTML;
 			$columns_width			=$this->fetch_array($sql_width_size);	
 		}
 		//END
-		
+
 		
 		//Validando a consulta da GRID
 		$sqlGrid_exec		=	 $this->query($sqlGrid);
-		if(!$this->num_rows($sqlGrid_exec))
-		{
-			echo fwrs_error(LNG('SELECT_NULL'));
-			WRS_TRACE('A consulta retornou vazia  '.$sqlGrid, __LINE__, __FILE__);
-			WRS_DEBUG_QUERY('A consulta retornou vazia  '.$sqlGrid);
-			return false;
-		}
+		
+		
 		
 		
 		
@@ -1508,23 +1550,29 @@ HTML;
 												$order_field,
 												$order_dir,
 												$page,
-												$pageSize,false);
+												$pageSize,$REPORT_FILTER,false);
 		
-
-		//Processando a Query da GRID
-		while ($rows =  $this->fetch_array($sqlGrid_exec))
-		{
-			$resultGridTmp		=	$rows;
-			//Colocando em negrito o value
-			if(isset($sort[0]['field']))
+			if($this->num_rows($sqlGrid_exec))
 			{
-				$resultGridTmp['bold'.$sort[0]['field']]	=	true;
-				//$resultGridTmp[$sort[0]['field']]	='<span style="color: #00ff00; font-weight: bold">42</span>';
-			}
-			$resultGrid[]		=	$resultGridTmp;
-		}
+				/*echo fwrs_error(LNG('SELECT_NULL'));
+				WRS_TRACE('A consulta retornou vazia  '.$sqlGrid, __LINE__, __FILE__);
+				WRS_DEBUG_QUERY('A consulta retornou vazia  '.$sqlGrid);
+				return false;*/
+			
+				//Processando a Query da GRID
+				while ($rows =  $this->fetch_array($sqlGrid_exec))
+				{
+					$resultGridTmp		=	$rows;
+					//Colocando em negrito o value
+					if(isset($sort[0]['field']))
+					{
+						$resultGridTmp['bold'.$sort[0]['field']]	=	true;
+						//$resultGridTmp[$sort[0]['field']]	='<span style="color: #00ff00; font-weight: bold">42</span>';
+					}
+					$resultGrid[]		=	$resultGridTmp;
+				}
 
-		
+			}
 		
 		//Processando a query e dados do CHart and MAP
 		$sqlChart_exec		=	 $this->query($sql_chart);
@@ -1537,8 +1585,6 @@ HTML;
 			}
 		}
 		//END CHART MAPS
-		
-		
 		
 		// Caso Esteja no Modo Drill Obtem os Registros Abertos
 		if($getRequestKendoUi['DRILL_HIERARQUIA_LINHA']==1)
@@ -1572,6 +1618,8 @@ HTML;
 		}
 		
 
+		
+	
 		/*
 		 * Retorna os valores para o Json 
 		 */

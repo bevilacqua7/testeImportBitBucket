@@ -1,7 +1,7 @@
 <?php 
 	
 	$charset		=	 isset($_REQUEST['charset']) ? $_REQUEST['charset'] : 'POR';
-	$file			=	'api'.DIRECTORY_SEPARATOR.'alphasoft'.DIRECTORY_SEPARATOR.'language'.DIRECTORY_SEPARATOR.$charset.'.php';
+	$file			=	'api'.DIRECTORY_SEPARATOR.'alphasoft'.DIRECTORY_SEPARATOR.'language'.DIRECTORY_SEPARATOR.$charset.'.lng';
 	
 	include_once 'config/configCommon.php';
 	include $file;
@@ -29,6 +29,8 @@
 				<p>
 					<ul>
 						<?php 
+						
+						
 								foreach(LNG('DESCONECTED_REASONS') as $val)
 								{
 									echo '<li><i class="fa fa-info-circle"></i> '.$val.'</li>';

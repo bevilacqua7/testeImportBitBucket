@@ -121,14 +121,15 @@ function callback_load_report_generic_modal(data,return_params,nao_processa)
 	var _filter_selected 	=	'';
 	
 	
-	var _param		=	{
-							'LAYOUT_ROWS'			:	wrs_base64encode(_ROWS),
-							'LAYOUT_COLUMNS'		:	wrs_base64encode(_COLUMNS),
-							'LAYOUT_MEASURES'		:	wrs_base64encode(_MEASURES),
-							'LAYOUT_FILTERS'		:	wrs_base64encode(_FILTERS),
-							'KendoUi'				:	base64_json(_kendoui),
-							'FILTER_TMP'			:	formata_filters_tmp(_FILTERS,_FILTERS_VALUES)//wrs_base64encode(_filter_selected)
-						}
+	var _param				=	{
+									'LAYOUT_ROWS'			:	wrs_base64encode(_ROWS),
+									'LAYOUT_COLUMNS'		:	wrs_base64encode(_COLUMNS),
+									'LAYOUT_MEASURES'		:	wrs_base64encode(_MEASURES),
+									'LAYOUT_FILTERS'		:	wrs_base64encode(_FILTERS),
+									'REPORT_FILTER'			:	data.REPORT_FILTER,
+									'KendoUi'				:	base64_json(_kendoui),
+									'FILTER_TMP'			:	formata_filters_tmp(_FILTERS,_FILTERS_VALUES)//wrs_base64encode(_filter_selected)
+							}
 	
 
 	
@@ -407,24 +408,19 @@ function getLoadReport(no_request)
 	
 		active_aba.wrsAbas('save_info_aba_current',active_aba,false);
 		
-		
-
-
-		
 	var _param						=	{};
 	var sortable_metrica			=	rows_by_metrica_attr_base64('.sortable_metrica','metrica');
 	var sortable_linha				=	rows_by_metrica_attr_base64('.sortable_linha','attr');
 	var sortable_coluna				=	rows_by_metrica_attr_base64('.sortable_coluna','attr');
 	var sortable_filtro				=	rows_by_metrica_attr_base64('.sortable_filtro','attr');
 	var wrs_grid_options_default	=	get_aba_active_kendoUi();
-	
 	var _filter_hide				=	activeToGetAllFilters();
 	
-	
-	
 	var filter_selected				=	$.WrsFilter('getAllFiltersToRun');
+		wrs_grid_options_default	=	wrs_clean_data(wrs_grid_options_default);
 	
-	wrs_grid_options_default		=	wrs_clean_data(wrs_grid_options_default);
+	var REPORT_ID					=	get_aba_active_kendoUi().REPORT_ID;	
+	var kendoGrid					=	$('#'+REPORT_ID).data('kendoGrid');
 	
 	//Salvando informação com Negação
 	var _explode		=	 explode(',',sortable_filtro.request);
@@ -449,6 +445,7 @@ function getLoadReport(no_request)
 	//END NEgação
 	
 	
+	kendoGridFilter	=	getFiltersKendoUiSave(kendoGrid.headerIndex.field,json_decode(json_encode(kendoGrid.dataSource.filter())));
 	
 	if(no_request)
 	{
@@ -463,11 +460,15 @@ function getLoadReport(no_request)
 		
 		
 	}else{
+		
+
+		
 		_param	=	{
 						'LAYOUT_ROWS'			:	sortable_linha,
 						'LAYOUT_COLUMNS'		:	sortable_coluna,
 						'LAYOUT_MEASURES'		:	sortable_metrica,
 						'LAYOUT_FILTERS'		:	sortable_filtro,
+						'REPORT_FILTER'			:	kendoGridFilter,
 						'KendoUi'				:	wrs_grid_options_default,
 						'filter_selected'		:	filter_selected
 		}

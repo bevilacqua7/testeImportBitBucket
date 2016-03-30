@@ -5,12 +5,43 @@
 	$language['IDIOMA'] 				= 	"POR";
 	$language['TITLE']					=	"WRS - ".WRS::VERSION();
 	$language['CharSet']		  		= 	'utf-8';		//por enqtanto está implementado apenas no  sendmail
-	$language['summernote']				=	"summernote-pt-BR.js";
 	$language['siglaIdioma']			=	"pt-BR";
+	$language['kendoUI']				=	"kendo.messages.pt-BR.min.js";
+	$language['summernote']				=	"summernote-pt-BR.js";
 	
-	$language['DESCONECTED_TITLE']		=	"USUÁRIO DESCONECTADO";
+	
+	
+	$language['MODAL_OK']			=	"Ok";
+	$language['MODAL_YES']			=	"Sim";
+	$language['MODAL_CANCEL']		=	"Cancelar";
+	
+	
+	$language['FILTER_KENDO_UI']		=	"Filtros da Grid";
+		
+	$language['CLEAR_FILTER_KENDOUI']			=	"Limpar filtros da Grid";
+	$language['CLEAR_FILTER_KENDOUI_WARNING']	=	"Deseja realmente limpar os filtros da Grid?";
+	$language['CLEAR_FILTER_KENDOUI_SUCCESS']	=	"Filtros da Grid limpos com sucesso.";
+	
+	$language["MES"]=array('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro');
+
+$language["DIAS"]=array('Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira','Sábado');
+
+$language["DE"]		=	' de ';
+
+
+		$language['BRN_OUT_SYSTEM']			='Sair do WRS';
+		
+		$language['theme_azul']			='Azul';
+		$language['theme_cinza']		='Cinza';
+		$language['theme_laranja']		='Laranja';
+		$language['theme_verde']		='Verde';
+		$language['theme_vermelho']		='Vermelho';
+		
+		
+	
+	$language['DESCONECTED_TITLE']		=	"Usuário desconectado";
 	$language['DESCONECTED_DESCRIPT']	=	"Usuário desconectado do sistema por motivo diversos:";
-	$language['DESCONECTED_BUTTON']		=	"VOLTAR PARA O LOGIN";
+	$language['DESCONECTED_BUTTON']		=	"Voltar para o login";
 	$language['DESCONECTED_REASONS']	=	array('Inatividade na sessão,','Alteração de senha,','Banco de dados sem conexão,','Outras.');
 	
  
@@ -22,7 +53,7 @@
 	
 											<p><strong>Olá</strong>, </p>
 													<p>Veja o extrato desta consulta "%s" na base "%s" extraído da ferramenta WRS.</p>
-													<p>Nesta consulta foram aplicados os seguintes filtros:</p><br><br>
+													<p>Nesta consulta foram aplicados os seguintes filtros:</p>
 													%s
 													<br><p>Atenciosamente,<br>
 													<strong>%s</strong>;</p>
@@ -34,7 +65,7 @@ HTML;
 	$language['ScreenShotMailTO']			=	"O campo <b>Para</b> é de prenchimento obrigatório";
 	$language['ScreenShotMailSUBJECT']		=	"O campo <b>Assunto</b> é de prenchimento obrigatório";
 	$language['ScreenShotMailMESSENGER']	=	"É necessário inserir algum conteúdo no corpo do email";
-	$language['ScreenShotMailSend']			=	"Enviando mensagem, aguarde... <img src='imagens/wrs_loading.gif' />";
+	$language['ScreenShotMailSend']			=	"Enviando mensagem, aguarde... <img src='imagens/wrs_loading.gif'/>";
 	
 	$language['ScreenShotMailSendSuccess']			=	"Email enviado com sucesso.";
 	
@@ -62,7 +93,7 @@ HTML;
 	$language['TOOLTIP_BTN_CLEAR_ELEMENTS_BELLOW']	=	"Remove todos os elementos do container a baixo";
 	//END
 	
-	$language['kendoUI']							=	"kendo.messages.pt-BR.min.js";
+
 	
 	$language['ERROR_CANT_CREATE_JOB'] 						= "Ops.. Favor reenviar a consulta, não foi possível criar um job, se o erro persistir favor entrar em contato com o suporte";
 	
@@ -112,7 +143,7 @@ HTML;
 	/*
 	 * CUBO ERRO
 	 */
-	$language ['ERRO_CUBO_INDISPONIVEL'] 			= "ERRO: INDISPONIVEL";
+	$language ['ERRO_CUBO_INDISPONIVEL'] 			= "Erro: Indisponível";
 	$language ['ERROR_TABLE_CACHE_NO_HEADER']		= "Não existem Dados para esta Consulta..";
 	$language ['ERROR_CUBO_NOT_FOUND']				= "Não foi possível identificar o Cubo utilizado. <br> Se o erro persistir, favor informar ao suporte";
 	$language ['ERRO_EXECUTE_ABA'] 					= "Erro ao executar a Consulta <b>%s</b> <br>";
@@ -168,14 +199,14 @@ HTML;
 	$language ['MAIN_OPEN_LAYOUT'] 		= "Abrir layouts";
 
 
-	$language['TITLE_TOP_TOTAL'] 	= "TOTAL";
-	$language['TITLE_TOP_5'] 		= "TOP 5";
-	$language['TITLE_TOP_10'] 		= "TOP 10";
-	$language['TITLE_TOP_15'] 		= "TOP 15";
-	$language['TITLE_TOP_20'] 		= "TOP 20";
-	$language['TITLE_TOP_25'] 		= "TOP 25";
-	$language['TITLE_TOP_50'] 		= "TOP 50";
-	$language['TITLE_TOP_100'] 		= "TOP 100";
+	$language['TITLE_TOP_TOTAL'] 	= "Total";
+	$language['TITLE_TOP_5'] 		= "Top 5";
+	$language['TITLE_TOP_10'] 		= "Top 10";
+	$language['TITLE_TOP_15'] 		= "Top 15";
+	$language['TITLE_TOP_20'] 		= "Top 20";
+	$language['TITLE_TOP_25'] 		= "Top 25";
+	$language['TITLE_TOP_50'] 		= "Top 50";
+	$language['TITLE_TOP_100'] 		= "Top 100";
 	
 	
 	
@@ -196,7 +227,7 @@ HTML;
 	/*
 	 * ERRO AO CARREGAR A RUN.php
 	 */
-	$language ['ERRO_FILE_PROCCESS'] = "Ops Houve algum erro no processso ERRO:0001";
+	$language ['ERRO_FILE_PROCCESS'] = "Ops Houve algum erro no processo ERRO:0001";
 	
 	/*
 	 * BOTAO
@@ -218,14 +249,14 @@ HTML;
 	$language ['DRAG_DROP_CLEAN_SELECTION_SUCCESS'] 		= "Remoção dos(as) <b>%s</b>(s) realizadas com sucesso.";
 	$language ['DRAG_DROP_CLEAN_SELECTION_SUCCESS_INSIDE'] = "Seleções do filtro removido com sucesso .";
 	
-	$language ['RUN_RELATORIO_FALTA_INFORMACAO'] 	= "Para execurar a Consulta falta informações em: <br> <b>%s</b>";
+	$language ['RUN_RELATORIO_FALTA_INFORMACAO'] 	= "Para executar a Consulta falta informações em: <br> <b>%s</b>";
 	
 	
 	
 	$language ['DRAG_DROP_FIELD_ATRIBUTO'] 	= "um Atributo";
-	$language ['DRAG_DROP_FIELD_METRICA'] 	= "uma Metrica";
+	$language ['DRAG_DROP_FIELD_METRICA'] 	= "uma Métrica";
 	
-	$language ['GERANDO_RELATORIO'] 		= "Aguarde um instante enquando a Consulta é criada";
+	$language ['GERANDO_RELATORIO'] 		= "Aguarde um instante enquanto a consulta é criada";
 	$language ['GERANDO_RELATORIO_TITLE'] 	= "Gerando Consulta";
 	
 	$language ['GERANDO_MULTI_CUBE_BODY'] 		= "Aguarde um instante para troca de Cubo";
@@ -235,7 +266,7 @@ HTML;
 	$language ['ATTRIBUTOS_FILTRO'] 	= "Filtros";
 	$language ['ATTRIBUTOS_COLUNA'] 	= "Colunas";
 	$language ['ATTRIBUTOS_LINHA'] 		= "Linhas";
-	$language ['ATTRIBUTOS_METRICA'] 	= "Metricas";
+	$language ['ATTRIBUTOS_METRICA'] 	= "Métricas";
 	$language ['ATTRIBUTOS_MULTIPLE_CUBE'] 	= "Cubos";
 	$language ['ATTRIBUTOS_SIMPLES'] 	= "Simples";
 	$language ['ATTRIBUTOS_COMPOSTO'] 	= "Composto";
@@ -313,9 +344,9 @@ HTML;
 	$language['GRID_HEADER_MAIL_SEND']	=	'Enviar e-mail';
 	$language['GRID_HEADER_SEE_MAP']	=	"Mapa";
 	
-	$language['GRID_HEADER_TITLE_DADOS']		=	"DADOS";
-	$language['GRID_HEADER_TITLE_TOTAL']		=	"TOTAL";
-	$language['GRID_HEADER_TITLE_EXIBITION']	=	"EXIBIÇÃO";
+	$language['GRID_HEADER_TITLE_DADOS']		=	"Dados";
+	$language['GRID_HEADER_TITLE_TOTAL']		=	"Total";
+	$language['GRID_HEADER_TITLE_EXIBITION']	=	"Exibição";
 		
 	$language['WHAT_SEARCH'] = "O que procura?";
 	
@@ -380,7 +411,7 @@ HTML;
 	$language ['FILTER_CONTEX_MENU_SELECTION_VIEW'] 		= "Visualizar ite%ns selecionado%s";
 	$language ['FILTER_CONTEX_MENU_SELECTION_ITEM_EXISTS'] 	= "O%s ite%ns abaixo já existia%m e não fo%ram adicionado%s:";
 	
-	$language ['TITLE_MENU_DASHBOARD'] 	= "('Visões Consolidadas com Relatórios de Diferentes Bases Segmentadas em Quadrantes Independentes')";
+	$language ['TITLE_MENU_DASHBOARD'] 	= "(Visões Consolidadas com Relatórios de Diferentes Bases Segmentadas em Quadrantes Independentes)";
 	
 
 	$language['tpl_association_save_sucess'] 				= "Associação salva com sucesso";
@@ -400,7 +431,7 @@ HTML;
 	$language ['HTML_CUBE_EDITION'] 	= "Edição:";
 	$language ['HTML_CUBE_UPDATE'] 		= "Atualizado:";
 	
-	$language['LABEL_NOVO']				=	"Novo";
+	$language['LABEL_NOVO']				=	" Novo ";
 	$language['LABEL_LOAD']				=	"Carregando...";
 	$language['PAGINATION_PAGE']		=	"Elementos";
 	$language['PAGINATION_PAGE_INSIDE']	=	"até";
@@ -419,7 +450,7 @@ HTML;
 	$language ['TITLE_ATT_WRS_PERFIL'] 		=  "Gerenciamento de Perfis";
 	$language ['TITLE_ATT_WRS_LOG'] 		=  "Gerenciamento de Logs";
 	
-	$language['LINE_TOTAL']					=	'TOTAL';
+	$language['LINE_TOTAL']					=	'Total';
 	$language['label_total']				=	'Total';
 	$language['LINE_TOTAL_BUBBLE']			=	'Deseja usar as linha de totais no gráfico?';
 	

@@ -30,6 +30,7 @@ $script_tags								=	'';
 $LABEL_LOAD									=	LNG('LABEL_LOAD');
 
 $GRID_HEADER_MAIL_SEND						=	LNG('GRID_HEADER_MAIL_SEND');
+$CLEAR_FILTER_KENDOUI						=	 LNG('CLEAR_FILTER_KENDOUI');
 
 $LAYOUTS					=	LNG('tpl_layout');
 //TAG pode ser enviada externamente pelo include
@@ -103,9 +104,15 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 		  
 		  <!-- Title -->
 			 <div class="navbar-left wrs_titles_config">
-
+			 
+			 
+ 
 			 <!-- Botão Histórico -->
-			 <div class="btn-group  font-black" role="group">			 
+			 <div class="btn-group  font-black" role="group">	
+			 
+			 <button type="button" class="btn btn-warning btn-xs  btn-clean-filter-kendo-ui wrs-tooltip"  title="{$CLEAR_FILTER_KENDOUI}"><i class="glyphicon glyphicon-trash"></i></button>
+						
+						
 					  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" disabled_s >
 						    <i class="fa fa-history"></i> <span class="caret"></span>
 						</button>

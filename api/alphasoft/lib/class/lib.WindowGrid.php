@@ -853,7 +853,7 @@ EOF;
 
 		$result				=	 array();
 		$result['total']	=	$num_rows;
-		$result['data']		=	$resultGrid;
+		$result['data']		=	@$resultGrid;
 			
 		echo json_encode($result);
 		
