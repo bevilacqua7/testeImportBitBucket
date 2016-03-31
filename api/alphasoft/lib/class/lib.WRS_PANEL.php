@@ -1022,7 +1022,7 @@ class WRS_PANEL  extends WRS_USER
 					
 					
 					
-					
+					//WRS_DEBUG_QUERY($getRequestKendoUi,'ds.log');
 					
 					/*
 					 *	Criando a base do script para o Data Report 
@@ -1208,6 +1208,7 @@ class WRS_PANEL  extends WRS_USER
 		
 		$_sort_current		=	(int)substr($getRequestKendoUi['ORDER_BY_COLUMN'], 1);
 		$_sort_column		=	WRS::GET_TOTAL_COLUMN($_cube['TABLE_CACHE']);
+		
 		
 		$_sort_order		=	$_sort_current > $_sort_column ? $_sort_column : $_sort_current;
 
@@ -1445,11 +1446,7 @@ HTML;
 		$QUERY_FILTER  			= 	$kendoUI->filtersToWhere($column_filters);
 
 //		Teste recursivo unic
-//		$kendoUI->getFilters($column_filters);
-		
 		$REPORT_FILTER			=	@$request['REPORT_FILTER'];
-		
-		
 		
 		/*
 		 * Pegando os eventos do WRS_PAnel
@@ -1458,7 +1455,9 @@ HTML;
 		$numRows			=	fwrs_request('numRows');
 		$TABLE_NAME			=	fwrs_request('tableCache');	
 		$LAYOUT_ROWS_SIZE	=	fwrs_request('LRS');
-		
+		$detect_filter		=	@$request['detect_filter'];
+				
+
 		/*
 		 * Efetuando a contagem recursiva para fazer a reordenação
 		 * WARNING:Esse é o trecho do código que está se repetindo
@@ -1466,15 +1465,19 @@ HTML;
 		 */
 		
 		//COntador de paginas
-		if(!empty($QUERY_FILTER))
+		if((!empty($QUERY_FILTER) && $page==1)|| empty($QUERY_FILTER) && $detect_filter==true)
 		{
-			$query_table = $this->query($this->_query->COUNT_SSAS_TABLE($TABLE_NAME,$QUERY_FILTER,((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+
+			$query_table 	= $this->query($this->_query->COUNT_SSAS_TABLE($TABLE_NAME,$QUERY_FILTER,((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+			$detect_filter	=	 true;
 			
 			if($this->num_rows($query_table))
 			{
 				$rows 		= $this->fetch_array($query_table);
 				$numRows 	= (int) $rows['TOTAL_ROWS'];
 			}
+			
+			if(empty($QUERY_FILTER) && $detect_filter==true)$detect_filter	=	 false;
 		}
 		
 		
@@ -1652,6 +1655,9 @@ HTML;
 		$result['wrs_request_data']['columns_size']	=	$columns_width;
 		$result['wrs_request_data']['chart_data']	= 	$resultChart;
 		$result['wrs_request_data']['total']		= 	$numRows;
+		$result['wrs_request_data']['detect_filter']= 	$detect_filter;
+		
+		
 		
 		echo json_encode($result);
 

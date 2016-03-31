@@ -10,19 +10,48 @@
 
 function click_wrs_manager_filter()
 {
+	var _field		=	$(this).parent().attr('data-field');
+	
+	var kendoUi		=	$(this).parents('.wrs_grid_container').data('kendoGrid').headerIndex.field;
+	
+	var 	_type		=	'';
+	
+	
+	try{
+		if(kendoUi[_field].wrsParam.FORMAT_STRING	=="Percent")
+			{
+				_type	=	'percent';
+			}
+	}catch(e){
+		console.warn(' exception');
+	}
+	
+
+	
+	
 	$('.k-filter-menu').each(
 								function(){
 									
-//									console.log('type',$(this).data('kendoPopup'));
+									//DS.push($(this).data('kendoPopup'));
 									
 									var is_grid	=	$(this).data('kendoPopup').options.viewport.$event.attr('wrs-grid');
+									var _that	=	 $(this);
 									
-										if(!isEmpty(is_grid))
+									if(_that.attr('wrs-type')!='percent')
+									{
+										if(!isEmpty(is_grid) && _type!='percent')
 										{
-											var _that	=	 $(this);
+											
 											_that.find('input').mask(LNG('NUMBER_FORMAT_MASK'), {reverse: true});
 											_that.find('input').removeAttr('maxlength');
 										}
+										
+										if(_type=='percent')
+										{
+											_that.attr('wrs-type',_type);
+										}
+									}
+										
 								});	
 }
 
