@@ -559,12 +559,16 @@ function btn_clean_filter_kendo_ui()
 					if(result)
 					{
 						var REPORT_ID		=	 get_aba_active_kendoUi().REPORT_ID;
-							$('#'+REPORT_ID).data('kendoGrid').dataSource.filter({});
+						var kendoUi			=	$('#'+REPORT_ID).data('kendoGrid').dataSource;
+						
+							kendoUi.filter({});
 							
 							var _aba_active	=	get_aba_active_object();
 							//CLean Filters
 							_aba_active.wrsAbaData('setWrsFilterStart',{filter	:	json_encode({}) });
 							_aba_active.wrsAbaData('setWrsData',{REPORT_FILTER:json_encode({})});
+							
+							
 							
 							WRS_ALERT(LNG('CLEAR_FILTER_KENDOUI_SUCCESS'),'success');
 					}
@@ -1979,7 +1983,8 @@ function wrs_run_filter()
 		
 		_param_request['REPORT_FILTER']	=	REPORT_FILTER;
 		
-		//console.log('_param_request',_param_request);
+
+	 	//console.log('_param_request',_param_request);
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 		
 		//AUTO LOAD
@@ -1989,6 +1994,7 @@ function wrs_run_filter()
 		}
 		
 		$('.wrs_run_filter').attr('east__onclose','true');
+		
 		layout_east_close(false,true);
 		//wrs_panel_layout.close('east');
 		

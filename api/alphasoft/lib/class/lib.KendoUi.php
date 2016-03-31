@@ -473,11 +473,12 @@ class KendoUi
 		                                								// TODO: para fazer a condicao de AND ou OR das colunas, basta alterar a variavel this.options.dataSource._filter.logic baseado em outro componente na tela, valores 'and' ou 'or' 
 				                                						
 		                                								var _filters		=	'{}';
+		                                								var _kendoUi		=	$('#{$this->getId()}').data('kendoGrid');
 		                                								
 				                                						if(!isEmpty(this.options.dataSource._filter))
 				                                								{
 				                                									var _headerIndex	=	 '';
-				                                									var _kendoUi		=	$('#{$this->getId()}').data('kendoGrid');
+				                                									
 				                                									
 				                                									try{
 				                                										_headerIndex	=	_kendoUi.headerIndex.field;
@@ -498,6 +499,16 @@ class KendoUi
 																						data.sort['0']['field']		=	kendoUi.ORDER_BY_COLUMN;
 																				
 																				}
+																				
+																		var detect_filter	=	 false;
+																		
+																		try{
+																			detect_filter	=	_kendoUi.dataSource._wrs_request_data.detect_filter
+																		}catch(e){
+																			detect_filter	=	 false;
+																			}
+																		
+																		data['detect_filter']	=	detect_filter;
 		                                							
 																	 	$(".{$this->getId()}").wrsAbaData('setWrsFilterStart',{filter	:	_filters});
 																		$(".{$this->getId()}").wrsAbaData('setWrsData',{REPORT_FILTER:_filters});
@@ -991,23 +1002,39 @@ HTML;
 		return json_encode($this->arr_operacoes,true);
 	}
 	
-	private function filtersToWhereField($field)
+	private function filtersToWhereField($_field)
 	{
-		$campos_de = array('%c','#v');				
+		$campos_de = array('%c','#v');
+		
+		$field		=	$_field;
+		
+		$isFormat	=	true;
+		if($field['type']=='percent')
+		{
+			$field['type'] ='number';
+			
+			$field['value']	=	 str_replace(array('%',','),array('','.'), $field['value']);
+			$field['value']	=	($field['value']/100);
+			
+			$isFormat	=	 false;
+		}
 		
 		$arr_operacoes = $this->arr_operacoes;
 		$field['type'] 						= 	array_key_exists('type', $field) && $field['type']!=''?$field['type']:'string'; // verifica se existe o type_column nativo na estrutura da coluna em questão para a montagem do filtro corretamente de acordo com seu tipo de conteudo.  Se nao existir, assume tipo string
 		
-		$campos_para 						= 	array($field['field'],$this->formatNumber($field['value'],$field['type']));
+		$campos_para 						= 	array($field['field'],$this->formatNumber($field['value'],$field['type'],$isFormat));
 		$condicao 							= 	str_replace($campos_de,$campos_para,$arr_operacoes[$field['type']][$field['operator']]);
 		
 		return '('.$condicao.')';
 	}
 	
 	
-	private function formatNumber($_val,$type)
+	private function formatNumber($_val,$type,$isFormat=true)
 	{
 		$val		=	 $_val;
+		
+		if($isFormat==false) return $val;
+		
 		if($type=='number') 
 		{
 			$db			=	LNG('NUMBER_FORMAT_DECIMAL_DB');

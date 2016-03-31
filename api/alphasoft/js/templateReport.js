@@ -444,8 +444,12 @@ function getLoadReport(no_request)
 	
 	//END NEgação
 	
+	var kendoGridFilter		=	{};
 	
-	kendoGridFilter	=	getFiltersKendoUiSave(kendoGrid.headerIndex.field,json_decode(json_encode(kendoGrid.dataSource.filter())));
+	if(!isEmpty(kendoGrid)){
+		 kendoGridFilter	=	getFiltersKendoUiSave(kendoGrid.headerIndex.field,json_decode(json_encode(kendoGrid.dataSource.filter())));
+	}
+	
 	
 	if(no_request)
 	{

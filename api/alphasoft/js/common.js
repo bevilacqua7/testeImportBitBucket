@@ -56,7 +56,7 @@ function rFFTIndex(label)
  */
 function recursiveFilterFindType(types,deep)
 {
- 
+
 	for(var line in deep)
 	{
 		if(typeof deep[line]=='object')
@@ -161,7 +161,15 @@ function makeFiltersKendoUiQuery(types,deep,logic)
 	
 	for(var line in deep)
 	{
-		var _op		=	optionsFilter[deep[line].type];
+		var _op		=	{};
+		
+		if(deep[line].type=='percent')
+		{
+			_op		=	optionsFilter.number;
+		}else{
+			_op		=	optionsFilter[deep[line].type];
+		}
+		
 				
 		if(typeof deep[line]=='object')
 		{

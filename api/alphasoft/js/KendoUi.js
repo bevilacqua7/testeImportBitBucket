@@ -775,7 +775,7 @@ function getWrsKendoColumn(data)
 					
 			}
 			
-//
+			try{
 			// Quando for total sempre salva a primeira linha de dados para o gráfico
 			if(_arg.items.length>=0 && wrsKendoUi['ALL_ROWS']==true)
 			{
@@ -785,7 +785,9 @@ function getWrsKendoColumn(data)
 					//$(report_aba).wrsAbaData('setFirstLineTotal',_arg.items[0]);
 				}
 			}
-			
+			}catch(e){
+				console.warn(' exception');
+			}
 			
 			
 			//Declarando os dados para o Gráfico
@@ -878,7 +880,6 @@ function onDataBound(arg)
 			{
 				arg.sender.dataSource._total	=	_total;
 			}
-			
 			
 			var classGrid		=	arg.sender.element.attr('id');
 			var nameID			=	 '#'+classGrid;
