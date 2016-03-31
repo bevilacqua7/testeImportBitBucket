@@ -6,6 +6,8 @@
  *
  */
 
+includeCLASS('WRS_USER');
+
 class WRS_MANAGE_PARAM
 {
 	
@@ -250,6 +252,7 @@ HTML;
 	 * Retorna o nome correto da tabela configurada no banco de dados, baseado no nome da tabela pro sistema, ex.: DE ATT_WRS_LOG para FAT_WRS_LOG
 	 */
 	public static function confereTabelaCadastroRetorno($nome_tabela){ // se o nome da tabela estiver diferente do padrao, retorna sempre o nome correto do sistema
+		$nome_tabela = $nome_tabela=='' && frws_request('tabela')!=''?fwrs_request('tabela'):$nome_tabela;
 		$dadosTabela = self::GET_CONFIG_TABLE($nome_tabela);
 		if(array_key_exists('nome_tabela_correto', $dadosTabela)){
 			return $dadosTabela['nome_tabela_correto'];
@@ -648,19 +651,19 @@ HTML;
 		$fields	=	array();
 	
 		// Atributos gerados com base na tabela ATT_WRS_CUBE automaticamente de acordo com script SQL ao final deste arquivo
-		$fields['CUBE_ID']   			= array('title'=>LNG('CUBE_ID')    			, 'placeholder'=>LNG('CUBE_ID_PLACEHOLDER')    				, 'length'=>100,   'primary' => true, 'list'=>true, 'basic'=>true , 'grid'=>true,  'obrigatorio' => true);
-		$fields['CUBE_DESC']   			= array('title'=>LNG('CUBE_DESC')    		, 'placeholder'=>LNG('CUBE_DESC_PLACEHOLDER')    			, 'length'=>100,   'list'=>true, 'basic'=>true, 'grid'=>true,   'obrigatorio' => true);
+		$fields['CUBE_ID']   			= array('title'=>LNG('CUBE_ID')    			, 'placeholder'=>LNG('CUBE_ID_PLACEHOLDER')    		, 'width'=>140		, 'length'=>100,   'primary' => true, 'list'=>true, 'basic'=>true , 'grid'=>true,  'obrigatorio' => true);
+		$fields['CUBE_DESC']   			= array('title'=>LNG('CUBE_DESC')    		, 'placeholder'=>LNG('CUBE_DESC_PLACEHOLDER')    	, 'width'=>140		, 'length'=>100,   'list'=>true, 'basic'=>true, 'grid'=>true,   'obrigatorio' => true);
 		$fields['CUBE_FLAG']   			= array('title'=>LNG('CUBE_FLAG')    		, 'placeholder'=>LNG('CUBE_FLAG_PLACEHOLDER')    			, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'class'=>'hide',  'obrigatorio' => false);
-		$fields['CUBE_FILTER']   		= array('title'=>LNG('CUBE_FILTER')    		, 'placeholder'=>LNG('CUBE_FILTER_PLACEHOLDER')    			, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'grid'=>true,   'obrigatorio' => false);
-		$fields['CUBE_FILTER_VALUE'] 	= array('title'=>LNG('CUBE_FILTER_VALUE') 	, 'placeholder'=>LNG('CUBE_FILTER_VALUE_PLACEHOLDER')   	, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'grid'=>true,   'obrigatorio' => false);
-		$fields['CUBE_STATUS'] 			= array('title'=>LNG('CUBE_STATUS')    		, 'placeholder'=>LNG('CUBE_STATUS_PLACEHOLDER')    			, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['CUBE_FILTER']   		= array('title'=>LNG('CUBE_FILTER')    		, 'placeholder'=>LNG('CUBE_FILTER_PLACEHOLDER')    	, 'width'=>180		, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'grid'=>true,   'obrigatorio' => false);
+		$fields['CUBE_FILTER_VALUE'] 	= array('title'=>LNG('CUBE_FILTER_VALUE') 	, 'placeholder'=>LNG('CUBE_FILTER_VALUE_PLACEHOLDER'), 'width'=>180   	, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'grid'=>true,   'obrigatorio' => false);
+		$fields['CUBE_STATUS'] 			= array('title'=>LNG('CUBE_STATUS')    		, 'placeholder'=>LNG('CUBE_STATUS_PLACEHOLDER')   , 'width'=>90 			, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['DATABASE_ID'] 			= array('title'=>LNG('DATABASE_ID')    		, 'placeholder'=>LNG('DATABASE_ID_PLACEHOLDER')    			, 'is_select'=>'ATT_WRS_DATABASE', 'select_fields_in_table'=>array('DATABASE_ID','DATABASE_DESC','SERVER_DESC','CUSTOMER_CODE'), 'length'=>100,   'primary' => true,   'obrigatorio' => true, 'link_field_master'=>array('id'=>array('DATABASE_ID','SERVER_ID'),'valores'=>array('SERVER_ID'=>'SERVER_DESC','CUSTOMER_ID'=>'CUSTOMER_DESC')), 'disabled_edit'=>false,   'list'=>false, 'basic'=>false , 'grid'=>false); // colocar server_desc junto da descricao do database
 		$fields['SERVER_ID'] 			= array('title'=>LNG('SERVER_ID')    		, 'placeholder'=>LNG('SERVER_ID_PLACEHOLDER')    			, 'is_select'=>'ATT_WRS_SERVER', 'select_fields_in_table'=>array('SERVER_ID','SERVER_DESC'), 'length'=>100,   'primary' => true,  'obrigatorio' => true, 'link_field'=>'DATABASE_ID', 'disabled'=>true,   'list'=>false, 'basic'=>false , 'grid'=>false);
 		$fields['CUSTOMER_ID']   		= array('title'=>LNG('CUSTOMER_ID')    		, 'placeholder'=>LNG('CUSTOMER_ID_PLACEHOLDER')    			, 'is_select'=>'ATT_WRS_CUSTOMER', 'select_fields_in_table'=>array('CUSTOMER_DESC'), 'type'=>'int',   'length' => 19,  'obrigatorio' => true, 'link_field'=>'DATABASE_ID', 'key'=>true, 'disabled'=>true,   'list'=>false, 'basic'=>false , 'grid'=>false);
 
-		$fields['DATABASE_DESC']   		= array('title'=>LNG('DATABASE_DESC')  		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
-		$fields['SERVER_DESC']   		= array('title'=>LNG('SERVER_DESC')    		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
-		$fields['CUSTOMER_DESC']   		= array('title'=>LNG('CUSTOMER_DESC')  		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
+		$fields['DATABASE_DESC']   		= array('title'=>LNG('DATABASE_DESC') , 'width'=>130 		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
+		$fields['SERVER_DESC']   		= array('title'=>LNG('SERVER_DESC')  , 'width'=>130  		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
+		$fields['CUSTOMER_DESC']   		= array('title'=>LNG('CUSTOMER_DESC') , 'width'=>180 		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
 		
 		//Atributos de execuções e Eventos
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_CUBE'), 
@@ -777,14 +780,14 @@ HTML;
 		$fields['CUBE_ID']   		= array('title'=>LNG('CUBE_ID')    		, 'placeholder'=>LNG('CUBE_ID_PLACEHOLDER')    		, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true,   'primary' => true);
 		$fields['USER_ID']   		= array('title'=>LNG('USER_ID')    		, 'placeholder'=>LNG('USER_ID_PLACEHOLDER')    		, 'class'=>'hide' ,	'list'=>true,	'basic'=>true, 'grid'=>true,   'primary' => true);
 		
-		$fields['DATABASE_DESC']  	= array('title'=>LNG('DATABASE_DESC')  		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
+		$fields['DATABASE_DESC']  	= array('title'=>LNG('DATABASE_DESC') , 'width'=>140 		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
 		
-		$fields['CUBE_DESC']   		= array('title'=>LNG('MENU_ADMIN_CUBE'), 'width'=>200	, 'placeholder'=>LNG('MENU_ADMIN_CUBE_PLACEHOLDER') ,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
+		$fields['CUBE_DESC']   		= array('title'=>LNG('MENU_ADMIN_CUBE'), 'width'=>100	, 'placeholder'=>LNG('MENU_ADMIN_CUBE_PLACEHOLDER') ,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
 		$fields['CUBE_DESC_FULL'] 	= array('title'=>LNG('MENU_ADMIN_CUBE'), 'width'=>200, 'class'=>'hide'	, 'placeholder'=>LNG('MENU_ADMIN_CUBE_PLACEHOLDER') ,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
 		$fields['USER_CODE']   		= array('title'=>LNG('MENU_ADMIN_USER'), 'width'=>200	, 'placeholder'=>LNG('MENU_ADMIN_USER_PLACEHOLDER') ,   'length'=>100	,'list'=>true,	'basic'=>true, 'grid'=>true);
 
-		$fields['USER_DESC']  		= array('title'=>LNG('USER_DESC')  		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
-		$fields['CUSTOMER_DESC']  	= array('title'=>LNG('CUSTOMER_DESC')  		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
+		$fields['USER_DESC']  		= array('title'=>LNG('USER_DESC') , 'width'=>190 		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
+		$fields['CUSTOMER_DESC']  	= array('title'=>LNG('CUSTOMER_DESC') , 'width'=>270 		, 'grid_only'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true);
 				
 		
 		return array(	'title'		=>	LNG('TITLE_REL_WRS_CUBE_USER'), 
@@ -887,18 +890,18 @@ HTML;
 	
 		// Atributos gerados com base na tabela FAT_WRS_LOG automaticamente de acordo com script SQL ao final deste arquivo
 		$fields['TRANSACTION_ID']   = array('title'=>LNG('TRANSACTION_ID')    ,   'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
-		$fields['DATE_ID']   = array('title'=>LNG('DATE_ID')    ,'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['MODULE']   = array('title'=>LNG('MODULE')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['PROCESS']   = array('title'=>LNG('PROCESS')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['OPERATION']   = array('title'=>LNG('OPERATION')    ,   'length'=>250,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['MESSAGE']   = array('title'=>LNG('MESSAGE')    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_MASTER']   = array('title'=>LNG('USER_MASTER')    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_ID']   = array('title'=>LNG('USER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
-		$fields['USER_CODE']   = array('title'=>LNG('USER_CODE')    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_DESC']   = array('title'=>LNG('USER_DESC')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_TYPE']   = array('title'=>LNG('USER_TYPE')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['CUSTOMER_ID']   = array('title'=>LNG('CUSTOMER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
-		$fields['CUSTOMER_DESC']   = array('title'=>LNG('CUSTOMER_DESC')    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['DATE_ID']  		= array('title'=>LNG('DATE_ID'), 'width'=>140    ,'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['MODULE']   		= array('title'=>LNG('MODULE'), 'width'=>135    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['PROCESS']   		= array('title'=>LNG('PROCESS'), 'width'=>350    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['OPERATION']   		= array('title'=>LNG('OPERATION') , 'width'=>100   ,   'length'=>250,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['MESSAGE']   		= array('title'=>LNG('MESSAGE'), 'width'=>300    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_MASTER']   	= array('title'=>LNG('USER_MASTER')    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_ID']   		= array('title'=>LNG('USER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
+		$fields['USER_CODE']   		= array('title'=>LNG('USER_CODE'), 'width'=>150    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_DESC']   		= array('title'=>LNG('USER_DESC'), 'width'=>190    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_TYPE']   		= array('title'=>LNG('USER_TYPE'), 'width'=>190    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['CUSTOMER_ID']   	= array('title'=>LNG('CUSTOMER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
+		$fields['CUSTOMER_DESC']   	= array('title'=>LNG('CUSTOMER_DESC'), 'width'=>300    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_LOG'),
 				'button'	=>	$button,

@@ -6,9 +6,10 @@ includeQUERY('ATT_WRS_USER');
 
 class ATT_WRS_USER extends WRS_BASE
 {
-	private $admin = NULL;
+	private $admin 			= 	NULL;
 	
-	public function __construct(){
+	public function __construct()
+	{
 		$this->admin = new WRS_AdminInterface();
 		$this->admin->classname  = 'ATT_WRS_USER';
 		$this->queryClass		 = new QUERY_WRS_USER();
@@ -21,18 +22,35 @@ class ATT_WRS_USER extends WRS_BASE
 	
 	public function run()
 	{
-		$event	=	 fwrs_request('event');
+		$event					=	fwrs_request('event');
+		$this->admin->set_conn($this->get_conn());
 		switch($event)
 		{
-			case 'downloadFile' 		: $this->downloadFile(); 			break;
+			case 'fileDownload' 		: $this->fileDownload(); 			break;
 			case 'changePassUser' 		: $this->changePassUser(); 			break;
+			case 'exportResults' 		: $this->exportResults(); 			break;
 		}
 	}
-	
-	public function downloadFile(){
-		$this->admin->downloadFile();
-	}
 
+	public function export($options=null)
+	{
+		return $this->admin->export($options);
+	}
+	
+	public function exportResults($options=null)
+	{
+		$customer_id_logado		= WRS::CUSTOMER_ID();
+		$param_extra = array(
+				'filtro_fixo' => 'CUSTOMER_ID = '.$customer_id_logado
+		);
+		return $this->admin->exportResults($options,$param_extra);
+	}
+	
+	public function fileDownload($options=null)
+	{
+		return $this->admin->fileDownload($options);
+	}
+	
 	public function changePassword($options){
 		$param 				= $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
 		$perfil_logado 		= trim(WRS::INFO_SSAS_LOGIN('PERFIL_ID'));
@@ -223,21 +241,6 @@ class ATT_WRS_USER extends WRS_BASE
 		return $param;
 	}
 
-	public function export($options)
-	{
-		return $this->admin->export($options);
-	}
-	
-	public function exportResults($options)
-	{
-		$customer_id_logado		= WRS::CUSTOMER_ID();
-		$param_extra = array(
-				'filtro_fixo' => 'CUSTOMER_ID = '.$customer_id_logado
-		);
-		return $this->admin->exportResults($options,$param_extra);
-	}
-	
-	
 
 }
 

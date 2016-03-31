@@ -18,18 +18,36 @@ class ATT_WRS_LOG extends WRS_BASE
 	{
 		$this->admin->SetObject($Object);
 	}
-	
+
 	public function run()
 	{
-		$event	=	 fwrs_request('event');
+		$event					=	fwrs_request('event');
+		$this->admin->set_conn($this->get_conn());
 		switch($event)
 		{
-			case 'downloadFile' : $this->downloadFile(); break;
+			case 'fileDownload' 			: 	$this->fileDownload(); 					break;
+			case 'exportResults' 			: 	$this->exportResults(); 				break;
+			case 'confereTabelaManageParam'	: 	$this->confereTabelaManageParam(); 		break;
 		}
 	}
 	
-	public function downloadFile(){
-		$this->admin->downloadFile();
+	public function export($options=null)
+	{
+		return $this->admin->export($options);
+	}
+	
+	public function exportResults($options=null)
+	{
+		$customer_id_logado		= WRS::CUSTOMER_ID();
+		$param_extra = array(
+				'filtro_fixo' => 'CUSTOMER_ID = '.$customer_id_logado
+		);
+		return $this->admin->exportResults($options,$param_extra);
+	}
+	
+	public function fileDownload($options=null)
+	{
+		return $this->admin->fileDownload($options);
 	}
 
 	public function insert($options)
@@ -112,18 +130,11 @@ class ATT_WRS_LOG extends WRS_BASE
 	
 		return $param;
 	}
+	
+	public function confereTabelaManageParam(){
+		echo WRS_MANAGE_PARAM::confereTabelaCadastroRetorno(fwrs_request('tabela'));
+	}
 
-	public function export($options)
-	{
-		return $this->admin->export($options);
-	}
-	
-	public function exportResults($options)
-	{
-		return $this->admin->exportResults($options);
-	}
-	
-	
 }
 
 ?>

@@ -2208,6 +2208,22 @@ function screenShotChart()
 	
 }
 
+function confereTabelaManageParam(tabela){
+	
+	var param	=	{'class':'ATT_WRS_LOG','file':'ATT_WRS_LOG','event':'confereTabelaManageParam','tabela':tabela};
+	
+	$.ajax({
+		method: "POST",
+		url: "run.php",
+		async: false,
+		data: param
+	}).done(function( tabela_param ) {
+		tabela = tabela_param;
+	});
+
+	return tabela;
+}
+
 function getLogin(id)
 {
 	var login 	=	$('body').WrsGlobal('getPHP','login');

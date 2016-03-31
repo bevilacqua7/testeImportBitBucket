@@ -1053,9 +1053,8 @@ HTML;
 		if($column_filters!=null && $column_filters!='' && !is_array($column_filters) && is_object($column_filters)){
 			$column_filters = (array)json_decode(json_encode($column_filters,1),1);			
 		}
-
 		
-		$column_condition	=	$column_filters['logic'];
+		$column_condition	=	is_array($column_filters) && array_key_exists('logic', $column_condition)?$column_filters['logic']:' AND ';
 
 		if($column_filters!=null && $column_filters!='' && is_array($column_filters)){
 			$where_conditions_columns	=	array();

@@ -108,7 +108,7 @@ class QUERY_WRS_ADMIN
 		 'E:\TEMP',
 		 ';'	
 		 */
-	
+
 		if(array_key_exists('tabela', $options) && $options['tabela']!=''){
 			$tabela 	= $options['tabela'];
 			$colunas	= (array_key_exists('colunas', $options))?((is_array($options['colunas']))?implode(',',$options['colunas']):$options['colunas']):'*';
@@ -125,8 +125,9 @@ class QUERY_WRS_ADMIN
 			
 			$arq_conf_param	= WRS_MANAGE_PARAM::getAtributoTabelaConfig($tabela,'nome_arquivo_import');
 			$diretorio 		= $diretorio.$arq_conf_param;
-			
-			$diretorio_inv	= str_replace('/','\\',$diretorio);
+
+			$diretorio_inv	= str_replace('/',DS,$diretorio);
+			$diretorio	= str_replace(DS,'/',$diretorio);
 				
 			return array("query"=> "
 						EXEC Export_Table '".$tabela."',
@@ -135,7 +136,7 @@ class QUERY_WRS_ADMIN
 		                        '".$diretorio_inv."',
 		                        '".$separador."'
 					",
-					"file" 		=> $diretorio,
+					"file" 		=> str_replace(DS,'/',str_replace(PATH_MAIN, '', $diretorio_inv)),
 					"file_ori" 	=> $arq_conf_param
 			);
 		}else{
@@ -183,7 +184,7 @@ class QUERY_WRS_ADMIN
 			$user_logado 		= WRS::USER_CODE();
 			$customer_id_logado	= WRS::CUSTOMER_ID();
 				
-			$diretorio 	= str_replace('/','\\',$options['diretorio']);
+			$diretorio 	= str_replace('/',DS,$options['diretorio']);
 	
 			return "
 						EXEC Import_Table '".$tabela."',
