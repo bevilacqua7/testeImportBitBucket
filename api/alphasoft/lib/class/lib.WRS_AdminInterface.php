@@ -7,8 +7,9 @@
  */
 includeQuery('ATT_WRS_AdminInterfaces');
 includeClass('KendoUi');
+includeCLASS('WRS_USER');
 
-class WRS_AdminInterface  extends WRS_BASE
+class WRS_AdminInterface  extends WRS_USER
 {
 
 	public $classname 		= NULL;
@@ -338,18 +339,27 @@ HTML;
 		$primary						= $_chavePrimaria;
 		$nome_diretorio					= $_param['nome_diretorio'];			
 		$WRS_DEFINE						= WRS_INI::WRS_DEFINE();
-		$nome_diretorio					= $WRS_DEFINE['WRS_DIRNAME_EXPORT'].$nome_diretorio;
+		$nome_diretorio					= $WRS_DEFINE['PATH_DB_CSV_ZIP'].$nome_diretorio;
 		
 		$this->confere_criacao_diretorio($nome_diretorio);
+
+		$arr_filtro = array();
 		
 		$filtros_window_grid 			= array_key_exists('filtros_aplicados', $_param) && $_param['filtros_aplicados']!=''?$_param['filtros_aplicados']:'';
-		
 		$filtro_fixo 					= array_key_exists('filtro_fixo', $_param) && $_param['filtro_fixo']!=''?$_param['filtro_fixo']:'';
-		
 		$filtros						= ((is_array($regIds) && count($regIds)>0)?$primary.' in ('.implode(',',$regIds).')':'');
 
-		$filtros 						= ($filtros==''?'':$filtros.' AND ').$filtro_fixo;
-		$filtros 						= ($filtros==''?'':$filtros.' AND ').$filtros_window_grid;
+		if($filtro_fixo!=''){
+			$arr_filtro[] = $filtro_fixo;
+		}
+		if($filtros!=''){
+			$arr_filtro[] = $filtros;
+		}
+		if($filtros_window_grid!=''){
+			$arr_filtro[] = $filtros_window_grid;
+		}
+		
+		$filtros = count($arr_filtro)>0?implode(' AND ',$arr_filtro):'';
 		
 		$_param['tabela_export'] 		= WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_param['tabela_export']);
 		$tabela_para_query 				= WRS_MANAGE_PARAM::getAtributoTabelaConfig($_param['tabela_export'],'tabela_bd');
@@ -365,15 +375,12 @@ HTML;
 																'separador' => $_param['caracter_separacao'],
 																'diretorio'	=> $nome_diretorio
 													));
-		
 		$query_export 	= $return_export['query'];
 		$file_export 	= $return_export['file'];
 		$file_original 	= $return_export['file_ori'];
-		
-		$this->set_conn($this->OBJECT->get_conn());
+
 		$query			= 	$this->query($query_export);
-		
-		
+
 		/*
 		 * Verificando se existe resultado
 		*/
@@ -388,11 +395,12 @@ HTML;
 			$status	= $rows['STATUS'];
 			if($status>0){
 				if($compacta){
-					$file_export_inv	= str_replace('/','\\',$file_export); // troca barras normais por invertidas para processo no SQL server/ windows
-					$new_file_export	= substr($file_export,0,-4).'.ZIP';
-					$new_file_export_inv= str_replace('/','\\',$new_file_export); // troca barras normais por invertidas para processo no SQL server/ windows
-					$return_compact 	= $this->queryClass->getQueryCompreessFile('ZIP', $file_export_inv, $new_file_export_inv);
-					$query			= 	$this->query($return_compact);
+					$file_export			= PATH_MAIN.$file_export;
+					$file_export_inv		= str_replace('/',DS,$file_export); // troca barras normais por invertidas para processo no SQL server/ windows
+					$new_file_export		= substr($file_export,0,-4).'.ZIP';
+					$new_file_export_inv	= str_replace('/',DS,$new_file_export); // troca barras normais por invertidas para processo no SQL server/ windows
+					$return_compact 		= $this->queryClass->getQueryCompreessFile('ZIP', $file_export_inv, $new_file_export_inv);
+					$query					= 	$this->query($return_compact);
 					if(!$this->num_rows($query))
 					{
 						return false;
@@ -402,7 +410,8 @@ HTML;
 						$status	= $rows['STATUS'];
 						if($status>0){
 							$processo=true;
-							$file_export = $new_file_export;
+							$file_export 	= $new_file_export;
+							$file_export	= str_replace(DS,'/',str_replace(PATH_MAIN,'',$file_export));
 						}
 					}
 				}else{
@@ -419,62 +428,14 @@ HTML;
 		}
 		
 		if($processo){
-			$file_export 	= str_replace('\\','/',$file_export);
-			$url 			= "run.php?file=".$this->classname."&class=".$this->classname."&event=downloadFile&fileDownload=".$file_export."&nameFileUser=".$file_original;
-			return $url;
-			
+			$file_export 	= str_replace(DS,'/',$file_export);
+			return array('link'=>$file_export);			
 		}else{
-			return $msg;
+			return array('erro'=>$msg);
 		}
 			
 	}
-	
-	public function downloadFile(){
-
-		$temp_filename_zip 	= trim($_REQUEST['fileDownload']); // somente a variavel chama zip, pode ser outro arquivo...
-		$name_file_user 	= trim($_REQUEST['nameFileUser']); // variavel para definir um  nome de arquivo diferente do original para o usuario final
 		
-		$this->SetObject(NULL);
-	
-		if(is_file($temp_filename_zip)){ // $this->temp_folder.
-			
-			// se existe nome alternativo para o usuario final, utiliza eeste nome
-			$nome_arq = (($name_file_user!='')?$name_file_user:basename($temp_filename_zip));
-			
-			// confere se a extensao do nome definido pro arquivo do usuario final é a mesma do arquivo original.  Se nao for, aplica a extensao correta
-			if(strtoupper(substr($temp_filename_zip,-4)) != strtoupper(substr($nome_arq,-4))){
-				$nome_arq = substr($nome_arq,0,-4).substr($temp_filename_zip,-4);
-			}
-			
-			header("Pragma: public");
-			header("Expires: 0");
-			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-			header("Cache-Control: public");
-			header("Content-Description: File Transfer");
-			header("Content-type: application/octet-stream");
-			header("Content-Disposition: attachment; filename=\"".$nome_arq."\"");
-			header("Content-Transfer-Encoding: binary");
-			header("Content-Length: ".filesize($temp_filename_zip)); // $this->temp_folder.
-			ob_clean();
-			flush();
-			ignore_user_abort(true);
-			if(readfile($temp_filename_zip)) // $this->temp_folder.
-			{
-				$this->apagarArquivoGerado($temp_filename_zip); // $this->temp_folder.
-				//if(is_file()){
-					
-				//}
-			}
-			exit();
-			
-			
-				
-		}else{
-			return false;
-		}
-	
-	}
-	
 	public function apagarArquivoGerado($filename){ // str ou array
 		if(is_array($filename) && count($filename)>0){
 			foreach($filename as $file){
@@ -596,8 +557,8 @@ HTML;
 				$nome_arquivo=false;
 				if(strtoupper(substr($arq,-3))=='ZIP'){
 						
-					$file_zip_to_import	= str_replace('/','\\',$arq); // troca barras normais por invertidas para processo no SQL server/ windows
-					$file_to_unzip		= str_replace('/','\\',$diretorio.$upload_dir_key.$name_file_import); // troca barras normais por invertidas para processo no SQL server/ windows
+					$file_zip_to_import	= str_replace('/',DS,$arq); // troca barras normais por invertidas para processo no SQL server/ windows
+					$file_to_unzip		= str_replace('/',DS,$diretorio.$upload_dir_key.$name_file_import); // troca barras normais por invertidas para processo no SQL server/ windows
 					$return_compact 	= $this->queryClass->getQueryCompreessFile('UNZIP', $file_zip_to_import, $file_to_unzip);
 	
 					$this->set_conn($this->OBJECT->get_conn());
@@ -776,75 +737,74 @@ HTML;
 	}
 	
 
-	public function exportResults($options,$param_extra=null)
-	{
-	
-		$_fields			= $options['field'];
+	public function exportResults($options=null,$param_extra=null)
+	{		
+
 		$_request_original 	= $_REQUEST;
-		$_tabela			= $options['table'];
-		
-		if(is_array($_request_original) && array_key_exists('prerequest', $_request_original)){
-			$prerequest = (array)json_decode(base64_decode($_request_original['prerequest']));
-			if(is_array($prerequest)){
-				$_request_original = array_merge($_request_original,$prerequest);
-			}
-		}		
-		
-		$_regForExport		= json_decode($_request_original['extraValues'],1);
-		$_regForExport['caracter_separacao'] = $_request_original['caracter_d'];
-		$_regForExport['efetua_compactacao'] = $_request_original['caracter_c']!='nao'?true:false;
-		
-		$filtros_aplicados = "";
-		if(array_key_exists('filters_window_grid', $_request_original) && $_request_original['filters_window_grid']){
-			$kendoObj = new KendoUi();
-			$filtros_aplicados = $kendoObj->filtersToWhere($_request_original['filters_window_grid']);
-		}
+		$_tabela			= $_request_original['table'];
+		$tabelaManageParam	= new WRS_MANAGE_PARAM();
+		if($tabelaManageParam->load($_tabela)){
+			header('Content-Type: application/json');
+			
+			$_fields		= $tabelaManageParam->getMetodoTabela($_tabela);
+	
+			if(is_array($_request_original) && array_key_exists('prerequest', $_request_original)){
+				$prerequest = (array)json_decode(base64_decode($_request_original['prerequest']),1);
+				if(is_array($prerequest)){
+					$_request_original = array_merge($_request_original,$prerequest);
+				}
+			}		
+			
+			$_regForExport							= (array)json_decode(json_encode($_request_original['values'],1),1);
+			$_regForExport 							= array_merge($_request_original,$_regForExport);
+			$_regForExport['caracter_separacao'] 	= $_regForExport['caracter_d'];
+			$_regForExport['efetua_compactacao'] 	= $_regForExport['caracter_c']!='nao'?true:false;
+			unset($_regForExport['values']);
+			unset($_regForExport['prerequest']);
 
-		$arr_campos_request = array();
-		foreach($_fields as $nome_campo => $valores){
-			if(array_key_exists($nome_campo, $_request_original)){
-				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
+			if(is_array($_regForExport) && array_key_exists('extraValues', $_regForExport)){
+				$paramExtra = (array)json_decode($_regForExport['extraValues'],1);
+				if(is_array($paramExtra)){
+					$_regForExport = array_merge($_regForExport,$paramExtra);
+				}
 			}
-		}
+				
+			$filtros_aplicados = "";
+			if(array_key_exists('filters_window_grid', $_request_original) && $_request_original['filters_window_grid']){
+				$kendoObj = new KendoUi();
+				$filtros_aplicados = $kendoObj->filtersToWhere($_request_original['filters_window_grid']);
+			}
 	
-		$param	=	 $this->RefreshDataAttrInParam($this->OBJECT->build_grid_form($options));
+			$arr_campos_request = array();
+			foreach($_fields as $nome_campo => $valores){
+				if(array_key_exists($nome_campo, $_request_original)){
+					$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
+				}
+			}
+			
+			$event_form						= WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_tabela);
+			$_request_original['event'] 	= $event_form;
+			
+			$param	=	 array();
 	
-		unset($param['button']['update']);
-		unset($param['button']['remove']);
-		unset($param['button']['import']);
-		unset($param['button']['changePassword']);
+			$param['tabela_export']			= $event_form;
+			$param['filtros_aplicados']		= $filtros_aplicados;
+			$param['caracter_separacao']	= $_regForExport['caracter_separacao'];
+			$param['efetua_compactacao']	= $_regForExport['efetua_compactacao'];
 	
-		$event_form						= WRS_MANAGE_PARAM::confereTabelaCadastroRetorno($_request_original['event']);
-		$_request_original['event'] 	= $event_form;
+			$customer_id_logado		= WRS::CUSTOMER_ID();		
+			$nome_diretorio = $customer_id_logado.'/';
+			$param['nome_diretorio']	= $nome_diretorio;
+		
+			$param['filtro_fixo'] = is_array($param_extra) && array_key_exists('filtro_fixo', $param_extra)?$param_extra['filtro_fixo']:'';
 
-		$param['tabela_export']			= $event_form;
-		$param['filtros_aplicados']		= $filtros_aplicados;
-		$param['caracter_separacao']	= $_regForExport['caracter_separacao'];
-		$param['efetua_compactacao']	= $_regForExport['efetua_compactacao'];
-	
-		$customer_id_logado		= WRS::CUSTOMER_ID();
-	
-		$nome_diretorio = 'uploads/'.$customer_id_logado.'/';
-		$param['nome_diretorio']	= $nome_diretorio;
-	
-		$param['filtro_fixo'] = is_array($param_extra) && array_key_exists('filtro_fixo', $param_extra)?$param_extra['filtro_fixo']:'';
-	
-		include PATH_TEMPLATE.'export_file_window.php';
-		$link_download = $this->downloadLink($_regForExport['objetosSelecionados'],$_regForExport['chave_primaria'],$param);
-		if(is_array($link_download)){
-			$msg 	= "<b>".LNG('ADMIN_EXPORT_OPTION_ERROR')."</b><br>".addslashes(implode('<br>',$link_download));
-			$tipomsg= "error";
-		}else{
-			$msg 	= LNG('ADMIN_EXPORT_OPTION_OK');
-			$tipomsg= "success";
+			include PATH_TEMPLATE.'export_file_window.php';
+			$param = $this->downloadLink($_regForExport['objetosSelecionados'],$_regForExport['chave_primaria'],$param);
+					
+			echo json_encode($param,true);
 		}
-		$HTML 	= str_replace(array('{MENSAGEM}','{TIPOMENSAGEM}','{URL_DOWNLOAD}'),array($msg,$tipomsg,$link_download),$HTML);
-		$param['html'] = $HTML;
-	
-		return $param;
+		
 	}
-	
-	
 	
 }
 

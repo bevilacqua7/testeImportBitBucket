@@ -294,7 +294,8 @@ function callback_check_line_generic_modal(data,tabela)
 		else if(typeof data == 'object' && tabela!=undefined && tabela!='')
 		{	
 			var linha=$('#'+tabela+' .k-grid-content table').find('tr')[data.indexClickTabela];
-			var check = !$(linha).find('td input.checkline').prop('checked');
+			if($(linha).find('td input.checkline').length){
+				var check = !$(linha).find('td input.checkline').prop('checked');
 	
 				if(check){
 					$(linha).addClass('k-state-selected');
@@ -309,6 +310,7 @@ function callback_check_line_generic_modal(data,tabela)
 				{ // se o click vier do checkbox
 					$($(event.target).context).prop('checked',!check);
 				}
+			}
 		}
 		
 	
@@ -319,11 +321,13 @@ function trataCheckColuna(obj,tabela){
 	_START('trataCheckColuna');
 	var checkColuna = obj.prop('checked');
 	$('#'+tabela+' .k-grid-content table').find('tr').each(function(){
-		$(this).find('td input.checkline').prop('checked',checkColuna);
-		if(checkColuna){
-			$(this).addClass('k-state-selected');
-		}else{
-			$(this).removeClass('k-state-selected');
+		if($(this).find('td input.checkline').length){
+			$(this).find('td input.checkline').prop('checked',checkColuna);
+			if(checkColuna){
+				$(this).addClass('k-state-selected');
+			}else{
+				$(this).removeClass('k-state-selected');
+			}
 		}
 	});
 	_END('trataCheckColuna');

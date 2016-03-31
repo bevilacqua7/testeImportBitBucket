@@ -24,20 +24,37 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 	{
 		$this->admin->SetObject($Object);
 	}
-	
-	public function downloadFile(){
-		$this->admin->downloadFile();
-	}
-	
-	public function run($_event=false,$param=false,$cube_s=false)
+
+	public function run()
 	{
-		$event	=	empty($_event)?fwrs_request('event'):$_event;
+		$event					=	fwrs_request('event');
+		$this->admin->set_conn($this->get_conn());
 		switch($event)
 		{
 			case 'save_association'			: 	$this->save_association(); 				break;
-			case 'downloadFile' 			: 	$this->downloadFile(); 					break;
+			case 'fileDownload' 			: 	$this->fileDownload(); 					break;
+			case 'exportResults' 			: 	$this->exportResults(); 				break;
 			case 'runGrid'					:	$this->runGrid();
 		}
+	}
+	
+	public function export($options=null)
+	{
+		return $this->admin->export($options);
+	}
+	
+	public function exportResults($options=null)
+	{
+		$customer_id_logado		= WRS::CUSTOMER_ID();
+		$param_extra = array(
+				'filtro_fixo' => 'CUSTOMER_ID = '.$customer_id_logado
+		);
+		return $this->admin->exportResults($options,$param_extra);
+	}
+	
+	public function fileDownload($options=null)
+	{
+		return $this->admin->fileDownload($options);
 	}
 
 	public function change_query_exception($table=NULL,$orderBy=NULL,$orderByPOS=NULL,$_start=NULL,$_end=NULL, $_where=NULL)
@@ -103,7 +120,7 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 				}
 			}
 			$sql_insert[]	= $this->queryClass->INSERT_RELATIONSHIP(implode(',',$servers),implode(',',$databases),implode(',',$cubos),$user_id,'USER'); // $SERVERS, $DATABASES, $CUBES, $USERS, $RELATIONSHIP  = 'USER'
-			exit('<pre>'.print_r($arr_indices_cubos,1).print_r($arr_cubos_sel,1));
+			
 			
 		}else if($tipo_save=='cube'){
 			
@@ -349,19 +366,6 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 	
 	}
 
-	public function export($options)
-	{
-		return $this->admin->export($options);
-	}
-	
-	public function exportResults($options)
-	{
-		$customer_id_logado		= WRS::CUSTOMER_ID();
-		$param_extra = array(
-				'filtro_fixo' => 'CUSTOMER_ID = '.$customer_id_logado
-		);
-		return $this->admin->exportResults($options,$param_extra);
-	}
 	
 }
 

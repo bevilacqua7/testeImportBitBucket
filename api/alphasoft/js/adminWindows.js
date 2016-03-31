@@ -616,7 +616,43 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 											}
 											break;
 										};
-				case 'exportResults':
+				case 'exportResults':	{
+
+											setLoading($('.modal-content-grid .modal-body'));
+											$('.modal-content-grid .modal-body').prepend(LNG('UPLOAD_BTN_PROCESS'));
+											$('.modal-content-grid .modal-footer').hide();
+											callBackExecDownload = function(data_return){
+												var link = data_return['link'];
+												$('.modal-content-grid').modal('hide');
+												if(link!=undefined && link!=''){
+													window.location.assign(link);
+													$('.menu_cadastro[tabela='+table+']').trigger('click');
+													alertify.success(LNG('ADMIN_EXPORT_OPTION_OK'),30000);
+												}else{
+													var erro = !isEmpty(data_return['erro'])?data_return['erro']:LNG('file_error_export');
+													WRS_ALERT(erro,'error',function(){ $('.menu_cadastro[tabela='+table+']').trigger('click'); });
+													return false;
+												}
+											}
+
+											var values			=	get_grid_window_values_form();
+
+											var table_system 	= 	confereTabelaManageParam(table); 
+											var	param_request	=	{
+													table		:	table,
+													prerequest	:	$('[name=prerequest]').val(),
+													values		:	values
+												};
+											
+											var Ofile			=	table_system;
+											var Oclass			=	table_system;
+											var Oevent			=	'exportResults';
+
+											runCall(param_request,Ofile,Oclass,Oevent,callBackExecDownload,'json');
+											
+											break;
+					
+										}
 				default: 	btn_window_grid_event(funCallBack,action_type,table,_extraValues);
 			}
 	
