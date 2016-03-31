@@ -8,6 +8,11 @@
 	$language['siglaIdioma']			=	"pt-BR";
 	$language["kendoUI"]				=	"kendo.messages.fr-FR.min.js";
 	$language["summernote"]				=	"summernote-fr-FR.js";
+	
+		$language['NUMBER_FORMAT_MASK']				=	"#.##0,00";
+	$language['NUMBER_FORMAT_DECIMAL_COUNTRY']	=	',';
+	$language['NUMBER_FORMAT_DECIMAL_DB']		=	'.';
+	
 
 $language["MODAL_OK"]="d'accord";
 $language["MODAL_YES"]="oui";

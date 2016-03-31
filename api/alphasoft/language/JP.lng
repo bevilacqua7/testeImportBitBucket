@@ -9,6 +9,11 @@
 	$language["kendoUI"]				=	'kendo.messages.zh-CN.min.js';
 	$language["summernote"]				=	'summernote-ja-JP.js';
 	
+		$language['NUMBER_FORMAT_MASK']				=	"#.##0,00";
+	$language['NUMBER_FORMAT_DECIMAL_COUNTRY']	=	',';
+	$language['NUMBER_FORMAT_DECIMAL_DB']		=	'.';
+	
+	
 $language["MODAL_OK"]="オーケー";
 $language["MODAL_YES"]="はい";
 $language["MODAL_CANCEL"]="キャンセル";

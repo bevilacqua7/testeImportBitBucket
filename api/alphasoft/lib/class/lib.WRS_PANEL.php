@@ -1465,6 +1465,19 @@ HTML;
 		 * 
 		 */
 		
+		//COntador de paginas
+		if(!empty($QUERY_FILTER))
+		{
+			$query_table = $this->query($this->_query->COUNT_SSAS_TABLE($TABLE_NAME,$QUERY_FILTER,((int)$getRequestKendoUi['DRILL_HIERARQUIA_LINHA'])));
+			
+			if($this->num_rows($query_table))
+			{
+				$rows 		= $this->fetch_array($query_table);
+				$numRows 	= (int) $rows['TOTAL_ROWS'];
+			}
+		}
+		
+		
 		
 		if(isset($sort[0]['field']))
 		{
@@ -1550,7 +1563,9 @@ HTML;
 												$order_field,
 												$order_dir,
 												$page,
-												$pageSize,$REPORT_FILTER,false);
+												$pageSize,
+												$REPORT_FILTER,
+												false);
 		
 			if($this->num_rows($sqlGrid_exec))
 			{
@@ -1624,13 +1639,19 @@ HTML;
 		 * Retorna os valores para o Json 
 		 */
 		$result				=	 array();
-		$result['total']	=	$numRows;
-		$result['data']		=	$resultGrid;
 
+//		$resultGrid['count']	=	2;
+		$result['total']	=	$numRows;
+//		$result['options']['pageSize']	=	2;
+		$result['data']		=	$resultGrid;
+		
+
+	
 		$result['wrs_request_data']					=	array();
 		$result['wrs_request_data']['drill']		=	$resultGridDrill;
 		$result['wrs_request_data']['columns_size']	=	$columns_width;
 		$result['wrs_request_data']['chart_data']	= 	$resultChart;
+		$result['wrs_request_data']['total']		= 	$numRows;
 		
 		echo json_encode($result);
 

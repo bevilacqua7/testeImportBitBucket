@@ -103,7 +103,7 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 				}
 			}
 			$sql_insert[]	= $this->queryClass->INSERT_RELATIONSHIP(implode(',',$servers),implode(',',$databases),implode(',',$cubos),$user_id,'USER'); // $SERVERS, $DATABASES, $CUBES, $USERS, $RELATIONSHIP  = 'USER'
-			exit('<pre>'.print_r($arr_indices_cubos,1).print_r($arr_cubos_sel,1));
+//			exit('<pre>'.print_r($arr_indices_cubos,1).print_r($arr_cubos_sel,1));
 			
 		}else if($tipo_save=='cube'){
 			
