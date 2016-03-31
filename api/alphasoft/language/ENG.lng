@@ -9,6 +9,10 @@
 	$language['kendoUI']="kendo.messages.en-US.min.js ";
 	$language['summernote']="summernote-es-EU.js";
 	
+		$language['NUMBER_FORMAT_MASK']				=	"#.##0,00";
+	$language['NUMBER_FORMAT_DECIMAL_COUNTRY']	=	',';
+	$language['NUMBER_FORMAT_DECIMAL_DB']		=	'.';
+	
 $language["MODAL_OK"]="OK";
 $language["MODAL_YES"]="Yes";
 $language["MODAL_CANCEL"]="Cancel";

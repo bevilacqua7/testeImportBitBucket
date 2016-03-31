@@ -590,8 +590,13 @@ HTML;
 		$EXTRA_SCRIPT	=	<<<HTML
 				var reportAtual = getLoadReport();
 				WRS_CONSOLE('atual',reportAtual);
-				var input	=	 $('<input/>',{name:"dadosJs",type:'hidden', value:base64_encode(json_encode(reportAtual))}).css('display','none');
+				var _val	=	base64_encode(json_encode(reportAtual));
+				var input	=	 $('<input/>',{name:"dadosJs",type:'hidden', value:_val}).css('display','none');
+				
 				$('#insert_report').append(input);
+				
+				input.val(_val);
+				
 				$('#report_name').val(reportAtual.KendoUi.TITLE_ABA); // preenche com o nome atual vindo do JS
 				$('#report_auto').prop( "checked", ((reportAtual.KendoUi.REPORT_AUTOLOAD==1)?true:false) );
 				$('#report_share').prop( "checked", ((reportAtual.KendoUi.REPORT_SHARE==1)?true:false) );

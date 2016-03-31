@@ -13,15 +13,29 @@ function click_wrs_manager_filter()
 	$('.k-filter-menu').each(
 								function(){
 									
+//									console.log('type',$(this).data('kendoPopup'));
+									
 									var is_grid	=	$(this).data('kendoPopup').options.viewport.$event.attr('wrs-grid');
 									
 										if(!isEmpty(is_grid))
 										{
 											var _that	=	 $(this);
-											_that.find('input').mask('#.##0,00', {reverse: true});
+											_that.find('input').mask(LNG('NUMBER_FORMAT_MASK'), {reverse: true});
 											_that.find('input').removeAttr('maxlength');
 										}
 								});	
+}
+
+
+function changeOrderTypeDesc(type)
+{
+	switch($.trim(type))
+	{
+		case "asc" 	: return "desc"; break;
+		case "desc" : return "asc"; break;
+	}
+	
+	return type;
 }
 
 function kendoFilterMaskWRSElements()
@@ -262,7 +276,6 @@ function changeWithDrillColumnRows(column,columnName)
 	var current_layout		=	getLoadReport(true);
 	
 	var _column				=	optionsDataConvert(current_layout,true);
-	
 	
 		_column[columnName]	=	 convert_to_class(column);
 		

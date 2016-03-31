@@ -118,6 +118,7 @@ class QUERY_WRS_CUBE_USER extends QUERY_WRS_ADMIN
 					                         '{$CUBES}',
 					                         '{$USERS}',
 					                         '{$RELATIONSHIP}',
+											 '{$USER_CODE}'
 EOF;
 		return $query;
 	}

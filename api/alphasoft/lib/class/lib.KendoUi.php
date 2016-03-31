@@ -474,12 +474,30 @@ class KendoUi
 				                                						
 		                                								var _filters		=	'{}';
 		                                								
-		                                								if(!isEmpty(this.options.dataSource._filter))
-		                                								{
-		                                									data['filters']	=	recursiveFilterFindType(rFFTIndex(this.options.dataSource.options.schema.model.fields),this.options.dataSource._filter);
-																			_filters	=	data['REPORT_FILTER']	=	changeFiltersKendoUi("{$report_id}",json_decode(json_encode(data['filters'])));
-																			
-																		}
+				                                						if(!isEmpty(this.options.dataSource._filter))
+				                                								{
+				                                									var _headerIndex	=	 '';
+				                                									var _kendoUi		=	$('#{$this->getId()}').data('kendoGrid');
+				                                									
+				                                									try{
+				                                										_headerIndex	=	_kendoUi.headerIndex.field;
+				                                									}catch(e){
+				                                										_headerIndex	=	WRSHeaderIndex(_kendoUi);
+				                                										_headerIndex	=	_headerIndex.field;
+																					}
+																					
+																					
+				                                									
+				                                									data['filters']	=	recursiveFilterFindType(_headerIndex,this.options.dataSource._filter);
+				                                							 
+																					_filters		=	data['REPORT_FILTER']	=	changeFiltersKendoUi("{$report_id}",json_decode(json_encode(data['filters'])));
+																					
+																					var kendoUi						=	$(".{$this->getId()}").wrsAbaData('getKendoUi');
+																						data.sort[0]				=	{};
+																						data.sort['0']['dir']		=	kendoUi.ORDER_COLUMN_TYPE;
+																						data.sort['0']['field']		=	kendoUi.ORDER_BY_COLUMN;
+																				
+																				}
 		                                							
 																	 	$(".{$this->getId()}").wrsAbaData('setWrsFilterStart',{filter	:	_filters});
 																		$(".{$this->getId()}").wrsAbaData('setWrsData',{REPORT_FILTER:_filters});
@@ -509,7 +527,7 @@ class KendoUi
 													   						$(".{$this->getId()}").wrsAbaData('setWrsFilterStart',{filter	:	ffilter});
 													   						
 													   			}catch(e){
-													   				console.log('Sem Filtros');
+													   				//console.log('Sem Filtros');
 													   			}
 													   			
 																
@@ -987,12 +1005,21 @@ HTML;
 	}
 	
 	
-	private function formatNumber($val,$type)
+	private function formatNumber($_val,$type)
 	{
-		if($type=='number') return str_replace(array('.',','), '', $val);
-			
+		$val		=	 $_val;
+		if($type=='number') 
+		{
+			$db			=	LNG('NUMBER_FORMAT_DECIMAL_DB');
+			$county		=	LNG('NUMBER_FORMAT_DECIMAL_COUNTRY');
+			$delimiter	=	"_";
+			$search		=	array(",",".");
+			$val		=	str_replace($search, '', str_replace($county, $delimiter, $val));
+			$val		=	str_replace($delimiter, $db, $val);
+		}
 		return $val;	
 	}
+	
 	
 	private function filtersToWhereContent($arr_content_field)
 	{
