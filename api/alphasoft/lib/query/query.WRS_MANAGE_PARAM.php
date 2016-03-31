@@ -372,14 +372,14 @@ HTML;
 		$exceptions	= array('class'=>'ATT_WRS_CUSTOMER'	,'file'=>'ATT_WRS_CUSTOMER'	, 'type'=>'');
 
 		// Atributos gerados com base na tabela ATT_WRS_CUSTOMER automaticamente de acordo com script SQL ao final deste arquivo
-		$fields['WRS_ICON']			= array('title'=>'Icone'					, 'filterable'=>false, 'width'=>70,     'basic'=>true, 'grid'=>true, 'is_upload'=>true, 'sortable'=>false); // sortable é nativo do KendoUi e impede a ordenacao na GRID quando renderizado, evitando quebra de SQL por coluna que nao existe
-		$fields['CUSTOMER_ID']   	= array('title'=>LNG('CUSTOMER_ID')    		, 'placeholder'=>LNG('CUSTOMER_ID_PLACEHOLDER')    			, 'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
-		$fields['CUSTOMER_CODE']   	= array('title'=>LNG('CUSTOMER_CODE')    	, 'placeholder'=>LNG('CUSTOMER_CODE_PLACEHOLDER')    		, 'key'=>true,   'length'=>10,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['CUSTOMER_DESC']   	= array('title'=>LNG('CUSTOMER_DESC')    	, 'placeholder'=>LNG('CUSTOMER_DESC_PLACEHOLDER')    		, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['CUSTOMER_EXPIRY']	= array('title'=>LNG('CUSTOMER_EXPIRY') 	, 'placeholder'=>LNG('CUSTOMER_EXPIRY_PLACEHOLDER')    		, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'max-value'=>365, 'min-value'=>0); // existe tambem 'min-value'=>1
+		$fields['WRS_ICON']			= array('title'=>'Icone'					, 'filterable'=>false, 'width'=>30,     'basic'=>true, 'grid'=>true, 'is_upload'=>true, 'sortable'=>false); // sortable é nativo do KendoUi e impede a ordenacao na GRID quando renderizado, evitando quebra de SQL por coluna que nao existe
+		$fields['CUSTOMER_ID']   	= array('title'=>LNG('CUSTOMER_ID')    		, 'placeholder'=>LNG('CUSTOMER_ID_PLACEHOLDER')   			, 'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
+		$fields['CUSTOMER_CODE']   	= array('title'=>LNG('CUSTOMER_CODE')    	, 'placeholder'=>LNG('CUSTOMER_CODE_PLACEHOLDER'), 'width'=>80    		, 'key'=>true,   'length'=>10,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['CUSTOMER_DESC']   	= array('title'=>LNG('CUSTOMER_DESC')    	, 'placeholder'=>LNG('CUSTOMER_DESC_PLACEHOLDER') , 'width'=>100   		, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['CUSTOMER_EXPIRY']	= array('title'=>LNG('CUSTOMER_EXPIRY') 	, 'placeholder'=>LNG('CUSTOMER_EXPIRY_PLACEHOLDER') , 'width'=>50   		, 'type'=>'int',   'length' => 5,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'max-value'=>365, 'min-value'=>0); // existe tambem 'min-value'=>1
 		$fields['CUSTOMER_FLAG'] 	= array('title'=>LNG('CUSTOMER_FLAG')    	, 'placeholder'=>LNG('CUSTOMER_FLAG_PLACEHOLDER')    		, 'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500, 'class'=>'hide', 'list'=>true, 'basic'=>true , 'grid'=>true, 'obrigatorio' => false);
-		$fields['CUSTOMER_STATUS']	= array('title'=>LNG('CUSTOMER_STATUS')		, 'placeholder'=>LNG('CUSTOMER_STATUS_PLACEHOLDER')    		, 'is_select'=>array('-1'=>LNG('manage_param_selecionar'),'1'=>LNG('manage_param_ativo'),'0'=>LNG('manage_param_inativo')), 'selected' => '1',   'type'=>'int',   'length' => 5,  'list'=>true, 'basic'=>true , 'grid'=>true, 'obrigatorio' => true);
-		$fields['CUSTOMER_GROUP']	= array('title'=>LNG('CUSTOMER_GROUP')    	, 'placeholder'=>LNG('CUSTOMER_GROUP_PLACEHOLDER')    		, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);		
+		$fields['CUSTOMER_STATUS']	= array('title'=>LNG('CUSTOMER_STATUS')		, 'placeholder'=>LNG('CUSTOMER_STATUS_PLACEHOLDER') , 'width'=>50   		, 'is_select'=>array('-1'=>LNG('manage_param_selecionar'),'1'=>LNG('manage_param_ativo'),'0'=>LNG('manage_param_inativo')), 'selected' => '1',   'type'=>'int',   'length' => 5,  'list'=>true, 'basic'=>true , 'grid'=>true, 'obrigatorio' => true);
+		$fields['CUSTOMER_GROUP']	= array('title'=>LNG('CUSTOMER_GROUP')    	, 'placeholder'=>LNG('CUSTOMER_GROUP_PLACEHOLDER') , 'width'=>60   		, 'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => false);		
 		
 		return array(	'title'		=>	LNG('TITLE_ATT_WRS_CUSTOMER'), 
 				'button'	=>	$button,
@@ -393,6 +393,7 @@ HTML;
 				'button_icon'			=>	$button_icon,										// NEW
 				'button_force_label'	=>	true, 			  									// NEW
  				'callback_btn_events'	=>	'carrega_grid_list_admin', 							// NEW
+				'use_auto_width'		=>	false, 												// NEW
 				'actionSingle'			=>	'callback_check_line_generic_modal',				// NEW
 				'actionDouble'			=>	'callback_load_admin_generic_modal',				// NEW
 				'exception'				=>	true, 												// NEW
