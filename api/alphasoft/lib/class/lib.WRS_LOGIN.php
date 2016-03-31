@@ -85,7 +85,7 @@ class WRS_LOGIN extends WRS_BASE
 				$param['html']	=	 fwrs_success(LNG('LOGIN_RECOVER_SUCCESS_TIME'));
 				$param['data']['recover']	=true;
 			}else{
-				$param['html']	=	 fwrs_error($rows['CHANGE_MESSAGE']);
+				$param['html']	=	 fwrs_error($rows['MESSAGE']);
 						
 			}
 			
@@ -290,7 +290,7 @@ class WRS_LOGIN extends WRS_BASE
 				$param['html']				=		fwrs_success(LNG('LOGIN_CHANGE_OK'));
 				$param['data']['change']	=	true;
 			}else{
-				$param['html']				=		fwrs_warning($rows['CHANGE_MESSAGE']);
+				$param['html']				=		fwrs_warning($rows['MESSAGE']);
 				$param['data']['change']	=	false;
 			}
 		}

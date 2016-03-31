@@ -4,7 +4,7 @@
   
 -->
 
-  <li role="presentation"><a href="run.php?file=WRS_MAIN&class=WRS_MAIN&ncon"><i class="fa default_bk_button_menu" style="
+  <li role="presentation"><a href="run.php?file=WRS_MAIN&class=WRS_MAIN&ncon" class="loadWindow"><i class="fa default_bk_button_menu" style="
 													    background-image: url(imagens/icons/home.png);
 													"></i></a></li>  
   <li role="presentation"><a href="#" class="wrs_open_modal"><i class="fa default_bk_button_menu" style="

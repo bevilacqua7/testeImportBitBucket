@@ -56,6 +56,7 @@ function rFFTIndex(label)
  */
 function recursiveFilterFindType(types,deep)
 {
+ 
 	for(var line in deep)
 	{
 		if(typeof deep[line]=='object')
@@ -65,11 +66,23 @@ function recursiveFilterFindType(types,deep)
 
 		if(typeof deep[line].field!='undefined')
 		{
-				deep[line]['type']	=	'number';//types[deep[line].field];
+			var _type		=	'number';
+			
+			try{
+				if(types[deep[line].field].wrsParam.FORMAT_STRING	=="Percent")
+					{
+						_type	=	'percent';
+					}
+			}catch(e){
+				console.warn(' exception');
+			}
+			
+				deep[line]['type']	=	_type;//types[deep[line].field];
 		}
 	}
 	return deep;	
 }
+
 
 
 
@@ -1782,9 +1795,6 @@ function sumarizaValor(valor)
  */
 function formataValue(MEASURE_NAME,formatacao,valor,sumariza,notTAG,label)
 {
-	
-	
-	
 	
 	switch(formatacao)
 	{

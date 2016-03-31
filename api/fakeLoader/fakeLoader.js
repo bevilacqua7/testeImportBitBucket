@@ -27,14 +27,14 @@
         }, options);
         
         
-        
+        //<svg class="spinner-container" style="width:50px;height:50px;" viewBox="0 0 44 44" data-reactid=".0.0.0"><circle class="path" cx="22" cy="22" r="20" fill="none" stroke-width="4" data-reactid=".0.0.0.0"></circle></svg>
         //Customized Spinners
         var spinner01 = '<div class="fl spinner1"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>';
         var spinner02 = '<div class="fl spinner2"><div class="spinner-container container1"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container2"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div><div class="spinner-container container3"><div class="circle1"></div><div class="circle2"></div><div class="circle3"></div><div class="circle4"></div></div></div>';
         var spinner03 = '<div class="fl spinner3"><div class="dot1"></div><div class="dot2"></div></div>';
         var spinner04 = '<div class="fl spinner4"></div>'; 
         var spinner05 = '<div class="fl spinner5"><div class="cube1"></div><div class="cube2"></div></div>'; 
-        var spinner06 = '<div class="fl spinner6"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>'; 
+        var spinner06 = '<div class="fl spinner6"><img src="./imagens/rolling.gif"/></div>'; 
         var spinner07 = '<div class="fl spinner7"><div class="circ1"></div><div class="circ2"></div><div class="circ3"></div><div class="circ4"></div></div>'; 
 
         //The target

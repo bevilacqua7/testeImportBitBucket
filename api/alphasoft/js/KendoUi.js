@@ -633,7 +633,7 @@ function getWrsKendoColumn(data)
 					
 					next_column_count		=	0;	
 					
-					for(obj in _param)
+					for(var obj in _param)
 					{
 						var word			=	_arg.items[i][obj];
 						var img				=	'';	
@@ -861,10 +861,25 @@ function wrsKendoUiChange(nameID,param,value)
 function onDataBound(arg)
 {
 		_START('onDataBound');
-		
 			
 			resizeColumnKendoUi(arg);
-
+			
+			var _total			=	null;
+			//Corrige o total
+			
+			try{
+				_total			=		arg.sender.dataSource._wrs_request_data.total;
+			}catch(e){
+				_total			=	null;
+			}
+			
+			
+			if(!isEmpty(_total))
+			{
+				arg.sender.dataSource._total	=	_total;
+			}
+			
+			
 			var classGrid		=	arg.sender.element.attr('id');
 			var nameID			=	 '#'+classGrid;
 			var report_aba		=	'.'+classGrid;
@@ -1743,6 +1758,7 @@ function  themeSUM(nameID,arg,wrsParam)
 															
 															
 															wrsKendoUiChange(IDName,'ORDER_BY_COLUMN',field);
+
 															wrsKendoUiChange(IDName,'ORDER_COLUMN_TYPE',columnType);
 															
 															

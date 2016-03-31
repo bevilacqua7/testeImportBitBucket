@@ -8,8 +8,50 @@
  * Verificnado se existe alterações nos filtros
  */
 
+function click_wrs_manager_filter()
+{
+	$('.k-filter-menu').each(
+								function(){
+									
+//									console.log('type',$(this).data('kendoPopup'));
+									
+									var is_grid	=	$(this).data('kendoPopup').options.viewport.$event.attr('wrs-grid');
+									
+										if(!isEmpty(is_grid))
+										{
+											var _that	=	 $(this);
+											_that.find('input').mask(LNG('NUMBER_FORMAT_MASK'), {reverse: true});
+											_that.find('input').removeAttr('maxlength');
+										}
+								});	
+}
 
 
+function changeOrderTypeDesc(type)
+{
+	switch($.trim(type))
+	{
+		case "asc" 	: return "desc"; break;
+		case "desc" : return "asc"; break;
+	}
+	
+	return type;
+}
+
+function kendoFilterMaskWRSElements()
+{
+	$('.k-grid-filter').each(function(){
+		
+		var _el	=	 $(this).attr('wrs-filter');
+		
+		if(isEmpty(_el)){
+			 $(this).attr('wrs-filter','true');
+			 $('.k-grid-filter').click(click_wrs_manager_filter)
+		}
+		
+	});
+	
+}
 
 	 /*
 	  * Configurações para aplicar a visualização das Titles do qTipe
@@ -234,7 +276,6 @@ function changeWithDrillColumnRows(column,columnName)
 	var current_layout		=	getLoadReport(true);
 	
 	var _column				=	optionsDataConvert(current_layout,true);
-	
 	
 		_column[columnName]	=	 convert_to_class(column);
 		
@@ -971,18 +1012,23 @@ function tagFilterWRS(typeReturn,_typeHeader)
  	
  	$('body').WrsGlobal('setCM',{cleanMakeFiltersKendoUiQuery:[]});
  	
- 	var get_filters_kendoGrid		=	 makeFiltersKendoUiQuery(kendoGrid.headerIndex.field,json_decode(json_encode(kendoGrid.dataSource.filter())));
+ 	var get_filters_kendoGrid	=	'';
  	
- 	if(!isEmpty(get_filters_kendoGrid))
+ 	if(!isEmpty(kendoGrid))
  	{
- 		get_filters_kendoGrid  = '<hr\><'+typeHeader+'>'+LNG('FILTER_KENDO_UI')+'</'+typeHeader+'>'+quebra+'<span style="font-size:13px;display:block;color:#333;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">'+get_filters_kendoGrid+'</span><br>';
- 		
- 		if(_width<=400)
- 		{
- 			_width	=400;	
- 			$('.qtip-default').width(_width); 
- 		}
- 		
+	 	get_filters_kendoGrid		=	 makeFiltersKendoUiQuery(kendoGrid.headerIndex.field,json_decode(json_encode(kendoGrid.dataSource.filter())));
+	 	
+	 	if(!isEmpty(get_filters_kendoGrid))
+	 	{
+	 		get_filters_kendoGrid  = '<hr\><'+typeHeader+'>'+LNG('FILTER_KENDO_UI')+'</'+typeHeader+'>'+quebra+'<span style="font-size:13px;display:block;color:#333;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;">'+get_filters_kendoGrid+'</span><br>';
+	 		
+	 		if(_width<=400)
+	 		{
+	 			_width	=400;	
+	 			$('.qtip-default').width(_width); 
+	 		}
+	 		
+	 	}
  	}
  	
 	_END('tagFilterWRS');

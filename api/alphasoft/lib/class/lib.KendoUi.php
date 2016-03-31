@@ -429,7 +429,7 @@ class KendoUi
 						<div class="wrs_box {$idTag}BOX">
 									{$WRS_PANEL_HEADER_TABLE}
 								
-									<div id="{$idTag}" class="wrsGrid table_border border_bottom hide wrs_grid_container"  ></div>
+									<div id="{$idTag}" class="wrsGrid table_border border_bottom hide wrs_grid_container" wrs-grid="true"  ></div>
 									
 									<div id="{$idTag}Elements" class="hide wrs_grid_elements ui-widget-content table_border"></div>
 							
@@ -474,12 +474,30 @@ class KendoUi
 				                                						
 		                                								var _filters		=	'{}';
 		                                								
-		                                								if(!isEmpty(this.options.dataSource._filter))
-		                                								{
-		                                									data['filters']	=	recursiveFilterFindType(rFFTIndex(this.options.dataSource.options.schema.model.fields),this.options.dataSource._filter);
-																			_filters	=	data['REPORT_FILTER']	=	changeFiltersKendoUi("{$report_id}",json_decode(json_encode(data['filters'])));
-																			
-																		}
+				                                						if(!isEmpty(this.options.dataSource._filter))
+				                                								{
+				                                									var _headerIndex	=	 '';
+				                                									var _kendoUi		=	$('#{$this->getId()}').data('kendoGrid');
+				                                									
+				                                									try{
+				                                										_headerIndex	=	_kendoUi.headerIndex.field;
+				                                									}catch(e){
+				                                										_headerIndex	=	WRSHeaderIndex(_kendoUi);
+				                                										_headerIndex	=	_headerIndex.field;
+																					}
+																					
+																					
+				                                									
+				                                									data['filters']	=	recursiveFilterFindType(_headerIndex,this.options.dataSource._filter);
+				                                							 
+																					_filters		=	data['REPORT_FILTER']	=	changeFiltersKendoUi("{$report_id}",json_decode(json_encode(data['filters'])));
+																					
+																					var kendoUi						=	$(".{$this->getId()}").wrsAbaData('getKendoUi');
+																						data.sort[0]				=	{};
+																						data.sort['0']['dir']		=	kendoUi.ORDER_COLUMN_TYPE;
+																						data.sort['0']['field']		=	kendoUi.ORDER_BY_COLUMN;
+																				
+																				}
 		                                							
 																	 	$(".{$this->getId()}").wrsAbaData('setWrsFilterStart',{filter	:	_filters});
 																		$(".{$this->getId()}").wrsAbaData('setWrsData',{REPORT_FILTER:_filters});
@@ -500,13 +518,16 @@ class KendoUi
 													   			try{
 													   					var  filters						=	json_decode($(".{$this->getId()}").wrsAbaData('getWrsData').REPORT_FILTER);
 													   					var ffilter=	setFiltersKendoUiDecode(json_decode('{$fields}'),filters);
-													   						
-													   						jsonDecode.dataSource.filter	=ffilter;
+													   					
+																			if(array_length(ffilter.filters)!=0)
+																			{
+													   							jsonDecode.dataSource.filter	=ffilter;
+													   						}
 													   						
 													   						$(".{$this->getId()}").wrsAbaData('setWrsFilterStart',{filter	:	ffilter});
 													   						
 													   			}catch(e){
-													   				console.log('Sem Filtros');
+													   				//console.log('Sem Filtros');
 													   			}
 													   			
 																
@@ -516,7 +537,9 @@ class KendoUi
 																$('.dropdown-menu-configuration form, .dropdown-menu-configuration li ').click(function (e) {e.stopPropagation();});
 																$('.NAV_CONFIG_WRS').wrsConfigGridDefault(); //Confgirando o Tools para pegar os elementos 
 																		
-																WRSKendoGridComplete("#{$this->getId()}");		
+																WRSKendoGridComplete("#{$this->getId()}");	
+																
+																kendoFilterMaskWRSElements();
 																
 													});
 													
@@ -528,6 +551,9 @@ class KendoUi
 																	TABLE_CAHCE		:	'{$table_cache}'
 																}
 																);
+																
+																
+																
 																
 																
 																
@@ -970,14 +996,29 @@ HTML;
 		$campos_de = array('%c','#v');				
 		
 		$arr_operacoes = $this->arr_operacoes;
-		
-		$campos_para 						= 	array($field['field'],$field['value']);
 		$field['type'] 						= 	array_key_exists('type', $field) && $field['type']!=''?$field['type']:'string'; // verifica se existe o type_column nativo na estrutura da coluna em questão para a montagem do filtro corretamente de acordo com seu tipo de conteudo.  Se nao existir, assume tipo string
+		
+		$campos_para 						= 	array($field['field'],$this->formatNumber($field['value'],$field['type']));
 		$condicao 							= 	str_replace($campos_de,$campos_para,$arr_operacoes[$field['type']][$field['operator']]);
 		
 		return '('.$condicao.')';
 	}
 	
+	
+	private function formatNumber($_val,$type)
+	{
+		$val		=	 $_val;
+		if($type=='number') 
+		{
+			$db			=	LNG('NUMBER_FORMAT_DECIMAL_DB');
+			$county		=	LNG('NUMBER_FORMAT_DECIMAL_COUNTRY');
+			$delimiter	=	"_";
+			$search		=	array(",",".");
+			$val		=	str_replace($search, '', str_replace($county, $delimiter, $val));
+			$val		=	str_replace($delimiter, $db, $val);
+		}
+		return $val;	
+	}
 	
 	
 	private function filtersToWhereContent($arr_content_field)
