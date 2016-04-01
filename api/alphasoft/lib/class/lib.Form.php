@@ -50,7 +50,18 @@ class FORM  extends WRS_USER
 		{
 			if(!empty($primary_number))
 			{
-				$where			=	$param['primary']."=''".$primary_number."''";	
+				// tratamento para mais de uma chave
+				$primaries		=	fwrs_request('primaries');
+				if($primaries!='' && is_array($primaries) && count($primaries)>0){
+					$w=array();
+					foreach($primaries as $p_campo=>$p_valor){
+						$w[]=$p_campo." = ''".$p_valor."''";
+					}
+					$where			=	implode(' AND ',$w);
+				}else{
+					$where			=	$param['primary']."=''".$primary_number."''";
+				}
+
 				$_query			=	$this->manage_param->select($param['field'], $param['table'], $param['order']['order_by'], $param['order']['order_type'], 1, 1,$where);
 				$_query			=	$this->query($_query);
 				
@@ -156,15 +167,17 @@ class FORM  extends WRS_USER
 	{
 				//Verificando se é key/primary com valor
 				if(
+						$this->current_event!='new' &&  // e for uma alteracao (diferente de novo)
 						(
-							(isset($param['primary']) || isset($param['key'])) && // se for primary ou key
-							$param['value']!='' && // e tiver algum valor
-							$this->current_event!='new' &&  // e for uma alteracao (diferente de novo)
-							(!array_key_exists('disabled_edit', $param) || $param['disabled_edit']===true) // nao tenha parametro disabled_edit ou que ele seja verdadeiro (nao permita alterar na edicao)
-						) || // OU
-						(
-							array_key_exists('disabled', $param) && // que tenha o parametro disabled e que ele seja verdadeiro (campo somente leitura)
-							$param['disabled']
+							(
+								(isset($param['primary']) || isset($param['key'])) && // se for primary ou key
+								$param['value']!='' && // e tiver algum valor
+								(!array_key_exists('disabled_edit', $param) || $param['disabled_edit']===true) // nao tenha parametro disabled_edit ou que ele seja verdadeiro (nao permita alterar na edicao)
+							) || // OU
+							(
+								array_key_exists('disabled', $param) && // que tenha o parametro disabled e que ele seja verdadeiro (campo somente leitura)
+								$param['disabled']
+							)
 						)
 				)
 				{
@@ -263,7 +276,7 @@ EOF;
 					}
 				}
 
-				$disabled = ((array_key_exists('disabled_edit', $param) && $param['disabled_edit']===true && $this->current_event!='new') || (array_key_exists('disabled', $param) && $param['disabled']===true))?' disabled':'';
+				$disabled = (((array_key_exists('disabled_edit', $param) && $param['disabled_edit']===true) || (array_key_exists('disabled', $param) && $param['disabled']===true)) && $this->current_event!='new')?' disabled':'';
 				
 				$html 	=	<<<EOF
 							<div  {$rel} title="{$param['label_title']}">
@@ -280,7 +293,7 @@ EOF;
 		}
 		
 		
-	private function select_box($param)
+	private function select_box($param,$return_value=false)
 		{
 	
 					$length			=	"";
@@ -313,8 +326,17 @@ EOF;
 						
 						foreach($param['is_select'] as $label =>$value)
 						{
+								$retorna_valor_return_value=false;
 								if(array_key_exists('selected', $param) && (!array_key_exists('value', $param) || $param['value']=='')){
 									$param['value'] = $param['selected'];
+									if($this->current_event!='new' && $return_value){
+										$retorna_valor_return_value=true;
+										return $value;
+									}
+								}
+
+								if($this->current_event!='new' && $return_value && !$retorna_valor_return_value){
+									return $value;
 								}
 								
 								$option	.=	 fwrs_option($label, $value,$param['value']);
@@ -422,6 +444,11 @@ EOF;
 								// ordenacao dos valores de selects - felipeb 20160323
 								ksort($array_options);
 								foreach($array_options as $arr_dados){
+
+									if($this->current_event!='new' && $return_value && $arr_dados['value']==$param['value']){
+										return $arr_dados['label'];
+									}
+									
 									$option	.=	 fwrs_option($arr_dados['value'], $arr_dados['label'], $arr_dados['valor'], $arr_dados['extra']);
 								}
 							}
@@ -441,7 +468,7 @@ EOF;
 
 					$complemento_link_field = (is_array(@$obj_aux_link_field) && count(@$obj_aux_link_field)>0)?json_encode(@$obj_aux_link_field,1):'';
 					
-					$disabled 				= ((array_key_exists('disabled_edit', $param) && $param['disabled_edit']===true && $this->current_event!='new') || (array_key_exists('disabled', $param) && $param['disabled']===true))?' disabled':'';
+					$disabled 				= (((array_key_exists('disabled_edit', $param) && $param['disabled_edit']===true) || (array_key_exists('disabled', $param) && $param['disabled']===true)) && $this->current_event!='new')?' disabled':'';
 
 					if($complemento_link_field!=''){
 						$complemento_link_field = "<script> atualiza_link_field_master($('#".$param['label']."'),".$complemento_link_field."); </script>";
@@ -467,7 +494,12 @@ EOF;
 	
 		private function is_key_with_value($param)
 		{
-
+			//Verificando se é select
+			if($this->current_event!='new' && isset($param['is_select']))
+			{
+				$param['value'] = $this->select_box($param,true);
+			}
+			
 			$rels				=	 array('class'=>'form-group form-control-wrs_color');
 			$rel				=	 $this->getParamFormInput($this->merge_array_value($param,$rels));
 			$html 	=	<<<EOF

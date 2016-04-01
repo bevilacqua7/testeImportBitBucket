@@ -125,7 +125,6 @@ class WindowGrid extends FORM
 				/*
 				 * extend 
 				 */
-				
 
 				if(array_key_exists('extend', $param) && count($param['extend'])>0)
 				{
@@ -178,31 +177,33 @@ class WindowGrid extends FORM
 		}
 */
 		//Aplicando a conversão das TAGS para aplicar no HTML
-		$TPL_TITLE				=		$param['title'];
-		$TPL_HTML				=		$param['html'];
+		$TPL_TITLE				=		!array_key_exists('title', $param)?'':$param['title'];
+		$TPL_HTML				=		!array_key_exists('html', $param)?'':$param['html'];
 
 		$TPL_DATA				=		(isset($param['data']))?$param['data']:'';
-		$TPL_COMPLEMENT_TITLE	=		$param['title_menu'];
+		$TPL_COMPLEMENT_TITLE	=		!array_key_exists('title_menu', $param)?'':$param['title_menu'];
 		
 		
-		if($wrs_type_grid=='form'){
-			unset($param['button']['new']); 
-			unset($param['button']['remove']); 	// se o usuario estiver no formulario para alteracao, ele so pode salvar ou apagar algo (sem botao de novo)
-			if(is_array($param['button']) && array_key_exists('export',$param['button']) && $form_event!='export'){
-				unset($param['button']['export']); // no formulario de alteracao nao tem de aparecer botoes de import/export se existirem
+		if(array_key_exists('button', $param)){
+			if($wrs_type_grid=='form'){
+					unset($param['button']['new']); 
+					unset($param['button']['remove']); 	// se o usuario estiver no formulario para alteracao, ele so pode salvar ou apagar algo (sem botao de novo)
+					if(is_array($param['button']) && array_key_exists('export',$param['button']) && $form_event!='export'){
+						unset($param['button']['export']); // no formulario de alteracao nao tem de aparecer botoes de import/export se existirem
+					}
+					if(is_array($param['button']) && array_key_exists('import',$param['button']) && $form_event!='import'){
+						unset($param['button']['import']);
+					}
+					if(is_array($param['button']) && array_key_exists('changePassword',$param['button']) && $form_event!='changePassword'){
+						unset($param['button']['changePassword']);
+					}
+			}else{
+				unset($param['button']['update']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
+				unset($param['button']['back']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
 			}
-			if(is_array($param['button']) && array_key_exists('import',$param['button']) && $form_event!='import'){
-				unset($param['button']['import']);
-			}
-			if(is_array($param['button']) && array_key_exists('changePassword',$param['button']) && $form_event!='changePassword'){
-				unset($param['button']['changePassword']);
-			}
-		}else{
-			unset($param['button']['update']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
-			unset($param['button']['back']);	// caso contrario, so pode criar Novo ou apagar vários (sem botao de salvar-update)
 		}
 						
-		$this->setButton($param['button'],$param['table'],((is_array($param) && array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false),((is_array($param) && array_key_exists('button_icon',$param) && is_array($param['button_icon']) && count($param['button_icon'])>0)?$param['button_icon']:false),((is_array($param) && array_key_exists('button_type',$param) && is_array($param['button_type']) && count($param['button_type'])>0)?$param['button_type']:false));
+		$this->setButton($param['button'],(!array_key_exists('table', $param)?'':$param['table']),((is_array($param) && array_key_exists('button_force_label',$param) && $param['button_force_label'])?true:false),((is_array($param) && array_key_exists('button_icon',$param) && is_array($param['button_icon']) && count($param['button_icon'])>0)?$param['button_icon']:false),((is_array($param) && array_key_exists('button_type',$param) && is_array($param['button_type']) && count($param['button_type'])>0)?$param['button_type']:false));
 				
 		$TPL_BUTTON				=		$this->getButton();
 				

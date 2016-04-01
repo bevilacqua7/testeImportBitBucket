@@ -252,7 +252,7 @@ HTML;
 	 * Retorna o nome correto da tabela configurada no banco de dados, baseado no nome da tabela pro sistema, ex.: DE ATT_WRS_LOG para FAT_WRS_LOG
 	 */
 	public static function confereTabelaCadastroRetorno($nome_tabela){ // se o nome da tabela estiver diferente do padrao, retorna sempre o nome correto do sistema
-		$nome_tabela = $nome_tabela=='' && frws_request('tabela')!=''?fwrs_request('tabela'):$nome_tabela;
+		$nome_tabela = $nome_tabela=='' && array_key_exists('tabela',$_REQUEST) && $_REQUEST['tabela']!=''?$_REQUEST['tabela']:$nome_tabela;
 		$dadosTabela = self::GET_CONFIG_TABLE($nome_tabela);
 		if(array_key_exists('nome_tabela_correto', $dadosTabela)){
 			return $dadosTabela['nome_tabela_correto'];
@@ -350,8 +350,8 @@ HTML;
 		$button['back']			=	LNG('bt_back');
 		$button['new']			=	LNG('bt_new');
 		$button['update']		=	LNG('bt_update');
-		$button['export']		=	LNG('bt_export_customer');
-		$button['import']		=	LNG('bt_import_customer');		
+		$button['export']		=	LNG('bt_export');
+		$button['import']		=	LNG('bt_import');		
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
 			$button['remove']	=	LNG('bt_remove');
@@ -411,8 +411,8 @@ HTML;
 		$button['back']				=	LNG('bt_back');
 		$button['new']				=	LNG('bt_new');
 		$button['update']			=	LNG('bt_update');		
-		$button['export']			=	LNG('bt_export_user');
-		$button['import']			=	LNG('bt_import_user');
+		$button['export']			=	LNG('bt_export');
+		$button['import']			=	LNG('bt_import');
 		$button['changePassword']	=	LNG('TITLE_ALTER_SENHA');
 			
 		if(!WRS_USER::getArrPerfUser('DRG')){
@@ -500,8 +500,8 @@ HTML;
 		$button['back']			=	LNG('bt_back');
 		$button['new']			=	LNG('bt_new');
 		$button['update']		=	LNG('bt_update');
-		$button['export']		=	LNG('bt_export_server');
-		$button['import']		=	LNG('bt_import_server');
+		$button['export']		=	LNG('bt_export');
+		$button['import']		=	LNG('bt_import');
 		
 		if(!WRS_USER::getArrPerfUser('DRG'))
 		{
@@ -562,8 +562,8 @@ HTML;
 		$button['back']			=	LNG('bt_back');
 		$button['new']			=	LNG('bt_new');
 		$button['update']		=	LNG('bt_update');
-		$button['export']		=	LNG('bt_export_database');
-		$button['import']		=	LNG('bt_import_database');
+		$button['export']		=	LNG('bt_export');
+		$button['import']		=	LNG('bt_import');
 				
 		if(!WRS_USER::getArrPerfUser('DRG')){
 			$button['remove']	=	LNG('bt_remove');
@@ -629,8 +629,8 @@ HTML;
 		$button['back']			=	LNG('bt_back');
 		$button['new']			=	LNG('bt_new');
 		$button['update']		=	LNG('bt_update');
-		$button['export']		=	LNG('bt_export_cube');
-		$button['import']		=	LNG('bt_import_cube');
+		$button['export']		=	LNG('bt_export');
+		$button['import']		=	LNG('bt_import');
 		
 		if(!WRS_USER::getArrPerfUser('DRG'))
 		{
@@ -695,8 +695,8 @@ HTML;
 		$button['back']			=	LNG('bt_back');
 		$button['new']			=	LNG('bt_new');
 		$button['update']		=	LNG('bt_update');
-		$button['export']		=	LNG('bt_export_profile');
-		$button['import']		=	LNG('bt_import_profile');
+		$button['export']		=	LNG('bt_export');
+		$button['import']		=	LNG('bt_import');
 		
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
@@ -752,8 +752,8 @@ HTML;
 		$button['back']			=	LNG('bt_back');
 		$button['new']			=	LNG('bt_new');
 		$button['update']		=	LNG('bt_update');
-		$button['export']		=	LNG('bt_export_cube_user');
-		$button['import']		=	LNG('bt_import_cube_user');
+		$button['export']		=	LNG('bt_export');
+		$button['import']		=	LNG('bt_import');
 		
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
@@ -820,8 +820,8 @@ HTML;
 		$button['back']			=	LNG('bt_back');
 		$button['new']			=	LNG('bt_new');
 		$button['update']		=	LNG('bt_update');		
-		$button['export']		=	LNG('bt_export_download');
-		$button['import']		=	LNG('bt_import_download');
+		$button['export']		=	LNG('bt_export');
+		$button['import']		=	LNG('bt_import');
 		
 		if(!WRS_USER::getArrPerfUser('DRG')){
 			$button['remove']	=	LNG('bt_remove');
@@ -877,7 +877,7 @@ HTML;
 		$button		=	$button_icon	=	array();
 
 		$button['back']			=	LNG('bt_back');
-		$button['export']		=	LNG('bt_export_log');
+		$button['export']		=	LNG('bt_export');
 		
 		$button_icon['back']	=	'glyphicon glyphicon-chevron-left bt_voltar';
 		$button_icon['export']	=	'glyphicon glyphicon-export color_write';
@@ -893,14 +893,14 @@ HTML;
 		$fields['TRANSACTION_ID']   = array('title'=>LNG('TRANSACTION_ID')    ,   'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
 		$fields['DATE_ID']  		= array('title'=>LNG('DATE_ID'), 'width'=>140    ,'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['MODULE']   		= array('title'=>LNG('MODULE'), 'width'=>135    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['PROCESS']   		= array('title'=>LNG('PROCESS'), 'width'=>350    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['OPERATION']   		= array('title'=>LNG('OPERATION') , 'width'=>100   ,   'length'=>250,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['MESSAGE']   		= array('title'=>LNG('MESSAGE'), 'width'=>300    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_MASTER']   	= array('title'=>LNG('USER_MASTER')    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['PROCESS']   		= array('title'=>LNG('PROCESS'), 'width'=>135    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['OPERATION']   		= array('title'=>LNG('OPERATION') , 'width'=>135   ,   'length'=>250,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['MESSAGE']   		= array('title'=>LNG('MESSAGE'), 'width'=>450    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_ID']   		= array('title'=>LNG('USER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
 		$fields['USER_CODE']   		= array('title'=>LNG('USER_CODE'), 'width'=>150    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_DESC']   		= array('title'=>LNG('USER_DESC'), 'width'=>190    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_TYPE']   		= array('title'=>LNG('USER_TYPE'), 'width'=>190    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_MASTER']   	= array('title'=>LNG('USER_MASTER')    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['CUSTOMER_ID']   	= array('title'=>LNG('CUSTOMER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
 		$fields['CUSTOMER_DESC']   	= array('title'=>LNG('CUSTOMER_DESC'), 'width'=>300    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		

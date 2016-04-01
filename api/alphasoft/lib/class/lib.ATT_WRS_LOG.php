@@ -33,7 +33,9 @@ class ATT_WRS_LOG extends WRS_BASE
 	
 	public function export($options=null)
 	{
-		return $this->admin->export($options);
+		$param = $this->admin->export($options);
+		$param['title']= LNG('bt_export_log');
+		return $param;
 	}
 	
 	public function exportResults($options=null)
@@ -122,6 +124,7 @@ class ATT_WRS_LOG extends WRS_BASE
 		unset($param['button']['update']);
 		unset($param['button']['remove']);
 		unset($param['button']['export']);
+		$param['title']= LNG('bt_import_log');
 	
 		$nome_arquivo = 'uploads/'.WRS::CUSTOMER_ID().'/';
 	

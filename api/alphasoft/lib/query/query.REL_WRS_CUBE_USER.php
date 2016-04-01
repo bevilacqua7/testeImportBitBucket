@@ -111,14 +111,16 @@ class QUERY_WRS_CUBE_USER extends QUERY_WRS_ADMIN
 	public function INSERT_RELATIONSHIP( $SERVERS, $DATABASES, $CUBES, $USERS, $RELATIONSHIP  = 'USER')
 	{
 		// Exemplo: EXEC Insert_Relationship  'ALPHABASE,ALPHAWEB', 'GSK - DDD,GSK - MDTR', 'GSK - DDD,GSK - MDTR', '1,2,3', 'CUBE' -- CUBE / USER
-		$USER_CODE = WRS::USER_CODE();
+		$USER_CODE 				= WRS::USER_CODE();
+		$USER_MASTER			= WRS::USER_MASTER();
 		$query = <<<EOF
 					EXEC Insert_Relationship '{$SERVERS}', 
 					                         '{$DATABASES}',
 					                         '{$CUBES}',
 					                         '{$USERS}',
-					                         '{$RELATIONSHIP}'
-											 '{$USER_CODE}'
+					                         '{$RELATIONSHIP}',
+											 '{$USER_CODE}',
+											 '{$USER_MASTER}'
 EOF;
 		return $query;
 	}

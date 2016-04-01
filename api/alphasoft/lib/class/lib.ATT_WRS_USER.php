@@ -34,7 +34,9 @@ class ATT_WRS_USER extends WRS_BASE
 
 	public function export($options=null)
 	{
-		return $this->admin->export($options);
+		$param = $this->admin->export($options);
+		$param['title']= LNG('bt_export_user');
+		return $param;
 	}
 	
 	public function exportResults($options=null)
@@ -232,6 +234,7 @@ class ATT_WRS_USER extends WRS_BASE
 		unset($param['button']['remove']);
 		unset($param['button']['export']);
 		unset($param['button']['changePassword']);
+		$param['title']= LNG('bt_import_user');
 	
 		$nome_arquivo = 'uploads/'.WRS::CUSTOMER_ID().'/';
 	

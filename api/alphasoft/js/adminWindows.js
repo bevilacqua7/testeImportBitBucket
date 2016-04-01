@@ -618,9 +618,6 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 										};
 				case 'exportResults':	{
 
-											setLoading($('.modal-content-grid .modal-body'));
-											$('.modal-content-grid .modal-body').prepend(LNG('UPLOAD_BTN_PROCESS'));
-											$('.modal-content-grid .modal-footer').hide();
 											callBackExecDownload = function(data_return){
 												var link = data_return['link'];
 												$('.modal-content-grid').modal('hide');
@@ -640,10 +637,13 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 											var table_system 	= 	confereTabelaManageParam(table); 
 											var	param_request	=	{
 													table		:	table,
-													prerequest	:	$('[name=prerequest]').val(),
 													values		:	values
 												};
-											
+
+											setLoading($('.modal-content-grid .modal-body'));
+											$('.modal-content-grid .modal-body').prepend(LNG('UPLOAD_BTN_PROCESS'));
+											$('.modal-content-grid .modal-footer').hide();
+																				
 											var Ofile			=	table_system;
 											var Oclass			=	table_system;
 											var Oevent			=	'exportResults';

@@ -241,16 +241,26 @@ HTML;
 				'wrs_type_grid',
 				'form_event'
 		);
+		$tabela = $_request_original['event'];
+		if(!$this->manage_param){
+			$this->manage_param = new WRS_MANAGE_PARAM;
+		}
+		$tabela_fields = $this->manage_param->getMetodoTabela($tabela);
+		$primaries = $this->retornaPrimariesPreenchidasDosFields($tabela_fields,$_request_original,true);
+				
 		$this->setCurrentAction('UPDATE');
 		foreach($_fields as $nome_campo => $valores){
 			if(array_key_exists($nome_campo, $_request_original)){
 				$arr_campos_request[$nome_campo]=$_request_original[$nome_campo];
 				if(!in_array($nome_campo,$arr_campos_request_classe)){
+					
 					if($nome_campo==$param['primary']){
 						if(trim($_request_original[$nome_campo])=='' || array_key_exists('novo_registro', $_request_original)){
 							$this->setCurrentAction('INSERT');
 						}
-					}else{
+					}
+					
+					if($nome_campo!=$param['primary'] || ($nome_campo==$param['primary'] && array_key_exists($nome_campo, $primaries) && $this->current_action=='INSERT')){
 						$possui_class_hide 		= array_key_exists('class', $valores) && strstr($valores['class'],'hide');
 						$possui_class_edit_new 	= array_key_exists('edit_new', $valores) && $valores['edit_new'];
 						
@@ -264,9 +274,10 @@ HTML;
 								$separador='';
 							}
 							$arr_campos_valores[$nome_campo]=$_request_original[$nome_campo]==''?'NULL':$separador.$_request_original[$nome_campo].$separador;
-							
+
 						}
 					}
+					
 				}
 			}
 		}
@@ -274,7 +285,7 @@ HTML;
 		return $arr_campos_valores;
 	}
 	
-	public function retornaPrimariesPreenchidasDosFields($param,$_request_original){
+	public function retornaPrimariesPreenchidasDosFields($param,$_request_original,$as_array_assoc=false){
 		/**
 		 * REGRA ADMINISTRATIVO para tabelas com chaves compostas - FACIOLI 20160226 - felipeb
 		 * varre todos os fields e verifica quem possui o atributo PRIMARY, com isso, pode mandar mais de uma coluna primary como parametro para a query
@@ -282,8 +293,12 @@ HTML;
 		$primaries=array();
 		foreach($param['field'] as $nomeField => $colunaAtual){
 			if(array_key_exists('primary',$colunaAtual) && $colunaAtual['primary']){
-				if(array_key_exists($nomeField, $_request_original) && $_request_original[$nomeField]!=''){
-					$primaries[] = $nomeField.' = '."''".$_request_original[$nomeField]."''";
+				if(is_array($_request_original) && array_key_exists($nomeField, $_request_original) && $_request_original[$nomeField]!=''){
+					if($as_array_assoc){
+						$primaries[$nomeField] = $_request_original[$nomeField];
+					}else{
+						$primaries[] = $nomeField.' = '."''".$_request_original[$nomeField]."''";
+					}
 				}
 			}
 		}
@@ -375,6 +390,7 @@ HTML;
 																'separador' => $_param['caracter_separacao'],
 																'diretorio'	=> $nome_diretorio
 													));
+			
 		$query_export 	= $return_export['query'];
 		$file_export 	= $return_export['file'];
 		$file_original 	= $return_export['file_ori'];
@@ -748,8 +764,8 @@ HTML;
 			
 			$_fields		= $tabelaManageParam->getMetodoTabela($_tabela);
 	
-			if(is_array($_request_original) && array_key_exists('prerequest', $_request_original)){
-				$prerequest = (array)json_decode(base64_decode($_request_original['prerequest']),1);
+			if(is_array($_request_original) && array_key_exists('values', $_request_original) && array_key_exists('prerequest', $_request_original['values'])){
+				$prerequest = (array)json_decode(base64_decode($_request_original['values']['prerequest']),1);
 				if(is_array($prerequest)){
 					$_request_original = array_merge($_request_original,$prerequest);
 				}
@@ -768,7 +784,10 @@ HTML;
 					$_regForExport = array_merge($_regForExport,$paramExtra);
 				}
 			}
-				
+			unset($_regForExport['extraValues']);
+			unset($_regForExport['caracter_d']);
+			unset($_regForExport['caracter_c']);
+			
 			$filtros_aplicados = "";
 			if(array_key_exists('filters_window_grid', $_request_original) && $_request_original['filters_window_grid']){
 				$kendoObj = new KendoUi();

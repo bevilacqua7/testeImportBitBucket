@@ -58,12 +58,17 @@ class QUERY_WRS_ADMIN
 			if($operacao=='INSERT'){ // certifica que inserts nao recebam condicoes
 				$condicao='';
 			}
+
+			$USER_CODE 				= WRS::USER_CODE();
+			$USER_MASTER			= WRS::USER_MASTER();
 			
 			$query			=	"EXEC Change_Table '".$tabela."',
 				                  '".implode(",",array_keys($arr_campos_valores))."',
 				                  '".implode("(_;_)",array_values($arr_campos_valores))."',
 				                  '".$condicao."',
 				                  '".$operacao."',
+				                  '".$USER_CODE."',
+				                  '".$USER_MASTER."',
 				                  1";
 			return $query;
 			
@@ -128,13 +133,18 @@ class QUERY_WRS_ADMIN
 
 			$diretorio_inv	= str_replace('/',DS,$diretorio);
 			$diretorio	= str_replace(DS,'/',$diretorio);
-				
+
+			$USER_CODE 				= WRS::USER_CODE();
+			$USER_MASTER			= WRS::USER_MASTER();
+			
 			return array("query"=> "
 						EXEC Export_Table '".$tabela."',
 		                        '".$colunas."',
 		                        '".$filtros."',
 		                        '".$diretorio_inv."',
-		                        '".$separador."'
+		                        '".$separador."',
+		                        '".$USER_CODE."',
+		                        '".$USER_MASTER."'
 					",
 					"file" 		=> str_replace(DS,'/',str_replace(PATH_MAIN, '', $diretorio_inv)),
 					"file_ori" 	=> $arq_conf_param
@@ -183,6 +193,7 @@ class QUERY_WRS_ADMIN
 			//$campo_id 	= $options['campo_id'];
 			$user_logado 		= WRS::USER_CODE();
 			$customer_id_logado	= WRS::CUSTOMER_ID();
+			$USER_MASTER		= WRS::USER_MASTER();
 				
 			$diretorio 	= str_replace('/',DS,$options['diretorio']);
 	
@@ -195,7 +206,8 @@ class QUERY_WRS_ADMIN
 		                        '".$separador."',
 				                ".$tipoImport.",
 				                '".$user_logado."',
-				                ".$customer_id_logado."
+				                ".$customer_id_logado.",
+				                '".$USER_MASTER."'
 					";
 		}else{
 			return false;

@@ -31,9 +31,9 @@ class WRS_REPORT  extends  WRS_USER
 	 */
 	private $_query_layout	=	NULL;
 	
-	public function run()
+	public function run($_event=null)
 	{		
-		$this->event		=	fwrs_request('event');
+		$this->event		=	isset($_event) && $_event!=''?$_event:fwrs_request('event');
 		$cube_s				=	fwrs_request('cube_s');
 		
 		$cubes				=	WRS::GET_SSAS_USER();
