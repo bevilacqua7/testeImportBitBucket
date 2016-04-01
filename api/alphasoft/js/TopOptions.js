@@ -104,13 +104,19 @@ function DEFAULT_OPTIONS_TOPS()
 				if(isDefault==true)
 				{
 					measure			=	telerikGrid;
-					
-
 				}else{
 					layout			=	wrsKendoUiContextMenuGetLayoutInfo(telerikGrid);
 					measure			=	explode(',',layout['LAYOUT_MEASURES']);
+					
+					/*
+					for(var lm in measure)
+						{
+							measure[lm]	=	replace_attr(measure[lm]);	
+						}*/
+					
 				}
 			
+				
 
 				
 				if(!$(IDGrid).hasClass('wrs_grid_options_default'))
@@ -163,7 +169,9 @@ function DEFAULT_OPTIONS_TOPS()
 									
 								//	TRACE_DEBUG('set03');
 									if(empty(_measure)){
-										 _title	=	telerikGrid.headerIndex.byFrozenLevelFull[measure[key_title]].title;
+										
+										 _title	=	telerikGrid.headerIndex.byFrozenLevelFull[(measure[key_title])].title;
+										 //_title	=	telerikGrid.headerIndex.byFrozenLevelFull[replace_attr(measure[key_title])].title;
 									}else{
 										_title	=	 _measure[key_title].name;
 									}
@@ -367,7 +375,7 @@ function DEFAULT_OPTIONS_TOPS()
 				var isROWS			=	Boolean(p.attr('isROWS'));
 				
 				
-				
+
 					for(lineMeasure in measure)
 						{
 							var title		=	'';
@@ -382,8 +390,10 @@ function DEFAULT_OPTIONS_TOPS()
 								}else{
 									_tag		=	(parseInt(lineMeasure)+1);
 									full_name	=	measure[lineMeasure];
-									title		=	telerikGrid.headerIndex.byFrozenLevelFull[measure[lineMeasure]].title;
+
+									title		=	telerikGrid.headerIndex.byFrozenLevelFull[measure[lineMeasure]]['title'];
 								}
+							
 								
 								liHTML+=' <li isROWS='+isROWS+' full_name="'+full_name+'"   tag='+_tag+' class="wrsTopOptionsDataSubLi"><a href="#"><span class="glyphicon glyphicon glyphicon-usd"></span> '+title+'</a></li>';
 						}

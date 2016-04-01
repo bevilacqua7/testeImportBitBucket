@@ -3,6 +3,10 @@
 * Includes: jquery.ui.core.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.accordion.css, jquery.ui.autocomplete.css, jquery.ui.button.css, jquery.ui.datepicker.css, jquery.ui.dialog.css, jquery.ui.menu.css, jquery.ui.progressbar.css, jquery.ui.slider.css, jquery.ui.spinner.css, jquery.ui.tabs.css, jquery.ui.tooltip.css, jquery.ui.theme.css
 * To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Verdana%2CArial%2Csans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=4px&bgColorHeader=%2379C9EC&bgTextureHeader=diagonals_small&bgImgOpacityHeader=50&borderColorHeader=%2358BCE7&fcHeader=%23ffffff&iconColorHeader=%232191C0&bgColorContent=%23ffffff&bgTextureContent=flat&bgImgOpacityContent=100&borderColorContent=%2358BCE7&fcContent=%23222222&iconColorContent=%230078ae&bgColorDefault=%23D9EFF9&bgTextureDefault=diagonals_small&bgImgOpacityDefault=75&borderColorDefault=%2358BCE7&fcDefault=%2310526D&iconColorDefault=%2310526D&bgColorHover=%232191C0&bgTextureHover=diagonals_small&bgImgOpacityHover=50&borderColorHover=%2358BCE7&fcHover=%23ffffff&iconColorHover=%23ffffff&bgColorActive=%23146A8F&bgTextureActive=flat&bgImgOpacityActive=50&borderColorActive=%232191C0&fcActive=%23FFFF00&iconColorActive=%23ffffff&bgColorHighlight=%23ffffff&bgTextureHighlight=diagonals_small&bgImgOpacityHighlight=50&borderColorHighlight=%2358BCE7&fcHighlight=%232191C0&iconColorHighlight=%232191C0&bgColorError=%23ffffff&bgTextureError=flat&bgImgOpacityError=100&borderColorError=%23cd0a0a&fcError=%23e14f1c&iconColorError=%23fcd113&bgColorOverlay=%23aaaaaa&bgTextureOverlay=flat&bgImgOpacityOverlay=75&opacityOverlay=30&bgColorShadow=%23999999&bgTextureShadow=flat&bgImgOpacityShadow=55&opacityShadow=45&thicknessShadow=0px&offsetTopShadow=5px&offsetLeftShadow=5px&cornerRadiusShadow=5px
 * Copyright 2014 jQuery Foundation and other contributors; Licensed MIT */
+.modal-text-wrs-job{
+	background-color:#D9F3FC !important;
+	color:#000 !important;
+}
 
 /* Layout helpers
 ----------------------------------*/
@@ -64,6 +68,7 @@
 	left: 0;
 	cursor: default;
 }
+
 
 .btn,.glyphicon{
 	color: #0E455C !important;
@@ -502,9 +507,34 @@ body .ui-tooltip { border-width: 2px; }
  }
  
 
+
+.box_wrs_panel:hover{ 
+				border: 1px solid #58BCE7; 
+				background: #2191C0 url("images/ui-bg_diagonals-small_50_2191C0_40x40.png") 50% 50% repeat ; 
+				font-weight: bold; color: #ffffff;  color: #ffffff; text-decoration: none; 
+			}
+				
+.wrs_menu_footer li a:hover{
+	background: #1E709A !important;
+	color:#E5F5FD !important;
+	padding-left: 8px !important;
+}
+
+.wrs_menu_footer > li:hover 
+{
+		background-color: #eee;
+		border-left: 2px solid #1E709A;
+		
+		-webkit-box-shadow: inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
+		-moz-box-shadow:    inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
+		box-shadow:         inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
+}
+
+				
 .ui-state-hover td div.ui-state-default span strong
  {
  	color: #1D5987 !important;
  }
  
 .ui-widget-shadow { margin: 5px 0 0 5px; padding: 0px; background: #999999 url("images/ui-bg_flat_55_999999_40x100.png") 50% 50% repeat-x; opacity: .45;filter:Alpha(Opacity=45); -moz-border-radius: 5px; -khtml-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
+

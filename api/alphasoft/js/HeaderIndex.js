@@ -111,7 +111,8 @@ function WRSHeaderIndex(kendoUi)
 				
 				
 				if(tmpComeBack[key]['map']!="[LATITUDE]"){///Não preenche com a latitude
-					byFrozenLevelFull[vValue['LEVEL_FULL']]		=	tmpComeBack[key];
+					byFrozenLevelFull[(vValue['LEVEL_FULL'])]		=	tmpComeBack[key];
+					//byFrozenLevelFull[replace_attr(vValue['LEVEL_FULL'])]		=	tmpComeBack[key];
 				}
 				
 //				foreach(tmpComeBack[key])
