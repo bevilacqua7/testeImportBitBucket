@@ -1354,7 +1354,7 @@ HTML;
 
 		$nameNotSpace	=	 str_replace(' ', '_', $_getRequestKendoUi['REPORT_DESC']);
 		$TelerikUi->setToolbarExcel('excel', $nameNotSpace, $url);
-		$TelerikUi->setToolbarPDF('pdf', $nameNotSpace, $url);
+		//$TelerikUi->setToolbarPDF('pdf', $nameNotSpace, $url);
 		
 
 		

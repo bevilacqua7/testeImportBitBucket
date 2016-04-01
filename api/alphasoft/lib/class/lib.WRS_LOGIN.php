@@ -120,7 +120,7 @@ class WRS_LOGIN extends WRS_BASE
 		
 		if($rows['STATUS']==1)
 		{
-			$param		=	 $this->send_recover($param,$USER_CODE,$rows['LINK_CODE']);
+			$param		=	 $this->send_recover($param,$USER_CODE,$rows['RESET_CODE']);
 		}
 		
 

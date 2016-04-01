@@ -398,6 +398,7 @@ function addTargetDisableContext(kendoUi,report_id)
 																	
 																		measure		=	explode(',',e.layout['LAYOUT_MEASURES']);
 
+																		
 		    															if(e.event.parent().hasClass('REMOVE_LINE_HEADER'))
 		    															{ // se clicou no botao remover
 		        															

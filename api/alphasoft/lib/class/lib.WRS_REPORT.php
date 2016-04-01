@@ -254,26 +254,29 @@ class WRS_REPORT  extends  WRS_USER
 			$query_genretare	=	$this->query($this->_query->csv_generate($param['table'], $path_db_csv));
 			
 			
+			
 			if(!$this->num_rows($query_genretare))
 			{
-				$fetch_array_g	= array('status'=>0);
+				$fetch_array_g	= array('STATUS'=>0);
 			}else{
 				$fetch_array_g		=	$this->fetch_array($query_genretare);	
 			}
 			
-			if($fetch_array_g['status']==1)//if(file_exists($name_csv))
+		 
+			
+			if($fetch_array_g['STATUS']=='1')//if(file_exists($name_csv))
 			{
 					
 				$query_zip	=	$this->query($this->_query->zip_generate($path_db_csv, $path_db_zip));
 				
 				if(!$this->num_rows($query_zip))
 				{
-					$fetch_zip	= array('status'=>0);
+					$fetch_zip	= array('STATUS'=>0);
 				}else{				
 					$fetch_zip	=	 $this->fetch_array($query_zip);
 				}
 				
-				if($fetch_zip['status']==1)//if(file_exists($name_zip))
+				if($fetch_zip['STATUS']=='1')//if(file_exists($name_zip))
 				{
 					//Permite o Download do ZIP
 					$param['download']	=	str_replace(DS,'/',str_replace(PATH_MAIN, '', $name_zip));

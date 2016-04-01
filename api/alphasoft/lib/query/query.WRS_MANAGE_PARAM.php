@@ -893,14 +893,14 @@ HTML;
 		$fields['TRANSACTION_ID']   = array('title'=>LNG('TRANSACTION_ID')    ,   'type'=>'int',   'length' => 19,   'primary' => true, 'class'=>'hide',   'obrigatorio' => true);
 		$fields['DATE_ID']  		= array('title'=>LNG('DATE_ID'), 'width'=>140    ,'type'=>'date_object' ,'format'=>'Y/m/d H:i:s' ,'type_convert'=>true,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['MODULE']   		= array('title'=>LNG('MODULE'), 'width'=>135    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['PROCESS']   		= array('title'=>LNG('PROCESS'), 'width'=>350    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['OPERATION']   		= array('title'=>LNG('OPERATION') , 'width'=>100   ,   'length'=>250,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['MESSAGE']   		= array('title'=>LNG('MESSAGE'), 'width'=>300    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
-		$fields['USER_MASTER']   	= array('title'=>LNG('USER_MASTER')    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['PROCESS']   		= array('title'=>LNG('PROCESS'), 'width'=>135    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['OPERATION']   		= array('title'=>LNG('OPERATION') , 'width'=>135   ,   'length'=>250,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['MESSAGE']   		= array('title'=>LNG('MESSAGE'), 'width'=>450    ,   'datatype_original_bd'=>'varchar',   'length_original_bd'=>'-1',   'length' => 7500,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_ID']   		= array('title'=>LNG('USER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
 		$fields['USER_CODE']   		= array('title'=>LNG('USER_CODE'), 'width'=>150    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_DESC']   		= array('title'=>LNG('USER_DESC'), 'width'=>190    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['USER_TYPE']   		= array('title'=>LNG('USER_TYPE'), 'width'=>190    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
+		$fields['USER_MASTER']   	= array('title'=>LNG('USER_MASTER')    ,   'length'=>50,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		$fields['CUSTOMER_ID']   	= array('title'=>LNG('CUSTOMER_ID')    ,   'type'=>'int',   'length' => 19,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true, 'class'=>'hide');
 		$fields['CUSTOMER_DESC']   	= array('title'=>LNG('CUSTOMER_DESC'), 'width'=>300    ,   'length'=>100,   'list'=>true, 'basic'=>true , 'grid'=>true,   'obrigatorio' => true);
 		

@@ -12,6 +12,11 @@ body {
 }
 
 
+
+.k-grid-toolbar{
+	display:none;
+}
+
 .btn-clean-filter-kendo-ui{
 	text-align: center !important;
 	padding-left:9px !important;
@@ -1440,13 +1445,7 @@ background: #449D44 !important;
 	text-align: center;
 }
 
-.wrs_menu_footer li a:hover{
-	background: #1E709A !important;
-	color:#E5F5FD !important;
-	padding-left: 8px !important;
-	
-	
-}
+
 .wrs_menu_footer li a .fa-file-text-o{
 	font-size: 20px !important;
 }
@@ -1490,15 +1489,6 @@ background: #449D44 !important;
 		left: -2px;
 }
 
-.wrs_menu_footer > li:hover 
-{
-		background-color: #eee;
-		border-left: 2px solid #1E709A;
-		
-		-webkit-box-shadow: inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
-		-moz-box-shadow:    inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
-		box-shadow:         inset 0px 2px 5px 0px rgba(50, 50, 50, 0.36);
-}
 
 
 
@@ -1856,7 +1846,7 @@ border-radius: 3px;
 }
 /* ESTILOS DE CORES*/
 	
-.box_wrs_panel:hover{ border: 1px solid #58BCE7; background: #2191C0 url("theme-azul/images/ui-bg_diagonals-small_50_2191C0_40x40.png") 50% 50% repeat ; font-weight: bold; color: #ffffff;  color: #ffffff; text-decoration: none; }
+
 
 
 .red{

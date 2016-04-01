@@ -194,7 +194,7 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						<ul class="dropdown-menu" role="menu_export">
 							<li id="dropdown-title"><h4 class="black"><i class="fa fa-th"></i> {$GRID_HEADER_SEE_GRID}</h4></li>
 							
-						    <li><a href="#" class="wrs_event_export" id-tag="{$idTag}" rel="k-grid-pdf"><i class="fa fa-file-pdf-o"></i> {$GRID_HEADER_EXPORT_PDF}</a></li>
+						   <!-- <li><a href="#" class="wrs_event_export" id-tag="{$idTag}" rel="k-grid-pdf"><i class="fa fa-file-pdf-o"></i> {$GRID_HEADER_EXPORT_PDF}</a></li> -->
 						    <li><a href="#" class="wrs_event_export" id-tag="{$idTag}" rel="k-grid-excel"><i class="fa fa-file-excel-o"></i> {$GRID_HEADER_EXPORT_EXCEL}</a></li>
 					  		<li><a href="#" class="wrs_event_export" id-tag="{$idTag}"  rel="k-grid-excel"><i class="fa fa-file-o"></i> {$GRID_HEADER_EXPORT_CSV}</a></li>
 						   <!-- <li><a href="#"><i class="fa fa-picture-o"></i> {$GRID_HEADER_EXPORT_IMAGE}</a></li> -->

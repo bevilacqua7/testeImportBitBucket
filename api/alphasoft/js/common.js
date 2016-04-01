@@ -1264,14 +1264,13 @@ function runCall(param_request,Ofile,Oclass,Oevent,funCallBack,typeAlert,typeDat
 	TRACE('Enviando parametro para o run.php mas sem esperar resposta file:common.js');	
 	
 	$.post('run.php',param,funCallBack,typeData).fail(function() {
-			if(typeAlert=='modal')
+			switch(typeAlert)
 			{
-				WRS_ALERT(LNG('ERRO_FILE_PROCCESS'),'error');				
+				case 'modal' :  WRS_ALERT(LNG('ERRO_FILE_PROCCESS'),'error'); break;
+				case 'log'	 :	console.error(LNG('ERRO_FILE_PROCCESS')); break;
+				default		 : $('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS'))); break;
 			}
-			else
-			{
-				$('.mensagens').html(fwrs_error(LNG('ERRO_FILE_PROCCESS')));
-			}			
+				
 	  });
 	
 	TRACE('runCall finalizado');
@@ -1318,7 +1317,7 @@ function isDesconected()
 		var _param_request	=	{};
 		
 		//Remove o report ID
-		runCall(_param_request,_file,_class,_event,getDataDisconectUser,'modal');
+		runCall(_param_request,_file,_class,_event,getDataDisconectUser,'log');
 		
 		
 		//Ajusta novamente a validação

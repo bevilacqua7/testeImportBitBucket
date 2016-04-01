@@ -22,6 +22,7 @@ class HeaderTag
 	 }
 			 
 	 
+	 //@link http://demos.telerik.com/kendo-ui/themebuilder/
 	 private function css($type)
 	 {
 	 	$tag		=	array();
@@ -43,7 +44,34 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.default.min.css",								"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.rtl.min.css",									"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.min.css",								"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.blueopal.min.css",								"access"=>array("main","panel"));
+	 
+	 	
+
+	 	//@link http://demos.telerik.com/kendo-ui/themebuilder/
+	 	switch(WRS::INFO_SSAS_LOGIN('USER_FORMAT'))
+	 	{
+	 		case 'theme-azul'	:	{
+	 			$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.blueopal.min.css",								"access"=>array("main","panel"));
+	 		}; break;			//Main
+	 		case 'theme-laranja':	{
+	 			$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.wrs-laranja.css",								"access"=>array("main","panel"));
+	 		}; break;			//Main
+	 		
+	 		case 'theme-verde':	{
+	 			$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.wrs-verde.css",								"access"=>array("main","panel"));
+	 		}; break;			//Main
+	 		
+	 		case 'theme-vermelho':	{
+	 			$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.wrs-vermelho.css",								"access"=>array("main","panel"));
+	 		}; break;			//Main
+	 		
+	 	}
+	 	
+	 	
+//	 	kendo.moonlight.min
+	 	
+	 	
+	 	
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.default.min.css",						"access"=>array("main","panel"));
 //	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.mobile.all.min.css",							"access"=>array("main","panel"));
 	 	
