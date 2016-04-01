@@ -40,7 +40,9 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 	
 	public function export($options=null)
 	{
-		return $this->admin->export($options);
+		$param = $this->admin->export($options);
+		$param['title']= LNG('bt_export_cube_user');
+		return $param;
 	}
 	
 	public function exportResults($options=null)
@@ -236,10 +238,10 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 		$primaries 			= fwrs_request('primaries');		
 		$options 			= $_options==null?fwrs_request('options_extra'):$_options;
 		
-		$user_id 			= array_key_exists('USER_ID', $primaries) 		&& $primaries['USER_ID']!=''			?$primaries['USER_ID']:'';
-		$cube_id 			= array_key_exists('CUBE_ID', $primaries) 		&& $primaries['CUBE_ID']!=''			?$primaries['CUBE_ID']:'';
-		$database_id 		= array_key_exists('DATABASE_ID', $primaries) 	&& $primaries['DATABASE_ID']!=''		?$primaries['DATABASE_ID']:'';
-		$server_id 			= array_key_exists('SERVER_ID', $primaries) 	&& $primaries['SERVER_ID']!=''			?$primaries['SERVER_ID']:'';
+		$user_id 			= is_array($primaries) && array_key_exists('USER_ID', $primaries) 		&& $primaries['USER_ID']!=''			?$primaries['USER_ID']:'';
+		$cube_id 			= is_array($primaries) && array_key_exists('CUBE_ID', $primaries) 		&& $primaries['CUBE_ID']!=''			?$primaries['CUBE_ID']:'';
+		$database_id 		= is_array($primaries) && array_key_exists('DATABASE_ID', $primaries) 	&& $primaries['DATABASE_ID']!=''		?$primaries['DATABASE_ID']:'';
+		$server_id 			= is_array($primaries) && array_key_exists('SERVER_ID', $primaries) 	&& $primaries['SERVER_ID']!=''			?$primaries['SERVER_ID']:'';
 		
 		$coluna_clique_user	= fwrs_request('coluna_clicada');
 		
@@ -366,6 +368,31 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 	
 	}
 
+	public function import($options)
+	{
+	
+		$_fields						= $options['field'];
+		$_request_original 				= $_REQUEST;
+		$_tabela						= $options['table'];
+		$_request_original['campo_id'] 	= $options['primary'];
+		$_request_original['_param'] 	= $options;
+	
+		$param	=	 $this->admin->RefreshDataAttrInParam($this->admin->OBJECT->build_grid_form($options));
+	
+		unset($param['button']['update']);
+		unset($param['button']['remove']);
+		unset($param['button']['export']);
+		unset($param['button']['changePassword']);
+		$param['title']= LNG('bt_import_cube_user');
+	
+		$nome_arquivo = 'uploads/'.WRS::CUSTOMER_ID().'/';
+	
+		// criacao do HTML para exibir o form de upload ou realizar a importacao se houverem arquivos enviados
+		$param['html'] = $this->admin->importarDadosEmMassa($nome_arquivo,$_request_original);
+	
+		return $param;
+	}
+	
 	
 }
 
