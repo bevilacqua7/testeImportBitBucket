@@ -459,7 +459,7 @@ HTML;
 	
 	// UPLOAD FORM
 	$language['msg_maxNumberOfFiles']					=	'Número maximo de arquivos excedido';
-	$language['msg_acceptFileTypes']					=	'Arquivo de extensão nao permitida';
+	$language['msg_acceptFileTypes']					=	'Arquivo de extensão nao permitida. Apenas .ZIP ou .CSV';
 	$language['msg_maxFileSize']						=	'Arquivo de tamanho excedido';
 	$language['msg_minFileSize']						=	'Arquivo de tamanho mínimo não alcancado';
 	$language['msg_nao_existe_file_in_zip']				=	'Não existe o arquivo permitido dentro deste ZIP: ';

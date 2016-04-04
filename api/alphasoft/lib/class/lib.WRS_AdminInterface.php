@@ -542,16 +542,18 @@ HTML;
 				'barra_status'				=>	false,
 				'image_versions' 			=>  false,
 				'restricaoCsvZip'			=>  true,
-				'nome_obrigatorio_zip' 		=> 	$name_file_import,
+				'nome_obrigatorio_zip' 		=> 	$name_file_import
+				
+				/*,
 				'valida_nome_dentro_zip' 	=> 	true,
 				'valida_nome_obrigatorio' 	=> 	true,
-				'accept_file_types'			=>  "/(zip)|(csv)$/i",
+				'accept_file_types'			=>  ("/(zip)|(csv)$/i"),
 				'messages'					=>  array(
 						'maxFileSize'					=> $msg_erro_tamanho,
 						'acceptFileTypes'				=> $msg_erro_tipo,
 						'nao_existe_arquivo_zip'		=> $msg_erro_nao_existe_file_in_zip,
 						'nome_obrigatorio_necessario'	=> $msg_nome_obrigatorio_necessario
-				)
+				)*/
 				//,'print_response' 	=>  false
 		);
 			

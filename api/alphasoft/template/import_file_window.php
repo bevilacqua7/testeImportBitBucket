@@ -5,6 +5,8 @@ $extra_params = isset($extra_params)?$extra_params:null;
 $upload				=	new WRSUpload($upload_dir_key,$extra_params);
 $htmlUpload			=	$upload->uploadHTML();
 $msg_sel			=	LNG('upload_files_select');
+$uploaderId			=	$upload->getUploaderId();
+$nome_obrigatorio_zip = array_key_exists('nome_obrigatorio_zip', $extra_params)?$extra_params['nome_obrigatorio_zip']:'';
 
 if(isset($avisos) && $avisos!=''){	
 	$avisosHTML = <<<HTML
@@ -38,6 +40,9 @@ $HTML_UPLOAD 		=	<<<EOF
 		    	<div id="uploadFile">
 					{$htmlUpload}
 				</div>
+				<script>
+				trataUploadAdmin('{$uploaderId}');
+				</script>
 	    	</div>
 			<div class="row">
 				<table class="table">
