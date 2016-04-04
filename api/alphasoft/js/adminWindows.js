@@ -623,13 +623,15 @@ function btn_window_grid_event_admin(data,_action_type,_table)
 												$('.modal-content-grid').modal('hide');
 												if(link!=undefined && link!=''){
 													window.location.assign(link);
-													$('.menu_cadastro[tabela='+table+']').trigger('click');
-													alertify.success(LNG('ADMIN_EXPORT_OPTION_OK'),30000);
+													WRS_ALERT(LNG('ADMIN_EXPORT_OPTION_OK'),'success',function(){ $('.menu_cadastro[tabela='+table+']').trigger('click'); });
+													// causa um erro apenas no navegador SAFARI
+													//$('.menu_cadastro[tabela='+table+']').trigger('click');
+													//alertify.success(LNG('ADMIN_EXPORT_OPTION_OK'),3000);
 												}else{
 													var erro = !isEmpty(data_return['erro'])?data_return['erro']:LNG('file_error_export');
 													WRS_ALERT(erro,'error',function(){ $('.menu_cadastro[tabela='+table+']').trigger('click'); });
-													return false;
 												}
+												return false;
 											}
 
 											var values			=	get_grid_window_values_form();
