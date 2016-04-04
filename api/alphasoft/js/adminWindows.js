@@ -735,7 +735,41 @@ function atualiza_link_field_master(obj_principal,obj_referencias){
 }
 
 
-function executaDownloadFile($file){
-	WRS_CONSOLE('DOWNLOAD',$file);
-	$('#downloadFileExport').attr('src',$file);
+
+function trataUploadAdmin(id) {
+		$('#'+id).fileupload({
+			'messages' 			:  	{
+						            	  'msg_nome_obrigatorio_necessario'	: LNG('msg_nome_obrigatorio_necessario'),
+						            	  'maxNumberOfFiles' 				: LNG('msg_maxNumberOfFiles'),
+						            	  'msg_acceptFileTypes'				: LNG('msg_acceptFileTypes')
+						           	}
+		},{
+			'process'			:	function (data, options) {
+										var dfd = $.Deferred();
+										var nome = options.nome_obrigatorio_zip;
+										nome = nome!=undefined?nome.split('.'):false;
+										if(nome!==false){
+											var arq 		= options.files[0].name;
+											nome 			= nome[0].toUpperCase();
+											arq 			= arq!=undefined?arq.split('.'):false;
+											var nome_arq 	= arq[0].toUpperCase();
+											var ext 		= arq[1].toUpperCase();
+											//if(nome_arq.indexOf(nome)<0){ // se o nome COMECA com o especificado - porem pode acontecer WRS_CUBE ser aceito no WRS_CUBE_USER ... etc
+											if(nome_arq!=nome){
+												var error = options.i18n('msg_nome_obrigatorio_necessario')+nome;
+										        $(options.context.find('strong.error')).html(error);	
+												options.files.error = true;
+									            dfd.rejectWith(this, [data]);
+											}
+											if(ext!='ZIP' && ext!='CSV'){
+												var error = options.i18n('msg_acceptFileTypes');
+										        $(options.context.find('strong.error')).html(error);	
+												options.files.error = true;
+									            dfd.rejectWith(this, [data]);
+											}
+										}
+								        return dfd.promise();
+									}
+		});
 }
+

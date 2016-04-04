@@ -28,6 +28,7 @@ class WRSUpload extends WRS_BASE
 									 );
 
 	public $nameFile;
+	public $id_uploader;
 	private $urlServerVar;
 	
 	public function WRSUpload($filename=NULL,$extra_params=NULL){
@@ -75,12 +76,17 @@ class WRSUpload extends WRS_BASE
 			return '';
 		}
 	}
-	
+
+
+	public function getUploaderId()
+	{
+		return $this->id_uploader;
+	}
 	
 	public function uploadHTML()
 	{
 		$id	=	'fileupload';//'WRSUpload'.rand(1,99999);
-		
+		$this->id_uploader = $id;
 		$this->ruleFileName();
 	
 		$parameter_upload							=	$this->parameter;
