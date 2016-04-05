@@ -11,8 +11,13 @@ body {
 	
 }
 
+.btn-click-drill-mobile i{
+	margin-left:5px;
+	margin-right:8px;
+}
 
 
+ 
 .k-grid-toolbar{
 	display:none;
 }
@@ -31,7 +36,8 @@ body {
 	width:auto;
 }
 
-.wrs_panel_center_body_container .btn-clean-filter-kendo-ui{
+.wrs_panel_center_body_container .btn-clean-filter-kendo-ui,
+.wrs_panel_center_body_container .btn-click-drill-mobile{
 	visible:hidden !important;
 	display:none !important;
 }

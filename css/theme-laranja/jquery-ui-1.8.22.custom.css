@@ -546,7 +546,25 @@ body .ui-tooltip { border-width: 2px; }
 	
 	
 	
+ figcaption a{
+	background:#E8834D !important;
+	border-color:#E8834D !important;
+}
+
+figcaption a:hover{
+	background:#83360C !important;
+	border-color:#83360C !important;
+}
+
+.mp-level { 
+	background: #E8834D !important;
+}
 	
+	
+	.k-filter-menu{
+	background-color:#FFDDCA !important;
+}
+
 	
 .ui-state-hover td div.ui-state-default span strong
  {

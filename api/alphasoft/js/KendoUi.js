@@ -1716,8 +1716,14 @@ function  themeSUM(nameID,arg,wrsParam)
 			 */
 			var orderByColumnEvent	=	 function()
 													{
+				
 
-														_START('WrsGridKendoUiControlColumnPlusMinus::orderByColumnEvent');													
+
+													_START('WrsGridKendoUiControlColumnPlusMinus::orderByColumnEvent');		
+													
+													return true;
+													
+													 
 														var $e		=	$(this).parent();
 														var field	=	$e.attr('data-field');
 														var dir		=	$e.attr('data-dir');
@@ -1765,6 +1771,8 @@ function  themeSUM(nameID,arg,wrsParam)
 															
 															telerikGrid.dataSource._sort	= [];
 															telerikGrid.dataSource._sort[0]	=	{'field':field,'dir':dir};
+															
+													
 														_END('WrsGridKendoUiControlColumnPlusMinus::orderByColumnEvent');	
 													}
 													

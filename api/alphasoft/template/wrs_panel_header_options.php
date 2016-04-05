@@ -30,7 +30,10 @@ $script_tags								=	'';
 $LABEL_LOAD									=	LNG('LABEL_LOAD');
 
 $GRID_HEADER_MAIL_SEND						=	LNG('GRID_HEADER_MAIL_SEND');
-$CLEAR_FILTER_KENDOUI						=	 LNG('CLEAR_FILTER_KENDOUI');
+$CLEAR_FILTER_KENDOUI						=	LNG('CLEAR_FILTER_KENDOUI');
+
+
+$BTN_DRILL_TOOLTIP							=	LNG('BTN_DRILL_TOOLTIP');	
 
 $LAYOUTS					=	LNG('tpl_layout');
 //TAG pode ser enviada externamente pelo include
@@ -111,6 +114,8 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 			 <div class="btn-group  font-black" role="group">	
 			 
 			 <button type="button" class="btn btn-warning btn-xs  btn-clean-filter-kendo-ui wrs-tooltip"  title="{$CLEAR_FILTER_KENDOUI}"><i class="glyphicon glyphicon-trash"></i></button>
+			 
+			 <button type="button" class="btn btn-default btn-xs  btn-click-drill-mobile wrs-tooltip"  title="{$BTN_DRILL_TOOLTIP}"><i class="fa fa-hand-pointer-o"></i></button>
 						
 						
 					  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" disabled_s >

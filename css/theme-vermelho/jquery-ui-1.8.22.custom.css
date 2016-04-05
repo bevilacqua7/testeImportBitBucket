@@ -550,6 +550,26 @@ body .ui-tooltip { border-width: 2px; }
 }
 
 
+ figcaption a{
+	background:#D4402A !important;
+	border-color:#D4402A !important;
+}
+
+figcaption a:hover{
+	background:#FC898B !important;
+	border-color:#FC898B !important;
+}
+
+
+ .k-filter-menu{
+	background-color:#FC898B !important;
+}
+
+
+
+.mp-level { 
+	background: #D4402A !important;
+}
 
  
 .ui-widget-shadow { margin: 5px 0 0 5px; padding: 0px; background: #999999 url("images/ui-bg_flat_55_999999_40x100.png") 50% 50% repeat-x; opacity: .45;filter:Alpha(Opacity=45); -moz-border-radius: 5px; -khtml-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }

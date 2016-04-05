@@ -329,6 +329,10 @@ HTML;
 	$language['GRID_HEADER_OPTION_ORDER_COLUMN']	 	=	"Inverter Colunas";
 	$language['GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA']=	"Registros Consolidados";
 	
+	
+	$language['BTN_DRILL_TITLE']	=	"Drill";
+	$language['BTN_DRILL_TOOLTIP']	=	"Ativando funções drill, eventos do botão direiro do mouse.";
+	
 	$language['GRID_HEADER_EXPORT'] 			= "Exportar";
 	$language['GRID_HEADER_EXPORT_PDF'] 		= "Pdf";
 	$language['GRID_HEADER_EXPORT_CSV'] 		= "Csv";

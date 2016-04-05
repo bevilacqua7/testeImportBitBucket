@@ -38,6 +38,12 @@ function addDrillOnDataBound(nameID,kendoUI)
 	
 	var clickDrillDown	=	 function(){
 		_START('addDrillOnDataBound::clickDrillDown');
+		
+		
+
+			if($('body').WrsGlobal('getCM','drill_mobile')!=true)
+			{
+		
 
 					var LEVEL_DRILL	=	 $(this).attr('LEVEL_DRILL');
 					var LEVEL_FULL	=	 $(this).attr('LEVEL_FULL');
@@ -70,6 +76,7 @@ function addDrillOnDataBound(nameID,kendoUI)
 						changeWithDrillFilter(_layout,filter_add);
 						
 						delete rows,column;
+			}//END drill_mobile
 						
 		_END('addDrillOnDataBound::clickDrillDown');				
 		
