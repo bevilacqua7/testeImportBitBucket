@@ -30,10 +30,23 @@ var context = context || (function () {
 			});
 		});
 		
-		if(options.preventDoubleContext){
-			$(document).on('contextmenu', '.dropdown-context', function (e) {
-				e.preventDefault();
-			});
+		if(options.preventDoubleContext)
+		{
+			
+			
+			
+			
+			if(getIsMobile().any())
+				{
+						$(document).on('click', '.dropdown-context', function (e) {
+							e.preventDefault();
+						});
+				}else{
+					
+						$(document).on('contextmenu', '.dropdown-context', function (e) {
+							e.preventDefault();
+						});
+				}
 		}
 		
 		$(document).on('mouseenter', '.dropdown-submenu', function(e){
@@ -358,12 +371,26 @@ var context = context || (function () {
 	
     var contextMenuFunction		=	  function (e) 
 	{
+    	if(getIsMobile().any())
+    	{
+    		if($('body').WrsGlobal('getCM','drill_mobile')!=true)
+    		{
+    			return true;
+    		}
+    	}
+    	
 		e.preventDefault();
 		
+
 		e.stopPropagation();
 		
 		//Se não existir dados então 
-		if($(this).html()=='-') return false;
+		if($(this).html()=='-') 
+		{
+			if(!getIsMobile().any()) return true;
+			
+			return false;
+		}
 		
 	
 		/*
@@ -451,7 +478,7 @@ var context = context || (function () {
 		//END
 		
 		//Verificando se é linha de total
-		if($(this).hasClass('tag_total') || $(this).parent().hasClass('tag_total')){
+		if($(this).hasClass('tag_total') || $(this).parent().hasClass('tag_total')){			
 			return true;
 		}
 		
@@ -496,7 +523,9 @@ var context = context || (function () {
 
 		hideContextMenu(type,_layout.layout_clean);
 		
-		if(empty($wrsEventMain.html())) return true;
+		if(empty($wrsEventMain.html())) {
+			return true;
+		}
 		
 		/*
 		 * Removendo o evento apenas das primeiras casas quando for os números das linhas
@@ -585,12 +614,23 @@ var context = context || (function () {
 	
 	
 	
-	$(document).on('contextmenu', selector,contextMenuFunction);
+	if(getIsMobile().any())
+	{
+		$(document).on('click', selector,contextMenuFunction);//Habilitando para o click
+	}else{
+		$(document).on('contextmenu', selector,contextMenuFunction);
+	}
+	
 }
 	
 	function destroyContext(selector) 
 	{
 		$(document).off('contextmenu', selector).off('click', '.context-event');
+		
+		if(getIsMobile().any())
+		{
+			$(document).off('click', selector).off('click', '.context-event');
+		}
 	}
 	
 	

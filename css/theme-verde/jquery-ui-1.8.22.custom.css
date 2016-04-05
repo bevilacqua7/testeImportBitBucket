@@ -549,6 +549,25 @@ body .ui-tooltip { border-width: 2px; }
 
 
 
+ figcaption a{
+	background:#54A079 !important;
+	border-color:#54A079 !important;
+}
+
+figcaption a:hover{
+	background:#087A56 !important;
+	border-color:#087A56 !important;
+}
+
+ .k-filter-menu{
+	background-color:#F0FFFB !important;
+}
+
+
+
+.mp-level { 
+	background: #54A079 !important;
+}
  
 .ui-widget-shadow { margin: 5px 0 0 5px; padding: 0px; background: #999999 url("images/ui-bg_flat_55_999999_40x100.png") 50% 50% repeat-x; opacity: .45;filter:Alpha(Opacity=45); -moz-border-radius: 5px; -khtml-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
 

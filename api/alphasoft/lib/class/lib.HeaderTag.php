@@ -171,6 +171,8 @@ class HeaderTag
 	 	
 	 	$tag[]		=	array("host"=>JS_PATH_API."ThreadJobManager.js",			"access"=>array("panel"));
 	 	
+	 	$tag[]		=	array("host"=>JS_PATH_API."Painel.js",				"access"=>array("panel")); //Antes era na linha 255
+	 	
 	 	$tag[]		=	array("host"=>JS_PATH_API."Layouts.js",						"access"=>array("panel"));
 	 	
 	 	$tag[]		=	array("host"=>"api/contextMenu/src/jquery.contextMenu.js","access"=>array("panel"));		//Main
@@ -252,7 +254,7 @@ class HeaderTag
 	 	
 //	 	$tag[]		=	array("host"=>"api/assets/utilcarousel-files/utilcarousel/jquery.utilcarousel.js?r=1.2",				"access"=>array("main"),'version'=>'no-use');//Main
 	 	
-	 	$tag[]		=	array("host"=>JS_PATH_API."Painel.js",				"access"=>array("panel"));
+	 	
 	 	
 	 	
 	 	/* API modernizr */
