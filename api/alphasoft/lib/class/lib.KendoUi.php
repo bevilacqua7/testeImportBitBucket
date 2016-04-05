@@ -1178,7 +1178,6 @@ HTML;
 		$grid	=	<<<HTML
 					<div id="{$table}"></div>
 		            <script>
-
 		                $(document).ready(function () {
 		                    $("#{$table}").data("wrsWindowGridShare",{$windowGridShare}).kendoGrid({
 		                    	columns: {$json_column},
