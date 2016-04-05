@@ -142,3 +142,9 @@ select.ajustabts{
 button.btn i.fa, button.btn i.glyphicon{
 	margin-right: 5px;
 } 
+
+
+.hide_wrs
+{
+  visibility: hidden !important;
+}
