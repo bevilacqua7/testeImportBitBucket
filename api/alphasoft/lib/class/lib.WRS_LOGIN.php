@@ -28,8 +28,8 @@ class WRS_LOGIN extends WRS_BASE
 				echo $this->remove($login);	
 			}; break;
 			case 'isUserConnect'	:	{ 	echo $this->isUserConnect(true) ;	}; break;
-			case 'recover_login':	{	echo $this->recover_login();}; break;
-			case 'recover_email'		:	{	echo $this->recover_email();}; break;
+			case 'recover_login'	:		{	echo $this->recover_login();}; break;
+			case 'recover_email'	:	{	echo $this->recover_email();}; break;
 		}
 
 		
@@ -123,7 +123,7 @@ class WRS_LOGIN extends WRS_BASE
 			$param		=	 $this->send_recover($param,$USER_CODE,$rows['RESET_CODE']);
 		}
 		
-
+		
 		return json_encode($param);
 	}
 	
@@ -158,7 +158,7 @@ class WRS_LOGIN extends WRS_BASE
 				$param['html']	=	 fwrs_warning(sprintf(LNG('LOGIN_NOT_EMAIL'),$USER_CODE));			
 			}else{
 				//Existe email para o usuário
-				$param['html']		= $this->sendMail($mail,$linkCode);
+				$param['html']		= $this->sendMail($mail,$linkCode,$USER_CODE);
 
 				
 			}
@@ -174,7 +174,7 @@ class WRS_LOGIN extends WRS_BASE
 	
 	
 	
-	private function sendMail($mail,$tag)
+	private function sendMail($mail,$tag,$userCode)
 	{
 
 		$param['mail']		=	$mail;
@@ -185,9 +185,10 @@ class WRS_LOGIN extends WRS_BASE
 		
 		$TITLE			=	LNG('HTML_LOGIN_RECOVER_TITLE');
 		$BODY			=	LNG('HTML_LOGIN_RECOVER');
-		$LINK			=	$url.'/login.php?recover='.$tag;
+		$LINK			=	$url.'/login.php?recover='.$tag.'&usercode='.$userCode;
 		$TITLE_BUTTON	=	LNG('HTML_LOGIN_RECOVER_BTN');
 		$LOGO			=	$url.'/imagens/logo-wrs.png';
+		
 
 		include PATH_TEMPLATE.'recover_password.php';
 		

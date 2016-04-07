@@ -1478,6 +1478,13 @@ function wrs_run_filter()
 	var get_active_aba_data	=	get_aba_active();
 	
 
+	
+	//Se for o drill mobile ao executar desabilita o botão de drill para que ele trenha que selecionar novamente para reativar o drill
+	if($('body').WrsGlobal('getCM','drill_mobile')==true)
+	{
+		$('.btn-click-drill-mobile').trigger('click');
+	}
+	
 	//Remove o tooltip
 	$('.wrs_run_filter').trigger('mouseout');
 	
@@ -1641,16 +1648,18 @@ function wrs_run_filter()
 			mensagem	+= LNG('ATTRIBUTOS_LINHA')+'<br>';
 		}
 
-		
 
+
+		//Não permite execução durante a navegação entre as abas
 		if($('body').WrsGlobal('getCM','dblclick_open_aba_not_run')==true && $('#'+_report_id).length>0)
 			{
-				$('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':false});
-				run	=	 false;
+				run				=	false;
+				manager_aba		=	true;
 				TRACE('Não executa o run');
 			}
 		
-		
+		$('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':false});
+		//END navegações abas
 		
 		if(run)
 			{

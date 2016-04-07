@@ -39,6 +39,8 @@
 	$obj->set_conn($conn_wrs);
 	
 	
+
+	
 	//Validando conexão de usuário
 /*	$val	=	WRS::LOGIN_ID();
 	if(empty($val))

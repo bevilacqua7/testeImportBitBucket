@@ -115,7 +115,7 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 			 
 			 <button type="button" class="btn btn-warning btn-xs  btn-clean-filter-kendo-ui wrs-tooltip"  title="{$CLEAR_FILTER_KENDOUI}"><i class="glyphicon glyphicon-trash"></i></button>
 			 
-			 <button type="button" class="btn btn-default btn-xs  btn-click-drill-mobile wrs-tooltip"  title="{$BTN_DRILL_TOOLTIP}"><i class="fa fa-hand-pointer-o"></i></button>
+			 <button type="button" class="btn btn-danger color_write btn-xs  btn-click-drill-mobile wrs-tooltip"  title="{$BTN_DRILL_TOOLTIP}"><i class="fa fa-hand-pointer-o"></i></button>
 						
 						
 					  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" disabled_s >

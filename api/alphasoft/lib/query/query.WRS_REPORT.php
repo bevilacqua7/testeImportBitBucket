@@ -30,20 +30,39 @@ class QUERY_WRS_REPORT
 	{
 		$FIELDS			=	'*';
 		$FILTER			=	'';
-	//	$FILE			=	'E:\WEB\_root\DEV\SANTOS\WRS\TESTE.CSV';
 		$SEPARATOR		=	';';
+		$USER_CODE		=	WRS::USER_CODE();
+		$USER_MASTER	=	WRS::USER_MASTER();
+		$EXPORT_DESC	=	$TABLE_NAME;
 		
+		return $this->EXPORT_TABLE($TABLE_NAME, $FIELDS, $FILTER, $FILE, $SEPARATOR, $USER_CODE, $USER_MASTER, $EXPORT_DESC);
+		
+	}
+	
+	
+	public function EXPORT_TABLE(	$TABLE_NAME,
+									$FIELDS,
+									$FILTER,
+									$FILE,
+									$SEPARATOR,
+									$USER_CODE,
+									$USER_MASTER,
+									$EXPORT_DESC)
+	{
+
 		$HTML		= <<<HTML
-								EXEC Export_Table 	
+								EXEC Export_Table
 													'{$TABLE_NAME}',
 													'{$FIELDS}',
 													'{$FILTER}',
 													'{$FILE}',
-													'{$SEPARATOR}'
+													'{$SEPARATOR}',
+													'{$USER_CODE}',
+													'{$USER_MASTER}',
+													'{$EXPORT_DESC}'
 HTML;
 		
 		return $HTML;
-		
 	}
 	
 	

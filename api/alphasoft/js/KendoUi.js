@@ -78,7 +78,8 @@ function generate_csv_zip_request(data)
 	{
 		if(!isEmpty(download))
 		{
-			window.location.href = download;
+			
+			window.location.assign(download);
 		}
 	}
 	
@@ -1721,8 +1722,6 @@ function  themeSUM(nameID,arg,wrsParam)
 
 													_START('WrsGridKendoUiControlColumnPlusMinus::orderByColumnEvent');		
 													
-													return true;
-													
 													 
 														var $e		=	$(this).parent();
 														var field	=	$e.attr('data-field');
@@ -1730,9 +1729,6 @@ function  themeSUM(nameID,arg,wrsParam)
 														var desc	=	'descending';
 														
 														var columnType		=	 dir;
-														
-														
-												
 														
 														var hasFrozen	=	 $e.parent().parent().parent().parent();
 														if(hasFrozen.hasClass('k-grid-header-locked'))
@@ -1775,8 +1771,7 @@ function  themeSUM(nameID,arg,wrsParam)
 													
 														_END('WrsGridKendoUiControlColumnPlusMinus::orderByColumnEvent');	
 													}
-													
-													
+																					
 			$eventTelerik.find('.k-grid-header table tr:last-child').find('th a').click(orderByColumnEvent);
 			
 			

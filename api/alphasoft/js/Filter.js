@@ -67,6 +67,7 @@ function changeOrderTypeDesc(type)
 	return type;
 }
 
+
 function kendoFilterMaskWRSElements()
 {
 	$('.k-grid-filter').each(function(){
@@ -1747,6 +1748,10 @@ function wrsFilterClickFalse(filter_hide)
 			 
         	 var event				=	 _event;
         	 var pageHome			=	false;
+        	 
+        	 //permite executar o relatório
+        	 $('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':false});
+        	 
         	 
         	 if(type!='loadWrs')
         	 {

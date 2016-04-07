@@ -1,4 +1,5 @@
 
+var form_data	=	{};
 function WRS_RESIZE()
 {
 		var width	=	 $(window).width();
@@ -81,13 +82,7 @@ function wrs_remove_user_temp()
 
 
 
-function start_time_reload_login()
-{
-	
-		$("#fakeloader").show();
-		window.location	='login.php?msg=LOGIN_ADD_NEW_RECOVER';
-		return false;
-}
+
 
 var function_call_login	=	 function(data){
 
@@ -113,7 +108,19 @@ var function_call_login	=	 function(data){
 		{
 			if(data.data.recover==true)
 			{
-				start_time_reload_login();
+				var _pas		=	$('#password_new').val();
+
+					form_data['user'].val(USER_CODE);
+					form_data['password'].val(_pas);
+					
+					$('.sub_container').prepend(form_data['password']);
+					$('.sub_container').prepend(form_data['user']);
+					$('.new_password').remove();
+					
+					RECOVER		=	 '';
+					
+					$('.wrs_login').trigger('click');
+	
 			}
 		}
 		
@@ -162,8 +169,16 @@ function password_recover()
 
 function wrs_login_recover()
 {
+
 	//RECOVER
 	create_new_pass();
+	
+	//form_data['sub_container']		=	$('#user').parent().html();
+	
+	form_data['user']			=	$('#user');
+	form_data['password']		=	$('#password');
+	
+	
 	$('#password,#user').remove();
 	LoginMensagen(fwrs_success(LNG('LOGIN_RECOVER_NEW')));
 	$('.checkbox,.wrs_info').hide();

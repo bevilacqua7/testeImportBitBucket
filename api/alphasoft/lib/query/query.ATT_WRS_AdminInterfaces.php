@@ -7,6 +7,7 @@
  */
 includeClass('WRS_BASE');
 includeQuery('WRS_MANAGE_PARAM');
+includeQuery('QUERY_WRS_REPORT');
 
 class QUERY_WRS_ADMIN
 {
@@ -137,17 +138,13 @@ class QUERY_WRS_ADMIN
 			$USER_CODE 				= WRS::USER_CODE();
 			$USER_MASTER			= WRS::USER_MASTER();
 			
-			return array("query"=> "
-						EXEC Export_Table '".$tabela."',
-		                        '".$colunas."',
-		                        '".$filtros."',
-		                        '".$diretorio_inv."',
-		                        '".$separador."',
-		                        '".$USER_CODE."',
-		                        '".$USER_MASTER."'
-					",
-					"file" 		=> str_replace(DS,'/',str_replace(PATH_MAIN, '', $diretorio_inv)),
-					"file_ori" 	=> $arq_conf_param
+			
+			$QUERY_WRS_REPORT	=	 new QUERY_WRS_REPORT();
+			
+			//change by Marcelo Santos
+			return array(	"query"=> $QUERY_WRS_REPORT->EXPORT_TABLE($tabela, $colunas, $filtros, $diretorio_inv, $separador, $USER_CODE, $USER_MASTER, ''),
+							"file" 		=> str_replace(DS,'/',str_replace(PATH_MAIN, '', $diretorio_inv)),
+							"file_ori" 	=> $arq_conf_param
 			);
 		}else{
 			return false;
