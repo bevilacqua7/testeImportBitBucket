@@ -46,34 +46,7 @@ $(function(){
 	/*
 	 * Evento quando se seleciona a mudança de Themas
 	 */
-	function WRSChangeTheme()
-	{
-		TRACE('Mudando o Thema na função WRSChangeTheme  no file:wrs_main.php');
-		var theme	=	$(this).val();
-		var param	=	{'theme':theme};
-		
-		runCall(param,'WRS_MAIN','WRS_MAIN','updateTheme');
-
-		var host 	= 	$('#themeHost').attr('host');
-			host	=	str_replace('{host}',theme,host); 
-			$('#themeHost').attr('href',host);
-			
-		//$("#switch_style").attr("href", id + ".css"); 
-		TRACE('Finalizaou WRSChangeTheme');	
-	}
-
-
-	function WRSChangeIdioma()
-	{
-		TRACE('Mudando o Idioma na função WRSChangeIdioma  no file:wrs_main.php');
-		var idioma	=	$(this).val();
-		$("#fakeloader").show();
-		var param	=	{'idioma':idioma};
-		console.log('change');
-		runCall(param,'WRS_MAIN','WRS_MAIN','updateIdioma',function(data){ location.reload();});
-		//$("#switch_style").attr("href", id + ".css"); 
-		TRACE('Finalizou WRSChangeIdioma');	
-	}
+	
 
 	
 	$(function(){

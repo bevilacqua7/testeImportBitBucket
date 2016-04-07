@@ -149,10 +149,11 @@ function optionsDataConvert(gridValue,with_decode)
 										};
 				var	opts 			= 	$.extend( {}, optionsAba, options );
 				
+					
 					set_value_box_relatorio(opts);
 					filter_configure_window();
 			
-			delete optionsAba,opts;
+					delete optionsAba,opts;
 					_END('wrsAbas::open_configure_default');
 			}
 			
@@ -259,7 +260,6 @@ function optionsDataConvert(gridValue,with_decode)
 									if(!noactive){
 										if(wrs_panel_layout) {
 											//Faz o evento do click quando não existir relatório ainda
-											
 											if(mensagem_window!=false)
 											{
 												layout_east_close(false, _isLoad);
@@ -574,8 +574,11 @@ function optionsDataConvert(gridValue,with_decode)
 				var IDCurrent		=	'#'+_report_id;
 				var current			=	 $(IDCurrent+'Main');
 				
+				
+				
 				//Flag para não deixar replicar o Filtro
 				$('body').WrsGlobal('setCM',{'dblclick_open_aba':true});
+				$('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':true});
 				
 				
 				/*
@@ -647,8 +650,19 @@ function optionsDataConvert(gridValue,with_decode)
 				//Pegando os dados salvo nessa aba
 				var aba_data			=	data_array_aba.data.LAYOUT_MEASURES;
 					
+				
+				
+				
+				 
+				
+
+				
+				
 				//Ainda não existe estrutura na ABA
-				if(empty(aba_data))
+				if(	empty(aba_data) && 
+					empty(data_array_aba.data.LAYOUT_COLUMNS) && 
+					empty(data_array_aba.data.LAYOUT_FILTERS) &&
+					empty(data_array_aba.data.LAYOUT_ROWS))
 				{
 						if(hasDefault==true)
 						{
@@ -679,7 +693,9 @@ function optionsDataConvert(gridValue,with_decode)
 					if(hasDefault==false)
 					{
 						only_aba		=	 true;
-					}else{
+					}
+					else
+					{
 						
 						
 						$(IDCurrent).each(function(){
@@ -700,7 +716,7 @@ function optionsDataConvert(gridValue,with_decode)
 						}
 						
 					}
-				
+					//END ELSE
 
 
 				
@@ -715,6 +731,7 @@ function optionsDataConvert(gridValue,with_decode)
 
 					
 					var optionsAba		=	optionsDataConvert(data_array_aba.data);
+					
 					
 					open_configure_default(optionsAba);
 				
@@ -749,10 +766,12 @@ function optionsDataConvert(gridValue,with_decode)
 					}
 					
 					
+					$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
+					
 					_END('wrsAbas::dblclick_open_aba');
 					
 					
-					$('body').WrsGlobal('setCM',{'dblclick_open_aba':false});
+					
 			}
 			
 			
@@ -1316,7 +1335,6 @@ function optionsDataConvert(gridValue,with_decode)
 								
 								var	opts 			= 	options[lineOptions];
 								
-								
 								//Carga inicial para filtros negado
 								var fxNegado	=	 fixed_filter_negado(opts['LAYOUT_FILTERS']);
 									
@@ -1383,7 +1401,7 @@ function optionsDataConvert(gridValue,with_decode)
 									
 										
 										add_aba_html(	kendoUi['TITLE_ABA'], 
-												kendoUi['REPORT_ID'],
+														kendoUi['REPORT_ID'],
 														_active,
 														true,
 														false,
@@ -1672,7 +1690,7 @@ function optionsDataConvert(gridValue,with_decode)
 			var __auto_load		=	 function (inputBase64,event)
 			{
 				//IS_TRACE=true;
-				_START('wrsAbas::__show_grid');
+				_START('wrsAbas::__auto_load');
 				
 				var aba_active	=	 tagABA.find('.active');
 				
@@ -1713,7 +1731,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 					
 					delete input;
-					_END('wrsAbas::__show_grid');
+					_END('wrsAbas::__auto_load');
 			}
 			
 			

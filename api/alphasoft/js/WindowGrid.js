@@ -279,7 +279,6 @@ function wrd_grid_window_to_form_dbl(arg)
 		{			
 
 			var toAction	=	param['actionDouble'];
-			
 			window[toAction](_data[index]);				
 		}
 	}

@@ -334,9 +334,6 @@ function get_all_jobs()
 						$(_data.modal).addClass('hide');
 					}
 					
-					
-					
-					
 				delete _data;
 				_END('managerJOB::__load_complete');
 			}
@@ -371,6 +368,9 @@ function get_all_jobs()
 			}
 			
 			
+	
+			
+			
 			
 			
 			
@@ -401,7 +401,6 @@ function get_all_jobs()
 							{
 								$(_data.close_modal).removeClass('hide');
 								$(_data.modal).addClass('hide');
-								
 							}
 							
 					delete _data;
@@ -434,7 +433,7 @@ function get_all_jobs()
 								'							<!--A simple primary message! -->'+
 								'						</div>'+
 								'						<div class="modal-buttons-wrs-job" report_id="">'+
-								'							<button class="btn btn-warning modal-btn-padding modal-btn-job-wrs   manager-job-modal-cancel"> <span class="title"> <i class="fa fa-hand-paper-o"></i> '+LNG('BTN_CANCEL_CONSULTA')+' </span> <span class="wrs-modal-time">00:00</span></button>'+
+								'							<button class="btn btn-warning modal-btn-padding modal-btn-job-wrs   manager-job-modal-cancel"> <span class="title"> <i style="margin-left:5px" class="fa fa-hand-paper-o"></i> '+LNG('BTN_CANCEL_CONSULTA')+' </span> <span class="wrs-modal-time">00:00</span></button>'+
 								'							<button class="btn btn-default  modal-btn-padding manager-job-modal-close"><i class="fa fa-times"></i> '+LNG('JOB_CLOSE_ALERT')+'</button>'+
 								'						</div>'+
 								'				</div>'+

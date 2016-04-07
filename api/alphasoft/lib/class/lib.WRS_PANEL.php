@@ -1005,7 +1005,7 @@ class WRS_PANEL  extends WRS_USER
 					$getRequestKendoUi	=	 array_merge($getRequestKendoUi,$this->ssas_request);
 					
 			
-					
+
 					$thread_job_manager	=	array(		'ROWSL'						=>	$ROWSL,
 														'getRequestKendoUi'			=>	$getRequestKendoUi,
 														'getRequestWrsExceptions'	=>	$getRequestWrsExceptions,
@@ -1022,7 +1022,6 @@ class WRS_PANEL  extends WRS_USER
 					
 					
 					
-					//WRS_DEBUG_QUERY($getRequestKendoUi,'ds.log');
 					
 					/*
 					 *	Criando a base do script para o Data Report 
