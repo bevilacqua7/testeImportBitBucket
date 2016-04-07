@@ -773,18 +773,12 @@ td{
  }
  
  
- :root
- {
- 	--color-border	:	#ffc125;
- }
- 
 .border_color tr td
 {	
-	border-color:#ffc125;
+	border-color:rgba(0,0,0,0.1);
 }
 
 .table_border{
-	border:1px solid #ffc125;
 	border-bottom:none !important;
 	
 }

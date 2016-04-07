@@ -23,6 +23,7 @@ class HeaderTag
 			 
 	 
 	 //@link http://demos.telerik.com/kendo-ui/themebuilder/
+	 //@link http://jqueryui.com/themeroller/
 	 private function css($type)
 	 {
 	 	$tag		=	array();
@@ -43,26 +44,31 @@ class HeaderTag
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.common.min.css",								"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.default.min.css",								"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.rtl.min.css",									"access"=>array("main","panel"));
-	 	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.min.css",								"access"=>array("main","panel"));
+	 //	$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.dataviz.min.css",								"access"=>array("main","panel"));
 	 
 	 	
+	 	
+	 	$add_tags_kendo			=	' class="changeStyleCSS" host="api/kendoUi/styles/wrs.{host}.css?v=2.0" ';
 
 	 	//@link http://demos.telerik.com/kendo-ui/themebuilder/
 	 	switch(WRS::INFO_SSAS_LOGIN('USER_FORMAT'))
 	 	{
 	 		case 'theme-azul'	:	{
-	 			$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.blueopal.min.css",								"access"=>array("main","panel"));
+	 			$tag[]		=	array("host"=>"api/kendoUi/styles/wrs.theme-azul.css", 'add_tags'=>$add_tags_kendo, 	"access"=>array("main","panel"));
 	 		}; break;			//Main
 	 		case 'theme-laranja':	{
-	 			$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.wrs-laranja.css",								"access"=>array("main","panel"));
+	 			$tag[]		=	array("host"=>"api/kendoUi/styles/wrs.theme-laranja.css",	'add_tags'=>$add_tags_kendo,							"access"=>array("main","panel"));
 	 		}; break;			//Main
 	 		
 	 		case 'theme-verde':	{
-	 			$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.wrs-verde.css",								"access"=>array("main","panel"));
+	 			$tag[]		=	array("host"=>"api/kendoUi/styles/wrs.theme-verde.css",	'add_tags'=>$add_tags_kendo,							"access"=>array("main","panel"));
 	 		}; break;			//Main
 	 		
 	 		case 'theme-vermelho':	{
-	 			$tag[]		=	array("host"=>"api/kendoUi/styles/kendo.wrs-vermelho.css",								"access"=>array("main","panel"));
+	 			$tag[]		=	array("host"=>"api/kendoUi/styles/wrs.theme-vermelho.css",	'add_tags'=>$add_tags_kendo,							"access"=>array("main","panel"));
+	 		}; break;			//Main
+	 		case 'theme-cinza':	{
+	 			$tag[]		=	array("host"=>"api/kendoUi/styles/wrs.theme-cinza.css",	'add_tags'=>$add_tags_kendo,							"access"=>array("main","panel"));
 	 		}; break;			//Main
 	 		
 	 	}
@@ -94,7 +100,7 @@ class HeaderTag
 	 	
 	 	$tag[]		=	array("host"=>"api/jquery.qtip.custom/jquery.qtip.css",									"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"api/fakeLoader/fakeLoader.css",											"access"=>array("main","panel",'login'));//Main
-	 	$tag[]		=	array("host"=>"css/".WRS::INFO_SSAS_LOGIN('USER_FORMAT')."/jquery-ui-1.8.22.custom.css",								"access"=>array("main","panel"), 'add_tags'=>' id="themeHost" host="./css/{host}/jquery-ui-1.8.22.custom.css?v=1.0"');
+	 	$tag[]		=	array("host"=>"css/".WRS::INFO_SSAS_LOGIN('USER_FORMAT')."/jquery-ui-1.8.22.custom.css",								"access"=>array("main","panel"), 'add_tags'=>' id="themeHost" host="./css/{host}/jquery-ui-1.8.22.custom.css?v=2.0"');
 	 	$tag[]		=	array("host"=>"css/wrs_common.css",														"access"=>array("main","panel"));
 	 	$tag[]		=	array("host"=>"css/wrs_panel.css",														"access"=>array("panel") );
 	 	$tag[]		=	array("host"=>"css/wrs_main.css",														"access"=>array("main") );
@@ -276,8 +282,8 @@ class HeaderTag
 	 	//HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries 
 	 	//WARNING: Respond.js doesn't work if you view the page via file:// 
 	 	$tag[]		=	array("host"=>"https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js",	"access"=>array("all"), 'IF'=>'<!--[if lt IE 9]>');//Main
-	 	$tag[]		=	array("host"=>"https://oss.maxcdn.com/respond/1.4.2/respond.min.js",	"access"=>array("all"), 'IF'=>'<!--[if lt IE 9]>');//Main
-	 	$tag[]		=	array("host"=>"//html5shiv.googlecode.com/svn/trunk/html5.js",	"access"=>array("all"), 'IF'=>'<!--[if lt IE 9]>');//Main
+	 	$tag[]		=	array("host"=>"https://oss.maxcdn.com/respond/1.4.2/respond.min.js",		"access"=>array("all"), 'IF'=>'<!--[if lt IE 9]>');//Main
+	 	$tag[]		=	array("host"=>"//html5shiv.googlecode.com/svn/trunk/html5.js",				"access"=>array("all"), 'IF'=>'<!--[if lt IE 9]>');//Main
  
 	 	
 	 	

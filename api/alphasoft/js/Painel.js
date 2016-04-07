@@ -555,14 +555,19 @@ function layout_east_close(_only_show_progress,is_hide)
 			$('.wrs_run_filter').attr('east__onclose','true');
 		}
 	
+	
+
+
 		
-	if(wrs_panel_layout.state.east.isClosed)
-	{
-		jqueryLayoutOptions.east__onclose();
+			if(wrs_panel_layout.state.east.isClosed)
+			{
+				jqueryLayoutOptions.east__onclose();
+				
+			}else{
+				wrs_panel_layout.close('east');
+			}
 		
-	}else{
-		wrs_panel_layout.close('east');
-	}
+	
 	
 	_END('layout_east_close');
 }
@@ -1450,7 +1455,11 @@ function stop_job_timeout(report_id)
 function wrs_run_filter()
 { 
 	_START('wrs_run_filter');
-
+			
+	
+	
+	
+	
 	var manager_aba			=	$(this).attr('manager_aba');
 		manager_aba			=	empty(manager_aba) ? false : true;
 		$(this).removeAttr('manager_aba');
@@ -1528,19 +1537,11 @@ function wrs_run_filter()
 			
 			panel_open_by_time_out(_report_id);
 			
-			
-			
-			delete aba_active;
-			delete report_KendoUi;
-			delete history;
-			delete _filtro_size;
+			delete aba_active,report_KendoUi,history,_filtro_size;
 			
 			return true;
 		}
 	
-		
-		
-		
 		
 		
 		if(noactive)
@@ -1548,13 +1549,7 @@ function wrs_run_filter()
 			$(this).removeAttr('noactive');
 			//stop_job_timeout(_report_id);
 			_END('wrs_run_filter 2');
-			
-						delete aba_active;
-			delete report_KendoUi;
-			delete history;
-			delete _filtro_size;
-
-			
+			delete aba_active,report_KendoUi,history,_filtro_size;
 			return true;
 		}
 	
@@ -1589,66 +1584,41 @@ function wrs_run_filter()
 	var getAllFiltersToRun	=	"";
 	
 	
+	
 		
 	
-	//Se existir o job em execução desse mesmo report id então faz o cancelamento
-	if(job_exist(report_KendoUi.REPORT_ID))
-	{
-		//click_stop_job();
-		WRS_ALERT(LNG('CONSULTA_ATIVA_CANCELAR'),'warning');
-		
-			delete aba_active;
-			delete report_KendoUi;
-			delete history;
-			delete _filtro_size;
-			delete sortable_metrica;
-			delete sortable_linha;
-			delete sortable_coluna;
-			delete sortable_filtro;
-			delete request_metrica;
-			delete request_linha;
-			delete request_coluna;
-			delete request_filtro;
-			
-		return true;
-	}
-	
-	
-	//Ao navegar pelas abas essa função impede que seja executada mesmo se tiver aoteração a alteração só será efetivada ao mandar executar
-	try{
-		
-		if(report_KendoUi.STOP_RUN==true)
+		//Se existir o job em execução desse mesmo report id então faz o cancelamento
+		if(job_exist(report_KendoUi.REPORT_ID))
 		{
-			aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
-			configure_options_show_grid($(this));
-			//stop_job_timeout(_report_id);
-			
-				delete aba_active;
-			delete report_KendoUi;
-			delete history;
-			delete _filtro_size;
-			delete sortable_metrica;
-			delete sortable_linha;
-			delete sortable_coluna;
-			delete sortable_filtro;
-			delete request_metrica;
-			delete request_linha;
-			delete request_coluna;
-			delete request_filtro;
-			
-			_END('wrs_run_filter 3');
-			
+			//click_stop_job();
+			WRS_ALERT(LNG('CONSULTA_ATIVA_CANCELAR'),'warning');
+			delete aba_active,report_KendoUi,history,_filtro_size,sortable_metrica,sortable_linha,sortable_coluna,sortable_filtro,request_metrica,request_linha,request_coluna,request_filtro;
 			return true;
 		}
-	}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
 	
 	
-	var demo_top	=	'';
+		//Ao navegar pelas abas essa função impede que seja executada mesmo se tiver aoteração a alteração só será efetivada ao mandar executar
+		try{
+			
+			if(report_KendoUi.STOP_RUN==true)
+			{
+				aba_active.wrsAbaData('setKendoUi',{STOP_RUN:false});
+				configure_options_show_grid($(this));
+				//stop_job_timeout(_report_id);
+				delete aba_active,report_KendoUi,history,_filtro_size,sortable_metrica,sortable_linha,sortable_coluna,sortable_filtro,request_metrica,request_linha,request_coluna,request_filtro;
+				_END('wrs_run_filter 3');
+				
+				return true;
+			}
+		}catch(e){if(IS_EXCEPTION) console.warn(' exception');}
+		
+		
+		var demo_top	=	'';
 	
-	if(!empty($('.wrsGrid').html()))
-	{
-		demo_top	=	report_KendoUi;
-	}
+		if(!empty($('.wrsGrid').html()))
+		{
+			demo_top	=	report_KendoUi;
+		}
  
 		//Verificando se todos tem informações
 		if(sortable_metrica && sortable_linha )
@@ -1671,7 +1641,15 @@ function wrs_run_filter()
 			mensagem	+= LNG('ATTRIBUTOS_LINHA')+'<br>';
 		}
 
+		
 
+		if($('body').WrsGlobal('getCM','dblclick_open_aba_not_run')==true && $('#'+_report_id).length>0)
+			{
+				$('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':false});
+				run	=	 false;
+				TRACE('Não executa o run');
+			}
+		
 		
 		
 		if(run)
@@ -1806,39 +1784,17 @@ function wrs_run_filter()
 					 * Verificnado os Filtros simples
 					 * nesse caso inpede o fluxo completo
 					 */
-					if(!$.WrsFilter('wrs_check_filter_simples')) {
-						
+					if(!$.WrsFilter('wrs_check_filter_simples')) 
+					{
 						$('body').wrsAbas('remove_event_click');
 						//stop_job_timeout(_report_id);
-						
-						delete aba_active;
-						delete report_KendoUi;
-						delete history;
-						delete _filtro_size;
-						delete sortable_metrica;
-						delete sortable_linha;
-						delete sortable_coluna;
-						delete sortable_filtro;
-						delete request_metrica;
-						delete request_linha;
-						delete request_coluna;
-						delete request_filtro;
-						delete wrs_data_param;
-						delete getAllFiltersToRun;
-						delete wrsConfigGridDefault_data;
-						delete _param_request;
-
+						delete aba_active,report_KendoUi,history,_filtro_size,sortable_metrica,sortable_linha,sortable_coluna,sortable_filtro,request_metrica,request_linha,request_coluna,request_filtro,wrs_data_param,getAllFiltersToRun,wrsConfigGridDefault_data,_param_request;
 						_END('wrs_run_filter 4');
-						
 						return false;
-						
-
 					}
 					
 					
 			 
-					
-
 					var is_wrs_change_to	=	is_wrs_change_to_run(	_param_request,
 																		manager_aba,
 																		_param_request['REPORT_ID'],
@@ -1846,42 +1802,25 @@ function wrs_run_filter()
 						_param_request		=	{};
 						_param_request		=	is_wrs_change_to.val;
 						
-						
+					
 					if(is_wrs_change_to.status)
 					{
 						if($('#'+_report_id).length!=0)
 						{
 							configure_options_show_grid($(this));
 							//stop_job_timeout(_report_id);
-							delete aba_active;
-							delete report_KendoUi;
-							delete history;
-							delete _filtro_size;
-							delete sortable_metrica;
-							delete sortable_linha;
-							delete sortable_coluna;
-							delete sortable_filtro;
-							delete request_metrica;
-							delete request_linha;
-							delete request_coluna;
-							delete request_filtro;
-							delete wrs_data_param;
-							delete getAllFiltersToRun;
-							delete wrsConfigGridDefault_data;
-							delete _param_request;
-							delete is_wrs_change_to;
-
+							delete aba_active,report_KendoUi,history,_filtro_size,sortable_metrica,sortable_linha,sortable_coluna,sortable_filtro,request_metrica,request_linha,request_coluna,request_filtro,wrs_data_param,getAllFiltersToRun,wrsConfigGridDefault_data,_param_request,is_wrs_change_to;
 							_END('wrs_run_filter 5');
 							return true;
 						}
-		}else{
-			if(flag_load!='true')
-			{
-				$(this).attr('flag_load','true');
-				
-				
-			}
-		}
+				}else{
+						if(flag_load!='true')
+						{
+							$(this).attr('flag_load','true');
+							
+							
+						}
+				}
 		
 					//Ajustando ABAS HTML	
 					
@@ -1902,25 +1841,7 @@ function wrs_run_filter()
 
 			$('.wrs_run_filter').removeAttr('status_load');
 			//stop_job_timeout(_report_id);
-			
-							delete aba_active;
-							delete report_KendoUi;
-							delete history;
-							delete _filtro_size;
-							delete sortable_metrica;
-							delete sortable_linha;
-							delete sortable_coluna;
-							delete sortable_filtro;
-							delete request_metrica;
-							delete request_linha;
-							delete request_coluna;
-							delete request_filtro;
-							delete wrs_data_param;
-							delete getAllFiltersToRun;
-							delete wrsConfigGridDefault_data;
-							delete _param_request;
-							delete is_wrs_change_to;
-							
+				delete aba_active,report_KendoUi,history,_filtro_size,sortable_metrica,sortable_linha,sortable_coluna,sortable_filtro,request_metrica,request_linha,request_coluna,request_filtro,wrs_data_param,getAllFiltersToRun,wrsConfigGridDefault_data,_param_request,is_wrs_change_to;
 			_END('wrs_run_filter 6');
 			return true;
 		}
@@ -2023,8 +1944,10 @@ function wrs_run_filter()
 	else
 	{
 			//wrs_panel_layout.open('east');
-		
 			$('body').wrsAbas('remove_event_click');
+			//HERE -- verificar i 
+
+			$('body').managerJOB('load_complete',{report_id:_report_id});
 			
 			//Falta informações para executar o relatório
 			//stop_job_timeout(_report_id);
@@ -2039,23 +1962,7 @@ function wrs_run_filter()
 			
 	}
 	
-	delete aba_active;
-	delete report_KendoUi;
-	delete history;
-	delete _filtro_size;
-	delete sortable_metrica;
-	delete sortable_linha;
-	delete sortable_coluna;
-	delete sortable_filtro;
-	delete request_metrica;
-	delete request_linha;
-	delete request_coluna;
-	delete request_filtro;
-	delete wrs_data_param;
-	delete getAllFiltersToRun;
-	delete wrsConfigGridDefault_data;
-	delete _param_request;
-	delete is_wrs_change_to;
+	delete aba_active,report_KendoUi,history,_filtro_size,sortable_metrica,sortable_linha,sortable_coluna,sortable_filtro,request_metrica,request_linha,request_coluna,request_filtro,wrs_data_param,getAllFiltersToRun,wrsConfigGridDefault_data,_param_request,is_wrs_change_to;
 	
 	_END('wrs_run_filter 7');
 	

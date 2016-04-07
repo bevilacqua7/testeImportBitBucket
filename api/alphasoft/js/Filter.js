@@ -572,6 +572,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id,compare_filte
 {
 	
 	_START('is_wrs_change_to_run');
+	
 	var param_request	=	{};
 		param_request	=	 _param_request;
 
@@ -623,11 +624,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id,compare_filte
 	
 	histoty_param	=	$.parseJSON(base64_decode(history));
 	
-	
-	
-
-	
-	var _compare	= ['LAYOUT_ROWS','LAYOUT_COLUMNS','LAYOUT_MEASURES','LAYOUT_FILTERS','ORDER_COLUMN','ALL_COLS','ALL_ROWS','DRILL_HIERARQUIA_LINHA','SUMARIZA'];
+	var _compare	= 	['LAYOUT_ROWS','LAYOUT_COLUMNS','LAYOUT_MEASURES','LAYOUT_FILTERS','ORDER_COLUMN','ALL_COLS','ALL_ROWS','DRILL_HIERARQUIA_LINHA','SUMARIZA'];
 
 		if(empty(param_request.ALL_COLS)) param_request.ALL_COLS='';
 		
@@ -638,6 +635,7 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id,compare_filte
 
 		for(var lineCompare in _compare)
 		{
+			
 			var __key				=	_compare[lineCompare];
 			var _history_compare	=	_trim(histoty_param[__key]);
 			var request_current	=	param_request[__key];
@@ -653,7 +651,10 @@ function is_wrs_change_to_run(_param_request,manager_aba,report_id,compare_filte
 				{
 					flag=false;
 				}
+				
 		}
+		
+
 		//DEVELOPE:
 		//VErifica se o filtro simples ou composto teve alteração filtro negado
 		
@@ -1309,18 +1310,18 @@ function wrsFilterClickFalse(filter_hide)
 		var getFiltersLevelUP =	function(level_up,typeEvent)
 		{
 			_START('WrsFilter::getFiltersLevelUP');	
-			var levelUP			=	[];
-			var filters_up		=	[];
+			var levelUP				=	[];
+			var filters_up			=	[];
 			var filters_up_only_Data=	[];
-			var empty_filter	=	false;
-			var tagQuery		=	'';
-			var FilterOriginal	=	[];
-			var addFilter		=	[];
-			var _index			=	[];
+			var empty_filter		=	false;
+			var tagQuery			=	'';
+			var FilterOriginal		=	[];
+			var addFilter			=	[];
+			var _index				=	[];
 			var aba_active			=			get_aba_active_object();
 			var add_filter_fixed	=	{};
 			
-				levelUP			=	 explode(',',level_up);			
+				levelUP				=	 explode(',',level_up);			
 			
 			if(empty(level_up) && empty(typeEvent)) 
 			{

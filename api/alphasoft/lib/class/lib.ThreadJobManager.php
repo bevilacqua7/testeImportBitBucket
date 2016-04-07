@@ -155,7 +155,8 @@ class ThreadJobManager extends WRS_USER
 			$job_status 		= $this->_query->GET_SSAS_JOB($rows_CREATE_SSAS_JOB['QUERY_ID']);
 			$job_status_exec	= $this->query($job_status);
 			$rows_GET_SSAS_JOB 	= $this->fetch_array($job_status_exec);
-			
+	//HERE		
+//			WRS_DEBUG_QUERY($rows_GET_SSAS_JOB,'job.log');
 			//$rows_GET_SSAS_JOB['JOB_STATUS']		=	3;	
 			
 
