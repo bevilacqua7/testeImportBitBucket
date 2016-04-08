@@ -229,7 +229,7 @@ function optionsDataConvert(gridValue,with_decode)
 									
 									$(window).resize();		
 									
-									resize_container_grid(report_id);
+									//resize_container_grid(report_id);
 									
 									delete history;
 								return true;
@@ -282,7 +282,7 @@ function optionsDataConvert(gridValue,with_decode)
 					
 						
 						$(window).resize();		
-						resize_container_grid(report_id);
+						//resize_container_grid(report_id);
 						delete history;
 						_END('wrsAbas::__manager_vision_grid_edit');
 			}

@@ -142,7 +142,6 @@ class ThreadJobManager extends WRS_USER
 		
 
 		
-		
 		//TODO:Remover esse IF inteiro
 		if(empty($rows_CREATE_SSAS_JOB['QUERY_ID']))
 		{

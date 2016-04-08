@@ -347,7 +347,6 @@ function generate_hight_models(report_id)
  */
 function resize_container_grid(report_id,_type_grid)
 {
-	
 	_START('resize_container_grid');
 	var type_grid		=		_type_grid;
 	var kendoUi			=		$('.'+report_id).wrsAbaData('getKendoUi');

@@ -486,8 +486,6 @@ class KendoUi
 				                                										_headerIndex	=	WRSHeaderIndex(_kendoUi);
 				                                										_headerIndex	=	_headerIndex.field;
 																					}
-																					
-																					
 				                                									
 				                                									data['filters']	=	recursiveFilterFindType(_headerIndex,this.options.dataSource._filter);
 				                                							 
@@ -512,9 +510,6 @@ class KendoUi
 		                                							
 																	 	$(".{$this->getId()}").wrsAbaData('setWrsFilterStart',{filter	:	_filters});
 																		$(".{$this->getId()}").wrsAbaData('setWrsData',{REPORT_FILTER:_filters});
-																		
-																		
-																			
 																			
 		                                								return kendo.stringify(data);
 																}
@@ -833,7 +828,6 @@ HTML;
 					}
 					else
 					{
-						 
 							if(empty($value['keyUp']))
 							{
 							//	$_menuUse[0]	=	$value; //Verão descontinuada da regra antiga

@@ -23,9 +23,11 @@ var NOT_CHECK_LOGIN	=	true;
 	<?php 
 	
 		$recover		=	 fwrs_request('recover');
+		$usecode		=	 fwrs_request('usercode');
 	
 	?>
 	var RECOVER='<?php echo $recover;?>';
+	var USER_CODE='<?php echo $usecode;?>';
 </script>
 
 <?php 

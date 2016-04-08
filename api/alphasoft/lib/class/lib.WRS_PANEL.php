@@ -383,8 +383,6 @@ class WRS_PANEL  extends WRS_USER
 			$option.=fwrs_option($cube_info['CUBE_ID'],$value,$CUBE_ID, 'json="'.base64_encode(json_encode($cube_info,true)).'"');
 		}
 		
-		
-		
 		return $option;
 	}
 	
