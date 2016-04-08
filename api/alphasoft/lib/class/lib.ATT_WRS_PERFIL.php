@@ -39,11 +39,7 @@ class ATT_WRS_PERFIL extends WRS_BASE
 	
 	public function exportResults($options=null)
 	{
-		$customer_id_logado		= WRS::CUSTOMER_ID();
-		$param_extra = array(
-				'filtro_fixo' => 'CUSTOMER_ID = '.$customer_id_logado
-		);
-		return $this->admin->exportResults($options,$param_extra);
+		return $this->admin->exportResults($options);
 	}
 	
 	public function fileDownload($options=null)
