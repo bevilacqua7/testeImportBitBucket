@@ -71,12 +71,12 @@ function btn_click_drill_mobile()
 	
 	if(_drill_mobile!=true)
 	{
-		$('.btn-click-drill-mobile').addClass('btn-success ').removeClass('btn-danger');
+		$('.btn-click-drill-mobile').addClass('btn-danger').removeClass('btn-success');
 		
 		$('.k-grid-filter').hide();
 		_drill_mobile	=	 true;
 	}else{
-		$('.btn-click-drill-mobile').removeClass('btn-success').addClass('btn-danger');
+		$('.btn-click-drill-mobile').removeClass('btn-danger').addClass('btn-success');
 		$('.k-grid-filter').show();
 		_drill_mobile	=	false;
 	}

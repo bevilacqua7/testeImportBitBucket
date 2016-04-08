@@ -7,7 +7,7 @@
  */
 includeClass('WRS_BASE');
 includeQuery('WRS_MANAGE_PARAM');
-includeQuery('QUERY_WRS_REPORT');
+includeQuery('WRS_REPORT');
 
 class QUERY_WRS_ADMIN
 {
@@ -85,11 +85,16 @@ class QUERY_WRS_ADMIN
 						
 			if($condicao!=''){
 				
+				$USER_CODE 				= WRS::USER_CODE();
+				$USER_MASTER			= WRS::USER_MASTER();
+
 				$query			=	"EXEC Change_Table '".$tabela."',
 					                  '',
 					                  '',
 					                  '".$condicao."',
 					                  'DELETE',
+									  '".$USER_CODE."',
+				                      '".$USER_MASTER."',
 					                  1";
 				//exit($query);
 				return $query;

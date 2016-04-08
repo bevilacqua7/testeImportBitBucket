@@ -465,7 +465,7 @@ $(document).ready(function () {
 											$('.WRS_DRAG_DROP_FILTER_CONTAINER').hide();
 											$('.wrs_panel_filter_icon').show();
 											wrsFilterClickFalse();
-											
+											wrs_center_onresize();
 											_END('east__onopen');
 										},
 			east__onclose: getArrPerfUser('DRG')?hide_east:function () 
@@ -1457,9 +1457,6 @@ function wrs_run_filter()
 	_START('wrs_run_filter');
 			
 	
-	
-	
-	
 	var manager_aba			=	$(this).attr('manager_aba');
 		manager_aba			=	empty(manager_aba) ? false : true;
 		$(this).removeAttr('manager_aba');
@@ -1930,7 +1927,15 @@ function wrs_run_filter()
 		
 		_param_request['REPORT_FILTER']	=	REPORT_FILTER;
 		
-
+		
+		//_param_request['FROZEN_ROWS']		=	wrsConfigGridDefault_data.FROZEN_ROWS;
+		_param_request['FROZEN_ROWS']		=	true;
+		
+		//Regra garante a compatibilicade pois se não for selecionado não contem dados
+		if(_param_request['FROZEN_ROWS']!=0){
+			_param_request['FROZEN_ROWS']	=	1;
+		}
+		
 	 	//console.log('_param_request',_param_request);
 		runCall(_param_request,_file,_class,_event,MOUNT_LAYOUT_GRID_HEADER,'modal');		
 		

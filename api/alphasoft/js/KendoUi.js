@@ -78,7 +78,7 @@ function generate_csv_zip_request(data)
 	{
 		if(!isEmpty(download))
 		{
-			
+			SYSTEM_OFF	=	 true;
 			window.location.assign(download);
 		}
 	}
@@ -315,6 +315,9 @@ function WRSKendoGridComplete(IDGrid)
 	var historyClick	=	 function()
 	{
 		_START('WRSKendoGridComplete::historyClick');
+		
+		
+		$('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':false});	//Habilita a execução da run
 		
 		var _wrs_id			=	$(this).attr('wrs-id');
 		var _mktime			=	$(this).attr('mktime');
@@ -1385,6 +1388,9 @@ function  themeSUM(nameID,arg,wrsParam)
 	    {	
 	    	_START('WrsGridKendoUiControlColumnPlusMinus');
 			addKendoUiColorJQueryGrid();
+			
+			$('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':false});
+			
 			
 			var $eventTelerik		=	 this;
 			var _openStart			=	openStart ? true : false;

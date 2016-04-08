@@ -1270,6 +1270,7 @@ function wrsFilterClickFalse(filter_hide)
 									/*
 									 * Se o filtro foi modificado então apaga os filhos
 									 */
+
 									aba_active.wrsAbaData('setNewFilter',{tag:tag_class,data:null});
 								}
 								
@@ -1745,12 +1746,9 @@ function wrsFilterClickFalse(filter_hide)
          var  clickHeaderFiltro	 = function (_event,type)
          {
 			 _START('WrsFilter::clickHeaderFiltro');
-			 
+
         	 var event				=	 _event;
         	 var pageHome			=	false;
-        	 
-        	 //permite executar o relatório
-        	 $('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':false});
         	 
         	 
         	 if(type!='loadWrs')
@@ -1850,6 +1848,7 @@ function wrsFilterClickFalse(filter_hide)
 		 	$(data.data.id).find('.wrs_filter_body_container').html(data.html);
 		 	
 		 	
+
 
 	 		var index_data			=	 data.data.index_data;
  			var _main				=	$('#wrs_header_filter_main_'+index_data);
@@ -2107,6 +2106,9 @@ function wrsFilterClickFalse(filter_hide)
 		 	
 		 	formata_texto_resultado_filtros();
 			
+			        	 //permite executar o relatório
+        	 $('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':false});
+			
 			_END('WrsFilter::funCallBackRun');
 		}
     	 
@@ -2321,7 +2323,7 @@ function wrsFilterClickFalse(filter_hide)
 				/**
 				 *  Verificnado se os comapos simples estão preenchidos
 				 */
-				var __wrs_check_filter_simples = function()
+				var __wrs_check_filter_simples = function(request)
 				{
 					_START('WrsFilter::__wrs_check_filter_simples');
 					
@@ -2393,6 +2395,8 @@ function wrsFilterClickFalse(filter_hide)
 							TRACE('Processando select simples');
 							filter.attr('is_atributo_simples',false);
 							$('.wrs_run_filter').attr('is_atributo_simples',true);
+							
+
 							$('.wrs_run_filter').trigger('click');
 						}
 					_END('WrsFilter::__wrs_check_filter_simples');

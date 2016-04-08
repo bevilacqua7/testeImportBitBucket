@@ -178,6 +178,7 @@ class KendoUi
 						'filter'								=> 	array(),	//Contem informações de negação e simples 
 						'GAUGE_SIZE_BY_LINE'					=> 	NULL,
 						'DRILL_HIERARQUIA_LINHA'				=> 	NULL,
+						'FROZEN_ROWS'							=>	false, 		//Informa se terá coluna de linhas congelados ou não
 						'DRILL_HIERARQUIA_LINHA_DATA'			=>	NULL,
 						'SHOW_LINE_TOTAL'						=> 	NULL,
 						'DRILL_HIERARQUIA_LINHA_DATA_HEADER'	=>	NULL,
@@ -702,9 +703,9 @@ HTML;
 	 * @param array $_param
 	 * 
 	 */
-	public function setHeaderColumnWRS($_param)
+	public function setHeaderColumnWRS($_param,$FROZEN_ROWS)
 	{
-		
+
 		/**
 		 *  Menu Principal
 		 */
@@ -772,7 +773,7 @@ HTML;
 		{
 			$frozenArrayHeader[0]['title']		=	(string)$label['LEVEL_NAME'];
 			$frozenArrayHeader[0]['LEVEL_FULL']	=	(string)$label['LEVEL_FULL'];
-			$frozenArrayHeader[0]['locked']		=	true;
+			$frozenArrayHeader[0]['locked']		=	$FROZEN_ROWS;
 			$frozenArrayHeader[0]['columns']	=	array_values($arrayFrozen);
 			//$frozenArrayHeader[0]['field']		=	'';
 			$arrayFrozen						=	$frozenArrayHeader;

@@ -1197,8 +1197,13 @@ var getRequestKendoUiDefault	=	{};
 		$(this).parent().find('input').each(function()
   				{
 	  				$(this).prop('checked',false);
+
+	  				var _val	=	_opts[$(this).attr('name')];
 	  				
-	  				if(!empty(_opts[$(this).attr('name')])){
+	  				//Mantem a compatibilidade com os relatórios já salvos
+	  				if($(this).attr('name')=='FROZEN_ROWS'){	if(_val!=0) _val = 1;}
+	  				
+	  				if(!empty(_val)){
 	  					$(this).prop('checked',true);
 	  				}else{
 	  					$(this).prop('checked',false);
