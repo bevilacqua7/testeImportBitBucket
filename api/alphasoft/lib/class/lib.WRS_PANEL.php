@@ -1340,7 +1340,10 @@ HTML;
 		
 		
 		$TelerikUi->setPageSize($page_size);
-		$TelerikUi->setHeaderColumnWRS($param);
+		
+
+		
+		$TelerikUi->setHeaderColumnWRS($param,$_getRequestKendoUi['FROZEN_ROWS']);
 		
 		$tagToUrl['TOTAL_COLUMN']	=	$TelerikUi->get_total_column();
 		

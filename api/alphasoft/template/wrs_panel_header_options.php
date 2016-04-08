@@ -8,6 +8,7 @@ $GRID_HEADER_OPTION_TOTAL_LINE				=	LNG('GRID_HEADER_OPTION_TOTAL_LINE');
 $GRID_HEADER_OPTION_TOTAL_COLUMN			=	LNG('GRID_HEADER_OPTION_TOTAL_COLUMN');
 $GRID_HEADER_OPTION_TOTAL_SUMARIZA			=	LNG('GRID_HEADER_OPTION_TOTAL_SUMARIZA');
 $GRID_HEADER_OPTION_TOTAL_LINE_COLOR		=	LNG('GRID_HEADER_OPTION_TOTAL_LINE_COLOR');
+$GRID_HEADER_OPTION_FROZEN_ROWS				=	LNG('GRID_HEADER_OPTION_FROZEN_ROWS');
 $GRID_HEADER_EXPORT_PDF						=	LNG('GRID_HEADER_EXPORT_PDF');
 $GRID_HEADER_EXPORT_CSV						=	LNG('GRID_HEADER_EXPORT_CSV');
 $GRID_HEADER_EXPORT_EXCEL					=	LNG('GRID_HEADER_EXPORT_EXCEL');
@@ -115,7 +116,7 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 			 
 			 <button type="button" class="btn btn-warning btn-xs  btn-clean-filter-kendo-ui wrs-tooltip"  title="{$CLEAR_FILTER_KENDOUI}"><i class="glyphicon glyphicon-trash"></i></button>
 			 
-			 <button type="button" class="btn btn-danger color_write btn-xs  btn-click-drill-mobile wrs-tooltip"  title="{$BTN_DRILL_TOOLTIP}"><i class="fa fa-hand-pointer-o"></i></button>
+			 <button type="button" class="btn btn-success color_write btn-xs  btn-click-drill-mobile wrs-tooltip"  title="{$BTN_DRILL_TOOLTIP}"><i class="fa fa-hand-pointer-o"></i></button>
 						
 						
 					  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" disabled_s >
@@ -155,6 +156,13 @@ $WRS_PANEL_HEADER_TABLE		=	<<<HTML
 						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="COLORS_LINE"> {$GRID_HEADER_OPTION_TOTAL_LINE_COLOR}</label></div>
 						  		</form>
 					  		</li>
+					  		<!--
+					  		<li>
+						  		<form>
+						  		 		<div class="checkbox"><label><input type="checkbox" value="1" name="FROZEN_ROWS"> {$GRID_HEADER_OPTION_FROZEN_ROWS}</label></div>
+						  		</form>
+					  		</li>
+					  		-->
 					  		<li class="divider"></li>
 					  		
 						    <li><h4>{$GRID_HEADER_TITLE_TOTAL}</h4></li>

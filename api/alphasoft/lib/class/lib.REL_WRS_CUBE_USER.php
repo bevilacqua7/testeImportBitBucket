@@ -347,7 +347,7 @@ class REL_WRS_CUBE_USER extends WRS_BASE
 				$_obj 						= (array)$obj;
 				$registros[$_obj['chave']]	= $_obj['valor'];
 			}
-			$condicao		= "CUBE_ID = ''".$registros['CUBE_ID']."'' AND DATABASE_ID = ''".$registros['DATABASE_ID']."'' AND USER_ID = ".$registros['USER_ID'];
+			$condicao		= "SERVER_ID = ''".$registros['SERVER_ID']."'' AND CUBE_ID = ''".$registros['CUBE_ID']."'' AND DATABASE_ID = ''".$registros['DATABASE_ID']."'' AND USER_ID = ".$registros['USER_ID'];
 			$sql_del[] 		= $this->queryClass->Get_procedure_remove_cube_user($this->admin->classname,$condicao);
 		}
 

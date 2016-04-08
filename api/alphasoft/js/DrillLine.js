@@ -254,6 +254,9 @@ function DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS()
 {
 	
 	_START('DRILL_HIERARQUIA_LINHA_CLICK_PLUS_MINUS');
+	
+	$('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':false});	//Habilita a execução da run
+	
 	var column		=	 $(this).attr('column');
 	var line		=	 $(this).attr('line');
 	var data		=	 $(this).attr('data');

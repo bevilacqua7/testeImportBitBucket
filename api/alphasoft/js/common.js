@@ -571,7 +571,10 @@ function not_close_save_info()
 		var report_id		=	0;
 		var kendoUi			=	get_aba_active_kendoUi();
 
-		if(SYSTEM_OFF==true) return null;
+		if(SYSTEM_OFF==true) {
+			SYSTEM_OFF	=	 false;
+			return null;
+		}
 		
 		 
 		
@@ -1310,7 +1313,7 @@ function runCall(param_request,Ofile,Oclass,Oevent,funCallBack,typeAlert,typeDat
 			}
 				
 	  });
-	
+	//console.error('runCall');
 	TRACE('runCall finalizado');
 }
 

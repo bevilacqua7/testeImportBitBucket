@@ -347,6 +347,9 @@ function addTargetDisableContext(kendoUi,report_id)
 
     		$('.'+e.kendoId).wrsAbaData('setKendoUi',{STOP_RUN:false, 'TYPE_RUN':TYPE_RUN[e.type]});
     		
+    		
+    		$('body').WrsGlobal('setCM',{'dblclick_open_aba_not_run':false});	//Habilita a execução da run
+    		
 
 
     		

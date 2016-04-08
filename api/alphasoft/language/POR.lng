@@ -18,7 +18,7 @@
 	$language['MODAL_CANCEL']		=	"Cancelar";
 	
 	
-	$language['FILTER_KENDO_UI']		=	"Filtros da Grid";
+	$language['FILTER_KENDO_UI']		=	"Filtros de Métricas";
 		
 	$language['CLEAR_FILTER_KENDOUI']			=	"Limpar filtros da Grid";
 	$language['CLEAR_FILTER_KENDOUI_WARNING']	=	"Deseja realmente limpar os filtros da Grid?";
@@ -31,7 +31,7 @@ $language["DIAS"]=array('Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feir
 $language["DE"]		=	' de ';
 
 
-		$language['BRN_OUT_SYSTEM']			='Sair do WRS';
+		$language['BRN_OUT_SYSTEM']			='Fechar Sistema';
 		
 		$language['theme_azul']			='Azul';
 		$language['theme_cinza']		='Cinza';
@@ -97,14 +97,14 @@ HTML;
 	
 
 	
-	$language['ERROR_CANT_CREATE_JOB'] 						= "Ops.. Favor reenviar a consulta, não foi possível criar um job, se o erro persistir favor entrar em contato com o suporte";
+	$language['ERROR_CANT_CREATE_JOB'] 		=	"Favor reenviar a consulta, não foi possível criar a mesma, se o erro persistir favor entrar em contato com o suporte";
 	
-	$language['CSV_ERROR_TABLE_EMPTY']			="Ops, ainda não foi gerado nenhum relatório para essa  consulta, ou falta informaçõe da tabela para ser gerada.";
+	$language['CSV_ERROR_TABLE_EMPTY']		=	"Ainda não foi gerado nenhum relatório para essa consulta, ou a mesma não retornou registros.";
 	$language['CSV_NOT_GENERATE']			=	'Não está sendo possivel gerar o CSV, erro interno no banco';
 
 	$language['CSV_GENERATE_ZIP']		=	'Gerando %s arquivos CSV';
 	
-	$language['LOGOUT']						=	'Aguarde um instante estamos saindo do sistema..<br><br><br>';
+	$language['LOGOUT']						=	'Aguarde um instante enquanto o sistema é fechado...<br><br><br>';
 	
 	$language['MENU_ADMIN_CUSTOMER']		=	'Clientes';
 	$language['MENU_ADMIN_USER']			=	'Usuários';
@@ -137,11 +137,11 @@ HTML;
 	$language['MENU_ALL_CATEGORY']			=	'Todas as categorias';
 		
 	
-	$language['NO_RESULTS_QUERY']	=	'sem resultados para a consulta: ';
+	$language['NO_RESULTS_QUERY']	=	'Consulta não retornou registros: ';
 	$language['NAME_REPORT_EMPTY']	=	'Escolha um nome para o relatório';
 
 	$language['DATABASE_NOT_CONECTED']	=	"Sem conexão com o banco de dados, tente desconectar e logar no sistema novamente";
-	$language['DATABASE_NOT_FOUND']		=	"Ops!!! Sem conexão com o banco de dados";
+	$language['DATABASE_NOT_FOUND']		=	"Sem conexão com o banco de dados";
 	/*
 	 * CUBO ERRO
 	 */
@@ -160,14 +160,14 @@ HTML;
 	$language ['JOB_NOTFOUND'] 				= "Não foi encontrado a Consulta para cancelar ou a mesma foi concluida";
 
 	$language ['JOB_CLOSE_ALERT'] 			= 	"Fechar Janela de Alerta";
-	$language['SORT_SSAS_TABLE_ERROR']		=	"ERROR::008 Não foi possível Sortear a tabela";	
+	$language['SORT_SSAS_TABLE_ERROR']		=	"ERROR::008 Não foi possível Ordenar a consulta";	
 	$language['CONSULTA_ATIVA_CANCELAR']	=	"Existe uma consulta em andamento para esse report, é necessário cancelar para solicitar uma nova consulta.";
 	/*
 	 * ALERTS
 	 */
 	
 	$language ['SELECT_NULL'] 					= "Consulta retornou vazia";
-	$language ['RUN_GRID_CHANGE_NOT'] 			= "Não há modificações para gerar uma nova Consulta..";
+	$language ['RUN_GRID_CHANGE_NOT'] 			= "Não há modificações para gerar uma nova Consulta";
 	
 	$language ['NOT_CLOSE_WINDOW'] 			= "As abas listadas a baixo não estão salvas:";
 	$language ['NOT_CLOSE_WINDOW_LOGOUT'] 	= "As abas listadas a baixo não estão salvas, deseja sair mesmo sem salvar?";
@@ -176,17 +176,17 @@ HTML;
 	$language['SEE_IN_MAP']					=	'VER NO MAPA';
 	$language['REMOVE']						=	'REMOVER';
 	
-	$language['DATA_BASE_ERROR']			=	'<b>Ops... Erro no Banco de dados:</b> ';
+	$language['DATA_BASE_ERROR']			=	'<b>Erro no Banco de dados:</b> ';
 	
 	/*
 	 * TITULOS
 	 */
 	
 	$language ['TITLE_TEMA'] 			= "Tema";
-	$language ['TITLE_LINGUA'] 			= "Lingua";
+	$language ['TITLE_LINGUA'] 			= "Idioma";
 	$language ['TITLE_ALTER_SENHA'] 	= "Alterar Senha";
 	$language ['TITLE_ADMINISTRATIVO'] 	= "Administrativo";
-	$language ['TITLE_ADMINISTRATIVO_MENU'] 	= "MENU PRINCIPAL";
+	$language ['TITLE_ADMINISTRATIVO_MENU'] 	= "Menu Principal";
 		
 	$language ['TITLE_GRID_WINDOW_MENU_MANAGER'] 		= "Visão";
 	$language ['TITLE_GRID_WINDOW_MENU_LIST'] 			= "Grid";
@@ -229,7 +229,7 @@ HTML;
 	/*
 	 * ERRO AO CARREGAR A RUN.php
 	 */
-	$language ['ERRO_FILE_PROCCESS'] = "Ops Houve algum erro no processo ERRO:0001";
+	$language ['ERRO_FILE_PROCCESS'] = "Houve algum erro no processo ERRO:0001";
 	
 	/*
 	 * BOTAO
@@ -278,23 +278,23 @@ HTML;
 	/*
 	 * CHART
 	 */
-	$language ['ACTIVE'] 			= "Ativas(os)";
-	$language ['ACTION'] 			= "Ações";
-	$language ['TYPE'] 				= "Tipo";
-	$language ['SUB_TYPE'] 			= "Sub Tipo";
-	$language ['LEGEND_ENABLE'] 	= "Desativar";
-	$language ['POLAR'] 			= "Polar";
-	$language ['RADAR'] 			= "Radar";
+	$language['ACTIVE'] 			= "Ativas(os)";
+	$language['ACTION'] 			= "Ações";
+	$language['TYPE'] 				= "Tipo";
+	$language['SUB_TYPE'] 			= "Sub Tipo";
+	$language['LEGEND_ENABLE'] 	= "Desativar";
+	$language['POLAR'] 			= "Polar";
+	$language['RADAR'] 			= "Radar";
 	$language['NORMAL']				= "Nornal";
 	$language['STACKED']			= "Empilhado";
 	$language['WAVY']				= "Ondulado";
 	$language['PERCENT']			= "Percentual";	
 	$language['LEGEND']				= "Legendas";
-	$language['MULTIPLE_CURSOR']	= "Multiplo";
+	$language['MULTIPLE_CURSOR']	= "Múltiplo";
 	
-	$language['CHART_GAUGE_RANGE']	= "Range";
-	$language['CHART_GAUGE_QUANTIDADE']	=	"Quantidade por linha";
-	$language['CHART_GAUGE_COLOR_TITLE']	= "Gauge";
+	$language['CHART_GAUGE_RANGE']	= "Faixa";
+	$language['CHART_GAUGE_QUANTIDADE']	= "Quantidade por linha";
+	$language['CHART_GAUGE_COLOR_TITLE'] = "Gauge";
 	$language['CHART_GAUGE_LINEAR']	= "Linear";
 	$language['CHART_GAUGE_RADIAL']	= "Radial";
 	
@@ -326,16 +326,17 @@ HTML;
 	$language['GRID_HEADER_OPTION_TOTAL_COLUMN']	 	=	"Colunas";
 	$language['GRID_HEADER_OPTION_TOTAL_SUMARIZA']	 	=	"Numeros Resumidos";
 	$language['GRID_HEADER_OPTION_TOTAL_LINE_COLOR']	=	"Linhas Intercaladas";
+	$language['GRID_HEADER_OPTION_FROZEN_ROWS']			=	"Congelar Cabeçalhos";
 	$language['GRID_HEADER_OPTION_ORDER_COLUMN']	 	=	"Inverter Colunas";
 	$language['GRID_HEADER_OPTION_DRILL_HIERARQUIA_LINHA']=	"Registros Consolidados";
 	
 	
 	$language['BTN_DRILL_TITLE']	=	"Drill";
-	$language['BTN_DRILL_TOOLTIP']	=	"Ativando funções drill, eventos do botão direiro do mouse.";
+	$language['BTN_DRILL_TOOLTIP']	=	"Habilita Sub-menus de Navegação";
 	
 	$language['GRID_HEADER_EXPORT'] 			= "Exportar";
-	$language['GRID_HEADER_EXPORT_PDF'] 		= "Pdf";
-	$language['GRID_HEADER_EXPORT_CSV'] 		= "Csv";
+	$language['GRID_HEADER_EXPORT_PDF'] 		= "PDF";
+	$language['GRID_HEADER_EXPORT_CSV'] 		= "CSV";
 	$language['GRID_HEADER_EXPORT_EXCEL'] 		= "Excel";
 	$language['GRID_HEADER_EXPORT_IMAGE'] 		= "Imagem";
 	$language['GRID_HEADER_EXPORT_IMAGE_SVG'] 	= "Imagem SVG";
@@ -347,7 +348,7 @@ HTML;
 	$language['GRID_HEADER_SEE'] 		= 	"Visão";
 	$language['GRID_HEADER_SEE_GRID']	=	"Planilha";	
 	$language['GRID_HEADER_SEE_CHART']	=	"Gráfico";
-	$language['GRID_HEADER_MAIL_SEND']	=	'Enviar e-mail';
+	$language['GRID_HEADER_MAIL_SEND']	=	'Enviar E-mail';
 	$language['GRID_HEADER_SEE_MAP']	=	"Mapa";
 	
 	$language['GRID_HEADER_TITLE_DADOS']		=	"Dados";
@@ -357,9 +358,9 @@ HTML;
 	$language['WHAT_SEARCH'] = "O que procura?";
 	
 	
-	$language ['TITLE_TOP'] 		= "Opções Top";
+	$language ['TITLE_TOP'] 		= "Opções TOP";
 	$language ['BTN_SAIR'] 		= "Sair";
-	$language ['BTN_SAIR_MENU'] 		= "Fechar menu";
+	$language ['BTN_SAIR_MENU'] = "Fechar Menu";
 	$language ['BTN_SIM'] 		= "Sim";
 	$language ['BTN_NAO'] 		= "Não";
 	$language ['BTN_CONFIRM'] 	= "Confirmado";
@@ -388,12 +389,11 @@ HTML;
 	$language['tpl_layout_name_empty'] 		= "É necessário digitar o <b>Nome Layout</b>";
 	$language['tpl_layout_alias_empty'] 	= "É necessário digitar o <b>Alias Layout</b>";
 	$language['tpl_layout_data_empty'] 		= "É necessário preencher uma das opções para salvar um layout <b>Métricas, Linhas ou Colunas</b>";
-	
+
 	$language['tpl_layout_option_select_empty'] 		= "É necessário selecionar alguma opção para o layout";
-	
-	
+
 	$language['tpl_layout_share'] 			= "Compartilhar";
-	$language['tpl_layout_error'] 			= "OPS... Erro ao salvar o layout,favor tentar novamente";
+	$language['tpl_layout_error'] 			= "Erro ao salvar o layout, favor tentar novamente";
 	$language['tpl_layout_sucess'] 			= "Layout salvo com sucesso";
 	
 	
@@ -500,7 +500,7 @@ HTML;
 	
 	
 	// ADMIN MANAGE PARAM
-	$language['obrigatorio'] 				= 'obrigatório';
+	$language['obrigatorio'] 				= 'Obrigatório';
 	$language['bt_back'] 					= 'Voltar';
 	$language['bt_new'] 					= 'Novo';
 	$language['bt_update'] 					= 'Salvar';
@@ -538,8 +538,8 @@ HTML;
 	
 	$language['LOGIN_SUBJECT']		=	'Recuperação de senha';
 	
-	$language['LOGIN_RECOVER_NOT_FOUND']		=	'Ops... Não foi encontrado o usuário <b>%s</b> para enviar a recuperação de senha.';
-	$language['LOGIN_NOT_EMAIL']		=	'Ops.. Não foi encontrado email para ser enviado para o usuário <b>%s</b>. <br>Favor entrar em contato com o suporte para a recuperação da senha.<br>Obrigado.';
+	$language['LOGIN_RECOVER_NOT_FOUND']		=	'Não foi encontrado o usuário <b>%s</b> para enviar a recuperação de senha.';
+	$language['LOGIN_NOT_EMAIL']		=	'Não foi encontrado email para ser enviado para o usuário <b>%s</b>. <br>Favor entrar em contato com o suporte para a recuperação da senha.<br>Obrigado.';
 	
 	$language['LOGIN_RECOVER_NEW']		=	'<h4>Alteração de senha</h4> Digite a nova senha para ter acesso ao sistema.';
 	
@@ -552,7 +552,7 @@ HTML;
 	$language['LOGIN_ADD_NEW_RECOVER']			=	'Entre com a nova senha para acessar o sistema';
 	$language['LOGIN_RECOVER_SUCCESS']			='Recuperação de senha enviada para o email do usuário';
 	
-	$language['LOGIN_RECOVER_ERROR']			='Ops.. Não foi possível enviar o email. Favor entrar em contato com o suporte para poder recuperar a senha. Obrigado';
+	$language['LOGIN_RECOVER_ERROR']			='Não foi possível enviar o email. Favor entrar em contato com o suporte para poder recuperar a senha. Obrigado';
 	
 	$language['HTML_LOGIN_RECOVER_BTN']		=	"TROCAR SENHA";
 	$language['HTML_LOGIN_RECOVER_TITLE']="Recuperação de senha";
@@ -563,28 +563,26 @@ HTML;
 HTML;
 
 	
-	$language['LOGIN_NEW_PASSWORD']			='Nova senha';
-	$language['LOGIN_NEW_PASSWORD_CONFIRM']	='Confirme a nova senha';
-	$language['LOGIN_CHECK']				='Verificando senha...';
-	$language['LOGIN_CHECK_NEW']			='Salvando nova senha ...';
-	$language['LOGIN_PASSWORD_EMPTY']		='É necessário preencher o campo <b>%s</b> ';
-	$language['LOGIN_PASSWORD_EMPTY_NEW']		='Não está sendo passado a nova senha.';
-	$language['LOGIN_TAG_EMPTY']		='O código para reset da senha está em branco';
-	$language['LOGIN_NEW_PASSWORD_CONFIRM_ERROR']		='A confirmação da nova senha não confere';
-	$language['LOGIN_CHANGE_SQL_ERRO']		='Ops.. erro ao executar query do login, favor tentar novamente.';
+	$language['LOGIN_NEW_PASSWORD']			= 'Nova senha';
+	$language['LOGIN_NEW_PASSWORD_CONFIRM']	= 'Confirme a nova senha';
+	$language['LOGIN_CHECK']				= 'Verificando senha...';
+	$language['LOGIN_CHECK_NEW']			= 'Salvando nova senha ...';
+	$language['LOGIN_PASSWORD_EMPTY']		= 'É necessário preencher o campo <b>%s</b> ';
+	$language['LOGIN_PASSWORD_EMPTY_NEW']		= 'Falta informar a nova senha.';
+	$language['LOGIN_TAG_EMPTY']		= 'O código da senha está em branco';
+	$language['LOGIN_NEW_PASSWORD_CONFIRM_ERROR']	= 'A confirmação da nova senha não confere';
+	$language['LOGIN_CHANGE_SQL_ERRO']		= 'Erro ao executar query do login, favor tentar novamente.';
 	
 	$language['LOGIN_RECOVER_SUCCESS_TIME']		=	'Senha gerada com sucesso. Redirecionando para o acesso ao sistema.';
+		
+	$language['LOGIN_CHANGE_SQL_ERRO_RECOVER']	= 'Erro ao executar query do login, para a recuperação da senha.';
+	
+	$language['LOGIN_CHANGE_OK']			= 'Senha alterada com sucesso, efetue o login com a nova senha';
+	$language['REMOVE_LOGIN_COOKIE']		= 'Tem certeza que deseja remover o usuário do histórico de acesso?';
+	
+	$language['LOGIN_HTML_TITLE']			= 'WRS - Web Report System';
 	
 	
-	$language['LOGIN_CHANGE_SQL_ERRO_RECOVER']		='Ops.. erro ao executar query do login, para a recuperação da senha.';
-	
-	$language['LOGIN_CHANGE_OK']			='Senha alterada com sucesso, agora efetue o login com a nova senha';
-	$language['REMOVE_LOGIN_COOKIE']		=	"Tem certeza que deseja remover o usuário do histórico de acesso?";
-	
-	$language['LOGIN_HTML_TITLE']			=	"WRS - Web Report System";
-	
-	
-
 	$language['ADMIN_IMPORT_caracter_delimitador']			=	'Caracter delimitador: ';
 	$language['ADMIN_IMPORT_tipo_importacao']				=	'Tipo de importação: ';
 	$language['ADMIN_IMPORT_virgula']						=	'Vírgula';
@@ -622,8 +620,8 @@ HTML;
 	$language['js_admin_pass_equals']		=	'A nova senha e a confirmação de senha devem ser diferentes da senha atual.';
 	$language['js_admin_pass_current']		=	'É necessário confirmar sua senha atual';
 	$language['js_admin_observation']		=	' expirar a senha';
-	$language['js_admin_new_pass_placeholder']=	'mínimo de 3 caracteres';
-	$language['js_admin_old_pass_placeholder']=	'entre com sua senha atual';
+	$language['js_admin_new_pass_placeholder']=	'Mínimo de 3 caracteres';
+	$language['js_admin_old_pass_placeholder']=	'Entre com sua senha atual';
 	$language['js_admin_new_pass']			=	'Nova Senha: ';
 	$language['js_admin_confirm_pass']		=	'Confirmar Senha: ';
 	$language['js_admin_old_pass']			=	'Senha Atual: ';
@@ -665,7 +663,7 @@ HTML;
 	$language['ADMIN_NO_REG'] 				= 	'Sem registro para ação';
 	
 	
-	$language['FORM_TYPE_PASSWORD_SHOW'] 	= 	'ver senha';
+	$language['FORM_TYPE_PASSWORD_SHOW'] 	= 	'Exibir Senha';
 	
 
 	$language['IMPORT_EXPORT_MESSAGES_STATUS'] 	= 	'Status:';
